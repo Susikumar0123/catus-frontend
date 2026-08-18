@@ -1,0 +1,2398 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+
+    header("Location: admin_login.php");
+
+    exit();
+
+}
+
+?>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Catus Admin Control Center</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+
+        /* Base Styles */
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f1f5f9; margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; }
+
+        
+
+        /* 1. Sidebar Styles */
+
+        .sidebar { width: 260px; background: #ffffff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s; z-index: 20; box-shadow: 2px 0 10px rgba(0,0,0,0.02); }
+
+        .sidebar-header { padding: 15px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 10px; }
+
+        .sidebar-header img { height: 35px; width: auto; object-fit: contain; }
+
+        .sidebar-header span { color: #000000; font-size: 13px; font-weight: 800; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: 0.3px; line-height: 1.2; }
+
+        .live-dot { background: #ef4444; width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-left: 4px; animation: pulse 1.5s infinite; }
+
+
+
+        .nav-links { flex-grow: 1; padding: 15px 0; overflow-y: auto; }
+
+        .nav-item { padding: 12px 20px; display: flex; align-items: center; gap: 12px; color: #475569; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
+
+        .nav-item:hover, .nav-item.active { background: #f0f9ff; color: #0284c7; border-left-color: #0284c7; }
+
+        .nav-item i { width: 20px; text-align: center; font-size: 16px; }
+
+        
+
+        .sidebar-footer { padding: 15px 20px; border-top: 1px solid #e2e8f0; }
+
+        .logout-btn { display: flex; align-items: center; gap: 10px; color: #ef4444; text-decoration: none; font-weight: 600; font-size: 13px; padding: 10px; border-radius: 8px; transition: 0.2s; cursor: pointer; }
+
+        .logout-btn:hover { background: #fef2f2; color: #dc2626; }
+
+
+
+        /* 2. Main Content Styles */
+
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: #f8fafc; width: calc(100% - 260px); }
+
+        
+
+        /* Topbar */
+
+        .topbar { background: #fff; padding: 15px 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; z-index: 10; border-bottom: 1px solid #e2e8f0; }
+
+        .topbar h2 { margin: 0; font-size: 18px; color: #1e293b; }
+
+        .topbar-actions { display: flex; gap: 15px; align-items: center; }
+
+        .search-box { padding: 8px 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; width: 250px; }
+
+        .search-box:focus { border-color: #0ea5e9; }
+
+        
+
+        /* Main Tabs Container */
+
+        .content-area { padding: 20px; overflow-y: auto; flex-grow: 1; }
+
+        .main-tab-pane { display: none; flex-direction: column; height: 100%; animation: fadeIn 0.3s ease; }
+
+        .main-tab-pane.active { display: flex; }
+
+
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+
+
+        /* SUMMARY CARDS */
+
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+
+        .summary-card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px; }
+
+        .summary-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; }
+
+        .summary-info h4 { margin: 0; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .summary-info h2 { margin: 5px 0 0; font-size: 22px; color: #0f172a; }
+
+        .icon-green { background: #dcfce7; color: #16a34a; }
+
+        .icon-blue { background: #dbeafe; color: #0284c7; }
+
+        .icon-purple { background: #f3e8ff; color: #9333ea; }
+
+
+
+        .panel-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+
+        
+
+        /* Tabs & Actions Row */
+
+        .panel-header { padding: 15px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; background: #fff; }
+
+        .tabs-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        .tab-btn { padding: 8px 16px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; cursor: pointer; color: #475569; font-size: 12px; transition: 0.2s; }
+
+        .tab-btn.active, .tab-btn:hover { background: #0284c7; color: #fff; border-color: #0284c7; }
+
+        .tab-btn.trash-tab.active { background: #dc2626; border-color: #dc2626; }
+
+        
+
+        .export-group { display: flex; gap: 8px; }
+
+        .export-btn { padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px; display: flex; align-items: center; gap: 6px; color: white; transition: 0.2s; }
+
+        .excel-btn { background: #16a34a; } .excel-btn:hover { background: #15803d; }
+
+        .pdf-btn { background: #ef4444; } .pdf-btn:hover { background: #dc2626; }
+
+        .bulk-del-btn { background: #dc2626; display: none; }
+
+
+
+        /* Responsive Table Styles */
+
+        .table-responsive { flex-grow: 1; overflow-x: auto; overflow-y: auto; padding: 0; background: #fff; }
+
+        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+
+        
+
+        th { position: sticky; top: 0; background: #f8fafc; color: #475569; font-weight: 700; font-size: 11px; padding: 12px 10px; border-bottom: 2px solid #e2e8f0; white-space: normal; text-transform: uppercase; letter-spacing: 0.5px; z-index: 5; }
+
+        td { padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #1e293b; vertical-align: middle; white-space: normal; word-wrap: break-word; }
+
+        tr:hover { background: #f0f9ff; }
+
+        
+
+        th.chk-col, td.chk-col { width: 30px; text-align: center; }
+
+        
+
+        .badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; display: inline-block; white-space: nowrap; }
+
+        .badge-pending { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+
+        .badge-assigned { background: #e0e7ff; color: #1d4ed8; border: 1px solid #c7d2fe; }
+
+        .badge-active { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+
+        .badge-completed { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+
+        .badge-reservice { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+
+        .badge-trash, .badge-blocked, .badge-failed { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+
+        .badge-inactive, .badge-refunded { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+
+
+
+        .manage-btn { background: #0f172a; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+
+        .manage-btn:hover { background: #38bdf8; color: #0f172a; }
+
+
+
+        /* MODALS */
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.7); display: none; justify-content: center; align-items: center; z-index: 999999; backdrop-filter: blur(4px); }
+
+        .modal-box { background: #fff; width: 95%; max-width: 900px; max-height: 90vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); animation: modalIn 0.3s ease; }
+
+        
+
+        .modal-header { background: #f8fafc; padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+
+        .modal-header h3 { margin: 0; color: #0f172a; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+
+        .close-modal { background: #ef4444; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
+
+        .close-modal:hover { background: #dc2626; transform: scale(1.1); }
+
+        
+
+        .modal-body { padding: 25px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+
+        @media(max-width: 768px) { .modal-body { grid-template-columns: 1fr; } }
+
+        
+
+        .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+
+        .info-title { font-size: 12px; text-transform: uppercase; color: #64748b; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+
+        
+
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+
+        .info-row span { color: #475569; }
+
+        .info-row strong { color: #0f172a; text-align: right; max-width: 60%; word-wrap: break-word; }
+
+        
+
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+
+        .form-group label { font-size: 12px; font-weight: 700; color: #334155; }
+
+        .form-input { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; transition: 0.2s; }
+
+        .form-input:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
+
+        
+
+        .action-btn { background: #16a34a; color: white; border: none; padding: 12px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; width: 100%; transition: all 0.2s ease; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 14px; }
+
+        .action-btn:hover { background: #15803d; }
+
+        .action-btn:disabled { background: #65a30d; cursor: not-allowed; opacity: 0.8; }
+
+        
+
+        .btn-danger { background: #dc2626; }
+
+        .btn-danger:hover { background: #b91c1c; }
+
+
+
+        .wallet-add-flex { display: flex; gap: 10px; }
+
+        .wallet-add-flex input { flex-grow: 1; }
+
+        .wallet-add-flex button { width: auto; padding: 10px 15px; margin: 0; }
+
+
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+<!-- 1. SIDEBAR NAVIGATION -->
+
+<div class="sidebar">
+
+    <div class="sidebar-header">
+
+        <img src="http://rinoservices.local/wp-content/uploads/2026/07/Design-a-premium-standalone-abstract-symbol-for-the-brand-_C.png" alt="Catus Logo">
+
+        <div>
+
+            <span>Admin Control Panel</span>
+
+            <div class="live-dot" title="Live Server"></div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-links">
+
+        <div class="nav-item active" onclick="switchMainPage('bookings', 'Booking Management', this)">
+
+            <i class="fa-solid fa-chart-pie"></i> Dashboard Bookings
+
+        </div>
+
+        <div class="nav-item" onclick="switchMainPage('customers', 'Customers Master', this)">
+
+            <i class="fa-solid fa-users"></i> Customers Master
+
+        </div>
+
+        <div class="nav-item" onclick="switchMainPage('wallet', 'Wallet & Payments', this)">
+
+            <i class="fa-solid fa-wallet"></i> Wallet & Payments
+
+        </div>
+
+        <div class="nav-item" onclick="switchMainPage('services', 'Manage Services', this)">
+
+            <i class="fa-solid fa-screwdriver-wrench"></i> Manage Services
+
+        </div>
+
+        <div class="nav-item" onclick="switchMainPage('coupons', 'Coupons & Discounts', this)">
+
+            <i class="fa-solid fa-ticket"></i> Coupons Master
+
+        </div>
+
+        <div class="nav-item" onclick="switchMainPage('technicians', 'Technicians List', this)">
+
+            <i class="fa-solid fa-user-gear"></i> Technicians Master
+
+        </div>
+
+        <div class="nav-item" onclick="switchMainPage('notifications', 'Push Notifications', this)">
+
+            <i class="fa-solid fa-bullhorn"></i> Notifications / SMS
+
+        </div>
+
+        <div class="nav-item" onclick="switchMainPage('settings', 'App Settings', this)">
+
+            <i class="fa-solid fa-gear"></i> App Settings
+
+        </div>
+
+    </div>
+
+    <div class="sidebar-footer">
+
+        <a href="admin_logout.php" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout Securely</a>
+
+    </div>
+
+</div>
+
+
+
+<!-- 2. MAIN CONTENT AREA -->
+
+<div class="main-content">
+
+    
+
+    <!-- Topbar -->
+
+    <div class="topbar">
+
+        <h2 id="topbarTitle">Booking Management</h2>
+
+        <div class="topbar-actions">
+
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search Order ID, Name, Phone..." onkeyup="filterTable()">
+
+        </div>
+
+    </div>
+
+        <div class="content-area">
+        
+        <!-- TAB 1: BOOKING MANAGEMENT -->
+        <div id="page-bookings" class="main-tab-pane active">
+            <div class="panel-card">
+                <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 10px;">
+                    <div class="tabs-group" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                        <button class="tab-btn active" onclick="switchTab('All', this, 'bookings')">All</button>
+                        <button class="tab-btn" onclick="switchTab('Online Paid', this, 'bookings')">Online Paid</button>
+                        <button class="tab-btn" onclick="switchTab('Pay Later', this, 'bookings')">Pay Later</button>
+                        <button class="tab-btn" onclick="switchTab('Assigned', this, 'bookings')">Assigned</button>
+                        <button class="tab-btn" onclick="switchTab('Pending', this, 'bookings')">Pending</button>
+                        <button class="tab-btn" onclick="switchTab('On the way', this, 'bookings')">On the way</button>
+                        <button class="tab-btn" onclick="switchTab('In Service', this, 'bookings')">In Service</button>
+                        <button class="tab-btn" onclick="switchTab('Completed', this, 'bookings')">Completed</button>
+                        <button class="tab-btn" onclick="switchTab('Re-Service Requested', this, 'bookings')">Re-Service Requested</button>
+                        <button class="tab-btn trash-tab" onclick="switchTab('Trash', this, 'bookings')"><i class="fa-solid fa-trash"></i> Trash</button>
+                    </div>
+
+                    <div class="export-group" style="display: flex; gap: 6px; flex-shrink: 0;">
+                        <button class="export-btn excel-btn" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> Excel</button>
+                        <button class="export-btn pdf-btn" onclick="exportToPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                        <button id="bulkDeleteBtn" class="export-btn bulk-del-btn" onclick="deleteSelectedTrash()"><i class="fa-solid fa-trash-can"></i> Delete Selected</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="reportTable">
+                        <thead>
+                            <tr>
+                                <th class="chk-col" id="selectAllHeaderCell" style="display:none;"><input type="checkbox" id="selectAllCheckbox" onclick="toggleSelectAll(this)"></th>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Service Info</th>
+                                <th>Mobile</th>
+                                <th>Location / Pincode</th>
+                                <th>Payment Mode</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th class="no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: CUSTOMERS MASTER -->
+        <div id="page-customers" class="main-tab-pane">
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h3 style="margin:0; font-size:15px; color:#1e293b;">Registered Customers List</h3>
+                    <div class="export-group"><button class="export-btn excel-btn"><i class="fa-solid fa-file-excel"></i> Export CSV</button></div>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Full Name</th>
+                                <th>Email ID</th>
+                                <th>Mobile No</th>
+                                <th>Wallet Bal</th>
+                                <th>Total Orders</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: WALLET & PAYMENTS -->
+        <div id="page-wallet" class="main-tab-pane">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-icon icon-green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                    <div class="summary-info">
+                        <h4>Total Platform Revenue</h4>
+                        <h2 id="statRevenue">₹0</h2>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon icon-blue"><i class="fa-solid fa-wallet"></i></div>
+                    <div class="summary-info">
+                        <h4>Total Wallet Liability</h4>
+                        <h2 id="statLiability">₹0</h2>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon icon-purple"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    <div class="summary-info">
+                        <h4>Today's Collection</h4>
+                        <h2 id="statToday">₹0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div class="tabs-group">
+                        <button class="tab-btn active" onclick="switchTab('All', this, 'wallet')">All Transactions</button>
+                        <button class="tab-btn" onclick="switchTab('Successful', this, 'wallet')">Successful</button>
+                        <button class="tab-btn" onclick="switchTab('Failed', this, 'wallet')">Failed</button>
+                        <button class="tab-btn" onclick="switchTab('Refunded', this, 'wallet')">Refunds</button>
+                    </div>
+                    <div class="export-group">
+                        <button class="export-btn excel-btn"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Date & Time</th>
+                                <th>Customer Name</th>
+                                <th>Type</th>
+                                <th>Payment Mode</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="walletTableBody">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: MANAGE SERVICES -->
+        <div id="page-services" class="main-tab-pane">
+            <div class="panel-card" style="padding: 20px; margin-bottom: 25px; height: auto; overflow: visible;">
+                <div class="panel-header" style="padding: 15px 20px; border-bottom: 2px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 8px; min-height: 50px; box-sizing: border-box;">
+                    <h3 style="margin:0; font-size:16px; color:#0f172a; display: flex; align-items: center;"><i class="fa-solid fa-images" style="color:#0284c7; margin-right:8px;"></i> Manage Home Top Banner Cards</h3>
+                    <button class="action-btn" style="width: auto; padding: 8px 16px; font-size: 12px; background: #10b981; margin:0; cursor:pointer; display: flex; align-items: center; gap: 6px;" onclick="openAddBannerModal()">
+                        <i class="fa-solid fa-plus"></i> Add New Banner Card
+                    </button>
+                </div>
+                
+                <div class="table-responsive" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Title & Subtitle</th>
+                                <th>Product Link ID</th>
+                                <th>Background</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminBannersTableBody">
+                            <!-- Loaded via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="adminServicesCategoriesContainer" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Category wise tables will be rendered here dynamically -->
+            </div>
+        </div>
+
+        <!-- TAB 5: COUPONS MANAGEMENT -->
+        <div id="page-coupons" class="main-tab-pane">
+            <div class="panel-card" style="padding: 20px;">
+                <div class="panel-header" style="padding:0 0 15px 0;">
+                    <h3 style="margin:0; font-size:16px;">Discount Coupons Master</h3>
+                    <button class="action-btn" style="width: auto; padding: 8px 16px; font-size: 12px;" onclick="alert('Create Coupon')"><i class="fa-solid fa-plus"></i> Create Coupon</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr><th>Coupon Code</th><th>Discount Value</th><th>Min Order Value</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><b>CATUS100</b></td><td>₹100 OFF</td><td>₹299</td><td><span class="badge badge-active">Active</span></td><td><button class="manage-btn btn-danger">Disable</button></td></tr>
+                            <tr><td><b>CATUS500</b></td><td>₹500 OFF</td><td>₹1,499</td><td><span class="badge badge-active">Active</span></td><td><button class="manage-btn btn-danger">Disable</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: TECHNICIANS MASTER -->
+        <div id="page-technicians" class="main-tab-pane">
+            <div class="panel-card" style="padding: 20px;">
+                <div class="panel-header" style="padding:0 0 15px 0;">
+                    <h3 style="margin:0; font-size:16px;">Verified Technicians Master</h3>
+                    <a href="technician_register.php" target="_blank" class="action-btn" style="width: auto; padding: 8px 16px; font-size: 12px; text-decoration:none;"><i class="fa-solid fa-user-plus"></i> Register New Tech</a>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tech ID</th>
+                                <th>Name</th>
+                                <th>Mobile No</th>
+                                <th>Specialization</th>
+                                <th>Home Address</th>
+                                <th>Shop Address</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="techniciansTableBody">
+                            <!-- Populated dynamically from localStorage -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: PUSH NOTIFICATIONS -->
+        <div id="page-notifications" class="main-tab-pane">
+            <div class="panel-card" style="padding: 25px; max-width: 600px;">
+                <h3 style="margin:0 0 15px 0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-bullhorn" style="color:#0284c7;"></i> Send Notification / SMS Broadcast</h3>
+                <div class="form-group"><label>Target Audience</label><select class="form-input"><option>All Registered Customers</option></select></div>
+                <div class="form-group"><label>Notification Title</label><input type="text" class="form-input" placeholder="Title"></div>
+                <div class="form-group"><label>Message Content</label><textarea class="form-input" rows="4" placeholder="Message..."></textarea></div>
+                <button class="action-btn" onclick="alert('Sent!')"><i class="fa-solid fa-paper-plane"></i> Send Broadcast Now</button>
+            </div>
+        </div>
+
+        <!-- TAB 8: APP SETTINGS -->
+        <div id="page-settings" class="main-tab-pane">
+            <div class="panel-card" style="padding: 25px; overflow-y: auto;">
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin:0; font-size: 18px; color: #0f172a;"><i class="fa-solid fa-sliders" style="color: #0284c7;"></i> Platform Settings</h3>
+                        <p style="color:#64748b; font-size:13px; margin: 5px 0 0 0;">Manage categories, pricing, and platform features here.</p>
+                    </div>
+                    <button class="action-btn" style="width: auto; padding: 10px 20px;" onclick="alert('Settings saved successfully!')"><i class="fa-solid fa-floppy-disk"></i> Save All Changes</button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px;">
+                    <div class="info-card" style="margin-bottom: 0;">
+                        <div class="info-title"><i class="fa-solid fa-mobile-screen"></i> General Details</div>
+                        <div class="form-group"><label>Platform Name</label><input type="text" class="form-input" value="Catus Home Services"></div>
+                        <div class="form-group"><label>Support Email Address</label><input type="email" class="form-input" value="support@catusapp.com"></div>
+                        <div class="form-group"><label>Customer Helpline No.</label><input type="text" class="form-input" value="+91 9876543210"></div>
+                        <div class="form-group"><label>Head Office Address</label><textarea class="form-input" rows="2" style="resize: none;">123, Tech Park Road, Coimbatore, Tamil Nadu.</textarea></div>
+                    </div>
+                    <div class="info-card" style="margin-bottom: 0;">
+                        <div class="info-title"><i class="fa-solid fa-indian-rupee-sign"></i> Pricing & Wallet Rules</div>
+                        <div class="form-group"><label>Minimum Wallet Recharge (₹)</label><input type="number" class="form-input" value="100"></div>
+                        <div class="form-group"><label>Maximum Wallet Limit (₹)</label><input type="number" class="form-input" value="10000"></div>
+                        <div class="form-group"><label>Default Platform Commission (%)</label><input type="number" class="form-input" value="15"></div>
+                        <div class="form-group"><label>Cancellation Charge (₹)</label><input type="number" class="form-input" value="50"></div>
+                    </div>
+                    <div class="info-card" style="margin-bottom: 0; border-left: 4px solid #9333ea;">
+                        <div class="info-title"><i class="fa-solid fa-toggle-on"></i> App Feature Controls</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed #cbd5e1;">
+                            <div><div style="font-size: 13px; color: #0f172a; font-weight: 700;">Allow New Registrations</div><div style="font-size: 11px; color: #64748b;">New users can sign up</div></div>
+                            <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed #cbd5e1;">
+                            <div><div style="font-size: 13px; color: #0f172a; font-weight: 700;">Enable Wallet Payments</div><div style="font-size: 11px; color: #64748b;">Users can pay via wallet</div></div>
+                            <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div><div style="font-size: 13px; color: #dc2626; font-weight: 700;">Maintenance Mode</div><div style="font-size: 11px; color: #64748b;">Temporarily block user access</div></div>
+                            <input type="checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+<!-- ==========================================
+
+     ORDER MANAGEMENT MODAL 
+
+     ========================================== -->
+
+<div class="modal-overlay" id="orderDetailModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3><i class="fa-solid fa-clipboard-check" style="color:#0284c7;"></i> Manage Order <span id="modalOrderIdTitle" style="color:#64748b; font-size:14px; margin-left:10px;"></span></h3>
+
+            <button class="close-modal" onclick="closeOrderModal()"><i class="fa-solid fa-xmark"></i></button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div>
+
+                <div class="info-card">
+
+                    <div class="info-title"><i class="fa-solid fa-user"></i> Customer Information</div>
+
+                    <div class="info-row"><span>Full Name:</span> <strong id="detCustName">-</strong></div>
+
+                    <div class="info-row"><span>Mobile No:</span> <strong id="detCustPhone">-</strong></div>
+
+                    <div class="info-row"><span>Email ID:</span> <strong id="detCustEmail" style="color:#0284c7;">srinathaus27@gmail.com</strong></div>
+
+                    <div class="info-row"><span>Wallet Balance:</span> <strong style="color:#16a34a; font-size:15px;">₹2500</strong></div>
+
+                </div>
+
+                <div class="info-card">
+
+                    <div class="info-title"><i class="fa-solid fa-box"></i> Service Request Details</div>
+
+                    <div class="info-row"><span>Service Name:</span> <strong id="detServiceName" style="color:#0ea5e9;">-</strong></div>
+
+                    <div class="info-row"><span>Product ID:</span> <strong id="detProductId">-</strong></div>
+
+                    <div class="info-row"><span>Bill Amount:</span> <strong id="detAmount">-</strong></div>
+
+                    <div class="info-row"><span>Booked On:</span> <strong id="detDate">-</strong></div>
+
+                </div>
+
+                <div class="info-card">
+
+                    <div class="info-title"><i class="fa-solid fa-map-location-dot"></i> Service Address</div>
+
+                    <div class="info-row"><span>Address:</span> <strong id="detAddress">-</strong></div>
+
+                    <div class="info-row"><span>District:</span> <strong id="detDistrict">-</strong></div>
+
+                    <div class="info-row"><span>Pincode:</span> <strong id="detPincode">-</strong></div>
+
+                </div>
+
+            </div>
+
+
+
+            <div>
+
+                <div class="info-card" style="border-left: 4px solid #0284c7;">
+
+                    <div class="info-title"><span><i class="fa-solid fa-user-gear"></i> Update Order & Technician</span></div>
+
+                    <input type="hidden" id="manageOrderId">
+
+                    <div class="form-group">
+
+                        <label>Current Status</label>
+
+                        <select id="statusUpdateSelect" class="form-input" style="font-weight:700;">
+
+                            <option value="Pending">Pending</option>
+
+                            <option value="Assigned">Assigned</option>
+
+                            <option value="On the way">On the way</option>
+
+                            <option value="In Service">In Service</option>
+
+                            <option value="Completed">Completed</option>
+
+                            <option value="Re-Service Requested">Re-Service Requested</option>
+
+                            <option value="Trash">Cancel / Move to Trash</option>
+
+                        </select>
+
+                    </div>
+
+                    
+
+                    <hr style="border:none; border-top:1px dashed #cbd5e1; margin:15px 0;">
+
+
+
+                    <div id="techDetailsView" style="display:none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+
+                            <span style="font-size:13px; font-weight:800; color:#16a34a;"><i class="fa-solid fa-user-check"></i> Assigned Technician</span>
+
+                            <button type="button" onclick="enableTechEdit()" style="background:#fff; border:1px solid #16a34a; color:#16a34a; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; transition:0.2s;"><i class="fa-solid fa-pen"></i> Edit Tech</button>
+
+                        </div>
+
+                        <div style="font-size:13px; color:#1e293b; line-height: 1.8;">
+
+                            <div style="display:flex; justify-content:space-between;"><b>Name:</b> <span id="viewTechName">-</span></div>
+
+                            <div style="display:flex; justify-content:space-between;"><b>Mobile:</b> <span id="viewTechPhone">-</span></div>
+
+                            <div style="display:flex; justify-content:space-between;"><b>ETA:</b> <span id="viewTechEta">-</span></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div id="techDetailsEdit">
+
+                        <div class="form-group">
+
+                            <label>Select Registered Technician (or type below)</label>
+
+                            <select id="techDropdownSelect" class="form-input" onchange="fillTechDataFromDropdown(this)">
+
+                                <option value="">-- Choose Registered Technician --</option>
+
+                            </select>
+
+                        </div>
+
+                        
+
+                        <div class="form-group">
+
+                            <label>Technician Name *</label>
+
+                            <input type="text" id="techNameInput" class="form-input" placeholder="e.g. Ramesh Kumar (TECH-101)">
+
+                        </div>
+
+                        
+
+                        <div class="form-group">
+
+                            <label>Technician Mobile No. *</label>
+
+                            <input type="text" id="techPhoneInput" class="form-input" placeholder="e.g. 9578155827" maxlength="10">
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>Expected Arrival (ETA) *</label>
+
+                            <input type="text" id="techEtaInput" class="form-input" placeholder="e.g. 30 Mins" value="30 Mins">
+
+                        </div>
+
+                    </div>
+
+                    
+
+                    <button class="action-btn" id="saveOrderBtn" onclick="saveOrderDetails()">
+
+                        <i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status
+
+                    </button>
+
+                    <p style="font-size:10px; color:#64748b; margin-top:8px; text-align:center;">*Status & Technician details will instantly reflect on customer's dashboard.</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+
+     CUSTOMER MANAGEMENT MODAL 
+
+     ========================================== -->
+
+<div class="modal-overlay" id="customerDetailModal">
+
+    <div class="modal-box" style="max-width: 800px;">
+
+        <div class="modal-header">
+
+            <h3><i class="fa-solid fa-user-shield" style="color:#0284c7;"></i> Manage Customer <span id="modalCusIdTitle" style="color:#64748b; font-size:14px; margin-left:10px;"></span></h3>
+
+            <button class="close-modal" onclick="closeCustomerModal()"><i class="fa-solid fa-xmark"></i></button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div>
+
+                <div class="info-card">
+
+                    <div class="info-title">
+
+                        <span><i class="fa-solid fa-address-card"></i> Profile Overview</span>
+
+                        <span id="cusStatusBadge" class="badge badge-active">Active</span>
+
+                    </div>
+
+                    <div class="info-row"><span>Full Name:</span> <strong id="cusModalName">-</strong></div>
+
+                    <div class="info-row"><span>Mobile No:</span> <strong id="cusModalPhone">-</strong></div>
+
+                    <div class="info-row"><span>Email ID:</span> <strong id="cusModalEmail">-</strong></div>
+
+                    <div class="info-row"><span>Primary Address:</span> <strong id="cusModalAddress" style="text-align: right; max-width: 60%;">-</strong></div>
+
+                </div>
+
+
+
+                <div class="info-card" style="background:#f0fdf4; border-color:#bbf7d0;">
+
+                    <div class="info-title" style="color:#16a34a; border-bottom-color:#bbf7d0;">
+
+                        <span><i class="fa-solid fa-wallet"></i> Wallet Management</span>
+
+                    </div>
+
+                    <div class="form-group" style="margin-top: 10px; margin-bottom:0;">
+
+                        <label style="color:#15803d; font-size:12px;">Total Wallet Balance (₹)</label>
+
+                        <div class="wallet-add-flex" style="margin-top: 4px;">
+
+                            <input type="number" id="walletBalanceInput" class="form-input" style="font-weight:bold; color:#16a34a; font-size:16px;" placeholder="0" min="0">
+
+                            <button class="action-btn" id="updateWalletBtn" onclick="updateWalletBalance()" style="margin-top:0; width: 110px;"><i class="fa-solid fa-check"></i> Update</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div>
+
+                <div class="info-card">
+
+                    <div class="info-title"><span><i class="fa-solid fa-clock-rotate-left"></i> Account Statistics</span></div>
+
+                    <div class="info-row"><span>Total Orders Placed:</span> <strong id="cusModalTotalOrders">-</strong></div>
+
+                    <div class="info-row"><span>Last Service Type:</span> <strong>Smart TV Repair & Service</strong></div>
+
+                    <div class="info-row"><span>Account Created:</span> <strong>March 2025</strong></div>
+
+                </div>
+
+
+
+                <div class="info-card" style="border-left: 4px solid #dc2626;">
+
+                    <div class="info-title" style="color:#dc2626;"><span><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</span></div>
+
+                    <p style="font-size: 12px; color:#475569; margin-top:0; line-height:1.5;">Suspend this customer to prevent them from booking new services on your app.</p>
+
+                    <button class="action-btn btn-danger" id="blockBtn" onclick="toggleCustomerStatus()">
+
+                        <i class="fa-solid fa-ban"></i> Block Customer
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+
+     TRANSACTION DETAILS MODAL
+
+     ========================================== -->
+
+<div class="modal-overlay" id="txnDetailModal">
+
+    <div class="modal-box" style="max-width: 500px;">
+
+        <div class="modal-header">
+
+            <h3><i class="fa-solid fa-file-invoice-dollar" style="color:#0284c7;"></i> Transaction Info</h3>
+
+            <button class="close-modal" onclick="closeTxnModal()"><i class="fa-solid fa-xmark"></i></button>
+
+        </div>
+
+        <div class="modal-body" style="grid-template-columns: 1fr; padding-top: 15px;">
+
+            <div class="info-card">
+
+                <div class="info-row"><span>Transaction ID:</span> <strong id="txnModalId">-</strong></div>
+
+                <div class="info-row"><span>Date & Time:</span> <strong id="txnModalDate">-</strong></div>
+
+                <div class="info-row"><span>Customer Name:</span> <strong id="txnModalName">-</strong></div>
+
+                <div class="info-row"><span>Payment Mode:</span> <strong id="txnModalMode">-</strong></div>
+
+                <div class="info-row"><span>Amount:</span> <strong style="color:#0f172a; font-size:16px;">₹<span id="txnModalAmount">0</span></strong></div>
+
+            </div>
+
+            <button class="action-btn btn-danger" id="initiateRefundBtn" onclick="initiateRefund()">
+
+                <i class="fa-solid fa-arrow-rotate-left"></i> Initiate Refund
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- EDIT SERVICE MODAL POPUP -->
+<div class="modal-overlay" id="editServiceModal" style="display:none; justify-content:center; align-items:center;">
+    <div class="modal-box" style="max-width: 550px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 15px;">
+            <h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-pen-to-square" style="color:#0284c7;"></i> Edit Service Details</h3>
+            <button class="close-modal" onclick="document.getElementById('editServiceModal').style.display='none'" style="background:#ef4444; border:none; width:30px; height:30px; border-radius:50%; font-size:14px; cursor:pointer; color:white; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <input type="hidden" id="oldServiceId">
+
+        <div style="display: flex; flex-direction: column; gap: 12px; max-height: 70vh; overflow-y: auto; padding-right: 5px;">
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Product ID / Service ID (Unique Link)</label>
+                <input type="text" id="modalServiceId" class="form-input" style="width:100%; box-sizing:border-box; background:#f8fafc; font-weight:600;" placeholder="e.g. tv-repair">
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Future Note / Description (2 rows below price)</label>
+                <textarea id="modalProductNote" class="form-input" style="width:100%; box-sizing:border-box; height: 60px;" placeholder="Write custom notes here..."></textarea>
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Service Name</label>
+                <input type="text" id="modalServiceName" class="form-input" style="width:100%; box-sizing:border-box;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group" style="margin:0;">
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Price (₹)</label>
+                    <input type="number" id="modalServicePrice" class="form-input" style="width:100%; box-sizing:border-box;">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Cut Price / MRP (₹)</label>
+                    <input type="number" id="modalServiceMrp" class="form-input" style="width:100%; box-sizing:border-box;">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Hot Deal Badge (1 = Show, 0 = Hide)</label>
+                <input type="number" id="modalIsHotDeal" class="form-input" style="width:100%; box-sizing:border-box;" min="0" max="1" placeholder="1">
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Discount Text (e.g., 3% off)</label>
+                <input type="text" id="modalDiscountText" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="3% off">
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Enable Select Options (1 = Show, 0 = Hide)</label>
+                <input type="number" id="modalEnableSelectOptions" class="form-input" style="width:100%; box-sizing:border-box;" min="0" max="1" placeholder="1">
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Select Options (Comma separated)</label>
+                <input type="text" id="modalSelectOptions" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="e.g. Standard Service, Advanced Repair">
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Why Choose Us (Separate points with |)</label>
+                <textarea id="modalWhyChooseUs" class="form-input" style="width:100%; box-sizing:border-box; height: 70px;" placeholder="Verified Professionals: ... | 30-Day Warranty: ..."></textarea>
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL (1)</label>
+                <input type="text" id="modalImg1" class="form-input" style="width:100%; box-sizing:border-box;">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (2)</label>
+                <input type="text" id="modalImg2" class="form-input" style="width:100%; box-sizing:border-box;">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (3)</label>
+                <input type="text" id="modalImg3" class="form-input" style="width:100%; box-sizing:border-box;">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (4)</label>
+                <input type="text" id="modalImg4" class="form-input" style="width:100%; box-sizing:border-box;">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Artificial Reviews Count (e.g. 500)</label>
+                <input type="number" id="modalArtificialReviewsCount" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="500">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Artificial Reviews & Comments (Format: Name | Rating | Comment )</label>
+                <textarea id="modalArtificialReviewsData" class="form-input" style="width:100%; box-sizing:border-box; height: 90px;" placeholder="Rahul Sharma | 5 | Excellent service!&#10;Priya Sundar | 4 | Good work."></textarea>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+            <button style="flex:1; padding:10px; border:1px solid #cbd5e1; background:white; color:#0f172a; border-radius:6px; font-weight:600; cursor:pointer;" onclick="document.getElementById('editServiceModal').style.display='none'">Cancel</button>
+            <button style="flex:1; padding:10px; border:none; background:#10b981; color:white; border-radius:6px; font-weight:600; cursor:pointer;" onclick="submitServiceUpdate()">Save Changes</button>
+        </div>
+    </div>
+</div>
+<!-- ADD / EDIT BANNER MODAL -->
+<div class="modal-overlay" id="bannerActionModal" style="display:none; justify-content:center; align-items:center;">
+    <div class="modal-box" style="max-width: 500px; background: white; padding: 25px; border-radius: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 15px;">
+            <h3 id="bannerModalTitle" style="margin:0; font-size:16px; color:#0f172a;">Add New Home Banner</h3>
+            <button class="close-modal" onclick="closeAddBannerModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <input type="hidden" id="bannerEditId">
+
+        <div style="display: flex; flex-direction: column; gap: 12px; max-height: 65vh; overflow-y: auto; padding-right: 4px;">
+            <div class="form-group"><label>Card Title *</label><input type="text" id="newBannerTitle" class="form-input" placeholder="e.g. Expert TV Repair"></div>
+            <div class="form-group"><label>Subtitle *</label><input type="text" id="newBannerSubtitle" class="form-input" placeholder="e.g. Fast doorstep service"></div>
+            <div class="form-group"><label>Image URL *</label><input type="text" id="newBannerImg" class="form-input" placeholder="https://images.unsplash.com/..."></div>
+            <div class="form-group"><label>Product / Service ID (for link)</label><input type="text" id="newBannerProdId" class="form-input" placeholder="e.g. tv-repair"></div>
+            <div class="form-group"><label>Background Color (Hex code)</label><input type="text" id="newBannerBg" class="form-input" value="#f4f3f1"></div>
+            <div class="form-group"><label>Text Color (Hex code)</label><input type="text" id="newBannerTextColor" class="form-input" value="#111"></div>
+            <div class="form-group"><label>Button Text</label><input type="text" id="newBannerBtnText" class="form-input" value="Book now"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+            <button style="flex:1; padding:10px; border:1px solid #cbd5e1; background:white; border-radius:6px; cursor:pointer;" onclick="closeAddBannerModal()">Cancel</button>
+            <button style="flex:1; padding:10px; border:none; background:#10b981; color:white; border-radius:6px; font-weight:600; cursor:pointer;" onclick="submitNewBanner()">Save Banner</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function closeEditOrderAddressModal() {
+        const modal = document.getElementById('editOrderAddressModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    function fetchDashboardStats() {
+        fetch('https://catus-backend-d2js.onrender.com/api/admin/dashboard-stats')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.stats) {
+                // Total Platform Revenue
+                document.getElementById('statRevenue').textContent = '₹' + (parseInt(data.stats.total_revenue) || 0).toLocaleString();
+                
+                // Total Wallet Liability (Users wallet balance sum)
+                document.getElementById('statLiability').textContent = '₹' + (parseInt(data.stats.total_liability) || 0).toLocaleString();
+                
+                // Today's Collection
+                document.getElementById('statToday').textContent = '₹' + (parseInt(data.stats.todays_collection) || 0).toLocaleString();
+            }
+        }).catch(err => console.error("Stats fetch error:", err));
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        renderTechniciansMasterTable();
+
+        loadTechniciansDropdown();
+
+        fetchLiveBookings();
+
+        fetchLiveCustomers();
+
+        fetchAdminServices(); 
+
+        fetchDashboardStats();
+
+    });
+
+
+
+    function renderTechniciansMasterTable() {
+
+        let tbody = document.getElementById('techniciansTableBody');
+
+        if(!tbody) return;
+
+
+
+        let registeredTechs = JSON.parse(localStorage.getItem('catus_registered_technicians')) || [
+
+            { id: 'TECH-101', name: 'Ramesh Kumar', phone: '9578155827', altPhone: 'N/A', spec: 'Smart TV & AC Specialist', homeAddress: '12, Main Road, Tiruppur', shopAddress: 'Shop 4, Market St' }
+
+        ];
+
+
+
+        let html = '';
+
+        registeredTechs.forEach(t => {
+
+            html += `<tr>
+
+                <td><b>${t.id}</b></td>
+
+                <td><strong>${t.name}</strong></td>
+
+                <td>${t.phone}</td>
+
+                <td><span style="color:#0284c7; font-weight:600;">${t.spec}</span></td>
+
+                <td><small>${t.homeAddress}</small></td>
+
+                <td><small>${t.shopAddress}</small></td>
+
+                <td><span class="badge badge-active">${t.status || 'Available'}</span></td>
+
+                <td><button class="manage-btn" onclick="alert('Tech: ${t.name} | Alt Phone: ${t.altPhone}')">View</button></td>
+
+            </tr>`;
+
+        });
+
+        tbody.innerHTML = html;
+
+    }
+
+
+
+    function loadTechniciansDropdown() {
+
+        const selectEl = document.getElementById('techDropdownSelect');
+
+        if(!selectEl) return;
+
+
+
+        let registeredTechs = JSON.parse(localStorage.getItem('catus_registered_technicians')) || [
+
+            { id: 'TECH-101', name: 'Ramesh Kumar', phone: '9578155827', spec: 'Smart TV & AC Specialist' }
+
+        ];
+
+
+
+        let html = '<option value="">-- Choose Registered Technician --</option>';
+
+        registeredTechs.forEach(t => {
+
+            html += `<option value="${t.name}|${t.phone}|${t.id}">${t.name} (${t.id}) - ${t.spec}</option>`;
+
+        });
+
+        selectEl.innerHTML = html;
+
+    }
+
+
+
+    function fillTechDataFromDropdown(selectEl) {
+
+        let val = selectEl.value;
+
+        if(val) {
+
+            let parts = val.split('|');
+
+            document.getElementById('techNameInput').value = `${parts[0]} (${parts[2]})`;
+
+            document.getElementById('techPhoneInput').value = parts[1];
+
+        } else {
+
+            document.getElementById('techNameInput').value = '';
+
+            document.getElementById('techPhoneInput').value = '';
+
+        }
+
+    }
+
+
+
+    let allBookings = [];
+
+    let currentTab = 'All';
+
+    let currentWalletTab = 'All'; 
+
+    const techCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
+
+
+
+    function switchMainPage(pageId, title, btnElement) {
+
+        document.querySelectorAll('.main-tab-pane').forEach(el => el.classList.remove('active'));
+
+        document.getElementById('page-' + pageId).classList.add('active');
+
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+        btnElement.classList.add('active');
+
+        document.getElementById('topbarTitle').textContent = title;
+
+
+
+        if(pageId === 'customers') renderCustomerTable();
+
+        if(pageId === 'wallet') renderWalletTable(); 
+
+        if(pageId === 'services') {
+
+            fetchAdminServices();
+
+            fetchAdminBanners();
+
+        }
+
+    }
+
+
+
+    function fetchLiveBookings() {
+        fetch('https://catus-backend-d2js.onrender.com/api/admin/orders')
+        .then(response => response.json())
+        .then(data => {
+            if(data && data.success && data.orders) {
+                allBookings = data.orders.map(order => {
+                    let cachedData = techCache[order.order_id];
+                    
+                    // Cache-la address update aayirunthal, athula irunthu District & Pincode-ai extract panrom
+                    let updatedAddress = (cachedData && cachedData.address) ? cachedData.address : order.address;
+                    let updatedDistrict = (cachedData && cachedData.district) ? cachedData.district : order.district;
+                    let updatedPincode = (cachedData && cachedData.pincode) ? cachedData.pincode : order.pincode;
+
+                    // Address string-irunthu district/pincode parse panra logic (e.g., "Door, Village, City, Taluk, District - Pincode")
+                    if (cachedData && cachedData.address && (!cachedData.district || !cachedData.pincode)) {
+                        let parts = cachedData.address.split('-').map(s => s.trim());
+                        if (parts.length > 1) {
+                            updatedPincode = parts[parts.length - 1]; // Last part is pincode
+                            let addressWithoutPin = parts[0];
+                            let subParts = addressWithoutPin.split(',').map(s => s.trim());
+                            if (subParts.length > 0) {
+                                updatedDistrict = subParts[subParts.length - 1]; // Second last or last city/district
+                            }
+                        }
+                    }
+
+                    return {
+                        ...order,
+                        status: (cachedData && cachedData.status) ? cachedData.status : order.status,
+                        technician_name: (cachedData && cachedData.name) ? cachedData.name : order.technician_name,
+                        technician_phone: (cachedData && cachedData.phone) ? cachedData.phone : order.technician_phone,
+                        eta: (cachedData && cachedData.eta) ? cachedData.eta : order.eta,
+                        address: updatedAddress,
+                        district: updatedDistrict,
+                        pincode: updatedPincode,
+                        is_deleted: ((cachedData && cachedData.status === 'Trash') || order.status === 'Trash') ? 1 : 0
+                    };
+                });
+                renderTable();
+            }
+        }).catch(err => {
+            console.error("API Fetch Error, using local cache fallback:", err);
+            renderTable();
+        });
+    }
+
+
+
+    function switchTab(status, btn, context = 'bookings') {
+
+        let parent = btn.parentElement;
+
+        parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+        btn.classList.add('active');
+
+
+
+        if (context === 'bookings') {
+
+            currentTab = status;
+
+            document.getElementById('selectAllHeaderCell').style.display = (currentTab === 'Trash') ? 'table-cell' : 'none';
+
+            document.getElementById('bulkDeleteBtn').style.display = 'none';
+
+            renderTable();
+
+        } else if (context === 'wallet') {
+
+            currentWalletTab = status;
+
+            renderWalletTable();
+
+        }
+
+    }
+
+
+
+    function getFilteredData() {
+        let searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        return allBookings.filter(item => {
+            let rawStatus = item.status ? item.status.trim() : 'Pending';
+            let normalizedStatus = rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1).toLowerCase();
+            
+            if(normalizedStatus === 'Active' || normalizedStatus === 'Service' || normalizedStatus === 'In service') {
+                normalizedStatus = 'In Service';
+            }
+
+            let payModeText = (item.status === 'Paid') ? 'Online Paid' : 'Pay Later';
+
+            let matchesTab = false;
+            if (currentTab === 'All') {
+                matchesTab = (item.is_deleted == 0);
+            } else if (currentTab === 'Trash') {
+                matchesTab = (item.is_deleted == 1 || rawStatus.toLowerCase() === 'trash');
+            } else if (currentTab === 'Online Paid') {
+                matchesTab = (item.is_deleted == 0 && payModeText === 'Online Paid');
+            } else if (currentTab === 'Pay Later') {
+                matchesTab = (item.is_deleted == 0 && payModeText === 'Pay Later');
+            } else if (currentTab === 'Pending') {
+                matchesTab = (item.is_deleted == 0 && (normalizedStatus === 'Pending' || normalizedStatus === ''));
+            } else if (currentTab === 'Assigned') {
+                matchesTab = (item.is_deleted == 0 && normalizedStatus === 'Assigned');
+            } else if (currentTab === 'On the way') {
+                matchesTab = (item.is_deleted == 0 && (normalizedStatus === 'On the way' || rawStatus.toLowerCase() === 'on the way'));
+            } else if (currentTab === 'In Service') {
+                matchesTab = (item.is_deleted == 0 && normalizedStatus === 'In Service');
+            } else if (currentTab === 'Completed') {
+                matchesTab = (item.is_deleted == 0 && normalizedStatus === 'Completed');
+            } else if (currentTab === 'Re-Service Requested') {
+                matchesTab = (item.is_deleted == 0 && (normalizedStatus === 'Re-Service Requested' || rawStatus.toLowerCase().includes('re-service')));
+            } else {
+                matchesTab = (item.is_deleted == 0 && normalizedStatus.toLowerCase() === currentTab.toLowerCase());
+            }
+
+            let prodName = item.service_name ? item.service_name.toLowerCase() : '';
+            let techName = item.technician_name ? item.technician_name.toLowerCase() : '';
+            let matchesSearch = item.customer_name.toLowerCase().includes(searchQuery) ||
+                                (item.phone && item.phone.includes(searchQuery)) ||
+                                (String(item.order_id).toLowerCase().includes(searchQuery)) ||
+                                techName.includes(searchQuery) || prodName.includes(searchQuery);
+                                
+            return matchesTab && matchesSearch;
+        });
+    }
+
+
+
+    function renderTable() {
+
+        let tbody = document.getElementById('bookingTableBody');
+
+        if(!tbody) return;
+
+        let filtered = getFilteredData();
+
+        let html = '';
+
+        if(filtered.length === 0) {
+
+            html = `<tr><td colspan="${currentTab === 'Trash' ? 9 : 8}" style="text-align:center; padding: 35px; color:#64748b;">No records found.</td></tr>`;
+
+        } else {
+
+            filtered.forEach(item => {
+
+                let displayStatus = (item.status === 'Active' || item.status === 'Service') ? 'In Service' : item.status;
+
+                let badgeClass = 'badge-pending';
+
+                if(displayStatus === 'Assigned' || displayStatus === 'On the way') badgeClass = 'badge-assigned';
+
+                if(displayStatus === 'In Service') badgeClass = 'badge-active';
+
+                if(displayStatus === 'Completed') badgeClass = 'badge-completed';
+
+                if(displayStatus === 'Re-Service Requested') badgeClass = 'badge-reservice';
+
+                if(item.is_deleted == 1) { badgeClass = 'badge-trash'; displayStatus = 'Trash'; }
+
+
+
+                let checkboxHTML = currentTab === 'Trash' ? `<td class="chk-col"><input type="checkbox" class="trash-checkbox" value="${item.order_id}" onclick="checkSelectedCount()"></td>` : (item.is_deleted == 1 ? '<td class="chk-col"></td>' : '');
+
+
+
+                // Payment mode badge stylingkaga
+                let payModeText = item.status === 'Paid' ? 'Online Paid' : 'Pay Later';
+                let payModeBadgeClass = item.status === 'Paid' ? 'badge-completed' : 'badge-pending';
+
+                html += `<tr>${checkboxHTML}
+                <td><b>#${item.order_id}</b></td>
+                <td><strong>${item.customer_name}</strong></td>
+                <td><span style="font-weight: 600; color:#0284c7;">${item.service_name || 'Smart TV Repair'}</span></td>
+                <td><a href="tel:${item.phone}" style="color:#475569; text-decoration:none;"><i class="fa-solid fa-phone"></i> ${item.phone}</a></td>
+                <td>${item.district} - ${item.pincode}</td>
+                <td><span class="badge ${payModeBadgeClass}">${payModeText}</span></td> <!-- Inga pudhu column-ai add panniyachu -->
+                <td><small style="color: #64748b; font-weight: 600;">${new Date(item.order_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true })}</small></td>
+                <td><span class="badge ${badgeClass}">${displayStatus}</span></td>
+                <td class="no-print"><button class="manage-btn" onclick="openOrderModal('${item.order_id}')"><i class="fa-solid fa-user-pen"></i> Manage</button></td>
+            </tr>`;
+            });
+
+        }
+
+        tbody.innerHTML = html;
+
+    }
+    
+    function openOrderModal(orderId) {
+        let order = allBookings.find(o => String(o.order_id) === String(orderId));
+        if(!order) return;
+        
+        document.getElementById('modalOrderIdTitle').textContent = `(#${order.order_id})`;
+        document.getElementById('manageOrderId').value = order.order_id;
+        document.getElementById('detCustName').textContent = order.customer_name;
+        document.getElementById('detCustPhone').textContent = order.phone;
+        
+        // (Intha edathula iruntha thappana s.enable_select_options line-ai remove panniyachu)
+
+        document.getElementById('detServiceName').textContent = order.service_name || 'Smart TV Repair';
+        document.getElementById('detProductId').textContent = order.product_id;
+        document.getElementById('detAmount').textContent = '₹' + order.amount;
+        document.getElementById('detDate').textContent = new Date(order.order_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true });
+        document.getElementById('detAddress').textContent = order.address;
+        document.getElementById('detDistrict').textContent = order.district;
+        document.getElementById('detPincode').textContent = order.pincode;
+
+        let currentStatus = order.is_deleted == 1 ? 'Trash' : order.status;
+        if(currentStatus === 'Active' || currentStatus === 'Service') currentStatus = 'In Service';
+        if(!["Pending", "Assigned", "On the way", "In Service", "Completed", "Re-Service Requested", "Trash"].includes(currentStatus)) currentStatus = 'Pending'; 
+        document.getElementById('statusUpdateSelect').value = currentStatus;
+
+        let tName = order.technician_name || '', tPhone = order.technician_phone || '', tEta = order.eta || '';
+        document.getElementById('techNameInput').value = tName;
+        document.getElementById('techPhoneInput').value = tPhone;
+        document.getElementById('techEtaInput').value = tEta;
+
+        let saveBtn = document.getElementById('saveOrderBtn');
+        saveBtn.disabled = false; 
+        
+        if(tName.trim() !== '') {
+            document.getElementById('viewTechName').textContent = tName;
+            document.getElementById('viewTechPhone').textContent = tPhone;
+            document.getElementById('viewTechEta').textContent = tEta;
+            document.getElementById('techDetailsView').style.display = 'block';
+            document.getElementById('techDetailsEdit').style.display = 'none';
+            saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Status';
+        } else {
+            document.getElementById('techDetailsView').style.display = 'none';
+            document.getElementById('techDetailsEdit').style.display = 'block';
+            saveBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status';
+        }
+        document.getElementById('orderDetailModal').style.display = 'flex';
+    }
+
+
+    function enableTechEdit() {
+
+        document.getElementById('techDetailsView').style.display = 'none';
+
+        document.getElementById('techDetailsEdit').style.display = 'block';
+
+        document.getElementById('saveOrderBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Tech Details & Status';
+
+        document.getElementById('techNameInput').focus();
+
+    }
+
+    
+
+    function closeOrderModal() { document.getElementById('orderDetailModal').style.display = 'none'; }
+
+
+
+    async function saveOrderDetails() {
+        let orderId = document.getElementById('manageOrderId').value;
+        let newStatus = document.getElementById('statusUpdateSelect').value;
+        let tName = document.getElementById('techNameInput').value.trim();
+        let tPhone = document.getElementById('techPhoneInput').value.trim();
+        let tEta = document.getElementById('techEtaInput').value.trim();
+        let saveBtn = document.getElementById('saveOrderBtn');
+
+        if(newStatus === 'Trash' && !confirm("Move to Trash?")) return;
+        saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
+        saveBtn.disabled = true;
+
+        const finalizeSave = () => {
+            // Exact India Time (IST) strict-ah generate panra code
+            const now = new Date();
+            const formattedTimeStr = now.toLocaleString("en-IN", { 
+                timeZone: "Asia/Kolkata", 
+                month: 'numeric', 
+                day: 'numeric', 
+                year: 'numeric', 
+                hour: 'numeric', 
+                minute: 'numeric', 
+                second: 'numeric', 
+                hour12: true 
+            });
+
+            let existingCache = techCache[orderId] || {};
+            existingCache.status = newStatus;
+            
+            // Ovvoru status-kum antha exact click panra nerathai store panrom
+            if (newStatus === 'Assigned') existingCache.assigned_time = formattedTimeStr;
+            if (newStatus === 'On the way') existingCache.ontheway_time = formattedTimeStr;
+            if (newStatus === 'In Service' || newStatus === 'Completed') existingCache.service_time = formattedTimeStr;
+
+            if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
+                existingCache.name = tName;
+                existingCache.phone = tPhone;
+                existingCache.eta = tEta;
+            }
+
+            techCache[orderId] = existingCache;
+            localStorage.setItem('catusAdminCache', JSON.stringify(techCache));
+            // ... (baki code apdiye irukattum)
+
+            let idx = allBookings.findIndex(o => String(o.order_id) === String(orderId));
+            if (idx !== -1) {
+                allBookings[idx].status = newStatus;
+                if (document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
+                    allBookings[idx].technician_name = tName;
+                    allBookings[idx].technician_phone = tPhone;
+                    allBookings[idx].eta = tEta;
+                }
+            }
+            renderTable(); 
+            setTimeout(() => {
+                saveBtn.disabled = false;
+                if (tName) {
+                    document.getElementById('viewTechName').textContent = tName;
+                    document.getElementById('viewTechPhone').textContent = tPhone;
+                    document.getElementById('viewTechEta').textContent = tEta;
+                    document.getElementById('techDetailsEdit').style.display = 'none';
+                    document.getElementById('techDetailsView').style.display = 'block';
+                    saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Status';
+                } else {
+                    saveBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status';
+                }
+            }, 600);
+        };
+
+        try {
+            await fetch('https://catus-backend-d2js.onrender.com/api/admin/update-status', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, status: newStatus}) }).catch(e => null);
+            if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
+                await fetch('https://catus-backend-d2js.onrender.com/api/admin/assign-technician-manual', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, technician_name: tName, technician_phone: tPhone, eta: tEta}) }).catch(e => null);
+            }
+        } catch(e){}
+        finalizeSave();
+    }
+
+
+
+    function filterTable() { 
+
+        if(document.getElementById('page-bookings').classList.contains('active')) renderTable(); 
+
+        if(document.getElementById('page-customers').classList.contains('active')) renderCustomerTable();
+
+        if(document.getElementById('page-wallet').classList.contains('active')) renderWalletTable(); 
+
+    }
+
+
+
+    let customersData = [];
+
+    function fetchLiveCustomers() {
+        fetch('https://catus-backend-d2js.onrender.com/api/admin/customers')
+        .then(response => response.json())
+        .then(data => {
+            if(data.success && data.customers) {
+                customersData = data.customers.map(c => {
+                    let cleanPhone = String(c.phone || '40001').replace(/[^0-9]/g, '');
+                    let numericId = 40000 + parseInt(cleanPhone.slice(-4));
+                    return {
+                        id: String(numericId),
+                        name: c.name || 'Customer',
+                        email: c.email || 'N/A',
+                        phone: c.phone,
+                        wallet: 0, // <--- Ellaa customer-kum ippo wallet bal 0-nu kaattum
+                        orders: c.total_orders !== undefined ? c.total_orders : 0,
+                        status: c.status || 'Active',
+                        address: c.address || 'Doorstep Service Location'
+                    };
+                });
+                renderCustomerTable();
+            }
+        }).catch(err => {
+            console.error("Customers fetch error:", err);
+        });
+    }
+
+
+
+    function renderCustomerTable() {
+
+        let tbody = document.getElementById('customerTableBody');
+
+        if(!tbody) return;
+
+        let searchQuery = document.getElementById('searchInput').value.toLowerCase();
+
+        let filtered = customersData.filter(c => c.name.toLowerCase().includes(searchQuery) || c.phone.includes(searchQuery));
+
+        let html = '';
+
+        if(filtered.length === 0) {
+
+            html = `<tr><td colspan="8" style="text-align:center; padding: 35px; color:#64748b;">No customers found.</td></tr>`;
+
+        } else {
+
+            filtered.forEach(c => {
+
+                let badgeClass = c.status === 'Active' ? 'badge-active' : 'badge-inactive';
+
+                html += `<tr>
+
+                    <td><b>${c.id}</b></td>
+
+                    <td><strong>${c.name}</strong></td>
+
+                    <td>${c.email}</td>
+
+                    <td>${c.phone}</td>
+
+                    <td><strong style="color:#16a34a;">₹${c.wallet}</strong></td>
+
+                    <td>${c.orders}</td>
+
+                    <td><span class="badge ${badgeClass}">${c.status}</span></td>
+
+                    <td><button class="manage-btn" style="background:#0284c7;" onclick="openCustomerModal('${c.id}')"><i class="fa-solid fa-sliders"></i> Manage</button></td>
+
+                </tr>`;
+
+            });
+
+        }
+
+        tbody.innerHTML = html;
+
+    }
+
+
+
+    function openCustomerModal(id) {
+
+        currentManageCustomer = customersData.find(c => c.id === id);
+
+        if(!currentManageCustomer) return;
+
+        document.getElementById('modalCusIdTitle').textContent = `(${currentManageCustomer.id})`;
+
+        document.getElementById('cusModalName').textContent = currentManageCustomer.name;
+
+        document.getElementById('cusModalPhone').textContent = currentManageCustomer.phone;
+
+        document.getElementById('cusModalEmail').textContent = currentManageCustomer.email;
+
+        document.getElementById('cusModalAddress').textContent = currentManageCustomer.address;
+
+        document.getElementById('cusModalTotalOrders').textContent = currentManageCustomer.orders;
+
+        document.getElementById('walletBalanceInput').value = currentManageCustomer.wallet;
+
+        document.getElementById('customerDetailModal').style.display = 'flex';
+
+    }
+
+
+
+    function closeCustomerModal() { document.getElementById('customerDetailModal').style.display = 'none'; }
+
+    
+
+    function updateWalletBalance() {
+
+        let newBalance = parseInt(document.getElementById('walletBalanceInput').value);
+
+        if(isNaN(newBalance) || newBalance < 0) { alert("Enter valid balance."); return; }
+
+        currentManageCustomer.wallet = newBalance;
+
+        renderCustomerTable();
+
+        alert("Wallet updated successfully!");
+
+    }
+
+
+
+    // To this (Empty array):
+    let walletTransactions = [];
+
+    let currentManageTxn = null;
+
+
+
+    function renderWalletTable() {
+
+        let tbody = document.getElementById('walletTableBody');
+
+        if(!tbody) return;
+
+        let html = '';
+
+        walletTransactions.forEach(t => {
+
+            html += `<tr>
+
+                <td><b>${t.id}</b></td>
+
+                <td><small>${new Date(t.date).toLocaleString()}</small></td>
+
+                <td><strong>${t.name}</strong></td>
+
+                <td><span style="color:#16a34a; font-weight:600;">${t.type}</span></td>
+
+                <td>${t.mode}</td>
+
+                <td><strong>₹${t.amount}</strong></td>
+
+                <td><span class="badge badge-completed">${t.status}</span></td>
+
+                <td><button class="manage-btn" onclick="openTxnModal('${t.id}')"><i class="fa-solid fa-eye"></i> View</button></td>
+
+            </tr>`;
+
+        });
+
+        tbody.innerHTML = html;
+
+    }
+
+
+
+    function openTxnModal(id) {
+
+        currentManageTxn = walletTransactions.find(t => t.id === id);
+
+        if(!currentManageTxn) return;
+
+        document.getElementById('txnModalId').textContent = currentManageTxn.id;
+
+        document.getElementById('txnModalDate').textContent = new Date(currentManageTxn.date).toLocaleString();
+
+        document.getElementById('txnModalName').textContent = currentManageTxn.name;
+
+        document.getElementById('txnModalMode').textContent = currentManageTxn.mode;
+
+        document.getElementById('txnModalAmount').textContent = currentManageTxn.amount;
+
+        document.getElementById('txnDetailModal').style.display = 'flex';
+
+    }
+
+
+
+    function closeTxnModal() { document.getElementById('txnDetailModal').style.display = 'none'; }
+
+
+
+    function exportToExcel() {
+
+        let table = document.getElementById("reportTable");
+
+        let html = table.outerHTML.replace(/ /g, '%20');
+
+        let downloadLink = document.createElement("a");
+
+        downloadLink.href = 'data:application/vnd.ms-excel,' + html;
+
+        downloadLink.download = 'Catus_Bookings_Report.xls';
+
+        downloadLink.click();
+
+    }
+
+
+
+    function exportToPDF() {
+
+        let tableHtml = document.getElementById("reportTable").outerHTML;
+
+        let printWin = window.open('', '_blank', 'width=900,height=600');
+
+        
+
+        printWin.document.write(`
+
+            <html>
+
+            <head>
+
+                <title>Catus Bookings Report</title>
+
+                <style>
+
+                    body { font-family: Arial, sans-serif; padding: 20px; color: #1e293b; }
+
+                    h2 { text-align: center; margin-bottom: 20px; color: #0284c7; }
+
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+
+                    th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; font-size: 12px; }
+
+                    th { background: #f8fafc; color: #475569; text-transform: uppercase; }
+
+                    .no-print, .chk-col { display: none; }
+
+                </style>
+
+            </head>
+
+            <body>
+
+                <h2>Catus Admin - Bookings Report</h2>
+
+                ${tableHtml}
+
+            </body>
+
+            </html>
+
+        `);
+
+        
+
+        printWin.document.close();
+
+        printWin.focus();
+
+        setTimeout(() => {
+
+            printWin.print();
+
+            printWin.close();
+
+        }, 400);
+
+    }
+
+    
+
+    // ==========================================
+    // MANAGE SERVICES (CATEGORY WISE & MODAL EDIT)
+    // ==========================================
+    let adminServices = [];
+
+    function fetchAdminServices() {
+        fetch('https://catus-backend-d2js.onrender.com/api/services')
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                adminServices = data.services;
+                renderServicesTable();
+            }
+        }).catch(err => console.error("Services fetch error:", err));
+    }
+
+    function renderServicesTable() {
+    let container = document.getElementById('adminServicesCategoriesContainer');
+    if(!container) return;
+
+    let grouped = {};
+    adminServices.forEach(s => {
+        let cat = s.category || 'Other Services';
+        if(!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push(s);
+    });
+
+    let html = '';
+    for(let categoryName in grouped) {
+        let safeCatName = categoryName.replace(/'/g, "\\'");
+        
+        html += `
+        <div class="panel-card" style="padding: 20px;">
+            <div class="panel-header" style="padding:0 0 15px 0; border-bottom: 2px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-layer-group" style="color:#0284c7; margin-right:6px;"></i> ${categoryName}</h3>
+                <button class="action-btn" style="width: auto; padding: 6px 14px; font-size: 11px; background: #0284c7;" onclick="openAddServiceModal('${safeCatName}')">
+                    <i class="fa-solid fa-plus"></i> Add New Product
+                </button>
+            </div>
+            <div class="table-responsive" style="margin-top: 10px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Image</th>
+                            <th>Service Name</th>
+                            <th>Category</th>
+                            <th>Price (₹)</th>
+                            <th>Cut Price (₹)</th>
+                            <th style="width: 100px; text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+        
+        grouped[categoryName].forEach(s => {
+            html += `<tr>
+                <td><img src="${s.image_url}" alt="Service" style="width: 45px; height: 35px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1;"></td>
+                <td><b>${s.service_name}</b> <br><small style="color:#64748b;">ID: ${s.service_id}</small></td>
+                <td>${s.category}</td>
+                <td>₹${s.price}</td>
+                <td>₹${s.mrp}</td>
+                <td style="text-align: right;"><button class="manage-btn" onclick="openEditServiceModal('${s.service_id}')"><i class="fa-solid fa-pen"></i> Edit</button></td>
+            </tr>`;
+        });
+
+        html += `</tbody>
+                </table>
+            </div>
+        </div>`;
+    }
+
+    container.innerHTML = html;
+}
+
+    function openEditServiceModal(serviceId) {
+        let s = adminServices.find(item => item.service_id === serviceId);
+        if(!s) return;
+        
+        document.getElementById('oldServiceId').value = s.service_id;
+        document.getElementById('modalServiceId').value = s.service_id || '';
+        document.getElementById('modalServiceName').value = s.service_name || '';
+        document.getElementById('modalServicePrice').value = s.price || '';
+        document.getElementById('modalServiceMrp').value = s.mrp || '';
+        document.getElementById('modalIsHotDeal').value = (s.is_hot_deal !== undefined) ? s.is_hot_deal : 1;
+        document.getElementById('modalEnableSelectOptions').value = (s.enable_select_options !== undefined) ? s.enable_select_options : 1;
+        
+        // ---> INGA THAAN ANTHA LINE-AI ADD PANNANUM <---
+        document.getElementById('modalProductNote').value = s.product_note || '';
+        // ------------------------------------------------
+
+        document.getElementById('modalSelectOptions').value = s.select_options || 'Standard Service';
+        document.getElementById('modalWhyChooseUs').value = s.why_choose_us || 'Verified Professionals: Background-verified expert technicians.|30-Day Warranty: Post-service warranty on all repairs.';
+        document.getElementById('modalArtificialReviewsCount').value = s.artificial_reviews_count || 500;
+        document.getElementById('modalArtificialReviewsData').value = s.artificial_reviews_data || '';
+        document.getElementById('modalDiscountText').value = s.discount_text || '';
+        document.getElementById('modalImg1').value = s.image_url || '';
+        document.getElementById('modalImg2').value = s.image_url_2 || '';
+        document.getElementById('modalImg3').value = s.image_url_3 || '';
+        document.getElementById('modalImg4').value = s.image_url_4 || '';
+
+        document.getElementById('editServiceModal').style.display = 'flex';
+    }
+
+    function submitServiceUpdate() {
+        let oldServiceId = document.getElementById('oldServiceId').value;
+        let newServiceId = document.getElementById('modalServiceId').value.trim();
+        let s = adminServices.find(item => item.service_id === oldServiceId);
+        if(!s) return;
+
+        let newName = document.getElementById('modalServiceName').value.trim();
+        let newPrice = parseInt(document.getElementById('modalServicePrice').value) || 0;
+        let newMrp = parseInt(document.getElementById('modalServiceMrp').value) || 0;
+        let is_hot_deal = parseInt(document.getElementById('modalIsHotDeal').value) || 0;
+        let enable_select_options = parseInt(document.getElementById('modalEnableSelectOptions').value) || 0;
+        let product_note = document.getElementById('modalProductNote').value.trim();
+        let select_options = document.getElementById('modalSelectOptions').value.trim() || 'Standard Service';
+        let why_choose_us = document.getElementById('modalWhyChooseUs').value.trim() || '';
+        let discount_text = document.getElementById('modalDiscountText').value.trim() || '3% off';
+        let artificial_reviews_count = parseInt(document.getElementById('modalArtificialReviewsCount').value) || 500;
+        let artificial_reviews_data = document.getElementById('modalArtificialReviewsData').value.trim();
+
+        let newImg1 = document.getElementById('modalImg1').value.trim();
+        let newImg2 = document.getElementById('modalImg2').value.trim();
+        let newImg3 = document.getElementById('modalImg3').value.trim();
+        let newImg4 = document.getElementById('modalImg4').value.trim();
+
+        if(!newName || !newServiceId) {
+            alert("Service ID and Name cannot be empty!");
+            return;
+        }
+
+        fetch('https://catus-backend-d2js.onrender.com/api/admin/update-service', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                old_service_id: oldServiceId,
+                service_id: newServiceId,
+                service_name: newName,
+                category: s.category,
+                price: newPrice,
+                mrp: newMrp,
+                is_hot_deal: is_hot_deal,
+                select_options: select_options,
+                why_choose_us: why_choose_us,
+                discount_text: discount_text,
+                artificial_reviews_count: artificial_reviews_count,
+                artificial_reviews_data: artificial_reviews_data,
+                image_url: newImg1,
+                image_url_2: newImg2,
+                image_url_3: newImg3,
+                image_url_4: newImg4,
+                enable_select_options: enable_select_options,
+                product_note: product_note // <--- INGA INTHA LINE-AI ADD PANNUNGA!
+            })
+        })
+
+        .then(res => res.json())
+        .then(data => {
+            if(data && data.success) {
+                alert("Product updated successfully!");
+                document.getElementById('editServiceModal').style.display = 'none';
+                fetchAdminServices();
+            } else {
+                alert("Update failed.");
+            }
+        })
+        .catch(err => {
+            console.error("Update error:", err);
+            alert("Server connection error.");
+        });
+    }
+
+    function openAddServiceModal(categoryName) {
+        document.getElementById('addServiceCategory').value = categoryName;
+        document.getElementById('addModalCatTitle').textContent = categoryName; 
+        document.getElementById('newServiceId').value = '';
+        document.getElementById('newServiceName').value = '';
+        document.getElementById('newServicePrice').value = '';
+        document.getElementById('newServiceMrp').value = '';
+        
+        let addDiscountInput = document.getElementById('modalDiscountText');
+        if(addDiscountInput) addDiscountInput.value = '3% off';
+
+        document.getElementById('newImg1').value = '';
+        document.getElementById('newImg2').value = '';
+        document.getElementById('newImg3').value = '';
+        document.getElementById('newImg4').value = '';
+
+        document.getElementById('addNewServiceModal').style.display = 'flex';
+    }
+
+    function closeAddServiceModal() {
+        document.getElementById('addNewServiceModal').style.display = 'none';
+    }
+
+    function submitNewService() {
+        let category = document.getElementById('addServiceCategory').value;
+        let serviceId = document.getElementById('newServiceId').value.trim();
+        let serviceName = document.getElementById('newServiceName').value.trim();
+        let price = parseInt(document.getElementById('newServicePrice').value) || 0;
+        let mrp = parseInt(document.getElementById('newServiceMrp').value) || 0;
+        
+        let product_note = document.getElementById('modalProductNote').value.trim(); // <--- Inga value-ai eduthuvarrom
+        
+        let discountInput = document.getElementById('modalDiscountText');
+        let discount_text = discountInput ? discountInput.value.trim() : '3% off';
+        
+        let image_url = document.getElementById('newImg1').value.trim();
+        let image_url_2 = document.getElementById('newImg2').value.trim();
+        let image_url_3 = document.getElementById('newImg3').value.trim();
+        let image_url_4 = document.getElementById('newImg4').value.trim();
+
+        if(!serviceId || !serviceName || !image_url) {
+            alert("Please fill Service ID, Name, and Main Image URL!");
+            return;
+        }
+
+        fetch('https://catus-backend-d2js.onrender.com/api/admin/add-service', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                service_id: serviceId, 
+                service_name: serviceName, 
+                category, 
+                price, 
+                mrp, 
+                discount_text, 
+                image_url, 
+                image_url_2, 
+                image_url_3, 
+                image_url_4,
+                product_note: product_note // <--- Inga add-service payload-layum pass panrom!
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                alert("New product added successfully!");
+                closeAddServiceModal();
+                fetchAdminServices();
+            } else {
+                alert("Error: " + (data.error || "Failed to add product"));
+            }
+        }).catch(err => alert("Server connection error."));
+    }
+
+    function openEditBannersModal() {
+        document.getElementById('editBannersModal').style.display = 'flex';
+    }
+
+    function closeEditBannersModal() {
+        document.getElementById('editBannersModal').style.display = 'none';
+    }
+
+    let allAdminBanners = [];
+
+    function fetchAdminBanners() {
+        fetch('https://catus-backend-d2js.onrender.com/api/hero-banners')
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                allAdminBanners = data.banners;
+                let tbody = document.getElementById('adminBannersTableBody');
+                if(!tbody) return;
+                let html = '';
+                if(allAdminBanners.length === 0) {
+                    html = `<tr><td colspan="5" style="text-align:center; padding:20px; color:#64748b;">No custom banners added yet.</td></tr>`;
+                } else {
+                    allAdminBanners.forEach(b => {
+                        html += `<tr>
+                            <td><img src="${b.image_url}" style="width: 50px; height: 35px; object-fit: cover; border-radius: 4px;"></td>
+                            <td><b>${b.title}</b><br><small style="color:#64748b;">${b.subtitle || ''}</small></td>
+                            <td><code>${b.product_id || 'N/A'}</code></td>
+                            <td><span style="background:${b.bg_color}; padding: 2px 8px; border-radius: 4px; border:1px solid #cbd5e1;">${b.bg_color}</span></td>
+                            <td style="text-align: right;">
+                                <button class="manage-btn" style="background:#0284c7; margin-right:4px;" onclick="openEditBannerModal(${b.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <button class="manage-btn btn-danger" onclick="deleteBanner(${b.id})"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </td>
+                        </tr>`;
+                    });
+                }
+                tbody.innerHTML = html;
+            }
+        }).catch(err => console.error("Banner fetch error:", err));
+    }
+
+    function openAddBannerModal() { 
+        document.getElementById('bannerModalTitle').textContent = "Add New Home Banner";
+        document.getElementById('bannerEditId').value = "";
+        document.getElementById('newBannerTitle').value = "";
+        document.getElementById('newBannerSubtitle').value = "";
+        document.getElementById('newBannerImg').value = "";
+        document.getElementById('newBannerProdId').value = "";
+        document.getElementById('newBannerBg').value = "#f4f3f1";
+        document.getElementById('newBannerTextColor').value = "#111";
+        document.getElementById('newBannerBtnText').value = "Book now";
+        document.getElementById('bannerActionModal').style.display = 'flex'; 
+    }
+
+    function openEditBannerModal(id) {
+        let b = allAdminBanners.find(item => Number(item.id) === Number(id));
+        if(!b) return;
+
+        document.getElementById('bannerModalTitle').textContent = "Edit Banner Card (#" + b.id + ")";
+        document.getElementById('bannerEditId').value = b.id;
+        document.getElementById('newBannerTitle').value = b.title || '';
+        document.getElementById('newBannerSubtitle').value = b.subtitle || '';
+        document.getElementById('newBannerImg').value = b.image_url || '';
+        document.getElementById('newBannerProdId').value = b.product_id || '';
+        document.getElementById('newBannerBg').value = b.bg_color || '#f4f3f1';
+        document.getElementById('newBannerTextColor').value = b.text_color || '#111';
+        document.getElementById('newBannerBtnText').value = b.button_text || 'Book now';
+        
+        document.getElementById('bannerActionModal').style.display = 'flex';
+    }
+
+    function closeAddBannerModal() { 
+        document.getElementById('bannerActionModal').style.display = 'none'; 
+    }
+
+    function submitNewBanner() {
+        let id = document.getElementById('bannerEditId').value;
+        let title = document.getElementById('newBannerTitle').value.trim();
+        let subtitle = document.getElementById('newBannerSubtitle').value.trim();
+        let image_url = document.getElementById('newBannerImg').value.trim();
+        let product_id = document.getElementById('newBannerProdId').value.trim();
+        let bg_color = document.getElementById('newBannerBg').value.trim();
+        let text_color = document.getElementById('newBannerTextColor').value.trim();
+        let button_text = document.getElementById('newBannerBtnText').value.trim();
+
+        if(!title || !image_url) { 
+            alert("Please fill Title and Image URL!"); 
+            return; 
+        }
+
+        let endpoint = id ? 'https://catus-backend-d2js.onrender.com/api/admin/edit-banner' : 'https://catus-backend-d2js.onrender.com/api/admin/add-banner';
+        let payload = id ? { id, title, subtitle, image_url, product_id, bg_color, text_color, button_text } : { title, subtitle, image_url, product_id, bg_color, text_color, button_text };
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                alert(id ? "Banner updated successfully!" : "New banner card added successfully!");
+                closeAddBannerModal();
+                fetchAdminBanners();
+            } else { 
+                alert("Operation failed."); 
+            }
+        }).catch(err => {
+            console.error("Banner save error:", err);
+            alert("Server connection error.");
+        });
+    }
+
+    function deleteBanner(id) {
+        if(!confirm("Are you sure you want to delete this banner card?")) return;
+        fetch('https://catus-backend-d2js.onrender.com/api/admin/delete-banner', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                alert("Banner deleted successfully!");
+                fetchAdminBanners();
+            } else {
+                alert("Failed to delete banner.");
+            }
+        }).catch(err => console.error("Delete error:", err));
+    }
+
+    const originalSwitchMainPage = window.switchMainPage;
+    window.switchMainPage = function(pageId, title, btnElement) {
+        if(typeof originalSwitchMainPage === 'function') {
+            originalSwitchMainPage(pageId, title, btnElement);
+        }
+        if(pageId === 'services') {
+            fetchAdminBanners();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchAdminBanners();
+    });
+</script>
+
+<!-- ADD NEW PRODUCT / SERVICE MODAL -->
+<div class="modal-overlay" id="addNewServiceModal" style="display:none; justify-content:center; align-items:center;">
+    <div class="modal-box" style="max-width: 550px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 15px;">
+            <h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-plus-circle" style="color:#0284c7;"></i> Add New Product to <span id="addModalCatTitle" style="color:#0284c7;"></span></h3>
+            <button class="close-modal" onclick="closeAddServiceModal()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <input type="hidden" id="addServiceCategory">
+
+        <div style="display: flex; flex-direction: column; gap: 12px; max-height: 70vh; overflow-y: auto; padding-right: 5px;">
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Service ID * (e.g. ac-repair)</label>
+                <input type="text" id="newServiceId" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Unique ID">
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Future Note / Description (2 rows below price)</label>
+                <textarea id="modalProductNote" class="form-input" style="width:100%; box-sizing:border-box; height: 60px;" placeholder="Write custom notes here..."></textarea>
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Service Name *</label>
+                <input type="text" id="newServiceName" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Product Name">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group" style="margin:0;">
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Price (₹)</label>
+                    <input type="number" id="newServicePrice" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="499">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Cut Price / MRP (₹)</label>
+                    <input type="number" id="newServiceMrp" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="799">
+                </div>
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL *</label>
+                <input type="text" id="newImg1" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="https://images.unsplash.com/...">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (2)</label>
+                <input type="text" id="newImg2" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Optional">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (3)</label>
+                <input type="text" id="newImg3" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Optional">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (4)</label>
+                <input type="text" id="newImg4" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Optional">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+            <button style="flex:1; padding:10px; border:1px solid #cbd5e1; background:white; color:#0f172a; border-radius:6px; font-weight:600; cursor:pointer;" onclick="closeAddServiceModal()">Cancel</button>
+            <button style="flex:1; padding:10px; border:none; background:#0284c7; color:white; border-radius:6px; font-weight:600; cursor:pointer;" onclick="submitNewService()">Add Product</button>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
