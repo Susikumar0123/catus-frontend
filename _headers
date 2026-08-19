@@ -1,4 +1,0 @@
-/*
-  X-Frame-Options: SAMEORIGIN
-  X-XSS-Protection: 0
-  Content-Security-Policy: default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://catus-backend-d2js.onrender.com
