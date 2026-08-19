@@ -280,7 +280,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
     <div class="sidebar-header">
 
-        <img src="http://rinoservices.local/wp-content/uploads/2026/07/Design-a-premium-standalone-abstract-symbol-for-the-brand-_C.png" alt="Catus Logo">
+        <img src="" alt="Catus Logo">
 
         <div>
 
