@@ -1513,6 +1513,11 @@
 
   <!-- JavaScript Integration -->
   <script>
+
+  const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000' 
+    : 'https://catus-backend-d2js.onrender.com';
+
   async function submitEditOrderAddress() {
         const orderId = document.getElementById('editAddressOrderId').value;
         
@@ -2737,7 +2742,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('https://catus-backend-d2js.onrender.com/api/services');
+                const response = await fetch(`${API_BASE_URL}/api/services`);
                 const data = await response.json();
 
                 if (data.success && data.services) {
@@ -2899,7 +2904,7 @@ function handleIndexSearchSelect(serviceId, serviceName) {
    
     async function loadLiveServicesForFrontend() {
         try {
-            const response = await fetch('https://catus-backend-d2js.onrender.com/api/home-services');
+            const response = await fetch(`${API_BASE_URL}/api/home-services`);
             const data = await response.json();
             
             if(data.success && data.services.length > 0) {

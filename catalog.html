@@ -75,12 +75,16 @@
     </div>
 
     <script>
+       const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000' 
+    : 'https://catus-backend-d2js.onrender.com';
+    
        window.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const searchQuery = urlParams.get('search') ? urlParams.get('search').toLowerCase().trim() : '';
 
             try {
-                const response = await fetch('https://catus-backend-d2js.onrender.com/api/services');
+                const response = await fetch(`${API_BASE_URL}/api/services`);
                 const data = await response.json();
                 
                 const container = document.getElementById('allCatalogContainer');

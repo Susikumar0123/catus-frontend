@@ -296,6 +296,9 @@
 
     <!-- Script Logic -->
     <script>
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000' 
+        : 'https://catus-backend-d2js.onrender.com';
         function goBackToProduct() {
             if (document.referrer && document.referrer.includes('product.html')) {
                 window.location.href = document.referrer;
@@ -641,7 +644,7 @@
             const mobile = document.getElementById('fieldMobile').value.trim();
 
             try {
-                const response = await fetch('https://catus-backend-d2js.onrender.com/api/create-razorpay-order', {
+                const response = await fetch(`${API_BASE_URL}/api/create-razorpay-order`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ amount: finalAmt * 100 })
@@ -784,7 +787,7 @@
 
                 lastOrderData = orderPayload;
 
-                const response = await fetch('https://catus-backend-d2js.onrender.com/api/orders', {
+                const response = await fetch(`${API_BASE_URL}/api/orders`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(orderPayload)

@@ -942,7 +942,7 @@ async function submitEditOrderAddress() {
     const newAddress = `${door}, ${street ? street + ', ' : ''}${village}, ${city}, ${taluk}, ${district} - ${pincode}`;
 
     try {
-        const response = await fetch('https://catus-backend-d2js.onrender.com/api/admin/update-order-address', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/update-order-address`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -955,7 +955,6 @@ async function submitEditOrderAddress() {
 
         const data = await response.json();
         if (data.success) {
-            // Local Admin Cache-layum instant update-kaga save panrom
             const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
             if (!adminCache[orderId]) adminCache[orderId] = {};
             adminCache[orderId].address = newAddress;
@@ -970,61 +969,9 @@ async function submitEditOrderAddress() {
         } else {
             alert("Failed to update address in database.");
         }
-    } catch (err) {
+    }	catch (err) {
         console.error("Connection error:", err);
         alert("Server connection error.");
-    }
-}
-
-function submitEditOrderAddress() {
-    const orderId = document.getElementById('editAddressOrderId').value;
-    
-    let missing = false;
-    ['editDoor', 'editStreet', 'editVillage', 'editCity', 'editTaluk', 'editDistrict', 'editPincode'].forEach(id => {
-        let el = document.getElementById(id);
-        if (el && !el.value.trim()) { 
-            el.classList.add('error'); 
-            missing = true; 
-        } else if(el) { 
-            el.classList.remove('error'); 
-        }
-    });
-
-    let pinEl = document.getElementById('editPincode');
-    if (pinEl && pinEl.value.trim().length !== 6) { 
-        pinEl.classList.add('error'); 
-        missing = true; 
-    }
-
-    if (missing) {
-        let alertBox = document.getElementById('editAddressAlert');
-        if(alertBox) alertBox.style.display = 'block';
-        return;
-    }
-    
-    let alertBox = document.getElementById('editAddressAlert');
-    if(alertBox) alertBox.style.display = 'none';
-
-    const door = document.getElementById('editDoor').value.trim();
-    const street = document.getElementById('editStreet').value.trim();
-    const village = document.getElementById('editVillage').value.trim();
-    const city = document.getElementById('editCity').value.trim();
-    const taluk = document.getElementById('editTaluk').value.trim();
-    const district = document.getElementById('editDistrict').value.trim();
-    const pincode = document.getElementById('editPincode').value.trim();
-
-    const newAddress = `${door}, ${street}, ${village}, ${city}, ${taluk}, ${district} - ${pincode}`;
-
-    const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
-    if (!adminCache[orderId]) adminCache[orderId] = {};
-    adminCache[orderId].address = newAddress;
-    localStorage.setItem('catusAdminCache', JSON.stringify(adminCache));
-
-    alert("Address updated successfully for this booking.");
-    closeEditOrderAddressModal();
-
-    if (currentUser && currentUser.phone) {
-        fetchUserOrdersPremium(currentUser.phone);
     }
 }
 

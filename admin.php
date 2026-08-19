@@ -1130,6 +1130,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 </div>
 
 <script>
+    const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000' 
+    : 'https://catus-backend-d2js.onrender.com';
 
     function closeEditOrderAddressModal() {
         const modal = document.getElementById('editOrderAddressModal');
@@ -1137,7 +1140,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     }
 
     function fetchDashboardStats() {
-        fetch('https://catus-backend-d2js.onrender.com/api/admin/dashboard-stats')
+        fetch(`${API_BASE_URL}/api/admin/dashboard-stats`)
         .then(res => res.json())
         .then(data => {
             if (data.success && data.stats) {
@@ -1314,7 +1317,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 
     function fetchLiveBookings() {
-        fetch('https://catus-backend-d2js.onrender.com/api/admin/orders')
+        fetch(`${API_BASE_URL}/api/admin/orders`)
         .then(response => response.json())
         .then(data => {
             if(data && data.success && data.orders) {
@@ -1640,9 +1643,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         };
 
         try {
-            await fetch('https://catus-backend-d2js.onrender.com/api/admin/update-status', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, status: newStatus}) }).catch(e => null);
+            await fetch(`${API_BASE_URL}/api/admin/update-status`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, status: newStatus}) }).catch(e => null);
             if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
-                await fetch('https://catus-backend-d2js.onrender.com/api/admin/assign-technician-manual', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, technician_name: tName, technician_phone: tPhone, eta: tEta}) }).catch(e => null);
+                await fetch(`${API_BASE_URL}/api/admin/assign-technician-manual`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, technician_name: tName, technician_phone: tPhone, eta: tEta}) }).catch(e => null);
             }
         } catch(e){}
         finalizeSave();
@@ -1665,7 +1668,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     let customersData = [];
 
     function fetchLiveCustomers() {
-        fetch('https://catus-backend-d2js.onrender.com/api/admin/customers')
+        fetch(`${API_BASE_URL}/api/admin/customers`)
         .then(response => response.json())
         .then(data => {
             if(data.success && data.customers) {
@@ -1949,7 +1952,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     let adminServices = [];
 
     function fetchAdminServices() {
-        fetch('https://catus-backend-d2js.onrender.com/api/services')
+        fetch(`${API_BASE_URL}/api/services`)
         .then(res => res.json())
         .then(data => {
             if(data.success) {
@@ -2073,7 +2076,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             return;
         }
 
-        fetch('https://catus-backend-d2js.onrender.com/api/admin/update-service', {
+        fetch(`${API_BASE_URL}/api/admin/update-service`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -2159,7 +2162,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             return;
         }
 
-        fetch('https://catus-backend-d2js.onrender.com/api/admin/add-service', {
+        fetch(`${API_BASE_URL}/api/admin/add-service`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -2199,7 +2202,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     let allAdminBanners = [];
 
     function fetchAdminBanners() {
-        fetch('https://catus-backend-d2js.onrender.com/api/hero-banners')
+        fetch(`${API_BASE_URL}/api/hero-banners`)
         .then(res => res.json())
         .then(data => {
             if(data.success) {
@@ -2277,7 +2280,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             return; 
         }
 
-        let endpoint = id ? 'https://catus-backend-d2js.onrender.com/api/admin/edit-banner' : 'https://catus-backend-d2js.onrender.com/api/admin/add-banner';
+        let endpoint = id ? `${API_BASE_URL}/api/admin/edit-banner` : `${API_BASE_URL}/api/admin/add-banner`;
         let payload = id ? { id, title, subtitle, image_url, product_id, bg_color, text_color, button_text } : { title, subtitle, image_url, product_id, bg_color, text_color, button_text };
 
         fetch(endpoint, {
@@ -2302,7 +2305,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
     function deleteBanner(id) {
         if(!confirm("Are you sure you want to delete this banner card?")) return;
-        fetch('https://catus-backend-d2js.onrender.com/api/admin/delete-banner', {
+        fetch(`${API_BASE_URL}/api/admin/delete-banner`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
