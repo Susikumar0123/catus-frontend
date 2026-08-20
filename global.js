@@ -296,7 +296,7 @@ async function requestOTP() {
     tempPhone = phone;
     
     try {
-        const response = await fetch('https://catus-backend-d2js.onrender.com/api/login', {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: tempPhone })
@@ -363,7 +363,7 @@ async function submitRegistration() {
     const address = "No address saved";
 
     try {
-        const response = await fetch('https://catus-backend-d2js.onrender.com/api/register', {
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, phone: tempPhone, pincode, address })
@@ -593,7 +593,7 @@ function renderAuditLogs() {
 
 async function fetchUserOrdersPremium(phone) {
     try {
-        const response = await fetch(`https://catus-backend-d2js.onrender.com/api/orders/${phone}`);
+        const response = await fetch(`${API_BASE_URL}/api/orders/${phone}`);
         const data = await response.json();
         
         const ordersList = document.getElementById('premOrdersListContainer');
@@ -1086,7 +1086,7 @@ async function submitServiceRating() {
     const customerName = currentUser ? currentUser.name : "Customer";
     
     try {
-        const res = await fetch('https://catus-backend-d2js.onrender.com/api/reviews', {
+        const res = await fetch(`${API_BASE_URL}/api/reviews`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
