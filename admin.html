@@ -1,17 +1,12 @@
-<?php
-
-session_start();
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-
-    header("Location: admin_login.php");
-
-    exit();
-
-}
-
-?>
-
+<body>
+    <script>
+        const adminPass = prompt("Enter Admin Password:");
+        if (adminPass !== "Susi@123") { // Inga ungaloda desired password-ai potukonga
+            alert("Access Denied!");
+            window.location.href = "index.html"; 
+        }
+    </script>
+    
 <!DOCTYPE html>
 
 <html lang="en">
