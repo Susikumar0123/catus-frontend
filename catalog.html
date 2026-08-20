@@ -93,7 +93,6 @@
                 if (data.success && data.services && data.services.length > 0) {
                     let servicesToDisplay = data.services;
 
-                    // Oruvela search query iruntha, athu match aagura services mattum filter panrom
                     if (searchQuery) {
                         servicesToDisplay = data.services.filter(s => 
                             s.service_name.toLowerCase().includes(searchQuery) || 
@@ -109,7 +108,6 @@
                         return;
                     }
 
-                    // Group services by Category
                     let categoriesMap = {};
                     servicesToDisplay.forEach(s => {
                         let catName = s.category || 'Other Services';

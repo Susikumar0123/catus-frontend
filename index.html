@@ -67,9 +67,9 @@
         }
 
         .master-app-container {
-    width: 100% !important;          /* <-- Ithu munnadi max-width irukum, ippo 100% podunga */
-    max-width: 100% !important;      /* <-- 1200px irunthatha 100% nu maathunga */
-    margin: 0 !important;            /* <-- 20px auto irunthatha 0 nu maathunga */
+    width: 100% !important;         /* <-- Ithu munnadi max-width irukum, ippo 100% podunga */
+    max-width: 100% !important;     /* <-- 1200px irunthatha 100% nu maathunga */
+    margin: 0 !important;           /* <-- 20px auto irunthatha 0 nu maathunga */
     padding: 20px 40px !important;   /* <-- Side-la konjam padding irukkuthukku 40px podunga */
     background: #ffffff;
     border: none !important;         /* <-- 1px solid e2e8f0 irunthatha none aakunga */
@@ -1518,6 +1518,8 @@
     ? 'http://localhost:3000' 
     : 'https://catus-backend-d2js.onrender.com';
 
+  let orderPollingInterval = null; // Clean polling reference to prevent memory leaks
+
   async function submitEditOrderAddress() {
         const orderId = document.getElementById('editAddressOrderId').value;
         
@@ -1556,7 +1558,7 @@
         const newAddress = `${door}, ${street ? street + ', ' : ''}${village}, ${city}, ${taluk}, ${district} - ${pincode}`;
 
         try {
-            const response = await fetch('https://catus-backend-d2js.onrender.com/api/admin/update-order-address', {
+            const response = await fetch(`${API_BASE_URL}/api/admin/update-order-address`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1569,7 +1571,6 @@
 
             const data = await response.json();
             if (data.success) {
-                // Local Admin Cache-layum update panrom for instant UI sync
                 const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
                 if (!adminCache[orderId]) adminCache[orderId] = {};
                 adminCache[orderId].address = newAddress;
@@ -1589,8 +1590,13 @@
             alert("Server connection error.");
         }
     }
+    
     function logoutUser() {
         if(confirm("Are you sure you want to logout securely?")) {
+            if (orderPollingInterval) {
+                clearInterval(orderPollingInterval);
+                orderPollingInterval = null;
+            }
             localStorage.removeItem('catus_logged_user');
             currentUser = null;
             closePremiumDashboard();
@@ -1599,6 +1605,7 @@
             window.location.reload();
         }
     }
+
     function updateCartUI() {
         let rawCart = localStorage.getItem('catus_cart');
         cartItems = rawCart ? JSON.parse(rawCart) : [];
@@ -1638,6 +1645,7 @@
         if (finalTotal < 0) finalTotal = 0;
         if (totalPriceEl) totalPriceEl.textContent = "₹" + finalTotal;
     }
+
     let cartItems = JSON.parse(localStorage.getItem('catus_cart')) || [];
     let discountAmount = 0;
     let appliedCoupon = "";
@@ -1663,7 +1671,8 @@
             if(currentUser.wallet === undefined) currentUser.wallet = 2500;
             fetchUserOrdersPremium(currentUser.phone);
             renderAuditLogs(); 
-            setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+            if (orderPollingInterval) clearInterval(orderPollingInterval);
+            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
         }
     });
 
@@ -2176,55 +2185,6 @@
         document.getElementById('editOrderAddressModal').style.display = 'none';
     }
 
-    function submitEditOrderAddress() {
-        const orderId = document.getElementById('editAddressOrderId').value;
-        
-        let missing = false;
-        ['editDoor', 'editStreet', 'editVillage', 'editCity', 'editTaluk', 'editDistrict', 'editPincode'].forEach(id => {
-            let el = document.getElementById(id);
-            if (!el.value.trim()) { 
-                el.classList.add('error'); 
-                missing = true; 
-            } else { 
-                el.classList.remove('error'); 
-            }
-        });
-
-        if (document.getElementById('editPincode').value.trim().length !== 6) { 
-            document.getElementById('editPincode').classList.add('error'); 
-            missing = true; 
-        }
-
-        if (missing) {
-            document.getElementById('editAddressAlert').style.display = 'block';
-            return;
-        }
-        
-        document.getElementById('editAddressAlert').style.display = 'none';
-
-        const door = document.getElementById('editDoor').value.trim();
-        const street = document.getElementById('editStreet').value.trim();
-        const village = document.getElementById('editVillage').value.trim();
-        const city = document.getElementById('editCity').value.trim();
-        const taluk = document.getElementById('editTaluk').value.trim();
-        const district = document.getElementById('editDistrict').value.trim();
-        const pincode = document.getElementById('editPincode').value.trim();
-
-        const newAddress = `${door}, ${street}, ${village}, ${city}, ${taluk}, ${district} - ${pincode}`;
-
-        const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
-        if (!adminCache[orderId]) adminCache[orderId] = {};
-        adminCache[orderId].address = newAddress;
-        localStorage.setItem('catusAdminCache', JSON.stringify(adminCache));
-
-        alert("Address updated successfully for this booking.");
-        closeEditOrderAddressModal();
-
-        if (currentUser && currentUser.phone) {
-            fetchUserOrdersPremium(currentUser.phone);
-        }
-    }
-
     function openPremiumDashboard() {
         toggleAuthModal(false);
         if (currentUser) {
@@ -2276,7 +2236,7 @@
         tempPhone = phone;
         
         try {
-            const response = await fetch('https://catus-backend-d2js.onrender.com/api/login', {
+            const response = await fetch(`${API_BASE_URL}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone: tempPhone })
@@ -2310,7 +2270,8 @@
                 openPremiumDashboard();
                 showToast("Login Successful!", false);
                 
-                setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+                if (orderPollingInterval) clearInterval(orderPollingInterval);
+                orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
             }
         } else {
             alert('Invalid OTP. Please enter 1234.');
@@ -2322,7 +2283,6 @@
     const email = document.getElementById('regEmail').value.trim();
     const pincode = document.getElementById('regPincode').value.trim();
     
-    // Strict Email Validation Check (@ and . irukanum)
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!name) {
@@ -2343,7 +2303,7 @@
     const address = "No address saved";
 
     try {
-        const response = await fetch('https://catus-backend-d2js.onrender.com/api/register', {
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, phone: tempPhone, pincode, address })
@@ -2359,7 +2319,8 @@
             openPremiumDashboard();
             showToast("Account Registered Successfully!", false);
             
-            setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+            if (orderPollingInterval) clearInterval(orderPollingInterval);
+            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
         } else {
             alert(data.message || 'Registration failed.');
         }
@@ -2371,7 +2332,7 @@
 
     async function fetchUserOrdersPremium(phone) {
         try {
-            const response = await fetch(`https://catus-backend-d2js.onrender.com/api/orders/${phone}`);
+            const response = await fetch(`${API_BASE_URL}/api/orders/${phone}`);
             const data = await response.json();
             
             const ordersList = document.getElementById('premOrdersListContainer');
@@ -2669,8 +2630,6 @@
         }
     }
 
-    
-
     function selectChip(element) {
         if (element.classList.contains('active')) {
             element.classList.remove('active');
@@ -2725,7 +2684,7 @@
     function backToPhoneStep() {
         showAuthStep('phone');
     }
-// --- DYNAMIC SEARCH & SUGGESTION SCRIPT FOR INDEX PAGE ---
+
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const suggestionsBox = document.getElementById('suggestionsBox');
@@ -2737,7 +2696,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (query.length === 0) {
                 suggestionsBox.style.display = 'none';
                 suggestionsBox.innerHTML = '';
-                filterProducts(''); // Reset product grid
+                filterProducts('');
                 return;
             }
 
@@ -2770,7 +2729,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Search error:", err);
             }
 
-            // Filter page products live
             filterProducts(query);
         });
 
@@ -2786,25 +2744,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 250);
         });
 
-        // --- CATALOG SEARCH REDIRECT FIX ---
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInput');
-    const suggestionsBox = document.getElementById('suggestionsBox');
-
-    if (searchInput) {
-        // Old listeners remove aagura maari direct-a function-ah assign panrom
         searchInput.onkeydown = function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 const query = searchInput.value.trim();
                 if (!query) return;
-                
-                // Direct-ah catalog page-ku search query-oda pogum
                 window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
             }
         };
-    }
-});
     }
 });
 
@@ -2814,7 +2761,6 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     const box = document.getElementById('suggestionsBox');
     if (box) box.style.display = 'none';
     
-    // Direct-a product page-ku redirect pannalam illa filter pannalam
     window.location.href = `product.html?id=${serviceId}`;
 }
 
@@ -2959,22 +2905,9 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         }
     }
 
-    function getCategoryDescription(catName) {
-        let c = catName.toLowerCase();
-        if(c.includes('tv')) return "Top-rated doorstep repair and installation for LED TVs and acoustic systems.";
-        if(c.includes('air conditioning') || c.includes('ac')) return "Complete split and window AC maintenance solutions";
-        if(c.includes('kitchen') || c.includes('water')) return "Ensuring your daily kitchen utilities run perfectly";
-        return "Complete doorstep repair and maintenance solutions";
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        loadLiveServicesForFrontend();
-        loadHeroBanners();
-    });
-
     async function loadHeroBanners() {
         try {
-            const response = await fetch('https://catus-backend-d2js.onrender.com/api/hero-banners');
+            const response = await fetch(`${API_BASE_URL}/api/hero-banners`);
             const data = await response.json();
             
             const container = document.getElementById('cardsContainer');

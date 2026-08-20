@@ -299,6 +299,7 @@
         const API_BASE_URL = window.location.hostname === 'localhost' 
         ? 'http://localhost:3000' 
         : 'https://catus-backend-d2js.onrender.com';
+        
         function goBackToProduct() {
             if (document.referrer && document.referrer.includes('product.html')) {
                 window.location.href = document.referrer;
@@ -447,7 +448,6 @@
                 return;
             }
 
-            // Inga error-ah hide panra line add panniyachu
             document.getElementById('errorAlert').style.display = 'none';
 
             const door = document.getElementById('fieldDoor').value.trim();
@@ -664,13 +664,11 @@
                     "description": "Service Booking Payment",
                     "order_id": data.id,
                     "handler": async function (response) {
-                        // Payment Successful - Ippo thaan database-la order save aagum & success page varum
                         await saveOrderToDatabase(response.razorpay_payment_id, finalAmt, 'Online Paid (Razorpay)', 'Paid');
                     },
                     "modal": {
                         "escape": false,
                         "ondismiss": function() {
-                            // User popup-ai close pannitaanga (Exit pannitaanga) -> Database-la order save aagathu!
                             showFailurePage("You cancelled the payment gateway. No booking was created.");
                         }
                     },
@@ -680,7 +678,6 @@
 
                 const rzp = new Razorpay(options);
                 
-                // Payment Failed event handling -> Database-la order save aagathu!
                 rzp.on('payment.failed', function (response){
                     showFailurePage(response.error.description || "Transaction declined by bank or network error.");
                 });
@@ -689,28 +686,24 @@
             } catch (err) {
                 alert('Payment gateway connection error.');
             }
-        }      
-     
+        }       
+      
                function showFailurePage(reasonText) {
             document.getElementById('checkoutMainSection').style.display = 'none';
             let successView = document.getElementById('successPageView');
             successView.style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Red cross styling for failure
             let circle = document.getElementById('circleAnim');
-            circle.style.background = '#ef4444'; // Red color
+            circle.style.background = '#ef4444'; 
             circle.classList.add('animate');
             
-            // Change tick to cross symbol using FontAwesome icon inside the circle
             circle.innerHTML = '<i class="fa-solid fa-xmark" style="color: white; font-size: 45px; line-height: 90px;"></i>';
 
-            // Change header texts
             successView.querySelector('h1').textContent = "Payment Failed / Cancelled!";
             successView.querySelector('h1').style.color = "#ef4444";
             successView.querySelector('p').textContent = reasonText || "Your transaction could not be completed. No order was placed.";
 
-            // Hide or clear receipt box for failed payments
             const receiptBox = successView.querySelector('.receipt-box');
             if(receiptBox) {
                 receiptBox.innerHTML = `
@@ -721,7 +714,6 @@
                 `;
             }
 
-            // Change button text & action
             let btn = successView.querySelector('button.confirm-btn');
             if(btn) {
                 btn.textContent = "Back to Checkout / Cart";
@@ -763,7 +755,6 @@
 
             let lastOrderData = {};
             try {
-                // Cart-la irukkura ellaa items-aiyum serthu oru single combined service name & product id-ah maathrom
                 let combinedServiceName = orderItems.map(i => i.name).join(', ');
                 let combinedProductIds = orderItems.map(i => i.product_id || 'tv-repair').join(', ');
                 

@@ -656,9 +656,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 <!-- ==========================================
 
-     ORDER MANAGEMENT MODAL 
+      ORDER MANAGEMENT MODAL 
 
-     ========================================== -->
+      ========================================== -->
 
 <div class="modal-overlay" id="orderDetailModal">
 
@@ -852,9 +852,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 <!-- ==========================================
 
-     CUSTOMER MANAGEMENT MODAL 
+      CUSTOMER MANAGEMENT MODAL 
 
-     ========================================== -->
+      ========================================== -->
 
 <div class="modal-overlay" id="customerDetailModal">
 
@@ -964,9 +964,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 <!-- ==========================================
 
-     TRANSACTION DETAILS MODAL
+      TRANSACTION DETAILS MODAL
 
-     ========================================== -->
+      ========================================== -->
 
 <div class="modal-overlay" id="txnDetailModal">
 
@@ -1144,177 +1144,92 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         .then(res => res.json())
         .then(data => {
             if (data.success && data.stats) {
-                // Total Platform Revenue
                 document.getElementById('statRevenue').textContent = '₹' + (parseInt(data.stats.total_revenue) || 0).toLocaleString();
-                
-                // Total Wallet Liability (Users wallet balance sum)
                 document.getElementById('statLiability').textContent = '₹' + (parseInt(data.stats.total_liability) || 0).toLocaleString();
-                
-                // Today's Collection
                 document.getElementById('statToday').textContent = '₹' + (parseInt(data.stats.todays_collection) || 0).toLocaleString();
             }
         }).catch(err => console.error("Stats fetch error:", err));
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-
         renderTechniciansMasterTable();
-
         loadTechniciansDropdown();
-
         fetchLiveBookings();
-
         fetchLiveCustomers();
-
         fetchAdminServices(); 
-
         fetchDashboardStats();
-
     });
 
-
-
     function renderTechniciansMasterTable() {
-
         let tbody = document.getElementById('techniciansTableBody');
-
         if(!tbody) return;
 
-
-
         let registeredTechs = JSON.parse(localStorage.getItem('catus_registered_technicians')) || [
-
             { id: 'TECH-101', name: 'Ramesh Kumar', phone: '9578155827', altPhone: 'N/A', spec: 'Smart TV & AC Specialist', homeAddress: '12, Main Road, Tiruppur', shopAddress: 'Shop 4, Market St' }
-
         ];
-
-
 
         let html = '';
-
         registeredTechs.forEach(t => {
-
             html += `<tr>
-
                 <td><b>${t.id}</b></td>
-
                 <td><strong>${t.name}</strong></td>
-
                 <td>${t.phone}</td>
-
                 <td><span style="color:#0284c7; font-weight:600;">${t.spec}</span></td>
-
                 <td><small>${t.homeAddress}</small></td>
-
                 <td><small>${t.shopAddress}</small></td>
-
                 <td><span class="badge badge-active">${t.status || 'Available'}</span></td>
-
                 <td><button class="manage-btn" onclick="alert('Tech: ${t.name} | Alt Phone: ${t.altPhone}')">View</button></td>
-
             </tr>`;
-
         });
-
         tbody.innerHTML = html;
-
     }
-
-
 
     function loadTechniciansDropdown() {
-
         const selectEl = document.getElementById('techDropdownSelect');
-
         if(!selectEl) return;
 
-
-
         let registeredTechs = JSON.parse(localStorage.getItem('catus_registered_technicians')) || [
-
             { id: 'TECH-101', name: 'Ramesh Kumar', phone: '9578155827', spec: 'Smart TV & AC Specialist' }
-
         ];
 
-
-
         let html = '<option value="">-- Choose Registered Technician --</option>';
-
         registeredTechs.forEach(t => {
-
             html += `<option value="${t.name}|${t.phone}|${t.id}">${t.name} (${t.id}) - ${t.spec}</option>`;
-
         });
-
         selectEl.innerHTML = html;
-
     }
-
-
 
     function fillTechDataFromDropdown(selectEl) {
-
         let val = selectEl.value;
-
         if(val) {
-
             let parts = val.split('|');
-
             document.getElementById('techNameInput').value = `${parts[0]} (${parts[2]})`;
-
             document.getElementById('techPhoneInput').value = parts[1];
-
         } else {
-
             document.getElementById('techNameInput').value = '';
-
             document.getElementById('techPhoneInput').value = '';
-
         }
-
     }
-
-
 
     let allBookings = [];
-
     let currentTab = 'All';
-
     let currentWalletTab = 'All'; 
-
     const techCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
 
-
-
     function switchMainPage(pageId, title, btnElement) {
-
         document.querySelectorAll('.main-tab-pane').forEach(el => el.classList.remove('active'));
-
         document.getElementById('page-' + pageId).classList.add('active');
-
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-
         btnElement.classList.add('active');
-
         document.getElementById('topbarTitle').textContent = title;
 
-
-
         if(pageId === 'customers') renderCustomerTable();
-
         if(pageId === 'wallet') renderWalletTable(); 
-
         if(pageId === 'services') {
-
             fetchAdminServices();
-
             fetchAdminBanners();
-
         }
-
     }
-
-
 
     function fetchLiveBookings() {
         fetch(`${API_BASE_URL}/api/admin/orders`)
@@ -1324,20 +1239,18 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 allBookings = data.orders.map(order => {
                     let cachedData = techCache[order.order_id];
                     
-                    // Cache-la address update aayirunthal, athula irunthu District & Pincode-ai extract panrom
                     let updatedAddress = (cachedData && cachedData.address) ? cachedData.address : order.address;
                     let updatedDistrict = (cachedData && cachedData.district) ? cachedData.district : order.district;
                     let updatedPincode = (cachedData && cachedData.pincode) ? cachedData.pincode : order.pincode;
 
-                    // Address string-irunthu district/pincode parse panra logic (e.g., "Door, Village, City, Taluk, District - Pincode")
                     if (cachedData && cachedData.address && (!cachedData.district || !cachedData.pincode)) {
                         let parts = cachedData.address.split('-').map(s => s.trim());
                         if (parts.length > 1) {
-                            updatedPincode = parts[parts.length - 1]; // Last part is pincode
+                            updatedPincode = parts[parts.length - 1]; 
                             let addressWithoutPin = parts[0];
                             let subParts = addressWithoutPin.split(',').map(s => s.trim());
                             if (subParts.length > 0) {
-                                updatedDistrict = subParts[subParts.length - 1]; // Second last or last city/district
+                                updatedDistrict = subParts[subParts.length - 1]; 
                             }
                         }
                     }
@@ -1362,39 +1275,21 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         });
     }
 
-
-
     function switchTab(status, btn, context = 'bookings') {
-
         let parent = btn.parentElement;
-
         parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-
         btn.classList.add('active');
 
-
-
         if (context === 'bookings') {
-
             currentTab = status;
-
             document.getElementById('selectAllHeaderCell').style.display = (currentTab === 'Trash') ? 'table-cell' : 'none';
-
             document.getElementById('bulkDeleteBtn').style.display = 'none';
-
             renderTable();
-
         } else if (context === 'wallet') {
-
             currentWalletTab = status;
-
             renderWalletTable();
-
         }
-
     }
-
-
 
     function getFilteredData() {
         let searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -1436,55 +1331,33 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             let prodName = item.service_name ? item.service_name.toLowerCase() : '';
             let techName = item.technician_name ? item.technician_name.toLowerCase() : '';
             let matchesSearch = item.customer_name.toLowerCase().includes(searchQuery) ||
-                                (item.phone && item.phone.includes(searchQuery)) ||
-                                (String(item.order_id).toLowerCase().includes(searchQuery)) ||
-                                techName.includes(searchQuery) || prodName.includes(searchQuery);
-                                
+                            (item.phone && item.phone.includes(searchQuery)) ||
+                            (String(item.order_id).toLowerCase().includes(searchQuery)) ||
+                            techName.includes(searchQuery) || prodName.includes(searchQuery);
+                            
             return matchesTab && matchesSearch;
         });
     }
 
-
-
     function renderTable() {
-
         let tbody = document.getElementById('bookingTableBody');
-
         if(!tbody) return;
-
         let filtered = getFilteredData();
-
         let html = '';
-
         if(filtered.length === 0) {
-
             html = `<tr><td colspan="${currentTab === 'Trash' ? 9 : 8}" style="text-align:center; padding: 35px; color:#64748b;">No records found.</td></tr>`;
-
         } else {
-
             filtered.forEach(item => {
-
                 let displayStatus = (item.status === 'Active' || item.status === 'Service') ? 'In Service' : item.status;
-
                 let badgeClass = 'badge-pending';
-
                 if(displayStatus === 'Assigned' || displayStatus === 'On the way') badgeClass = 'badge-assigned';
-
                 if(displayStatus === 'In Service') badgeClass = 'badge-active';
-
                 if(displayStatus === 'Completed') badgeClass = 'badge-completed';
-
                 if(displayStatus === 'Re-Service Requested') badgeClass = 'badge-reservice';
-
                 if(item.is_deleted == 1) { badgeClass = 'badge-trash'; displayStatus = 'Trash'; }
-
-
 
                 let checkboxHTML = currentTab === 'Trash' ? `<td class="chk-col"><input type="checkbox" class="trash-checkbox" value="${item.order_id}" onclick="checkSelectedCount()"></td>` : (item.is_deleted == 1 ? '<td class="chk-col"></td>' : '');
 
-
-
-                // Payment mode badge stylingkaga
                 let payModeText = item.status === 'Paid' ? 'Online Paid' : 'Pay Later';
                 let payModeBadgeClass = item.status === 'Paid' ? 'badge-completed' : 'badge-pending';
 
@@ -1494,17 +1367,14 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 <td><span style="font-weight: 600; color:#0284c7;">${item.service_name || 'Smart TV Repair'}</span></td>
                 <td><a href="tel:${item.phone}" style="color:#475569; text-decoration:none;"><i class="fa-solid fa-phone"></i> ${item.phone}</a></td>
                 <td>${item.district} - ${item.pincode}</td>
-                <td><span class="badge ${payModeBadgeClass}">${payModeText}</span></td> <!-- Inga pudhu column-ai add panniyachu -->
+                <td><span class="badge ${payModeBadgeClass}">${payModeText}</span></td>
                 <td><small style="color: #64748b; font-weight: 600;">${new Date(item.order_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true })}</small></td>
                 <td><span class="badge ${badgeClass}">${displayStatus}</span></td>
                 <td class="no-print"><button class="manage-btn" onclick="openOrderModal('${item.order_id}')"><i class="fa-solid fa-user-pen"></i> Manage</button></td>
             </tr>`;
             });
-
         }
-
         tbody.innerHTML = html;
-
     }
     
     function openOrderModal(orderId) {
@@ -1516,8 +1386,6 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         document.getElementById('detCustName').textContent = order.customer_name;
         document.getElementById('detCustPhone').textContent = order.phone;
         
-        // (Intha edathula iruntha thappana s.enable_select_options line-ai remove panniyachu)
-
         document.getElementById('detServiceName').textContent = order.service_name || 'Smart TV Repair';
         document.getElementById('detProductId').textContent = order.product_id;
         document.getElementById('detAmount').textContent = '₹' + order.amount;
@@ -1554,24 +1422,14 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         document.getElementById('orderDetailModal').style.display = 'flex';
     }
 
-
     function enableTechEdit() {
-
         document.getElementById('techDetailsView').style.display = 'none';
-
         document.getElementById('techDetailsEdit').style.display = 'block';
-
         document.getElementById('saveOrderBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Tech Details & Status';
-
         document.getElementById('techNameInput').focus();
-
     }
-
     
-
     function closeOrderModal() { document.getElementById('orderDetailModal').style.display = 'none'; }
-
-
 
     async function saveOrderDetails() {
         let orderId = document.getElementById('manageOrderId').value;
@@ -1586,7 +1444,6 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         saveBtn.disabled = true;
 
         const finalizeSave = () => {
-            // Exact India Time (IST) strict-ah generate panra code
             const now = new Date();
             const formattedTimeStr = now.toLocaleString("en-IN", { 
                 timeZone: "Asia/Kolkata", 
@@ -1602,7 +1459,6 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             let existingCache = techCache[orderId] || {};
             existingCache.status = newStatus;
             
-            // Ovvoru status-kum antha exact click panra nerathai store panrom
             if (newStatus === 'Assigned') existingCache.assigned_time = formattedTimeStr;
             if (newStatus === 'On the way') existingCache.ontheway_time = formattedTimeStr;
             if (newStatus === 'In Service' || newStatus === 'Completed') existingCache.service_time = formattedTimeStr;
@@ -1615,7 +1471,6 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
             techCache[orderId] = existingCache;
             localStorage.setItem('catusAdminCache', JSON.stringify(techCache));
-            // ... (baki code apdiye irukattum)
 
             let idx = allBookings.findIndex(o => String(o.order_id) === String(orderId));
             if (idx !== -1) {
@@ -1651,22 +1506,13 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         finalizeSave();
     }
 
-
-
     function filterTable() { 
-
         if(document.getElementById('page-bookings').classList.contains('active')) renderTable(); 
-
         if(document.getElementById('page-customers').classList.contains('active')) renderCustomerTable();
-
         if(document.getElementById('page-wallet').classList.contains('active')) renderWalletTable(); 
-
     }
 
-
-
     let customersData = [];
-
     function fetchLiveCustomers() {
         fetch(`${API_BASE_URL}/api/admin/customers`)
         .then(response => response.json())
@@ -1680,7 +1526,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                         name: c.name || 'Customer',
                         email: c.email || 'N/A',
                         phone: c.phone,
-                        wallet: 0, // <--- Ellaa customer-kum ippo wallet bal 0-nu kaattum
+                        wallet: 0, 
                         orders: c.total_orders !== undefined ? c.total_orders : 0,
                         status: c.status || 'Active',
                         address: c.address || 'Doorstep Service Location'
@@ -1693,262 +1539,129 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         });
     }
 
-
-
     function renderCustomerTable() {
-
         let tbody = document.getElementById('customerTableBody');
-
         if(!tbody) return;
-
         let searchQuery = document.getElementById('searchInput').value.toLowerCase();
-
         let filtered = customersData.filter(c => c.name.toLowerCase().includes(searchQuery) || c.phone.includes(searchQuery));
-
         let html = '';
-
         if(filtered.length === 0) {
-
             html = `<tr><td colspan="8" style="text-align:center; padding: 35px; color:#64748b;">No customers found.</td></tr>`;
-
         } else {
-
             filtered.forEach(c => {
-
                 let badgeClass = c.status === 'Active' ? 'badge-active' : 'badge-inactive';
-
                 html += `<tr>
-
                     <td><b>${c.id}</b></td>
-
                     <td><strong>${c.name}</strong></td>
-
                     <td>${c.email}</td>
-
                     <td>${c.phone}</td>
-
                     <td><strong style="color:#16a34a;">₹${c.wallet}</strong></td>
-
                     <td>${c.orders}</td>
-
                     <td><span class="badge ${badgeClass}">${c.status}</span></td>
-
                     <td><button class="manage-btn" style="background:#0284c7;" onclick="openCustomerModal('${c.id}')"><i class="fa-solid fa-sliders"></i> Manage</button></td>
-
                 </tr>`;
-
             });
-
         }
-
         tbody.innerHTML = html;
-
     }
-
-
 
     function openCustomerModal(id) {
-
         currentManageCustomer = customersData.find(c => c.id === id);
-
         if(!currentManageCustomer) return;
-
         document.getElementById('modalCusIdTitle').textContent = `(${currentManageCustomer.id})`;
-
         document.getElementById('cusModalName').textContent = currentManageCustomer.name;
-
         document.getElementById('cusModalPhone').textContent = currentManageCustomer.phone;
-
         document.getElementById('cusModalEmail').textContent = currentManageCustomer.email;
-
         document.getElementById('cusModalAddress').textContent = currentManageCustomer.address;
-
         document.getElementById('cusModalTotalOrders').textContent = currentManageCustomer.orders;
-
         document.getElementById('walletBalanceInput').value = currentManageCustomer.wallet;
-
         document.getElementById('customerDetailModal').style.display = 'flex';
-
     }
-
-
 
     function closeCustomerModal() { document.getElementById('customerDetailModal').style.display = 'none'; }
-
     
-
     function updateWalletBalance() {
-
         let newBalance = parseInt(document.getElementById('walletBalanceInput').value);
-
         if(isNaN(newBalance) || newBalance < 0) { alert("Enter valid balance."); return; }
-
         currentManageCustomer.wallet = newBalance;
-
         renderCustomerTable();
-
         alert("Wallet updated successfully!");
-
     }
 
-
-
-    // To this (Empty array):
     let walletTransactions = [];
-
     let currentManageTxn = null;
 
-
-
     function renderWalletTable() {
-
         let tbody = document.getElementById('walletTableBody');
-
         if(!tbody) return;
-
         let html = '';
-
         walletTransactions.forEach(t => {
-
             html += `<tr>
-
                 <td><b>${t.id}</b></td>
-
                 <td><small>${new Date(t.date).toLocaleString()}</small></td>
-
                 <td><strong>${t.name}</strong></td>
-
                 <td><span style="color:#16a34a; font-weight:600;">${t.type}</span></td>
-
                 <td>${t.mode}</td>
-
                 <td><strong>₹${t.amount}</strong></td>
-
                 <td><span class="badge badge-completed">${t.status}</span></td>
-
                 <td><button class="manage-btn" onclick="openTxnModal('${t.id}')"><i class="fa-solid fa-eye"></i> View</button></td>
-
             </tr>`;
-
         });
-
         tbody.innerHTML = html;
-
     }
-
-
 
     function openTxnModal(id) {
-
         currentManageTxn = walletTransactions.find(t => t.id === id);
-
         if(!currentManageTxn) return;
-
         document.getElementById('txnModalId').textContent = currentManageTxn.id;
-
         document.getElementById('txnModalDate').textContent = new Date(currentManageTxn.date).toLocaleString();
-
         document.getElementById('txnModalName').textContent = currentManageTxn.name;
-
         document.getElementById('txnModalMode').textContent = currentManageTxn.mode;
-
         document.getElementById('txnModalAmount').textContent = currentManageTxn.amount;
-
         document.getElementById('txnDetailModal').style.display = 'flex';
-
     }
-
-
 
     function closeTxnModal() { document.getElementById('txnDetailModal').style.display = 'none'; }
 
-
-
     function exportToExcel() {
-
         let table = document.getElementById("reportTable");
-
         let html = table.outerHTML.replace(/ /g, '%20');
-
         let downloadLink = document.createElement("a");
-
         downloadLink.href = 'data:application/vnd.ms-excel,' + html;
-
         downloadLink.download = 'Catus_Bookings_Report.xls';
-
         downloadLink.click();
-
     }
-
-
 
     function exportToPDF() {
-
         let tableHtml = document.getElementById("reportTable").outerHTML;
-
         let printWin = window.open('', '_blank', 'width=900,height=600');
-
-        
-
         printWin.document.write(`
-
             <html>
-
             <head>
-
                 <title>Catus Bookings Report</title>
-
                 <style>
-
                     body { font-family: Arial, sans-serif; padding: 20px; color: #1e293b; }
-
                     h2 { text-align: center; margin-bottom: 20px; color: #0284c7; }
-
                     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-
                     th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; font-size: 12px; }
-
                     th { background: #f8fafc; color: #475569; text-transform: uppercase; }
-
                     .no-print, .chk-col { display: none; }
-
                 </style>
-
             </head>
-
             <body>
-
                 <h2>Catus Admin - Bookings Report</h2>
-
                 ${tableHtml}
-
             </body>
-
             </html>
-
         `);
-
-        
-
         printWin.document.close();
-
         printWin.focus();
-
         setTimeout(() => {
-
             printWin.print();
-
             printWin.close();
-
         }, 400);
-
     }
-
     
-
-    // ==========================================
-    // MANAGE SERVICES (CATEGORY WISE & MODAL EDIT)
-    // ==========================================
     let adminServices = [];
 
     function fetchAdminServices() {
@@ -2031,9 +1744,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         document.getElementById('modalIsHotDeal').value = (s.is_hot_deal !== undefined) ? s.is_hot_deal : 1;
         document.getElementById('modalEnableSelectOptions').value = (s.enable_select_options !== undefined) ? s.enable_select_options : 1;
         
-        // ---> INGA THAAN ANTHA LINE-AI ADD PANNANUM <---
         document.getElementById('modalProductNote').value = s.product_note || '';
-        // ------------------------------------------------
 
         document.getElementById('modalSelectOptions').value = s.select_options || 'Standard Service';
         document.getElementById('modalWhyChooseUs').value = s.why_choose_us || 'Verified Professionals: Background-verified expert technicians.|30-Day Warranty: Post-service warranty on all repairs.';
@@ -2097,10 +1808,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 image_url_3: newImg3,
                 image_url_4: newImg4,
                 enable_select_options: enable_select_options,
-                product_note: product_note // <--- INGA INTHA LINE-AI ADD PANNUNGA!
+                product_note: product_note 
             })
         })
-
         .then(res => res.json())
         .then(data => {
             if(data && data.success) {
@@ -2147,7 +1857,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         let price = parseInt(document.getElementById('newServicePrice').value) || 0;
         let mrp = parseInt(document.getElementById('newServiceMrp').value) || 0;
         
-        let product_note = document.getElementById('modalProductNote').value.trim(); // <--- Inga value-ai eduthuvarrom
+        let product_note = document.getElementById('modalProductNote').value.trim(); 
         
         let discountInput = document.getElementById('modalDiscountText');
         let discount_text = discountInput ? discountInput.value.trim() : '3% off';
@@ -2176,7 +1886,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 image_url_2, 
                 image_url_3, 
                 image_url_4,
-                product_note: product_note // <--- Inga add-service payload-layum pass panrom!
+                product_note: product_note 
             })
         })
         .then(res => res.json())
@@ -2185,18 +1895,10 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 alert("New product added successfully!");
                 closeAddServiceModal();
                 fetchAdminServices();
-            } else {
-                alert("Error: " + (data.error || "Failed to add product"));
+            } else { 
+                alert("Error: " + (data.error || "Failed to add product")); 
             }
         }).catch(err => alert("Server connection error."));
-    }
-
-    function openEditBannersModal() {
-        document.getElementById('editBannersModal').style.display = 'flex';
-    }
-
-    function closeEditBannersModal() {
-        document.getElementById('editBannersModal').style.display = 'none';
     }
 
     let allAdminBanners = [];

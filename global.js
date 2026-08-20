@@ -12,6 +12,7 @@ let currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || null;
 let tempPhone = "";
 let checkoutMode = 'single'; 
 let checkoutSingleItem = null;
+let orderPollingInterval = null; // Clean polling timer reference
 
 // ==========================================
 // 2. UTILITY & TOAST FUNCTIONS
@@ -278,6 +279,10 @@ function backToPhoneStep() {
 
 function logoutUser() {
     if(confirm("Are you sure you want to logout securely?")) {
+        if (orderPollingInterval) {
+            clearInterval(orderPollingInterval);
+            orderPollingInterval = null;
+        }
         localStorage.removeItem('catus_logged_user');
         currentUser = null;
         closePremiumDashboard();
@@ -330,7 +335,8 @@ function verifyOTP() {
             openPremiumDashboard();
             showToast("Login Successful!", false);
             
-            setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+            if (orderPollingInterval) clearInterval(orderPollingInterval);
+            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
         }
     } else {
         alert('Invalid OTP. Please enter 1234.');
@@ -342,7 +348,6 @@ async function submitRegistration() {
     const email = document.getElementById('regEmail').value.trim();
     const pincode = document.getElementById('regPincode').value.trim();
     
-    // Strict Email Validation Check (@ and . irukanum)
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!name) {
@@ -379,7 +384,8 @@ async function submitRegistration() {
             openPremiumDashboard();
             showToast("Account Registered Successfully!", false);
             
-            setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+            if (orderPollingInterval) clearInterval(orderPollingInterval);
+            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
         } else {
             alert(data.message || 'Registration failed.');
         }
@@ -790,7 +796,6 @@ async function fetchUserOrdersPremium(phone) {
                     if (isRated) {
                         ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#f1f5f9; color:#94a3b8; border-color:#e2e8f0; cursor:not-allowed;" onclick="showToast('You have already rated this service!', true)"><i class="fa-solid fa-check-circle"></i> Rated</button>`;
                     } else {
-                        // Pass exact displayProductId as 3rd parameter to link review to specific product
                         ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#10b981; color:white; border-color:#10b981;" onclick="openRatingModal('${order.order_id}', '${safeServiceName}', '${displayProductId}')"><i class="fa-solid fa-star"></i> Rate Service</button>`;
                     }
                     actionButtonsHTML = `
@@ -969,7 +974,7 @@ async function submitEditOrderAddress() {
         } else {
             alert("Failed to update address in database.");
         }
-    }	catch (err) {
+    }   catch (err) {
         console.error("Connection error:", err);
         alert("Server connection error.");
     }
@@ -1081,7 +1086,6 @@ async function submitServiceRating() {
     const orderId = document.getElementById('currentRatingOrderId').value;
     const prodIdInput = document.getElementById('currentRatingProductId');
     
-    // Captures exact product ID from booking history
     const targetServiceId = (prodIdInput && prodIdInput.value) ? prodIdInput.value : (typeof activeServiceId !== 'undefined' ? activeServiceId : 'tv-repair');
     const customerName = currentUser ? currentUser.name : "Customer";
     
@@ -1090,7 +1094,7 @@ async function submitServiceRating() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                service_id: targetServiceId, // Exact specific product ID linked to booking
+                service_id: targetServiceId,
                 customer_name: customerName, 
                 rating: rating, 
                 review_text: reviewText 

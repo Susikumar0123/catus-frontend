@@ -36,7 +36,7 @@
         body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; color: #212121; transition: background-color 0.3s, color 0.3s; }
         .master-app-container { 
     width: 100% !important;          /* <-- 100% podunga */
-    max-width: 100% !important;      /* <-- 1200px-ku badhila 100% podunga */
+    max-width: 100% !important;     /* <-- 1200px-ku badhila 100% podunga */
     margin: 0 !important;            /* <-- 0 nu podunga */
     padding: 20px 40px !important;   /* <-- Side gap-kaga 40px podunga */
     background: #ffffff; 
@@ -743,7 +743,7 @@
       </div>
   </div>
 
-  <!-- ACTION MODALS (Edit Address, Cancel, Invoice, Rating) -->
+  <!-- ACTION MODALS (Edit Address, Cancel, Invoice, Rate) -->
   
   <!-- EDIT ADDRESS MODAL FOR LIVE TRACKING -->
   <div class="cart-modal-overlay" id="editOrderAddressModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
@@ -830,6 +830,8 @@
     ? 'http://localhost:3000' 
     : 'https://catus-backend-d2js.onrender.com';
 
+  let orderPollingInterval = null; // Clean polling reference to prevent memory leaks
+
   async function submitEditOrderAddress() {
         const orderId = document.getElementById('editAddressOrderId').value;
         
@@ -881,7 +883,6 @@
 
             const data = await response.json();
             if (data.success) {
-                // Local Admin Cache-layum update panrom for instant UI sync
                 const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
                 if (!adminCache[orderId]) adminCache[orderId] = {};
                 adminCache[orderId].address = newAddress;
@@ -901,9 +902,14 @@
             alert("Server connection error.");
         }
     }
+  
   // --- SECURE LOGOUT FUNCTION ---
 function logoutUser() {
     if(confirm("Are you sure you want to logout securely?")) {
+        if (orderPollingInterval) {
+            clearInterval(orderPollingInterval);
+            orderPollingInterval = null;
+        }
         localStorage.removeItem('catus_logged_user');
         currentUser = null;
         closePremiumDashboard();
@@ -913,7 +919,6 @@ function logoutUser() {
     }
 }
   
-// --- INTHA FUNCTION-AH UNGA SCRIPT-ODA STARTING-LA PASTE PANNINGA ---
 async function loadProductReviews(serviceId) {
     const container = document.getElementById('popupReviewsListContainer');
     const headerCount = document.getElementById('popupReviewsCountHeader');
@@ -972,7 +977,7 @@ async function loadProductReviews(serviceId) {
         console.log("Error loading reviews:", e);
     }
 }
-    
+  
 
 function openReviewsPopup() {
     const modal = document.getElementById('productReviewsPopupModal');
@@ -989,7 +994,6 @@ function closeReviewsPopup() {
     }
 }
 
-// loadPopupReviewsData function alias to loadProductReviews for seamless compatibility
 function loadPopupReviewsData(serviceId) {
     loadProductReviews(serviceId);
 }
@@ -1057,7 +1061,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const query = searchInput.value.trim();
                 if (!query) return;
                 
-                // Direct-ah catalog page-ku search query-oda redirect aagum
                 window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
             }
         });
@@ -1108,59 +1111,51 @@ function handleProductSearchSelect(serviceId) {
                     document.getElementById('bcCategory').innerText = s.category || 'Service';
                     document.getElementById('bcTitle').innerText = s.service_name;
                     document.getElementById('prodRating').innerText = s.rating || '4.8';
-                    document.getElementById('prodReviewsCount').innerText = (s.reviews_count || '500') + " Ratings & Reviews";
                     document.getElementById('prodReviewsCount').innerText = (s.artificial_reviews_count || s.reviews_count || '500') + " Ratings & Reviews";
                     document.getElementById('displayDiscount').innerText = s.discount_text || '3% off';
 
-                    // 1. Hot Deal Badge On/Off Control
                     const hotDealEl = document.querySelector('.hot-deal');
                     if (hotDealEl) {
                     hotDealEl.style.display = (s.is_hot_deal == 1) ? 'block' : 'none';
                     }
                     
-                    // 5. Product Custom Note / Description Display Control
-const productNoteEl = document.getElementById('productNoteContainer');
-if (productNoteEl) {
-    if (s.product_note && s.product_note.trim() !== '') {
-        productNoteEl.style.display = 'block';
-        productNoteEl.innerText = s.product_note;
-    } else {
-        productNoteEl.style.display = 'none';
-        productNoteEl.innerText = '';
-    }
-}
+                    const productNoteEl = document.getElementById('productNoteContainer');
+                    if (productNoteEl) {
+                        if (s.product_note && s.product_note.trim() !== '') {
+                            productNoteEl.style.display = 'block';
+                            productNoteEl.innerText = s.product_note;
+                        } else {
+                            productNoteEl.style.display = 'none';
+                            productNoteEl.innerText = '';
+                        }
+                    }
 
-                    // ---> INGA THAAN ANTHA CODE-AI ADD PANNANUM <---
-                    // 4. Enable/Disable Select Options Toggle Check
                     const selectOptionWrapper = document.querySelector('.variant-title') ? document.querySelector('.variant-title').closest('div') : null;
                     if (selectOptionWrapper) {
                     selectOptionWrapper.style.display = (s.enable_select_options == 0) ? 'none' : 'block';
                     }
 
-                    // 2. Select Options (Variants) Dynamic Load from Admin
-const variantContainer = document.getElementById('variantContainer');
-const variantTitleEl = document.querySelector('.variant-title'); // Select Option heading
+                    const variantContainer = document.getElementById('variantContainer');
+                    const variantTitleEl = document.querySelector('.variant-title');
 
-if (variantContainer) {
-    // Oruvela enable_select_options 0-nu iruntha, button-um title-um complete-ah hide aagum
-    if (s.enable_select_options == 0) {
-        variantContainer.style.display = 'none';
-        if (variantTitleEl) variantTitleEl.style.display = 'none';
-    } else {
-        variantContainer.style.display = 'flex';
-        if (variantTitleEl) variantTitleEl.style.display = 'block';
+                    if (variantContainer) {
+                        if (s.enable_select_options == 0) {
+                            variantContainer.style.display = 'none';
+                            if (variantTitleEl) variantTitleEl.style.display = 'none';
+                        } else {
+                            variantContainer.style.display = 'flex';
+                            if (variantTitleEl) variantTitleEl.style.display = 'block';
 
-        let optionsStr = s.select_options || 'Standard Service';
-        let optionsArr = optionsStr.split(',');
-        let optHtml = '';
-        optionsArr.forEach((opt, idx) => {
-            optHtml += `<button class="variant-btn ${idx === 0 ? 'active' : ''}" onclick="selectVariant(this)">${opt.trim()}</button>`;
-        });
-        variantContainer.innerHTML = optHtml;
-    }
-}
+                            let optionsStr = s.select_options || 'Standard Service';
+                            let optionsArr = optionsStr.split(',');
+                            let optHtml = '';
+                            optionsArr.forEach((opt, idx) => {
+                                optHtml += `<button class="variant-btn ${idx === 0 ? 'active' : ''}" onclick="selectVariant(this)">${opt.trim()}</button>`;
+                            });
+                            variantContainer.innerHTML = optHtml;
+                        }
+                    }
 
-                    // 3. Why Choose Us Dialogues Dynamic Load from Admin
                     const featuresContainer = document.getElementById('featuresContainer');
                     if (featuresContainer) {
                         let whyStr = s.why_choose_us || 'Verified Professionals: Background-verified expert technicians.|30-Day Warranty: Post-service warranty on all repairs.';
@@ -1175,7 +1170,6 @@ if (variantContainer) {
                         featuresContainer.innerHTML = pointsHtml;
                     }
 
-                    // Thumbnails
                     let thumbContainer = document.getElementById('thumbnailContainer');
                     let thumbsHTML = `<div class="thumb-box active" onclick="changeMainImage(this)"><img src="${s.image_url}" alt="Thumb"></div>`;
                     if(s.image_url_2) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_2}" alt="Thumb"></div>`;
@@ -1195,6 +1189,8 @@ if (variantContainer) {
             if(currentUser.wallet === undefined) currentUser.wallet = 2500;
             fetchUserOrdersPremium(currentUser.phone);
             renderAuditLogs();
+            if (orderPollingInterval) clearInterval(orderPollingInterval);
+            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
         }
     });
 
@@ -1211,33 +1207,32 @@ if (variantContainer) {
     }
 
     function loadRelatedServices(allServices, currentCategory, currentId) {
-        const relatedContainer = document.getElementById('relatedContainer');
-        if(!relatedContainer) return;
-        let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
-        
-        if (filtered.length === 0) {
-            filtered = allServices.slice(0, 4); 
-        }
-
-        let html = '';
-        filtered.forEach(s => {
-            // BUTTONS REMOVED: Card mela click pannave direct product page pogum
-            html += `
-            <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
-                <div class="uc-card-img-wrapper">
-                    <img src="${s.image_url}" alt="${s.service_name}">
-                    <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
-                </div>
-                <div class="uc-body">
-                    <div>
-                        <h4>${s.service_name.toUpperCase()}</h4>
-                        <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
-                    </div>
-                </div>
-            </div>`;
-        });
-        relatedContainer.innerHTML = html;
+    const relatedContainer = document.getElementById('relatedContainer');
+    if(!relatedContainer) return;
+    let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
+    
+    if (filtered.length === 0) {
+        filtered = allServices.slice(0, 4); 
     }
+
+    let html = '';
+    filtered.forEach(s => {
+        html += `
+        <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
+            <div class="uc-card-img-wrapper">
+                <img src="${s.image_url}" alt="${s.service_name}">
+                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
+            </div>
+            <div class="uc-body">
+                <div>
+                    <h4>${s.service_name.toUpperCase()}</h4>
+                    <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
+                </div>
+            </div>
+        </div>`;
+    });
+    relatedContainer.innerHTML = html;
+}
 
     function addToCartCurrentProduct() {
         if(!currentProductData) return;
@@ -1425,6 +1420,8 @@ if (variantContainer) {
                 updateHeaderLoginUI();
                 toggleAuthModal(false);
                 showToast("Login Successful!", false);
+                if (orderPollingInterval) clearInterval(orderPollingInterval);
+                orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
             }
         } else {
             alert('Invalid OTP. Please enter 1234.');
@@ -1436,7 +1433,6 @@ if (variantContainer) {
     const email = document.getElementById('regEmail').value.trim();
     const pincode = document.getElementById('regPincode').value.trim();
     
-    // Strict Email Validation Check (@ and . irukanum)
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!name) {
@@ -1473,7 +1469,8 @@ if (variantContainer) {
             openPremiumDashboard();
             showToast("Account Registered Successfully!", false);
             
-            setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+            if (orderPollingInterval) clearInterval(orderPollingInterval);
+            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
         } else {
             alert(data.message || 'Registration failed.');
         }
@@ -1837,7 +1834,6 @@ if (variantContainer) {
     const customerName = currentUser ? currentUser.name : "Customer";
     
     try {
-        // Database-ku review-ah send panrathu
         const res = await fetch(`${API_BASE_URL}/api/reviews`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1858,7 +1854,6 @@ if (variantContainer) {
             closeRatingModal();
             showToast("Thanks for your review & rating! It's live now.", false);
             
-            // Popup open-la iruntha reviews list-ah instant-ah refresh panrathuku
             loadPopupReviewsData(activeServiceId);
             
             if (currentUser && currentUser.phone) fetchUserOrdersPremium(currentUser.phone);
@@ -1870,34 +1865,6 @@ if (variantContainer) {
         alert("Server connection error.");
     }
 }
-
-    async function submitPopupReview() {
-        let name = document.getElementById('popupReviewAuthor').value.trim();
-        let rating = document.getElementById('popupReviewRating').value;
-        let text = document.getElementById('popupReviewText').value.trim();
-
-        if(!name || !text) {
-            alert("Please enter your name and comments.");
-            return;
-        }
-
-        try {
-            const res = await fetch('https://catus-backend-d2js.onrender.com/api/reviews', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ service_id: activeServiceId, customer_name: name, rating, review_text: text })
-            });
-            const data = await res.json();
-            if(data.success) {
-                alert("Review posted successfully!");
-                document.getElementById('popupReviewAuthor').value = '';
-                document.getElementById('popupReviewText').value = '';
-                loadPopupReviewsData(activeServiceId);
-            }
-        } catch(e) {
-            alert("Failed to post review.");
-        }
-    }
 
     // Profile Settings Addons
     function toggleEditField(field) {
