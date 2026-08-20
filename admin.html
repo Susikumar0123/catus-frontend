@@ -1665,6 +1665,8 @@
     
     let adminServices = [];
 
+    let adminServices = [];
+
     function fetchAdminServices() {
         fetch(`${API_BASE_URL}/api/services`)
         .then(res => res.json())
@@ -1672,6 +1674,8 @@
             if(data.success) {
                 adminServices = data.services;
                 renderServicesTable();
+            } else {
+                console.error("Services data fetch failed");
             }
         }).catch(err => console.error("Services fetch error:", err));
     }
@@ -2030,6 +2034,7 @@
             originalSwitchMainPage(pageId, title, btnElement);
         }
         if(pageId === 'services') {
+            fetchAdminServices(); // 🛑 Ithu manage services tab click panra pothu fresh-ah fetch panni podum!
             fetchAdminBanners();
         }
     }
