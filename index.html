@@ -2849,61 +2849,63 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     }
    
     async function loadLiveServicesForFrontend() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/home-services`);
-            const data = await response.json();
-            
-            if(data.success && data.services.length > 0) {
-                let container = document.getElementById('productGridContainer');
-                if(!container) return;
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/home-services`);
+        const data = await response.json();
+        
+        if(data.success && data.services.length > 0) {
+            let container = document.getElementById('productGridContainer');
+            if(!container) return;
 
-                let categoriesMap = {};
-                data.services.forEach(s => {
-                    let catName = s.category || 'Other Services';
-                    if(!categoriesMap[catName]) {
-                        categoriesMap[catName] = { items: [] };
-                    }
-                    if (categoriesMap[catName].items.length < 4) {
-                        categoriesMap[catName].items.push(s);
-                    }
+            let categoriesMap = {};
+            data.services.forEach(s => {
+                let catName = s.category || 'Other Services';
+                if(!categoriesMap[catName]) {
+                    categoriesMap[catName] = { items: [] };
+                }
+                if (categoriesMap[catName].items.length < 4) {
+                    categoriesMap[catName].items.push(s);
+                }
+            });
+
+            let html = '';
+            for(let catName in categoriesMap) {
+                let catData = categoriesMap[catName];
+                
+                html += `
+                <div class="uc-category-box">
+                    <div class="uc-cat-header">
+                        <h3>${catName}</h3>
+                        <p>Top-rated doorstep repair and installation services for ${catName}.</p>
+                    </div>
+                    <div class="uc-grid">`;
+        
+                catData.items.forEach((s) => {
+                    let trendingBadgeHTML = (s.is_hot_deal == 1) ? `<div class="trending-badge">Hot Deal</div>` : ``;
+                    html += `
+                    <div class="uc-card" data-name="${s.service_name.toLowerCase()}" onclick="window.location.href='product.html?id=${s.service_id}'">
+                        <div class="uc-card-img-wrapper">
+                            ${trendingBadgeHTML}
+                            <img src="${s.image_url}" alt="${s.service_name}" loading="lazy">
+                            <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
+                        </div>
+                        <div class="uc-body">
+                            <div>
+                                <h4>${s.service_name.toUpperCase()}</h4>
+                                <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
+                            </div>
+                        </div>
+                    </div>`;
                 });
 
-                let html = '';
-                for(let catName in categoriesMap) {
-                    let catData = categoriesMap[catName];
-                    
-                    html += `
-                    <div class="uc-category-box">
-                        <div class="uc-cat-header">
-                            <h3>${catName}</h3>
-                            <p>Top-rated doorstep repair and installation services.</p>
-                        </div>
-                        <div class="uc-grid">`;
-                
-                    catData.items.forEach((s) => {
-                        html += `
-                        <div class="uc-card" data-name="${s.service_name.toLowerCase()}" onclick="window.location.href='product.html?id=${s.service_id}'">
-                            <div class="uc-card-img-wrapper">
-                                <img src="${s.image_url}" alt="${s.service_name}" loading="lazy">
-                                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
-                            </div>
-                            <div class="uc-body">
-                                <div>
-                                    <h4>${s.service_name.toUpperCase()}</h4>
-                                    <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
-                                </div>
-                            </div>
-                        </div>`;
-                    });
-
-                    html += `</div></div>`;
-                }
-                container.innerHTML = html;
+                html += `</div></div>`;
             }
-        } catch(e) {
-            console.log("Error loading home services:", e);
+            container.innerHTML = html;
         }
+    } catch(e) {
+        console.log("Error loading home services:", e);
     }
+}
 
     async function loadHeroBanners() {
         try {

@@ -80,86 +80,92 @@
     : 'https://catus-backend-d2js.onrender.com';
     
        window.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const searchQuery = urlParams.get('search') ? urlParams.get('search').toLowerCase().trim() : '';
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('search') ? urlParams.get('search').toLowerCase().trim() : '';
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/services`);
-                const data = await response.json();
-                
-                const container = document.getElementById('allCatalogContainer');
-                const subtitleLabel = document.getElementById('catalogSubtitle');
-                
-                if (data.success && data.services && data.services.length > 0) {
-                    let servicesToDisplay = data.services;
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/services`);
+            const data = await response.json();
+            
+            const container = document.getElementById('allCatalogContainer');
+            const subtitleLabel = document.getElementById('catalogSubtitle');
+            
+            if (data.success && data.services && data.services.length > 0) {
+                let servicesToDisplay = data.services;
 
-                    if (searchQuery) {
-                        servicesToDisplay = data.services.filter(s => 
-                            s.service_name.toLowerCase().includes(searchQuery) || 
-                            (s.category && s.category.toLowerCase().includes(searchQuery))
-                        );
-                        subtitleLabel.textContent = `Search results for "${searchQuery}" (${servicesToDisplay.length} services found):`;
-                    } else {
-                        subtitleLabel.textContent = `Explore our complete catalog of over ${data.services.length}+ professional repair and maintenance services.`;
+                if (searchQuery) {
+                    servicesToDisplay = data.services.filter(s => 
+                        s.service_name.toLowerCase().includes(searchQuery) || 
+                        (s.category && s.category.toLowerCase().includes(searchQuery))
+                    );
+                    subtitleLabel.textContent = `Search results for "${searchQuery}" (${servicesToDisplay.length} services found):`;
+                } else {
+                    subtitleLabel.textContent = `Explore our complete catalog of over ${data.services.length}+ professional repair and maintenance services.`;
+                }
+                
+                if (servicesToDisplay.length === 0) {
+                    container.innerHTML = `<p style="text-align: center; color: #ef4444; padding: 40px;">No services found matching "${searchQuery}".</p>`;
+                    return;
+                }
+
+                let categoriesMap = {};
+                servicesToDisplay.forEach(s => {
+                    let catName = s.category || 'Other Services';
+                    if(!categoriesMap[catName]) {
+                        categoriesMap[catName] = [];
                     }
+                    categoriesMap[catName].push(s);
+                });
+
+                let html = '';
+                for(let catName in categoriesMap) {
+                    let items = categoriesMap[catName];
+                    let catDesc = getCategoryDescription(catName);
+
+                    html += `
+                    <div class="uc-category-box">
+                        <div class="uc-cat-header">
+                            <h3>${catName}</h3>
+                            <p>${catDesc}</p>
+                        </div>
+                        <div class="uc-grid">`;
                     
-                    if (servicesToDisplay.length === 0) {
-                        container.innerHTML = `<p style="text-align: center; color: #ef4444; padding: 40px;">No services found matching "${searchQuery}".</p>`;
-                        return;
-                    }
-
-                    let categoriesMap = {};
-                    servicesToDisplay.forEach(s => {
-                        let catName = s.category || 'Other Services';
-                        if(!categoriesMap[catName]) {
-                            categoriesMap[catName] = [];
-                        }
-                        categoriesMap[catName].push(s);
+                    items.forEach(s => {
+                        let safeName = s.service_name.replace(/'/g, "\\'");
+                        let hotDealBadge = (s.is_hot_deal == 1) ? `<div class="trending-badge" style="position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #8b5cf6, #5b21b6); color: #fff; font-size: 8px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 10; text-transform: uppercase;">Hot Deal</div>` : '';
+                        
+                        html += `
+                        <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
+                            <div class="uc-card-img-wrapper" style="position: relative; width: 100%; height: 160px; border-radius: 10px; overflow: hidden; background: #f1f5f9; margin-bottom: 8px;">
+                                ${hotDealBadge}
+                                <img src="${s.image_url}" alt="${s.service_name}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="uc-overlay-rating" style="position: absolute; bottom: 8px; left: 8px; background: rgba(255,255,255,0.92); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 3px;"><i class="fa-solid fa-star" style="color: #10b981; font-size: 10px;"></i> ${s.rating || '4.8'}</div>
+                            </div>
+                            <div class="uc-body">
+                                <div>
+                                    <div class="uc-rating-row"><span class="uc-stars"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</span><span class="uc-reviews">(${s.artificial_reviews_count || 500})</span></div>
+                                    <h4 style="font-size: 14px; font-weight: 500; color: #212121; margin: 0 0 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${s.service_name.toUpperCase()}</h4>
+                                    <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
+                                </div>
+                                <div class="uc-btn-row" style="display: flex; gap: 8px; width: 100%; margin-top: 8px;">
+                                    <button class="uc-btn uc-cart-btn" onclick="event.stopPropagation(); addToCartCatalog('${safeName}', ${s.price}, '${s.image_url}', this)">Add to Cart</button>
+                                    <a href="product.html?id=${s.service_id}" class="uc-btn" onclick="event.stopPropagation();">Book Now</a>
+                                </div>
+                            </div>
+                        </div>`;
                     });
 
-                    let html = '';
-                    for(let catName in categoriesMap) {
-                        let items = categoriesMap[catName];
-                        let catDesc = getCategoryDescription(catName);
-
-                        html += `
-                        <div class="uc-category-box">
-                            <div class="uc-cat-header">
-                                <h3>${catName}</h3>
-                                <p>${catDesc}</p>
-                            </div>
-                            <div class="uc-grid">`;
-                        
-                        items.forEach(s => {
-                            let safeName = s.service_name.replace(/'/g, "\\'");
-                            html += `
-                            <div class="uc-card">
-                                <img src="${s.image_url}" alt="${s.service_name}" loading="lazy" onclick="window.location.href='product.html?id=${s.service_id}'">
-                                <div class="uc-body">
-                                    <div>
-                                        <div class="uc-rating-row"><span class="uc-stars"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</span><span class="uc-reviews">(${s.reviews_count || '500'})</span></div>
-                                        <h4 onclick="window.location.href='product.html?id=${s.service_id}'">${s.service_name.toUpperCase()}</h4>
-                                        <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
-                                    </div>
-                                    <div class="uc-btn-row">
-                                        <button class="uc-btn uc-cart-btn" onclick="addToCartCatalog('${safeName}', ${s.price}, '${s.image_url}', this)">Add to Cart</button>
-                                        <a href="product.html?id=${s.service_id}" class="uc-btn">Book Now</a>
-                                    </div>
-                                </div>
-                            </div>`;
-                        });
-
-                        html += `</div></div>`;
-                    }
-                    container.innerHTML = html;
-                } else {
-                    container.innerHTML = `<p style="text-align: center; color: #ef4444; padding: 40px;">No services found in database.</p>`;
+                    html += `</div></div>`;
                 }
-            } catch (e) {
-                console.error("Error loading catalog:", e);
-                document.getElementById('allCatalogContainer').innerHTML = `<p style="text-align: center; color: #ef4444; padding: 40px;">Server connection error.</p>`;
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = `<p style="text-align: center; color: #ef4444; padding: 40px;">No services found in database.</p>`;
             }
-        });
+        } catch (e) {
+            console.error("Error loading catalog:", e);
+            document.getElementById('allCatalogContainer').innerHTML = `<p style="text-align: center; color: #ef4444; padding: 40px;">Server connection error.</p>`;
+        }
+    });
 
         function getCategoryDescription(catName) {
             let c = catName.toLowerCase();

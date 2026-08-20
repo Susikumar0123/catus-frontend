@@ -1089,19 +1089,16 @@ function handleProductSearchSelect(serviceId) {
 
     let activeServiceId = 'tv-repair';
 
-    window.addEventListener('DOMContentLoaded', async () => {
-        updateCartUI();
-        updateHeaderLoginUI();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        activeServiceId = urlParams.get('id') || 'tv-repair';
-
+    // ==========================================
+    // DYNAMIC PRODUCT DETAILS & REVIEWS LOADER
+    // ==========================================
+    async function loadProductDetailsAndReviews(serviceId) {
         try {
             const response = await fetch(`${API_BASE_URL}/api/services`);
             const data = await response.json();
             
             if (data.success && data.services) {
-                const s = data.services.find(item => String(item.service_id) === String(activeServiceId));
+                const s = data.services.find(item => String(item.service_id) === String(serviceId));
                 if (s) {
                     currentProductData = s;
                     document.getElementById('prodTitle').innerText = s.service_name;
@@ -1111,14 +1108,20 @@ function handleProductSearchSelect(serviceId) {
                     document.getElementById('bcCategory').innerText = s.category || 'Service';
                     document.getElementById('bcTitle').innerText = s.service_name;
                     document.getElementById('prodRating').innerText = s.rating || '4.8';
-                    document.getElementById('prodReviewsCount').innerText = (s.artificial_reviews_count || s.reviews_count || '500') + " Ratings & Reviews";
-                    document.getElementById('displayDiscount').innerText = s.discount_text || '3% off';
 
+                    // 1. Discount Percentage Text (e.g. 50% off)
+                    const discountEl = document.getElementById('displayDiscount');
+                    if (discountEl) {
+                        discountEl.textContent = s.discount_text || '3% off';
+                    }
+
+                    // 2. Hot Deal Badge
                     const hotDealEl = document.querySelector('.hot-deal');
                     if (hotDealEl) {
-                    hotDealEl.style.display = (s.is_hot_deal == 1) ? 'block' : 'none';
+                        hotDealEl.style.display = (s.is_hot_deal == 1) ? 'block' : 'none';
                     }
-                    
+
+                    // 3. Product Note
                     const productNoteEl = document.getElementById('productNoteContainer');
                     if (productNoteEl) {
                         if (s.product_note && s.product_note.trim() !== '') {
@@ -1130,14 +1133,9 @@ function handleProductSearchSelect(serviceId) {
                         }
                     }
 
-                    const selectOptionWrapper = document.querySelector('.variant-title') ? document.querySelector('.variant-title').closest('div') : null;
-                    if (selectOptionWrapper) {
-                    selectOptionWrapper.style.display = (s.enable_select_options == 0) ? 'none' : 'block';
-                    }
-
+                    // 4. Select Option ON / OFF Toggle
                     const variantContainer = document.getElementById('variantContainer');
                     const variantTitleEl = document.querySelector('.variant-title');
-
                     if (variantContainer) {
                         if (s.enable_select_options == 0) {
                             variantContainer.style.display = 'none';
@@ -1145,9 +1143,7 @@ function handleProductSearchSelect(serviceId) {
                         } else {
                             variantContainer.style.display = 'flex';
                             if (variantTitleEl) variantTitleEl.style.display = 'block';
-
-                            let optionsStr = s.select_options || 'Standard Service';
-                            let optionsArr = optionsStr.split(',');
+                            let optionsArr = (s.select_options || 'Standard Service').split(',');
                             let optHtml = '';
                             optionsArr.forEach((opt, idx) => {
                                 optHtml += `<button class="variant-btn ${idx === 0 ? 'active' : ''}" onclick="selectVariant(this)">${opt.trim()}</button>`;
@@ -1156,6 +1152,7 @@ function handleProductSearchSelect(serviceId) {
                         }
                     }
 
+                    // 5. Why Choose Us Dynamic Content
                     const featuresContainer = document.getElementById('featuresContainer');
                     if (featuresContainer) {
                         let whyStr = s.why_choose_us || 'Verified Professionals: Background-verified expert technicians.|30-Day Warranty: Post-service warranty on all repairs.';
@@ -1170,20 +1167,133 @@ function handleProductSearchSelect(serviceId) {
                         featuresContainer.innerHTML = pointsHtml;
                     }
 
+                    // 6. Thumbnails
                     let thumbContainer = document.getElementById('thumbnailContainer');
-                    let thumbsHTML = `<div class="thumb-box active" onclick="changeMainImage(this)"><img src="${s.image_url}" alt="Thumb"></div>`;
-                    if(s.image_url_2) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_2}" alt="Thumb"></div>`;
-                    if(s.image_url_3) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_3}" alt="Thumb"></div>`;
-                    if(s.image_url_4) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_4}" alt="Thumb"></div>`;
-                    thumbContainer.innerHTML = thumbsHTML;
+                    if (thumbContainer) {
+                        let thumbsHTML = `<div class="thumb-box active" onclick="changeMainImage(this)"><img src="${s.image_url}" alt="Thumb"></div>`;
+                        if(s.image_url_2) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_2}" alt="Thumb"></div>`;
+                        if(s.image_url_3) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_3}" alt="Thumb"></div>`;
+                        if(s.image_url_4) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_4}" alt="Thumb"></div>`;
+                        thumbContainer.innerHTML = thumbsHTML;
+                    }
 
-                    loadRelatedServices(data.services, s.category, s.service_id);
-                    loadProductReviews(activeServiceId);
+                    // 7. Load Combined Reviews (Artificial + Live Users)
+                    await loadCombinedProductReviews(serviceId, s);
+
+                    // 8. Load More Relevant Services
+                    loadRelevantServicesSection(data.services, s.category, s.service_id);
                 }
             }
         } catch (e) {
-            console.log("Backend offline.");
+            console.error("Error loading product details:", e);
         }
+    }
+
+    async function loadCombinedProductReviews(serviceId, productObj) {
+        const container = document.getElementById('popupReviewsListContainer');
+        const headerCount = document.getElementById('popupReviewsCountHeader');
+        
+        let totalReviewCount = productObj.artificial_reviews_count || 500;
+        if(headerCount) headerCount.textContent = totalReviewCount;
+        
+        let reviewsCountTextEl = document.getElementById('prodReviewsCount');
+        if(reviewsCountTextEl) reviewsCountTextEl.textContent = totalReviewCount + " Ratings & Reviews";
+
+        let customReviews = [];
+        if (productObj.artificial_reviews_data) {
+            let lines = productObj.artificial_reviews_data.split('\n');
+            lines.forEach(line => {
+                let parts = line.split('|').map(p => p.trim());
+                if(parts.length >= 3) {
+                    customReviews.push({
+                        customer_name: parts[0],
+                        rating: parseInt(parts[1]) || 5,
+                        review_text: parts[2]
+                    });
+                }
+            });
+        }
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/reviews/${serviceId}`);
+            const data = await res.json();
+            let dbReviews = (data.success && data.reviews) ? data.reviews : [];
+
+            let combinedReviews = [...dbReviews, ...customReviews];
+            
+            let html = '';
+            if(combinedReviews.length === 0) {
+                html = `<p style="text-align:center; color:#64748b; padding:20px;">No reviews yet.</p>`;
+            } else {
+                combinedReviews.forEach(r => {
+                    let stars = '⭐'.repeat(parseInt(r.rating) || 5);
+                    html += `
+                        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <strong style="font-size: 13px; color: #0f172a;">${r.customer_name}</strong>
+                                <span style="font-size: 11px; color: #15803d; background: #f0fdf4; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${stars} (${r.rating}/5)</span>
+                            </div>
+                            <p style="margin: 0; font-size: 12.5px; color: #475569; line-height: 1.4;">${r.review_text}</p>
+                        </div>`;
+                });
+            }
+            if(container) container.innerHTML = html;
+        } catch(err) {
+            console.error("Error fetching live reviews:", err);
+        }
+    }
+
+    function loadRelevantServicesSection(allServices, currentCategory, currentId) {
+        const relatedContainer = document.getElementById('relatedContainer');
+        const relatedBox = document.getElementById('relatedServicesBox');
+        if(!relatedContainer) return;
+
+        if(relatedBox) {
+            let catHeader = relatedBox.querySelector('.uc-cat-header');
+            if(catHeader) {
+                catHeader.innerHTML = `
+                    <h3>More Relevant Services in ${currentCategory}</h3>
+                    <p>Top-rated doorstep repair and installation services for ${currentCategory}.</p>
+                `;
+            }
+        }
+
+        let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
+        if (filtered.length === 0) {
+            filtered = allServices.slice(0, 4); 
+        }
+
+        let html = '';
+        filtered.forEach(s => {
+            html += `
+            <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
+                <div class="uc-card-img-wrapper">
+                    <img src="${s.image_url}" alt="${s.service_name}">
+                    <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
+                </div>
+                <div class="uc-body">
+                    <div>
+                        <h4>${s.service_name.toUpperCase()}</h4>
+                        <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        relatedContainer.innerHTML = html;
+    }
+
+    // ==========================================
+    // PAGE INITIALIZATION (DOMContentLoaded)
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', async () => {
+        updateCartUI();
+        updateHeaderLoginUI();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        activeServiceId = urlParams.get('id') || 'tv-repair';
+
+        // Dynamic Loading
+        await loadProductDetailsAndReviews(activeServiceId);
 
         if(currentUser) {
             if(currentUser.wallet === undefined) currentUser.wallet = 2500;
@@ -1982,6 +2092,7 @@ function trackProfileChange(field, oldVal, newVal) {
     });
     relatedContainer.innerHTML = html;
 }
+
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
   <div class="cart-modal-overlay" id="productReviewsPopupModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
