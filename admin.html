@@ -2139,15 +2139,35 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
 </div>
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (2)</label>
-                <input type="text" id="newImg2" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Optional">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="text" id="newImg2" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="Optional">
+                    <label for="hiddenImageFile2" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                        <i class="fa-solid fa-upload"></i> Upload
+                    </label>
+                    <input type="file" id="hiddenImageFile2" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg2')">
+                </div>
             </div>
+
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (3)</label>
-                <input type="text" id="newImg3" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Optional">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="text" id="newImg3" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="Optional">
+                    <label for="hiddenImageFile3" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                        <i class="fa-solid fa-upload"></i> Upload
+                    </label>
+                    <input type="file" id="hiddenImageFile3" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg3')">
+                </div>
             </div>
+
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (4)</label>
-                <input type="text" id="newImg4" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Optional">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="text" id="newImg4" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="Optional">
+                    <label for="hiddenImageFile4" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                        <i class="fa-solid fa-upload"></i> Upload
+                    </label>
+                    <input type="file" id="hiddenImageFile4" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg4')">
+                </div>
             </div>
         </div>
 
