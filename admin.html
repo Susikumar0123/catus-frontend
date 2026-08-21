@@ -260,11 +260,11 @@
 <body>
 
     <script>
-        const adminPass = prompt("Enter Admin Password:");
-        if (adminPass !== "Maxel@123") { // Ungaloda password-ai inga change pannikonga
-            alert("Access Denied!");
-            window.location.href = "index.html"; // Password thappa iruntha Home page-kku anpidum
-        }
+        // Login aagatha yarum direct-ah admin.html-ai open panna mudiyaathu
+    if (sessionStorage.getItem("adminAuthenticated") !== "true") {
+        alert("Please login first!");
+        window.location.href = "admin_login.html";
+    }
     </script>
 
 
@@ -340,10 +340,15 @@
     </div>
 
     <div class="sidebar-footer">
+    <a href="#" onclick="adminLogout()" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout Securely</a>
+</div>
 
-        <a href="admin_logout.php" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout Securely</a>
-
-    </div>
+<script>
+    function adminLogout() {
+        sessionStorage.removeItem("adminAuthenticated");
+        window.location.href = "admin_login.html"; // Logout aana odane login page-kku anpidum
+    }
+</script>
 
 </div>
 

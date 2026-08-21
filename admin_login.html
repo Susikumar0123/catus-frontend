@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catus Admin Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f1f5f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 380px; box-sizing: border-box; }
+        h2 { color: #1e293b; margin-bottom: 20px; font-size: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 6px; }
+        input { width: 100%; padding: 11px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; }
+        input:focus { border-color: #0284c7; }
+        .login-btn { background: #0284c7; color: #fff; border: none; width: 100%; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+        .login-btn:hover { background: #0369a1; }
+        .error-msg { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 15px; text-align: center; font-weight: 600; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h2><i class="fa-solid fa-lock" style="color: #0284c7;"></i> Catus Admin Login</h2>
+    <div id="errorMsg" class="error-msg">Invalid Login ID or Password!</div>
+    
+    <div class="form-group">
+        <label>Login ID / Username</label>
+        <input type="text" id="username" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+    </div>
+    <button type="button" class="login-btn" onclick="validateLogin()">Secure Login</button>
+</div>
+
+<script>
+    function validateLogin() {
+        let user = document.getElementById('username').value.trim();
+        let pass = document.getElementById('password').value.trim();
+
+        // Inga ungaloda admin username matrum password-ai set pannikonga
+        if (user === "admin" && pass === "Maxel@123") {
+            sessionStorage.setItem("adminAuthenticated", "true");
+            window.location.href = "admin.html"; // Login aana odane admin panel-kku pogum
+        } else {
+            document.getElementById('errorMsg').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
