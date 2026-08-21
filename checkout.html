@@ -34,7 +34,8 @@
         .card-body-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
         /* Saved Address Container Styles */
-        .saved-address-card { background: #f0fdf4; border: none; border-radius: 10px; padding: 16px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+        .saved-address-card { background: #f0fdf4; border: none; border-radius: 10px; padding: 16px; margin-bottom: 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+        .saved-address-content-row { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; gap: 10px; }
         .saved-address-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #0f172a; font-weight: 700; display: flex; align-items: center; gap: 6px; }
         .saved-address-info p { margin: 0; font-size: 13px; color: #334155; line-height: 1.5; }
         
@@ -93,6 +94,26 @@
         .payment-method-card input { accent-color: #0284c7; width: 16px; height: 16px; }
 
         @media (max-width: 900px) { .checkout-grid { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: span 1; } }
+        /* Mobile Bottom Nav Styles for Checkout */
+.mobile-bottom-nav {
+    display: none; 
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    z-index: 99999;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+.bot-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    background: none; border: none; font-size: 11px; color: #64748b; cursor: pointer;
+}
+.bot-nav-item i { font-size: 18px; margin-bottom: 4px; }
+
+@media (max-width: 850px) {
+    .mobile-bottom-nav { display: flex !important; }
+    body { padding-bottom: 70px !important; }
+}
     </style>
 </head>
 <body>
@@ -125,21 +146,23 @@
                 <div class="card-body-scroll">
                     <!-- SAVED ADDRESS CONTAINER -->
                     <div id="savedAddressContainer" style="display:none;">
-                        <div class="saved-address-card">
-                            <div class="saved-address-info">
-                                <h4><i class="fa-solid fa-house" style="color:#059669; margin-right:6px;"></i> Default Delivery Address</h4>
-                                <p id="savedAddressText">Loading address...</p>
-                            </div>
-                            <div class="action-btns-inline">
-                                <button type="button" class="edit-text-btn" onclick="toggleEditAddressForm()">
-                                    <i class="fa-solid fa-pen"></i> Edit
-                                </button>
-                                <button type="button" class="remove-text-btn" onclick="removeSavedAddress()">
-                                    <i class="fa-solid fa-trash-can"></i> Remove
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+    <div class="saved-address-card">
+        <div class="saved-address-content-row">
+            <div class="saved-address-info">
+                <h4><i class="fa-solid fa-house" style="color:#059669; margin-right:6px;"></i> Default Delivery Address</h4>
+                <p id="savedAddressText">Loading address...</p>
+            </div>
+            <div class="action-btns-inline">
+                <button type="button" class="edit-text-btn" onclick="toggleEditAddressForm()">
+                    <i class="fa-solid fa-pen"></i> Edit
+                </button>
+                <button type="button" class="remove-text-btn" onclick="removeSavedAddress()">
+                    <i class="fa-solid fa-trash-can"></i> Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
                     <div id="errorAlert" style="background:#fef2f2; color:#991b1b; padding:10px 15px; border-radius:8px; font-size:13px; font-weight:600; margin-bottom:20px; display:none;">
                         <i class="fa-solid fa-circle-exclamation"></i> Please fill in all required fields correctly.
@@ -828,6 +851,24 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
             document.getElementById('dispAddress').textContent = fullAddress;
             document.getElementById('dispTotal').textContent = "₹" + total + ` (${paymentModeText})`;
         }
+        function scrollToCategories() {
+            window.location.href = 'index.html#productGridContainer';
+        }
     </script>
+    <!-- Mobile Bottom Navigation Bar -->
+<div class="mobile-bottom-nav">
+    <button class="bot-nav-item" onclick="window.location.href='index.html'">
+        <i class="fa-solid fa-house"></i> <span>Home</span>
+    </button>
+    <button class="bot-nav-item" onclick="toggleCartModal(true)">
+        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
+    </button>
+    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
+        <i class="fa-solid fa-user"></i> <span>Account</span>
+    </button>
+    <button class="bot-nav-item" onclick="scrollToCategories()">
+        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
+    </button>
+</div>
 </body>
 </html>
