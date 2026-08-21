@@ -616,6 +616,13 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
     }
 
+    /* Laptop/Desktop Layout Fix */
+@media (min-width: 769px) {
+    .master-app-container {
+        padding: 20px 60px !important; /* Side space for larger screens */
+    }
+}
+
 /* Separate Add to Cart (Green) and Book Now (Blue) Colors */
     .uc-btn-row .uc-cart-btn {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
@@ -2925,8 +2932,15 @@ function handleIndexSearchSelect(serviceId, serviceName) {
             console.error("Error loading hero banners:", e);
         }
     }
+    function scrollToCategories() {
+        const firstCat = document.querySelector('#productGridContainer');
+        if (firstCat) {
+            firstCat.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
   </script>
-  <div class="mobile-bottom-nav">
+  <!-- Mobile Bottom Navigation Bar -->
+<div class="mobile-bottom-nav">
     <button class="bot-nav-item" onclick="window.location.reload()">
         <i class="fa-solid fa-house"></i> <span>Home</span>
     </button>
@@ -2940,5 +2954,6 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
     </button>
 </div>
+
 </body>
 </html>
