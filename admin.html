@@ -1085,9 +1085,15 @@
             </div>
 
             <div class="form-group" style="margin:0;">
-                <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL (1)</label>
-                <input type="text" id="modalImg1" class="form-input" style="width:100%; box-sizing:border-box;">
-            </div>
+    <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL (1)</label>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="text" id="modalImg1" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="https://...">
+        <label for="hiddenImageFile1" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+            <i class="fa-solid fa-upload"></i> Upload
+        </label>
+        <input type="file" id="hiddenImageFile1" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'modalImg1')">
+    </div>
+</div>
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (2)</label>
                 <input type="text" id="modalImg2" class="form-input" style="width:100%; box-sizing:border-box;">
@@ -2051,6 +2057,38 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
     document.addEventListener("DOMContentLoaded", () => {
         fetchAdminBanners();
     });
+    async function uploadAdminImage(fileInput, targetInputId) {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const uploadLabel = fileInput.previousElementSibling;
+    let originalText = uploadLabel.innerHTML;
+    uploadLabel.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/upload-image`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            document.getElementById(targetInputId).value = data.imageUrl;
+            alert("Image uploaded and link generated successfully!");
+        } else {
+            alert("Image upload failed.");
+        }
+    } catch (err) {
+        console.error("Upload error:", err);
+        alert("Server connection error during upload.");
+    } finally {
+        uploadLabel.innerHTML = originalText;
+        fileInput.value = '';
+    }
+}
 </script>
 
 <!-- ADD NEW PRODUCT / SERVICE MODAL -->
@@ -2090,9 +2128,15 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
                 </div>
             </div>
             <div class="form-group" style="margin:0;">
-                <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL *</label>
-                <input type="text" id="newImg1" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="https://images.unsplash.com/...">
-            </div>
+    <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL *</label>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="text" id="newImg1" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="https://...">
+        <label for="hiddenImageFile2" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+            <i class="fa-solid fa-upload"></i> Upload
+        </label>
+        <input type="file" id="hiddenImageFile2" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg1')">
+    </div>
+</div>
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (2)</label>
                 <input type="text" id="newImg2" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Optional">
