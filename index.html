@@ -1808,6 +1808,23 @@
                 Total Paid: ₹${amount}
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
+            
+            <!-- Mobile Bottom Navigation Bar -->
+<div class="mobile-bottom-nav">
+    <button class="bot-nav-item" onclick="window.location.reload()">
+        <i class="fa-solid fa-house"></i> <span>Home</span>
+    </button>
+    <button class="bot-nav-item" onclick="toggleCartModal(true)">
+        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
+    </button>
+    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
+        <i class="fa-solid fa-user"></i> <span>Account</span>
+    </button>
+    <button class="bot-nav-item" onclick="document.querySelector('#productGridContainer').scrollIntoView({behavior:'smooth'})">
+        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
+    </button>
+</div>
+
         </body>
         </html>
         `;
@@ -2939,21 +2956,5 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         }
     }
   </script>
-  <!-- Mobile Bottom Navigation Bar -->
-<div class="mobile-bottom-nav">
-    <button class="bot-nav-item" onclick="window.location.reload()">
-        <i class="fa-solid fa-house"></i> <span>Home</span>
-    </button>
-    <button class="bot-nav-item" onclick="toggleCartModal(true)">
-        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
-    </button>
-    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-        <i class="fa-solid fa-user"></i> <span>Account</span>
-    </button>
-    <button class="bot-nav-item" onclick="document.querySelector('#productGridContainer').scrollIntoView({behavior:'smooth'})">
-        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
-    </button>
-</div>
-
 </body>
 </html>
