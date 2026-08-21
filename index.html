@@ -12,41 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-
-        body {
-    font-family: 'Roboto', Arial, sans-serif;
-    margin: 0; padding: 0;
-    background-color: #f8fafc;
-    color: #212121;
-    overflow-x: hidden;
-}
-.master-app-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-    background: #ffffff;
-}
-/* Mobile Bottom Nav Styles */
-.mobile-bottom-nav {
-    display: none;
-    position: fixed; bottom: 0; left: 0; width: 100%;
-    background: #ffffff;
-    border-top: 1px solid #e2e8f0;
-    z-index: 99999;
-    justify-content: space-around;
-    padding: 10px 0;
-}
-.bot-nav-item {
-    background: none; border: none;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: #64748b; font-size: 11px; cursor: pointer;
-}
-@media (max-width: 768px) {
-    .mobile-bottom-nav { display: flex; }
-    .header-nav-right .login-btn { display: none; }
-}
        
         .clear-cart-text, .cart-header span[onclick*="clearCart"] {
     text-decoration: none !important;
@@ -94,7 +59,13 @@
         }
 
 
-        
+
+        /* 1. Header & Search Bar Section */
+        .uc-homepage-wrapper { margin-bottom: 20px; width: 100%; box-sizing: border-box; }
+        .header-main-container { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: 15px; width: 100%; box-sizing: border-box; }
+        .brand-logo { order: 1; margin-right: auto; display: flex; align-items: center; cursor: pointer; }
+        .brand-logo img { height: 60px; width: auto; object-fit: contain; }
+
         .search-container {
             position: relative; display: flex; align-items: center; background: #ffffff;
             border: 1.5px solid #0284c7; padding: 0 14px; border-radius: 50px;
@@ -110,6 +81,22 @@
         .suggestion-item:last-child { margin-bottom: 0; }
         .suggestion-item:hover { background: #e2e8f0; color: #0284c7; }
 
+        .header-nav-right { display: flex; align-items: center; gap: 20px; flex-shrink: 0; order: 3; }
+        .nav-item { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; font-weight: 500; color: #1e293b; transition: color 0.2s ease; }
+        .nav-item:hover { color: #0284c7; }
+        .nav-item svg { width: 18px; height: 18px; stroke: #1e293b; stroke-width: 2; fill: none; }
+        .nav-item:hover svg { stroke: #0284c7; }
+        .chevron-icon { width: 14px !important; height: 14px !important; }
+        .cart-icon-wrapper { position: relative; display: flex; align-items: center; }
+        .cart-badge { position: absolute; top: -6px; right: -8px; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
+        .login-btn { background: #0284c7; color: #fff; border: none; padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .login-btn:hover { background: #0369a1; }
+
+        /* 2. Quick Services Bar (Catus Unique Flipkart-Style) */
+        .quick-services-bar { width: 100%; background: transparent; padding: 10px 0 0 0; box-sizing: border-box; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; }
+        .services-track { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; padding-bottom: 0px; }
+        
+        .service-chip { display: inline-flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; background: transparent; border: none; color: #475569; padding: 4px 8px 12px 8px; border-radius: 0; font-size: 11px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; flex: 0 0 auto; min-width: 75px; position: relative; }
         
         /* Icon Background Box */
         .chip-icon-bg { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -1814,7 +1801,6 @@
                 Total Paid: ₹${amount}
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
-            
         </body>
         </html>
         `;
@@ -2940,20 +2926,19 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         }
     }
   </script>
-  <!-- Mobile Bottom Navigation Bar -->
   <div class="mobile-bottom-nav">
-      <button class="bot-nav-item" onclick="window.location.reload()">
-          <i class="fa-solid fa-house"></i> <span>Home</span>
-      </button>
-      <button class="bot-nav-item" onclick="toggleCartModal(true)">
-          <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
-      </button>
-      <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-          <i class="fa-solid fa-user"></i> <span>Account</span>
-      </button>
-      <button class="bot-nav-item" onclick="document.querySelector('#productGridContainer').scrollIntoView({behavior:'smooth'})">
-          <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
-      </button>
-  </div>
+    <button class="bot-nav-item" onclick="window.location.reload()">
+        <i class="fa-solid fa-house"></i> <span>Home</span>
+    </button>
+    <button class="bot-nav-item" onclick="toggleCartModal(true)">
+        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
+    </button>
+    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
+        <i class="fa-solid fa-user"></i> <span>Account</span>
+    </button>
+    <button class="bot-nav-item" onclick="document.querySelector('#productGridContainer').scrollIntoView({behavior:'smooth'})">
+        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
+    </button>
+</div>
 </body>
 </html>
