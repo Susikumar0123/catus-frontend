@@ -558,6 +558,34 @@
         color: #ffffff !important;
         box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25) !important;
     }
+    /* Mobile Bottom Navigation Bar Styles */
+.mobile-bottom-nav {
+    display: none; 
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    z-index: 99999;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+.bot-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    background: none; border: none; font-size: 11px; color: #64748b; cursor: pointer;
+}
+.bot-nav-item i { font-size: 18px; margin-bottom: 4px; }
+
+@media (max-width: 850px) {
+    .mobile-bottom-nav { display: flex !important; }
+}
+
+/* Desktop layout fix */
+@media (min-width: 851px) {
+    .master-app-container {
+        padding: 20px 60px !important;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
 /* ==========================================================
         FINAL FIX: SEPARATE BUTTON COLORS & DASHBOARD OVERRIDE
         ========================================================== */
@@ -1808,23 +1836,6 @@
                 Total Paid: ₹${amount}
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
-            
-            <!-- Mobile Bottom Navigation Bar -->
-<div class="mobile-bottom-nav">
-    <button class="bot-nav-item" onclick="window.location.reload()">
-        <i class="fa-solid fa-house"></i> <span>Home</span>
-    </button>
-    <button class="bot-nav-item" onclick="toggleCartModal(true)">
-        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
-    </button>
-    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-        <i class="fa-solid fa-user"></i> <span>Account</span>
-    </button>
-    <button class="bot-nav-item" onclick="document.querySelector('#productGridContainer').scrollIntoView({behavior:'smooth'})">
-        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
-    </button>
-</div>
-
         </body>
         </html>
         `;
@@ -2956,5 +2967,19 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         }
     }
   </script>
+<div class="mobile-bottom-nav">
+    <button class="bot-nav-item" onclick="window.location.reload()">
+        <i class="fa-solid fa-house"></i> <span>Home</span>
+    </button>
+    <button class="bot-nav-item" onclick="toggleCartModal(true)">
+        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
+    </button>
+    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
+        <i class="fa-solid fa-user"></i> <span>Account</span>
+    </button>
+    <button class="bot-nav-item" onclick="scrollToCategories()">
+        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
+    </button>
+</div>
 </body>
 </html>
