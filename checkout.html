@@ -34,8 +34,8 @@
         .card-body-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
         /* Saved Address Container Styles */
-        .saved-address-card { background: #f0fdf4; border: none; border-radius: 10px; padding: 16px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .saved-address-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px dashed #bbf7d0; padding-bottom: 8px; }
+        .saved-address-card { background: #f0fdf4; border: none; border-radius: 10px; padding: 16px; margin-bottom: 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+        .saved-address-content-row { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; gap: 10px; }
         .saved-address-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #0f172a; font-weight: 700; display: flex; align-items: center; gap: 6px; }
         .saved-address-info p { margin: 0; font-size: 13px; color: #334155; line-height: 1.5; }
         
@@ -147,9 +147,10 @@
                     <!-- SAVED ADDRESS CONTAINER -->
                     <div id="savedAddressContainer" style="display:none;">
     <div class="saved-address-card">
-        <div class="saved-address-top-row">
+        <div class="saved-address-content-row">
             <div class="saved-address-info">
                 <h4><i class="fa-solid fa-house" style="color:#059669; margin-right:6px;"></i> Default Delivery Address</h4>
+                <p id="savedAddressText">Loading address...</p>
             </div>
             <div class="action-btns-inline">
                 <button type="button" class="edit-text-btn" onclick="toggleEditAddressForm()">
@@ -160,11 +161,7 @@
                 </button>
             </div>
         </div>
-        <div class="saved-address-info" style="width: 100%;">
-            <p id="savedAddressText" style="margin-top: 4px;">Loading address...</p>
-        </div>
     </div>
-</div>
 </div>
 
                     <div id="errorAlert" style="background:#fef2f2; color:#991b1b; padding:10px 15px; border-radius:8px; font-size:13px; font-weight:600; margin-bottom:20px; display:none;">
