@@ -1096,36 +1096,24 @@
 </div>
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (2)</label>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <input type="text" id="newImg2" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="Optional">
-                    <label for="hiddenImageFile2" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
-                        <i class="fa-solid fa-upload"></i> Upload
-                    </label>
-                    <input type="file" id="hiddenImageFile2" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg2')">
-                </div>
+                <input type="text" id="modalImg2" class="form-input" style="width:100%; box-sizing:border-box;">
             </div>
-
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (3)</label>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <input type="text" id="newImg3" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="Optional">
-                    <label for="hiddenImageFile3" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
-                        <i class="fa-solid fa-upload"></i> Upload
-                    </label>
-                    <input type="file" id="hiddenImageFile3" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg3')">
-                </div>
+                <input type="text" id="modalImg3" class="form-input" style="width:100%; box-sizing:border-box;">
             </div>
-
             <div class="form-group" style="margin:0;">
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Thumbnail Image URL (4)</label>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <input type="text" id="newImg4" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="Optional">
-                    <label for="hiddenImageFile4" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
-                        <i class="fa-solid fa-upload"></i> Upload
-                    </label>
-                    <input type="file" id="hiddenImageFile4" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg4')">
-                </div>
+                <input type="text" id="modalImg4" class="form-input" style="width:100%; box-sizing:border-box;">
             </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+            <button style="flex:1; padding:10px; border:1px solid #cbd5e1; background:white; color:#0f172a; border-radius:6px; font-weight:600; cursor:pointer;" onclick="document.getElementById('editServiceModal').style.display='none'">Cancel</button>
+            <button style="flex:1; padding:10px; border:none; background:#10b981; color:white; border-radius:6px; font-weight:600; cursor:pointer;" onclick="submitServiceUpdate()">Save Changes</button>
+        </div>
+    </div>
+</div>
 <!-- ADD / EDIT BANNER MODAL -->
 <div class="modal-overlay" id="bannerActionModal" style="display:none; justify-content:center; align-items:center;">
     <div class="modal-box" style="max-width: 500px; background: white; padding: 25px; border-radius: 12px;">
