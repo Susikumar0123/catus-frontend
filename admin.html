@@ -1446,16 +1446,15 @@
 
         const finalizeSave = () => {
             const now = new Date();
-            const formattedTimeStr = now.toLocaleString("en-IN", { 
-                timeZone: "Asia/Kolkata", 
-                month: 'numeric', 
-                day: 'numeric', 
-                year: 'numeric', 
-                hour: 'numeric', 
-                minute: 'numeric', 
-                second: 'numeric', 
-                hour12: true 
-            });
+const currentIstTimeStr = now.toLocaleString("en-IN", { 
+    timeZone: "Asia/Kolkata", 
+    day: '2-digit', 
+    month: '2-digit', 
+    year: 'numeric', 
+    hour: 'numeric', 
+    minute: 'numeric', 
+    hour12: true 
+});
 
             let existingCache = techCache[orderId] || {};
             existingCache.status = newStatus;
