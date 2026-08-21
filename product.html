@@ -75,9 +75,6 @@
         .breadcrumb a { color: #0284c7; text-decoration: none; }
         .breadcrumb span { margin: 0 8px; color: #cbd5e1; }
         .breadcrumb .active { color: #212121; }
-
-        .product-grid { display: grid; grid-template-columns: 58% 40%; gap: 2%; align-items: start; }
-        .product-gallery { width: 100%; position: sticky; top: 20px; }
         
         /* Main Image Container matching Index Card Wrapper Style */
         .main-image-container { width: 100%; border-radius: 12px; overflow: hidden; background: #f1f5f9; border: none; margin-bottom: 12px; position: relative; }
@@ -350,6 +347,32 @@
         .uc-fk-field input { padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff; transition: all 0.2s ease; color: #1e293b; }
         .uc-fk-field input.error { border-color: #ef4444; background: #fef2f2;}
         @media (max-width: 820px) { .uc-fk-form-grid { grid-template-columns: 1fr; } .uc-fk-field.full { grid-column: span 1; } }
+
+/* --- FIXED PRODUCT GRID & MOBILE HEADER CLEANUP --- */
+.product-grid { 
+    display: grid; 
+    grid-template-columns: 58% 40%; 
+    gap: 2%; 
+    align-items: start; 
+    overflow: visible !important; 
+}
+
+.product-gallery { 
+    width: 100%; 
+    position: -webkit-sticky; 
+    position: sticky; 
+    top: 20px; 
+    z-index: 1; 
+}
+
+@media (max-width: 850px) {
+    .header-nav-right {
+        display: none !important;
+    }
+    .header-main-container {
+        justify-content: flex-start !important;
+    }
+}
     </style>
 </head>
 <body>
