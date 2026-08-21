@@ -674,11 +674,26 @@
         margin-right: 15px !important;
     }
 }
-/* Mobile view-la footer bottom nav-kku mela space irukka */
+/* Professional Footer & Mobile Bottom Nav Spacing */
+.mobile-bottom-nav {
+    display: none; 
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    z-index: 99999;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+.bot-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    background: none; border: none; font-size: 11px; color: #64748b; cursor: pointer;
+}
+.bot-nav-item i { font-size: 18px; margin-bottom: 4px; }
+
 @media (max-width: 850px) {
-    footer {
-        margin-bottom: 60px; /* Bottom nav bar-kku space */
-    }
+    .mobile-bottom-nav { display: flex !important; }
+    body { padding-bottom: 70px !important; }
+    footer { margin-bottom: 60px; }
 }
     </style>
 </head>
@@ -2986,8 +3001,9 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         }
     }
   </script>
+<!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
-    <button class="bot-nav-item" onclick="window.location.reload()">
+    <button class="bot-nav-item" onclick="window.location.href='index.html'">
         <i class="fa-solid fa-house"></i> <span>Home</span>
     </button>
     <button class="bot-nav-item" onclick="toggleCartModal(true)">
@@ -2999,7 +3015,9 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     <button class="bot-nav-item" onclick="scrollToCategories()">
         <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
     </button>
-    <!-- Professional Footer Section -->
+</div>
+
+<!-- Professional Footer Section -->
 <footer style="background: #0f172a; color: #cbd5e1; padding: 40px 20px 20px 20px; margin-top: 50px; font-size: 13px;">
     <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-bottom: 30px;">
         
@@ -3050,7 +3068,5 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         <p style="margin: 0;">© 2026 Catus Electronics & Home Services. All Rights Reserved.</p>
     </div>
 </footer>
-
-</div>
 </body>
 </html>
