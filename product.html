@@ -397,33 +397,6 @@
         position: static !important; /* Mobile-la sticky remove aagum */
     }
 }
-/* Mobile view-la top icons-ai hide panna */
-@media (max-width: 850px) {
-    .header-nav-right {
-        display: none !important;
-    }
-    .header-main-container {
-        justify-content: space-between !important;
-    }
-}
-
-/* Bottom Nav Bar-kku proper spacing */
-body {
-    padding-bottom: 60px !important; /* Mobile bottom nav-kku space */
-}
-/* Mobile view-la header buttons-ai hide panna */
-@media (max-width: 850px) {
-    .header-nav-right {
-        display: none !important;
-    }
-    .header-main-container {
-        justify-content: flex-start !important;
-    }
-    /* Bottom nav-kku space kodukka */
-    body {
-        padding-bottom: 70px !important;
-    }
-}
     </style>
 </head>
 <body>
@@ -2166,15 +2139,7 @@ function trackProfileChange(field, oldVal, newVal) {
     });
     relatedContainer.innerHTML = html;
 }
-function scrollToCategories() {
-    // index.html-la iruntha home-ku pogum, ila na page-la irukra category-ku pogum
-    const catSection = document.getElementById('relatedServicesBox');
-    if (catSection) {
-        catSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        window.location.href = 'index.html#productGridContainer';
-    }
-}
+
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
   <div class="cart-modal-overlay" id="productReviewsPopupModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
@@ -2193,20 +2158,5 @@ function scrollToCategories() {
 
       </div>
   </div>
-  <!-- Mobile Bottom Navigation Bar (Added) -->
-<div class="mobile-bottom-nav">
-    <button class="bot-nav-item" onclick="window.location.href='index.html'">
-        <i class="fa-solid fa-house"></i> <span>Home</span>
-    </button>
-    <button class="bot-nav-item" onclick="toggleCartModal(true)">
-        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
-    </button>
-    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-        <i class="fa-solid fa-user"></i> <span>Account</span>
-    </button>
-    <button class="bot-nav-item" onclick="scrollToCategories()">
-        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
-    </button>
-</div>
 </body>
 </html>
