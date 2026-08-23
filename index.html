@@ -31,16 +31,17 @@
 .suggestion-item:hover { background: #e2e8f0; color: #0284c7; }
 
         /* Banner Card Book Now Button Fix */
-.card .book-btn {
-    background-color: #111 !important;
-    color: #ffffff !important;
-    padding: 6px 12px !important;
-    border-radius: 6px !important;
-    font-weight: 600 !important;
-    font-size: 10px !important;
-    display: inline-block !important;
-    border: none !important;
-}
+    .card .book-btn, a.book-btn { 
+        background-color: #111 !important; 
+        color: #ffffff !important; 
+        padding: 4px 10px !important; 
+        border-radius: 6px !important; 
+        font-weight: 600 !important; 
+        font-size: 10px !important; 
+        display: inline-block !important; /* அகலம் நீளமாகாமல் டெக்ஸ்ட்க்கு ஏற்ப இருக்க */
+        width: auto !important; 
+        border: none !important; 
+    }
 
 /* Light background cards-ku mattum button dark-ah irukkum */
 .card[style*="background-color: #e0f2fe"] .book-btn,
@@ -156,7 +157,15 @@
     }
     
     .card:hover { transform: translateY(-3px); }
-    .card-content { max-width: 55%; z-index: 2; padding-right: 4px; display: flex; flex-direction: column; justify-content: center; }
+    .card-content { 
+        max-width: 55%; 
+        z-index: 2; 
+        padding-right: 4px; 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: flex-start; /* பட்டன் தன் தேவைக்கேற்ப சுருங்க இது உதவும் */
+    }
     
     .card-content h3 { font-size: 11px; line-height: 1.25; margin: 0 0 3px 0; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .card-content p { font-size: 9px; margin: 0 0 6px 0; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
