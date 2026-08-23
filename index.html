@@ -3027,7 +3027,7 @@ function handleIndexSearchSelect(serviceId, serviceName) {
                     let btnBgColor = (b.text_color === '#111' || b.text_color === '#000') ? '#111' : (b.text_color || '#111');
 
                     dynamicHTML += `
-                    <a href="product.html?id=${b.product_id || 'tv-repair'}" class="card-link">
+                    <a href="product.html?id=${b.product_id ? b.product_id.trim() : 'tv-repair'}" class="card-link">
                         <div class="card" style="background-color: ${b.bg_color || '#f4f3f1'}; color: ${b.text_color || '#111'};">
                             <div class="card-content">
                                 <h3>${b.title}</h3>
