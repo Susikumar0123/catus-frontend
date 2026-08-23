@@ -3013,41 +3013,44 @@ function handleIndexSearchSelect(serviceId, serviceName) {
 }
 
     async function loadHeroBanners() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/hero-banners`);
-            const data = await response.json();
-            
-            const container = document.getElementById('cardsContainer');
-            if(!container) return;
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/hero-banners`);
+        const data = await response.json();
+        
+        const container = document.getElementById('cardsContainer');
+        if(!container) return;
 
-            if (data.success && data.banners.length > 0) {
-                let dynamicHTML = '';
-                data.banners.forEach(b => {
-                    let btnTextColor = (b.text_color === '#111' || b.text_color === '#000') ? '#fff' : (b.text_color || '#fff');
-                    let btnBgColor = (b.text_color === '#111' || b.text_color === '#000') ? '#111' : (b.text_color || '#111');
+        if (data.success && data.banners.length > 0) {
+            let dynamicHTML = '';
+            data.banners.forEach(b => {
+                let btnTextColor = (b.text_color === '#111' || b.text_color === '#000') ? '#fff' : (b.text_color || '#fff');
+                let btnBgColor = (b.text_color === '#111' || b.text_color === '#000') ? '#111' : (b.text_color || '#111');
 
-                    dynamicHTML += `
-                    <a href="product.html?id=${b.product_id ? b.product_id.trim() : 'tv-repair'}" class="card-link">
-                        <div class="card" style="background-color: ${b.bg_color || '#f4f3f1'}; color: ${b.text_color || '#111'};">
-                            <div class="card-content">
-                                <h3>${b.title}</h3>
-                                <p>${b.subtitle || ''}</p>
-                                <span class="book-btn" style="background-color: ${btnBgColor}; color: ${btnTextColor};">
-                                    ${b.button_data || b.button_text || 'Book now'}
-                                </span>
-                            </div>
-                            <img src="${b.image_url}" alt="${b.title}">
+                // Ingu product_id hardcoded-ah irukkirathuku bathila actual string/numeric ID-ah pass panrom
+                let targetId = b.product_id ? b.product_id.trim() : 'tv-repair';
+
+                dynamicHTML += `
+                <a href="product.html?id=${targetId}" class="card-link">
+                    <div class="card" style="background-color: ${b.bg_color || '#f4f3f1'}; color: ${b.text_color || '#111'};">
+                        <div class="card-content">
+                            <h3>${b.title}</h3>
+                            <p>${b.subtitle || ''}</p>
+                            <span class="book-btn" style="background-color: ${btnBgColor}; color: ${btnTextColor};">
+                                ${b.button_data || b.button_text || 'Book now'}
+                            </span>
                         </div>
-                    </a>`;
-                });
-                container.innerHTML = dynamicHTML;
-            } else {
-                container.innerHTML = `<p style="padding: 10px; color: #64748b;">No banners found. Please add from Admin Panel.</p>`;
-            }
-        } catch(e) {
-            console.error("Error loading hero banners:", e);
+                        <img src="${b.image_url}" alt="${b.title}">
+                    </div>
+                </a>`;
+            });
+            container.innerHTML = dynamicHTML;
+        } else {
+            container.innerHTML = `<p style="padding: 10px; color: #64748b;">No banners found. Please add from Admin Panel.</p>`;
         }
+    } catch(e) {
+        console.error("Error loading hero banners:", e);
     }
+}
     function scrollToCategories() {
         const firstCat = document.querySelector('#productGridContainer');
         if (firstCat) {
