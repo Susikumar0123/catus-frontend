@@ -123,13 +123,37 @@
 
         /* 4. Banner Scroll Cards Container Fix */
     .scroll-wrapper { position: relative; width: 100%; margin: 0 auto; overflow: hidden; padding: 10px 0; margin-bottom: 20px; }
-    .cards-container { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; padding: 5px 0; -webkit-overflow-scrolling: touch; align-items: stretch; }
-    .cards-container::-webkit-scrollbar { display: none; }
+    .cards-container { 
+        display: flex; 
+        gap: 15px; 
+        overflow-x: auto; 
+        scrollbar-width: none; 
+        padding: 5px 0; 
+        -webkit-overflow-scrolling: touch; 
+    }
     
     /* இங்கே அகலத்தை 240px ஆகக் குறைத்துள்ளோம் */
-    .card-link { text-decoration: none !important; color: inherit; flex: 0 0 240px !important; display: flex; } 
+    .card-link { 
+        text-decoration: none !important; 
+        color: inherit; 
+        flex: 0 0 260px !important; /* எல்லா கார்டுகளுக்கும் ஒரே அகலம் */
+        width: 260px !important;
+        display: block !important; 
+    } 
     
-    .card { width: 100%; height: 130px; min-height: 130px; max-height: 130px; border-radius: 12px; overflow: hidden; position: relative; box-shadow: 0 3px 10px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; box-sizing: border-box; transition: transform 0.2s ease; }
+    .card { 
+        width: 100% !important; 
+        height: 130px !important; 
+        border-radius: 12px; 
+        overflow: hidden; 
+        position: relative; 
+        box-shadow: 0 3px 10px rgba(0,0,0,0.06); 
+        display: flex !important; 
+        align-items: center !important; 
+        justify-content: space-between !important; 
+        padding: 14px 16px !important; 
+        box-sizing: border-box; 
+    }
     
     .card:hover { transform: translateY(-3px); }
     .card-content { max-width: 55%; z-index: 2; padding-right: 4px; display: flex; flex-direction: column; justify-content: center; }
