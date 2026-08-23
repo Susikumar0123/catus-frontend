@@ -205,7 +205,14 @@
             background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.15), transparent);
         }
 
-        .card img { width: 38%; height: 60px; object-fit: cover; border-radius: 6px; z-index: 2; flex-shrink: 0; }
+         .card img { 
+        width: 36% !important; /* இமேஜ் சைஸை சற்று கச்சிதமாக மாற்ற */
+        height: 65px !important; 
+        object-fit: cover !important; 
+        border-radius: 6px; 
+        z-index: 1; 
+        flex-shrink: 0; 
+    }
         .scroll-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background-color: #ffffff !important; border: 2px solid #cbd5e1 !important; width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important; max-width: 40px !important; max-height: 40px !important; border-radius: 50% !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important; cursor: pointer; display: flex !important; align-items: center !important; justify-content: center !important; z-index: 20; padding: 0 !important; box-sizing: border-box !important; flex-shrink: 0 !important; }
         .scroll-btn:hover { background-color: #f1f5f9 !important; border-color: #0284c7 !important; box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25) !important; }
         .scroll-btn svg { width: 18px !important; height: 18px !important; fill: none !important; stroke: #0f172a !important; stroke-width: 3 !important; stroke-linecap: round; stroke-linejoin: round; }
