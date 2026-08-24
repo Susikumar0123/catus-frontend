@@ -1464,85 +1464,85 @@
     function closeOrderModal() { document.getElementById('orderDetailModal').style.display = 'none'; }
 
     async function saveOrderDetails() {
-        let orderId = document.getElementById('manageOrderId').value;
-        let newStatus = document.getElementById('statusUpdateSelect').value;
-        let tName = document.getElementById('techNameInput').value.trim();
-        let tPhone = document.getElementById('techPhoneInput').value.trim();
-        let tEta = document.getElementById('techEtaInput').value.trim();
-        let saveBtn = document.getElementById('saveOrderBtn');
+    let orderId = document.getElementById('manageOrderId').value;
+    let newStatus = document.getElementById('statusUpdateSelect').value;
+    let tName = document.getElementById('techNameInput').value.trim();
+    let tPhone = document.getElementById('techPhoneInput').value.trim();
+    let tEta = document.getElementById('techEtaInput').value.trim();
+    let saveBtn = document.getElementById('saveOrderBtn');
 
-        if(newStatus === 'Trash' && !confirm("Move to Trash?")) return;
-        saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
-        saveBtn.disabled = true;
+    if(newStatus === 'Trash' && !confirm("Move to Trash?")) return;
+    
+    // Instant feedback - No waiting for slow server wakeup
+    saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
+    saveBtn.disabled = true;
 
-        const finalizeSave = () => {
-            const now = new Date();
-const options = { 
-    timeZone: "Asia/Kolkata", 
-    year: 'numeric', 
-    month: '2-digit', 
-    day: '2-digit', 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit', 
-    hour12: false 
-};
-const formatter = new Intl.DateTimeFormat('en-GB', options);
-const parts = formatter.formatToParts(now);
-const p = {};
-parts.forEach(part => { p[part.type] = part.value; });
+    const now = new Date();
+    const options = { timeZone: "Asia/Kolkata", year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+    const formatter = new Intl.DateTimeFormat('en-GB', options);
+    const parts = formatter.formatToParts(now);
+    const p = {};
+    parts.forEach(part => { p[part.type] = part.value; });
+    const formattedTimeStr = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}`;
 
-const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}`;
+    // Update Local Cache instantly so customer & admin see it immediately
+    let existingCache = techCache[orderId] || {};
+    existingCache.status = newStatus;
+    
+    if (newStatus === 'Assigned') existingCache.assigned_time = formattedTimeStr;
+    if (newStatus === 'On the way') existingCache.ontheway_time = formattedTimeStr;
+    if (newStatus === 'In Service' || newStatus === 'Completed') existingCache.service_time = formattedTimeStr;
 
-            let existingCache = techCache[orderId] || {};
-            existingCache.status = newStatus;
-            
-            if (newStatus === 'Assigned') existingCache.assigned_time = formattedTimeStr;
-            if (newStatus === 'On the way') existingCache.ontheway_time = formattedTimeStr;
-            if (newStatus === 'In Service' || newStatus === 'Completed') existingCache.service_time = formattedTimeStr;
-
-            if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
-                existingCache.name = tName;
-                existingCache.phone = tPhone;
-                existingCache.eta = tEta;
-            }
-
-            techCache[orderId] = existingCache;
-            localStorage.setItem('catusAdminCache', JSON.stringify(techCache));
-
-            let idx = allBookings.findIndex(o => String(o.order_id) === String(orderId));
-            if (idx !== -1) {
-                allBookings[idx].status = newStatus;
-                if (document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
-                    allBookings[idx].technician_name = tName;
-                    allBookings[idx].technician_phone = tPhone;
-                    allBookings[idx].eta = tEta;
-                }
-            }
-            renderTable(); 
-            setTimeout(() => {
-                saveBtn.disabled = false;
-                if (tName) {
-                    document.getElementById('viewTechName').textContent = tName;
-                    document.getElementById('viewTechPhone').textContent = tPhone;
-                    document.getElementById('viewTechEta').textContent = tEta;
-                    document.getElementById('techDetailsEdit').style.display = 'none';
-                    document.getElementById('techDetailsView').style.display = 'block';
-                    saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Status';
-                } else {
-                    saveBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status';
-                }
-            }, 600);
-        };
-
-        try {
-            await fetch(`${API_BASE_URL}/api/admin/update-status`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, status: newStatus}) }).catch(e => null);
-            if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
-                await fetch(`${API_BASE_URL}/api/admin/assign-technician-manual`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({order_id: orderId, technician_name: tName, technician_phone: tPhone, eta: tEta}) }).catch(e => null);
-            }
-        } catch(e){}
-        finalizeSave();
+    if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
+        existingCache.name = tName;
+        existingCache.phone = tPhone;
+        existingCache.eta = tEta;
     }
+
+    techCache[orderId] = existingCache;
+    localStorage.setItem('catusAdminCache', JSON.stringify(techCache));
+
+    let idx = allBookings.findIndex(o => String(o.order_id) === String(orderId));
+    if (idx !== -1) {
+        allBookings[idx].status = newStatus;
+        if (document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
+            allBookings[idx].technician_name = tName;
+            allBookings[idx].technician_phone = tPhone;
+            allBookings[idx].eta = tEta;
+        }
+    }
+    
+    renderTable();
+
+    // Success UI instant display
+    saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Updated Successfully!';
+    
+    setTimeout(() => {
+        closeOrderModal();
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status';
+        fetchLiveBookings(); // Background sync
+    }, 400);
+
+    // Background server sync without blocking UI
+    try {
+        fetch(`${API_BASE_URL}/api/admin/update-status`, { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({order_id: orderId, status: newStatus}) 
+        }).catch(e => null);
+
+        if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
+            fetch(`${API_BASE_URL}/api/admin/assign-technician-manual`, { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({order_id: orderId, technician_name: tName, technician_phone: tPhone, eta: tEta}) 
+            }).catch(e => null);
+        }
+    } catch(e) {
+        console.log("Background sync error ignored.");
+    }
+}
 
     function filterTable() { 
         if(document.getElementById('page-bookings').classList.contains('active')) renderTable(); 
