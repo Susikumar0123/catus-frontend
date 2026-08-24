@@ -781,12 +781,12 @@
 
               <!-- Flipkart-Style Header Location Widget -->
               <div class="header-location-widget" onclick="openLocationModal()" style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                  <div class="loc-text-box" style="display: flex; flex-direction: column; font-size: 11px; line-height: 1.2;">
-                      <span class="loc-label" style="color: #64748b;">Delivery to</span>
-                      <strong id="headerLocationDisplay" style="color: #0f172a; font-size: 12px;">Tiruppur - 641601</strong>
-                  </div>
-                  <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #64748b; margin-left: 2px;"></i>
-              </div>
+    <div class="loc-text-box" style="display: flex; flex-direction: column; font-size: 11px; line-height: 1.2;">
+        <span class="loc-label" style="color: #64748b;">Delivery to</span>
+        <strong id="headerLocationDisplay" style="color: #0f172a; font-size: 12px;">Tiruppur - 641601</strong>
+    </div>
+    <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #64748b; margin-left: 2px;"></i>
+</div>
 
               <!-- Cart Clickable Item -->
               <div class="nav-item cart-item" onclick="toggleCartModal(true)">
@@ -2746,6 +2746,86 @@ function handleIndexSearchSelect(serviceId, serviceName) {
             firstCat.scrollIntoView({ behavior: 'smooth' });
         }
     }
+    function openLocationModal() {
+    const modal = document.getElementById('locationPopupModal');
+    if (modal) modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function toggleLocationModal(open) {
+    const modal = document.getElementById('locationPopupModal');
+    if (modal) modal.style.display = open ? 'flex' : 'none';
+    if (!open) document.body.style.overflow = 'auto';
+}
+
+function checkCloseLocationModal(event) {
+    const card = document.getElementById('locModalCard');
+    if (card && !card.contains(event.target)) {
+        toggleLocationModal(false);
+    }
+}
+
+function detectCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            let detectedLoc = "Tiruppur - 641601"; // அவசியமானால் ஜியோகோடிங் அல்லது கரண்ட் லொகேஷன் வைக்கலாம்
+            document.getElementById('headerLocationDisplay').textContent = detectedLoc;
+            localStorage.setItem('catus_user_location', detectedLoc);
+            toggleLocationModal(false);
+            showToast("Location detected successfully!", false);
+        }, () => {
+            alert("Unable to retrieve your location. Please type manually.");
+        });
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
+}
+
+// லொகேஷன் சர்ச் செய்யும் வசதி
+document.addEventListener('DOMContentLoaded', () => {
+    const locInput = document.getElementById('locSearchInput');
+    const locBox = document.getElementById('locSuggestionsBox');
+    const popularLocations = ["Tiruppur - 641601", "Coimbatore - 641001", "Chennai - 600001", "Erode - 638001", "Salem - 636001"];
+
+    if (locInput && locBox) {
+        locInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (query.length === 0) {
+                locBox.style.display = 'none';
+                locBox.innerHTML = '';
+                return;
+            }
+            const filtered = popularLocations.filter(l => l.toLowerCase().includes(query));
+            if (filtered.length > 0) {
+                let html = '';
+                filtered.forEach(loc => {
+                    html += `<div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; border-radius: 6px;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'" onclick="selectLocationModal('${loc}')"><i class="fa-solid fa-location-dot" style="margin-right:8px; color:#0284c7;"></i>${loc}</div>`;
+                });
+                locBox.innerHTML = html;
+                locBox.style.display = 'block';
+            } else {
+                locBox.innerHTML = `<div style="padding: 8px 12px; font-size: 13px; color: #ef4444;">No locations found</div>`;
+                locBox.style.display = 'block';
+            }
+        });
+    }
+});
+
+function selectLocationModal(locName) {
+    document.getElementById('headerLocationDisplay').textContent = locName;
+    localStorage.setItem('catus_user_location', locName);
+    toggleLocationModal(false);
+    showToast(`Location set to ${locName}`, false);
+}
+
+// ஏற்கனவே சேமித்த லொகேஷனை பேஜ் லோட் ஆனதும் காட்ட
+window.addEventListener('DOMContentLoaded', () => {
+    let savedLoc = localStorage.getItem('catus_user_location');
+    if (savedLoc) {
+        const disp = document.getElementById('headerLocationDisplay');
+        if (disp) disp.textContent = savedLoc;
+    }
+});
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
@@ -2813,6 +2893,33 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     <div style="border-top: 1px solid #1e293b; padding-top: 20px; text-align: center; color: #64748b; font-size: 12px;">
         <p style="margin: 0;">© 2026 Catus Electronics & Home Services. All Rights Reserved.</p>
     </div>
+    <!-- Location Change Popup Modal (Urban Company Style) -->
+<div class="cart-modal-overlay" id="locationPopupModal" onclick="checkCloseLocationModal(event)" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 99999;">
+    <div class="loc-modal-card" id="locModalCard" style="background: #ffffff; width: 90%; max-width: 460px; border-radius: 16px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #0f172a;">Change location</h3>
+            <button class="close-cart" onclick="toggleLocationModal(false)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <!-- Search Bar matching 2nd Image -->
+        <div style="display: flex; align-items: center; gap: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; background: #ffffff;">
+            <i class="fa-solid fa-magnifying-glass" style="color: #64748b; font-size: 14px;"></i>
+            <input type="text" id="locSearchInput" placeholder="Search for your location/society/apartment" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" autocomplete="off">
+        </div>
+        <div id="locSuggestionsBox" style="max-height: 180px; overflow-y: auto; margin-top: 5px; display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px;"></div>
+
+        <!-- Use Current Location Button -->
+        <div onclick="detectCurrentLocation()" style="display: flex; align-items: center; gap: 12px; padding: 16px 0; margin-top: 15px; cursor: pointer; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weight: 500; color: #7c3aed;">
+            <i class="fa-solid fa-location-crosshairs" style="font-size: 16px;"></i>
+            <span>Use current location</span>
+        </div>
+
+        <div style="text-align: right; font-size: 10px; color: #94a3b8; margin-top: 15px; letter-spacing: 0.5px;">
+            <span>powered by <b>Google</b></span>
+        </div>
+    </div>
+</div>
 </footer>
 </body>
 </html>
