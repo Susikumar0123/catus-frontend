@@ -921,14 +921,15 @@
   </div>
 
   <!-- JAVASCRIPT LOGIC -->
+  <script src="global.js"></script>
   <script>
-  const API_BASE_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000' 
-    : 'https://catus-backend-d2js.onrender.com';
+    const API_BASE_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3000' 
+      : 'https://catus-backend-d2js.onrender.com';
 
-  let orderPollingInterval = null; // Clean polling reference to prevent memory leaks
+    let orderPollingInterval = null; 
 
-  async function submitEditOrderAddress() {
+    async function submitEditOrderAddress() {
         const orderId = document.getElementById('editAddressOrderId').value;
         
         let missing = false;
@@ -999,175 +1000,175 @@
         }
     }
   
-  // --- SECURE LOGOUT FUNCTION ---
-function logoutUser() {
-    if(confirm("Are you sure you want to logout securely?")) {
-        if (orderPollingInterval) {
-            clearInterval(orderPollingInterval);
-            orderPollingInterval = null;
+    // --- SECURE LOGOUT FUNCTION ---
+    function logoutUser() {
+        if(confirm("Are you sure you want to logout securely?")) {
+            if (orderPollingInterval) {
+                clearInterval(orderPollingInterval);
+                orderPollingInterval = null;
+            }
+            localStorage.removeItem('catus_logged_user');
+            currentUser = null;
+            closePremiumDashboard();
+            updateHeaderLoginUI();
+            showToast("Logged out successfully!", false);
+            window.location.reload(); 
         }
-        localStorage.removeItem('catus_logged_user');
-        currentUser = null;
-        closePremiumDashboard();
-        updateHeaderLoginUI();
-        showToast("Logged out successfully!", false);
-        window.location.reload(); 
     }
-}
   
-async function loadProductReviews(serviceId) {
-    const container = document.getElementById('popupReviewsListContainer');
-    const headerCount = document.getElementById('popupReviewsCountHeader');
-    if(!container) return;
+    async function loadProductReviews(serviceId) {
+        const container = document.getElementById('popupReviewsListContainer');
+        const headerCount = document.getElementById('popupReviewsCountHeader');
+        if(!container) return;
 
-    try {
-        const prodRes = await fetch(`${API_BASE_URL}/api/services`);
-        const prodData = await prodRes.json();
-        let currentProd = prodData.services.find(item => String(item.service_id) === String(serviceId));
-        
-        let artCount = currentProd ? (currentProd.artificial_reviews_count || 500) : 500;
-        
-        if(headerCount) headerCount.textContent = artCount;
-        let reviewsCountTextEl = document.getElementById('prodReviewsCount');
-        if(reviewsCountTextEl) reviewsCountTextEl.textContent = artCount + " Ratings & Reviews";
+        try {
+            const prodRes = await fetch(`${API_BASE_URL}/api/services`);
+            const prodData = await prodRes.json();
+            let currentProd = prodData.services.find(item => String(item.service_id) === String(serviceId));
+            
+            let artCount = currentProd ? (currentProd.artificial_reviews_count || 500) : 500;
+            
+            if(headerCount) headerCount.textContent = artCount;
+            let reviewsCountTextEl = document.getElementById('prodReviewsCount');
+            if(reviewsCountTextEl) reviewsCountTextEl.textContent = artCount + " Ratings & Reviews";
 
-        let customReviews = [];
-        if (currentProd && currentProd.artificial_reviews_data) {
-            let lines = currentProd.artificial_reviews_data.split('\n');
-            lines.forEach(line => {
-                let parts = line.split('|').map(p => p.trim());
-                if(parts.length >= 3) {
-                    customReviews.push({
-                        customer_name: parts[0],
-                        rating: parseInt(parts[1]) || 5,
-                        review_text: parts[2]
-                    });
-                }
-            });
+            let customReviews = [];
+            if (currentProd && currentProd.artificial_reviews_data) {
+                let lines = currentProd.artificial_reviews_data.split('\n');
+                lines.forEach(line => {
+                    let parts = line.split('|').map(p => p.trim());
+                    if(parts.length >= 3) {
+                        customReviews.push({
+                            customer_name: parts[0],
+                            rating: parseInt(parts[1]) || 5,
+                            review_text: parts[2]
+                        });
+                    }
+                });
+            }
+
+            const res = await fetch(`${API_BASE_URL}/api/reviews/${serviceId}`);
+            const data = await res.json();
+            let dbReviews = (data.success && data.reviews) ? data.reviews : [];
+
+            let combinedReviews = [...dbReviews, ...customReviews];
+
+            let html = '';
+            if(combinedReviews.length === 0) {
+                html = `<p style="text-align:center; color:#64748b; padding:20px;">No reviews yet.</p>`;
+            } else {
+                combinedReviews.forEach(r => {
+                    let stars = '⭐'.repeat(parseInt(r.rating) || 5);
+                    html += `
+                        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <strong style="font-size: 13px; color: #0f172a;">${r.customer_name}</strong>
+                                <span style="font-size: 11px; color: #15803d; background: #f0fdf4; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${stars} (${r.rating}/5)</span>
+                            </div>
+                            <p style="margin: 0; font-size: 12.5px; color: #475569; line-height: 1.4;">${r.review_text}</p>
+                        </div>`;
+                });
+            }
+            container.innerHTML = html;
+        } catch(e) {
+            console.log("Error loading reviews:", e);
         }
-
-        const res = await fetch(`${API_BASE_URL}/api/reviews/${serviceId}`);
-        const data = await res.json();
-        let dbReviews = (data.success && data.reviews) ? data.reviews : [];
-
-        let combinedReviews = [...dbReviews, ...customReviews];
-
-        let html = '';
-        if(combinedReviews.length === 0) {
-            html = `<p style="text-align:center; color:#64748b; padding:20px;">No reviews yet.</p>`;
-        } else {
-            combinedReviews.forEach(r => {
-                let stars = '⭐'.repeat(parseInt(r.rating) || 5);
-                html += `
-                    <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                            <strong style="font-size: 13px; color: #0f172a;">${r.customer_name}</strong>
-                            <span style="font-size: 11px; color: #15803d; background: #f0fdf4; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${stars} (${r.rating}/5)</span>
-                        </div>
-                        <p style="margin: 0; font-size: 12.5px; color: #475569; line-height: 1.4;">${r.review_text}</p>
-                    </div>`;
-            });
-        }
-        container.innerHTML = html;
-    } catch(e) {
-        console.log("Error loading reviews:", e);
     }
-}
   
-
-function openReviewsPopup() {
-    const modal = document.getElementById('productReviewsPopupModal');
-    if (modal) {
-        modal.style.display = 'flex';
-        loadPopupReviewsData(activeServiceId);
+    function openReviewsPopup() {
+        const modal = document.getElementById('productReviewsPopupModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            loadPopupReviewsData(activeServiceId);
+        }
     }
-}
 
-function closeReviewsPopup() {
-    const modal = document.getElementById('productReviewsPopupModal');
-    if (modal) {
-        modal.style.display = 'none';
+    function closeReviewsPopup() {
+        const modal = document.getElementById('productReviewsPopupModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
     }
-}
 
-function loadPopupReviewsData(serviceId) {
-    loadProductReviews(serviceId);
-}
+    function loadPopupReviewsData(serviceId) {
+        loadProductReviews(serviceId);
+    }
 
     // --- DYNAMIC SEARCH & SUGGESTION SCRIPT FOR PRODUCT PAGE ---
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInput');
-    const suggestionsBox = document.getElementById('suggestionsBox');
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsBox = document.getElementById('suggestionsBox');
 
-    if (searchInput && suggestionsBox) {
-        searchInput.addEventListener('input', async (e) => {
-            const query = e.target.value.toLowerCase().trim();
+        if (searchInput && suggestionsBox) {
+            searchInput.addEventListener('input', async (e) => {
+                const query = e.target.value.toLowerCase().trim();
 
-            if (query.length === 0) {
-                suggestionsBox.style.display = 'none';
-                suggestionsBox.innerHTML = '';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/services`);
-                const data = await response.json();
-
-                if (data.success && data.services) {
-                    const filtered = data.services.filter(s => 
-                        s.service_name.toLowerCase().includes(query) || 
-                        (s.category && s.category.toLowerCase().includes(query))
-                    );
-
-                    if (filtered.length > 0) {
-                        let html = '';
-                        filtered.forEach(s => {
-                            let safeName = s.service_name.replace(/'/g, "\\'");
-                            html += `<div class="suggestion-item" onmousedown="handleProductSearchSelect('${s.service_id}')">
-                                <i class="fa-solid fa-magnifying-glass" style="margin-right:8px; color:#0284c7;"></i> ${s.service_name} <span style="font-size:11px; color:#94a3b8; float:right;">(${s.category || 'Service'})</span>
-                            </div>`;
-                        });
-                        suggestionsBox.innerHTML = html;
-                        suggestionsBox.style.display = 'block';
-                    } else {
-                        suggestionsBox.innerHTML = `<div class="suggestion-item" style="color:#ef4444;">No matching services found</div>`;
-                        suggestionsBox.style.display = 'block';
-                    }
+                if (query.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = '';
+                    return;
                 }
-            } catch (err) {
-                console.error("Search error:", err);
-            }
-        });
 
-        searchInput.addEventListener('focus', () => {
-            if (searchInput.value.trim().length > 0) {
-                suggestionsBox.style.display = 'block';
-            }
-        });
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/services`);
+                    const data = await response.json();
 
-        searchInput.addEventListener('blur', () => {
-            setTimeout(() => {
-                suggestionsBox.style.display = 'none';
-            }, 250);
-        });
+                    if (data.success && data.services) {
+                        const filtered = data.services.filter(s => 
+                            s.service_name.toLowerCase().includes(query) || 
+                            (s.category && s.category.toLowerCase().includes(query))
+                        );
 
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const query = searchInput.value.trim();
-                if (!query) return;
-                
-                window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
-            }
-        });
+                        if (filtered.length > 0) {
+                            let html = '';
+                            filtered.forEach(s => {
+                                let safeName = s.service_name.replace(/'/g, "\\'");
+                                html += `<div class="suggestion-item" onmousedown="handleProductSearchSelect('${s.service_id}')">
+                                    <i class="fa-solid fa-magnifying-glass" style="margin-right:8px; color:#0284c7;"></i> ${s.service_name} <span style="font-size:11px; color:#94a3b8; float:right;">(${s.category || 'Service'})</span>
+                                </div>`;
+                            });
+                            suggestionsBox.innerHTML = html;
+                            suggestionsBox.style.display = 'block';
+                        } else {
+                            suggestionsBox.innerHTML = `<div class="suggestion-item" style="color:#ef4444;">No matching services found</div>`;
+                            suggestionsBox.style.display = 'block';
+                        }
+                    }
+                } catch (err) {
+                    console.error("Search error:", err);
+                }
+            });
+
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim().length > 0) {
+                    suggestionsBox.style.display = 'block';
+                }
+            });
+
+            searchInput.addEventListener('blur', () => {
+                setTimeout(() => {
+                    suggestionsBox.style.display = 'none';
+                }, 250);
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const query = searchInput.value.trim();
+                    if (!query) return;
+                    
+                    window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
+                }
+            });
+        }
+    });
+
+    function handleProductSearchSelect(serviceId) {
+        const box = document.getElementById('suggestionsBox');
+        if (box) box.style.display = 'none';
+        window.location.href = `product.html?id=${serviceId}`;
     }
-});
 
-function handleProductSearchSelect(serviceId) {
-    const box = document.getElementById('suggestionsBox');
-    if (box) box.style.display = 'none';
-    window.location.href = `product.html?id=${serviceId}`;
-}
     let currentProductData = {
         service_id: 'tv-repair',
         service_name: "Smart TV Repair & Service",
@@ -1182,14 +1183,9 @@ function handleProductSearchSelect(serviceId) {
     let cartItems = JSON.parse(localStorage.getItem('catus_cart')) || [];
     let currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || null;
     let tempPhone = "";
-
     let activeServiceId = 'tv-repair';
 
-    // ==========================================
-    // DYNAMIC PRODUCT DETAILS & REVIEWS LOADER
-    // ==========================================
     async function loadProductDetailsAndReviews(serviceId) {
-        // லோட் ஆகும் முன் பழைய டிசைன் கண்ணில் படாமல் இருக்க ஒப்பாசிட்டி 0
         const mainGrid = document.getElementById('productGridMain');
         if (mainGrid) mainGrid.style.opacity = '0';
 
@@ -1209,19 +1205,16 @@ function handleProductSearchSelect(serviceId) {
                     document.getElementById('bcTitle').innerText = s.service_name;
                     document.getElementById('prodRating').innerText = s.rating || '4.8';
 
-                    // 1. Discount Percentage Text (e.g. 50% off)
                     const discountEl = document.getElementById('displayDiscount');
                     if (discountEl) {
                         discountEl.textContent = s.discount_text || '3% off';
                     }
 
-                    // 2. Hot Deal Badge
                     const hotDealEl = document.querySelector('.hot-deal');
                     if (hotDealEl) {
                         hotDealEl.style.display = (s.is_hot_deal == 1) ? 'block' : 'none';
                     }
 
-                    // 3. Product Note
                     const productNoteEl = document.getElementById('productNoteContainer');
                     if (productNoteEl) {
                         if (s.product_note && s.product_note.trim() !== '') {
@@ -1233,7 +1226,6 @@ function handleProductSearchSelect(serviceId) {
                         }
                     }
 
-                    // 4. Select Option ON / OFF Toggle
                     const variantContainer = document.getElementById('variantContainer');
                     const variantTitleEl = document.querySelector('.variant-title');
                     if (variantContainer) {
@@ -1252,7 +1244,6 @@ function handleProductSearchSelect(serviceId) {
                         }
                     }
 
-                    // 5. Why Choose Us Dynamic Content
                     const featuresContainer = document.getElementById('featuresContainer');
                     if (featuresContainer) {
                         let whyStr = s.why_choose_us || 'Verified Professionals: Background-verified expert technicians.|30-Day Warranty: Post-service warranty on all repairs.';
@@ -1267,7 +1258,6 @@ function handleProductSearchSelect(serviceId) {
                         featuresContainer.innerHTML = pointsHtml;
                     }
 
-                    // 6. Thumbnails
                     let thumbContainer = document.getElementById('thumbnailContainer');
                     if (thumbContainer) {
                         let thumbsHTML = `<div class="thumb-box active" onclick="changeMainImage(this)"><img src="${s.image_url}" alt="Thumb"></div>`;
@@ -1277,19 +1267,15 @@ function handleProductSearchSelect(serviceId) {
                         thumbContainer.innerHTML = thumbsHTML;
                     }
 
-                    // 7. Load Combined Reviews
                     await loadCombinedProductReviews(serviceId, s);
-
-                    // 8. Load More Relevant Services
                     loadRelevantServicesSection(data.services, s.category, s.service_id);
 
-                    // டேட்டா முழுமையாக செட் ஆன பிறகு ஒரிஜினல் டிசைனை விசிபிள் செய்ய
                     if (mainGrid) mainGrid.style.opacity = '1';
                 }
             }
         } catch (e) {
             console.error("Error loading product details:", e);
-            if (mainGrid) mainGrid.style.opacity = '1'; // எர்ரர் வந்தாலும் பேஜ் தெரியும்படி
+            if (mainGrid) mainGrid.style.opacity = '1'; 
         }
     }
 
@@ -1386,9 +1372,6 @@ function handleProductSearchSelect(serviceId) {
         relatedContainer.innerHTML = html;
     }
 
-    // ==========================================
-    // PAGE INITIALIZATION (DOMContentLoaded)
-    // ==========================================
     window.addEventListener('DOMContentLoaded', async () => {
         updateCartUI();
         updateHeaderLoginUI();
@@ -1396,7 +1379,6 @@ function handleProductSearchSelect(serviceId) {
         const urlParams = new URLSearchParams(window.location.search);
         activeServiceId = urlParams.get('id') || 'tv-repair';
 
-        // Dynamic Loading
         await loadProductDetailsAndReviews(activeServiceId);
 
         if(currentUser) {
@@ -1419,34 +1401,6 @@ function handleProductSearchSelect(serviceId) {
         let img = thumbElement.querySelector('img');
         if(img) document.getElementById('mainProductImage').src = img.src;
     }
-
-    function loadRelatedServices(allServices, currentCategory, currentId) {
-    const relatedContainer = document.getElementById('relatedContainer');
-    if(!relatedContainer) return;
-    let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
-    
-    if (filtered.length === 0) {
-        filtered = allServices.slice(0, 4); 
-    }
-
-    let html = '';
-    filtered.forEach(s => {
-        html += `
-        <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
-            <div class="uc-card-img-wrapper">
-                <img src="${s.image_url}" alt="${s.service_name}">
-                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
-            </div>
-            <div class="uc-body">
-                <div>
-                    <h4>${s.service_name.toUpperCase()}</h4>
-                    <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
-                </div>
-            </div>
-        </div>`;
-    });
-    relatedContainer.innerHTML = html;
-}
 
     function addToCartCurrentProduct() {
         if(!currentProductData) return;
@@ -1600,99 +1554,6 @@ function handleProductSearchSelect(serviceId) {
     }
 
     function backToPhoneStep() { showAuthStep('phone'); }
-
-    async function requestOTP() {
-        const phone = document.getElementById('inputPhone').value.trim();
-        if (phone.length !== 10) { alert('Please enter a valid 10-digit mobile number.'); return; }
-        tempPhone = phone;
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: tempPhone })
-            });
-            const data = await response.json();
-            if (data.success) {
-                if (data.exists) {
-                    currentUser = data.user;
-                    showAuthStep('otp');
-                } else {
-                    showAuthStep('register');
-                }
-                showToast("OTP sent successfully!", false);
-            }
-        } catch (err) {
-            alert('Server connection error.');
-        }
-    }
-
-    function verifyOTP() {
-        const otp = document.getElementById('inputOTP').value.trim();
-        if (otp === "1234") {
-            if (currentUser) {
-                localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-                updateHeaderLoginUI();
-                toggleAuthModal(false);
-                showToast("Login Successful!", false);
-                if (orderPollingInterval) clearInterval(orderPollingInterval);
-                orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
-            }
-        } else {
-            alert('Invalid OTP. Please enter 1234.');
-        }
-    }
-
-    async function submitRegistration() {
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pincode = document.getElementById('regPincode').value.trim();
-    
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!name) {
-        alert('Please enter your full name.');
-        return;
-    }
-    if (!email || !emailPattern.test(email)) {
-        alert('Please enter a valid email address (e.g., name@gmail.com).');
-        document.getElementById('regEmail').focus();
-        return;
-    }
-    if (!pincode || pincode.length !== 6) {
-        alert('Please enter a valid 6-digit Service Pincode.');
-        document.getElementById('regPincode').focus();
-        return;
-    }
-
-    const address = "No address saved";
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, phone: tempPhone, pincode, address })
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            currentUser = data.user;
-            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-            updateHeaderLoginUI();
-            toggleAuthModal(false);
-            openPremiumDashboard();
-            showToast("Account Registered Successfully!", false);
-            
-            if (orderPollingInterval) clearInterval(orderPollingInterval);
-            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
-        } else {
-            alert(data.message || 'Registration failed.');
-        }
-    } catch (err) {
-        alert('Server connection error.');
-        console.error(err);
-    }
-}
 
     function checkCloseModal(event, drawerId, modalId) {
         const drawer = document.getElementById(drawerId);
@@ -1948,7 +1809,6 @@ function handleProductSearchSelect(serviceId) {
         }
     }
 
-    // Modal Actions (Address Edit, Cancel, Invoice, Rate)
     let activeCancelOrderId = null;
     function openCancelModal(orderId) { activeCancelOrderId = orderId; document.getElementById('cancelBookingModal').style.display = 'flex'; }
     function closeCancelModal() { document.getElementById('cancelBookingModal').style.display = 'none'; activeCancelOrderId = null; }
@@ -2037,50 +1897,49 @@ function handleProductSearchSelect(serviceId) {
         }
     }
     async function submitServiceRating() {
-    const rating = parseInt(document.getElementById('currentRatingVal').value);
-    if(rating === 0) {
-        alert("Please select a star rating first.");
-        return;
-    }
-    
-    const reviewText = document.getElementById('ratingReviewText').value.trim();
-    const orderId = document.getElementById('currentRatingOrderId').value;
-    const customerName = currentUser ? currentUser.name : "Customer";
-    
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/reviews`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                service_id: activeServiceId, 
-                customer_name: customerName, 
-                rating: rating, 
-                review_text: reviewText 
-            })
-        });
-        const data = await res.json();
-        
-        if(data.success) {
-            let ratedOrders = JSON.parse(localStorage.getItem('catus_rated_orders')) || [];
-            ratedOrders.push(orderId);
-            localStorage.setItem('catus_rated_orders', JSON.stringify(ratedOrders));
-
-            closeRatingModal();
-            showToast("Thanks for your review & rating! It's live now.", false);
-            
-            loadPopupReviewsData(activeServiceId);
-            
-            if (currentUser && currentUser.phone) fetchUserOrdersPremium(currentUser.phone);
-        } else {
-            alert("Failed to submit review.");
+        const rating = parseInt(document.getElementById('currentRatingVal').value);
+        if(rating === 0) {
+            alert("Please select a star rating first.");
+            return;
         }
-    } catch(e) {
-        console.error("Review submission error:", e);
-        alert("Server connection error.");
-    }
-}
+        
+        const reviewText = document.getElementById('ratingReviewText').value.trim();
+        const orderId = document.getElementById('currentRatingOrderId').value;
+        const customerName = currentUser ? currentUser.name : "Customer";
+        
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/reviews`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    service_id: activeServiceId, 
+                    customer_name: customerName, 
+                    rating: rating, 
+                    review_text: reviewText 
+                })
+            });
+            const data = await res.json();
+            
+            if(data.success) {
+                let ratedOrders = JSON.parse(localStorage.getItem('catus_rated_orders')) || [];
+                ratedOrders.push(orderId);
+                localStorage.setItem('catus_rated_orders', JSON.stringify(ratedOrders));
 
-    // Profile Settings Addons
+                closeRatingModal();
+                showToast("Thanks for your review & rating! It's live now.", false);
+                
+                loadPopupReviewsData(activeServiceId);
+                
+                if (currentUser && currentUser.phone) fetchUserOrdersPremium(currentUser.phone);
+            } else {
+                alert("Failed to submit review.");
+            }
+        } catch(e) {
+            console.error("Review submission error:", e);
+            alert("Server connection error.");
+        }
+    }
+
     function toggleEditField(field) {
         const displayEl = document.getElementById('premProfile' + field + 'Display');
         const editEl = document.getElementById('premProfile' + field + 'Edit');
@@ -2141,7 +2000,7 @@ function handleProductSearchSelect(serviceId) {
         showToast("Delivery Address updated successfully!", false);
     }
 
-function trackProfileChange(field, oldVal, newVal) {
+    function trackProfileChange(field, oldVal, newVal) {
         let logs = JSON.parse(localStorage.getItem('catus_audit_logs')) || [];
         const logEntry = { 
             timestamp: new Date().toLocaleString(), 
@@ -2169,196 +2028,171 @@ function trackProfileChange(field, oldVal, newVal) {
         });
         container.innerHTML = html;
     }
-    function loadRelatedServices(allServices, currentCategory, currentId) {
-    const relatedContainer = document.getElementById('relatedContainer');
-    if(!relatedContainer) return;
-    let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
-    
-    if (filtered.length === 0) {
-        filtered = allServices.slice(0, 4); 
+
+    function scrollToCategories() {
+        const catSection = document.getElementById('relatedServicesBox');
+        if (catSection) {
+            catSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.location.href = 'index.html#productGridContainer';
+        }
     }
 
-    let html = '';
-    filtered.forEach(s => {
-        html += `
-        <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
-            <div class="uc-card-img-wrapper">
-                <img src="${s.image_url}" alt="${s.service_name}">
-                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
-            </div>
-            <div class="uc-body">
-                <div>
-                    <h4>${s.service_name.toUpperCase()}</h4>
-                    <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
-                </div>
-            </div>
-        </div>`;
-    });
-    relatedContainer.innerHTML = html;
-}
-function scrollToCategories() {
-    const catSection = document.getElementById('relatedServicesBox');
-    if (catSection) {
-        catSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        window.location.href = 'index.html#productGridContainer';
+    function openLocationModal() {
+        const modal = document.getElementById('locationPopupModal');
+        if (modal) modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     }
-}
-function openLocationModal() {
-    const modal = document.getElementById('locationPopupModal');
-    if (modal) modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
 
-function toggleLocationModal(open) {
-    const modal = document.getElementById('locationPopupModal');
-    if (modal) modal.style.display = open ? 'flex' : 'none';
-    if (!open) document.body.style.overflow = 'auto';
-}
-
-function checkCloseLocationModal(event) {
-    const card = document.getElementById('locModalCard');
-    if (card && !card.contains(event.target)) {
-        toggleLocationModal(false);
+    function toggleLocationModal(open) {
+        const modal = document.getElementById('locationPopupModal');
+        if (modal) modal.style.display = open ? 'flex' : 'none';
+        if (!open) document.body.style.overflow = 'auto';
     }
-}
 
-function detectCurrentLocation() {
-    if (navigator.geolocation) {
-        showToast("Detecting your live location...", false);
-        navigator.geolocation.getCurrentPosition(async position => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            
-            try {
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`, {
-                    headers: { 'Accept-Language': 'en' }
-                });
-                const data = await response.json();
+    function checkCloseLocationModal(event) {
+        const card = document.getElementById('locModalCard');
+        if (card && !card.contains(event.target)) {
+            toggleLocationModal(false);
+        }
+    }
+
+    function detectCurrentLocation() {
+        if (navigator.geolocation) {
+            showToast("Detecting your live location...", false);
+            navigator.geolocation.getCurrentPosition(async position => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
                 
-                if (data && data.display_name) {
-                    let fullAddress = data.display_name;
-                    let shortAddress = formatShortAddress(fullAddress);
-                    
-                    document.getElementById('headerLocationDisplay').textContent = shortAddress;
-                    localStorage.setItem('catus_user_location', shortAddress);
-                    toggleLocationModal(false);
-                    showToast("Live location detected successfully!", false);
-                } else {
-                    alert("Unable to fetch address details for your location.");
-                }
-            } catch (err) {
-                console.error("GPS Reverse Geocoding error:", err);
-                alert("Failed to connect to location server.");
-            }
-        }, () => {
-            alert("Location access denied. Please enable GPS or type manually.");
-        }, { timeout: 10000, enableHighAccuracy: true });
-    } else {
-        alert("Geolocation is not supported by your browser.");
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const locInput = document.getElementById('locSearchInput');
-    const locBox = document.getElementById('locSuggestionsBox');
-    let searchTimeout = null;
-
-    if (locInput && locBox) {
-        locInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim();
-            clearTimeout(searchTimeout);
-            
-            if (query.length < 3) {
-                locBox.style.display = 'none';
-                locBox.innerHTML = '';
-                return;
-            }
-
-            searchTimeout = setTimeout(async () => {
                 try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in&addressdetails=1&limit=10`, {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`, {
                         headers: { 'Accept-Language': 'en' }
                     });
                     const data = await response.json();
-
-                    if (data && data.length > 0) {
-                        let html = '';
-                        data.forEach(item => {
-                            let displayName = item.display_name;
-                            let safeDisplayName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                            
-                            html += `<div style="padding: 10px 12px; font-size: 13px; color: #475569; cursor: pointer; border-bottom: 1px solid #f1f5f9;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'" onclick="selectLocationSuggestion('${safeDisplayName}')">
-                                <i class="fa-solid fa-location-dot" style="margin-right:8px; color:#0284c7;"></i>${displayName}
-                            </div>`;
-                        });
-                        locBox.innerHTML = html;
-                        locBox.style.display = 'block';
+                    
+                    if (data && data.display_name) {
+                        let fullAddress = data.display_name;
+                        let shortAddress = formatShortAddress(fullAddress);
+                        
+                        document.getElementById('headerLocationDisplay').textContent = shortAddress;
+                        localStorage.setItem('catus_user_location', shortAddress);
+                        toggleLocationModal(false);
+                        showToast("Live location detected successfully!", false);
                     } else {
-                        locBox.innerHTML = `<div style="padding: 10px 12px; font-size: 13px; color: #ef4444;">No villages or locations found</div>`;
-                        locBox.style.display = 'block';
+                        alert("Unable to fetch address details for your location.");
                     }
                 } catch (err) {
-                    console.error("Location search error:", err);
+                    console.error("GPS Reverse Geocoding error:", err);
+                    alert("Failed to connect to location server.");
                 }
-            }, 400);
-        });
-    }
-});
-
-function selectLocationSuggestion(fullAddress) {
-    const locInput = document.getElementById('locSearchInput');
-    const locBox = document.getElementById('locSuggestionsBox');
-    
-    if (locInput) locInput.value = fullAddress;
-    if (locBox) locBox.style.display = 'none';
-    
-    let shortAddress = formatShortAddress(fullAddress);
-    document.getElementById('headerLocationDisplay').textContent = shortAddress;
-    localStorage.setItem('catus_user_location', shortAddress);
-    toggleLocationModal(false);
-    showToast(`Location set successfully!`, false);
-}
-
-function formatShortAddress(fullAddress) {
-    if (!fullAddress) return "Tiruppur - 641601";
-    let parts = fullAddress.split(',').map(p => p.trim());
-    
-    let pincode = parts.find(p => /^\d{6}$/.test(p)) || "";
-    let village = parts[0] || "";
-    let district = "";
-    
-    for (let i = 1; i < parts.length; i++) {
-        let p = parts[i].toLowerCase();
-        if (p.includes('district') || p.includes('taluk') || p.includes('tamil nadu') || p.includes('india') || /^\d{6}$/.test(parts[i])) {
-            if (!p.includes('tamil nadu') && !p.includes('india') && !/^\d{6}$/.test(parts[i])) {
-                district = parts[i].replace('District', '').trim();
-            }
+            }, () => {
+                alert("Location access denied. Please enable GPS or type manually.");
+            }, { timeout: 10000, enableHighAccuracy: true });
+        } else {
+            alert("Geolocation is not supported by your browser.");
         }
     }
-    
-    if (!district && parts.length > 2) {
-        district = parts[parts.length - 3] || parts[1] || "";
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const locInput = document.getElementById('locSearchInput');
+        const locBox = document.getElementById('locSuggestionsBox');
+        let searchTimeout = null;
+
+        if (locInput && locBox) {
+            locInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                clearTimeout(searchTimeout);
+                
+                if (query.length < 3) {
+                    locBox.style.display = 'none';
+                    locBox.innerHTML = '';
+                    return;
+                }
+
+                searchTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in&addressdetails=1&limit=10`, {
+                            headers: { 'Accept-Language': 'en' }
+                        });
+                        const data = await response.json();
+
+                        if (data && data.length > 0) {
+                            let html = '';
+                            data.forEach(item => {
+                                let displayName = item.display_name;
+                                let safeDisplayName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                                
+                                html += `<div style="padding: 10px 12px; font-size: 13px; color: #475569; cursor: pointer; border-bottom: 1px solid #f1f5f9;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'" onclick="selectLocationSuggestion('${safeDisplayName}')">
+                                    <i class="fa-solid fa-location-dot" style="margin-right:8px; color:#0284c7;"></i>${displayName}
+                                </div>`;
+                            });
+                            locBox.innerHTML = html;
+                            locBox.style.display = 'block';
+                        } else {
+                            locBox.innerHTML = `<div style="padding: 10px 12px; font-size: 13px; color: #ef4444;">No villages or locations found</div>`;
+                            locBox.style.display = 'block';
+                        }
+                    } catch (err) {
+                        console.error("Location search error:", err);
+                    }
+                }, 400);
+            });
+        }
+    });
+
+    function selectLocationSuggestion(fullAddress) {
+        const locInput = document.getElementById('locSearchInput');
+        const locBox = document.getElementById('locSuggestionsBox');
+        
+        if (locInput) locInput.value = fullAddress;
+        if (locBox) locBox.style.display = 'none';
+        
+        let shortAddress = formatShortAddress(fullAddress);
+        document.getElementById('headerLocationDisplay').textContent = shortAddress;
+        localStorage.setItem('catus_user_location', shortAddress);
+        toggleLocationModal(false);
+        showToast(`Location set successfully!`, false);
     }
 
-    let result = village;
-    if (district && district.toLowerCase() !== village.toLowerCase()) {
-        result += `, ${district}`;
-    }
-    if (pincode) {
-        result += ` - ${pincode}`;
-    }
-    
-    return result || fullAddress.substring(0, 30) + "...";
-}
+    function formatShortAddress(fullAddress) {
+        if (!fullAddress) return "Tiruppur - 641601";
+        let parts = fullAddress.split(',').map(p => p.trim());
+        
+        let pincode = parts.find(p => /^\d{6}$/.test(p)) || "";
+        let village = parts[0] || "";
+        let district = "";
+        
+        for (let i = 1; i < parts.length; i++) {
+            let p = parts[i].toLowerCase();
+            if (p.includes('district') || p.includes('taluk') || p.includes('tamil nadu') || p.includes('india') || /^\d{6}$/.test(parts[i])) {
+                if (!p.includes('tamil nadu') && !p.includes('india') && !/^\d{6}$/.test(parts[i])) {
+                    district = parts[i].replace('District', '').trim();
+                }
+            }
+        }
+        
+        if (!district && parts.length > 2) {
+            district = parts[parts.length - 3] || parts[1] || "";
+        }
 
-window.addEventListener('DOMContentLoaded', () => {
-    let savedLoc = localStorage.getItem('catus_user_location');
-    if (savedLoc) {
-        const disp = document.getElementById('headerLocationDisplay');
-        if (disp) disp.textContent = savedLoc;
+        let result = village;
+        if (district && district.toLowerCase() !== village.toLowerCase()) {
+            result += `, ${district}`;
+        }
+        if (pincode) {
+            result += ` - ${pincode}`;
+        }
+        
+        return result || fullAddress.substring(0, 30) + "...";
     }
-});
+
+    window.addEventListener('DOMContentLoaded', () => {
+        let savedLoc = localStorage.getItem('catus_user_location');
+        if (savedLoc) {
+            const disp = document.getElementById('headerLocationDisplay');
+            if (disp) disp.textContent = savedLoc;
+        }
+    });
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
   <div class="cart-modal-overlay" id="productReviewsPopupModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
@@ -2442,7 +2276,8 @@ window.addEventListener('DOMContentLoaded', () => {
     <div style="border-top: 1px solid #1e293b; padding-top: 20px; text-align: center; color: #64748b; font-size: 12px;">
         <p style="margin: 0;">© 2026 Catus Electronics & Home Services. All Rights Reserved.</p>
     </div>
-    <!-- Location Change Popup Modal (Urban Company Style) -->
+    </footer>
+    <!-- Location Change Popup Modal (இது ஃபுட்டருக்கு வெளியே இருக்க வேண்டும்) -->
 <div class="cart-modal-overlay" id="locationPopupModal" onclick="checkCloseLocationModal(event)" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 99999;">
     <div class="loc-modal-card" id="locModalCard" style="background: #ffffff; width: 90%; max-width: 460px; border-radius: 16px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative;">
         
@@ -2467,6 +2302,40 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>
 </div>
-</footer>
+
+<script>
+    function formatShortAddress(fullAddress) {
+        if (!fullAddress) return "Tiruppur - 641601";
+        let parts = fullAddress.split(',').map(p => p.trim());
+        
+        let pincode = parts.find(p => /^\d{6}$/.test(p)) || "";
+        let village = parts[0] || "";
+        let district = "";
+        
+        for (let i = 1; i < parts.length; i++) {
+            let p = parts[i].toLowerCase();
+            if (p.includes('district') || p.includes('taluk') || p.includes('tamil nadu') || p.includes('india') || /^\d{6}$/.test(parts[i])) {
+                if (!p.includes('tamil nadu') && !p.includes('india') && !/^\d{6}$/.test(parts[i])) {
+                    district = parts[i].replace('District', '').trim();
+                }
+            }
+        }
+        
+        if (!district && parts.length > 2) {
+            district = parts[parts.length - 3] || parts[1] || "";
+        }
+
+        let result = village;
+        if (district && district.toLowerCase() !== village.toLowerCase()) {
+            result += `, ${district}`;
+        }
+        if (pincode) {
+            result += ` - ${pincode}`;
+        }
+        
+        return result || fullAddress.substring(0, 30) + "...";
+    }
+</script>
+
 </body>
 </html>
