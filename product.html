@@ -662,7 +662,7 @@
               <div class="header-left-group">
                   <button class="prem-icon-btn" onclick="closePremiumDashboard()" title="Back to Home Page"><i class="fa-solid fa-arrow-left"></i></button>
                   <div class="prem-greeting" style="overflow: hidden;">
-                      <h1 id="greetName" class="prem-greeting-text">👋 Welcome, Customer</h1>
+                      <h1 id="greetName" class="prem-greeting-text">Welcome, Customer</h1>
                   </div>
               </div>
               <div class="header-center-group">
@@ -675,7 +675,7 @@
 
           <!-- TAB 1: HOME DASHBOARD -->
           <div id="dashTabHome" class="prem-tab-pane active">
-              <div class="prem-section-title">📊 Dashboard Summary</div>
+              <div class="prem-section-title">Dashboard Summary</div>
               <div class="prem-grid-4">
                   <div class="prem-stat-card" onclick="showSummaryDetail('bookings')"><h3 id="sumTotal">0</h3><p>Total Bookings</p></div>
                   <div class="prem-stat-card" onclick="showSummaryDetail('completed')"><h3 id="sumCompleted">0</h3><p>Completed</p></div>
@@ -698,7 +698,7 @@
 
           <!-- TAB 2: MY BOOKINGS -->
           <div id="dashTabBookings" class="prem-tab-pane">
-              <div class="prem-section-title">📋 My Booking History</div>
+              <div class="prem-section-title">My Booking History</div>
               <div id="premOrdersListContainer">
                   <p style="color:#64748b;">Loading your orders...</p>
               </div>
@@ -755,7 +755,7 @@
 
           <!-- TAB 5: PROFILE SETTINGS -->
           <div id="dashTabProfile" class="prem-tab-pane">
-              <div class="prem-section-title">👤 Profile Settings</div>
+              <div class="prem-section-title">Profile Settings</div>
               <div class="prem-card-box">
                   <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                       <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
@@ -817,7 +817,7 @@
                   </div>
               </div>
 
-              <div class="prem-section-title" style="margin-top: 25px;">🕵️ Profile Change Logs</div>
+              <div class="prem-section-title" style="margin-top: 25px;">Profile Change Logs</div>
               <div class="prem-card-box" id="auditLogContainer" style="font-size:11px; color:#64748b; max-height:180px; overflow-y:auto; line-height: 1.5;">
                   <!-- Logs generated dynamically via JS -->
               </div>
@@ -1698,7 +1698,7 @@ function handleProductSearchSelect(serviceId) {
     function openPremiumDashboard() {
         toggleAuthModal(false);
         if (currentUser) {
-            document.getElementById('greetName').innerHTML = "👋 Welcome, " + (currentUser.name || "Customer");
+            document.getElementById('greetName').innerHTML = "Welcome, " + (currentUser.name || "Customer");
             document.getElementById('premProfileNameDisplay').textContent = currentUser.name || "Add Name";
             document.getElementById('premProfilePhone').textContent = "+91 " + currentUser.phone;
             
@@ -2091,7 +2091,7 @@ function handleProductSearchSelect(serviceId) {
                 if(currentUser) {
                     if(field === 'Name') {
                         currentUser.name = newVal;
-                        document.getElementById('greetName').innerHTML = "👋 Welcome, " + newVal;
+                        document.getElementById('greetName').innerHTML = "Welcome, " + newVal;
                         document.getElementById('premAvatarInitials').textContent = newVal.charAt(0).toUpperCase();
                     }
                     if(field === 'Address') currentUser.address = newVal;
