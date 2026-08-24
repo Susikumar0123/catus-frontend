@@ -1295,6 +1295,12 @@
 
   <!-- JavaScript Integration -->
   <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCartUI();
+      updateHeaderLoginUI();
+      loadHeroBanners();
+      loadLiveServicesForFrontend(); // 🛑 இந்த வரியை ஹோம் பேஜ் லோடிங்கில் சேர்க்கவும்!
+  });
 
   const API_BASE_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000' 
