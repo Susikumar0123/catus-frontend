@@ -632,14 +632,6 @@
     .mobile-bottom-nav { display: flex !important; }
 }
 
-/* Desktop layout fix */
-@media (min-width: 851px) {
-    .master-app-container {
-        padding: 20px 60px !important;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-}
 /* ==========================================================
         FINAL FIX: SEPARATE BUTTON COLORS & DASHBOARD OVERRIDE
         ========================================================== */
@@ -698,15 +690,17 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
     }
 
-   /* Laptop/Desktop Layout Fix - Full Screen Width Upgrade */
-@media (min-width: 769px) {
-    .master-app-container {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 20px 40px !important;
-        box-sizing: border-box !important;
-    }
+   @media (min-width: 769px) {
+    ..master-app-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 20px 40px !important;
+    background: #ffffff;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
 }
 
 /* Separate Add to Cart (Green) and Book Now (Blue) Colors */
