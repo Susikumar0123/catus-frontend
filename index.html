@@ -12,6 +12,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* சர்வர் ரெஸ்பான்ஸ் வரும் வரை பழைய கார்டுகள்/டிசைன் உடனே தெரியாமல் இருக்க */
+    #cardsContainer:empty, #productGridContainer:empty {
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5f9;
+        border-radius: 12px;
+    }
+    #cardsContainer:empty::after, #productGridContainer:empty::after {
+        content: "Loading services...";
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 500;
+        animation: pulseText 1s infinite alternate;
+    }
+    @keyframes pulseText {
+        0% { opacity: 0.4; }
+        100% { opacity: 1; }
+    }
        
         .clear-cart-text, .cart-header span[onclick*="clearCart"] {
     text-decoration: none !important;
