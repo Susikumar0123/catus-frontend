@@ -2860,6 +2860,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await response.json();
 
+                    if (data && data.length > 0) {
+                        let html = '';
+                        data.forEach(item => {
+                            let displayName = item.display_name;
+                            let safeDisplayName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                            
+                            // இங்கு onclick-ல் 'selectLocationSuggestion' என்று மாற்றிவிட்டோம்
+                            html += `<div style="padding: 10px 12px; font-size: 13px; color: #475569; cursor: pointer; border-bottom: 1px solid #f1f5f9;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'" onclick="selectLocationSuggestion('${safeDisplayName}')">
+                                <i class="fa-solid fa-location-dot" style="margin-right:8px; color:#0284c7;"></i>${displayName}
+                            </div>`;
+                        });
+                        locBox.innerHTML = html;
+                        locBox.style.display = 'block';
+                    }
                 } catch (err) {
                     console.error("Location search error:", err);
                 }
@@ -2867,15 +2881,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-// சஜஷனை க்ளிக் செய்யும் போது சர்ச் பாரை க்ளியர் செய்துவிட்டு சரியான முகவரியை மட்டும் செட் செய்ய
+
+// சஜஷனை க்ளிக் செய்யும் போது சர்ச் பாரில் நாம் டைப் செய்ததை நீக்கிவிட்டு, சஜஷன் டெக்ஸ்டை மட்டும் முழுமையாக செட் செய்ய
 function selectLocationSuggestion(fullAddress) {
     const locInput = document.getElementById('locSearchInput');
     const locBox = document.getElementById('locSuggestionsBox');
     
-    if (locInput) locInput.value = fullAddress;
+    if (locInput) locInput.value = fullAddress; // சர்ச் பாரில் சஜஷன் டெக்ஸ்ட் மட்டும் இருக்கும்
     if (locBox) locBox.style.display = 'none';
     
-    selectLocationModal(fullAddress);
+    // சுருக்கப்பட்ட அட்ரஸை ஹெடரில் செட் செய்ய
+    let shortAddress = formatShortAddress(fullAddress);
+    document.getElementById('headerLocationDisplay').textContent = shortAddress;
+    localStorage.setItem('catus_user_location', shortAddress);
+    toggleLocationModal(false);
+    showToast(`Location set successfully!`, false);
 }
 
 // முழு முகவரியிலிருந்து கிராமம், மாவட்டம், பின் கோடு மட்டும் கச்சிதமாக பிரித்து எடுக்க
