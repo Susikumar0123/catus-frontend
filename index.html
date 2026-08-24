@@ -149,7 +149,23 @@
         .service-chip { display: inline-flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; background: transparent; border: none; color: #475569; padding: 4px 8px 12px 8px; border-radius: 0; font-size: 11px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; flex: 0 0 auto; min-width: 75px; position: relative; }
         
         /* Icon Background Box */
-        .chip-icon-bg { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .chip-icon-bg { 
+    width: 44px; 
+    height: 44px; 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: transparent; 
+    overflow: hidden; /* இமேஜ் பெட்டியை விட்டு வெளியே போகாமல் இருக்க */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+.chip-icon-bg img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* பெட்டி முழுவதையும் இமேஜ் நிரப்ப */
+    display: block;
+}
         .chip-icon-bg svg { width: 22px; height: 22px; stroke: #334155; stroke-width: 1.5; fill: none; transition: 0.3s; }
         
         .service-chip span { width: 100%; text-align: center; white-space: nowrap; transition: color 0.3s; }
@@ -860,61 +876,61 @@
       <div class="services-track" id="servicesTrack">
         <button class="service-chip active" data-search="tv" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="tvlogo.png" alt="Smart TV" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="tvlogo.png" alt="Smart TV">
           </div>
           <span>Smart TV</span>
         </button>
         <button class="service-chip" data-search="ac" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="ac-logo.png" alt="AC Service" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="ac-logo.png" alt="AC Service">
           </div>
           <span>AC Service</span>
         </button>
         <button class="service-chip" data-search="washing machine" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="washing-logo.png" alt="Washing M/C" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="washing-logo.png" alt="Washing M/C">
           </div>
           <span>Washing M/C</span>
         </button>
         <button class="service-chip" data-search="refrigerator" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="fridge-logo.png" alt="Refrigerator" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="fridge-logo.png" alt="Refrigerator">
           </div>
           <span>Refrigerator</span>
         </button>
         <button class="service-chip" data-search="purifier" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="purifier-logo.png" alt="RO Purifier" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="purifier-logo.png" alt="RO Purifier">
           </div>
           <span>RO Purifier</span>
         </button>
         <button class="service-chip" data-search="inverter" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="ups-logo.png" alt="UPS & Battery" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="ups-logo.png" alt="UPS & Battery">
           </div>
           <span>UPS & Battery</span>
         </button>
         <button class="service-chip" data-search="cctv" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="cctv-logo.png" alt="CCTV Setup" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="cctv-logo.png" alt="CCTV Setup">
           </div>
           <span>CCTV Setup</span>
         </button>
         <button class="service-chip" data-search="chimney" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="chimney-logo.png" alt="Chimney" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="chimney-logo.png" alt="Chimney">
           </div>
           <span>Chimney</span>
         </button>
         <button class="service-chip" data-search="lock" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="lock-logo.png" alt="Smart Lock" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="lock-logo.png" alt="Smart Lock">
           </div>
           <span>Smart Lock</span>
         </button>
         <button class="service-chip" data-search="microwave" onclick="selectChip(this)">
           <div class="chip-icon-bg">
-              <img src="microwave-logo.png" alt="Microwave" style="width: 24px; height: 24px; object-fit: contain;">
+              <img src="microwave-logo.png" alt="Microwave">
           </div>
           <span>Microwave</span>
         </button>
