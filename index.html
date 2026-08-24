@@ -2797,15 +2797,38 @@ function checkCloseLocationModal(event) {
 
 function detectCurrentLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-            let detectedLoc = "Tiruppur - 641601"; // அவசியமானால் ஜியோகோடிங் அல்லது கரண்ட் லொகேஷன் வைக்கலாம்
-            document.getElementById('headerLocationDisplay').textContent = detectedLoc;
-            localStorage.setItem('catus_user_location', detectedLoc);
-            toggleLocationModal(false);
-            showToast("Location detected successfully!", false);
+        showToast("Detecting your live location...", false);
+        navigator.geolocation.getCurrentPosition(async position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            
+            try {
+                // லேட்டிடியூட் மற்றும் லாங்கிடியூட் மூலம் உண்மையான அட்ரஸை ஆன்லைனில் பெறுதல்
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`, {
+                    headers: {
+                        'Accept-Language': 'en'
+                    }
+                });
+                const data = await response.json();
+                
+                if (data && data.display_name) {
+                    let fullAddress = data.display_name;
+                    let shortAddress = formatShortAddress(fullAddress);
+                    
+                    document.getElementById('headerLocationDisplay').textContent = shortAddress;
+                    localStorage.setItem('catus_user_location', shortAddress);
+                    toggleLocationModal(false);
+                    showToast("Live location detected successfully!", false);
+                } else {
+                    alert("Unable to fetch address details for your location.");
+                }
+            } catch (err) {
+                console.error("GPS Reverse Geocoding error:", err);
+                alert("Failed to connect to location server.");
+            }
         }, () => {
-            alert("Unable to retrieve your location. Please type manually.");
-        });
+            alert("Location access denied. Please enable GPS or type manually.");
+        }, { timeout: 10000, enableHighAccuracy: true });
     } else {
         alert("Geolocation is not supported by your browser.");
     }
