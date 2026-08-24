@@ -120,8 +120,27 @@
         .chevron-icon { width: 14px !important; height: 14px !important; }
         .cart-icon-wrapper { position: relative; display: flex; align-items: center; }
         .cart-badge { position: absolute; top: -6px; right: -8px; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
-        .login-btn { background: #0284c7; color: #fff; border: none; padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .login-btn:hover { background: #0369a1; }
+        .login-btn {
+    background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%) !important; /* ரிச்சான மரூன் / ரெட் கிரேடியன்ட் */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity 0.2s;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.login-btn:hover {
+    background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%) !important;
+}
 
         /* 2. Quick Services Bar (Catus Unique Flipkart-Style) */
         .quick-services-bar { width: 100%; background: transparent; padding: 10px 0 0 0; box-sizing: border-box; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; }
