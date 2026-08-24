@@ -2853,7 +2853,7 @@ function detectCurrentLocation() {
     }
 }
 
-// இந்தியாவின் அனைத்து கிராமங்கள், ஊர்களைத் தேடும் API லாஜிக்
+// இந்தியாவின் அனைத்து கிராமங்கள், ஊர்களைத் தேடும் சரியான API லாஜிக்
 document.addEventListener('DOMContentLoaded', () => {
     const locInput = document.getElementById('locSearchInput');
     const locBox = document.getElementById('locSuggestionsBox');
@@ -2885,12 +2885,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             let displayName = item.display_name;
                             let safeDisplayName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                             
-                            // இங்கு onclick-ல் 'selectLocationSuggestion' என்று மாற்றிவிட்டோம்
+                            // சஜஷனை க்ளிக் செய்யும்போது 'selectLocationSuggestion' பங்க்ஷன் அழைக்கப்படும்
                             html += `<div style="padding: 10px 12px; font-size: 13px; color: #475569; cursor: pointer; border-bottom: 1px solid #f1f5f9;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'" onclick="selectLocationSuggestion('${safeDisplayName}')">
                                 <i class="fa-solid fa-location-dot" style="margin-right:8px; color:#0284c7;"></i>${displayName}
                             </div>`;
                         });
                         locBox.innerHTML = html;
+                        locBox.style.display = 'block';
+                    } else {
+                        locBox.innerHTML = `<div style="padding: 10px 12px; font-size: 13px; color: #ef4444;">No villages or locations found</div>`;
                         locBox.style.display = 'block';
                     }
                 } catch (err) {
@@ -2901,12 +2904,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// சஜஷனை க்ளிக் செய்யும் போது சர்ச் பாரில் நாம் டைப் செய்ததை நீக்கிவிட்டு, சஜஷன் டெக்ஸ்டை மட்டும் முழுமையாக செட் செய்ய
+// சஜஷனை க்ளிக் செய்யும் போது நாம் டைப் செய்ததை அழித்துவிட்டு, சஜஷன் டெக்ஸ்டை மட்டும் முழுமையாக செட் செய்ய
 function selectLocationSuggestion(fullAddress) {
     const locInput = document.getElementById('locSearchInput');
     const locBox = document.getElementById('locSuggestionsBox');
     
-    if (locInput) locInput.value = fullAddress; // சர்ச் பாரில் சஜஷன் டெக்ஸ்ட் மட்டும் இருக்கும்
+    if (locInput) locInput.value = fullAddress; // சர்ச் பாரில் சஜஷன் டெக்ஸ்ட் மட்டும் தெளிவாக இருக்கும்
     if (locBox) locBox.style.display = 'none';
     
     // சுருக்கப்பட்ட அட்ரஸை ஹெடரில் செட் செய்ய
