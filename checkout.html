@@ -279,12 +279,6 @@
                             <label>Pincode *</label>
                             <input type="text" id="fieldPincode" class="form-input" placeholder="6-digit pincode" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g, ''); this.classList.remove('error');">
                         </div>
-                        
-                        <div class="form-group full" style="margin-top: 5px;">
-                            <button type="button" onclick="getGPSLocation()" id="gpsBtn" style="background: #e0f2fe; color: #0284c7; border: none; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;">
-                                <i class="fa-solid fa-location-crosshairs"></i> Drop Customer Location (GPS)
-                            </button>
-                        </div>
 
                         <div class="form-group full" style="margin-top: 5px;">
                             <button type="button" class="save-addr-action-btn" onclick="saveAddressChanges()">
@@ -701,18 +695,6 @@
     document.getElementById('billTotalSum').textContent = "₹" + totalBill;
     document.getElementById('billAmountToPay').textContent = "₹" + totalBill;
 }
-
-        function getGPSLocation() {
-            const btn = document.getElementById('gpsBtn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Fetching Location...';
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    window.customerGPS = `${position.coords.latitude}, ${position.coords.longitude}`;
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Location Pinned Successfully!';
-                    btn.style.background = '#dcfce7'; btn.style.color = '#16a34a';
-                }, () => { alert("Unable to fetch location."); btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Drop Customer Location (GPS)'; });
-            }
-        }
 
         async function submitOrder() {
             const fields = ['fieldName', 'fieldMobile', 'fieldDoor', 'fieldVillage', 'fieldCountry', 'fieldState', 'fieldDistrict', 'fieldCity', 'fieldPincode'];
