@@ -2442,7 +2442,9 @@ window.addEventListener('DOMContentLoaded', () => {
     <div style="border-top: 1px solid #1e293b; padding-top: 20px; text-align: center; color: #64748b; font-size: 12px;">
         <p style="margin: 0;">© 2026 Catus Electronics & Home Services. All Rights Reserved.</p>
     </div>
-    <!-- Location Change Popup Modal (Urban Company Style) -->
+</footer>
+
+<!-- Location Change Popup Modal (இது ஃபுட்டருக்கு வெளியே இருக்க வேண்டும்) -->
 <div class="cart-modal-overlay" id="locationPopupModal" onclick="checkCloseLocationModal(event)" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 99999;">
     <div class="loc-modal-card" id="locModalCard" style="background: #ffffff; width: 90%; max-width: 460px; border-radius: 16px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative;">
         
@@ -2467,6 +2469,40 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>
 </div>
-</footer>
+
+<script>
+    function formatShortAddress(fullAddress) {
+        if (!fullAddress) return "Tiruppur - 641601";
+        let parts = fullAddress.split(',').map(p => p.trim());
+        
+        let pincode = parts.find(p => /^\d{6}$/.test(p)) || "";
+        let village = parts[0] || "";
+        let district = "";
+        
+        for (let i = 1; i < parts.length; i++) {
+            let p = parts[i].toLowerCase();
+            if (p.includes('district') || p.includes('taluk') || p.includes('tamil nadu') || p.includes('india') || /^\d{6}$/.test(parts[i])) {
+                if (!p.includes('tamil nadu') && !p.includes('india') && !/^\d{6}$/.test(parts[i])) {
+                    district = parts[i].replace('District', '').trim();
+                }
+            }
+        }
+        
+        if (!district && parts.length > 2) {
+            district = parts[parts.length - 3] || parts[1] || "";
+        }
+
+        let result = village;
+        if (district && district.toLowerCase() !== village.toLowerCase()) {
+            result += `, ${district}`;
+        }
+        if (pincode) {
+            result += ` - ${pincode}`;
+        }
+        
+        return result || fullAddress.substring(0, 30) + "...";
+    }
+</script>
+
 </body>
 </html>
