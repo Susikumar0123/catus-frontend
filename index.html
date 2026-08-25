@@ -1633,20 +1633,34 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-        updateCartUI();
-        syncButtonStates();
-        updateHeaderLoginUI();
-        loadHeroBanners();
-        loadLiveServicesForFrontend(); // 🛑 Inga load aaguthu nu ensure pannikonga
-        
-        if(currentUser) {
-            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-            fetchUserOrdersPremium(currentUser.phone);
-            renderAuditLogs(); 
-            if (orderPollingInterval) clearInterval(orderPollingInterval);
-            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
-        }
-    });
+    // 🛑 ரிஃப்ரேஷ் செய்யும் போது பாப்-அப்கள் வராமல் இருக்க கட்டாயம் சேர்க்கவும்:
+    const cartModal = document.getElementById('cartModal');
+    if(cartModal) cartModal.style.display = 'none';
+
+    const authModal = document.getElementById('authModal');
+    if(authModal) authModal.style.display = 'none';
+
+    const dashModal = document.getElementById('premiumCustomerDashboard');
+    if(dashModal) dashModal.style.display = 'none';
+
+    updateCartUI();
+    updateHeaderLoginUI();
+    loadHeroBanners();
+    loadLiveServicesForFrontend();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    activeServiceId = urlParams.get('id') || 'tv-repair';
+
+    loadProductDetailsAndReviews(activeServiceId);
+
+    if(currentUser) {
+        if(currentUser.wallet === undefined) currentUser.wallet = 2500;
+        fetchUserOrdersPremium(currentUser.phone);
+        renderAuditLogs();
+        if (orderPollingInterval) clearInterval(orderPollingInterval);
+        orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+    }
+});
 
     function toggleDarkMode() {
         document.body.classList.toggle('dark-theme');
