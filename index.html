@@ -382,8 +382,24 @@
         .uc-cut { font-size: 13px; font-weight: 400; color: #878787; text-decoration: line-through; margin-left: 6px; }
 
         /* Modals / Drawers Shared Styles */
-        .cart-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); z-index: 99999; display: none; justify-content: flex-end; align-items: stretch; }
-        .cart-drawer { width: 100%; max-width: 440px; background: #ffffff; height: 100%; box-shadow: -4px 0 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; box-sizing: border-box; animation: slideIn 0.3s ease; position: relative; z-index: 100000; }
+       @media (max-width: 850px) {
+    .cart-modal-overlay {
+        z-index: 999998;
+    }
+}
+        .cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 440px;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 999999; /* Bottom Nav-ஐ விட இது உயரமாக இருக்க வேண்டும் */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
         .cart-header { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; position: relative; }
         .cart-header h3 { margin: 0; font-size: 18px; font-weight: 500; color: #212121; }
@@ -398,7 +414,14 @@
         .cart-item-price { font-weight: 500; color: #212121; font-size: 14px; margin-right: 10px; }
         .remove-item-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 14px; padding: 6px; transition: color 0.2s; }
         .remove-item-btn:hover { background: #dc2626; }
-        .cart-footer { padding: 20px; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; flex-direction: column; gap: 10px; }
+        .cart-footer {
+    padding: 15px 20px 20px 20px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
         .cart-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 500; color: #212121; }
         .checkout-btn { width: 100%; background: #0284c7; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 13px; transition: 0.2s; }
 
