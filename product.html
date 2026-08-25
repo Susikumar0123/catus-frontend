@@ -449,42 +449,14 @@
     background: #f8fafc; 
 }
 
+/* Mobile Screen Layout Adjustments */
 @media (max-width: 850px) {
-    /* சர்ச் பார் இடது பக்கமும், லோகோ வலது பக்கமும் ஒரே வரியில் இருக்க */
-    .header-main-container { 
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important; 
-        justify-content: space-between !important;
-        align-items: center !important; 
-        gap: 8px !important; 
-        width: 100% !important;
+    .header-nav-right {
+        display: none !important;
     }
-    
-    /* சர்ச் பார் இடது பக்கம் (Order 1) */
-    .search-container { 
-        order: 1 !important; 
-        flex: 1 1 auto !important; 
-        width: auto !important; 
-        padding: 0 10px !important; 
-        margin: 0 !important;
+    .header-main-container {
+        justify-content: flex-start !important;
     }
-    
-    /* லோகோ வலது பக்கம் (Order 2) */
-    .brand-logo { 
-        order: 2 !important; 
-        margin-right: 0 !important; 
-        flex-shrink: 0 !important;
-    }
-    .brand-logo img { 
-        height: 35px !important; 
-        width: auto !important; 
-    }
-    
-    .header-nav-right { 
-        display: none !important; 
-    }
-}
     .product-grid { 
         grid-template-columns: 1fr !important; /* Image mela, text keezha varum */
         gap: 20px; 
