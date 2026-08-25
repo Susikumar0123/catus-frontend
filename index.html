@@ -713,14 +713,22 @@
         @media (max-width: 768px) {
             .master-app-container { margin: 0; padding: 12px; border: none; border-radius: 0; box-shadow: none; }
             .header-main-container { 
+        display: flex !important;
+        flex-direction: row !important;
         flex-wrap: nowrap !important; 
-        gap: 8px !important; 
+        justify-content: space-between !important;
         align-items: center !important; 
+        gap: 8px !important; 
+        width: 100% !important;
     }
-            .brand-logo img { height: 36px !important; }
+    .brand-logo { 
+        order: 1 !important; 
+        margin-right: 0 !important; 
+    }
+            .brand-logo img { height: 35px !important; }
             .header-nav-right { order: unset !important; gap: 10px; }
             .search-container { 
-        order: unset !important; 
+        order: 2 !important; 
         flex: 1 1 auto !important; 
         width: auto !important; 
         padding: 0 10px !important; 
