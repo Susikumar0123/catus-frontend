@@ -2484,6 +2484,35 @@ window.addEventListener('DOMContentLoaded', () => {
         if (disp) disp.textContent = savedLoc;
     }
 });
+
+window.addEventListener('DOMContentLoaded', async () => {
+    // 🛑 ரிஃப்ரேஷ் மற்றும் கிளிக் செய்யும்போது பாப்-அப்கள் வராமல் இருக்க கட்டாயம் சேர்க்கவும்:
+    const cartModal = document.getElementById('cartModal');
+    if (cartModal) cartModal.style.display = 'none';
+
+    const authModal = document.getElementById('authModal');
+    if (authModal) authModal.style.display = 'none';
+
+    const dashModal = document.getElementById('premiumCustomerDashboard');
+    if (dashModal) dashModal.style.display = 'none';
+
+    updateCartUI();
+    updateHeaderLoginUI();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    activeServiceId = urlParams.get('id') || 'tv-repair';
+
+    await loadProductDetailsAndReviews(activeServiceId);
+
+    if (currentUser) {
+        if (currentUser.wallet === undefined) currentUser.wallet = 2500;
+        fetchUserOrdersPremium(currentUser.phone);
+        renderAuditLogs();
+        if (orderPollingInterval) clearInterval(orderPollingInterval);
+        orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+    }
+});
+
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
   <div class="cart-modal-overlay" id="productReviewsPopupModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
