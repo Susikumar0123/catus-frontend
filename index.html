@@ -2128,55 +2128,87 @@
     }
 
     async function requestOTP() {
-        const phone = document.getElementById('inputPhone').value.trim();
-        if (phone.length !== 10) {
-            alert('Please enter a valid 10-digit mobile number.');
-            return;
-        }
-        tempPhone = phone;
-        
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/login`, {
+    const phone = document.getElementById('inputPhone').value.trim();
+    if (phone.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+    }
+    tempPhone = phone;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            if (data.exists) {
+                currentUser = data.user;
+                if(currentUser.wallet === undefined) currentUser.wallet = 2500;
+            }
+
+            // Real SMS OTP trigger panra backend route
+            const smsRes = await fetch(`${API_BASE_URL}/api/send-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone: tempPhone })
             });
-            const data = await response.json();
+            const smsData = await smsRes.json();
 
-            if (data.success) {
-                if (data.exists) {
-                    currentUser = data.user;
-                    if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-                    document.getElementById('otpInfoText').textContent = `OTP sent to registered mobile for +91 ${tempPhone}. (Enter 1234)`;
-                    showAuthStep('otp');
-                } else {
-                    showAuthStep('register');
-                }
-                showToast("OTP sent successfully!", false);
+            if (smsData.success) {
+                showAuthStep('otp');
+                document.getElementById('otpInfoText').textContent = `OTP sent via SMS to +91 ${tempPhone}`;
+                showToast("OTP sent successfully to your mobile!", false);
+            } else {
+                alert(smsData.message || 'Failed to send real SMS OTP.');
             }
-        } catch (err) {
-            alert('Server connection error. Make sure backend is running.');
-            console.error(err);
         }
+    } catch (err) {
+        alert('Server connection error. Make sure backend is running.');
+        console.error(err);
+    }
+}
+
+    async function verifyOTP() {
+    const otp = document.getElementById('inputOTP').value.trim();
+    if (otp.length !== 4) {
+        alert('Please enter the 4-digit OTP received via SMS.');
+        return;
     }
 
-    function verifyOTP() {
-        const otp = document.getElementById('inputOTP').value.trim();
-        if (otp === "1234") {
-            if (currentUser) {
-                localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-                updateHeaderLoginUI();
-                toggleAuthModal(false);
-                openPremiumDashboard();
-                showToast("Login Successful!", false);
-                
-                if (orderPollingInterval) clearInterval(orderPollingInterval);
-                orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, otp: otp })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            if (!currentUser) {
+                showAuthStep('register');
+                showToast("OTP Verified! Please complete registration.", false);
+                return;
             }
+
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("Login Successful!", false);
+            
+            if (orderPollingInterval) clearInterval(orderPollingInterval);
+            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
         } else {
-            alert('Invalid OTP. Please enter 1234.');
+            alert(data.message || 'Invalid or expired OTP. Please try again.');
         }
+    } catch (err) {
+        alert('Server connection error during OTP verification.');
+        console.error(err);
     }
+}
 
     async function submitRegistration() {
     const name = document.getElementById('regName').value.trim();
