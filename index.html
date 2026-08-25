@@ -1093,21 +1093,27 @@
           </div>
 
           <!-- VIEW 2: ENTER OTP -->
-          <div id="authStepOTP" class="login-body-content" style="display: none;">
-              <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                  <h3>Verify OTP</h3>
-                  <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-              <p id="otpInfoText">OTP has been sent to your mobile/email.</p>
-              
-              <div class="login-input-group">
-                  <label>Enter 4-Digit OTP Received via SMS</label>
-                  <input type="text" id="inputOTP" class="login-input" placeholder="Enter OTP" maxlength="4">
-              </div>
+         <div id="authStepOTP" class="login-body-content" style="display: none;">
+             <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
+                 <h3>Verify OTP</h3>
+                 <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+             </div>
+             <p id="otpInfoText">OTP has been sent to your mobile/email.</p>
+             
+             <div class="login-input-group">
+                 <label>Enter 4-Digit OTP Received via SMS</label>
+                 <input type="text" id="inputOTP" class="login-input" placeholder="Enter OTP" maxlength="4">
+             </div>
 
-              <button class="login-submit-btn" onclick="verifyOTP()">Verify & Login</button>
-              <div class="auth-switch-text" onclick="backToPhoneStep()">← Change Mobile Number</div>
-          </div>
+             <!-- ⏱️ இங்கே புதியதாக டைமர் மற்றும் ரீசெண்ட் ஆப்ஷனைச் சேர்க்கவும் -->
+             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin: 4px 0;">
+                 <span id="otpTimerText" style="color: #64748b;">Resend OTP in <b id="timerCount">30</b>s</span>
+                 <span id="resendOtpBtn" style="color: #0284c7; font-weight: 600; cursor: pointer; display: none;" onclick="resendOTPAction()">Resend OTP</span>
+             </div>
+
+             <button class="login-submit-btn" onclick="verifyOTP()">Verify & Login</button>
+             <div class="auth-switch-text" onclick="backToPhoneStep()">← Change Mobile Number</div>
+         </div>
 
           <!-- VIEW 3: REGISTRATION FORM (If new user) -->
           <div id="authStepRegister" class="login-body-content" style="display: none;">
@@ -2247,6 +2253,7 @@
                 showAuthStep('otp');
                 document.getElementById('otpInfoText').textContent = `OTP sent via SMS to +91 ${tempPhone}`;
                 showToast("OTP sent successfully to your mobile!", false);
+                startOtpTimer();
             } else {
                 alert(smsData.message || 'Failed to send real SMS OTP.');
             }
@@ -3142,6 +3149,60 @@ window.addEventListener('DOMContentLoaded', () => {
         if (disp) disp.textContent = formatShortAddress(savedLoc);
     }
 });
+let otpCountdownTimer = null;
+
+// OTP டைமரைத் தொடங்கும் பங்க்ஷன்
+function startOtpTimer() {
+    let timeLeft = 30;
+    const timerCountEl = document.getElementById('timerCount');
+    const otpTimerTextEl = document.getElementById('otpTimerText');
+    const resendBtnEl = document.getElementById('resendOtpBtn');
+
+    if (otpTimerTextEl) otpTimerTextEl.style.display = 'block';
+    if (resendBtnEl) resendBtnEl.style.display = 'none';
+    if (timerCountEl) timerCountEl.textContent = timeLeft;
+
+    if (otpCountdownTimer) clearInterval(otpCountdownTimer);
+
+    otpCountdownTimer = setInterval(() => {
+        timeLeft--;
+        if (timerCountEl) timerCountEl.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(otpCountdownTimer);
+            if (otpTimerTextEl) otpTimerTextEl.style.display = 'none';
+            if (resendBtnEl) resendBtnEl.style.display = 'block'; // 30 விநாடிகளுக்குப் பிறகு ரீசெண்ட் பட்டன் தோன்றும்
+        }
+    }, 1000);
+}
+
+// "Resend OTP" பட்டனை க்ளிக் செய்யும்போது மீண்டும் SMS அனுப்பும் பங்க்ஷன்
+async function resendOTPAction() {
+    if (!tempPhone) {
+        alert("Mobile number missing. Please go back and re-enter.");
+        return;
+    }
+    showToast("Resending OTP...", false);
+    
+    try {
+        const smsRes = await fetch(`${API_BASE_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const smsData = await smsRes.json();
+
+        if (smsData.success) {
+            showToast("OTP resent successfully!", false);
+            startOtpTimer(); // டைமரை மீண்டும் 30 விநாடிகளில் இருந்து தொடங்க
+        } else {
+            alert(smsData.message || 'Failed to resend OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server connection error during resend.');
+    }
+}
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
