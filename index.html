@@ -1175,7 +1175,7 @@
             </div>
 
             <!-- STEP 4: VERIFY OTP ONLY (Only OTP section at last) -->
-            <div id="authStepSetPassword" style="display: none; flex-direction: column; height: 100%;">
+            <div id="authStepOTP" style="display: none; flex-direction: column; height: 100%;"></div>
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP</h3>
                     <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the OTP sent to your mobile.</p>
@@ -2123,10 +2123,27 @@
 
     function showAuthStep(step) {
         document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-        document.getElementById('authStepOTP').style.display = (step === 'otp') ? 'flex' : 'none';
+        document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
         document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-    }
+        document.getElementById('authStepOTP').style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
 
+        const titleEl = document.getElementById('leftPanelTitle');
+        const descEl = document.getElementById('leftPanelDesc');
+
+        if (step === 'phone') {
+            titleEl.textContent = "Looks like you're new here!";
+            descEl.textContent = "Sign up with your mobile number to get started";
+        } else if (step === 'password') {
+            titleEl.textContent = "Login";
+            descEl.textContent = "Get access to your Orders, Services and Recommendations";
+        } else if (step === 'register') {
+            titleEl.textContent = "Looks like you're new here!";
+            descEl.textContent = "Sign up with your mobile number to get started";
+        } else {
+            titleEl.textContent = "Verify OTP";
+            descEl.textContent = "Please enter the OTP sent to your mobile";
+        }
+    }
     function showSummaryDetail(type) {
         const box = document.getElementById('summaryDetailBox');
         const title = document.getElementById('summaryDetailTitle');
