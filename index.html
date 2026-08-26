@@ -13,14 +13,34 @@
     
     <style>
         @media (max-width: 768px) {
-    /* Mobile-la login modal-oda height-ah 65px korachu, padding-um kammi panrom */
+    .auth-modal-wrapper {
+        align-items: flex-end !important; /* Mobile-la modal keezha varum, appo bottom nav-kku idaru varathu */
+        background: rgba(0, 0, 0, 0.7) !important;
+    }
     .auth-modal-container {
-        height: calc(100vh - 75px) !important;
-        margin-bottom: 60px !important;
-        max-height: calc(100vh - 75px) !important;
+        flex-direction: column !important;
+        width: 100vw !important;
+        height: auto !important;
+        max-height: 80vh !important; /* Screen-la 80% mattum eduthukkum, keezha bottom nav clear-ah theriyum */
+        border-radius: 16px 16px 0 0 !important;
+        margin-bottom: 60px !important; /* Bottom nav-kku space */
+    }
+    .auth-left-panel {
+        width: 100% !important;
+        height: 100px !important;
+        padding: 15px 20px !important;
+    }
+    .auth-left-panel h2 {
+        font-size: 20px !important;
+        margin-bottom: 4px !important;
+    }
+    .auth-left-panel p {
+        font-size: 13px !important;
     }
     .auth-right-panel {
-        padding: 20px 20px !important; /* Padding-ah kammi panrathala ulla irukkura text ellame mukkiyama theriyum */
+        width: 100% !important;
+        padding: 20px 20px !important;
+        max-height: 60vh !important;
     }
 }
 
@@ -59,7 +79,23 @@
 .auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; }
 .auth-left-panel p { font-size: 16px; color: #dbdbdb; margin: 0; line-height: 1.5; }
 .auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #ffffff; overflow-y: auto; }
-.auth-close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; color: #878787; cursor: pointer; }
+.auth-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: #f1f5f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #334155;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
 .auth-input-field { width: 100%; padding: 10px 0; font-size: 15px; border: none; border-bottom: 1.5px solid #e0e0e0; outline: none; color: #212121; margin-top: 25px; margin-bottom: 5px; background: transparent; box-sizing: border-box; }
 .auth-input-field:focus { border-bottom-color: #2874f0; }
 .auth-primary-btn { width: 100%; background: #fb641b; color: #ffffff; border: none; padding: 14px; border-radius: 2px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 25px; }
