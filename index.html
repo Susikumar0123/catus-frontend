@@ -2063,13 +2063,11 @@
     }
 
     function handleHeaderAuthClick() {
-        if (currentUser) {
-            openPremiumDashboard();
-        } else {
-            showAuthStep('phone');
-            toggleAuthModal(true);
-        }
-    }
+    // 🛑 எப்பொழுதும் லாகின் / மொபைல் எண் கேட்கும் பாப்-அப் ஓபன் ஆக:
+    showAuthStep('phone');
+    toggleAuthModal(true);
+}
+
 
     function toggleAuthModal(open) {
         const modal = document.getElementById('authModal');
