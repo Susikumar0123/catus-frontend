@@ -759,24 +759,25 @@
                 <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
             </div>
 
-            <!-- STEP 3: COMPLETE REGISTRATION (புதிய யூசருக்கு முதலில் இது வரும்) -->
+            <!-- STEP 3: COMPLETE REGISTRATION (Name, Email, Pincode & Password) -->
             <div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Looks like you're new here!</h3>
                     <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please provide your details to register.</p>
                     
                     <input type="text" id="regName" class="auth-input-field" placeholder="Full Name">
-                    <input type="email" id="regEmail" class="auth-input-field" placeholder="Email Address">
+                    <input type="email" id="regEmail" class="auth-input-field" placeholder="Gmail ID (e.g. name@gmail.com)">
                     <input type="text" id="regPincode" class="auth-input-field" placeholder="6-digit Pincode" maxlength="6">
+                    <input type="password" id="regPassword" class="auth-input-field" placeholder="Create Password (min 4 chars)">
                 </div>
-                <button class="auth-primary-btn" onclick="proceedToOtpFromRegister()">CONTINUE</button>
+                <button class="auth-primary-btn" onclick="proceedToOtpFromRegister()">GET OTP & REGISTER</button>
                 <div class="auth-bottom-link" onclick="backToPhoneStep()">Existing User? Log in</div>
             </div>
 
-            <!-- STEP 4: VERIFY OTP & SET PASSWORD (கடைசியாக இது வரும்) -->
+            <!-- STEP 4: VERIFY OTP ONLY (Only OTP section at last) -->
             <div id="authStepSetPassword" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP & Set Password</h3>
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP</h3>
                     <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the OTP sent to your mobile.</p>
                     
                     <input type="text" id="inputRegOTP" class="auth-input-field" placeholder="Enter 4-digit OTP" maxlength="4">
@@ -786,10 +787,8 @@
                         <span style="color: #878787;">Resend code in <b id="timerCount" style="color: #212121;">2:00</b></span>
                         <span id="resendOtpBtn" style="color: #2874f0; font-weight: 600; cursor: pointer; display: none;" onclick="triggerForgotPassword()">Resend OTP</span>
                     </div>
-
-                    <input type="password" id="inputNewPassword" class="auth-input-field" placeholder="Create new password (min 4 chars)">
                 </div>
-                <button class="auth-primary-btn" onclick="verifyOtpAndSetPassword()">VERIFY & REGISTER</button>
+                <button class="auth-primary-btn" onclick="verifyOtpAndSetPassword()">VERIFY & LOGIN</button>
                 <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
             </div>
 
@@ -1809,21 +1808,24 @@ function switchToNewUserRegisterDirect() {
     showAuthStep('register');
 }
 
-// 2. Registration Form ஃபில் செய்த பிறகு OTP அனுப்புவது
+let pendingRegData = {}; // புதிய யூசர் ஃபில் செய்யும் டேட்டாவை தற்காலிகமாக சேமிக்க
+
+// 1. Registration Form-ல் விவரங்களை வாங்கிவிட்டு OTP அனுப்புதல்
 async function proceedToOtpFromRegister() {
     const name = document.getElementById('regName').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     const pincode = document.getElementById('regPincode').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!name) { alert('Please enter your full name.'); return; }
-    if (!email || !emailPattern.test(email)) { alert('Please enter a valid email address.'); return; }
+    if (!email || !emailPattern.test(email)) { alert('Please enter a valid Gmail address.'); return; }
     if (!pincode || pincode.length !== 6) { alert('Please enter a valid 6-digit Pincode.'); return; }
+    if (!password || password.length < 4) { alert('Password must be at least 4 characters.'); return; }
 
     // டேட்டாவை தற்காலிகமாக சேமித்துக்கொள்ளுதல்
-    pendingRegData = { name, email, pincode, address: "No address saved" };
+    pendingRegData = { name, email, pincode, password, address: "No address saved" };
 
-    // இப்போது OTP அனுப்பவும்
     try {
         showToast("Sending OTP...", false);
         const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
@@ -1926,43 +1928,40 @@ function startTwoMinTimer() {
     }, 1000);
 }
 
-// 5. OTP வெரிஃபை செய்து ரெஜிஸ்ட்ரேஷன் மற்றும் பாஸ்வேர்டை டேட்டாபேஸில் சேமிப்பது
+// 2. OTP வெரிஃபை செய்து டேட்டாபேஸில் ரெஜிஸ்டர் செய்வது
 async function verifyOtpAndSetPassword() {
     const otp = document.getElementById('inputRegOTP').value.trim();
-    const newPassword = document.getElementById('inputNewPassword').value.trim();
 
     if (otp.length !== 4) { alert('Please enter a valid 4-digit OTP.'); return; }
-    if (!newPassword || newPassword.length < 4) { alert('Password must be at least 4 characters.'); return; }
 
     try {
-        // 1. First Verify OTP and Set Password
+        // 1. First Verify OTP and Set Password in backend using the new password created
         const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, otp: otp, password: newPassword })
+            body: JSON.stringify({ phone: tempPhone, otp: otp, password: pendingRegData.password })
         });
         const data = await response.json();
 
         if (data.success) {
-            // 2. If it's a brand new user, complete registration in database
-            if (pendingRegData.name) {
-                const regRes = await fetch(`${API_BASE_URL}/api/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        name: pendingRegData.name, 
-                        email: pendingRegData.email, 
-                        phone: tempPhone, 
-                        pincode: pendingRegData.pincode, 
-                        address: pendingRegData.address 
-                    })
-                });
-                const regData = await regRes.json();
-                if (regData.success) {
-                    currentUser = regData.user;
-                } else {
-                    currentUser = data.user;
-                }
+            // 2. Complete registration in database with Name, Email, Pincode
+            const regRes = await fetch(`${API_BASE_URL}/api/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    name: pendingRegData.name, 
+                    email: pendingRegData.email, 
+                    phone: tempPhone, 
+                    pincode: pendingRegData.pincode, 
+                    address: pendingRegData.address 
+                })
+            });
+            const regData = await regRes.json();
+
+            if (regData.success) {
+                currentUser = regData.user;
+                // பாஸ்வேர்டை யூசர் ஆப்ஜெக்ட்டில் இணைத்துக்கொள்ள
+                currentUser.password = pendingRegData.password;
             } else {
                 currentUser = data.user;
             }
