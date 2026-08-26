@@ -1175,7 +1175,7 @@
             </div>
 
             <!-- STEP 4: VERIFY OTP ONLY (Only OTP section at last) -->
-            <div id="authStepOTP" style="display: none; flex-direction: column; height: 100%;"></div>
+            <div id="authStepOTP" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP</h3>
                     <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the OTP sent to your mobile.</p>
@@ -2144,6 +2144,7 @@
             descEl.textContent = "Please enter the OTP sent to your mobile";
         }
     }
+
     function showSummaryDetail(type) {
         const box = document.getElementById('summaryDetailBox');
         const title = document.getElementById('summaryDetailTitle');
