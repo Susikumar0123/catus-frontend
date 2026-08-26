@@ -2668,11 +2668,14 @@ function checkCloseAuthModal(event) {
                         }
 
                         let actionButtons = '';
-                        if (stat === 'pending') {
-                            actionButtons = `
-                                <button class="prem-btn-compact" style="background:#eff6ff; color:#0284c7; border:1px solid #bfdbfe;" onclick="openEditOrderAddressModal('${currentOrder.order_id}', '${(currentOrder.address || '').replace(/'/g, "\\'")}')"><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
-                                <button class="prem-btn-compact prem-btn-cancel-compact" onclick="openCancelModal('${currentOrder.order_id}')"><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
-                            `;
+if (stat === 'pending') {
+    let safeAddress = (currentOrder.address || '').replace(/'/g, "").replace(/"/g, "");
+    actionButtons = `
+        <button class="prem-btn-compact" style="background:#eff6ff; color:#0284c7; border:1px solid #bfdbfe;" onclick="openEditOrderAddressModal('${currentOrder.order_id}', '${safeAddress}')"><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
+        <button class="prem-btn-compact prem-btn-cancel-compact" onclick="openCancelModal('${currentOrder.order_id}')"><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
+    `;
+
+                            
                         } else {
                             actionButtons = `
                                 <button class="prem-btn-compact" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" title="Cannot edit address after technician is assigned" disabled><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
