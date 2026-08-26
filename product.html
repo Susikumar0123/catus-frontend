@@ -1663,9 +1663,12 @@ function handleProductSearchSelect(serviceId) {
     }
 
    function handleHeaderAuthClick() {
-    // 🛑 எப்பொழுதும் லாகின் / மொபைல் எண் கேட்கும் பாப்-அப் ஓபன் ஆக:
-    showAuthStep('phone');
-    toggleAuthModal(true);
+    if (currentUser) {
+        openPremiumDashboard(); // 🟢 ஏற்கனவே லாகின் செய்திருந்தால் நேரடியாக டேஷ்போர்டைத் திறக்கும்
+    } else {
+        showAuthStep('phone');
+        toggleAuthModal(true);  // 🔒 இல்லையென்றால் லாகின் பாப்-அப் காட்டும்
+    }
 }
 
     function toggleAuthModal(open) {
@@ -2483,7 +2486,9 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('DOMContentLoaded', async () => {
-    // 🛑 ரிஃப்ரேஷ் மற்றும் கிளிக் செய்யும்போது பாப்-அப்கள் வராமல் இருக்க கட்டாயம் சேர்க்கவும்:
+    // 🛑 ரிஃப்ரேஷ் செய்யும் போது லாகின் செஷன் அழியாமல் இருக்க கட்டாயம் இருக்க வேண்டும்:
+    currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || null;
+
     const cartModal = document.getElementById('cartModal');
     if (cartModal) cartModal.style.display = 'none';
 
@@ -2501,7 +2506,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     await loadProductDetailsAndReviews(activeServiceId);
 
-    if (currentUser) {
+    if (currentUser && currentUser.phone) {
         if (currentUser.wallet === undefined) currentUser.wallet = 2500;
         fetchUserOrdersPremium(currentUser.phone);
         renderAuditLogs();
