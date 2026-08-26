@@ -12,6 +12,60 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- PREMIUM FLIPKART STYLE AUTH MODAL --- */
+.auth-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999999;
+    justify-content: center;
+    align-items: center;
+}
+.auth-modal-container {
+    display: flex;
+    width: 750px;
+    max-width: 95vw;
+    height: 520px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    position: relative;
+    animation: authPopupScale 0.3s ease;
+}
+@keyframes authPopupScale {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.auth-left-panel {
+    width: 38%;
+    background: #2874f0;
+    color: #ffffff;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+.auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; }
+.auth-left-panel p { font-size: 16px; color: #dbdbdb; margin: 0; line-height: 1.5; }
+.auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #ffffff; overflow-y: auto; }
+.auth-close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; color: #878787; cursor: pointer; }
+.auth-input-field { width: 100%; padding: 10px 0; font-size: 15px; border: none; border-bottom: 1.5px solid #e0e0e0; outline: none; color: #212121; margin-top: 25px; margin-bottom: 5px; background: transparent; box-sizing: border-box; }
+.auth-input-field:focus { border-bottom-color: #2874f0; }
+.auth-primary-btn { width: 100%; background: #fb641b; color: #ffffff; border: none; padding: 14px; border-radius: 2px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 25px; }
+.auth-terms-text { font-size: 11px; color: #878787; margin-top: 20px; line-height: 1.4; }
+.auth-terms-text a { color: #2874f0; text-decoration: none; }
+.auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #2874f0; font-weight: 600; cursor: pointer; padding-top: 20px; }
+
+@media (max-width: 768px) {
+    .auth-modal-container { flex-direction: column; height: 100vh; max-width: 100vw; border-radius: 0; }
+    .auth-left-panel { width: 100%; height: 150px; padding: 20px; }
+    .auth-right-panel { width: 100%; height: calc(100vh - 150px); padding: 25px; }
+}
+
         /* சர்வர் டேட்டா வரும் வரை ப்ராடக்ட் ஏரியாவை மறைக்க */
     #productGridMain {
         opacity: 0;
@@ -664,92 +718,81 @@
       </div>
   </div>
 
-  <!-- AUTHENTICATION MODAL -->
-  <div class="cart-modal-overlay" id="authModal" onclick="checkCloseModal(event, 'authDrawer', 'authModal')">
-      <div class="cart-drawer" id="authDrawer">
-          
-          <!-- VIEW 1: ENTER MOBILE NUMBER -->
-          <div id="authStepPhone" class="login-body-content" style="display: flex;">
-              <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                  <h3>Login / Register</h3>
-                  <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-              <p>Enter your mobile number to continue.</p>
-              
-              <div class="login-input-group">
-                  <label>Mobile Number</label>
-                  <div class="login-phone-row">
-                      <div class="country-code-box">+91</div>
-                      <input type="tel" id="inputPhone" class="login-input" placeholder="10-digit mobile number" maxlength="10">
-                  </div>
-              </div>
-              <button class="login-submit-btn" onclick="checkUserAndProceed()">Continue</button>
-          </div>
+  <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
+<div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
+    <div class="auth-modal-container" id="authDrawer">
+        
+        <div class="auth-left-panel">
+            <div>
+                <h2 id="leftPanelTitle">Looks like you're new here!</h2>
+                <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
+            </div>
+            <div class="auth-left-illustration">
+                <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
+            </div>
+        </div>
 
-          <!-- VIEW 2: ENTER PASSWORD (பழைய யூசர்களுக்கு) -->
-          <div id="authStepPassword" class="login-body-content" style="display: none;">
-              <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                  <h3>Enter Password</h3>
-                  <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-              <p id="passInfoText">Welcome back! Please enter your password.</p>
-              
-              <div class="login-input-group">
-                  <label>Password</label>
-                  <input type="password" id="inputPassword" class="login-input" placeholder="Enter your password">
-              </div>
-              <div style="text-align: right; font-size: 12px; margin-top: -4px;">
-                  <span style="color: #0284c7; cursor: pointer; font-weight: 500;" onclick="triggerForgotPassword()">Forgot Password?</span>
-              </div>
+        <div class="auth-right-panel">
+            <button class="auth-close-btn" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
 
-              <button class="login-submit-btn" onclick="loginWithPassword()">Login</button>
-              <div class="auth-switch-text" onclick="backToPhoneStep()">← Change Mobile Number</div>
-          </div>
+            <!-- STEP 1: ENTER MOBILE NUMBER -->
+            <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
+                <div style="margin-top: 10px;">
+                    <input type="tel" id="inputPhone" class="auth-input-field" placeholder="Enter Mobile number" maxlength="10">
+                    <p class="auth-terms-text">By continuing, you agree to Catus Electronics' <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+                </div>
+                <button class="auth-primary-btn" onclick="checkUserAndProceed()">CONTINUE</button>
+                <div class="auth-bottom-link" onclick="switchToNewUserRegister()">New to Catus? Create an account</div>
+            </div>
 
-          <!-- VIEW 3: SET PASSWORD (புதிய யூசர்களுக்கு / Forgot Password-க்கு OTP வந்த பிறகு) -->
-          <div id="authStepSetPassword" class="login-body-content" style="display: none;">
-              <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                  <h3>Set Password</h3>
-                  <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-              <p id="setPasswordInfo">Enter the 4-digit OTP sent to your mobile and create a new password.</p>
-              
-              <div class="login-input-group">
-                  <label>Enter 4-Digit OTP</label>
-                  <input type="text" id="inputRegOTP" class="login-input" placeholder="Enter OTP" maxlength="4">
-              </div>
+            <!-- STEP 2: ENTER PASSWORD -->
+            <div id="authStepPassword" style="display: none; flex-direction: column; height: 100%;">
+                <div style="margin-top: 10px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Enter Password</h3>
+                    <p id="passInfoText" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Welcome back! Please enter your password to login.</p>
+                    <input type="password" id="inputPassword" class="auth-input-field" placeholder="Enter your password">
+                    <div style="text-align: right; margin-top: 8px;">
+                        <span style="color: #2874f0; font-size: 13px; font-weight: 600; cursor: pointer;" onclick="triggerForgotPassword()">Forgot?</span>
+                    </div>
+                </div>
+                <button class="auth-primary-btn" onclick="loginWithPassword()">LOGIN</button>
+                <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
+            </div>
 
-              <!-- ⏱️ 2 நிமிடங்கள் (120 விநாடிகள்) டைமர் -->
-              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin: 2px 0;">
-                  <span style="color: #64748b;">Resend OTP in <b id="timerCount">2:00</b></span>
-                  <span id="resendOtpBtn" style="color: #0284c7; font-weight: 600; cursor: pointer; display: none;" onclick="triggerForgotPassword()">Resend OTP</span>
-              </div>
+            <!-- STEP 3: SET PASSWORD / OTP -->
+            <div id="authStepSetPassword" style="display: none; flex-direction: column; height: 100%;">
+                <div style="margin-top: 10px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP & Set Password</h3>
+                    <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the 4-digit OTP sent to your mobile.</p>
+                    <input type="text" id="inputRegOTP" class="auth-input-field" placeholder="Enter 4-digit OTP" maxlength="4">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin: 8px 0 15px 0;">
+                        <span style="color: #878787;">Resend code in <b id="timerCount" style="color: #212121;">2:00</b></span>
+                        <span id="resendOtpBtn" style="color: #2874f0; font-weight: 600; cursor: pointer; display: none;" onclick="triggerForgotPassword()">Resend OTP</span>
+                    </div>
 
-              <div class="login-input-group">
-                  <label>Create New Password</label>
-                  <input type="password" id="inputNewPassword" class="login-input" placeholder="Enter new password">
-              </div>
+                    <input type="password" id="inputNewPassword" class="auth-input-field" placeholder="Create new password (min 4 chars)">
+                </div>
+                <button class="auth-primary-btn" onclick="verifyOtpAndSetPassword()">VERIFY & LOGIN</button>
+                <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
+            </div>
 
-              <button class="login-submit-btn" onclick="verifyOtpAndSetPassword()">Verify & Login</button>
-              <div class="auth-switch-text" onclick="backToPhoneStep()">← Change Mobile Number</div>
-          </div>
+            <!-- STEP 4: COMPLETE REGISTRATION -->
+            <div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
+                <div style="margin-top: 10px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Complete Registration</h3>
+                    <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please provide your details to finish signing up.</p>
+                    <input type="text" id="regName" class="auth-input-field" placeholder="Full Name">
+                    <input type="email" id="regEmail" class="auth-input-field" placeholder="Email Address">
+                    <input type="text" id="regPincode" class="auth-input-field" placeholder="6-digit Pincode" maxlength="6">
+                </div>
+                <button class="auth-primary-btn" onclick="submitRegistration()">REGISTER & CONTINUE</button>
+                <div class="auth-bottom-link" onclick="backToPhoneStep()">← Back to Login</div>
+            </div>
 
-          <!-- VIEW 4: REGISTRATION FORM -->
-          <div id="authStepRegister" class="login-body-content" style="display: none;">
-              <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                  <h3>Complete Registration</h3>
-                  <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-              <p>New user detected! Please fill your details to register.</p>
-              
-              <div class="login-input-group"><label>Full Name</label><input type="text" id="regName" class="login-input" placeholder="Enter your name"></div>
-              <div class="login-input-group"><label>Email Address</label><input type="email" id="regEmail" class="login-input" placeholder="Enter your email"></div>
-              <div class="login-input-group"><label>Service Pincode</label><input type="text" id="regPincode" class="login-input" placeholder="Enter 6-digit Pincode" maxlength="6"></div>
-              
-              <button class="login-submit-btn" onclick="submitRegistration()">Register & Continue</button>
-          </div>
-      </div>
-  </div>
+        </div>
+    </div>
+</div>
 
   <!-- EXACT PREMIUM FULL-SCREEN CUSTOMER DASHBOARD MODAL -->
   <div id="premiumCustomerDashboard" class="prem-dashboard-modal">
@@ -1713,11 +1756,8 @@ function handleProductSearchSelect(serviceId) {
         if (modal) modal.style.display = open ? 'flex' : 'none';
     }
 
-    function showAuthStep(step) {
-        document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-        document.getElementById('authStepOTP').style.display = (step === 'otp') ? 'flex' : 'none';
-        document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-    }
+    
+    
 
     function backToPhoneStep() { showAuthStep('phone'); }
 
@@ -1908,11 +1948,43 @@ function handleProductSearchSelect(serviceId) {
   }
 
   function showAuthStep(step) {
-      document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-      document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
-      document.getElementById('authStepSetPassword').style.display = (step === 'setpassword') ? 'flex' : 'none';
-      document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-  }
+    document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
+    document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
+    document.getElementById('authStepSetPassword').style.display = (step === 'setpassword') ? 'flex' : 'none';
+    document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
+
+    const titleEl = document.getElementById('leftPanelTitle');
+    const descEl = document.getElementById('leftPanelDesc');
+
+    if (step === 'phone') {
+        titleEl.textContent = "Looks like you're new here!";
+        descEl.textContent = "Get access to your Orders, Services and Recommendations";
+    } else if (step === 'password') {
+        titleEl.textContent = "Login";
+        descEl.textContent = "Get access to your Orders, Services and Recommendations";
+    } else {
+        titleEl.textContent = "Looks like you're new here!";
+        descEl.textContent = "Sign up with your mobile number to get started";
+    }
+}
+
+function switchToNewUserRegister() {
+    const phone = document.getElementById('inputPhone').value.trim();
+    if (phone.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number first.');
+        return;
+    }
+    tempPhone = phone;
+    sendOtpForNewUser();
+}
+
+function checkCloseAuthModal(event) {
+    const drawer = document.getElementById('authDrawer');
+    const modal = document.getElementById('authModal');
+    if (drawer && !drawer.contains(event.target)) {
+        modal.style.display = 'none';
+    }
+}
 
   function backToPhoneStep() { 
       showAuthStep('phone'); 
