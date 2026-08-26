@@ -1808,8 +1808,6 @@ function switchToNewUserRegisterDirect() {
     showAuthStep('register');
 }
 
-let pendingRegData = {}; // புதிய யூசர் ஃபில் செய்யும் டேட்டாவை தற்காலிகமாக சேமிக்க
-
 // 1. Registration Form-ல் விவரங்களை வாங்கிவிட்டு OTP அனுப்புதல்
 async function proceedToOtpFromRegister() {
     const name = document.getElementById('regName').value.trim();
