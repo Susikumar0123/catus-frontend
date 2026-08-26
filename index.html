@@ -1070,78 +1070,91 @@
   </div>
 
   <!-- AUTHENTICATION / DASHBOARD MODAL DRAWER -->
-  <div class="cart-modal-overlay" id="authModal" onclick="checkCloseModal(event, 'authDrawer', 'authModal')">
-      <div class="cart-drawer" id="authDrawer">
-          
-          <!-- VIEW 1: ENTER MOBILE NUMBER -->
-          <div id="authStepPhone" class="login-body-content" style="display: flex;">
-              <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                  <h3>Login / Register</h3>
-                  <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-              <p>Enter your mobile number to get OTP and access your dashboard.</p>
-              
-              <div class="login-input-group">
-                  <label>Mobile Number</label>
-                  <div class="login-phone-row">
-                      <div class="country-code-box">+91</div>
-                      <input type="tel" id="inputPhone" class="login-input" placeholder="10-digit mobile number" maxlength="10">
-                  </div>
-              </div>
+    <div class="cart-modal-overlay" id="authModal" onclick="checkCloseModal(event, 'authDrawer', 'authModal')">
+        <div class="cart-drawer" id="authDrawer">
+            
+            <!-- STEP 1: ENTER MOBILE NUMBER -->
+            <div id="authStepPhone" class="login-body-content" style="display: flex;">
+                <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
+                    <h3>Login / Register</h3>
+                    <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <p>Enter your mobile number to continue.</p>
+                
+                <div class="login-input-group">
+                    <label>Mobile Number</label>
+                    <div class="login-phone-row">
+                        <div class="country-code-box">+91</div>
+                        <input type="tel" id="inputPhone" class="login-input" placeholder="10-digit mobile number" maxlength="10">
+                    </div>
+                </div>
+                <button class="login-submit-btn" onclick="checkUserAndProceed()">Continue</button>
+            </div>
 
-              <button class="login-submit-btn" onclick="requestOTP()">Continue & Send OTP</button>
-          </div>
+            <!-- STEP 2: ENTER PASSWORD (பழைய யூசர்களுக்கு) -->
+            <div id="authStepPassword" class="login-body-content" style="display: none;">
+                <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
+                    <h3>Enter Password</h3>
+                    <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <p id="passInfoText">Welcome back! Please enter your password.</p>
+                
+                <div class="login-input-group">
+                    <label>Password</label>
+                    <input type="password" id="inputPassword" class="login-input" placeholder="Enter your password">
+                </div>
+                <div style="text-align: right; font-size: 12px; margin-top: -4px;">
+                    <span style="color: #0284c7; cursor: pointer; font-weight: 500;" onclick="triggerForgotPassword()">Forgot Password?</span>
+                </div>
 
-          <!-- VIEW 2: ENTER OTP -->
-         <div id="authStepOTP" class="login-body-content" style="display: none;">
-             <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                 <h3>Verify OTP</h3>
-                 <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-             </div>
-             <p id="otpInfoText">OTP has been sent to your mobile/email.</p>
-             
-             <div class="login-input-group">
-                 <label>Enter 4-Digit OTP Received via SMS</label>
-                 <input type="text" id="inputOTP" class="login-input" placeholder="Enter OTP" maxlength="4">
-             </div>
+                <button class="login-submit-btn" onclick="loginWithPassword()">Login</button>
+                <div class="auth-switch-text" onclick="backToPhoneStep()">← Change Mobile Number</div>
+            </div>
 
-             <!-- ⏱️ இங்கே புதியதாக டைமர் மற்றும் ரீசெண்ட் ஆப்ஷனைச் சேர்க்கவும் -->
-             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin: 4px 0;">
-                 <span id="otpTimerText" style="color: #64748b;">Resend OTP in <b id="timerCount">30</b>s</span>
-                 <span id="resendOtpBtn" style="color: #0284c7; font-weight: 600; cursor: pointer; display: none;" onclick="resendOTPAction()">Resend OTP</span>
-             </div>
+            <!-- STEP 3: SET PASSWORD (புதிய யூசர்களுக்கு அல்லது Forgot Password-க்கு OTP வந்த பிறகு) -->
+            <div id="authStepSetPassword" class="login-body-content" style="display: none;">
+                <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
+                    <h3>Set Password</h3>
+                    <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <p id="setPasswordInfo">Enter the 4-digit OTP sent to your mobile and create a new password.</p>
+                
+                <div class="login-input-group">
+                    <label>Enter 4-Digit OTP</label>
+                    <input type="text" id="inputRegOTP" class="login-input" placeholder="Enter OTP" maxlength="4">
+                </div>
 
-             <button class="login-submit-btn" onclick="verifyOTP()">Verify & Login</button>
-             <div class="auth-switch-text" onclick="backToPhoneStep()">← Change Mobile Number</div>
-         </div>
+                <!-- ⏱️ 2 நிமிடங்கள் (120 விநாடிகள்) டைமர் -->
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin: 2px 0;">
+                    <span style="color: #64748b;">Resend OTP in <b id="timerCount">2:00</b></span>
+                    <span id="resendOtpBtn" style="color: #0284c7; font-weight: 600; cursor: pointer; display: none;" onclick="triggerForgotPassword()">Resend OTP</span>
+                </div>
 
-          <!-- VIEW 3: REGISTRATION FORM (If new user) -->
-          <div id="authStepRegister" class="login-body-content" style="display: none;">
-              <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
-                  <h3>Complete Registration</h3>
-                  <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-              <p>New user detected! Please fill your details to register.</p>
-              
-              <div class="login-input-group">
-                  <label>Full Name</label>
-                  <input type="text" id="regName" class="login-input" placeholder="Enter your name">
-              </div>
+                <div class="login-input-group">
+                    <label>Create New Password</label>
+                    <input type="password" id="inputNewPassword" class="login-input" placeholder="Enter new password">
+                </div>
 
-              <div class="login-input-group">
-                  <label>Email Address</label>
-                  <input type="email" id="regEmail" class="login-input" placeholder="Enter your email">
-              </div>
+                <button class="login-submit-btn" onclick="verifyOtpAndSetPassword()">Verify & Login</button>
+                <div class="auth-switch-text" onclick="backToPhoneStep()">← Change Mobile Number</div>
+            </div>
 
-              <div class="login-input-group">
-                  <label>Service Pincode</label>
-                  <input type="text" id="regPincode" class="login-input" placeholder="Enter 6-digit Pincode" maxlength="6">
-              </div>
+            <!-- STEP 4: REGISTRATION (பெயர் மற்றும் ஈமெயில் பதிவு செய்ய) -->
+            <div id="authStepRegister" class="login-body-content" style="display: none;">
+                <div class="cart-header" style="padding:0 0 15px 0; border:none; margin:0;">
+                    <h3>Complete Registration</h3>
+                    <button class="close-cart" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <p>New user detected! Please fill your details to register.</p>
+                
+                <div class="login-input-group"><label>Full Name</label><input type="text" id="regName" class="login-input" placeholder="Enter your name"></div>
+                <div class="login-input-group"><label>Email Address</label><input type="email" id="regEmail" class="login-input" placeholder="Enter your email"></div>
+                <div class="login-input-group"><label>Service Pincode</label><input type="text" id="regPincode" class="login-input" placeholder="6-digit Pincode" maxlength="6"></div>
 
-              <button class="login-submit-btn" onclick="submitRegistration()">Register & Verify OTP</button>
-          </div>
-      </div>
-  </div>
+                <button class="login-submit-btn" onclick="submitRegistration()">Register & Continue</button>
+            </div>
+        </div>
+    </div>
 
   <!-- PREMIUM FULL-SCREEN CUSTOMER DASHBOARD MODAL -->
   <div id="premiumCustomerDashboard" class="prem-dashboard-modal">
@@ -2224,16 +2237,19 @@
         document.getElementById('dashContentArea').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    async function requestOTP() {
+    let twoMinTimer = null;
+
+// 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
+async function checkUserAndProceed() {
     const phone = document.getElementById('inputPhone').value.trim();
     if (phone.length !== 10) {
         alert('Please enter a valid 10-digit mobile number.');
         return;
     }
     tempPhone = phone;
-    
+
     try {
-        const response = await fetch(`${API_BASE_URL}/api/login`, {
+        const response = await fetch(`${API_BASE_URL}/api/check-user`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: tempPhone })
@@ -2241,53 +2257,159 @@
         const data = await response.json();
 
         if (data.success) {
-            if (data.exists) {
-                currentUser = data.user;
-                if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-            }
-
-            // Real SMS OTP trigger panra backend route
-            const smsRes = await fetch(`${API_BASE_URL}/api/send-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: tempPhone })
-            });
-            const smsData = await smsRes.json();
-
-            if (smsData.success) {
-                showAuthStep('otp');
-                document.getElementById('otpInfoText').textContent = `OTP sent via SMS to +91 ${tempPhone}`;
-                showToast("OTP sent successfully to your mobile!", false);
-                startOtpTimer();
+            if (data.exists && data.hasPassword) {
+                // பழைய யூசர் என்றால் பாஸ்வேர்ட் கேட்கும் ஸ்கிரீனுக்குச் செல்லவும் (Wallet Balance மிச்சமாகும்!)
+                document.getElementById('authStepPhone').style.display = 'none';
+                document.getElementById('authStepPassword').style.display = 'flex';
             } else {
-                alert(smsData.message || 'Failed to send real SMS OTP.');
+                // புதிய யூசர் என்றால் முதல்முறை மட்டும் OTP அனுப்பி பாஸ்வேர்ட் செட் செய்யச் சொல்லவும்
+                await sendOtpForNewUser();
             }
         }
     } catch (err) {
-        alert('Server connection error. Make sure backend is running.');
         console.error(err);
+        alert('Server connection error.');
     }
 }
 
-    async function verifyOTP() {
-    const otp = document.getElementById('inputOTP').value.trim();
-    if (otp.length !== 4) {
-        alert('Please enter the 4-digit OTP received via SMS.');
+// 2. பாஸ்வேர்ட் மூலம் லாகின் செய்தல்
+async function loginWithPassword() {
+    const password = document.getElementById('inputPassword').value.trim();
+    if (!password) {
+        alert('Please enter your password.');
         return;
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/verify-otp`, {
+        const response = await fetch(`${API_BASE_URL}/api/login-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, otp: otp })
+            body: JSON.stringify({ phone: tempPhone, password: password })
         });
         const data = await response.json();
 
         if (data.success) {
+            currentUser = data.user;
+            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("Login Successful!", false);
+        } else {
+            alert(data.message || 'Incorrect password. Try again or click Forgot Password.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server connection error.');
+    }
+}
+
+// 3. புதிய யூசருக்கு முதல்முறை OTP அனுப்புவது
+async function sendOtpForNewUser() {
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            document.getElementById('authStepPhone').style.display = 'none';
+            document.getElementById('authStepSetPassword').style.display = 'flex';
+            document.getElementById('setPasswordInfo').textContent = `OTP sent to +91 ${tempPhone}. Please enter OTP and set your password.`;
+            startTwoMinTimer();
+            showToast("OTP sent successfully!", false);
+        } else {
+            alert(data.message || 'Failed to send OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error.');
+    }
+}
+
+// 4. Forgot Password - OTP அனுப்புவது
+async function triggerForgotPassword() {
+    showToast("Sending OTP for password reset...", false);
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            document.getElementById('authStepPassword').style.display = 'none';
+            document.getElementById('authStepSetPassword').style.display = 'flex';
+            document.getElementById('setPasswordInfo').textContent = `Reset OTP sent to +91 ${tempPhone}.`;
+            startTwoMinTimer();
+            showToast("OTP sent successfully!", false);
+        } else {
+            alert(data.message || 'Failed to send OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error.');
+    }
+}
+
+// ⏱️ 2 நிமிடங்கள் (120 விநாடிகள்) டைமர் லாஜிக்
+function startTwoMinTimer() {
+    let timeLeft = 120; // 2 Minutes = 120 Seconds
+    const timerCountEl = document.getElementById('timerCount');
+    const resendBtnEl = document.getElementById('resendOtpBtn');
+
+    if (resendBtnEl) resendBtnEl.style.display = 'none';
+
+    if (twoMinTimer) clearInterval(twoMinTimer);
+
+    twoMinTimer = setInterval(() => {
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+        if (timerCountEl) {
+            timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(twoMinTimer);
+            if (timerCountEl) timerCountEl.parentElement.style.display = 'none';
+            if (resendBtnEl) resendBtnEl.style.display = 'inline'; // 2 நிமிடத்திற்குப் பிறகு ரீசெண்ட் பட்டன் காட்டும்
+        }
+        timeLeft--;
+    }, 1000);
+}
+
+// 5. OTP வெரிஃபை செய்து பாஸ்வேர்டை சேமிப்பது
+async function verifyOtpAndSetPassword() {
+    const otp = document.getElementById('inputRegOTP').value.trim();
+    const newPassword = document.getElementById('inputNewPassword').value.trim();
+
+    if (otp.length !== 4) {
+        alert('Please enter a valid 4-digit OTP.');
+        return;
+    }
+    if (!newPassword || newPassword.length < 4) {
+        alert('Please enter a password with at least 4 characters.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, otp: otp, password: newPassword })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            currentUser = data.user;
             if (!currentUser) {
-                showAuthStep('register');
-                showToast("OTP Verified! Please complete registration.", false);
+                // ஒருவேளை புதிய யூசர் என்றால் ரிஜிஸ்ட்ரேஷன் ஃபார்மிற்கு அனுப்பவும்
+                document.getElementById('authStepSetPassword').style.display = 'none';
+                document.getElementById('authStepRegister').style.display = 'flex';
                 return;
             }
 
@@ -2295,16 +2417,13 @@
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
-            showToast("Login Successful!", false);
-            
-            if (orderPollingInterval) clearInterval(orderPollingInterval);
-            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+            showToast("Password set & Login Successful!", false);
         } else {
-            alert(data.message || 'Invalid or expired OTP. Please try again.');
+            alert(data.message || 'Invalid or expired OTP.');
         }
     } catch (err) {
-        alert('Server connection error during OTP verification.');
         console.error(err);
+        alert('Server error during verification.');
     }
 }
 
