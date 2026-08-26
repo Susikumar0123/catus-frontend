@@ -13,12 +13,6 @@
     
     <style>
 
-    /* Modal z-index fix */
-    #editOrderAddressModal, #cancelBookingModal {
-        z-index: 999999999 !important;
-    }
-
-
         /* --- PREMIUM FLIPKART STYLE AUTH MODAL CSS --- */
 .auth-modal-wrapper {
     display: none;
@@ -63,48 +57,9 @@
 .auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #2874f0; font-weight: 600; cursor: pointer; padding-top: 20px; }
 
 @media (max-width: 768px) {
-    .auth-modal-wrapper {
-        align-items: flex-end !important; /* மொபைலில் கீழே இருந்து ஸ்லைடு ஆவது போல் இருக்க */
-        background: rgba(0, 0, 0, 0.65) !important;
-        padding: 0 !important;
-    }
-    .auth-modal-container { 
-        flex-direction: column !important; 
-        width: 100% !important; 
-        max-width: 100% !important; 
-        height: auto !important; 
-        max-height: 85vh !important; 
-        border-radius: 16px 16px 0 0 !important; 
-        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.3) !important;
-        overflow: hidden !important;
-    }
-    .auth-left-panel { 
-        width: 100% !important; 
-        height: auto !important; 
-        min-height: 110px !important; 
-        padding: 20px 20px 15px 20px !important; 
-    }
-    .auth-left-panel h2 { 
-        font-size: 20px !important; 
-        margin-bottom: 6px !important; 
-    }
-    .auth-left-panel p { 
-        font-size: 13px !important; 
-    }
-    .auth-right-panel { 
-        width: 100% !important; 
-        max-height: calc(85vh - 110px) !important; 
-        padding: 20px !important; 
-        overflow-y: auto !important; 
-        background: #ffffff !important;
-    }
-    .auth-input-field {
-        margin-top: 15px !important;
-    }
-    .auth-primary-btn {
-        margin-top: 20px !important;
-        padding: 12px !important;
-    }
+    .auth-modal-container { flex-direction: column; height: 100vh; max-width: 100vw; border-radius: 0; }
+    .auth-left-panel { width: 100%; height: 150px; padding: 20px; }
+    .auth-right-panel { width: 100%; height: calc(100vh - 150px); padding: 25px; }
 }
         
         .clear-cart-text, .cart-header span[onclick*="clearCart"] {
@@ -871,7 +826,7 @@
 
 /* ==========================================================
         FINAL FIX: SEPARATE BUTTON COLORS & DASHBOARD OVERRIDE
-        ========================================================== */
+        ================================================== */
 
     /* 1. Add to Cart Button - Distinct Emerald Green */
     .uc-btn-row .uc-cart-btn, 
@@ -2673,15 +2628,12 @@ function checkCloseAuthModal(event) {
                             serviceStr = `<b>${sDate.toLocaleDateString()}</b><br><b>${sDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
                         }
 
-                    let actionButtons = '';
-if (stat === 'pending') {
-    actionButtons = `
-        <button class="prem-btn-compact" style="background:#eff6ff; color:#0284c7; border:1px solid #bfdbfe;" onclick="openEditOrderAddressModal('${currentOrder.order_id}', '')"><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
-        <button class="prem-btn-compact prem-btn-cancel-compact" onclick="openCancelModal('${currentOrder.order_id}')"><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
-    `;
-
-
-                            
+                        let actionButtons = '';
+                        if (stat === 'pending') {
+                            actionButtons = `
+                                <button class="prem-btn-compact" style="background:#eff6ff; color:#0284c7; border:1px solid #bfdbfe;" onclick="openEditOrderAddressModal('${currentOrder.order_id}', '${(currentOrder.address || '').replace(/'/g, "\\'")}')"><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
+                                <button class="prem-btn-compact prem-btn-cancel-compact" onclick="openCancelModal('${currentOrder.order_id}')"><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
+                            `;
                         } else {
                             actionButtons = `
                                 <button class="prem-btn-compact" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" title="Cannot edit address after technician is assigned" disabled><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
@@ -2927,10 +2879,6 @@ if (stat === 'pending') {
                 categoryBox.style.display = 'none';
             }
         });
-    }
-
-    function backToPhoneStep() {
-        showAuthStep('phone');
     }
 
 document.addEventListener('DOMContentLoaded', () => {
