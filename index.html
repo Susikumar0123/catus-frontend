@@ -13,38 +13,53 @@
     
     <style>
         
-        /* --- PREMIUM FLIPKART STYLE AUTH MODAL1 CSS --- */
-.auth-modal-wrapper {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 9999999;
-    justify-content: center;
-    align-items: center;
+        @media (max-width: 768px) {
+    .auth-modal-wrapper {
+        align-items: flex-end !important; /* Mobile view-la popup keezha varum */
+        background: rgba(0, 0, 0, 0.7) !important;
+    }
+    .auth-modal-container {
+        flex-direction: column !important;
+        width: 100vw !important;
+        height: auto !important;
+        max-height: 72vh !important; /* Bottom nav-kku mela kachithama nikka height limit */
+        border-radius: 16px 16px 0 0 !important;
+        margin-bottom: 60px !important; /* Bottom nav space */
+    }
+    .auth-left-panel {
+        width: 100% !important;
+        height: 75px !important;
+        padding: 10px 15px !important;
+    }
+    .auth-left-panel h2 {
+        font-size: 16px !important;
+        margin-bottom: 2px !important;
+    }
+    .auth-left-panel p {
+        font-size: 11px !important;
+    }
+    .auth-right-panel {
+        width: 100% !important;
+        padding: 15px 20px !important;
+        max-height: 45vh !important;
+        overflow-y: auto !important;
+    }
+    /* Mobile-la close/cancel button clear-ah mela right corner-la theriyum */
+    .auth-close-btn {
+        top: 10px !important;
+        right: 15px !important;
+        background: #e2e8f0 !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 99999 !important;
+    }
 }
-.auth-modal-container {
-    display: flex;
-    width: 750px;
-    max-width: 95vw;
-    height: 520px;
-    background: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    position: relative;
-}
-.auth-left-panel {
-    width: 38%;
-    background: #2874f0;
-    color: #ffffff;
-    padding: 40px 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-}
+
+
 .auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; }
 .auth-left-panel p { font-size: 16px; color: #dbdbdb; margin: 0; line-height: 1.5; }
 .auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #ffffff; overflow-y: auto; }
@@ -72,50 +87,6 @@
 .auth-terms-text a { color: #2874f0; text-decoration: none; }
 .auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #2874f0; font-weight: 600; cursor: pointer; padding-top: 20px; }
 
-/* Mobile view-la login popup bottom nav-kku mela azhaga var aana CSS */
-@media (max-width: 768px) {
-    .auth-modal-wrapper {
-        align-items: flex-end !important;
-        background: rgba(0, 0, 0, 0.7) !important;
-    }
-    .auth-modal-container {
-        flex-direction: column !important;
-        width: 100vw !important;
-        height: auto !important;
-        max-height: 75vh !important;
-        border-radius: 16px 16px 0 0 !important;
-        margin-bottom: 60px !important;
-    }
-    .auth-left-panel {
-        width: 100% !important;
-        height: 90px !important;
-        padding: 12px 20px !important;
-    }
-    .auth-left-panel h2 {
-        font-size: 18px !important;
-        margin-bottom: 2px !important;
-    }
-    .auth-left-panel p {
-        font-size: 12px !important;
-    }
-    .auth-right-panel {
-        width: 100% !important;
-        padding: 20px 20px !important;
-        max-height: 50vh !important;
-    }
-    .auth-close-btn {
-        top: 10px !important;
-        right: 15px !important;
-        background: #f1f5f9 !important;
-        width: 30px !important;
-        height: 30px !important;
-        border-radius: 50% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 10 !important;
-    }
-}
        
         .clear-cart-text, .cart-header span[onclick*="clearCart"] {
     text-decoration: none !important;
