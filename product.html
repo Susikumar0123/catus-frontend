@@ -742,10 +742,10 @@
                     <p class="auth-terms-text">By continuing, you agree to Catus Electronics' <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
                 </div>
                 <button class="auth-primary-btn" onclick="checkUserAndProceed()">CONTINUE</button>
-                <div class="auth-bottom-link" onclick="switchToNewUserRegister()">New to Catus? Create an account</div>
+                <div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">New to Catus? Create an account</div>
             </div>
 
-            <!-- STEP 2: ENTER PASSWORD -->
+            <!-- STEP 2: ENTER PASSWORD (பழைய யூசர்களுக்கு) -->
             <div id="authStepPassword" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Enter Password</h3>
@@ -759,13 +759,29 @@
                 <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
             </div>
 
-            <!-- STEP 3: SET PASSWORD / OTP -->
+            <!-- STEP 3: COMPLETE REGISTRATION (புதிய யூசருக்கு முதலில் இது வரும்) -->
+            <div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
+                <div style="margin-top: 10px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Looks like you're new here!</h3>
+                    <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please provide your details to register.</p>
+                    
+                    <input type="text" id="regName" class="auth-input-field" placeholder="Full Name">
+                    <input type="email" id="regEmail" class="auth-input-field" placeholder="Email Address">
+                    <input type="text" id="regPincode" class="auth-input-field" placeholder="6-digit Pincode" maxlength="6">
+                </div>
+                <button class="auth-primary-btn" onclick="proceedToOtpFromRegister()">CONTINUE</button>
+                <div class="auth-bottom-link" onclick="backToPhoneStep()">Existing User? Log in</div>
+            </div>
+
+            <!-- STEP 4: VERIFY OTP & SET PASSWORD (கடைசியாக இது வரும்) -->
             <div id="authStepSetPassword" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP & Set Password</h3>
-                    <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the 4-digit OTP sent to your mobile.</p>
+                    <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the OTP sent to your mobile.</p>
+                    
                     <input type="text" id="inputRegOTP" class="auth-input-field" placeholder="Enter 4-digit OTP" maxlength="4">
                     
+                    <!-- ⏱️ 2 நிமிடங்கள் டைமர் -->
                     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin: 8px 0 15px 0;">
                         <span style="color: #878787;">Resend code in <b id="timerCount" style="color: #212121;">2:00</b></span>
                         <span id="resendOtpBtn" style="color: #2874f0; font-weight: 600; cursor: pointer; display: none;" onclick="triggerForgotPassword()">Resend OTP</span>
@@ -773,21 +789,8 @@
 
                     <input type="password" id="inputNewPassword" class="auth-input-field" placeholder="Create new password (min 4 chars)">
                 </div>
-                <button class="auth-primary-btn" onclick="verifyOtpAndSetPassword()">VERIFY & LOGIN</button>
+                <button class="auth-primary-btn" onclick="verifyOtpAndSetPassword()">VERIFY & REGISTER</button>
                 <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
-            </div>
-
-            <!-- STEP 4: COMPLETE REGISTRATION -->
-            <div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
-                <div style="margin-top: 10px;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Complete Registration</h3>
-                    <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please provide your details to finish signing up.</p>
-                    <input type="text" id="regName" class="auth-input-field" placeholder="Full Name">
-                    <input type="email" id="regEmail" class="auth-input-field" placeholder="Email Address">
-                    <input type="text" id="regPincode" class="auth-input-field" placeholder="6-digit Pincode" maxlength="6">
-                </div>
-                <button class="auth-primary-btn" onclick="submitRegistration()">REGISTER & CONTINUE</button>
-                <div class="auth-bottom-link" onclick="backToPhoneStep()">← Back to Login</div>
             </div>
 
         </div>
@@ -1756,269 +1759,104 @@ function handleProductSearchSelect(serviceId) {
         if (modal) modal.style.display = open ? 'flex' : 'none';
     }
 
-    
-    
 
     function backToPhoneStep() { showAuthStep('phone'); }
 
     let twoMinTimer = null;
 
-  // 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
-  async function checkUserAndProceed() {
-      const phone = document.getElementById('inputPhone').value.trim();
-      if (phone.length !== 10) {
-          alert('Please enter a valid 10-digit mobile number.');
-          return;
-      }
-      tempPhone = phone;
+  let pendingRegData = {}; // புதிய யூசர் ஃபில் செய்யும் டேட்டாவை தற்காலிகமாக சேமிக்க
 
-      try {
-          const response = await fetch(`${API_BASE_URL}/api/check-user`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ phone: tempPhone })
-          });
-          const data = await response.json();
+// 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
+async function checkUserAndProceed() {
+    const phone = document.getElementById('inputPhone').value.trim();
+    if (phone.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+    }
+    tempPhone = phone;
 
-          if (data.success) {
-              if (data.exists && data.hasPassword) {
-                  document.getElementById('authStepPhone').style.display = 'none';
-                  document.getElementById('authStepPassword').style.display = 'flex';
-              } else {
-                  await sendOtpForNewUser();
-              }
-          }
-      } catch (err) {
-          console.error(err);
-          alert('Server connection error.');
-      }
-  }
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/check-user`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await response.json();
 
-  // 2. பாஸ்வேர்ட் மூலம் லாகின் செய்தல்
-  async function loginWithPassword() {
-      const password = document.getElementById('inputPassword').value.trim();
-      if (!password) {
-          alert('Please enter your password.');
-          return;
-      }
-
-      try {
-          const response = await fetch(`${API_BASE_URL}/api/login-password`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ phone: tempPhone, password: password })
-          });
-          const data = await response.json();
-
-          if (data.success) {
-              currentUser = data.user;
-              if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-              localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-              updateHeaderLoginUI();
-              toggleAuthModal(false);
-              openPremiumDashboard();
-              showToast("Login Successful!", false);
-          } else {
-              alert(data.message || 'Incorrect password. Try again or click Forgot Password.');
-          }
-      } catch (err) {
-          console.error(err);
-          alert('Server connection error.');
-      }
-  }
-
-  // 3. புதிய யூசருக்கு முதல்முறை OTP அனுப்புவது
-  async function sendOtpForNewUser() {
-      try {
-          const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ phone: tempPhone })
-          });
-          const data = await res.json();
-
-          if (data.success) {
-              document.getElementById('authStepPhone').style.display = 'none';
-              document.getElementById('authStepSetPassword').style.display = 'flex';
-              document.getElementById('setPasswordInfo').textContent = `OTP sent to +91 ${tempPhone}. Please enter OTP and set your password.`;
-              startTwoMinTimer();
-              showToast("OTP sent successfully!", false);
-          } else {
-              alert(data.message || 'Failed to send OTP.');
-          }
-      } catch (err) {
-          console.error(err);
-          alert('Server error.');
-      }
-  }
-
-  // 4. Forgot Password - OTP அனுப்புவது
-  async function triggerForgotPassword() {
-      showToast("Sending OTP for password reset...", false);
-      try {
-          const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ phone: tempPhone })
-          });
-          const data = await res.json();
-
-          if (data.success) {
-              document.getElementById('authStepPassword').style.display = 'none';
-              document.getElementById('authStepSetPassword').style.display = 'flex';
-              document.getElementById('setPasswordInfo').textContent = `Reset OTP sent to +91 ${tempPhone}.`;
-              startTwoMinTimer();
-              showToast("OTP sent successfully!", false);
-          } else {
-              alert(data.message || 'Failed to send OTP.');
-          }
-      } catch (err) {
-          console.error(err);
-          alert('Server error.');
-      }
-  }
-
-  // ⏱️ 2 நிமிடங்கள் (120 விநாடிகள்) டைமர் லாஜிக்
-  function startTwoMinTimer() {
-      let timeLeft = 120; // 2 Minutes = 120 Seconds
-      const timerCountEl = document.getElementById('timerCount');
-      const resendBtnEl = document.getElementById('resendOtpBtn');
-
-      if (resendBtnEl) resendBtnEl.style.display = 'none';
-      if (twoMinTimer) clearInterval(twoMinTimer);
-
-      twoMinTimer = setInterval(() => {
-          let mins = Math.floor(timeLeft / 60);
-          let secs = timeLeft % 60;
-          if (timerCountEl) {
-              timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-          }
-
-          if (timeLeft <= 0) {
-              clearInterval(twoMinTimer);
-              if (timerCountEl) timerCountEl.parentElement.style.display = 'none';
-              if (resendBtnEl) resendBtnEl.style.display = 'inline';
-          }
-          timeLeft--;
-      }, 1000);
-  }
-
-  // 5. OTP வெரிஃபை செய்து பாஸ்வேர்டை சேமிப்பது
-  async function verifyOtpAndSetPassword() {
-      const otp = document.getElementById('inputRegOTP').value.trim();
-      const newPassword = document.getElementById('inputNewPassword').value.trim();
-
-      if (otp.length !== 4) {
-          alert('Please enter a valid 4-digit OTP.');
-          return;
-      }
-      if (!newPassword || newPassword.length < 4) {
-          alert('Please enter a password with at least 4 characters.');
-          return;
-      }
-
-      try {
-          const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ phone: tempPhone, otp: otp, password: newPassword })
-          });
-          const data = await response.json();
-
-          if (data.success) {
-              currentUser = data.user;
-              if (!currentUser) {
-                  document.getElementById('authStepSetPassword').style.display = 'none';
-                  document.getElementById('authStepRegister').style.display = 'flex';
-                  return;
-              }
-
-              localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-              updateHeaderLoginUI();
-              toggleAuthModal(false);
-              openPremiumDashboard();
-              showToast("Password set & Login Successful!", false);
-          } else {
-              alert(data.message || 'Invalid or expired OTP.');
-          }
-      } catch (err) {
-          console.error(err);
-          alert('Server error during verification.');
-      }
-  }
-
-  function showAuthStep(step) {
-    document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-    document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
-    document.getElementById('authStepSetPassword').style.display = (step === 'setpassword') ? 'flex' : 'none';
-    document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-
-    const titleEl = document.getElementById('leftPanelTitle');
-    const descEl = document.getElementById('leftPanelDesc');
-
-    if (step === 'phone') {
-        titleEl.textContent = "Looks like you're new here!";
-        descEl.textContent = "Get access to your Orders, Services and Recommendations";
-    } else if (step === 'password') {
-        titleEl.textContent = "Login";
-        descEl.textContent = "Get access to your Orders, Services and Recommendations";
-    } else {
-        titleEl.textContent = "Looks like you're new here!";
-        descEl.textContent = "Sign up with your mobile number to get started";
+        if (data.success) {
+            if (data.exists && data.hasPassword) {
+                // பழைய யூசர் என்றால் Password கேட்கும் பகுதிக்குச் செல்லும்
+                showAuthStep('password');
+            } else {
+                // புதிய யூசர் என்றால் முதலில் Registration Form-க்குச் செல்லும்
+                showAuthStep('register');
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server connection error.');
     }
 }
 
-function switchToNewUserRegister() {
+// "New to Catus? Create an account" கிளிக் செய்தால்
+function switchToNewUserRegisterDirect() {
     const phone = document.getElementById('inputPhone').value.trim();
     if (phone.length !== 10) {
         alert('Please enter a valid 10-digit mobile number first.');
         return;
     }
     tempPhone = phone;
-    sendOtpForNewUser();
+    showAuthStep('register');
 }
 
-function checkCloseAuthModal(event) {
-    const drawer = document.getElementById('authDrawer');
-    const modal = document.getElementById('authModal');
-    if (drawer && !drawer.contains(event.target)) {
-        modal.style.display = 'none';
-    }
-}
-
-  function backToPhoneStep() { 
-      showAuthStep('phone'); 
-  }
-
-    async function submitRegistration() {
+// 2. Registration Form ஃபில் செய்த பிறகு OTP அனுப்புவது
+async function proceedToOtpFromRegister() {
     const name = document.getElementById('regName').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     const pincode = document.getElementById('regPincode').value.trim();
-    
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!name) {
-        alert('Please enter your full name.');
-        return;
-    }
-    if (!email || !emailPattern.test(email)) {
-        alert('Please enter a valid email address (e.g., name@gmail.com).');
-        document.getElementById('regEmail').focus();
-        return;
-    }
-    if (!pincode || pincode.length !== 6) {
-        alert('Please enter a valid 6-digit Service Pincode.');
-        document.getElementById('regPincode').focus();
-        return;
-    }
+    if (!name) { alert('Please enter your full name.'); return; }
+    if (!email || !emailPattern.test(email)) { alert('Please enter a valid email address.'); return; }
+    if (!pincode || pincode.length !== 6) { alert('Please enter a valid 6-digit Pincode.'); return; }
 
-    const address = "No address saved";
+    // டேட்டாவை தற்காலிகமாக சேமித்துக்கொள்ளுதல்
+    pendingRegData = { name, email, pincode, address: "No address saved" };
 
+    // இப்போது OTP அனுப்பவும்
     try {
-        const response = await fetch(`${API_BASE_URL}/api/register`, {
+        showToast("Sending OTP...", false);
+        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, phone: tempPhone, pincode, address })
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showAuthStep('setpassword');
+            document.getElementById('setPasswordInfo').textContent = `Please enter the OTP sent to +91 ${tempPhone}`;
+            startTwoMinTimer();
+            showToast("OTP sent successfully!", false);
+        } else {
+            alert(data.message || 'Failed to send OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error while sending OTP.');
+    }
+}
+
+// 3. பாஸ்வேர்ட் மூலம் லாகின் செய்தல் (பழைய யூசர்)
+async function loginWithPassword() {
+    const password = document.getElementById('inputPassword').value.trim();
+    if (!password) { alert('Please enter your password.'); return; }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/login-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, password: password })
         });
         const data = await response.json();
 
@@ -2029,26 +1867,157 @@ function checkCloseAuthModal(event) {
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
-            showToast("Account Registered Successfully!", false);
-            
-            if (orderPollingInterval) clearInterval(orderPollingInterval);
-            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+            showToast("Login Successful!", false);
         } else {
-            alert(data.message || 'Registration failed.');
+            alert(data.message || 'Incorrect password.');
         }
     } catch (err) {
-        alert('Server connection error.');
         console.error(err);
+        alert('Server connection error.');
     }
 }
 
-    function checkCloseModal(event, drawerId, modalId) {
-        const drawer = document.getElementById(drawerId);
-        const modal = document.getElementById(modalId);
-        if (drawer && !drawer.contains(event.target)) {
-            modal.style.display = 'none';
+// 4. Forgot Password - OTP அனுப்புவது
+async function triggerForgotPassword() {
+    showToast("Sending OTP for password reset...", false);
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showAuthStep('setpassword');
+            document.getElementById('setPasswordInfo').textContent = `Reset OTP sent to +91 ${tempPhone}.`;
+            startTwoMinTimer();
+            showToast("OTP sent successfully!", false);
+        } else {
+            alert(data.message || 'Failed to send OTP.');
         }
+    } catch (err) {
+        console.error(err);
+        alert('Server error.');
     }
+}
+
+// ⏱️ 2 நிமிடங்கள் டைமர் லாஜிக்
+function startTwoMinTimer() {
+    let timeLeft = 120; 
+    const timerCountEl = document.getElementById('timerCount');
+    const resendBtnEl = document.getElementById('resendOtpBtn');
+
+    if (resendBtnEl) resendBtnEl.style.display = 'none';
+    if (twoMinTimer) clearInterval(twoMinTimer);
+
+    twoMinTimer = setInterval(() => {
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+        if (timerCountEl) {
+            timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        if (timeLeft <= 0) {
+            clearInterval(twoMinTimer);
+            if (timerCountEl) timerCountEl.parentElement.style.display = 'none';
+            if (resendBtnEl) resendBtnEl.style.display = 'inline';
+        }
+        timeLeft--;
+    }, 1000);
+}
+
+// 5. OTP வெரிஃபை செய்து ரெஜிஸ்ட்ரேஷன் மற்றும் பாஸ்வேர்டை டேட்டாபேஸில் சேமிப்பது
+async function verifyOtpAndSetPassword() {
+    const otp = document.getElementById('inputRegOTP').value.trim();
+    const newPassword = document.getElementById('inputNewPassword').value.trim();
+
+    if (otp.length !== 4) { alert('Please enter a valid 4-digit OTP.'); return; }
+    if (!newPassword || newPassword.length < 4) { alert('Password must be at least 4 characters.'); return; }
+
+    try {
+        // 1. First Verify OTP and Set Password
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, otp: otp, password: newPassword })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            // 2. If it's a brand new user, complete registration in database
+            if (pendingRegData.name) {
+                const regRes = await fetch(`${API_BASE_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        name: pendingRegData.name, 
+                        email: pendingRegData.email, 
+                        phone: tempPhone, 
+                        pincode: pendingRegData.pincode, 
+                        address: pendingRegData.address 
+                    })
+                });
+                const regData = await regRes.json();
+                if (regData.success) {
+                    currentUser = regData.user;
+                } else {
+                    currentUser = data.user;
+                }
+            } else {
+                currentUser = data.user;
+            }
+
+            if(currentUser && currentUser.wallet === undefined) currentUser.wallet = 2500;
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("Registration & Login Successful!", false);
+        } else {
+            alert(data.message || 'Invalid or expired OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error during verification.');
+    }
+}
+
+// விண்டோ ஸ்டெப்களை கன்ட்ரோல் செய்யும் பங்க்ஷன்
+function showAuthStep(step) {
+    document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
+    document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
+    document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
+    document.getElementById('authStepSetPassword').style.display = (step === 'setpassword') ? 'flex' : 'none';
+
+    const titleEl = document.getElementById('leftPanelTitle');
+    const descEl = document.getElementById('leftPanelDesc');
+
+    if (step === 'phone') {
+        titleEl.textContent = "Looks like you're new here!";
+        descEl.textContent = "Sign up with your mobile number to get started";
+    } else if (step === 'password') {
+        titleEl.textContent = "Login";
+        descEl.textContent = "Get access to your Orders, Services and Recommendations";
+    } else if (step === 'register') {
+        titleEl.textContent = "Looks like you're new here!";
+        descEl.textContent = "Sign up with your mobile number to get started";
+    } else {
+        titleEl.textContent = "Verify OTP";
+        descEl.textContent = "Please enter the OTP sent to your mobile";
+    }
+}
+
+function backToPhoneStep() { 
+    showAuthStep('phone'); 
+}
+
+function checkCloseAuthModal(event) {
+    const drawer = document.getElementById('authDrawer');
+    const modal = document.getElementById('authModal');
+    if (drawer && !drawer.contains(event.target)) {
+        modal.style.display = 'none';
+    }
+}
 
     function openPremiumDashboard() {
         toggleAuthModal(false);
