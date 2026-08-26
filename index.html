@@ -13,6 +13,12 @@
     
     <style>
 
+    /* Modal z-index fix */
+    #editOrderAddressModal, #cancelBookingModal {
+        z-index: 999999999 !important;
+    }
+
+
         /* --- PREMIUM FLIPKART STYLE AUTH MODAL CSS --- */
 .auth-modal-wrapper {
     display: none;
@@ -2667,12 +2673,12 @@ function checkCloseAuthModal(event) {
                             serviceStr = `<b>${sDate.toLocaleDateString()}</b><br><b>${sDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
                         }
 
-                        let actionButtons = '';
+                    let actionButtons = '';
 if (stat === 'pending') {
     let safeAddress = (currentOrder.address || '').replace(/'/g, "").replace(/"/g, "");
     actionButtons = `
-        <button class="prem-btn-compact" style="background:#eff6ff; color:#0284c7; border:1px solid #bfdbfe;" onclick="openEditOrderAddressModal('${currentOrder.order_id}', '${safeAddress}')"><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
-        <button class="prem-btn-compact prem-btn-cancel-compact" onclick="openCancelModal('${currentOrder.order_id}')"><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
+        <button class="prem-btn-compact" style="background:#eff6ff; color:#0284c7; border:1px solid #bfdbfe; position:relative; z-index:99;" onclick="openEditOrderAddressModal('${currentOrder.order_id}', '${safeAddress}')"><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
+        <button class="prem-btn-compact prem-btn-cancel-compact" style="position:relative; z-index:99;" onclick="openCancelModal('${currentOrder.order_id}')"><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
     `;
 
                             
