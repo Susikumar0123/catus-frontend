@@ -2072,18 +2072,18 @@
 
     function handleHeaderAuthClick() {
     if (currentUser) {
-        openPremiumDashboard(); // 🟢 ஏற்கனவே லாகின் செய்திருந்தால் நேரடியாக டேஷ்போர்டைத் திறக்கும்
+        openPremiumDashboard(); // ஏற்கனவே லாகின் செய்திருந்தால் டேஷ்போர்ட் திறக்கும்
     } else {
         showAuthStep('phone');
-        toggleAuthModal(true);  // 🔒 இல்லையென்றால் லாகின் பாப்-அப் காட்டும்
+        toggleAuthModal(true);  // லாகின் பாப்-அப் ஓபன் ஆகும்
     }
 }
 
 
     function toggleAuthModal(open) {
-        const modal = document.getElementById('authModal');
-        if (modal) modal.style.display = open ? 'flex' : 'none';
-    }
+    const modal = document.getElementById('authModal');
+    if (modal) modal.style.display = open ? 'flex' : 'none';
+}
 
     function checkCloseModal(event, drawerId, modalId) {
         const drawer = document.getElementById(drawerId);
@@ -2480,6 +2480,7 @@ function checkCloseAuthModal(event) {
         modal.style.display = 'none';
     }
 }
+
     async function fetchUserOrdersPremium(phone) {
         try {
             const response = await fetch(`${API_BASE_URL}/api/orders/${phone}`);
