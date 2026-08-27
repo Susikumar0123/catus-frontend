@@ -1067,7 +1067,86 @@
     max-height: 90vh !important;
     overflow-y: auto !important;
 }
+/* மொபைல் வியூவிற்கான ஸ்பெஷல் ஃப்ளோட்டிங் க்ளோஸ் பட்டன் */
+.mobile-floating-close {
+    display: none;
+}
+@media (max-width: 768px) {
+    /* ❌ மொபைல் வியூ க்ளோஸ் பட்டன் கச்சிதமாக வேலை செய்ய மற்றும் நடுவில் சரியாகப் பொருந்த */
+    .mobile-header-close, .universal-close-btn {
+        display: flex !important;
+        position: absolute !important;
+        top: 6px !important;
+        right: 8px !important;
+        width: 28px !important;
+        height: 28px !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+        color: #ffffff !important;
+        font-size: 14px !important;
+        border-radius: 50% !important;
+        border: none !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        z-index: 2147483647 !important;
+        pointer-events: auto !important;
+    }
+}
 
+/* --- MOBILE CLOSE BUTTON FIXED STYLES --- */
+.mobile-absolute-close {
+    position: absolute !important;
+    top: 12px !important;
+    right: 15px !important;
+    width: 32px !important;
+    height: 32px !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    color: #212121 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 18px !important;
+    border: none !important;
+    cursor: pointer !important;
+    z-index: 2147483647 !important;
+    pointer-events: auto !important;
+}
+
+@media (max-width: 768px) {
+    .mobile-absolute-close {
+        background: rgba(0, 0, 0, 0.25) !important; 
+        color: #ffffff !important;
+        top: 10px !important;
+        right: 10px !important;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 16px !important;
+        display: flex !important; /* மொபைலிலும் பட்டன் தெரிய கட்டாயம் தேவை */
+    }
+}
+@media (max-width: 768px) {
+    .auth-left-panel {
+        position: relative !important;
+    }
+    
+    /* ப்ளூ பாக்ஸின் மேல் வலது மூலையில் (Top-Right) சரியாக அமர வைக்க */
+    .auth-left-panel .mobile-absolute-close {
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+        border-radius: 50% !important;
+        width: 30px !important;
+        height: 30px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 2147483647 !important;
+        border: none !important;
+    }
+}
 
     </style>
 </head>
