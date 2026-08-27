@@ -1085,7 +1085,6 @@
     }
     .desktop-header-close { display: none !important; }
 }
-/* மொபைல் லாகின் பாப்-அப் க்ளோஸ் பட்டன் பிக்ஸ் */
 .auth-close-custom-btn {
     position: absolute !important;
     top: 12px !important;
@@ -1101,7 +1100,7 @@
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
-    z-index: 99999999 !important;
+    z-index: 2147483647 !important;
     pointer-events: auto !important;
 }
 
@@ -3587,6 +3586,35 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             e.stopPropagation();
             toggleAuthModal(false);
+        });
+    }
+});
+ document.addEventListener('DOMContentLoaded', () => {
+    const authModal = document.getElementById('authModal');
+    const closeBtn = document.querySelector('.auth-close-custom-btn');
+
+    if (closeBtn) {
+        const closeAction = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleAuthModal(false);
+        };
+
+        closeBtn.addEventListener('click', closeAction);
+        closeBtn.addEventListener('touchend', closeAction);
+    }
+
+    if (authModal) {
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                toggleAuthModal(false);
+            }
+        });
+        authModal.addEventListener('touchend', (e) => {
+            if (e.target === authModal) {
+                e.preventDefault();
+                toggleAuthModal(false);
+            }
         });
     }
 });
