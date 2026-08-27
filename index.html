@@ -1125,16 +1125,18 @@
         display: flex !important; /* மொபைலிலும் பட்டன் தெரிய கட்டாயம் தேவை */
     }
 }
-/* ❌ Mobile view-la antha X button blue panel-oda right corner-la perfect-aa set aaga */
 @media (max-width: 768px) {
+    /* 1. Blue panel-ku relative position kodukkrom, appothan button athkulla corner-la ukkaarum */
     .auth-left-panel {
-        position: relative !important; /* Blue panel-ku relative position thara */
+        position: relative !important;
     }
+    
+    /* 2. Antha close button-ah blue colour box-oda top right corner-kku fix panrom */
     .auth-right-panel .mobile-absolute-close {
         position: absolute !important;
-        top: 10px !important;
-        right: 10px !important;
-        background: rgba(0, 0, 0, 0.2) !important;
+        top: -125px !important;  /* White panel-la irunthu mela blue panel-kku poga */
+        right: 10px !important;   /* Right corner-la set aaga */
+        background: rgba(255, 255, 255, 0.25) !important;
         color: #ffffff !important;
         border-radius: 50% !important;
         width: 30px !important;
@@ -1143,6 +1145,7 @@
         align-items: center !important;
         justify-content: center !important;
         z-index: 2147483647 !important;
+        border: none !important;
     }
 }
 
