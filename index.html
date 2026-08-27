@@ -17,13 +17,16 @@
 .auth-modal-wrapper {
     display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 9999999;
+    top: 0; 
+    left: 0;
+    width: 100vw; 
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6) !important;
+    z-index: 99999999 !important;
     justify-content: center;
     align-items: center;
-    pointer-events: auto !important; /* 🛑 மொபைலில் டச் வேலை செய்ய இது கட்டாயம் தேவை */
+    pointer-events: auto !important;
+    box-sizing: border-box;
 }
 .auth-modal-container {
     display: flex;
@@ -2664,23 +2667,31 @@ function toggleAuthModal(open) {
     }
 }
 
-// 🛑 எளிமையான மற்றும் துல்லியமான Backdrop Close லாஜிக் (Mobile & Desktop)
+// 🛑 மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிலும் வெளியே தொட்டால் க்ளோஸ் செய்ய
 function checkCloseAuthModal(event) {
     const modalContainer = document.getElementById('authDrawer');
     
-    // நீங்கள் தொட்ட இடம் (event.target) அந்த வெள்ளை/நீலப் பெட்டிக்கு (auth-modal-container) வெளியே உள்ளதா எனச் சோதிக்கிறது
+    // நீங்கள் தொட்டது வெள்ளை/நீலப் பெட்டிக்கு வெளியே உள்ளதா எனச் சோதிக்கிறது
     if (modalContainer && !modalContainer.contains(event.target)) {
         toggleAuthModal(false);
     }
 }
 
-// மொபைல் போன்களில் டச் (Touch) செய்யும்போது வெளியே க்ளோஸ் ஆவதை உறுதி செய்ய
+// மொபைல் போன்களில் டச் ஈவென்ட் மூலமாக க்ளோஸ் ஆவதை உறுதி செய்ய
 document.addEventListener('DOMContentLoaded', () => {
-    const authModal = document.getElementById('authModal');
-    if (authModal) {
-        authModal.addEventListener('touchend', (e) => {
+    const authWrapper = document.getElementById('authModal');
+    if (authWrapper) {
+        authWrapper.addEventListener('click', (e) => {
             const modalContainer = document.getElementById('authDrawer');
             if (modalContainer && !modalContainer.contains(e.target)) {
+                toggleAuthModal(false);
+            }
+        });
+        
+        authWrapper.addEventListener('touchend', (e) => {
+            const modalContainer = document.getElementById('authDrawer');
+            if (modalContainer && !modalContainer.contains(e.target)) {
+                e.preventDefault(); // டச் செய்யும்போது டபுள் கிளிக் ஆவதைத் தவிர்க்க
                 toggleAuthModal(false);
             }
         });
