@@ -56,78 +56,6 @@
 .auth-terms-text a { color: #2874f0; text-decoration: none; }
 .auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #2874f0; font-weight: 600; cursor: pointer; padding-top: 20px; }
 
-@media (max-width: 768px) {
-    .auth-modal-wrapper {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        background: rgba(0, 0, 0, 0.6) !important;
-        padding: 16px !important;
-        box-sizing: border-box !important;
-        z-index: 9999 !important;
-    }
-    .auth-modal-container { 
-        flex-direction: column !important; 
-        width: 100% !important; 
-        max-width: 340px !important; 
-        height: auto !important; 
-        max-height: 85vh !important;
-        border-radius: 12px !important; 
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-        margin: auto !important; /* ஸ்கிரீன் நடுவில் கச்சிதமாக வர */
-    }
-    .auth-left-panel { 
-        width: 100% !important; 
-        min-height: auto !important; 
-        padding: 14px 16px !important; 
-        flex-shrink: 0 !important;
-        box-sizing: border-box !important;
-    }
-    .auth-left-panel h2 { 
-        font-size: 16px !important; 
-        margin-bottom: 2px !important; 
-    }
-    .auth-left-panel p { 
-        font-size: 11px !important; 
-    }
-    .auth-left-illustration {
-        display: none !important; 
-    }
-    .auth-right-panel { 
-        width: 100% !important; 
-        height: auto !important; 
-        padding: 16px !important; 
-        box-sizing: border-box !important;
-        overflow-y: auto !important;
-    }
-    .auth-input-field {
-        margin-top: 10px !important;
-        font-size: 13px !important;
-        padding: 8px 0 !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-    .auth-primary-btn {
-        margin-top: 12px !important;
-        padding: 10px !important;
-        font-size: 14px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-    
-
-    .desktop-header-close {
-        display: none !important; /* மொபைல் வியூவில் டெஸ்க்டாப் பட்டன் முழுமையாக மறைக்கப்படும் */
-    }
-}
-
-/* Desktop view-ku mattum */
-@media (min-width: 769px) {
-    .desktop-header-close {
-        display: block !important;
-    }
-}
         
         .clear-cart-text, .cart-header span[onclick*="clearCart"] {
     text-decoration: none !important;
@@ -1067,69 +995,92 @@
     max-height: 90vh !important;
     overflow-y: auto !important;
 }
-/* மொபைல் வியூவிற்கான ஸ்பெஷல் ஃப்ளோட்டிங் க்ளோஸ் பட்டன் */
-.mobile-floating-close {
-    display: none;
-}
 @media (max-width: 768px) {
-    /* ❌ மொபைல் வியூ க்ளோஸ் பட்டன் கச்சிதமாக வேலை செய்ய மற்றும் நடுவில் சரியாகப் பொருந்த */
-    .mobile-header-close, .universal-close-btn {
+    .auth-modal-wrapper {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+        z-index: 9999999 !important;
+    }
+    .auth-modal-container { 
+        flex-direction: column !important; 
+        width: 90% !important; 
+        max-width: 320px !important; /* மொபைலுக்கு கச்சிதமான அகலம் */
+        height: auto !important; 
+        max-height: 80vh !important;
+        border-radius: 12px !important; 
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        margin: auto !important;
+        position: relative !important;
+    }
+    .auth-left-panel { 
+        width: 100% !important; 
+        padding: 18px 16px !important; 
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+    }
+    .auth-left-panel h2 { font-size: 15px !important; margin-bottom: 2px !important; }
+    .auth-left-panel p { font-size: 11px !important; }
+    .auth-left-illustration { display: none !important; }
+    
+    .auth-right-panel { 
+        width: 100% !important; 
+        height: auto !important; 
+        padding: 18px 16px !important; 
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+    }
+    .auth-input-field {
+        margin-top: 8px !important;
+        font-size: 13px !important;
+        padding: 8px 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .auth-primary-btn {
+        margin-top: 15px !important;
+        padding: 10px !important;
+        font-size: 13px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .auth-terms-text {
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+        margin-top: 10px !important;
+    }
+    .auth-bottom-link {
+        font-size: 12px !important;
+        padding-top: 15px !important;
+    }
+
+    /* ❌ மொபைல் நீல நிற ஹெடருக்குள் க்ளோஸ் பட்டன் கச்சிதமாக வர */
+    .auth-left-panel .mobile-absolute-close,
+    .auth-left-panel .mobile-header-close {
         display: flex !important;
         position: absolute !important;
-        top: 6px !important;
-        right: 8px !important;
-        width: 28px !important;
-        height: 28px !important;
-        background: rgba(0, 0, 0, 0.2) !important;
+        top: 10px !important;
+        right: 10px !important;
         color: #ffffff !important;
         font-size: 14px !important;
+        background: rgba(255, 255, 255, 0.25) !important;
         border-radius: 50% !important;
-        border: none !important;
+        width: 26px !important;
+        height: 26px !important;
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
         z-index: 2147483647 !important;
-        pointer-events: auto !important;
+        border: none !important;
     }
+    .desktop-header-close { display: none !important; }
 }
 
-/* --- MOBILE CLOSE BUTTON FIXED STYLES --- */
-.mobile-absolute-close {
-    position: absolute !important;
-    top: 12px !important;
-    right: 15px !important;
-    width: 32px !important;
-    height: 32px !important;
-    background: rgba(0, 0, 0, 0.1) !important;
-    color: #212121 !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 18px !important;
-    border: none !important;
-    cursor: pointer !important;
-    z-index: 2147483647 !important;
-    pointer-events: auto !important;
-}
-
-@media (max-width: 768px) {
-    .mobile-absolute-close {
-        background: rgba(0, 0, 0, 0.25) !important; 
-        color: #ffffff !important;
-        top: 10px !important;
-        right: 10px !important;
-        width: 30px !important;
-        height: 30px !important;
-        font-size: 16px !important;
-    }
-}
-@media (max-width: 768px) {
-    /* மொபைல் வியூவில் அந்த X க்ளோஸ் பட்டனை முழுமையாக மறைக்க */
-    .mobile-absolute-close {
-        display: none !important;
-    }
-}
     </style>
 </head>
 <body>
@@ -1295,21 +1246,26 @@
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
-        <!-- Left Blue Panel -->
-<div class="auth-left-panel" style="position: relative;">
-    <!-- ❌ க்ளோஸ் பட்டனை ப்ளூ பாக்ஸுக்கு உள்ளே சேர்க்கிறோம் -->
-    <button type="button" class="mobile-absolute-close" onclick="forceCloseAuthModal(); event.stopPropagation(); return false;">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
-    
-    <div>
-        <h2 id="leftPanelTitle">Looks like you're new here!</h2>
-        <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
-    </div>
-    <div class="auth-left-illustration">
-        <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
-    </div>
-</div>
+        <!-- Left Blue Panel (இதற்குள் க்ளோஸ் பட்டன் இணைக்கப்பட்டுள்ளது) -->
+        <div class="auth-left-panel" style="position: relative;">
+            <button type="button" class="mobile-absolute-close" onclick="forceCloseAuthModal(); event.stopPropagation(); return false;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div>
+                <h2 id="leftPanelTitle">Looks like you're new here!</h2>
+                <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
+            </div>
+            <div class="auth-left-illustration">
+                <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
+            </div>
+        </div>
+
+        <!-- Right White Panel (இதற்கு கீழே உள்ள உங்களது ஸ்டெப்ஸ்கள் அப்படியே இருக்கும்) -->
+        <div class="auth-right-panel">
+            <button type="button" class="desktop-header-close auth-close-btn" onclick="toggleAuthModal(false)">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
