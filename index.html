@@ -17,17 +17,13 @@
 .auth-modal-wrapper {
     display: none;
     position: fixed;
-    top: 0; 
-    left: 0;
-    width: 100vw; 
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.6) !important;
-    z-index: 99999999 !important;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999999;
     justify-content: center;
     align-items: center;
-    pointer-events: auto !important;
-    box-sizing: border-box;
-    padding: 20px; /* 🛑 மொபைலில் சைட் கேப் சரியாக இருக்க இது உதவும் */
+    pointer-events: auto !important; /* 🛑 மொபைலில் டச் வேலை செய்ய இது கட்டாயம் தேவை */
 }
 .auth-modal-container {
     display: flex;
@@ -1085,39 +1081,7 @@
     }
     .desktop-header-close { display: none !important; }
 }
-.auth-close-custom-btn {
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    background: rgba(0, 0, 0, 0.15) !important;
-    border: none !important;
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 50% !important;
-    font-size: 18px !important;
-    color: #ffffff !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    z-index: 2147483647 !important;
-    pointer-events: auto !important;
-    -webkit-tap-highlight-color: transparent;
-}
 
-.auth-close-custom-btn:active, 
-.auth-close-custom-btn:hover {
-    background: rgba(0, 0, 0, 0.3) !important;
-}
-
-@media (max-width: 768px) {
-    .auth-close-custom-btn {
-        top: 8px !important;
-        right: 8px !important;
-        background: rgba(255, 255, 255, 0.3) !important;
-        color: #212121 !important; /* மொபைல் நீல/வெள்ளை கான்ட்ராஸ்ட்க்காக */
-    }
-}
     </style>
 </head>
 <body>
@@ -1282,10 +1246,7 @@
   <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
-    <!-- 🛑 இந்த க்ளோஸ் பட்டனை சரியாக கன்டெய்னரின் முதல் வரியாக வையுங்கள் -->
-    <button type="button" class="auth-close-custom-btn" onclick="toggleAuthModal(false);">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
+        
         <!-- Left Blue Panel -->
 <div class="auth-left-panel" style="position: relative;">
     <div>
@@ -2703,36 +2664,28 @@ function toggleAuthModal(open) {
     }
 }
 
-// 🛑 மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிலும் பாப்-அப்புக்கு வெளியே தொட்டால் க்ளோஸ் செய்ய
+// 🛑 எளிமையான மற்றும் துல்லியமான Backdrop Close லாஜிக் (Mobile & Desktop)
+function checkCloseAuthModal(event) {
+    const modalContainer = document.getElementById('authDrawer');
+    
+    // நீங்கள் தொட்ட இடம் (event.target) அந்த வெள்ளை/நீலப் பெட்டிக்கு (auth-modal-container) வெளியே உள்ளதா எனச் சோதிக்கிறது
+    if (modalContainer && !modalContainer.contains(event.target)) {
+        toggleAuthModal(false);
+    }
+}
+
+// மொபைல் போன்களில் டச் (Touch) செய்யும்போது வெளியே க்ளோஸ் ஆவதை உறுதி செய்ய
 document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('authModal');
-    const authDrawer = document.getElementById('authDrawer');
-
-    if (authModal && authDrawer) {
-        // டெஸ்க்டாப் மற்றும் மொபைல் இரண்டிற்குமான ஒட்டுமொத்த கிளிக்/டச் ஹேண்ட்லர்
-        authModal.addEventListener('click', (e) => {
-            if (e.target === authModal) {
-                toggleAuthModal(false);
-            }
-        });
-
+    if (authModal) {
         authModal.addEventListener('touchend', (e) => {
-            if (e.target === authModal) {
-                e.preventDefault();
+            const modalContainer = document.getElementById('authDrawer');
+            if (modalContainer && !modalContainer.contains(e.target)) {
                 toggleAuthModal(false);
             }
         });
     }
 });
-
-function checkCloseAuthModal(event) {
-    const modalContainer = document.getElementById('authDrawer');
-    
-    // நீங்கள் கிளிக் அல்லது டச் செய்தது அந்த வெள்ளை/நீலப் பெட்டிக்கு (authDrawer) வெளியே உள்ளதா எனப் பார்க்கிறது
-    if (modalContainer && !modalContainer.contains(event.target)) {
-        toggleAuthModal(false);
-    }
-}
 
     async function fetchUserOrdersPremium(phone) {
         try {
@@ -3578,49 +3531,25 @@ async function resendOTPAction() {
         alert('Server connection error during resend.');
     }
 }
+// மொபைல் வியூ மற்றும் டெஸ்க்டாப் வியூ இரண்டிலும் க்ளோஸ் பட்டன் வேலை செய்வதை உறுதி செய்ய
 document.addEventListener('DOMContentLoaded', () => {
-    const authModal = document.getElementById('authModal');
-    const closeBtn = document.querySelector('.auth-close-custom-btn');
-
-    if (closeBtn) {
-        const forceCloseModal = (e) => {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-            }
-            
-            // 1. பாப்-அப்பை உடனடியாக மறைக்க
-            if (authModal) {
-                authModal.style.display = 'none';
-            }
-            document.body.style.overflow = 'auto';
-            
-            // 2. உங்களது ஒரிஜினல் டாகிள் பங்க்ஷனையும் இயக்க
-            if (typeof toggleAuthModal === 'function') {
-                toggleAuthModal(false);
-            }
-            return false;
-        };
-
-        // மொபைல் டச் மற்றும் டெஸ்க்டாப் கிளிக் இரண்டிற்கும் நேரடியாக இணைத்தல்
-        closeBtn.onclick = forceCloseModal;
-        closeBtn.addEventListener('click', forceCloseModal, { capture: true, passive: false });
-        closeBtn.addEventListener('touchend', forceCloseModal, { capture: true, passive: false });
+    // மொபைல் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
+    const mobileCloseBtn = document.querySelector('.mobile-header-close');
+    if (mobileCloseBtn) {
+        mobileCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleAuthModal(false);
+        });
     }
 
-    // பாப்-அப்புக்கு வெளியே உள்ள பிளாக் பேக்ராப்சை தட்டினால் க்ளோஸ் ஆக
-    if (authModal) {
-        authModal.addEventListener('click', (e) => {
-            if (e.target === authModal) {
-                toggleAuthModal(false);
-            }
-        });
-        authModal.addEventListener('touchend', (e) => {
-            if (e.target === authModal) {
-                e.preventDefault();
-                toggleAuthModal(false);
-            }
+    // டெஸ்க்டாப் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
+    const desktopCloseBtn = document.querySelector('.desktop-header-close');
+    if (desktopCloseBtn) {
+        desktopCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleAuthModal(false);
         });
     }
 });
