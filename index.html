@@ -1119,10 +1119,15 @@
         color: #ffffff !important;
         top: 10px !important;
         right: 10px !important;
-        width: 34px !important;
-        height: 34px !important;
+        width: 30px !important;
+        height: 30px !important;
         font-size: 16px !important;
-        z-index: 2147483647 !important;
+    }
+}
+@media (max-width: 768px) {
+    /* மொபைல் வியூவில் அந்த X க்ளோஸ் பட்டனை முழுமையாக மறைக்க */
+    .mobile-absolute-close {
+        display: none !important;
     }
 }
     </style>
@@ -1290,6 +1295,11 @@
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
+        <!-- ❌ மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் பொதுவான, உறுதியான க்ளோஸ் பட்டன் -->
+        <button type="button" class="mobile-absolute-close" onclick="toggleAuthModal(false); event.stopPropagation(); return false;">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        
         <!-- Left Blue Panel -->
         <div class="auth-left-panel">
             <div>
@@ -1302,13 +1312,7 @@
         </div>
 
         <!-- Right White Panel -->
-        <div class="auth-right-panel" style="position: relative;">
-            
-            <!-- ❌ மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் உறுதியான க்ளோஸ் பட்டன் (White Panel-kku ulla irukkum) -->
-            <button type="button" class="mobile-absolute-close" onclick="toggleAuthModal(false); event.stopPropagation(); return false;">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
+        <div class="auth-right-panel">
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
@@ -2709,10 +2713,13 @@ function toggleAuthModal(open) {
     }
 }
 
-// Backdrop-ah click pannalum close aaga (Mobile & Desktop friendly)
+// Backdrop-ah (veliya irukra dark area) click pannalum mobile/desktop-la close aaga
 function checkCloseAuthModal(event) {
-    const container = document.querySelector('.auth-modal-container');
-    if (container && !container.contains(event.target)) {
+    const modalWrapper = document.getElementById('authModal');
+    const modalContainer = document.querySelector('.auth-modal-container');
+    
+    // User popup-kku ulla click pannama, veliya irukkura grey area-la click pannal-na close aagum
+    if (modalContainer && !modalContainer.contains(event.target)) {
         toggleAuthModal(false);
     }
 }
