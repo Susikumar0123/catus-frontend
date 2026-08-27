@@ -59,28 +59,28 @@
 @media (max-width: 768px) {
     .auth-modal-wrapper {
         display: flex !important;
-        justify-content: center !important; /* Center horizontally */
-        align-items: center !important; /* Center vertically */
+        justify-content: center !important;
+        align-items: center !important;
         background: rgba(0, 0, 0, 0.6) !important;
-        padding: 16px !important; /* Left & Right side la space varum */
+        padding: 16px !important;
         box-sizing: border-box !important;
         z-index: 9999 !important;
     }
     .auth-modal-container { 
         flex-direction: column !important; 
         width: 100% !important; 
-        max-width: 340px !important; /* Screen-oda width-ku perfect-ah match aagum */
+        max-width: 340px !important; 
         height: auto !important; 
         max-height: 85vh !important;
         border-radius: 12px !important; 
         box-sizing: border-box !important;
         overflow: hidden !important;
-        margin: 0 auto !important; /* Center position-ai confirm panra idthu */
+        margin: auto !important; /* ஸ்கிரீன் நடுவில் கச்சிதமாக வர */
     }
     .auth-left-panel { 
         width: 100% !important; 
         min-height: auto !important; 
-        padding: 12px 16px !important; 
+        padding: 14px 16px !important; 
         flex-shrink: 0 !important;
         box-sizing: border-box !important;
     }
@@ -115,8 +115,9 @@
         width: 100% !important;
         box-sizing: border-box !important;
     }
-    /* Blue header குள்ள இருக்கும் Close button ஸ்டைல் */
-    .auth-close-btn.mobile-header-close {
+    /* Mobile-ku blue header குள்ள இருக்கும் Close button */
+    .mobile-header-close {
+        display: block !important;
         position: absolute !important;
         top: 8px !important;
         right: 12px !important;
@@ -125,7 +126,20 @@
         background: transparent !important;
         border: none !important;
         cursor: pointer !important;
-        z-index: 10;
+        z-index: 99999 !important;
+    }
+    .desktop-header-close {
+        display: none !important; /* Mobile la white panel button hide aagum */
+    }
+}
+
+/* Desktop view-ku mattum */
+@media (min-width: 769px) {
+    .mobile-header-close {
+        display: none !important; /* Desktop la blue header button hide aagum */
+    }
+    .desktop-header-close {
+        display: block !important;
     }
 }
         
@@ -1232,7 +1246,9 @@
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer">
         
-        <div class="auth-left-panel">
+        <div class="auth-left-panel" style="position: relative;">
+            <!-- Mobile view-ku mattum blue header-ku ulla close button -->
+            <button class="auth-close-btn mobile-header-close" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
             <div>
                 <h2 id="leftPanelTitle">Looks like you're new here!</h2>
                 <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
@@ -1242,8 +1258,9 @@
             </div>
         </div>
 
-        <div class="auth-right-panel">
-            <button class="auth-close-btn" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+        <div class="auth-right-panel" style="position: relative;">
+            <!-- Desktop view-ku mattum white panel-la irukura close button -->
+            <button class="auth-close-btn desktop-header-close" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
 
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
