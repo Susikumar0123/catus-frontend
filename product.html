@@ -2254,21 +2254,42 @@ function checkCloseAuthModal(event) {
 
     async function fetchUserOrdersPremium(phone) {
     try {
+        // Fetch services map first so we can grab the correct image per product_id
+        let servicesMap = {};
+        try {
+            const sRes = await fetch(`${API_BASE_URL}/api/services`);
+            const sData = await sRes.json();
+            if (sData.success && sData.services) {
+                sData.services.forEach(srv => {
+                    servicesMap[String(srv.service_id).trim()] = srv.image_url;
+                    servicesMap[srv.service_name.toLowerCase().trim()] = srv.image_url;
+                });
+            }
+        } catch(e) {
+            console.error("Could not preload services map for images", e);
+        }
+
         const response = await fetch(`${API_BASE_URL}/api/orders/${phone}`);
         const data = await response.json();
+        
         const ordersList = document.getElementById('premOrdersListContainer');
-        const liveContainer = document.getElementById('liveTrackingContainer');
-        const liveTitle = document.getElementById('liveTrackingTitle');
         if (!ordersList) return; 
 
         const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
         const ratedOrders = JSON.parse(localStorage.getItem('catus_rated_orders')) || [];
 
-        if (data.success && data.orders && data.orders.length > 0) {
+        if (data.success && data.orders) {
             let processedOrders = data.orders.map(o => {
                 let cached = adminCache[o.order_id];
                 if (cached) {
-                    return { ...o, status: cached.status || o.status, technician_name: cached.name || o.technician_name, technician_phone: cached.phone || o.technician_phone, eta: cached.eta || o.eta, address: cached.address || o.address };
+                    return {
+                        ...o,
+                        status: cached.status || o.status,
+                        technician_name: cached.name || o.technician_name,
+                        technician_phone: cached.phone || o.technician_phone,
+                        eta: cached.eta || o.eta,
+                        address: cached.address || o.address
+                    };
                 }
                 return o;
             });
@@ -2277,13 +2298,7 @@ function checkCloseAuthModal(event) {
             window.currentOrders = processedOrders; 
             
             let compCount = processedOrders.filter(o => o.status.toLowerCase() === 'completed').length;
-            
-            // 🛑 திருத்தம்: Pending, Assigned, On the way, In service போன்ற அனைத்து ஆக்டிவ் ஆர்டர்களையும் 'In Progress'-ல் வரச் செய்ய
-            let activeOrders = processedOrders.filter(o => {
-                let st = o.status.toLowerCase();
-                return st !== 'completed' && st !== 'cancelled' && st !== 'rejected' && st !== 'trash';
-            });
-            
+            let activeOrders = processedOrders.filter(o => o.status.toLowerCase() !== 'completed' && o.status.toLowerCase() !== 'cancelled' && o.status.toLowerCase() !== 'rejected');
             let rejectedCount = processedOrders.filter(o => o.status.toLowerCase() === 'cancelled' || o.status.toLowerCase() === 'rejected').length;
 
             document.getElementById('sumTotal').textContent = processedOrders.length;
@@ -2291,41 +2306,66 @@ function checkCloseAuthModal(event) {
             document.getElementById('sumProgress').textContent = activeOrders.length;
             document.getElementById('sumRejected').textContent = rejectedCount;
 
-            // Live Tracking Cards Render
-            if(activeOrders.length > 0 && liveTitle && liveContainer) {
+            const liveContainer = document.getElementById('liveTrackingContainer');
+            const liveTitle = document.getElementById('liveTrackingTitle');
+
+            if(activeOrders.length > 0) {
                 liveTitle.style.display = 'block';
                 liveContainer.innerHTML = ''; 
+                
                 activeOrders.forEach(currentOrder => {
                     let stat = currentOrder.status.toLowerCase();
                     let otpCode = String(currentOrder.order_id).slice(-4) || "8421";
                     let techName = currentOrder.technician_name || "Awaiting Technician";
                     let techPhoneText = currentOrder.technician_phone ? `+91 ${currentOrder.technician_phone}` : "Assigning soon...";
-                    let eta = currentOrder.eta || "30 Min";
+                    let eta = currentOrder.eta || "-- Min";
+                    
                     let orderDateObj = new Date(currentOrder.order_date);
                     let dateStringLive = orderDateObj.toLocaleDateString() + ' ' + orderDateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    let displayProductId = currentOrder.product_id || Math.floor(100 + Math.random() * 900);
+                    let displayProductId = currentOrder.product_id || 'tv-repair';
                     
-                    let stepBookedClass = 'prem-step-compact done'; 
-                    let stepAssignedClass = 'prem-step-compact'; 
-                    let stepWayClass = 'prem-step-compact'; 
-                    let stepServiceClass = 'prem-step-compact'; 
+                    // Match the correct product image dynamically
+                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[currentOrder.service_name.toLowerCase().trim()] || 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=150&q=80';
+
+                    let stepBookedClass = 'prem-step-compact done';
+                    let stepAssignedClass = 'prem-step-compact';
+                    let stepWayClass = 'prem-step-compact';
+                    let stepServiceClass = 'prem-step-compact';
                     let progressWidth = '0%';
 
-                    if(stat === 'pending') { 
-                        stepBookedClass = 'prem-step-compact active'; 
-                        progressWidth = '15%'; 
-                    } else if(stat === 'assigned') { 
-                        stepAssignedClass = 'prem-step-compact active'; 
-                        progressWidth = '40%'; 
-                    } else if(stat === 'on the way') { 
-                        stepAssignedClass = 'prem-step-compact done'; 
-                        stepWayClass = 'prem-step-compact active'; 
-                        progressWidth = '70%'; 
-                    } else if(stat === 'in service' || stat === 'service' || stat === 'active') { 
-                        stepAssignedClass = 'prem-step-compact done'; 
-                        stepWayClass = 'prem-step-compact done'; 
-                        stepServiceClass = 'prem-step-compact active'; 
-                        progressWidth = '100%'; 
+                    let bookedStr = `<b>${orderDateObj.toLocaleDateString()}</b><br><b>${orderDateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
+                    let assignedStr = "--<br>--";
+                    let wayStr = "--<br>--";
+                    let serviceStr = "--<br>--";
+
+                    if(stat === 'pending') {
+                        stepBookedClass = 'prem-step-compact active';
+                        progressWidth = '0%';
+                    } else if(stat === 'assigned') {
+                        stepAssignedClass = 'prem-step-compact active';
+                        progressWidth = '33.3%';
+                    } else if(stat === 'on the way') {
+                        stepAssignedClass = 'prem-step-compact done';
+                        stepWayClass = 'prem-step-compact active';
+                        progressWidth = '66.6%';
+                    } else if(stat === 'in service' || stat === 'service' || stat === 'active') {
+                        stepAssignedClass = 'prem-step-compact done';
+                        stepWayClass = 'prem-step-compact done';
+                        stepServiceClass = 'prem-step-compact active';
+                        progressWidth = '75%';
+                    }
+                    
+                    if(stat === 'assigned' || stat === 'on the way' || stat === 'in service' || stat === 'service' || stat === 'active') {
+                        let aDate = new Date(orderDateObj.getTime() + 15*60000);
+                        assignedStr = `<b>${aDate.toLocaleDateString()}</b><br><b>${aDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
+                    }
+                    if(stat === 'on the way' || stat === 'in service' || stat === 'service' || stat === 'active') {
+                        let wDate = new Date(orderDateObj.getTime() + 45*60000);
+                        wayStr = `<b>${wDate.toLocaleDateString()}</b><br><b>${wDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
+                    }
+                    if(stat === 'in service' || stat === 'service' || stat === 'active') {
+                        let sDate = new Date(orderDateObj.getTime() + 60*60000);
+                        serviceStr = `<b>${sDate.toLocaleDateString()}</b><br><b>${sDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
                     }
 
                     let actionButtons = '';
@@ -2336,102 +2376,144 @@ function checkCloseAuthModal(event) {
                         `;
                     } else {
                         actionButtons = `
-                            <button class="prem-btn-compact" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
-                            <button class="prem-btn-compact" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
+                            <button class="prem-btn-compact" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" title="Cannot edit address after technician is assigned" disabled><i class="fa-solid fa-pen-to-square"></i> Edit Address</button>
+                            <button class="prem-btn-compact" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" title="Cannot cancel booking after technician is assigned" disabled><i class="fa-solid fa-xmark"></i> Cancel Booking</button>
                         `;
                     }
 
-                    liveContainer.innerHTML += `
+                    let cardHTML = `
                     <div class="prem-live-card">
                         <div class="prem-live-top-row">
                             <div>
                                 <h3 style="margin: 0 0 4px 0; font-size: 14px; color: #0f172a;">${currentOrder.service_name}</h3>
                                 <div style="font-size:10px; color:#64748b; display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:6px;">
-                                    <span><b>Order ID:</b> #${currentOrder.order_id}</span> |
-                                    <span><b>Product ID:</b> #${displayProductId}</span> |
+                                    <span><b>Order ID:</b> #${currentOrder.order_id}</span> <span style="color:#cbd5e1;">|</span>
+                                    <span><b>Product ID:</b> #${displayProductId}</span> <span style="color:#cbd5e1;">|</span>
                                     <span><b>Date:</b> ${dateStringLive}</span>
                                 </div>
                                 <div class="prem-live-status-badge"><span class="pulse"></span> ${currentOrder.status.toUpperCase()}</div>
                             </div>
-                            <div class="prem-live-otp-compact">Booking OTP<span>${otpCode}</span></div>
+                            <div class="prem-live-otp-compact">
+                                Booking OTP
+                                <span>${otpCode}</span>
+                            </div>
                         </div>
+                        
                         <div class="prem-live-middle-row">
                             <div class="prem-tech-info-compact">
-                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80" alt="Technician" class="prem-tech-img-compact">
+                                <img src="${orderImgUrl}" alt="Service Image" class="prem-tech-img-compact">
                                 <div class="prem-tech-details-compact">
                                     <h4>${techName}</h4>
                                     <p><i class="fa-solid fa-star" style="color:#f59e0b;"></i> 4.9 • ${techPhoneText}</p>
                                 </div>
                             </div>
-                            <div class="prem-eta-compact"><strong>${eta}</strong><span>Est. Arrival</span></div>
+                            <div class="prem-eta-compact">
+                                <strong>${eta}</strong>
+                                <span>Est. Arrival</span>
+                            </div>
                         </div>
+                        
                         <div class="prem-timeline-compact">
                             <div class="prem-timeline-progress" style="width: ${progressWidth};"></div>
-                            <div class="${stepBookedClass}"><div class="prem-step-icon-compact"><i class="fa-solid fa-check"></i></div><span>Booked</span></div>
-                            <div class="${stepAssignedClass}"><div class="prem-step-icon-compact"><i class="fa-solid fa-user-check"></i></div><span>Assigned</span></div>
-                            <div class="${stepWayClass}"><div class="prem-step-icon-compact"><i class="fa-solid fa-motorcycle"></i></div><span>On the way</span></div>
-                            <div class="${stepServiceClass}"><div class="prem-step-icon-compact"><i class="fa-solid fa-wrench"></i></div><span>Service</span></div>
+                            <div class="${stepBookedClass}">
+                                <div class="prem-step-icon-compact"><i class="fa-solid fa-check"></i></div>
+                                <span>Booked</span>
+                                <div style="font-size:8.5px; color:#334155; text-align:center; margin-top:3px; line-height:1.2; font-weight:bold;">${bookedStr}</div>
+                            </div>
+                            <div class="${stepAssignedClass}">
+                                <div class="prem-step-icon-compact"><i class="fa-solid fa-user-check"></i></div>
+                                <span>Assigned</span>
+                                <div style="font-size:8.5px; color:#334155; text-align:center; margin-top:3px; line-height:1.2; font-weight:bold;">${assignedStr}</div>
+                            </div>
+                            <div class="${stepWayClass}">
+                                <div class="prem-step-icon-compact"><i class="fa-solid fa-motorcycle"></i></div>
+                                <span>On the way</span>
+                                <div style="font-size:8.5px; color:#334155; text-align:center; margin-top:3px; line-height:1.2; font-weight:bold;">${wayStr}</div>
+                            </div>
+                            <div class="${stepServiceClass}">
+                                <div class="prem-step-icon-compact"><i class="fa-solid fa-wrench"></i></div>
+                                <span>Service</span>
+                                <div style="font-size:8.5px; color:#334155; text-align:center; margin-top:3px; line-height:1.2; font-weight:bold;">${serviceStr}</div>
+                            </div>
                         </div>
-                        <div class="prem-actions-compact">${actionButtons}</div>
-                    </div>`;
+
+                        <div class="prem-actions-compact">
+                            ${actionButtons}
+                        </div>
+                    </div>
+                    `;
+                    liveContainer.innerHTML += cardHTML;
                 });
-            } else if(liveTitle && liveContainer) {
+            } else {
                 liveTitle.style.display = 'none';
                 liveContainer.innerHTML = '';
             }
 
-            ordersList.innerHTML = ''; 
-            processedOrders.forEach(order => {
-                let statusColor = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#ef4444' : '#16a34a';
-                let statusBg = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#fef2f2' : '#f0fdf4';
-                let dateString = new Date(order.order_date).toLocaleDateString() + ' ' + new Date(order.order_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                let displayProductId = order.product_id || Math.floor(100 + Math.random() * 900);
-                let safeCustName = currentUser.name ? currentUser.name.replace(/'/g, "\\'") : 'Customer';
-                let safeServiceName = order.service_name.replace(/'/g, "\\'");
-                let isRated = ratedOrders.includes(String(order.order_id));
-                let ratingBtnHTML = '';
-                let actionButtonsHTML = '';
+            if (processedOrders.length > 0) {
+                ordersList.innerHTML = ''; 
+                processedOrders.forEach(order => {
+                    let statusColor = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#ef4444' : '#16a34a';
+                    let statusBg = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#fef2f2' : '#f0fdf4';
+                    
+                    let dateString = new Date(order.order_date).toLocaleDateString() + ' ' + new Date(order.order_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    let displayProductId = order.product_id || 'tv-repair';
+                    let safeCustName = currentUser.name ? currentUser.name.replace(/'/g, "\\'") : 'Customer';
+                    let safeServiceName = order.service_name.replace(/'/g, "\\'");
+                    
+                    // Match the correct product image dynamically for history list
+                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[order.service_name.toLowerCase().trim()] || 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=150&q=80';
 
-                if(order.status.toLowerCase() === 'completed') {
-                    if (isRated) {
-                        ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#f1f5f9; color:#94a3b8; border-color:#e2e8f0; cursor:not-allowed;" disabled><i class="fa-solid fa-check-circle"></i> Rated</button>`;
+                    let isRated = ratedOrders.includes(String(order.order_id));
+                    let ratingBtnHTML = '';
+
+                    let actionButtonsHTML = '';
+                    if(order.status.toLowerCase() === 'completed') {
+                        if (isRated) {
+                            ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#f1f5f9; color:#94a3b8; border-color:#e2e8f0; cursor:not-allowed;" onclick="showToast('You have already rated this service!', true)"><i class="fa-solid fa-check-circle"></i> Rated</button>`;
+                        } else {
+                            ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#10b981; color:white; border-color:#10b981;" onclick="openRatingModal('${order.order_id}', '${safeServiceName}')"><i class="fa-solid fa-star"></i> Rate Service</button>`;
+                        }
+                        actionButtonsHTML = `
+                            <button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px;" onclick="downloadInvoice('${order.order_id}', '${safeServiceName}', '${order.amount}', '${order.status}', '${dateString}', '${displayProductId}', '${safeCustName}', '${currentUser.phone}')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+                            <button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#eff6ff; color:#0284c7; border-color:#bfdbfe;" onclick="openInvoiceView('${order.order_id}', '${safeServiceName}', '${order.amount}', '${order.status}', '${dateString}', '${displayProductId}')"><i class="fa-solid fa-file-invoice"></i> View Invoice</button>
+                            ${ratingBtnHTML}
+                        `;
                     } else {
-                        ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#10b981; color:white; border-color:#10b981;" onclick="openRatingModal('${order.order_id}', '${safeServiceName}')"><i class="fa-solid fa-star"></i> Rate Service</button>`;
+                        ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#f1f5f9; color:#94a3b8; border-color:#e2e8f0; cursor:not-allowed;" disabled><i class="fa-solid fa-star"></i> Rate Service</button>`;
+                        actionButtonsHTML = `
+                            ${ratingBtnHTML}
+                        `;
                     }
-                    actionButtonsHTML = `
-                        <button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px;" onclick="downloadInvoice('${order.order_id}', '${safeServiceName}', '${order.amount}', '${order.status}', '${dateString}', '${displayProductId}', '${safeCustName}', '${currentUser.phone}')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-                        <button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#eff6ff; color:#0284c7; border-color:#bfdbfe;" onclick="openInvoiceView('${order.order_id}', '${safeServiceName}', '${order.amount}', '${order.status}', '${dateString}', '${displayProductId}')"><i class="fa-solid fa-file-invoice"></i> View Invoice</button>
-                        ${ratingBtnHTML}
-                    `;
-                } else {
-                    ratingBtnHTML = `<button class="prem-btn-small" style="flex:1; padding:8px; font-size:11px; background:#f1f5f9; color:#94a3b8; border-color:#e2e8f0; cursor:not-allowed;" disabled><i class="fa-solid fa-star"></i> Rate Service</button>`;
-                    actionButtonsHTML = `${ratingBtnHTML}`;
-                }
 
-                ordersList.innerHTML += `
-                    <div class="prem-card-box" style="margin-bottom:10px; padding:15px; border-radius:8px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #f1f5f9; padding-bottom:10px; margin-bottom:10px;">
-                            <div style="display:flex; gap:12px;">
-                                <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=150&q=80" style="width:45px; height:45px; border-radius:6px; object-fit:cover; border:1px solid #e2e8f0;">
-                                <div>
-                                    <strong style="color:#0f172a; font-size:14px; display:block; margin-bottom:6px;">${order.service_name}</strong>
-                                    <div style="font-size:11px; color:#64748b; display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
-                                        <span><b>Order ID:</b> #${order.order_id}</span> |
-                                        <span><b>Product ID:</b> #${displayProductId}</span> |
-                                        <span><b>Date:</b> ${dateString}</span>
+                    ordersList.innerHTML += `
+                        <div class="prem-card-box" style="margin-bottom:10px; padding:15px; border-radius:8px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #f1f5f9; padding-bottom:10px; margin-bottom:10px;">
+                                <div style="display:flex; gap:12px;">
+                                    <img src="${orderImgUrl}" style="width:45px; height:45px; border-radius:6px; object-fit:cover; border:1px solid #e2e8f0;">
+                                    <div>
+                                        <strong style="color:#0f172a; font-size:14px; display:block; margin-bottom:6px;">${order.service_name}</strong>
+                                        <div style="font-size:11px; color:#64748b; display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+                                            <span><b>Order ID:</b> #${order.order_id}</span> <span style="color:#cbd5e1;">|</span>
+                                            <span><b>Product ID:</b> #${displayProductId}</span> <span style="color:#cbd5e1;">|</span>
+                                            <span><b>Date:</b> ${dateString}</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <div style="text-align:right;">
+                                    <span style="background:${statusBg}; color:${statusColor}; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700;">${order.status}</span>
+                                    <div style="font-size:15px; font-weight:800; color:#0f172a; margin-top:8px;">₹${order.amount}</div>
+                                </div>
                             </div>
-                            <div style="text-align:right;">
-                                <span style="background:${statusBg}; color:${statusColor}; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700;">${order.status}</span>
-                                <div style="font-size:15px; font-weight:800; color:#0f172a; margin-top:8px;">₹${order.amount}</div>
+                            <div style="display:flex; gap:8px;">
+                                ${actionButtonsHTML}
                             </div>
                         </div>
-                        <div style="display:flex; gap:8px;">
-                            ${actionButtonsHTML}
-                        </div>
-                    </div>`;
-            });
+                    `;
+                });
+            } else {
+                ordersList.innerHTML = `<p style="color:#64748b; text-align:center; padding: 20px;">No bookings found yet.</p>`;
+            }
         } else {
             window.currentOrders = [];
             document.getElementById('sumTotal').textContent = "0";
@@ -2439,10 +2521,8 @@ function checkCloseAuthModal(event) {
             document.getElementById('sumProgress').textContent = "0";
             document.getElementById('sumRejected').textContent = "0";
             ordersList.innerHTML = `<p style="color:#64748b; text-align:center; padding: 20px;">No bookings found yet.</p>`;
-            if(liveTitle && liveContainer) {
-                liveTitle.style.display = 'none';
-                liveContainer.innerHTML = '';
-            }
+            document.getElementById('liveTrackingTitle').style.display = 'none';
+            document.getElementById('liveTrackingContainer').innerHTML = '';
         }
     } catch (err) {
         console.error('Failed to fetch user orders', err);
