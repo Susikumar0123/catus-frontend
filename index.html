@@ -1247,7 +1247,7 @@
   </div>
 
   <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
-<div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
+<div class="auth-modal-wrapper" id="authModal">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
         <!-- Left Blue Panel -->
@@ -2667,36 +2667,32 @@ function toggleAuthModal(open) {
     }
 }
 
-// 🛑 மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிலும் வெளியே தொட்டால் க்ளோஸ் செய்ய
-function checkCloseAuthModal(event) {
-    const modalContainer = document.getElementById('authDrawer');
-    
-    // நீங்கள் தொட்டது வெள்ளை/நீலப் பெட்டிக்கு வெளியே உள்ளதா எனச் சோதிக்கிறது
-    if (modalContainer && !modalContainer.contains(event.target)) {
-        toggleAuthModal(false);
-    }
-}
-
-// மொபைல் போன்களில் டச் ஈவென்ட் மூலமாக க்ளோஸ் ஆவதை உறுதி செய்ய
+// 🛑 மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிலும் பாப்-அப்புக்கு வெளியே தொட்டால் க்ளோஸ் செய்ய
 document.addEventListener('DOMContentLoaded', () => {
-    const authWrapper = document.getElementById('authModal');
-    if (authWrapper) {
-        authWrapper.addEventListener('click', (e) => {
-            const modalContainer = document.getElementById('authDrawer');
-            if (modalContainer && !modalContainer.contains(e.target)) {
+    const authModal = document.getElementById('authModal');
+    const authDrawer = document.getElementById('authDrawer');
+
+    if (authModal && authDrawer) {
+        // டெஸ்க்டாப் மற்றும் மொபைல் இரண்டிற்குமான ஒட்டுமொத்த கிளிக்/டச் ஹேண்ட்லர்
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
                 toggleAuthModal(false);
             }
         });
-        
-        authWrapper.addEventListener('touchend', (e) => {
-            const modalContainer = document.getElementById('authDrawer');
-            if (modalContainer && !modalContainer.contains(e.target)) {
-                e.preventDefault(); // டச் செய்யும்போது டபுள் கிளிக் ஆவதைத் தவிர்க்க
+
+        authModal.addEventListener('touchend', (e) => {
+            if (e.target === authModal) {
+                e.preventDefault();
                 toggleAuthModal(false);
             }
         });
     }
 });
+
+// பழைய செக் க்ளோஸ் பங்க்ஷனை குழப்பம் தவிர்க்க நீக்கிவிடலாம்
+function checkCloseAuthModal(event) {
+    // இது தேவையில்லை, மேலே உள்ள addEventListener பார்த்துக் கொள்ளும்
+}
 
     async function fetchUserOrdersPremium(phone) {
         try {
