@@ -1082,6 +1082,29 @@
     max-height: 90vh !important;
     overflow-y: auto !important;
 }
+/* மொபைல் வியூவிற்கான ஸ்பெஷல் ஃப்ளோட்டிங் க்ளோஸ் பட்டன் */
+.mobile-floating-close {
+    display: none;
+}
+@media (max-width: 768px) {
+    .mobile-floating-close {
+        display: flex !important;
+        position: absolute !important;
+        top: 8px !important;
+        right: 12px !important;
+        width: 32px !important;
+        height: 32px !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+        color: #ffffff !important;
+        border-radius: 50% !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 16px !important;
+        border: none !important;
+        cursor: pointer !important;
+        z-index: 2147483647 !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -2251,7 +2274,28 @@
 
     function toggleAuthModal(open) {
     const modal = document.getElementById('authModal');
-    if (modal) modal.style.display = open ? 'flex' : 'none';
+    if (modal) {
+        modal.style.display = open ? 'flex' : 'none';
+        
+        // மொபைல் வியூவில் பாப்-அப் ஓபன் ஆகும்போது க்ளோஸ் பட்டன் ஒர்க் ஆவதை உறுதி செய்ய
+        if (open && window.innerWidth <= 768) {
+            setTimeout(() => {
+                let leftPanel = document.querySelector('.auth-left-panel');
+                if (leftPanel && !leftPanel.querySelector('.mobile-floating-close')) {
+                    let closeBtn = document.createElement('button');
+                    closeBtn.type = 'button';
+                    closeBtn.className = 'mobile-floating-close';
+                    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                    closeBtn.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleAuthModal(false);
+                    };
+                    leftPanel.appendChild(closeBtn);
+                }
+            }, 50);
+        }
+    }
 }
 
     function checkCloseModal(event, drawerId, modalId) {
