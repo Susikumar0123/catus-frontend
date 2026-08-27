@@ -59,31 +59,32 @@
 @media (max-width: 768px) {
     .auth-modal-wrapper {
         align-items: center !important;
-        background: rgba(0, 0, 0, 0.5) !important;
+        background: rgba(0, 0, 0, 0.6) !important;
         padding: 15px !important;
-        z-index: 99999 !important; /* Bottom nav (99999) தெரியும் படி சற்றே குறைக்கப்பட்டுள்ளது */
+        z-index: 9999 !important; /* Bottom nav (1000) ku mela theriyum, aana romba perusa pogathu */
     }
     .auth-modal-container { 
         flex-direction: column !important; 
         width: 100% !important; 
         height: auto !important; 
-        max-height: 90vh !important;
-        max-width: 100% !important; 
+        max-height: 80vh !important;
+        max-width: 380px !important; /* Cancel order popup size-kku correct-ah set aagum */
         border-radius: 12px !important; 
         box-sizing: border-box !important;
+        overflow: hidden !important;
     }
     .auth-left-panel { 
         width: 100% !important; 
         min-height: auto !important; 
-        padding: 18px 20px !important; 
+        padding: 12px 16px !important; 
         flex-shrink: 0 !important;
     }
     .auth-left-panel h2 { 
-        font-size: 18px !important; 
-        margin-bottom: 4px !important; 
+        font-size: 16px !important; 
+        margin-bottom: 2px !important; 
     }
     .auth-left-panel p { 
-        font-size: 12px !important; 
+        font-size: 11px !important; 
     }
     .auth-left-illustration {
         display: none !important; 
@@ -91,27 +92,30 @@
     .auth-right-panel { 
         width: 100% !important; 
         height: auto !important; 
-        padding: 20px !important; 
+        padding: 16px !important; 
         box-sizing: border-box !important;
-        overflow-y: visible !important;
+        overflow-y: auto !important;
     }
     .auth-input-field {
         margin-top: 10px !important;
-        font-size: 14px !important;
+        font-size: 13px !important;
+        padding: 8px 0 !important;
     }
     .auth-primary-btn {
-        margin-top: 15px !important;
-        padding: 12px !important;
+        margin-top: 12px !important;
+        padding: 10px !important;
+        font-size: 14px !important;
     }
     /* Blue header குள்ள இருக்கும் Close button ஸ்டைல் */
     .auth-close-btn.mobile-header-close {
         position: absolute !important;
-        top: 10px !important;
-        right: 15px !important;
+        top: 8px !important;
+        right: 12px !important;
         color: #ffffff !important;
-        font-size: 20px !important;
+        font-size: 18px !important;
         background: transparent !important;
         border: none !important;
+        cursor: pointer !important;
         z-index: 10;
     }
 }
@@ -1218,21 +1222,19 @@
   <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer">
-    
-    <div class="auth-left-panel" style="position: relative;">
-        <!-- Close button now inside blue header -->
-        <button class="auth-close-btn mobile-header-close" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
-        <div>
-            <h2 id="leftPanelTitle">Looks like you're new here!</h2>
-            <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
+        
+        <div class="auth-left-panel">
+            <div>
+                <h2 id="leftPanelTitle">Looks like you're new here!</h2>
+                <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
+            </div>
+            <div class="auth-left-illustration">
+                <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
+            </div>
         </div>
-        <div class="auth-left-illustration">
-            <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
-        </div>
-    </div>
 
-    <div class="auth-right-panel">
-        <!-- (Old close button removed here) -->
+        <div class="auth-right-panel">
+            <button class="auth-close-btn" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
 
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
