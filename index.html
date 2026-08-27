@@ -1322,10 +1322,9 @@
     <button class="auth-primary-btn" onclick="checkUserAndProceed()">CONTINUE</button>
     <div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">New to Catus? Create an account</div>
     
-    <!-- 🏠 புதிய ஹோம் பட்டன் (Mobile & Desktop இரண்டிற்கும்) -->
-    <button type="button" onclick="window.location.href='index.html'" style="background: #e2e8f0; color: #1e293b; border: none; padding: 10px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-        <i class="fa-solid fa-house"></i> Go to Home Page
-    </button>
+   <button type="button" onclick="document.getElementById('authModal').style.display='none'; document.body.style.overflow='auto'; window.location.href='index.html'; return false;" style="background: #0284c7; color: #ffffff; border: none; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+    <i class="fa-solid fa-house"></i> Go to Home Page
+</button>
 </div>
 
             <!-- STEP 2: ENTER PASSWORD -->
