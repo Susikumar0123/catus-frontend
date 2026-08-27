@@ -2682,28 +2682,17 @@ function showAuthStep(step) {
         }
     }
 
+// முழுமையான மற்றும் துல்லியமான Modal Toggle பங்க்ஷன்
 function toggleAuthModal(open) {
     const modal = document.getElementById('authModal');
     if (modal) {
-        modal.style.display = open ? 'flex' : 'none';
-        
-        // மொபைல் வியூவில் பாப்-அப் ஓபன் ஆகும்போது க்ளோஸ் பட்டன் ஒர்க் ஆவதை உறுதி செய்ய
-        if (open && window.innerWidth <= 768) {
-            setTimeout(() => {
-                let leftPanel = document.querySelector('.auth-left-panel');
-                if (leftPanel && !leftPanel.querySelector('.mobile-floating-close')) {
-                    let closeBtn = document.createElement('button');
-                    closeBtn.type = 'button';
-                    closeBtn.className = 'mobile-floating-close';
-                    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                    closeBtn.onclick = (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleAuthModal(false);
-                    };
-                    leftPanel.appendChild(closeBtn);
-                }
-            }, 50);
+        if (open) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // பின்புறம் ஸ்க்ரோல் ஆகாமல் இருக்க
+            showAuthStep('phone'); // ஓபன் ஆகும்போது ஸ்டெப் 1-க்கு வர
+        } else {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     }
 }
