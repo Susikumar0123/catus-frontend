@@ -3515,6 +3515,16 @@ async function resendOTPAction() {
         alert('Server connection error during resend.');
     }
 }
+// மொபைல் வியூவில் க்ளோஸ் பட்டன் கிளிக் ஆவதை உறுதி செய்ய
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileCloseBtn = document.querySelector('.mobile-header-close');
+        if (mobileCloseBtn) {
+            mobileCloseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleAuthModal(false);
+            });
+        }
+    });
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
