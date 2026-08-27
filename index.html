@@ -1309,6 +1309,9 @@
 
         <!-- Right White Panel -->
         <div class="auth-right-panel">
+            <button type="button" class="mobile-absolute-close" onclick="forceCloseAuthModal(); event.stopPropagation(); return false;">
+    <i class="fa-solid fa-xmark"></i>
+</button>
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
@@ -3583,6 +3586,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+// 🛑 எந்த நிலையிலும் பாப்-அப்பை உடனடியாக மூடும் முறையான பங்க்ஷன்
+function forceCloseAuthModal() {
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.style.setProperty('display', 'none', 'important');
+    }
+    document.body.style.overflow = 'auto';
+}
+
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
