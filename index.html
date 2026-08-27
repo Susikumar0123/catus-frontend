@@ -2172,12 +2172,15 @@
             modal.style.display = 'none';
         }
     }
-
-    function showAuthStep(step) {
+function showAuthStep(step) {
         document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
         document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
         document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-        document.getElementById('authStepOTP').style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
+        
+        let otpStepElem = document.getElementById('authStepSetPassword') || document.getElementById('authStepOTP');
+        if (otpStepElem) {
+            otpStepElem.style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
+        }
 
         const titleEl = document.getElementById('leftPanelTitle');
         const descEl = document.getElementById('leftPanelDesc');
@@ -2541,31 +2544,7 @@ async function verifyOtpAndSetPassword() {
     }
 }
 
-// மாடல் ஸ்டெப்களை கன்ட்ரோல் செய்யும் பங்க்ஷன்
-function showAuthStep(step) {
-    document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-    document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
-    document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-    document.getElementById('authStepSetPassword').style.display = (step === 'setpassword') ? 'flex' : 'none';
-
-    const titleEl = document.getElementById('leftPanelTitle');
-    const descEl = document.getElementById('leftPanelDesc');
-
-    if (step === 'phone') {
-        titleEl.textContent = "Looks like you're new here!";
-        descEl.textContent = "Sign up with your mobile number to get started";
-    } else if (step === 'password') {
-        titleEl.textContent = "Login";
-        descEl.textContent = "Get access to your Orders, Services and Recommendations";
-    } else if (step === 'register') {
-        titleEl.textContent = "Looks like you're new here!";
-        descEl.textContent = "Sign up with your mobile number to get started";
-    } else {
-        titleEl.textContent = "Verify OTP";
-        descEl.textContent = "Please enter the OTP sent to your mobile";
-    }
-}
-
+/
 function toggleAuthModal(open) {
     const modal = document.getElementById('authModal');
     if (modal) modal.style.display = open ? 'flex' : 'none';
