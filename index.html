@@ -1314,14 +1314,19 @@
         <!-- Right White Panel -->
         <div class="auth-right-panel">
             <!-- STEP 1: ENTER MOBILE NUMBER -->
-            <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
-                <div style="margin-top: 10px;">
-                    <input type="tel" id="inputPhone" class="auth-input-field" placeholder="Enter Mobile number" maxlength="10">
-                    <p class="auth-terms-text">By continuing, you agree to Catus Electronics' <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
-                </div>
-                <button class="auth-primary-btn" onclick="checkUserAndProceed()">CONTINUE</button>
-                <div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">New to Catus? Create an account</div>
-            </div>
+<div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
+    <div style="margin-top: 10px;">
+        <input type="tel" id="inputPhone" class="auth-input-field" placeholder="Enter Mobile number" maxlength="10">
+        <p class="auth-terms-text">By continuing, you agree to Catus Electronics' <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+    <button class="auth-primary-btn" onclick="checkUserAndProceed()">CONTINUE</button>
+    <div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">New to Catus? Create an account</div>
+    
+    <!-- 🏠 புதிய ஹோம் பட்டன் (Mobile & Desktop இரண்டிற்கும்) -->
+    <button type="button" onclick="window.location.href='index.html'" style="background: #e2e8f0; color: #1e293b; border: none; padding: 10px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <i class="fa-solid fa-house"></i> Go to Home Page
+    </button>
+</div>
 
             <!-- STEP 2: ENTER PASSWORD -->
             <div id="authStepPassword" style="display: none; flex-direction: column; height: 100%;">
