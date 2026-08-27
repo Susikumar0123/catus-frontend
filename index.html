@@ -1085,26 +1085,28 @@
     }
     .desktop-header-close { display: none !important; }
 }
+/* மொபைல் லாகின் பாப்-அப் க்ளோஸ் பட்டன் பிக்ஸ் */
 .auth-close-custom-btn {
     position: absolute !important;
     top: 12px !important;
     right: 15px !important;
-    background: #f1f5f9 !important;
+    background: rgba(255, 255, 255, 0.25) !important;
     border: none !important;
     width: 32px !important;
     height: 32px !important;
     border-radius: 50% !important;
     font-size: 16px !important;
-    color: #475569 !important;
+    color: #ffffff !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
-    z-index: 999999 !important;
+    z-index: 99999999 !important;
+    pointer-events: auto !important;
 }
-.auth-close-custom-btn:hover {
-    background: #fee2e2 !important;
-    color: #ef4444 !important;
+
+.auth-close-custom-btn:active {
+    background: rgba(255, 255, 255, 0.4) !important;
 }
     </style>
 </head>
@@ -1268,28 +1270,27 @@
   </div>
 
   <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
-<div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
+<div class="auth-modal-wrapper" id="authModal">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
-    <!-- 🛑 இந்த க்ளோஸ் பட்டனை சரியாக கன்டெய்னரின் முதல் வரியாக வையுங்கள் -->
-    <button type="button" class="auth-close-custom-btn" onclick="toggleAuthModal(false);">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
+        
         <!-- Left Blue Panel -->
-<div class="auth-left-panel" style="position: relative;">
-    <div>
-        <h2 id="leftPanelTitle">Looks like you're new here!</h2>
-        <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
-    </div>
-    <div class="auth-left-illustration">
-        <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
-    </div>
-</div>
-
-        <!-- Right White Panel (இதற்கு கீழே உள்ள உங்களது ஸ்டெப்ஸ்கள் அப்படியே இருக்கும்) -->
-        <div class="auth-right-panel">
-            <button type="button" class="desktop-header-close auth-close-btn" onclick="toggleAuthModal(false)">
+        <div class="auth-left-panel" style="position: relative;">
+            <!-- 🛑 க்ளோஸ் பட்டனை நீல நிற ஹெடருக்குள் சரியாக வைக்கவும் -->
+            <button type="button" class="auth-close-custom-btn" onclick="toggleAuthModal(false);">
                 <i class="fa-solid fa-xmark"></i>
             </button>
+
+            <div>
+                <h2 id="leftPanelTitle">Looks like you're new here!</h2>
+                <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
+            </div>
+            <div class="auth-left-illustration">
+                <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
+            </div>
+        </div>
+
+        <!-- Right White Panel -->
+        <div class="auth-right-panel">
 
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
@@ -3566,28 +3567,24 @@ async function resendOTPAction() {
         alert('Server connection error during resend.');
     }
 }
-// மொபைல் வியூ மற்றும் டெஸ்க்டாப் வியூ இரண்டிலும் க்ளோஸ் பட்டன் வேலை செய்வதை உறுதி செய்ய
 document.addEventListener('DOMContentLoaded', () => {
-    // மொபைல் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
-    const mobileCloseBtn = document.querySelector('.mobile-header-close');
-    if (mobileCloseBtn) {
-        mobileCloseBtn.addEventListener('click', (e) => {
+    const closeBtn = document.querySelector('.auth-close-custom-btn');
+    if (closeBtn) {
+        // மொபைல் டச் மற்றும் டெஸ்க்டாப் கிளிக் இரண்டிற்கும் சேர்த்து வேலை செய்ய
+        closeBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleAuthModal(false);
         });
-    }
 
-    // டெஸ்க்டாப் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
-    const desktopCloseBtn = document.querySelector('.desktop-header-close');
-    if (desktopCloseBtn) {
-        desktopCloseBtn.addEventListener('click', (e) => {
+        closeBtn.addEventListener('touchend', (e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleAuthModal(false);
         });
     }
 });
+
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
