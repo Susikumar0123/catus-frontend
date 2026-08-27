@@ -115,20 +115,8 @@
         width: 100% !important;
         box-sizing: border-box !important;
     }
-    /* Mobile-ku blue header குள்ள இருக்கும் Close button */
-    .mobile-header-close {
-        display: block !important;
-        position: absolute !important;
-        top: 10px !important;
-        right: 12px !important;
-        color: #ffffff !important;
-        font-size: 20px !important;
-        background: transparent !important;
-        border: none !important;
-        cursor: pointer !important;
-        z-index: 2147483647 !important; /* மற்ற அனைத்து லேயர்களையும் விட மேலே இருக்க */
-        pointer-events: auto !important;
-    }
+    
+
     .desktop-header-close {
         display: none !important; /* மொபைல் வியூவில் டெஸ்க்டாப் பட்டன் முழுமையாக மறைக்கப்படும் */
     }
@@ -136,9 +124,6 @@
 
 /* Desktop view-ku mattum */
 @media (min-width: 769px) {
-    .mobile-header-close {
-        display: none !important; /* Desktop la blue header button hide aagum */
-    }
     .desktop-header-close {
         display: block !important;
     }
@@ -1087,59 +1072,55 @@
     display: none;
 }
 @media (max-width: 768px) {
-    .mobile-floating-close {
+    /* ❌ மொபைல் வியூ க்ளோஸ் பட்டன் கச்சிதமாக வேலை செய்ய மற்றும் நடுவில் சரியாகப் பொருந்த */
+    .mobile-header-close, .universal-close-btn {
         display: flex !important;
         position: absolute !important;
-        top: 8px !important;
-        right: 12px !important;
-        width: 32px !important;
-        height: 32px !important;
+        top: 6px !important;
+        right: 8px !important;
+        width: 28px !important;
+        height: 28px !important;
         background: rgba(0, 0, 0, 0.2) !important;
         color: #ffffff !important;
+        font-size: 14px !important;
         border-radius: 50% !important;
+        border: none !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 16px !important;
-        border: none !important;
         cursor: pointer !important;
         z-index: 2147483647 !important;
+        pointer-events: auto !important;
     }
 }
-/* --- UNIVERSAL AUTH MODAL CLOSE BUTTON CSS --- */
-.universal-close-btn {
+/* --- மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் பொதுவான க்ளோஸ் பட்டன் டிசைன் --- */
+.mobile-absolute-close {
     position: absolute !important;
-    top: 10px !important;
-    right: 12px !important;
+    top: 12px !important;
+    right: 15px !important;
     width: 32px !important;
     height: 32px !important;
-    background: rgba(0, 0, 0, 0.15) !important;
-    color: #ffffff !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    color: #212121 !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     border: none !important;
     cursor: pointer !important;
     z-index: 2147483647 !important;
     pointer-events: auto !important;
-    transition: background 0.2s;
 }
 
-.universal-close-btn:hover {
-    background: rgba(0, 0, 0, 0.3) !important;
-}
-
-/* டெஸ்க்டாப் வியூவில் பட்டன் நிறத்தை மாற்றிக் கொள்ள (தேவைப்பட்டால்) */
-@media (min-width: 769px) {
-    .universal-close-btn {
-        background: transparent !important;
-        color: #878787 !important;
-        font-size: 20px !important;
-    }
-    .universal-close-btn:hover {
-        color: #212121 !important;
-        background: transparent !important;
+@media (max-width: 768px) {
+    .mobile-absolute-close {
+        background: rgba(0, 0, 0, 0.25) !important; /* மொபைலில் சற்று தெளிவாகத் தெரிய */
+        color: #ffffff !important;
+        top: 10px !important;
+        right: 10px !important;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 16px !important;
     }
 }
     </style>
@@ -1307,8 +1288,8 @@
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
-        <!-- ❌ எப்போதுமே ஒர்க் ஆகும் யுனிவர்சல் க்ளோஸ் பட்டன் (Universal Close Button) -->
-        <button type="button" class="universal-close-btn" onclick="toggleAuthModal(false); return false;">
+        <!-- ❌ மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் பொதுவான, உறுதியான க்ளோஸ் பட்டன் -->
+        <button type="button" class="mobile-absolute-close" onclick="toggleAuthModal(false); return false;">
             <i class="fa-solid fa-xmark"></i>
         </button>
 
