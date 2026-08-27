@@ -119,17 +119,18 @@
     .mobile-header-close {
         display: block !important;
         position: absolute !important;
-        top: 8px !important;
+        top: 10px !important;
         right: 12px !important;
         color: #ffffff !important;
-        font-size: 18px !important;
+        font-size: 20px !important;
         background: transparent !important;
         border: none !important;
         cursor: pointer !important;
-        z-index: 99999 !important;
+        z-index: 2147483647 !important; /* மற்ற அனைத்து லேயர்களையும் விட மேலே இருக்க */
+        pointer-events: auto !important;
     }
     .desktop-header-close {
-        display: none !important; /* Mobile la white panel button hide aagum */
+        display: none !important; /* மொபைல் வியூவில் டெஸ்க்டாப் பட்டன் முழுமையாக மறைக்கப்படும் */
     }
 }
 
@@ -1246,9 +1247,10 @@
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer">
         
+        <!-- 📱 ப்ளூ ஹெடர் பகுதி (மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் பொதுவானது) -->
         <div class="auth-left-panel" style="position: relative;">
-            <!-- 📱 மொபைல் வியூவிற்கான Cancel (X) பட்டன் (இப்போது ப்ளூ ஹெடருக்குள் சரியாக இணைக்கப்பட்டுள்ளது) -->
-            <button type="button" class="auth-close-btn mobile-header-close" onclick="toggleAuthModal(false)">
+            <!-- மொபைல் வியூவிற்கான பிரத்யேக Cancel பட்டன் -->
+            <button type="button" class="auth-close-btn mobile-header-close" onclick="toggleAuthModal(false); return false;">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div>
@@ -1261,7 +1263,7 @@
         </div>
 
         <div class="auth-right-panel" style="position: relative;">
-            <!-- 💻 டெஸ்க்டாப் வியூவிற்கான Cancel (X) பட்டன் -->
+            <!-- டெஸ்க்டாப் வியூவிற்கான Cancel பட்டன் -->
             <button type="button" class="auth-close-btn desktop-header-close" onclick="toggleAuthModal(false)">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -1276,7 +1278,7 @@
                 <div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">New to Catus? Create an account</div>
             </div>
 
-            <!-- STEP 2: ENTER PASSWORD (பழைய யூசர்களுக்கு) -->
+            <!-- STEP 2: ENTER PASSWORD -->
             <div id="authStepPassword" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Enter Password</h3>
@@ -1290,7 +1292,7 @@
                 <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
             </div>
 
-            <!-- STEP 3: COMPLETE REGISTRATION (Name, Gmail, Pincode & Password) -->
+            <!-- STEP 3: COMPLETE REGISTRATION -->
             <div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Looks like you're new here!</h3>
@@ -1305,7 +1307,7 @@
                 <div class="auth-bottom-link" onclick="backToPhoneStep()">Existing User? Log in</div>
             </div>
 
-            <!-- STEP 4: VERIFY OTP ONLY (Only OTP section at last) -->
+            <!-- STEP 4: VERIFY OTP ONLY -->
             <div id="authStepOTP" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP</h3>
@@ -1313,7 +1315,6 @@
                     
                     <input type="text" id="inputRegOTP" class="auth-input-field" placeholder="Enter 4-digit OTP" maxlength="4">
                     
-                    <!-- ⏱️ 2 நிமிடங்கள் டைமர் -->
                     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin: 8px 0 15px 0;">
                         <span style="color: #878787;">Resend code in <b id="timerCount" style="color: #212121;">2:00</b></span>
                         <span id="resendOtpBtn" style="color: #2874f0; font-weight: 600; cursor: pointer; display: none;" onclick="triggerForgotPassword()">Resend OTP</span>
@@ -3515,16 +3516,7 @@ async function resendOTPAction() {
         alert('Server connection error during resend.');
     }
 }
-// மொபைல் வியூவில் க்ளோஸ் பட்டன் கிளிக் ஆவதை உறுதி செய்ய
-    document.addEventListener('DOMContentLoaded', () => {
-        const mobileCloseBtn = document.querySelector('.mobile-header-close');
-        if (mobileCloseBtn) {
-            mobileCloseBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleAuthModal(false);
-            });
-        }
-    });
+
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
