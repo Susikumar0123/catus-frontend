@@ -1096,18 +1096,18 @@
 /* --- MOBILE CLOSE BUTTON FIXED STYLES --- */
 .mobile-absolute-close {
     position: absolute !important;
-    top: 15px !important;
+    top: 12px !important;
     right: 15px !important;
     width: 32px !important;
     height: 32px !important;
-    background: #f1f5f9 !important;
-    color: #475569 !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    color: #212121 !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 16px !important;
-    border: 1px solid #cbd5e1 !important;
+    font-size: 18px !important;
+    border: none !important;
     cursor: pointer !important;
     z-index: 2147483647 !important;
     pointer-events: auto !important;
@@ -1115,15 +1115,13 @@
 
 @media (max-width: 768px) {
     .mobile-absolute-close {
-        top: 12px !important;
-        right: 12px !important;
-        width: 34px !important;
-        height: 34px !important;
-        background: #e2e8f0 !important;
-        color: #0f172a !important;
+        background: rgba(0, 0, 0, 0.25) !important; 
+        color: #ffffff !important;
+        top: 10px !important;
+        right: 10px !important;
+        width: 30px !important;
+        height: 30px !important;
         font-size: 16px !important;
-        border: none !important;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 }
     </style>
@@ -1291,6 +1289,11 @@
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
+        <!-- ❌ மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் பொதுவான, உறுதியான க்ளோஸ் பட்டன் -->
+        <button type="button" class="mobile-absolute-close" onclick="toggleAuthModal(false); event.stopPropagation(); return false;">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        
         <!-- Left Blue Panel -->
         <div class="auth-left-panel">
             <div>
@@ -1303,13 +1306,7 @@
         </div>
 
         <!-- Right White Panel -->
-        <div class="auth-right-panel" style="position: relative;">
-            
-            <!-- ❌ மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் உறுதியான க்ளோஸ் பட்டன் (White Panel-kku ulla) -->
-            <button type="button" class="mobile-absolute-close" onclick="toggleAuthModal(false); event.stopPropagation(); return false;">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
+        <div class="auth-right-panel">
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
