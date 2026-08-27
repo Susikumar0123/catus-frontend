@@ -3578,59 +3578,38 @@ async function resendOTPAction() {
         alert('Server connection error during resend.');
     }
 }
-// மொபைல் வியூ மற்றும் டெஸ்க்டாப் வியூ இரண்டிலும் க்ளோஸ் பட்டன் வேலை செய்வதை உறுதி செய்ய
-document.addEventListener('DOMContentLoaded', () => {
-    // மொபைல் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
-    const mobileCloseBtn = document.querySelector('.mobile-header-close');
-    if (mobileCloseBtn) {
-        mobileCloseBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleAuthModal(false);
-        });
-    }
-
-    // டெஸ்க்டாப் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
-    const desktopCloseBtn = document.querySelector('.desktop-header-close');
-    if (desktopCloseBtn) {
-        desktopCloseBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleAuthModal(false);
-        });
-    }
-});
- 
 document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('authModal');
     const closeBtn = document.querySelector('.auth-close-custom-btn');
 
     if (closeBtn) {
         const forceCloseModal = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+            }
             
-            // பாப்-அப்பை உடனடியாக மறைக்க
+            // 1. பாப்-அப்பை உடனடியாக மறைக்க
             if (authModal) {
                 authModal.style.display = 'none';
             }
             document.body.style.overflow = 'auto';
             
-            // உங்களது ஒரிஜினல் பங்க்ஷனையும் சேர்த்து இயக்க
+            // 2. உங்களது ஒரிஜினல் டாகிள் பங்க்ஷனையும் இயக்க
             if (typeof toggleAuthModal === 'function') {
                 toggleAuthModal(false);
             }
             return false;
         };
 
-        // மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் அனைத்து விதமான ஈவென்ட்களையும் பைண்ட் செய்தல்
+        // மொபைல் டச் மற்றும் டெஸ்க்டாப் கிளிக் இரண்டிற்கும் நேரடியாக இணைத்தல்
         closeBtn.onclick = forceCloseModal;
-        closeBtn.addEventListener('click', forceCloseModal, { passive: false });
-        closeBtn.addEventListener('touchend', forceCloseModal, { passive: false });
-        closeBtn.addEventListener('pointerdown', forceCloseModal, { passive: false });
+        closeBtn.addEventListener('click', forceCloseModal, { capture: true, passive: false });
+        closeBtn.addEventListener('touchend', forceCloseModal, { capture: true, passive: false });
     }
 
+    // பாப்-அப்புக்கு வெளியே உள்ள பிளாக் பேக்ராப்சை தட்டினால் க்ளோஸ் ஆக
     if (authModal) {
         authModal.addEventListener('click', (e) => {
             if (e.target === authModal) {
