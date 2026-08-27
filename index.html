@@ -2664,16 +2664,29 @@ function toggleAuthModal(open) {
     }
 }
 
-// Backdrop-ah click/touch pannalum popup close aaga (Mobile & Desktop friendly)
+// 🛑 மொபைல் டச் மற்றும் டெஸ்க்டாப் கிளிக் இரண்டிலும் வெளியே தொட்டால் க்ளோஸ் ஆகும் முறை
 function checkCloseAuthModal(event) {
     const modalWrapper = document.getElementById('authModal');
-    const modalContainer = document.querySelector('.auth-modal-container');
+    const modalContainer = document.getElementById('authDrawer');
     
-    // பாப்-அப் பாக்ஸுக்கு வெளியே உள்ள grey area-வை தொட்டால் மட்டும் க்ளோஸ் ஆகும்
-    if (modalWrapper && modalContainer && event.target === modalWrapper) {
+    // பாப்-அப் பாக்ஸுக்கு (white/blue box) வெளியே உள்ள சாம்பல் நிற ஏரியாவை தொட்டால் மட்டும் க்ளோஸ் ஆகும்
+    if (modalWrapper && modalContainer && !modalContainer.contains(event.target)) {
         toggleAuthModal(false);
     }
 }
+
+// மொபைல் போன்களில் டச் (Touch) செய்யும்போது வெளியே க்ளோஸ் ஆவதை உறுதி செய்ய
+document.addEventListener('DOMContentLoaded', () => {
+    const authModal = document.getElementById('authModal');
+    if (authModal) {
+        authModal.addEventListener('touchend', (e) => {
+            const modalContainer = document.getElementById('authDrawer');
+            if (modalContainer && !modalContainer.contains(e.target)) {
+                toggleAuthModal(false);
+            }
+        });
+    }
+});
 
     async function fetchUserOrdersPremium(phone) {
         try {
