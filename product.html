@@ -12,6 +12,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        @media (max-width: 850px) {
+    /* 1. More Relevant Services மற்றும் ஹோம் பேஜ் கிரிட்களை 2x2 வடிவத்திற்கு மாற்ற */
+    .uc-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    /* 2. மொபைல் கார்டுகளின் இமேஜ் மற்றும் டெக்ஸ்ட் சைஸ் கச்சிதமாக இருக்க */
+    .uc-card-img-wrapper {
+        height: 110px !important;
+    }
+
+    .uc-body h4 {
+        font-size: 12px !important;
+        white-space: normal !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .uc-price {
+        font-size: 13px !important;
+    }
+
+    /* 3. Product Page மிடில் கேலரி மற்றும் இன்போ லே அவுட் மொபைலில் நேர்த்தியாக வர */
+    .product-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+}
         @media (max-width: 768px) {
     /* Mobile-la login modal-oda height-ah 65px korachu, padding-um kammi panrom */
     .auth-modal-container {
