@@ -1085,7 +1085,27 @@
     }
     .desktop-header-close { display: none !important; }
 }
-
+.auth-close-custom-btn {
+    position: absolute !important;
+    top: 12px !important;
+    right: 15px !important;
+    background: #f1f5f9 !important;
+    border: none !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    font-size: 16px !important;
+    color: #475569 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 999999 !important;
+}
+.auth-close-custom-btn:hover {
+    background: #fee2e2 !important;
+    color: #ef4444 !important;
+}
     </style>
 </head>
 <body>
@@ -1250,7 +1270,9 @@
   <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
-        
+      <button type="button" class="auth-close-custom-btn" onclick="toggleAuthModal(false)">
+        <i class="fa-solid fa-xmark"></i>
+    </button>  
         <!-- Left Blue Panel -->
 <div class="auth-left-panel" style="position: relative;">
     <div>
