@@ -72,9 +72,76 @@
 .auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #2874f0; font-weight: 600; cursor: pointer; padding-top: 20px; }
 
 @media (max-width: 768px) {
-    .auth-modal-container { flex-direction: column; height: 100vh; max-width: 100vw; border-radius: 0; }
-    .auth-left-panel { width: 100%; height: 150px; padding: 20px; }
-    .auth-right-panel { width: 100%; height: calc(100vh - 150px); padding: 25px; }
+    .auth-modal-wrapper {
+        display: flex !important;
+        justify-content: center !important; /* Center horizontally */
+        align-items: center !important; /* Center vertically */
+        background: rgba(0, 0, 0, 0.6) !important;
+        padding: 16px !important; /* Left & Right side la space varum */
+        box-sizing: border-box !important;
+        z-index: 9999 !important;
+    }
+    .auth-modal-container { 
+        flex-direction: column !important; 
+        width: 100% !important; 
+        max-width: 340px !important; /* Screen-oda width-ku perfect-ah match aagum */
+        height: auto !important; 
+        max-height: 85vh !important;
+        border-radius: 12px !important; 
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        margin: 0 auto !important; /* Center position-ai confirm panra idthu */
+    }
+    .auth-left-panel { 
+        width: 100% !important; 
+        min-height: auto !important; 
+        padding: 12px 16px !important; 
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
+    }
+    .auth-left-panel h2 { 
+        font-size: 16px !important; 
+        margin-bottom: 2px !important; 
+    }
+    .auth-left-panel p { 
+        font-size: 11px !important; 
+    }
+    .auth-left-illustration {
+        display: none !important; 
+    }
+    .auth-right-panel { 
+        width: 100% !important; 
+        height: auto !important; 
+        padding: 16px !important; 
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+    }
+    .auth-input-field {
+        margin-top: 10px !important;
+        font-size: 13px !important;
+        padding: 8px 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .auth-primary-btn {
+        margin-top: 12px !important;
+        padding: 10px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    /* Blue header குள்ள இருக்கும் Close button ஸ்டைல் */
+    .auth-close-btn.mobile-header-close {
+        position: absolute !important;
+        top: 8px !important;
+        right: 12px !important;
+        color: #ffffff !important;
+        font-size: 18px !important;
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
+        z-index: 10;
+    }
 }
 
         /* சர்வர் டேட்டா வரும் வரை ப்ராடக்ட் ஏரியாவை மறைக்க */
