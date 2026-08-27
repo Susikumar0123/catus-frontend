@@ -1122,14 +1122,10 @@
         width: 30px !important;
         height: 30px !important;
         font-size: 16px !important;
+        display: flex !important; /* மொபைலிலும் பட்டன் தெரிய கட்டாயம் தேவை */
     }
 }
-@media (max-width: 768px) {
-    /* மொபைல் வியூவில் அந்த X க்ளோஸ் பட்டனை முழுமையாக மறைக்க */
-    .mobile-absolute-close {
-        display: none !important;
-    }
-}
+
     </style>
 </head>
 <body>
@@ -2713,12 +2709,9 @@ function toggleAuthModal(open) {
     }
 }
 
-// Backdrop-ah (veliya irukra dark area) click pannalum mobile/desktop-la close aaga
+// வெளியே உள்ள சாம்பல் நிறப் பகுதியை (Backdrop) கிளிக் செய்தால் மூட
 function checkCloseAuthModal(event) {
-    const modalWrapper = document.getElementById('authModal');
     const modalContainer = document.querySelector('.auth-modal-container');
-    
-    // User popup-kku ulla click pannama, veliya irukkura grey area-la click pannal-na close aagum
     if (modalContainer && !modalContainer.contains(event.target)) {
         toggleAuthModal(false);
     }
