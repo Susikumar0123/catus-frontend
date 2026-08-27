@@ -1125,6 +1125,26 @@
         display: flex !important; /* மொபைலிலும் பட்டன் தெரிய கட்டாயம் தேவை */
     }
 }
+/* ❌ Mobile view-la antha X button blue panel-oda right corner-la perfect-aa set aaga */
+@media (max-width: 768px) {
+    .auth-left-panel {
+        position: relative !important; /* Blue panel-ku relative position thara */
+    }
+    .auth-right-panel .mobile-absolute-close {
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+        color: #ffffff !important;
+        border-radius: 50% !important;
+        width: 30px !important;
+        height: 30px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 2147483647 !important;
+    }
+}
 
     </style>
 </head>
@@ -1290,11 +1310,6 @@
   <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
-        
-        <!-- ❌ மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் பொதுவான, உறுதியான க்ளோஸ் பட்டன் -->
-        <button type="button" class="mobile-absolute-close" onclick="toggleAuthModal(false); event.stopPropagation(); return false;">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
         
         <!-- Left Blue Panel -->
         <div class="auth-left-panel">
