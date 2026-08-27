@@ -58,26 +58,31 @@
 
 @media (max-width: 768px) {
     .auth-modal-wrapper {
-        align-items: center !important;
+        display: flex !important;
+        justify-content: center !important; /* Center horizontally */
+        align-items: center !important; /* Center vertically */
         background: rgba(0, 0, 0, 0.6) !important;
-        padding: 15px !important;
-        z-index: 9999 !important; /* Bottom nav (1000) ku mela theriyum, aana romba perusa pogathu */
+        padding: 16px !important; /* Left & Right side la space varum */
+        box-sizing: border-box !important;
+        z-index: 9999 !important;
     }
     .auth-modal-container { 
         flex-direction: column !important; 
         width: 100% !important; 
+        max-width: 340px !important; /* Screen-oda width-ku perfect-ah match aagum */
         height: auto !important; 
-        max-height: 80vh !important;
-        max-width: 380px !important; /* Cancel order popup size-kku correct-ah set aagum */
+        max-height: 85vh !important;
         border-radius: 12px !important; 
         box-sizing: border-box !important;
         overflow: hidden !important;
+        margin: 0 auto !important; /* Center position-ai confirm panra idthu */
     }
     .auth-left-panel { 
         width: 100% !important; 
         min-height: auto !important; 
         padding: 12px 16px !important; 
         flex-shrink: 0 !important;
+        box-sizing: border-box !important;
     }
     .auth-left-panel h2 { 
         font-size: 16px !important; 
@@ -100,11 +105,15 @@
         margin-top: 10px !important;
         font-size: 13px !important;
         padding: 8px 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     .auth-primary-btn {
         margin-top: 12px !important;
         padding: 10px !important;
         font-size: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     /* Blue header குள்ள இருக்கும் Close button ஸ்டைல் */
     .auth-close-btn.mobile-header-close {
