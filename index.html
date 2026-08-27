@@ -27,6 +27,7 @@
     align-items: center;
     pointer-events: auto !important;
     box-sizing: border-box;
+    padding: 20px; /* 🛑 மொபைலில் சைட் கேப் சரியாக இருக்க இது உதவும் */
 }
 .auth-modal-container {
     display: flex;
@@ -1247,7 +1248,7 @@
   </div>
 
   <!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
-<div class="auth-modal-wrapper" id="authModal">
+<div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)"></div>
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
         <!-- Left Blue Panel -->
@@ -2689,9 +2690,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// பழைய செக் க்ளோஸ் பங்க்ஷனை குழப்பம் தவிர்க்க நீக்கிவிடலாம்
 function checkCloseAuthModal(event) {
-    // இது தேவையில்லை, மேலே உள்ள addEventListener பார்த்துக் கொள்ளும்
+    const modalContainer = document.getElementById('authDrawer');
+    
+    // நீங்கள் கிளிக் அல்லது டச் செய்தது அந்த வெள்ளை/நீலப் பெட்டிக்கு (authDrawer) வெளியே உள்ளதா எனப் பார்க்கிறது
+    if (modalContainer && !modalContainer.contains(event.target)) {
+        toggleAuthModal(false);
+    }
 }
 
     async function fetchUserOrdersPremium(phone) {
