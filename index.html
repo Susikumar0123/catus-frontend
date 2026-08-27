@@ -1126,16 +1126,15 @@
     }
 }
 @media (max-width: 768px) {
-    /* 1. Blue panel-ku relative position kodukkrom, appothan button athkulla corner-la ukkaarum */
     .auth-left-panel {
         position: relative !important;
     }
     
-    /* 2. Antha close button-ah blue colour box-oda top right corner-kku fix panrom */
-    .auth-right-panel .mobile-absolute-close {
+    /* ப்ளூ பாக்ஸின் மேல் வலது மூலையில் (Top-Right) சரியாக அமர வைக்க */
+    .auth-left-panel .mobile-absolute-close {
         position: absolute !important;
-        top: -125px !important;  /* White panel-la irunthu mela blue panel-kku poga */
-        right: 10px !important;   /* Right corner-la set aaga */
+        top: 10px !important;
+        right: 10px !important;
         background: rgba(255, 255, 255, 0.25) !important;
         color: #ffffff !important;
         border-radius: 50% !important;
@@ -1315,15 +1314,20 @@
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
         <!-- Left Blue Panel -->
-        <div class="auth-left-panel">
-            <div>
-                <h2 id="leftPanelTitle">Looks like you're new here!</h2>
-                <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
-            </div>
-            <div class="auth-left-illustration">
-                <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
-            </div>
-        </div>
+<div class="auth-left-panel" style="position: relative;">
+    <!-- ❌ க்ளோஸ் பட்டனை ப்ளூ பாக்ஸுக்கு உள்ளே சேர்க்கிறோம் -->
+    <button type="button" class="mobile-absolute-close" onclick="forceCloseAuthModal(); event.stopPropagation(); return false;">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    
+    <div>
+        <h2 id="leftPanelTitle">Looks like you're new here!</h2>
+        <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
+    </div>
+    <div class="auth-left-illustration">
+        <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
+    </div>
+</div>
 
         <!-- Right White Panel -->
         <div class="auth-right-panel">
