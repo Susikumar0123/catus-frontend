@@ -3516,7 +3516,28 @@ async function resendOTPAction() {
         alert('Server connection error during resend.');
     }
 }
+// மொபைல் வியூ மற்றும் டெஸ்க்டாப் வியூ இரண்டிலும் க்ளோஸ் பட்டன் வேலை செய்வதை உறுதி செய்ய
+document.addEventListener('DOMContentLoaded', () => {
+    // மொபைல் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
+    const mobileCloseBtn = document.querySelector('.mobile-header-close');
+    if (mobileCloseBtn) {
+        mobileCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleAuthModal(false);
+        });
+    }
 
+    // டெஸ்க்டாப் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
+    const desktopCloseBtn = document.querySelector('.desktop-header-close');
+    if (desktopCloseBtn) {
+        desktopCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleAuthModal(false);
+        });
+    }
+});
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
