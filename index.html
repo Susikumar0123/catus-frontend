@@ -1247,8 +1247,10 @@
     <div class="auth-modal-container" id="authDrawer">
         
         <div class="auth-left-panel" style="position: relative;">
-            <!-- Mobile view-ku mattum blue header-ku ulla close button -->
-            <button class="auth-close-btn mobile-header-close" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            <!-- 📱 மொபைல் வியூவிற்கான Cancel (X) பட்டன் (இப்போது ப்ளூ ஹெடருக்குள் சரியாக இணைக்கப்பட்டுள்ளது) -->
+            <button type="button" class="auth-close-btn mobile-header-close" onclick="toggleAuthModal(false)">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             <div>
                 <h2 id="leftPanelTitle">Looks like you're new here!</h2>
                 <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
@@ -1259,8 +1261,10 @@
         </div>
 
         <div class="auth-right-panel" style="position: relative;">
-            <!-- Desktop view-ku mattum white panel-la irukura close button -->
-            <button class="auth-close-btn desktop-header-close" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            <!-- 💻 டெஸ்க்டாப் வியூவிற்கான Cancel (X) பட்டன் -->
+            <button type="button" class="auth-close-btn desktop-header-close" onclick="toggleAuthModal(false)">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
