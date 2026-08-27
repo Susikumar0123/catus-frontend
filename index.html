@@ -1295,24 +1295,22 @@
 <div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
     <div class="auth-modal-container" id="authDrawer" style="position: relative;">
         
-        <!-- ❌ மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் பொதுவான, உறுதியான க்ளோஸ் பட்டன் -->
-        <button type="button" class="mobile-absolute-close" onclick="toggleAuthModal(false); event.stopPropagation(); return false;">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-        
         <!-- Left Blue Panel -->
-        <div class="auth-left-panel">
-            <div>
-                <h2 id="leftPanelTitle">Looks like you're new here!</h2>
-                <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
-            </div>
-            <div class="auth-left-illustration">
-                <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
-            </div>
-        </div>
+<div class="auth-left-panel" style="position: relative;">
+    <!-- ❌ க்ளோஸ் பட்டனை ப்ளூ பாக்ஸுக்கு உள்ளே சேர்க்கிறோம் -->
+    <button type="button" class="mobile-absolute-close" onclick="forceCloseAuthModal(); event.stopPropagation(); return false;">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    
+    <div>
+        <h2 id="leftPanelTitle">Looks like you're new here!</h2>
+        <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
+    </div>
+    <div class="auth-left-illustration">
+        <i class="fa-solid fa-shield-halved" style="font-size: 64px; color: rgba(255,255,255,0.8);"></i>
+    </div>
+</div>
 
-        <!-- Right White Panel -->
-        <div class="auth-right-panel">
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
