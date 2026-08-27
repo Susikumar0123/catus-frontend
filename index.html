@@ -1087,14 +1087,14 @@
 }
 .auth-close-custom-btn {
     position: absolute !important;
-    top: 12px !important;
-    right: 15px !important;
-    background: rgba(255, 255, 255, 0.25) !important;
+    top: 10px !important;
+    right: 10px !important;
+    background: rgba(0, 0, 0, 0.15) !important;
     border: none !important;
-    width: 32px !important;
-    height: 32px !important;
+    width: 36px !important;
+    height: 36px !important;
     border-radius: 50% !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     color: #ffffff !important;
     display: flex !important;
     align-items: center !important;
@@ -1102,10 +1102,21 @@
     cursor: pointer !important;
     z-index: 2147483647 !important;
     pointer-events: auto !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.auth-close-custom-btn:active {
-    background: rgba(255, 255, 255, 0.4) !important;
+.auth-close-custom-btn:active, 
+.auth-close-custom-btn:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+
+@media (max-width: 768px) {
+    .auth-close-custom-btn {
+        top: 8px !important;
+        right: 8px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: #212121 !important; /* மொபைல் நீல/வெள்ளை கான்ட்ராஸ்ட்க்காக */
+    }
 }
     </style>
 </head>
@@ -3589,19 +3600,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
- document.addEventListener('DOMContentLoaded', () => {
+ 
+document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('authModal');
     const closeBtn = document.querySelector('.auth-close-custom-btn');
 
     if (closeBtn) {
-        const closeAction = (e) => {
+        const forceCloseModal = (e) => {
             e.preventDefault();
             e.stopPropagation();
-            toggleAuthModal(false);
+            e.stopImmediatePropagation();
+            
+            // பாப்-அப்பை உடனடியாக மறைக்க
+            if (authModal) {
+                authModal.style.display = 'none';
+            }
+            document.body.style.overflow = 'auto';
+            
+            // உங்களது ஒரிஜினல் பங்க்ஷனையும் சேர்த்து இயக்க
+            if (typeof toggleAuthModal === 'function') {
+                toggleAuthModal(false);
+            }
+            return false;
         };
 
-        closeBtn.addEventListener('click', closeAction);
-        closeBtn.addEventListener('touchend', closeAction);
+        // மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிற்கும் அனைத்து விதமான ஈவென்ட்களையும் பைண்ட் செய்தல்
+        closeBtn.onclick = forceCloseModal;
+        closeBtn.addEventListener('click', forceCloseModal, { passive: false });
+        closeBtn.addEventListener('touchend', forceCloseModal, { passive: false });
+        closeBtn.addEventListener('pointerdown', forceCloseModal, { passive: false });
     }
 
     if (authModal) {
