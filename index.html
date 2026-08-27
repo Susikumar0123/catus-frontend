@@ -1067,84 +1067,94 @@
     max-height: 90vh !important;
     overflow-y: auto !important;
 }
-/* மொபைல் வியூவிற்கான ஸ்பெஷல் ஃப்ளோட்டிங் க்ளோஸ் பட்டன் */
-.mobile-floating-close {
-    display: none;
-}
 @media (max-width: 768px) {
-    /* ❌ மொபைல் வியூ க்ளோஸ் பட்டன் கச்சிதமாக வேலை செய்ய மற்றும் நடுவில் சரியாகப் பொருந்த */
-    .mobile-header-close, .universal-close-btn {
+    .auth-modal-wrapper {
         display: flex !important;
-        position: absolute !important;
-        top: 6px !important;
-        right: 8px !important;
-        width: 28px !important;
-        height: 28px !important;
-        background: rgba(0, 0, 0, 0.2) !important;
-        color: #ffffff !important;
-        font-size: 14px !important;
-        border-radius: 50% !important;
-        border: none !important;
-        align-items: center !important;
         justify-content: center !important;
-        cursor: pointer !important;
-        z-index: 2147483647 !important;
-        pointer-events: auto !important;
+        align-items: center !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+        z-index: 9999 !important;
     }
-}
-
-/* --- MOBILE CLOSE BUTTON FIXED STYLES --- */
-.mobile-absolute-close {
-    position: absolute !important;
-    top: 12px !important;
-    right: 15px !important;
-    width: 32px !important;
-    height: 32px !important;
-    background: rgba(0, 0, 0, 0.1) !important;
-    color: #212121 !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 18px !important;
-    border: none !important;
-    cursor: pointer !important;
-    z-index: 2147483647 !important;
-    pointer-events: auto !important;
-}
-
-@media (max-width: 768px) {
-    .mobile-absolute-close {
-        background: rgba(0, 0, 0, 0.25) !important; 
-        color: #ffffff !important;
-        top: 10px !important;
-        right: 10px !important;
-        width: 30px !important;
-        height: 30px !important;
-        font-size: 16px !important;
-        display: flex !important; /* மொபைலிலும் பட்டன் தெரிய கட்டாயம் தேவை */
+    .auth-modal-container { 
+        flex-direction: column !important; 
+        width: 100% !important; 
+        max-width: 340px !important; 
+        height: auto !important; 
+        max-height: 85vh !important;
+        border-radius: 12px !important; 
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        margin: auto !important;
     }
-}
-@media (max-width: 768px) {
-    .auth-left-panel {
+    .auth-left-panel { 
+        width: 100% !important; 
+        min-height: auto !important; 
+        padding: 16px !important; 
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
         position: relative !important;
     }
+    .auth-left-panel h2 { 
+        font-size: 15px !important; 
+        margin-bottom: 2px !important; 
+    }
+    .auth-left-panel p { 
+        font-size: 11px !important; 
+    }
+    .auth-left-illustration {
+        display: none !important; 
+    }
+    .auth-right-panel { 
+        width: 100% !important; 
+        height: auto !important; 
+        padding: 20px 16px !important; /* உள் இடைவெளியை சீரமைக்க */
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+    }
+    .auth-input-field {
+        margin-top: 8px !important;
+        font-size: 13px !important;
+        padding: 8px 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .auth-primary-btn {
+        margin-top: 15px !important;
+        padding: 12px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    /* 🔤 டெக்ஸ்ட் ஒட்டிக்கொள்ளாமல் இருக்க லைன் ஸ்பேஸை சரி செய்ய */
+    .auth-terms-text {
+        font-size: 10.5px !important;
+        line-height: 1.5 !important;
+        margin-top: 12px !important;
+        word-spacing: 0.5px;
+    }
+    .auth-bottom-link {
+        font-size: 13px !important;
+        padding-top: 15px !important;
+    }
     
-    /* ப்ளூ பாக்ஸின் மேல் வலது மூலையில் (Top-Right) சரியாக அமர வைக்க */
+    /* ❌ ப்ளூ பாக்ஸ் க்ளோஸ் பட்டன் பொசிஷன் */
     .auth-left-panel .mobile-absolute-close {
         position: absolute !important;
-        top: 10px !important;
-        right: 10px !important;
+        top: 12px !important;
+        right: 12px !important;
         background: rgba(255, 255, 255, 0.25) !important;
         color: #ffffff !important;
         border-radius: 50% !important;
-        width: 30px !important;
-        height: 30px !important;
+        width: 28px !important;
+        height: 28px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         z-index: 2147483647 !important;
         border: none !important;
+        font-size: 14px !important;
     }
 }
 
