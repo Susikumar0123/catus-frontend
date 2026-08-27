@@ -12,6 +12,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        @media (max-width: 768px) {
+    /* மொபைல் வியூவில் 2 காலம்களாக (2 items per row) மாற்ற */
+    .uc-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    /* மொபைல் கார்டுகளின் சைஸ் மற்றும் அலைன்மென்ட் கச்சிதமாக இருக்க */
+    .uc-card {
+        margin-bottom: 0 !important;
+    }
+
+    .uc-card-img-wrapper {
+        height: 110px !important; /* மொபைலுக்கு ஏற்ப இமேஜ் உயரம் */
+    }
+
+    .uc-body h4 {
+        font-size: 12px !important;
+        white-space: normal !important; /* பெயர் நீண்டால் அடுத்த வ在這 வர அனுமதிக்கும் */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .uc-price {
+        font-size: 13px !important;
+    }
+}
 
         /* --- PREMIUM FLIPKART STYLE AUTH MODAL CSS --- */
 .auth-modal-wrapper {
