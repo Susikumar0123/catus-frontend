@@ -14,6 +14,18 @@
     <style>
 
         /* --- PREMIUM FLIPKART STYLE AUTH MODAL CSS --- */
+ @media (max-width: 768px) {
+    /* Mobile-la login modal-oda height-ah 65px korachu, padding-um kammi panrom */
+    .auth-modal-container {
+        height: calc(100vh - 75px) !important;
+        margin-bottom: 60px !important;
+        max-height: calc(100vh - 75px) !important;
+    }
+    .auth-right-panel {
+        padding: 20px 20px !important; /* Padding-ah kammi panrathala ulla irukkura text ellame mukkiyama theriyum */
+    }
+}
+        /* --- PREMIUM FLIPKART STYLE AUTH MODAL1 --- */
 .auth-modal-wrapper {
     display: none;
     position: fixed;
@@ -34,6 +46,11 @@
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     position: relative;
+    animation: authPopupScale 0.3s ease;
+}
+@keyframes authPopupScale {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 .auth-left-panel {
     width: 38%;
