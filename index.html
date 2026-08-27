@@ -2274,28 +2274,7 @@
 
     function toggleAuthModal(open) {
     const modal = document.getElementById('authModal');
-    if (modal) {
-        modal.style.display = open ? 'flex' : 'none';
-        
-        // மொபைல் வியூவில் பாப்-அப் ஓபன் ஆகும்போது க்ளோஸ் பட்டன் ஒர்க் ஆவதை உறுதி செய்ய
-        if (open && window.innerWidth <= 768) {
-            setTimeout(() => {
-                let leftPanel = document.querySelector('.auth-left-panel');
-                if (leftPanel && !leftPanel.querySelector('.mobile-floating-close')) {
-                    let closeBtn = document.createElement('button');
-                    closeBtn.type = 'button';
-                    closeBtn.className = 'mobile-floating-close';
-                    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                    closeBtn.onclick = (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleAuthModal(false);
-                    };
-                    leftPanel.appendChild(closeBtn);
-                }
-            }, 50);
-        }
-    }
+    if (modal) modal.style.display = open ? 'flex' : 'none';
 }
 
     function checkCloseModal(event, drawerId, modalId) {
@@ -2705,7 +2684,28 @@ function showAuthStep(step) {
 
 function toggleAuthModal(open) {
     const modal = document.getElementById('authModal');
-    if (modal) modal.style.display = open ? 'flex' : 'none';
+    if (modal) {
+        modal.style.display = open ? 'flex' : 'none';
+        
+        // மொபைல் வியூவில் பாப்-அப் ஓபன் ஆகும்போது க்ளோஸ் பட்டன் ஒர்க் ஆவதை உறுதி செய்ய
+        if (open && window.innerWidth <= 768) {
+            setTimeout(() => {
+                let leftPanel = document.querySelector('.auth-left-panel');
+                if (leftPanel && !leftPanel.querySelector('.mobile-floating-close')) {
+                    let closeBtn = document.createElement('button');
+                    closeBtn.type = 'button';
+                    closeBtn.className = 'mobile-floating-close';
+                    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                    closeBtn.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleAuthModal(false);
+                    };
+                    leftPanel.appendChild(closeBtn);
+                }
+            }, 50);
+        }
+    }
 }
 
 function checkCloseAuthModal(event) {
