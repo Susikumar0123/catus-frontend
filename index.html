@@ -23,6 +23,7 @@
     z-index: 9999999;
     justify-content: center;
     align-items: center;
+    pointer-events: auto !important; /* 🛑 மொபைலில் டச் வேலை செய்ய இது கட்டாயம் தேவை */
 }
 .auth-modal-container {
     display: flex;
@@ -2663,10 +2664,13 @@ function toggleAuthModal(open) {
     }
 }
 
-// Backdrop-ah click pannalum close aaga (Mobile & Desktop friendly)
+// Backdrop-ah click/touch pannalum popup close aaga (Mobile & Desktop friendly)
 function checkCloseAuthModal(event) {
-    const container = document.querySelector('.auth-modal-container');
-    if (container && !container.contains(event.target)) {
+    const modalWrapper = document.getElementById('authModal');
+    const modalContainer = document.querySelector('.auth-modal-container');
+    
+    // பாப்-அப் பாக்ஸுக்கு வெளியே உள்ள grey area-வை தொட்டால் மட்டும் க்ளோஸ் ஆகும்
+    if (modalWrapper && modalContainer && event.target === modalWrapper) {
         toggleAuthModal(false);
     }
 }
