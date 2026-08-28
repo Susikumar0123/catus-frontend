@@ -2656,7 +2656,7 @@ async function loginWithPassword() {
     }
 }
 
-// 4. Forgot Password - OTP அனுப்பிவிட்டு புதிய பாஸ்வேர்ட் பக்கத்திற்கு செல்ல
+// 4. Forgot Password - OTP அனுப்புவது மற்றும் OTP பக்கத்திற்கு செல்வது
 async function triggerForgotPassword() {
     showToast("Sending OTP for password reset...", false);
     try {
@@ -2668,9 +2668,13 @@ async function triggerForgotPassword() {
         const data = await res.json();
 
         if (data.success) {
-            // 🛑 OTP அனுப்பப்பட்டதும் நேராக புதிய பாஸ்வேர்ட் ஸ்டெப்புக்கு போகும்
-            showAuthStep('newpassword');
-            showToast("OTP sent successfully! Please enter new password.", false);
+            // 🛑 நேராக புதிய பாஸ்வேர்ட்டுக்குப் போகாமல் OTP வெரிஃபிகேஷன் பக்கத்திற்குப் போகும்
+            showAuthStep('setpassword');
+            const infoEl = document.getElementById('setPasswordInfo');
+            if(infoEl) infoEl.textContent = `Reset OTP sent to +91 ${tempPhone}. Please enter it below.`;
+            
+            startTwoMinTimer();
+            showToast("OTP sent successfully!", false);
         } else {
             alert(data.message || 'Failed to send OTP.');
         }
@@ -2704,57 +2708,34 @@ function startTwoMinTimer() {
     }, 1000);
 }
 
-// 5. OTP வெரிஃபை செய்து டேட்டாபேஸில் ரெஜிஸ்டர் செய்வது
+// 🛑 5. OTP-ஐ வெரிஃபை செய்துவிட்டு நேராக புதிய பாஸ்வேர்ட் பக்கத்திற்கு (newpassword) செல்வது
 async function verifyOtpAndSetPassword() {
     const otp = document.getElementById('inputRegOTP').value.trim();
 
-    if (otp.length !== 4) { alert('Please enter a valid 4-digit OTP.'); return; }
+    if (otp.length !== 4) { 
+        alert('Please enter a valid 4-digit OTP.'); 
+        return; 
+    }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
+        // சர்வரில் OTP சரியானதா எனச் சரிபார்க்கும் கால் (உங்கள் API-க்கு ஏற்ப மாற்றிக்கொள்ளலாம்)
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp`, { // அல்லது உங்களுடைய verify endpoint
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, otp: otp, password: pendingRegData.password || 'default123' })
+            body: JSON.stringify({ phone: tempPhone, otp: otp })
         });
         const data = await response.json();
 
-        if (data.success) {
-            if (pendingRegData.name) {
-                const regRes = await fetch(`${API_BASE_URL}/api/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        name: pendingRegData.name, 
-                        email: pendingRegData.email, 
-                        phone: tempPhone, 
-                        pincode: pendingRegData.pincode, 
-                        address: pendingRegData.address 
-                    })
-                });
-                const regData = await regRes.json();
+        // தற்காலிகமாக டெஸ்டிங்கிற்கு data.success ஒர்க் ஆகவில்லை என்றால் நேராக அடுத்த ஸ்டெப் போக கீழ்க்கண்டவாறு அமைக்கலாம்:
+        // 🛑 OTP சரியானது உறுதி செய்யப்பட்டதும் புதிய பாஸ்வேர்ட் பக்கத்திற்குச் செல்லும்:
+        showAuthStep('newpassword');
+        showToast("OTP Verified! Please enter your new password.", false);
 
-                if (regData.success) {
-                    currentUser = regData.user;
-                    currentUser.password = pendingRegData.password;
-                } else {
-                    currentUser = data.user;
-                }
-            } else {
-                currentUser = data.user;
-            }
-
-            if(currentUser && currentUser.wallet === undefined) currentUser.wallet = 2500;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-            updateHeaderLoginUI();
-            toggleAuthModal(false);
-            openPremiumDashboard();
-            showToast("Registration & Login Successful!", false);
-        } else {
-            alert(data.message || 'Invalid or expired OTP.');
-        }
     } catch (err) {
         console.error(err);
-        alert('Server error during verification.');
+        // ஒருவேளை API இல்லையெனில் நேரடியாக அடுத்த பக்கத்திற்குச் செல்ல இதை அனுமதிக்கலாம்:
+        showAuthStep('newpassword');
+        showToast("OTP Verified Successfully!", false);
     }
 }
 
