@@ -157,36 +157,54 @@
             box-shadow: 0 2px 8px rgba(2, 132, 199, 0.1); transition: all 0.2s ease;
             flex: 1 1 400px; order: 2; box-sizing: border-box;
         }
-        /* Location Widget Fixed Size Styling */
-        .header-location-widget {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1.5px solid #e2e8f0;
-            max-width: 220px;
-            box-sizing: border-box;
-        }
-        .loc-text-box {
-            display: flex;
-            flex-direction: column;
-            font-size: 11px;
-            line-height: 1.2;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            max-width: 150px;
-        }
-        #headerLocationDisplay {
-            color: #0f172a;
-            font-size: 12px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
+        /* --- Flipkart-Style Header Location Widget Fixed Size & Height --- */
+.header-location-widget {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    background: #d7a7a8 !important; /* லாகின் பட்டன் கலர் */
+    border: none !important;
+    padding: 0 14px !important;
+    border-radius: 50px !important; /* லாகின் பட்டன் போன்ற வட்டமான வடிவம் */
+    height: 38px !important;        /* லாகின் பட்டனின் சரியான உயரம் */
+    width: 190px !important;        /* 🛑 நிலையான அகலம் (Fixed Width) - எவ்வளவு பெரிய அட்ரஸானாலும் மாறாது */
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+}
+
+.loc-text-box {
+    display: flex !important;
+    flex-direction: column !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+}
+
+#headerLocationDisplay {
+    color: #111111 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important; /* பெரிய அட்ரஸ் இருந்தால் இறுதியில் ... என காட்டும் */
+}
+
+.header-location-widget .loc-label {
+    color: #333333 !important;
+    font-size: 10px !important;
+}
+
+.header-location-widget i {
+    font-size: 11px !important;
+    color: #111111 !important;
+    flex-shrink: 0 !important;
+}
+        
         .search-container:focus-within { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); }
         .search-icon { width: 18px; height: 18px; stroke: #64748b; stroke-width: 2; fill: none; flex-shrink: 0; margin-right: 10px; }
         #searchInput { width: 100%; padding: 12px 0; font-size: 14px; border: none; outline: none; background: transparent; color: #1e293b; font-family: inherit; }
@@ -204,26 +222,32 @@
         .chevron-icon { width: 14px !important; height: 14px !important; }
         .cart-icon-wrapper { position: relative; display: flex; align-items: center; }
         .cart-badge { position: absolute; top: -6px; right: -8px; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
-        .login-btn {
-    background: linear-gradient(135deg, #0284c7 0%, #005f73 100%) !important; /* அழகான ஓஷன் ப்ளூ கிரேடியன்ட் */
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: opacity 0.2s;
-    max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+        .login-btn { 
+    background: #d7a7a8 !important; 
+    color: #111111 !important; /* டெக்ஸ்ட் கலர் கருப்பு */
+    border: none; 
+    padding: 8px 16px; 
+    border-radius: 50px; 
+    font-size: 13px; 
+    font-weight: 500; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    transition: background 0.2s; 
+    max-width: 150px; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
 }
-.login-btn:hover {
-    background: linear-gradient(135deg, #0369a1 0%, #003f4c 100%) !important;
+
+.login-btn:hover { 
+    background: #c29394 !important; 
+}
+
+/* லாகின் பட்டனுக்குள் இருக்கும் ஐகானும் (User Icon) கருப்பு நிறமாக மாற */
+.login-btn svg { 
+    stroke: #111111 !important; 
 }
 
         /* 2. Quick Services Bar (Catus Unique Flipkart-Style) */
