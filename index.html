@@ -2323,29 +2323,7 @@
         }
     }
 
-    function showAuthStep(step) {
-        document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-        document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
-        document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-        document.getElementById('authStepOTP').style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
-
-        const titleEl = document.getElementById('leftPanelTitle');
-        const descEl = document.getElementById('leftPanelDesc');
-
-        if (step === 'phone') {
-            titleEl.textContent = "Looks like you're new here!";
-            descEl.textContent = "Sign up with your mobile number to get started";
-        } else if (step === 'password') {
-            titleEl.textContent = "Login";
-            descEl.textContent = "Get access to your Orders, Services and Recommendations";
-        } else if (step === 'register') {
-            titleEl.textContent = "Looks like you're new here!";
-            descEl.textContent = "Sign up with your mobile number to get started";
-        } else {
-            titleEl.textContent = "Verify OTP";
-            descEl.textContent = "Please enter the OTP sent to your mobile";
-        }
-    }
+    
 
     function showSummaryDetail(type) {
         const box = document.getElementById('summaryDetailBox');
@@ -2479,7 +2457,7 @@
     let twoMinTimer = null;
 let pendingRegData = {};
 
-// 1. மொபைல் நம்பரை செக் செய்து ஏற்கனவே உள்ளவரா (Registered) எனப் பார்த்தல்
+// 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
 async function checkUserAndProceed() {
     const phone = document.getElementById('inputPhone').value.trim();
     if (phone.length !== 10) {
@@ -2497,20 +2475,49 @@ async function checkUserAndProceed() {
         const data = await response.json();
 
         if (data.success) {
-            // 🛑 ஏற்கனவே பதிவு செய்திருந்தால் (exists: true) நேரடியாக Password Page-க்குச் செல்லும்
-            if (data.exists && data.hasPassword) {
+            // 🛑 ரொம்ப முக்கியம்: ஏற்கனவே யூசர் இருந்தால் மற்றும் பாஸ்வேர்ட் செட் செய்திருந்தால் 'password' ஸ்டெப்புக்கு போகும்
+            if (data.exists && data.hasPassword === true) {
                 showAuthStep('password');
             } else {
-                // புதிய யூசர் என்றால் மட்டுமே Registration Form-க்குச் செல்லும்
+                // புதிய யூசர் என்றால் மட்டுமே ரெஜிஸ்டர் ஸ்டெப்புக்கு போகும்
                 showAuthStep('register');
             }
         } else {
-            // ஒருவேளை டேட்டாபேஸில் இல்லாவிட்டால் ரெஜிஸ்டர் பேஜ்க்கு அனுப்ப
             showAuthStep('register');
         }
     } catch (err) {
         console.error("Check user error:", err);
         alert('Server connection error.');
+    }
+}
+
+// 2. எந்த ஸ்டெப் ஓபன் ஆக வேண்டும் என்பதை துல்லியமாக கன்ட்ரோல் செய்யும் பங்க்ஷன்
+function showAuthStep(step) {
+    document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
+    document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
+    document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
+    
+    let otpStepElem = document.getElementById('authStepSetPassword') || document.getElementById('authStepOTP');
+    if (otpStepElem) {
+        otpStepElem.style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
+    }
+
+    const titleEl = document.getElementById('leftPanelTitle');
+    const descEl = document.getElementById('leftPanelDesc');
+
+    if (step === 'phone') {
+        titleEl.textContent = "Looks like you're new here!";
+        descEl.textContent = "Sign up with your mobile number to get started";
+    } else if (step === 'password') {
+        // 🛑 ஏற்கனவே உள்ள யூசருக்கு லாகின் தலைப்பு மாறும்
+        titleEl.textContent = "Login";
+        descEl.textContent = "Get access to your Orders, Services and Recommendations";
+    } else if (step === 'register') {
+        titleEl.textContent = "Looks like you're new here!";
+        descEl.textContent = "Sign up with your mobile number to get started";
+    } else {
+        titleEl.textContent = "Verify OTP";
+        descEl.textContent = "Please enter the OTP sent to your mobile";
     }
 }
 
@@ -2705,34 +2712,7 @@ async function verifyOtpAndSetPassword() {
     }
 }
 
-// மாடல் ஸ்டெப்களை கன்ட்ரோல் செய்யும் பங்க்ஷன்
-function showAuthStep(step) {
-        document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-        document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
-        document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-        
-        let otpStepElem = document.getElementById('authStepSetPassword') || document.getElementById('authStepOTP');
-        if (otpStepElem) {
-            otpStepElem.style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
-        }
 
-        const titleEl = document.getElementById('leftPanelTitle');
-        const descEl = document.getElementById('leftPanelDesc');
-
-        if (step === 'phone') {
-            titleEl.textContent = "Looks like you're new here!";
-            descEl.textContent = "Sign up with your mobile number to get started";
-        } else if (step === 'password') {
-            titleEl.textContent = "Login";
-            descEl.textContent = "Get access to your Orders, Services and Recommendations";
-        } else if (step === 'register') {
-            titleEl.textContent = "Looks like you're new here!";
-            descEl.textContent = "Sign up with your mobile number to get started";
-        } else {
-            titleEl.textContent = "Verify OTP";
-            descEl.textContent = "Please enter the OTP sent to your mobile";
-        }
-    }
 
 // முழுமையான மற்றும் துல்லியமான Modal Toggle பங்க்ஷன்
 function toggleAuthModal(open) {
