@@ -2479,7 +2479,7 @@
     let twoMinTimer = null;
 let pendingRegData = {};
 
-// 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
+// 1. மொபைல் நம்பரை செக் செய்து ஏற்கனவே உள்ளவரா (Registered) எனப் பார்த்தல்
 async function checkUserAndProceed() {
     const phone = document.getElementById('inputPhone').value.trim();
     if (phone.length !== 10) {
@@ -2497,14 +2497,19 @@ async function checkUserAndProceed() {
         const data = await response.json();
 
         if (data.success) {
+            // 🛑 ஏற்கனவே பதிவு செய்திருந்தால் (exists: true) நேரடியாக Password Page-க்குச் செல்லும்
             if (data.exists && data.hasPassword) {
                 showAuthStep('password');
             } else {
+                // புதிய யூசர் என்றால் மட்டுமே Registration Form-க்குச் செல்லும்
                 showAuthStep('register');
             }
+        } else {
+            // ஒருவேளை டேட்டாபேஸில் இல்லாவிட்டால் ரெஜிஸ்டர் பேஜ்க்கு அனுப்ப
+            showAuthStep('register');
         }
     } catch (err) {
-        console.error(err);
+        console.error("Check user error:", err);
         alert('Server connection error.');
     }
 }
