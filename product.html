@@ -326,12 +326,48 @@
         .feature-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; margin-bottom: 10px; line-height: 1.5; color: #475569; }
         .feature-item i { color: #16a34a; margin-top: 3px; font-size: 16px; }
 
-        .action-buttons { display: flex; gap: 15px; margin-top: 20px; }
-        .btn { flex: 1; padding: 16px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; color:#fff; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none;}
-        .btn-cart { background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); } 
-        .btn-cart:hover { background: linear-gradient(135deg, #059669 0%, #047857 100%) !important; transform: translateY(-2px); }
-        .btn-buy { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25); } 
-        .btn-buy:hover { background: linear-gradient(135deg, #0369a1 100%, #075985 100%) !important; transform: translateY(-2px); }
+        /* --- Product Page Action Buttons (Add to Cart & Book Now Styling Fix) --- */
+.action-buttons { 
+    display: flex; 
+    gap: 15px; 
+    margin-top: 20px; 
+}
+
+.btn { 
+    flex: 1; 
+    padding: 16px 20px; 
+    border: none; 
+    border-radius: 8px; /* 2-வது படத்தில் உள்ள வட்டமான கார்னர் ஸ்டைல் */
+    font-size: 15px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    color: #fff !important; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 8px; 
+    transition: all 0.2s ease; 
+    text-decoration: none; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* சாஃப்ட் ஷேடோ */
+}
+
+/* 1. Add to Cart Button (Matching Emerald Green) */
+.btn-cart { 
+    background: #10b981 !important; /* அழகான மற்றும் பிரகாசமான பச்சை நிறம் */
+} 
+.btn-cart:hover { 
+    background: #059669 !important; 
+    transform: translateY(-2px); 
+}
+
+/* 2. Book Now Button (Matching 2nd Image Purple Color) */
+.btn-buy { 
+    background: #7c3aed !important; /* 2-வது படத்தில் உள்ள ஊதா நிறம் */
+} 
+.btn-buy:hover { 
+    background: #6d28d9 !important; 
+    transform: translateY(-2px); 
+}
 
         /* Related Services (Borderless Modern Cards matching Index) */
         .uc-category-box { background: transparent; padding: 0; margin-top: 50px; border-top: 1px solid #e2e8f0; padding-top: 40px; }
