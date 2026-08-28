@@ -319,7 +319,15 @@
         .variant-title { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 10px; text-transform: uppercase; }
         .variant-group { display: flex; flex-wrap: wrap; gap: 12px; }
         .variant-btn { background: #fff; border: 1px solid #cbd5e1; padding: 12px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; transition: 0.2s; color: #1e293b; }
-        .variant-btn.active { border-color: #d7a7a8; color: #111111; background: #f6d2bc; box-shadow: 0 0 0 1px #d7a7a8; }
+        .variant-btn.active { 
+    background: #d7a7a8 !important; /* லாகின் மற்றும் டெலிவரி பாக்ஸ் போன்ற அதே ரோஸ்/பிங்க் கலர் */
+    border-color: #d7a7a8 !important; 
+    color: #111111 !important;     /* டெக்ஸ்ட் கலர் கருப்பு */
+    box-shadow: 0 0 0 1px #d7a7a8 !important; 
+}
+.variant-btn.active:hover {
+    background: #c29394 !important; /* ஹோவர் செய்யும்போது வரும் சிறிய டார்க் ஷேட் */
+}
 
         .features-section { margin-top: 15px; background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .features-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #0f172a; }
