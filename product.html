@@ -498,8 +498,29 @@
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
         .cart-header { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; position: relative; }
         .cart-header h3 { margin: 0; font-size: 18px; font-weight: 500; color: #212121; }
-        .close-cart { background: #ef4444 !important; border: none !important; width: 36px !important; height: 36px !important; border-radius: 50% !important; font-size: 16px !important; cursor: pointer !important; color: #ffffff !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 0 !important; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3); transition: background 0.2s, transform 0.2s; flex-shrink: 0; }
-        .close-cart:hover { background: #dc2626 !important; transform: scale(1.05); }
+        /* --- Cart Close Button (Red to Matching Purple Style) --- */
+.close-cart { 
+    background: #7c3aed !important; /* 2-வது படத்தில் உள்ள ஊதா நிறம் */
+    border: none !important; 
+    width: 36px !important; 
+    height: 36px !important; 
+    border-radius: 50% !important; 
+    font-size: 16px !important; 
+    cursor: pointer !important; 
+    color: #ffffff !important;     /* உள்ளே இருக்கும் 'X' குறியீடு வெள்ளை நிறம் */
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+    padding: 0 !important; 
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3); /* சாஃப்ட் பர்ப்பிள் ஷேடோ */
+    transition: background 0.2s, transform 0.2s; 
+    flex-shrink: 0; 
+}
+
+.close-cart:hover { 
+    background: #6d28d9 !important; /* ஹோவர் செய்யும்போது சற்று டார்க் ஆன பர்ப்பிள் */
+    transform: scale(1.05); 
+}
         
         /* Cart Specific */
         .cart-items-list { padding: 20px; overflow-y: auto; flex-grow: 1; }
