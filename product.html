@@ -3261,6 +3261,27 @@ window.addEventListener('DOMContentLoaded', async () => {
         orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
     }
 });
+// 🛑 மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிலும் பாப்-அப்புக்கு வெளியே கிளிக்/டச் செய்தால் க்ளோஸ் செய்ய
+document.addEventListener('DOMContentLoaded', () => {
+    const authModal = document.getElementById('authModal');
+    if (authModal) {
+        // டெஸ்க்டாப் கிளிக் (Click) செய்யும்போது வெளியே க்ளோஸ் ஆக
+        authModal.addEventListener('click', (e) => {
+            const modalContainer = document.getElementById('authDrawer');
+            if (modalContainer && !modalContainer.contains(e.target)) {
+                toggleAuthModal(false);
+            }
+        });
+
+        // மொபைல் டச் (Touch) செய்யும்போது வெளியே க்ளோஸ் ஆக
+        authModal.addEventListener('touchend', (e) => {
+            const modalContainer = document.getElementById('authDrawer');
+            if (modalContainer && !modalContainer.contains(e.target)) {
+                toggleAuthModal(false);
+            }
+        });
+    }
+});
 
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
