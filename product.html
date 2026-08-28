@@ -89,11 +89,12 @@
     padding: 40px 30px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center !important; /* 🛑 மேலிருந்து கீழே சரியாக நடுவில் இருக்க */
+    align-items: flex-start !important;  /* 🛑 இடது பக்கத்திற்கு நேராக இருக்க */
     position: relative;
 }
-.auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; }
-.auth-left-panel p { font-size: 16px; color: #111111; margin: 0; line-height: 1.5; }
+.auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; text-align: left;}
+.auth-left-panel p { font-size: 16px; color: #111111; margin: 0; line-height: 1.5; text-align: left;}
 .auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #f6d2bc; overflow-y: auto; }
 .auth-close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; color: #878787; cursor: pointer; }
 .auth-input-field { width: 100%; padding: 10px 0; font-size: 15px; border: none; border-bottom: 1.5px solid #b89789; outline: none; color: #111111; margin-top: 25px; margin-bottom: 5px; background: transparent; box-sizing: border-box; }
