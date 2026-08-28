@@ -1321,7 +1321,25 @@
             <button type="button" class="desktop-header-close auth-close-btn" onclick="toggleAuthModal(false)">
                 <i class="fa-solid fa-xmark"></i>
             </button>
+            <!-- STEP 2: ENTER PASSWORD (LOGIN) -->
+<div id="authStepPassword" style="display: none; flex-direction: column; height: 100%;">
+    <div style="margin-top: 10px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #111111;">Enter Password</h3>
+        <p id="passInfoText" style="font-size: 13px; color: #334155; margin: 0 0 15px 0;">Welcome back! Please enter your password to login.</p>
+        
+        <!-- Password Input with Eye Icon -->
+        <div class="password-field-wrapper">
+            <input type="password" id="inputPassword" class="auth-input-field" placeholder="Enter your password">
+            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('inputPassword', this)"></i>
+        </div>
 
+        <div style="text-align: right; margin-top: 8px;">
+            <span style="color: #0284c7; font-size: 13px; font-weight: 600; cursor: pointer;" onclick="triggerForgotPassword()">Forgot?</span>
+        </div>
+    </div>
+    <button class="auth-primary-btn" onclick="loginWithPassword()">LOGIN</button>
+    <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
+</div>
             <!-- STEP 1: ENTER MOBILE NUMBER -->
             <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
@@ -1332,19 +1350,29 @@
                 <div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">New to Catus? Create an account</div>
             </div>
 
-            <!-- STEP 2: ENTER PASSWORD -->
-            <div id="authStepPassword" style="display: none; flex-direction: column; height: 100%;">
-                <div style="margin-top: 10px;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Enter Password</h3>
-                    <p id="passInfoText" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Welcome back! Please enter your password to login.</p>
-                    <input type="password" id="inputPassword" class="auth-input-field" placeholder="Enter your password">
-                    <div style="text-align: right; margin-top: 8px;">
-                        <span style="color: #2874f0; font-size: 13px; font-weight: 600; cursor: pointer;" onclick="triggerForgotPassword()">Forgot?</span>
-                    </div>
-                </div>
-                <button class="auth-primary-btn" onclick="loginWithPassword()">LOGIN</button>
-                <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
-            </div>
+            <!-- STEP 5: CREATE NEW PASSWORD (FORGOT PASSWORD RESET) -->
+<div id="authStepNewPassword" style="display: none; flex-direction: column; height: 100%;">
+    <div style="margin-top: 10px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Create New Password</h3>
+        <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter your new password below.</p>
+        
+        <!-- New Password with Eye Icon -->
+        <div class="password-field-wrapper">
+            <input type="password" id="newResetPassword" class="auth-input-field" placeholder="New Password (min 4 chars)">
+            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('newResetPassword', this)"></i>
+        </div>
+
+        <!-- Confirm New Password with Eye Icon -->
+        <div class="password-field-wrapper">
+            <input type="password" id="newResetConfirmPassword" class="auth-input-field" placeholder="Confirm New Password">
+            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('newResetConfirmPassword', this)"></i>
+        </div>
+
+        <span id="resetPasswordErrorMsg" style="color: #ef4444; font-size: 12px; display: none; margin-top: 5px;">Passwords do not match!</span>
+    </div>
+    <button class="auth-primary-btn" onclick="submitNewPasswordReset()">UPDATE PASSWORD & LOGIN</button>
+    <div class="auth-bottom-link" onclick="backToPhoneStep()">← Cancel</div>
+</div>
 
             <!-- STEP 3: COMPLETE REGISTRATION -->
 <div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
@@ -2457,7 +2485,7 @@
     let twoMinTimer = null;
 let pendingRegData = {};
 
-// 1. மொபைல் நம்பரை செக் செய்து ஏற்கனவே உள்ளவரா எனத் துல்லியமாகப் பார்த்தல்
+// 🛑 மொபைல் நம்பரை செக் செய்து டேட்டாபேஸில் இருந்தால் நேராக பாஸ்வேர்ட் பக்கத்திற்கு அனுப்பும் சரியான லாஜிக்
 async function checkUserAndProceed() {
     const phone = document.getElementById('inputPhone').value.trim();
     if (phone.length !== 10) {
@@ -2475,11 +2503,11 @@ async function checkUserAndProceed() {
         const data = await response.json();
 
         if (data.success) {
-            // 🛑 ரொம்ப முக்கியம்: டேட்டாபேஸில் நம்பர் இருந்து, பாஸ்வேர்டும் செட் செய்யப்பட்டிருந்தால் நேரடியாக Login (Password) பேஜ்க்கு போகும்
-            if (data.exists === true || data.hasPassword === true) {
-                showAuthStep('password');
+            // ஒருவேளை டேட்டாபேஸில் இந்த நம்பர் ஏற்கனவே பதிவு செய்யப்பட்டிருந்தால்
+            if (data.exists === true) {
+                showAuthStep('password'); // நேராக லாகின் (Password) பக்கத்திற்குச் செல்லும்
             } else {
-                // புதிய யூசர் என்றால் மட்டுமே Name, Email கேட்கும் Register பேஜ்க்கு போகும்
+                // புதிய நம்பர் என்றால் மட்டுமே ரெஜிஸ்டர் பக்கத்திற்குச் செல்லும்
                 showAuthStep('register');
             }
         } else {
@@ -2487,17 +2515,28 @@ async function checkUserAndProceed() {
         }
     } catch (err) {
         console.error("Check user error:", err);
-        // ஒருவேளை API-ல் சிக்கல் இருந்தால், பாதுகாப்பாக Password லாகினுக்கு அனுப்பலாம் அல்லது ரெஜிஸ்டருக்கு அனுப்பலாம்
-        showAuthStep('password'); 
+        alert('Server connection error.');
     }
 }
-
-// 2. எந்த ஸ்டெப் ஓபன் ஆக வேண்டும் என்பதை துல்லியமாக கன்ட்ரோல் செய்யும் பங்க்ஷன்
+// 🛑 எந்த ஸ்டெப் ஓபன் ஆக வேண்டும் என்பதை துல்லியமாக கன்ட்ரோல் செய்யும் ஒரே சரியான பங்க்ஷன்
 function showAuthStep(step) {
     document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-    document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
-    document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
     
+    const passStep = document.getElementById('authStepPassword');
+    if (passStep) {
+        passStep.style.display = (step === 'password') ? 'flex' : 'none';
+    }
+
+    const regStep = document.getElementById('authStepRegister');
+    if (regStep) {
+        regStep.style.display = (step === 'register') ? 'flex' : 'none';
+    }
+    
+    let newPassStep = document.getElementById('authStepNewPassword');
+    if (newPassStep) {
+        newPassStep.style.display = (step === 'newpassword') ? 'flex' : 'none';
+    }
+
     let otpStepElem = document.getElementById('authStepSetPassword') || document.getElementById('authStepOTP');
     if (otpStepElem) {
         otpStepElem.style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
@@ -2510,9 +2549,11 @@ function showAuthStep(step) {
         titleEl.textContent = "Looks like you're new here!";
         descEl.textContent = "Sign up with your mobile number to get started";
     } else if (step === 'password') {
-        // 🛑 ஏற்கனவே உள்ள யூசருக்கு லாகின் தலைப்பு மாறும்
         titleEl.textContent = "Login";
         descEl.textContent = "Get access to your Orders, Services and Recommendations";
+    } else if (step === 'newpassword') {
+        titleEl.textContent = "Reset Password";
+        descEl.textContent = "Secure your account with a new password";
     } else if (step === 'register') {
         titleEl.textContent = "Looks like you're new here!";
         descEl.textContent = "Sign up with your mobile number to get started";
@@ -2520,6 +2561,11 @@ function showAuthStep(step) {
         titleEl.textContent = "Verify OTP";
         descEl.textContent = "Please enter the OTP sent to your mobile";
     }
+}
+
+// பின்னோக்கி செல்ல (Change Mobile Number அல்லது Cancel செய்ய)
+function backToPhoneStep() {
+    showAuthStep('phone');
 }
 
 // "New to Catus? Create an account" கிளிக் செய்தால்
