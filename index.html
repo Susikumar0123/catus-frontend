@@ -1449,7 +1449,7 @@
 
         <span id="resetPasswordErrorMsg" style="color: #ef4444; font-size: 12px; display: none; margin-top: 5px;">Passwords do not match!</span>
     </div>
-    <button class="auth-primary-btn" onclick="submitNewPasswordReset()">UPDATE PASSWORD & LOGIN</button>
+    
     <div class="auth-bottom-link" onclick="backToPhoneStep()">← Cancel</div>
 </div>
 
@@ -3772,49 +3772,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
         iconElement.classList.add("fa-eye"); // சாதாரண கண் ஐகானாக மாறும்
     }
 }
-// 🛑 பிரண்ட்என்டில் உடனடியாக வேலை செய்யும் புதிய பாஸ்வேர்ட் ரீசெட் பங்க்ஷன்
-async function submitNewPasswordReset() {
-    const newPass = document.getElementById('newResetPassword').value.trim();
-    const confirmPass = document.getElementById('newResetConfirmPassword').value.trim();
-    const errorEl = document.getElementById('resetPasswordErrorMsg');
 
-    if (!newPass || newPass.length < 4) {
-        alert('Password must be at least 4 characters.');
-        return;
-    }
-
-    if (newPass !== confirmPass) {
-        if (errorEl) errorEl.style.display = 'block';
-        return;
-    } else {
-        if (errorEl) errorEl.style.display = 'none';
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, password: newPass })
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            currentUser = data.user;
-            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-            
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-            updateHeaderLoginUI();
-            toggleAuthModal(false);
-            openPremiumDashboard();
-            showToast("Password updated & Login successful!", false);
-        } else {
-            alert(data.message || 'Failed to update password.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('Server connection error while updating password.');
-    }
-}
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
