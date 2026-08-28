@@ -552,8 +552,25 @@
         .cart-item-info strong { display: block; font-size: 13px; font-weight: 500; color: #212121; margin-bottom: 2px; }
         .cart-item-info span { font-size: 12px; color: #64748b; }
         .cart-item-price { font-weight: 500; color: #212121; font-size: 14px; margin-right: 10px; }
-        .remove-item-btn { background: none; border: none; color: #6d28d9; cursor: pointer; font-size: 14px; padding: 6px; transition: color 0.2s; }
-        .remove-item-btn:hover { background: #6d28d9; }
+        .remove-item-btn { 
+    background: #f5f3ff !important; /* மிக லேசான பர்ப்பிள் கலர் பேக்ரவுண்ட் */
+    border: none !important; 
+    color: #7c3aed !important;     /* ஐகான் பர்ப்பிள் கலர் */
+    cursor: pointer !important; 
+    font-size: 13px !important; 
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important; /* வட்டமான வடிவம் */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important; 
+}
+
+.remove-item-btn:hover { 
+    background: #7c3aed !important; /* ஹோவர் செய்யும்போது முழு பாக்ஸும் பர்ப்பிள் மாறும் */
+    color: #ffffff !important;     /* ஐகான் வெள்ளை நிறமாக மாறும் */
+}
         .cart-footer {
     padding: 20px !important;
     background: #f8fafc;
