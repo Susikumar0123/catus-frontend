@@ -509,8 +509,25 @@
         .cart-item-info strong { display: block; font-size: 13px; font-weight: 500; color: #212121; margin-bottom: 2px; }
         .cart-item-info span { font-size: 12px; color: #64748b; }
         .cart-item-price { font-weight: 500; color: #212121; font-size: 14px; margin-right: 10px; }
-        .remove-item-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 14px; padding: 6px; transition: color 0.2s; }
-        .remove-item-btn:hover { background: #dc2626; color: #fff; border-radius: 4px; }
+        .remove-item-btn { 
+    background: #f5f3ff !important; /* மிக லேசான பர்ப்பிள் கலர் பேக்ரவுண்ட் */
+    border: none !important; 
+    color: #7c3aed !important;     /* ஐகான் பர்ப்பிள் கலர் */
+    cursor: pointer !important; 
+    font-size: 13px !important; 
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important; /* வட்டமான வடிவம் */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important; 
+}
+
+.remove-item-btn:hover { 
+    background: #7c3aed !important; /* ஹோவர் செய்யும்போது முழு பாக்ஸும் பர்ப்பிள் மாறும் */
+    color: #ffffff !important;     /* ஐகான் வெள்ளை நிறமாக மாறும் */
+}
         .cart-footer {
     padding: 20px !important;
     background: #f8fafc;
@@ -530,18 +547,35 @@
     color: #212121;
     margin-bottom: 0 !important; /* ஒட்டிக்கொள்ளாமல் இருக்க */
 }
-        .checkout-btn {
-    width: 100%;
-    background: #0284c7;
-    color: white;
-    border: none;
-    padding: 14px !important; /* பட்டன் பார்ப்பதற்கு இன்னும் அழகாகவும் பெரிதாகவும் இருக்க */
-    border-radius: 8px !important;
+        /* --- 1. Clear Cart Text Color to Purple --- */
+.cart-header span[onclick*="clearCart"], 
+.clear-cart-text {
+    color: #7c3aed !important; /* ஊதா நிறம் */
     font-weight: 600;
     cursor: pointer;
-    font-size: 14px;
-    transition: 0.2s;
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+.cart-header span[onclick*="clearCart"]:hover {
+    text-decoration: underline !important;
+}
+
+/* --- 2. Proceed to Checkout Button Color to Purple --- */
+.checkout-btn {
+    width: 100% !important;
+    background: #7c3aed !important; /* ஊதா நிறம் */
+    color: white !important;
+    border: none !important;
+    padding: 14px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    font-size: 15px !important;
+    transition: 0.2s !important;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
+}
+
+.checkout-btn:hover {
+    background: #6d28d9 !important; /* ஹோவர் செய்யும்போது சற்று டார்க் ஆன பர்ப்பிள் */
+    transform: translateY(-2px);
 }
 
         /* Auth Specific */
