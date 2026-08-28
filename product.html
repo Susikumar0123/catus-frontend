@@ -844,27 +844,52 @@
 .toggle-password-icon:hover {
     color: #111111;
 }
-/* --- Delivery Address Widget (Border Removed & Background Set to Border Color) --- */
+/* --- Flipkart-Style Header Location Widget Fixed Size & Height --- */
 .header-location-widget {
-    background: #d7a7a8 !important; /* பார்டர் என்ன கலரோ அதே கலர் பேக்ரவுண்டாக மாறும் */
-    border: none !important;        /* பார்டர் முழுமையாக நீக்கப்படும் */
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    max-width: 220px;
-    box-sizing: border-box;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    background: #d7a7a8 !important; /* லாகின் பட்டன் கலர் */
+    border: none !important;
+    padding: 0 14px !important;
+    border-radius: 50px !important; /* லாகின் பட்டன் போன்ற வட்டமான வடிவம் */
+    height: 38px !important;        /* லாகின் பட்டனின் சரியான உயரம் */
+    width: 190px !important;        /* 🛑 நிலையான அகலம் (Fixed Width) - எவ்வளவு பெரிய அட்ரஸானாலும் மாறாது */
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+}
+
+.loc-text-box {
+    display: flex !important;
+    flex-direction: column !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+}
+
+#headerLocationDisplay {
+    color: #111111 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important; /* பெரிய அட்ரஸ் இருந்தால் இறுதியில் ... என காட்டும் */
 }
 
 .header-location-widget .loc-label {
-    color: #111111 !important;     /* 'Delivery to' டெக்ஸ்ட் கலர் */
-}
-
-.header-location-widget strong {
-    color: #111111 !important;     /* ஊர் பெயர் மற்றும் பின் கோடு கலர் */
+    color: #333333 !important;
+    font-size: 10px !important;
 }
 
 .header-location-widget i {
-    color: #111111 !important;     /* டவுன் ஆரோ ஐகான் கலர் */
+    font-size: 11px !important;
+    color: #111111 !important;
+    flex-shrink: 0 !important;
 }
 
 /* --- Rating Badge Background to Purple and Text/Star to Pure White --- */
