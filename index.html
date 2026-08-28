@@ -3677,7 +3677,6 @@ function togglePasswordVisibility(fieldId, iconElement) {
         iconElement.classList.add("fa-eye"); // சாதாரண கண் ஐகானாக மாறும்
     }
 }
-// 🛑 புதிய பாஸ்வேர்டை உறுதியாக டேட்டாபேஸில் சேமித்து லாகின் செய்யும் பங்க்ஷன்
 async function submitNewPasswordReset() {
     const newPass = document.getElementById('newResetPassword').value.trim();
     const confirmPass = document.getElementById('newResetConfirmPassword').value.trim();
@@ -3696,8 +3695,8 @@ async function submitNewPasswordReset() {
     }
 
     try {
-        // நாம் புதிதாக உருவாக்கிய /api/update-password ரூட்டை இங்கு அழைக்கிறோம்
-        const response = await fetch(`${API_BASE_URL}/api/update-password`, {
+        // ஏற்கனவே உங்கள் Backend-ல் வேலை செய்யும் /api/verify-otp-set-password ரூட்டை அழைப்பது
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: tempPhone, password: newPass })
@@ -3708,7 +3707,6 @@ async function submitNewPasswordReset() {
             currentUser = data.user;
             if(currentUser.wallet === undefined) currentUser.wallet = 2500;
             
-            // புதிய பாஸ்வேர்டுடன் யூசர் செஷனை சேமித்தல்
             localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
             updateHeaderLoginUI();
             toggleAuthModal(false);
