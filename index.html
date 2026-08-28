@@ -2656,7 +2656,7 @@ async function loginWithPassword() {
     }
 }
 
-// 4. Forgot Password - OTP அனுப்புவது
+// 4. Forgot Password - OTP அனுப்பிவிட்டு புதிய பாஸ்வேர்ட் பக்கத்திற்கு செல்ல
 async function triggerForgotPassword() {
     showToast("Sending OTP for password reset...", false);
     try {
@@ -2668,10 +2668,9 @@ async function triggerForgotPassword() {
         const data = await res.json();
 
         if (data.success) {
-            showAuthStep('setpassword');
-            document.getElementById('setPasswordInfo').textContent = `Reset OTP sent to +91 ${tempPhone}.`;
-            startTwoMinTimer();
-            showToast("OTP sent successfully!", false);
+            // 🛑 OTP அனுப்பப்பட்டதும் நேராக புதிய பாஸ்வேர்ட் ஸ்டெப்புக்கு போகும்
+            showAuthStep('newpassword');
+            showToast("OTP sent successfully! Please enter new password.", false);
         } else {
             alert(data.message || 'Failed to send OTP.');
         }
@@ -3698,6 +3697,48 @@ function togglePasswordVisibility(fieldId, iconElement) {
         passwordInput.type = "password";
         iconElement.classList.remove("fa-eye-slash");
         iconElement.classList.add("fa-eye"); // சாதாரண கண் ஐகானாக மாறும்
+    }
+}
+// 🛑 புதிய பாஸ்வேர்ட்டை சேமித்து டேட்டாபேஸில் அப்டேட் செய்யும் பங்க்ஷன்
+async function submitNewPasswordReset() {
+    const newPass = document.getElementById('newResetPassword').value.trim();
+    const confirmPass = document.getElementById('newResetConfirmPassword').value.trim();
+    const errorEl = document.getElementById('resetPasswordErrorMsg');
+
+    if (!newPass || newPass.length < 4) {
+        alert('Password must be at least 4 characters.');
+        return;
+    }
+
+    if (newPass !== confirmPass) {
+        if (errorEl) errorEl.style.display = 'block';
+        return;
+    } else {
+        if (errorEl) errorEl.style.display = 'none';
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, password: newPass })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("Password updated & Login successful!", false);
+        } else {
+            alert(data.message || 'Failed to update password.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server connection error.');
     }
 }
   </script>
