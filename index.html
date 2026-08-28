@@ -1084,6 +1084,19 @@
         width: 100% !important;
         box-sizing: border-box !important;
     }
+    /* பிரவுசர் ஆட்டோஃபில் செய்யும் போது வரும் வெள்ளை/நீலப் பின்னணியை நீக்க */
+.auth-input-field:-webkit-autofill,
+.auth-input-field:-webkit-autofill:hover, 
+.auth-input-field:-webkit-autofill:focus, 
+.auth-input-field:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #f6d2bc inset !important; /* வலதுபக்க பேனல் கலர் (#f6d2bc) */
+    -webkit-text-fill-color: #111111 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.auth-input-field {
+    background-color: transparent !important;
+}
     .auth-primary-btn {
         margin-top: 15px !important;
         padding: 10px !important;
