@@ -757,7 +757,32 @@
     padding: 25px !important;
     box-sizing: border-box !important;
 }
+/* --- Password Field & Eye Icon Styling Fix --- */
+.password-field-wrapper {
+    position: relative;
+    width: 100%;
+}
 
+.password-field-wrapper .auth-input-field {
+    width: 100%;
+    padding-right: 35px; /* ஐகானுக்காக பக்கவாட்டில் இடம் ஒதுக்க */
+    box-sizing: border-box;
+}
+
+.toggle-password-icon {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555555;
+    font-size: 16px;
+    z-index: 10;
+}
+
+.toggle-password-icon:hover {
+    color: #111111;
+}
     </style>
 </head>
 <body>
@@ -3282,6 +3307,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+function togglePasswordVisibility(fieldId, iconElement) {
+    const passwordInput = document.getElementById(fieldId);
+    if (!passwordInput) return;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        iconElement.classList.remove("fa-eye");
+        iconElement.classList.add("fa-eye-slash"); // கண் வெட்டப்பட்ட ஐகானாக மாறும்
+    } else {
+        passwordInput.type = "password";
+        iconElement.classList.remove("fa-eye-slash");
+        iconElement.classList.add("fa-eye"); // சாதாரண கண் ஐகானாக மாறும்
+    }
+}
 
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
