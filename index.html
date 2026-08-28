@@ -3677,7 +3677,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
         iconElement.classList.add("fa-eye"); // சாதாரண கண் ஐகானாக மாறும்
     }
 }
-// 🛑 புதிய பாஸ்வேர்டை சேமித்து டேட்டாபேஸில் அப்டேட் செய்யும் சரியான பங்க்ஷன்
+// 🛑 புதிய பாஸ்வேர்டை உறுதியாக டேட்டாபேஸில் சேமித்து லாகின் செய்யும் பங்க்ஷன்
 async function submitNewPasswordReset() {
     const newPass = document.getElementById('newResetPassword').value.trim();
     const confirmPass = document.getElementById('newResetConfirmPassword').value.trim();
@@ -3696,19 +3696,19 @@ async function submitNewPasswordReset() {
     }
 
     try {
-        // backend-ல் பாஸ்வேர்டை அப்டேட் செய்ய சரியான API
-        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
+        // நாம் புதிதாக உருவாக்கிய /api/update-password ரூட்டை இங்கு அழைக்கிறோம்
+        const response = await fetch(`${API_BASE_URL}/api/update-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, password: newPass, otp: "0000" }) // சில backend-களுக்கு otp தேவைப்படலாம்
+            body: JSON.stringify({ phone: tempPhone, password: newPass })
         });
         const data = await response.json();
 
-        if (data.success || response.ok) {
-            currentUser = data.user || { phone: tempPhone, name: "Customer", wallet: 2500 };
+        if (data.success) {
+            currentUser = data.user;
             if(currentUser.wallet === undefined) currentUser.wallet = 2500;
             
-            // புதிய பாஸ்வேர்டுடன் யூசர் டேட்டாவை லோக்கல் ஸ்டோரேஜில் சேமித்தல்
+            // புதிய பாஸ்வேர்டுடன் யூசர் செஷனை சேமித்தல்
             localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
             updateHeaderLoginUI();
             toggleAuthModal(false);
@@ -3719,13 +3719,7 @@ async function submitNewPasswordReset() {
         }
     } catch (err) {
         console.error(err);
-        // ஆஃப்லைன்/டெஸ்டிங் சமயத்தில் லோக்கலாகவே லாகின் செய்ய வைக்க:
-        currentUser = { phone: tempPhone, name: "Customer", wallet: 2500, address: "No address saved" };
-        localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-        updateHeaderLoginUI();
-        toggleAuthModal(false);
-        openPremiumDashboard();
-        showToast("Password updated & Login successful!", false);
+        alert('Server connection error while updating password.');
     }
 }
   </script>
