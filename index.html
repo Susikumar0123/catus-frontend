@@ -2457,7 +2457,7 @@
     let twoMinTimer = null;
 let pendingRegData = {};
 
-// 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
+// 1. மொபைல் நம்பரை செக் செய்து ஏற்கனவே உள்ளவரா எனத் துல்லியமாகப் பார்த்தல்
 async function checkUserAndProceed() {
     const phone = document.getElementById('inputPhone').value.trim();
     if (phone.length !== 10) {
@@ -2475,11 +2475,11 @@ async function checkUserAndProceed() {
         const data = await response.json();
 
         if (data.success) {
-            // 🛑 ரொம்ப முக்கியம்: ஏற்கனவே யூசர் இருந்தால் மற்றும் பாஸ்வேர்ட் செட் செய்திருந்தால் 'password' ஸ்டெப்புக்கு போகும்
-            if (data.exists && data.hasPassword === true) {
+            // 🛑 ரொம்ப முக்கியம்: டேட்டாபேஸில் நம்பர் இருந்து, பாஸ்வேர்டும் செட் செய்யப்பட்டிருந்தால் நேரடியாக Login (Password) பேஜ்க்கு போகும்
+            if (data.exists === true || data.hasPassword === true) {
                 showAuthStep('password');
             } else {
-                // புதிய யூசர் என்றால் மட்டுமே ரெஜிஸ்டர் ஸ்டெப்புக்கு போகும்
+                // புதிய யூசர் என்றால் மட்டுமே Name, Email கேட்கும் Register பேஜ்க்கு போகும்
                 showAuthStep('register');
             }
         } else {
@@ -2487,7 +2487,8 @@ async function checkUserAndProceed() {
         }
     } catch (err) {
         console.error("Check user error:", err);
-        alert('Server connection error.');
+        // ஒருவேளை API-ல் சிக்கல் இருந்தால், பாதுகாப்பாக Password லாகினுக்கு அனுப்பலாம் அல்லது ரெஜிஸ்டருக்கு அனுப்பலாம்
+        showAuthStep('password'); 
     }
 }
 
