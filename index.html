@@ -77,7 +77,6 @@
     align-items: flex-start;
     position: relative;
 }
-
 .auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; }
 .auth-left-panel p { font-size: 16px; color: #111111; margin: 0; line-height: 1.5; }
 .auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #f6d2bc; overflow-y: auto; }
@@ -1084,19 +1083,6 @@
         width: 100% !important;
         box-sizing: border-box !important;
     }
-    /* பிரவுசர் ஆட்டோஃபில் செய்யும் போது வரும் வெள்ளை/நீலப் பின்னணியை நீக்க */
-.auth-input-field:-webkit-autofill,
-.auth-input-field:-webkit-autofill:hover, 
-.auth-input-field:-webkit-autofill:focus, 
-.auth-input-field:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #f6d2bc inset !important; /* வலதுபக்க பேனல் கலர் (#f6d2bc) */
-    -webkit-text-fill-color: #111111 !important;
-    transition: background-color 5000s ease-in-out 0s;
-}
-
-.auth-input-field {
-    background-color: transparent !important;
-}
     .auth-primary-btn {
         margin-top: 15px !important;
         padding: 10px !important;
@@ -1340,19 +1326,23 @@
             </div>
 
             <!-- STEP 3: COMPLETE REGISTRATION -->
-            <div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
-                <div style="margin-top: 10px;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Looks like you're new here!</h3>
-                    <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please provide your details to register.</p>
-                    
-                    <input type="text" id="regName" class="auth-input-field" placeholder="Full Name">
-                    <input type="email" id="regEmail" class="auth-input-field" placeholder="Gmail ID (e.g. name@gmail.com)">
-                    <input type="text" id="regPincode" class="auth-input-field" placeholder="6-digit Pincode" maxlength="6">
-                    <input type="password" id="regPassword" class="auth-input-field" placeholder="Create Password (min 4 chars)">
-                </div>
-                <button class="auth-primary-btn" onclick="proceedToOtpFromRegister()">GET OTP & REGISTER</button>
-                <div class="auth-bottom-link" onclick="backToPhoneStep()">Existing User? Log in</div>
-            </div>
+<div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
+    <div style="margin-top: 10px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Looks like you're new here!</h3>
+        <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please provide your details to register.</p>
+        
+        <input type="text" id="regName" class="auth-input-field" placeholder="Full Name">
+        <input type="email" id="regEmail" class="auth-input-field" placeholder="Gmail ID (e.g. name@gmail.com)">
+        <input type="text" id="regPincode" class="auth-input-field" placeholder="6-digit Pincode" maxlength="6">
+        <input type="password" id="regPassword" class="auth-input-field" placeholder="Create Password (min 4 chars)">
+        
+        <!-- 🛑 புதியதாக சேர்க்கப்பட வேண்டிய Confirm Password & Error Text -->
+        <input type="password" id="regConfirmPassword" class="auth-input-field" placeholder="Confirm Password">
+        <span id="passwordErrorMsg" style="color: #ef4444; font-size: 12px; display: none; margin-top: 5px;">Passwords do not match!</span>
+    </div>
+    <button class="auth-primary-btn" onclick="proceedToOtpFromRegister()">GET OTP & REGISTER</button>
+    <div class="auth-bottom-link" onclick="backToPhoneStep()">Existing User? Log in</div>
+</div>
 
             <!-- STEP 4: VERIFY OTP ONLY -->
             <div id="authStepOTP" style="display: none; flex-direction: column; height: 100%;">
@@ -2500,18 +2490,27 @@ function switchToNewUserRegisterDirect() {
     showAuthStep('register');
 }
 
-// 2. Registration Form ஃபில் செய்த பிறகு OTP அனுப்புவது
 async function proceedToOtpFromRegister() {
     const name = document.getElementById('regName').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     const pincode = document.getElementById('regPincode').value.trim();
     const password = document.getElementById('regPassword').value.trim();
+    const confirmPassword = document.getElementById('regConfirmPassword').value.trim();
+    const errorMsgEl = document.getElementById('passwordErrorMsg');
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!name) { alert('Please enter your full name.'); return; }
     if (!email || !emailPattern.test(email)) { alert('Please enter a valid Gmail address.'); return; }
     if (!pincode || pincode.length !== 6) { alert('Please enter a valid 6-digit Pincode.'); return; }
     if (!password || password.length < 4) { alert('Password must be at least 4 characters.'); return; }
+
+    // 🛑 இரண்டு பாஸ்வேர்டுகளும் ஒத்துப்போகிறதா எனச் சோதிக்கிறது
+    if (password !== confirmPassword) {
+        if (errorMsgEl) errorMsgEl.style.display = 'block';
+        return;
+    } else {
+        if (errorMsgEl) errorMsgEl.style.display = 'none';
+    }
 
     pendingRegData = { name, email, pincode, password, address: "No address saved" };
 
