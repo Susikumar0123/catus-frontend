@@ -265,7 +265,7 @@
            2. PRODUCT PAGE SPECIFIC STYLES (Modern Borderless & Overlay Rating)
            ========================================================== */
         .breadcrumb { font-size: 13px; color: #64748b; margin-bottom: 25px; font-weight: 500; border-top: 1px solid #e2e8f0; padding-top: 15px; }
-        .breadcrumb a { color: #b89789; text-decoration: none; }
+        .breadcrumb a { color: #a86c6d; text-decoration: none; }
         .breadcrumb span { margin: 0 8px; color: #cbd5e1; }
         .breadcrumb .active { color: #212121; }
         
@@ -785,6 +785,20 @@
 .toggle-password-icon:hover {
     color: #111111;
 }
+/* --- Delivery Address Widget Theme Fix --- */
+.header-location-widget {
+    background: #fcf6f6 !important;
+    border: 1.5px solid #d7a7a8 !important;
+}
+.header-location-widget .loc-label {
+    color: #8c5859 !important;
+}
+.header-location-widget strong {
+    color: #212121 !important;
+}
+.header-location-widget i {
+    color: #a86c6d !important;
+}
     </style>
 </head>
 <body>
@@ -811,12 +825,12 @@
           <div class="header-nav-right">
 
               <!-- Flipkart-Style Header Location Widget -->
-              <div class="header-location-widget" onclick="openLocationModal()" style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <div class="header-location-widget" onclick="openLocationModal()" style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #fcf6f6; padding: 6px 12px; border-radius: 8px; border: 1px solid #d7a7a8;">
                   <div class="loc-text-box" style="display: flex; flex-direction: column; font-size: 11px; line-height: 1.2;">
-                      <span class="loc-label" style="color: #64748b;">Delivery to</span>
-                      <strong id="headerLocationDisplay" style="color: #0f172a; font-size: 12px;">Tiruppur - 641601</strong>
+                      <span class="loc-label" style="color: #8c5859;">Delivery to</span>
+                      <strong id="headerLocationDisplay" style="color: #212121; font-size: 12px;">Tiruppur - 641601</strong>
                   </div>
-                  <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #64748b; margin-left: 2px;"></i>
+                  <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #a86c6d; margin-left: 2px;"></i>
               </div>
               
               <div class="nav-item cart-item" onclick="toggleCartModal(true)">
