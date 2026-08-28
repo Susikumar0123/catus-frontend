@@ -2560,7 +2560,6 @@ async function checkUserAndProceed() {
         alert('Server connection error.');
     }
 }
-
 // Step Control Function
 function showAuthStep(step) {
     document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
@@ -2586,10 +2585,12 @@ function showAuthStep(step) {
     }
 }
 
+// பின்னோக்கி செல்ல (Change Mobile Number அல்லது Cancel செய்ய)
 function backToPhoneStep() {
     showAuthStep('phone');
 }
 
+// "New to Catus? Create an account" கிளிக் செய்தால்
 function switchToNewUserRegisterDirect() {
     const phone = document.getElementById('inputPhone').value.trim();
     if (phone.length !== 10) {
@@ -2642,32 +2643,7 @@ async function proceedToRegisterAndOtp() {
     }
 }
 
-// Existing User -> Forgot Password -> Send OTP
-async function triggerForgotPassword() {
-    showToast("Sending OTP for password reset...", false);
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, mode: 'forgot' })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-            showAuthStep('otp');
-            document.getElementById('setPasswordInfo').textContent = `Reset OTP = 1234 sent to +91 ${tempPhone}.`;
-            startTwoMinTimer();
-            showToast("Reset OTP sent successfully! (Use 1234)", false);
-        } else {
-            alert(data.message || 'Failed to send OTP.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('Server error.');
-    }
-}
-
-// Existing User -> Password Login
+// 3. பாஸ்வேர்ட் மூலம் லாகின் செய்தல் (பழைய யூசர்)
 async function loginWithPassword() {
     const password = document.getElementById('inputPassword').value.trim();
     if (!password) { alert('Please enter your password.'); return; }
@@ -2697,7 +2673,55 @@ async function loginWithPassword() {
     }
 }
 
-// Verify OTP (1234) & Save/Update Password -> Login Success
+// 4. Forgot Password - OTP அனுப்புவது மற்றும் OTP பக்கத்திற்கு செல்வது
+async function triggerForgotPassword() {
+    showToast("Sending OTP for password reset...", false);
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, mode: 'forgot' })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showAuthStep('otp');
+            document.getElementById('setPasswordInfo').textContent = `Reset OTP = 1234 sent to +91 ${tempPhone}.`;
+            startTwoMinTimer();
+            showToast("Reset OTP sent successfully! (Use 1234)", false);
+        } else {
+            alert(data.message || 'Failed to send OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error.');
+    }
+}
+
+// ⏱️ 2 நிமிடங்கள் டைமர் லாஜிக்
+function startTwoMinTimer() {
+    let timeLeft = 120; 
+    const timerCountEl = document.getElementById('timerCount');
+    const resendBtnEl = document.getElementById('resendOtpBtn');
+
+    if (resendBtnEl) resendBtnEl.style.display = 'none';
+    if (twoMinTimer) clearInterval(twoMinTimer);
+
+    twoMinTimer = setInterval(() => {
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+        if (timerCountEl) {
+            timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        if (timeLeft <= 0) {
+            clearInterval(twoMinTimer);
+            if (timerCountEl) timerCountEl.parentElement.style.display = 'none';
+            if (resendBtnEl) resendBtnEl.style.display = 'inline';
+        }
+        timeLeft--;
+    }, 1000);
+}
+
 async function verifyOtpAndSetPassword() {
     const otpInput = document.getElementById('inputRegOTP');
     const otp = otpInput ? otpInput.value.trim() : '';
