@@ -71,7 +71,7 @@
     width: 750px;
     max-width: 95vw;
     height: 520px;
-    background: #ffffff;
+    background: #f6d2bc;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
@@ -84,8 +84,8 @@
 }
 .auth-left-panel {
     width: 38%;
-    background: #2874f0;
-    color: #ffffff;
+    background: #d7a7a8;
+    color: #111111;
     padding: 40px 30px;
     display: flex;
     flex-direction: column;
@@ -93,15 +93,17 @@
     position: relative;
 }
 .auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; }
-.auth-left-panel p { font-size: 16px; color: #dbdbdb; margin: 0; line-height: 1.5; }
-.auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #ffffff; overflow-y: auto; }
+.auth-left-panel p { font-size: 16px; color: #111111; margin: 0; line-height: 1.5; }
+.auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #f6d2bc; overflow-y: auto; }
 .auth-close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; color: #878787; cursor: pointer; }
-.auth-input-field { width: 100%; padding: 10px 0; font-size: 15px; border: none; border-bottom: 1.5px solid #e0e0e0; outline: none; color: #212121; margin-top: 25px; margin-bottom: 5px; background: transparent; box-sizing: border-box; }
-.auth-input-field:focus { border-bottom-color: #2874f0; }
-.auth-primary-btn { width: 100%; background: #fb641b; color: #ffffff; border: none; padding: 14px; border-radius: 2px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 25px; }
-.auth-terms-text { font-size: 11px; color: #878787; margin-top: 20px; line-height: 1.4; }
+.auth-input-field { width: 100%; padding: 10px 0; font-size: 15px; border: none; border-bottom: 1.5px solid #b89789; outline: none; color: #111111; margin-top: 25px; margin-bottom: 5px; background: transparent; box-sizing: border-box; }
+.auth-input-field:focus { border-bottom-color: #8b6d76; }
+.auth-input-field::placeholder { color: #555555; }
+.auth-primary-btn { width: 100%; background: #d7a7a8; color: #111111; border: none; padding: 14px; border-radius: 2px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 25px; }
+.auth-primary-btn:hover { background: #c29394; }
+.auth-terms-text { font-size: 11px; color: #334155; margin-top: 20px; line-height: 1.4; }
 .auth-terms-text a { color: #2874f0; text-decoration: none; }
-.auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #2874f0; font-weight: 600; cursor: pointer; padding-top: 20px; }
+.auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #000000; font-weight: 600; cursor: pointer; padding-top: 20px; }
 
 @media (max-width: 768px) {
     .auth-modal-wrapper {
@@ -2173,28 +2175,48 @@ async function verifyOtpAndSetPassword() {
     }
 }
 
-// விண்டோ ஸ்டெப்களை கன்ட்ரோல் செய்யும் பங்க்ஷன்
+// 🛑 எந்த ஸ்டெப் ஓபன் ஆக வேண்டும் என்பதை கன்ட்ரோல் செய்யும் பங்க்ஷன்
 function showAuthStep(step) {
     document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-    document.getElementById('authStepPassword').style.display = (step === 'password') ? 'flex' : 'none';
-    document.getElementById('authStepRegister').style.display = (step === 'register') ? 'flex' : 'none';
-    document.getElementById('authStepSetPassword').style.display = (step === 'setpassword') ? 'flex' : 'none';
+    
+    const passStep = document.getElementById('authStepPassword');
+    if (passStep) {
+        passStep.style.display = (step === 'password') ? 'flex' : 'none';
+    }
+
+    const regStep = document.getElementById('authStepRegister');
+    if (regStep) {
+        regStep.style.display = (step === 'register') ? 'flex' : 'none';
+    }
+    
+    let newPassStep = document.getElementById('authStepNewPassword');
+    if (newPassStep) {
+        newPassStep.style.display = (step === 'newpassword') ? 'flex' : 'none';
+    }
+
+    let otpStepElem = document.getElementById('authStepSetPassword') || document.getElementById('authStepOTP');
+    if (otpStepElem) {
+        otpStepElem.style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
+    }
 
     const titleEl = document.getElementById('leftPanelTitle');
     const descEl = document.getElementById('leftPanelDesc');
 
     if (step === 'phone') {
-        titleEl.textContent = "Looks like you're new here!";
-        descEl.textContent = "Sign up with your mobile number to get started";
+        if(titleEl) titleEl.textContent = "Looks like you're new here!";
+        if(descEl) descEl.textContent = "Sign up with your mobile number to get started";
     } else if (step === 'password') {
-        titleEl.textContent = "Login";
-        descEl.textContent = "Get access to your Orders, Services and Recommendations";
+        if(titleEl) titleEl.textContent = "Login";
+        if(descEl) descEl.textContent = "Get access to your Orders, Services and Recommendations";
+    } else if (step === 'newpassword') {
+        if(titleEl) titleEl.textContent = "Reset Password";
+        if(descEl) descEl.textContent = "Secure your account with a new password";
     } else if (step === 'register') {
-        titleEl.textContent = "Looks like you're new here!";
-        descEl.textContent = "Sign up with your mobile number to get started";
+        if(titleEl) titleEl.textContent = "Looks like you're new here!";
+        if(descEl) descEl.textContent = "Sign up with your mobile number to get started";
     } else {
-        titleEl.textContent = "Verify OTP";
-        descEl.textContent = "Please enter the OTP sent to your mobile";
+        if(titleEl) titleEl.textContent = "Verify OTP";
+        if(descEl) descEl.textContent = "Please enter the OTP sent to your mobile";
     }
 }
 
@@ -2202,11 +2224,209 @@ function backToPhoneStep() {
     showAuthStep('phone'); 
 }
 
-function checkCloseAuthModal(event) {
-    const drawer = document.getElementById('authDrawer');
-    const modal = document.getElementById('authModal');
-    if (drawer && !drawer.contains(event.target)) {
-        modal.style.display = 'none';
+// பழைய யூசரா புதியவரா எனச் சரிபார்த்தல்
+async function checkUserAndProceed() {
+    const phone = document.getElementById('inputPhone').value.trim();
+    if (phone.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+    }
+    tempPhone = phone;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/check-user`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            if (data.exists === true) {
+                showAuthStep('password');
+            } else {
+                showAuthStep('register');
+            }
+        } else {
+            showAuthStep('register');
+        }
+    } catch (err) {
+        console.error("Check user error:", err);
+        alert('Server connection error.');
+    }
+}
+function switchToNewUserRegisterDirect() {
+    const phone = document.getElementById('inputPhone').value.trim();
+    if (phone.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number first.');
+        return;
+    }
+    tempPhone = phone;
+    showAuthStep('register');
+}
+
+async function proceedToOtpFromRegister() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pincode = document.getElementById('regPincode').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name) { alert('Please enter your full name.'); return; }
+    if (!email || !emailPattern.test(email)) { alert('Please enter a valid Gmail address.'); return; }
+    if (!pincode || pincode.length !== 6) { alert('Please enter a valid 6-digit Pincode.'); return; }
+    if (!password || password.length < 4) { alert('Password must be at least 4 characters.'); return; }
+
+    pendingRegData = { name, email, pincode, password, address: "No address saved" };
+
+    try {
+        showToast("Sending OTP...", false);
+        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showAuthStep('setpassword');
+            const infoEl = document.getElementById('setPasswordInfo');
+            if(infoEl) infoEl.textContent = `Please enter the OTP sent to +91 ${tempPhone}`;
+            startTwoMinTimer();
+            showToast("OTP sent successfully!", false);
+        } else {
+            alert(data.message || 'Failed to send OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error while sending OTP.');
+    }
+}
+
+async function loginWithPassword() {
+    const password = document.getElementById('inputPassword').value.trim();
+    if (!password) { alert('Please enter your password.'); return; }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/login-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, password: password })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("Login Successful!", false);
+        } else {
+            alert(data.message || 'Incorrect password.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server connection error.');
+    }
+}
+
+async function triggerForgotPassword() {
+    showToast("Sending OTP for password reset...", false);
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showAuthStep('setpassword');
+            const infoEl = document.getElementById('setPasswordInfo');
+            if(infoEl) infoEl.textContent = `Reset OTP sent to +91 ${tempPhone}. Please enter it below.`;
+            startTwoMinTimer();
+            showToast("OTP sent successfully!", false);
+        } else {
+            alert(data.message || 'Failed to send OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error.');
+    }
+}
+
+function startTwoMinTimer() {
+    let timeLeft = 120; 
+    const timerCountEl = document.getElementById('timerCount');
+    const resendBtnEl = document.getElementById('resendOtpBtn');
+
+    if (resendBtnEl) resendBtnEl.style.display = 'none';
+    if (twoMinTimer) clearInterval(twoMinTimer);
+
+    twoMinTimer = setInterval(() => {
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+        if (timerCountEl) {
+            timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        if (timeLeft <= 0) {
+            clearInterval(twoMinTimer);
+            if (timerCountEl && timerCountEl.parentElement) timerCountEl.parentElement.style.display = 'none';
+            if (resendBtnEl) resendBtnEl.style.display = 'inline';
+        }
+        timeLeft--;
+    }, 1000);
+}
+
+async function verifyOtpAndSetPassword() {
+    const otp = document.getElementById('inputRegOTP').value.trim();
+    if (otp.length !== 4) { alert('Please enter a valid 4-digit OTP.'); return; }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, otp: otp, password: pendingRegData.password || 'default123' })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            if (pendingRegData.name) {
+                const regRes = await fetch(`${API_BASE_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        name: pendingRegData.name, 
+                        email: pendingRegData.email, 
+                        phone: tempPhone, 
+                        pincode: pendingRegData.pincode, 
+                        address: pendingRegData.address 
+                    })
+                });
+                const regData = await regRes.json();
+                if (regData.success) {
+                    currentUser = regData.user;
+                } else {
+                    currentUser = data.user;
+                }
+            } else {
+                currentUser = data.user;
+            }
+
+            if(currentUser && currentUser.wallet === undefined) currentUser.wallet = 2500;
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("Registration & Login Successful!", false);
+        } else {
+            alert(data.message || 'Invalid or expired OTP.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server error during verification.');
     }
 }
 
