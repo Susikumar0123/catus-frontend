@@ -574,18 +574,35 @@
     margin-bottom: 0 !important; /* ஒட்டிக்கொள்ளாமல் இருக்க */
 }
 
-        .checkout-btn {
-    width: 100%;
-    background: #0284c7;
-    color: white;
-    border: none;
-    padding: 14px !important; /* பட்டன் பார்ப்பதற்கு இன்னும் அழகாகவும் பெரிதாகவும் இருக்க */
-    border-radius: 8px !important;
+        /* --- 1. Clear Cart Text Color to Purple --- */
+.cart-header span[onclick*="clearCart"], 
+.clear-cart-text {
+    color: #7c3aed !important; /* ஊதா நிறம் */
     font-weight: 600;
     cursor: pointer;
-    font-size: 14px;
-    transition: 0.2s;
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+.cart-header span[onclick*="clearCart"]:hover {
+    text-decoration: underline !important;
+}
+
+/* --- 2. Proceed to Checkout Button Color to Purple --- */
+.checkout-btn {
+    width: 100% !important;
+    background: #7c3aed !important; /* ஊதா நிறம் */
+    color: white !important;
+    border: none !important;
+    padding: 14px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    font-size: 15px !important;
+    transition: 0.2s !important;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
+}
+
+.checkout-btn:hover {
+    background: #6d28d9 !important; /* ஹோவர் செய்யும்போது சற்று டார்க் ஆன பர்ப்பிள் */
+    transform: translateY(-2px);
 }
 
         /* Login & Register Modal Styles */
