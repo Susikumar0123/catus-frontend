@@ -2787,32 +2787,48 @@ function startTwoMinTimer() {
     }, 1000);
 }
 
-// 5. OTP வெரிஃபை செய்துவிட்டு புதிய பாஸ்வேர்ட் பக்கத்திற்கு (newpassword) செல்வது
 async function verifyOtpAndSetPassword() {
-    const otp = document.getElementById('inputRegOTP').value.trim();
+    // 🛑 ID 'inputRegOTP'-ilirunthu sariyaana value-ai eduthukolla
+    const otpInput = document.getElementById('inputRegOTP');
+    const otp = otpInput ? otpInput.value.trim() : '';
 
-    if (otp.length !== 4) { 
+    if (!otp || otp.length !== 4) { 
         alert('Please enter a valid 4-digit OTP.'); 
         return; 
     }
 
+    if (!tempPhone) {
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
+
     try {
-        const response = await fetch(`${API_BASE_URL}/api/verify-otp`, {
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, otp: otp })
+            body: JSON.stringify({ 
+                phone: tempPhone, 
+                otp: otp, 
+                password: (typeof pendingRegData !== 'undefined' && pendingRegData.password) ? pendingRegData.password : 'default123' 
+            })
         });
         const data = await response.json();
 
-        // 🛑 OTP சரியானது உறுதி செய்யப்பட்டதும் நேராக புதிய பாஸ்வேர்ட் பக்கத்திற்குச் செல்லும்
-        showAuthStep('newpassword');
-        showToast("OTP Verified! Please enter your new password.", false);
-
+        if (data.success) {
+            currentUser = data.user;
+            if(currentUser && currentUser.wallet === undefined) currentUser.wallet = 2500;
+            
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("OTP Verified & Login Successful!", false);
+        } else {
+            alert(data.message || 'Invalid or incorrect OTP.');
+        }
     } catch (err) {
-        console.error(err);
-        // சர்வர் இணைப்பு இல்லாவிட்டாலும் அடுத்த பக்கத்திற்குச் செல்ல அனுமதிக்கலாம்
-        showAuthStep('newpassword');
-        showToast("OTP Verified Successfully!", false);
+        console.error("OTP verification error:", err);
+        alert('Server connection error during OTP verification.');
     }
 }
 

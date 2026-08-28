@@ -2381,56 +2381,48 @@ function startTwoMinTimer() {
     }, 1000);
 }
 
-// 2. OTP வெரிஃபை செய்து டேட்டாபேஸில் ரெஜிஸ்டர் செய்வது
 async function verifyOtpAndSetPassword() {
-    const otp = document.getElementById('inputRegOTP').value.trim();
+    // 🛑 ID 'inputRegOTP'-ilirunthu sariyaana value-ai eduthukolla
+    const otpInput = document.getElementById('inputRegOTP');
+    const otp = otpInput ? otpInput.value.trim() : '';
 
-    if (otp.length !== 4) { alert('Please enter a valid 4-digit OTP.'); return; }
+    if (!otp || otp.length !== 4) { 
+        alert('Please enter a valid 4-digit OTP.'); 
+        return; 
+    }
+
+    if (!tempPhone) {
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
 
     try {
-        // 1. First Verify OTP and Set Password in backend using the new password created
         const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, otp: otp, password: pendingRegData.password })
+            body: JSON.stringify({ 
+                phone: tempPhone, 
+                otp: otp, 
+                password: (typeof pendingRegData !== 'undefined' && pendingRegData.password) ? pendingRegData.password : 'default123' 
+            })
         });
         const data = await response.json();
 
         if (data.success) {
-            // 2. Complete registration in database with Name, Email, Pincode
-            const regRes = await fetch(`${API_BASE_URL}/api/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    name: pendingRegData.name, 
-                    email: pendingRegData.email, 
-                    phone: tempPhone, 
-                    pincode: pendingRegData.pincode, 
-                    address: pendingRegData.address 
-                })
-            });
-            const regData = await regRes.json();
-
-            if (regData.success) {
-                currentUser = regData.user;
-                // பாஸ்வேர்டை யூசர் ஆப்ஜெக்ட்டில் இணைத்துக்கொள்ள
-                currentUser.password = pendingRegData.password;
-            } else {
-                currentUser = data.user;
-            }
-
+            currentUser = data.user;
             if(currentUser && currentUser.wallet === undefined) currentUser.wallet = 2500;
+            
             localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
-            showToast("Registration & Login Successful!", false);
+            showToast("OTP Verified & Login Successful!", false);
         } else {
-            alert(data.message || 'Invalid or expired OTP.');
+            alert(data.message || 'Invalid or incorrect OTP.');
         }
     } catch (err) {
-        console.error(err);
-        alert('Server error during verification.');
+        console.error("OTP verification error:", err);
+        alert('Server connection error during OTP verification.');
     }
 }
 
@@ -2639,55 +2631,7 @@ function startTwoMinTimer() {
     }, 1000);
 }
 
-async function verifyOtpAndSetPassword() {
-    const otp = document.getElementById('inputRegOTP').value.trim();
-    if (otp.length !== 4) { alert('Please enter a valid 4-digit OTP.'); return; }
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, otp: otp, password: pendingRegData.password || 'default123' })
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            if (pendingRegData.name) {
-                const regRes = await fetch(`${API_BASE_URL}/api/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        name: pendingRegData.name, 
-                        email: pendingRegData.email, 
-                        phone: tempPhone, 
-                        pincode: pendingRegData.pincode, 
-                        address: pendingRegData.address 
-                    })
-                });
-                const regData = await regRes.json();
-                if (regData.success) {
-                    currentUser = regData.user;
-                } else {
-                    currentUser = data.user;
-                }
-            } else {
-                currentUser = data.user;
-            }
-
-            if(currentUser && currentUser.wallet === undefined) currentUser.wallet = 2500;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-            updateHeaderLoginUI();
-            toggleAuthModal(false);
-            openPremiumDashboard();
-            showToast("Registration & Login Successful!", false);
-        } else {
-            alert(data.message || 'Invalid or expired OTP.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('Server error during verification.');
-    }
-}
 
     function openPremiumDashboard() {
         toggleAuthModal(false);
