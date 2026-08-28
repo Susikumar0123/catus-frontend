@@ -73,9 +73,11 @@
     padding: 40px 30px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center !important; /* 🛑 மேலிருந்து கீழே சரியாக நடுவில் இருக்க */
+    align-items: flex-start;
     position: relative;
 }
+
 .auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; }
 .auth-left-panel p { font-size: 16px; color: #111111; margin: 0; line-height: 1.5; }
 .auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #f6d2bc; overflow-y: auto; }
@@ -1063,24 +1065,7 @@
         box-sizing: border-box !important;
         position: relative !important;
     }
-    /* 1. Continue பட்டன் டெக்ஸ்ட் கலரை பிளாக்கிற்கு மாற்ற */
-.auth-primary-btn {
-    color: #111111 !important; /* கருப்பு நிற எழுத்துக்கள் */
-}
 
-/* 2. இடது பக்க பேனலில் உள்ள டெக்ஸ்ட்களை சென்டருக்கு (Vertically Centered) கொண்டு வர */
-.auth-left-panel {
-    justify-content: center !important; /* மேலிருந்து கீழே சரியாக நடுவில் இருக்க */
-    text-align: left; /* அல்லது டெக்ஸ்ட் நடுவில் வர வேண்டும் என்றால் center என மாற்றலாம் */
-}
-
-/* இடது பக்க டெக்ஸ்ட்களுக்கு இடையே உள்ள இடைவெளியை சீரமைக்க */
-.auth-left-panel > div:first-child {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 12px;
-}
     .auth-left-panel h2 { font-size: 15px !important; margin-bottom: 2px !important; }
     .auth-left-panel p { font-size: 11px !important; }
     .auth-left-illustration { display: none !important; }
