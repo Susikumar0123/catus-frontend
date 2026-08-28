@@ -257,10 +257,33 @@
         .nav-item:hover svg { stroke: #0284c7; }
         .cart-icon-wrapper { position: relative; display: flex; align-items: center; }
         .cart-badge { position: absolute; top: -6px; right: -8px; background: #10b981; color: #ffffff; font-size: 10px; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
-        .login-btn { background: #d7a7a8; color: #fff; border: none; padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .login-btn:hover { background: #c29394; }
-        .login-btn svg {stroke: #111111;}
+        .login-btn { 
+    background: #d7a7a8 !important; 
+    color: #111111 !important; /* டெக்ஸ்ட் கலர் கருப்பு */
+    border: none; 
+    padding: 8px 16px; 
+    border-radius: 50px; 
+    font-size: 13px; 
+    font-weight: 500; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    transition: background 0.2s; 
+    max-width: 150px; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+}
 
+.login-btn:hover { 
+    background: #c29394 !important; 
+}
+
+/* லாகின் பட்டனுக்குள் இருக்கும் ஐகானும் (User Icon) கருப்பு நிறமாக மாற */
+.login-btn svg { 
+    stroke: #111111 !important; 
+}
         /* ==========================================================
            2. PRODUCT PAGE SPECIFIC STYLES (Modern Borderless & Overlay Rating)
            ========================================================== */
