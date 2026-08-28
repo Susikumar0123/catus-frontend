@@ -1449,7 +1449,7 @@
 
         <span id="resetPasswordErrorMsg" style="color: #ef4444; font-size: 12px; display: none; margin-top: 5px;">Passwords do not match!</span>
     </div>
-    
+    <button class="auth-primary-btn" onclick="submitNewPasswordReset()">UPDATE PASSWORD & LOGIN</button>
     <div class="auth-bottom-link" onclick="backToPhoneStep()">← Cancel</div>
 </div>
 
@@ -1488,6 +1488,11 @@
                     <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the OTP sent to your mobile.</p>
                     
                     <input type="text" id="inputRegOTP" class="auth-input-field" placeholder="Enter 4-digit OTP" maxlength="4">
+                    <!-- 🛑 புதிய பாஸ்வேர்ட் டைப் செய்ய இந்த input-ஐ சேர்க்கவும் -->
+<div class="password-field-wrapper" style="margin-top: 15px;">
+    <input type="password" id="forgotNewPassword" class="auth-input-field" placeholder="Enter New Password (min 4 chars)">
+    <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('forgotNewPassword', this)"></i>
+</div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin: 8px 0 15px 0;">
                         <span style="color: #878787;">Resend code in <b id="timerCount" style="color: #212121;">2:00</b></span>
@@ -2788,13 +2793,21 @@ function startTwoMinTimer() {
 }
 
 async function verifyOtpAndSetPassword() {
-    // 🛑 ID 'inputRegOTP'-ilirunthu sariyaana value-ai eduthukolla
     const otpInput = document.getElementById('inputRegOTP');
     const otp = otpInput ? otpInput.value.trim() : '';
+
+    // புதிய பாஸ்வேர்ட் input-ல் இருந்து மதிப்பை வாங்குதல்
+    const newPassInput = document.getElementById('forgotNewPassword');
+    const newPassword = newPassInput ? newPassInput.value.trim() : 'default123';
 
     if (!otp || otp.length !== 4) { 
         alert('Please enter a valid 4-digit OTP.'); 
         return; 
+    }
+
+    if (!newPassword || newPassword.length < 4) {
+        alert('Password must be at least 4 characters.');
+        return;
     }
 
     if (!tempPhone) {
@@ -2809,7 +2822,7 @@ async function verifyOtpAndSetPassword() {
             body: JSON.stringify({ 
                 phone: tempPhone, 
                 otp: otp, 
-                password: (typeof pendingRegData !== 'undefined' && pendingRegData.password) ? pendingRegData.password : 'default123' 
+                password: newPassword // 🛑 நயா பாஸ்வேர்ட் சர்வர்க்கு அனுப்பப்படுகிறது
             })
         });
         const data = await response.json();
@@ -2822,7 +2835,7 @@ async function verifyOtpAndSetPassword() {
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
-            showToast("OTP Verified & Login Successful!", false);
+            showToast("Password updated & Login successful!", false);
         } else {
             alert(data.message || 'Invalid or incorrect OTP.');
         }
@@ -3772,7 +3785,49 @@ function togglePasswordVisibility(fieldId, iconElement) {
         iconElement.classList.add("fa-eye"); // சாதாரண கண் ஐகானாக மாறும்
     }
 }
+// 🛑 பிரண்ட்என்டில் உடனடியாக வேலை செய்யும் புதிய பாஸ்வேர்ட் ரீசெட் பங்க்ஷன்
+async function submitNewPasswordReset() {
+    const newPass = document.getElementById('newResetPassword').value.trim();
+    const confirmPass = document.getElementById('newResetConfirmPassword').value.trim();
+    const errorEl = document.getElementById('resetPasswordErrorMsg');
 
+    if (!newPass || newPass.length < 4) {
+        alert('Password must be at least 4 characters.');
+        return;
+    }
+
+    if (newPass !== confirmPass) {
+        if (errorEl) errorEl.style.display = 'block';
+        return;
+    } else {
+        if (errorEl) errorEl.style.display = 'none';
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, password: newPass })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
+            
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openPremiumDashboard();
+            showToast("Password updated & Login successful!", false);
+        } else {
+            alert(data.message || 'Failed to update password.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server connection error while updating password.');
+    }
+}
   </script>
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
