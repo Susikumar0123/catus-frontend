@@ -1655,24 +1655,34 @@
                     </p>
 
 
-                    <!-- FULL NAME -->
-                    <input
-                        type="text"
-                        id="regName"
-                        class="auth-input-field"
-                        placeholder="Full Name"
-                        autocomplete="name"
-                    >
+                    <!-- MOBILE NUMBER -->
+<input
+    type="tel"
+    id="regMobile"
+    class="auth-input-field"
+    placeholder="Mobile Number"
+    maxlength="10"
+    inputmode="numeric"
+    autocomplete="tel"
+>
 
+<!-- FULL NAME -->
+<input
+    type="text"
+    id="regName"
+    class="auth-input-field"
+    placeholder="Full Name"
+    autocomplete="name"
+>
 
-                    <!-- EMAIL -->
-                    <input
-                        type="email"
-                        id="regEmail"
-                        class="auth-input-field"
-                        placeholder="Gmail ID (e.g. name@gmail.com)"
-                        autocomplete="email"
-                    >
+<!-- OPTIONAL EMAIL -->
+<input
+    type="email"
+    id="regEmail"
+    class="auth-input-field"
+    placeholder="Gmail ID (Optional)"
+    autocomplete="email"
+>
 
 
                     <!-- PINCODE -->
@@ -3280,73 +3290,309 @@ function backToPhoneStep() {
 
 // "New to Catus? Create an account" கிளிக் செய்தால்
 function switchToNewUserRegisterDirect() {
-    const phone = document.getElementById('inputPhone').value.trim();
-    if (phone.length !== 10) {
-        alert('Please enter a valid 10-digit mobile number first.');
-        return;
+
+    const phoneInput =
+        document.getElementById('inputPhone');
+
+    const regMobileInput =
+        document.getElementById('regMobile');
+
+    const phone =
+        phoneInput
+            ? phoneInput.value.trim()
+            : '';
+
+    // First screen-la already mobile enter pannirundha
+    // registration mobile field-la auto-fill pannuvom.
+    if (/^\d{10}$/.test(phone)) {
+
+        tempPhone = phone;
+
+        if (regMobileInput) {
+            regMobileInput.value = phone;
+        }
+
+    } else {
+
+        tempPhone = '';
+
+        if (regMobileInput) {
+            regMobileInput.value = '';
+        }
     }
-    tempPhone = phone;
+
+    authFlowMode = 'register';
+
     showAuthStep('register');
 }
 
 async function proceedToOtpFromRegister() {
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pincode = document.getElementById('regPincode').value.trim();
-    const password = document.getElementById('regPassword').value.trim();
-    const confirmPassword = document.getElementById('regConfirmPassword').value.trim();
-    const errorMsgEl = document.getElementById('passwordErrorMsg');
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!name) { alert('Please enter your full name.'); return; }
-    if (!email || !emailPattern.test(email)) { alert('Please enter a valid Gmail address.'); return; }
-    if (!pincode || pincode.length !== 6) { alert('Please enter a valid 6-digit Pincode.'); return; }
-    if (!password || password.length < 4) { alert('Password must be at least 4 characters.'); return; }
+    const mobileInput =
+        document.getElementById('regMobile');
 
-    // 🛑 இரண்டு பாஸ்வேர்டுகளும் ஒத்துப்போகிறதா எனச் சோதிக்கிறது
-    if (password !== confirmPassword) {
-        if (errorMsgEl) errorMsgEl.style.display = 'block';
+    const nameInput =
+        document.getElementById('regName');
+
+    const emailInput =
+        document.getElementById('regEmail');
+
+    const pincodeInput =
+        document.getElementById('regPincode');
+
+    const passwordInput =
+        document.getElementById('regPassword');
+
+    const confirmPasswordInput =
+        document.getElementById('regConfirmPassword');
+
+    const errorMsgEl =
+        document.getElementById('passwordErrorMsg');
+
+    const phone =
+        mobileInput
+            ? mobileInput.value.trim()
+            : '';
+
+    const name =
+        nameInput
+            ? nameInput.value.trim()
+            : '';
+
+    const email =
+        emailInput
+            ? emailInput.value.trim()
+            : '';
+
+    const pincode =
+        pincodeInput
+            ? pincodeInput.value.trim()
+            : '';
+
+    const password =
+        passwordInput
+            ? passwordInput.value.trim()
+            : '';
+
+    const confirmPassword =
+        confirmPasswordInput
+            ? confirmPasswordInput.value.trim()
+            : '';
+
+
+    // ==========================================
+    // MOBILE VALIDATION
+    // ==========================================
+
+    if (!/^\d{10}$/.test(phone)) {
+
+        alert(
+            'Please enter a valid 10-digit mobile number.'
+        );
+
+        if (mobileInput) {
+            mobileInput.focus();
+        }
+
         return;
-    } else {
-        if (errorMsgEl) errorMsgEl.style.display = 'none';
     }
 
-    pendingRegData = { name, email, pincode, password, address: "No address saved" };
 
-    try {
-        showToast("Sending OTP...", false);
-        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-    phone: tempPhone,
-    mode: 'register',
-    name: name,
-    email: email,
-    pincode: pincode
-})
-        });
-        const data = await res.json();
+    // ==========================================
+    // NAME VALIDATION
+    // ==========================================
 
-        if (data.success) {
+    if (!name) {
+
+        alert('Please enter your full name.');
+
+        if (nameInput) {
+            nameInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // PINCODE VALIDATION
+    // ==========================================
+
+    if (!/^\d{6}$/.test(pincode)) {
+
+        alert('Please enter a valid 6-digit pincode.');
+
+        if (pincodeInput) {
+            pincodeInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // PASSWORD VALIDATION
+    // ==========================================
+
+    if (!password || password.length < 4) {
+
+        alert(
+            'Password must be at least 4 characters.'
+        );
+
+        if (passwordInput) {
+            passwordInput.focus();
+        }
+
+        return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+        if (errorMsgEl) {
+            errorMsgEl.textContent =
+                'Passwords do not match!';
+
+            errorMsgEl.style.display =
+                'block';
+        }
+
+        return;
+    }
+
+    if (errorMsgEl) {
+        errorMsgEl.style.display = 'none';
+    }
+
+
+    // ==========================================
+    // OPTIONAL EMAIL VALIDATION
+    // ==========================================
+
+    if (
+        email &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+
+        alert(
+            'Please enter a valid Gmail/email address or leave it empty.'
+        );
+
+        if (emailInput) {
+            emailInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // SAVE TEMP REGISTRATION DATA
+    // ==========================================
+
+    tempPhone = phone;
 
     authFlowMode = 'register';
 
-    showAuthStep('otp');
+    pendingRegData = {
+        name: name,
+        email: email,
+        pincode: pincode,
+        password: password,
+        address: 'No address saved'
+    };
 
-    document.getElementById('setPasswordInfo').textContent =
-        `Please enter the OTP sent to +91 ${tempPhone}`;
 
-    startTwoMinTimer();
+    // ==========================================
+    // SEND REGISTRATION OTP
+    // ==========================================
 
-    showToast("OTP sent successfully!", false);
+    try {
 
-} else {
-    alert(data.message || 'Failed to send OTP.');
-}
-    } catch (err) {
-        console.error(err);
-        alert('Server error while sending OTP.');
+        showToast(
+            'Sending OTP...',
+            false
+        );
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/send-otp`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    phone: phone,
+                    mode: 'register',
+                    name: name,
+                    email: email,
+                    pincode: pincode
+                })
+            }
+        );
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            alert(
+                data.message ||
+                'Unable to send registration OTP.'
+            );
+
+            return;
+        }
+
+
+        // ==========================================
+        // OTP SCREEN
+        // ==========================================
+
+        showAuthStep('otp');
+
+        const infoEl =
+            document.getElementById(
+                'setPasswordInfo'
+            );
+
+        if (infoEl) {
+
+            infoEl.textContent =
+                `Registration OTP sent to +91 ${phone}. Please enter it below.`;
+        }
+
+        const otpInput =
+            document.getElementById(
+                'inputRegOTP'
+            );
+
+        if (otpInput) {
+            otpInput.value = '';
+            otpInput.focus();
+        }
+
+        startTwoMinTimer();
+
+        showToast(
+            'OTP sent successfully!',
+            false
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Registration OTP error:',
+            error
+        );
+
+        alert(
+            'Server connection error while sending registration OTP.'
+        );
     }
 }
 
@@ -3797,20 +4043,24 @@ async function resendCurrentOtp() {
     try {
 
         const body = {
-            phone: tempPhone
-        };
+    phone: tempPhone
+};
 
-        // Registration OTP
-        if (authFlowMode === 'register') {
+// Registration OTP resend
+if (authFlowMode === 'register') {
 
-            body.mode = 'register';
-            body.name =
-                pendingRegData.name || '';
-            body.email =
-                pendingRegData.email || '';
-            body.pincode =
-                pendingRegData.pincode || '';
-        }
+    body.mode = 'register';
+    body.resend = true;
+
+    body.name =
+        pendingRegData.name || '';
+
+    body.email =
+        pendingRegData.email || '';
+
+    body.pincode =
+        pendingRegData.pincode || '';
+}
 
         const response = await fetch(
             `${API_BASE_URL}/api/send-otp`,
