@@ -3680,8 +3680,7 @@ async function submitNewPasswordReset() {
     if (password !== confirmPassword) {
 
         if (errorMsg) {
-            errorMsg.textContent =
-                'Passwords do not match!';
+            errorMsg.textContent = 'Passwords do not match!';
             errorMsg.style.display = 'block';
         }
 
@@ -3689,14 +3688,29 @@ async function submitNewPasswordReset() {
     }
 
     if (!tempPhone) {
-        alert('Mobile number missing.');
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
+
+    // OTP field-ல் user entered OTP இன்னும் இருக்கும்.
+    const otpInput =
+        document.getElementById('inputRegOTP');
+
+    const verifiedOtp =
+        otpInput
+            ? otpInput.value.trim()
+            : '';
+
+    if (!/^\d{4}$/.test(verifiedOtp)) {
+        alert('OTP session is invalid. Please verify again.');
+        showAuthStep('otp');
         return;
     }
 
     try {
 
         const response = await fetch(
-            `${API_BASE_URL}/api/update-password-after-otp`,
+            `${API_BASE_URL}/api/verify-otp-set-password`,
             {
                 method: 'POST',
                 headers: {
@@ -3704,6 +3718,7 @@ async function submitNewPasswordReset() {
                 },
                 body: JSON.stringify({
                     phone: tempPhone,
+                    otp: verifiedOtp,
                     password: password
                 })
             }
@@ -3734,7 +3749,9 @@ async function submitNewPasswordReset() {
         );
 
         updateHeaderLoginUI();
+
         toggleAuthModal(false);
+
         openPremiumDashboard();
 
         showToast(
@@ -3748,6 +3765,10 @@ async function submitNewPasswordReset() {
 
         if (confirmInput) {
             confirmInput.value = '';
+        }
+
+        if (otpInput) {
+            otpInput.value = '';
         }
 
         otpVerified = false;
