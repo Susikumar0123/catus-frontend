@@ -1123,123 +1123,685 @@
       </div>
   </div>
 
-<!-- PREMIUM FLIPKART STYLE AUTHENTICATION MODAL -->
-<div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
-    <div class="auth-modal-container" id="authDrawer" style="position: relative;">
-        
-<!-- Left Panel (Shield removed) -->
-<div class="auth-left-panel" style="position: relative;">
-    <div>
-        <h2 id="leftPanelTitle">Looks like you're new here!</h2>
-        <p id="leftPanelDesc">Sign up with your mobile number to get started</p>
-    </div>
-</div>
+<!-- =========================================================
+     PREMIUM FLIPKART STYLE AUTHENTICATION MODAL
+========================================================= -->
 
-        <!-- Right White Panel (இதற்கு கீழே உள்ள உங்களது ஸ்டெப்ஸ்கள் அப்படியே இருக்கும்) -->
+<div
+    class="auth-modal-wrapper"
+    id="authModal"
+    onclick="checkCloseAuthModal(event)"
+>
+
+    <div
+        class="auth-modal-container"
+        id="authDrawer"
+        style="position: relative;"
+    >
+
+        <!-- =================================================
+             LEFT PANEL
+        ================================================== -->
+        <div
+            class="auth-left-panel"
+            style="position: relative;"
+        >
+            <div>
+
+                <h2 id="leftPanelTitle">
+                    Looks like you're new here!
+                </h2>
+
+                <p id="leftPanelDesc">
+                    Sign up with your mobile number to get started
+                </p>
+
+            </div>
+        </div>
+
+
+        <!-- =================================================
+             RIGHT PANEL
+        ================================================== -->
         <div class="auth-right-panel">
-            <button type="button" class="desktop-header-close auth-close-btn" onclick="toggleAuthModal(false)">
+
+            <!-- CLOSE BUTTON -->
+            <button
+                type="button"
+                class="desktop-header-close auth-close-btn"
+                onclick="toggleAuthModal(false)"
+                aria-label="Close"
+            >
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <!-- STEP 2: ENTER PASSWORD (LOGIN) -->
-<div id="authStepPassword" style="display: none; flex-direction: column; height: 100%;">
-    <div style="margin-top: 10px;">
-        <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #111111;">Enter Password</h3>
-        <p id="passInfoText" style="font-size: 13px; color: #334155; margin: 0 0 15px 0;">Welcome back! Please enter your password to login.</p>
-        
-        <!-- Password Input with Eye Icon -->
-        <div class="password-field-wrapper">
-            <input type="password" id="inputPassword" class="auth-input-field" placeholder="Enter your password">
-            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('inputPassword', this)"></i>
-        </div>
 
-        <div style="text-align: right; margin-top: 8px;">
-            <span style="color: #0284c7; font-size: 13px; font-weight: 600; cursor: pointer;" onclick="triggerForgotPassword()">Forgot?</span>
-        </div>
-    </div>
-    <button class="auth-primary-btn" onclick="loginWithPassword()">LOGIN</button>
-    <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
-</div>
-            <!-- STEP 1: ENTER MOBILE NUMBER -->
-            <div id="authStepPhone" style="display: flex; flex-direction: column; height: 100%;">
+
+            <!-- =================================================
+                 STEP 1 : MOBILE NUMBER
+            ================================================== -->
+            <div
+                id="authStepPhone"
+                style="
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                "
+            >
+
                 <div style="margin-top: 10px;">
-                    <input type="tel" id="inputPhone" class="auth-input-field" placeholder="Enter Mobile number" maxlength="10">
-                    <p class="auth-terms-text">By continuing, you agree to Catus Electronics' <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+
+                    <h3
+                        style="
+                            margin: 0 0 10px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        "
+                    >
+                        Welcome to Catus
+                    </h3>
+
+                    <p
+                        style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 20px 0;
+                            line-height: 1.5;
+                        "
+                    >
+                        Enter your mobile number to continue
+                    </p>
+
+                    <input
+                        type="tel"
+                        id="inputPhone"
+                        class="auth-input-field"
+                        placeholder="Enter Mobile number"
+                        maxlength="10"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                    >
+
+                    <p class="auth-terms-text">
+                        By continuing, you agree to Catus Electronics'
+                        <a href="#">Terms of Use</a>
+                        and
+                        <a href="#">Privacy Policy</a>.
+                    </p>
+
                 </div>
-                <button class="auth-primary-btn" onclick="checkUserAndProceed()">CONTINUE</button>
-                <div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">New to Catus? Create an account</div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="checkUserAndProceed()"
+                >
+                    CONTINUE
+                </button>
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="switchToNewUserRegisterDirect()"
+                >
+                    New to Catus? Create an account
+                </div>
+
             </div>
 
-            <!-- STEP 5: CREATE NEW PASSWORD (FORGOT PASSWORD RESET) -->
-<div id="authStepNewPassword" style="display: none; flex-direction: column; height: 100%;">
-    <div style="margin-top: 10px;">
-        <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Create New Password</h3>
-        <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter your new password below.</p>
-        
-        <!-- New Password with Eye Icon -->
-        <div class="password-field-wrapper">
-            <input type="password" id="newResetPassword" class="auth-input-field" placeholder="New Password (min 4 chars)">
-            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('newResetPassword', this)"></i>
-        </div>
 
-        <!-- Confirm New Password with Eye Icon -->
-        <div class="password-field-wrapper">
-            <input type="password" id="newResetConfirmPassword" class="auth-input-field" placeholder="Confirm New Password">
-            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('newResetConfirmPassword', this)"></i>
-        </div>
+            <!-- =================================================
+                 STEP 2 : EXISTING USER PASSWORD LOGIN
+            ================================================== -->
+            <div
+                id="authStepPassword"
+                style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                "
+            >
 
-        <span id="resetPasswordErrorMsg" style="color: #ef4444; font-size: 12px; display: none; margin-top: 5px;">Passwords do not match!</span>
-    </div>
-    <button class="auth-primary-btn" onclick="submitNewPasswordReset()">UPDATE PASSWORD & LOGIN</button>
-    <div class="auth-bottom-link" onclick="backToPhoneStep()">← Cancel</div>
-</div>
-
-            <!-- STEP 3: COMPLETE REGISTRATION -->
-<div id="authStepRegister" style="display: none; flex-direction: column; height: 100%;">
-    <div style="margin-top: 10px;">
-        <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Looks like you're new here!</h3>
-        <p style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please provide your details to register.</p>
-        
-        <input type="text" id="regName" class="auth-input-field" placeholder="Full Name">
-        <input type="email" id="regEmail" class="auth-input-field" placeholder="Gmail ID (e.g. name@gmail.com)">
-        <input type="text" id="regPincode" class="auth-input-field" placeholder="6-digit Pincode" maxlength="6">
-        
-        <!-- Create Password with Eye Icon -->
-        <div class="password-field-wrapper">
-            <input type="password" id="regPassword" class="auth-input-field" placeholder="Create Password (min 4 chars)">
-            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('regPassword', this)"></i>
-        </div>
-
-        <!-- Confirm Password with Eye Icon -->
-        <div class="password-field-wrapper">
-            <input type="password" id="regConfirmPassword" class="auth-input-field" placeholder="Confirm Password">
-            <i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility('regConfirmPassword', this)"></i>
-        </div>
-
-        <span id="passwordErrorMsg" style="color: #ef4444; font-size: 12px; display: none; margin-top: 5px;">Passwords do not match!</span>
-    </div>
-    <button class="auth-primary-btn" onclick="proceedToOtpFromRegister()">GET OTP & REGISTER</button>
-    <div class="auth-bottom-link" onclick="backToPhoneStep()">Existing User? Log in</div>
-</div>
-
-            <!-- STEP 4: VERIFY OTP ONLY -->
-            <div id="authStepOTP" style="display: none; flex-direction: column; height: 100%;">
                 <div style="margin-top: 10px;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #212121;">Verify OTP</h3>
-                    <p id="setPasswordInfo" style="font-size: 13px; color: #878787; margin: 0 0 15px 0;">Please enter the OTP sent to your mobile.</p>
-                    
-                    <input type="text" id="inputRegOTP" class="auth-input-field" placeholder="Enter 4-digit OTP" maxlength="4">
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin: 8px 0 15px 0;">
-                        <span style="color: #878787;">Resend code in <b id="timerCount" style="color: #212121;">2:00</b></span>
-                        <span id="resendOtpBtn" style="color: #2874f0; font-weight: 600; cursor: pointer; display: none;" onclick="triggerForgotPassword()">Resend OTP</span>
+
+                    <h3
+                        style="
+                            margin: 0 0 10px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        "
+                    >
+                        Welcome Back
+                    </h3>
+
+                    <p
+                        id="passInfoText"
+                        style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 18px 0;
+                            line-height: 1.5;
+                        "
+                    >
+                        Enter your password to login.
+                    </p>
+
+
+                    <!-- PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="position: relative;"
+                    >
+
+                        <input
+                            type="password"
+                            id="inputPassword"
+                            class="auth-input-field"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
+                                'inputPassword',
+                                this
+                            )"
+                        ></i>
+
                     </div>
+
+
+                    <!-- FORGOT -->
+                    <div
+                        style="
+                            text-align: right;
+                            margin-top: 10px;
+                        "
+                    >
+
+                        <span
+                            style="
+                                color: #2874f0;
+                                font-size: 13px;
+                                font-weight: 600;
+                                cursor: pointer;
+                            "
+                            onclick="triggerForgotPassword()"
+                        >
+                            Forgot?
+                        </span>
+
+                    </div>
+
                 </div>
-                <button class="auth-primary-btn" onclick="verifyOtpAndSetPassword()">VERIFY & LOGIN</button>
-                <div class="auth-bottom-link" onclick="backToPhoneStep()">← Change Mobile Number</div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="loginWithPassword()"
+                >
+                    LOGIN
+                </button>
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="backToPhoneStep()"
+                >
+                    ← Change Mobile Number
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STEP 3 : NEW USER REGISTRATION
+            ================================================== -->
+            <div
+                id="authStepRegister"
+                style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        style="
+                            margin: 0 0 8px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        "
+                    >
+                        Looks like you're new here!
+                    </h3>
+
+                    <p
+                        style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 18px 0;
+                            line-height: 1.5;
+                        "
+                    >
+                        Create your Catus account to get started.
+                    </p>
+
+
+                    <!-- MOBILE NUMBER -->
+<input
+    type="tel"
+    id="regMobile"
+    class="auth-input-field"
+    placeholder="Mobile Number"
+    maxlength="10"
+    inputmode="numeric"
+    autocomplete="tel"
+>
+
+<!-- FULL NAME -->
+<input
+    type="text"
+    id="regName"
+    class="auth-input-field"
+    placeholder="Full Name"
+    autocomplete="name"
+>
+
+<!-- OPTIONAL EMAIL -->
+<input
+    type="email"
+    id="regEmail"
+    class="auth-input-field"
+    placeholder="Gmail ID (Optional)"
+    autocomplete="email"
+>
+
+
+                    <!-- PINCODE -->
+                    <input
+                        type="text"
+                        id="regPincode"
+                        class="auth-input-field"
+                        placeholder="6-digit Pincode"
+                        maxlength="6"
+                        inputmode="numeric"
+                        autocomplete="postal-code"
+                    >
+
+
+                    <!-- CREATE PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="position: relative;"
+                    >
+
+                        <input
+                            type="password"
+                            id="regPassword"
+                            class="auth-input-field"
+                            placeholder="Create Password (min 4 chars)"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
+                                'regPassword',
+                                this
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="
+                            position: relative;
+                            margin-top: 8px;
+                        "
+                    >
+
+                        <input
+                            type="password"
+                            id="regConfirmPassword"
+                            class="auth-input-field"
+                            placeholder="Confirm Password"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
+                                'regConfirmPassword',
+                                this
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- PASSWORD ERROR -->
+                    <span
+                        id="passwordErrorMsg"
+                        style="
+                            color: #ef4444;
+                            font-size: 12px;
+                            display: none;
+                            margin-top: 7px;
+                        "
+                    >
+                        Passwords do not match!
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="proceedToOtpFromRegister()"
+                >
+                    GET OTP & REGISTER
+                </button>
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="backToPhoneStep()"
+                >
+                    Existing User? Log in
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STEP 4 : OTP VERIFICATION
+                 COMMON FOR REGISTER + FORGOT PASSWORD
+            ================================================== -->
+            <div
+                id="authStepOTP"
+                style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        id="otpTitle"
+                        style="
+                            margin: 0 0 8px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        "
+                    >
+                        Verify OTP
+                    </h3>
+
+
+                    <p
+                        id="setPasswordInfo"
+                        style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 22px 0;
+                            line-height: 1.5;
+                        "
+                    >
+                        Please enter the OTP sent to your mobile.
+                    </p>
+
+
+                    <!-- OTP -->
+                    <input
+                        type="text"
+                        id="inputRegOTP"
+                        class="auth-input-field"
+                        placeholder="Enter 4-digit OTP"
+                        maxlength="4"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        style="
+                            text-align: center;
+                            font-size: 22px;
+                            font-weight: 600;
+                            letter-spacing: 8px;
+                        "
+                    >
+
+
+                    <!-- RESEND -->
+                    <div
+                        style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            font-size: 12px;
+                            margin: 12px 0 15px 0;
+                        "
+                    >
+
+                        <span style="color: #878787;">
+                            Resend code in
+                            <b
+                                id="timerCount"
+                                style="color: #212121;"
+                            >
+                                2:00
+                            </b>
+                        </span>
+
+
+                        <span
+                            id="resendOtpBtn"
+                            style="
+                                color: #2874f0;
+                                font-weight: 600;
+                                cursor: pointer;
+                                display: none;
+                            "
+                            onclick="resendCurrentOtp()"
+                        >
+                            Resend OTP
+                        </span>
+
+                    </div>
+
+
+                    <!-- OTP INFO -->
+                    <div
+                        id="otpErrorMsg"
+                        style="
+                            display: none;
+                            color: #ef4444;
+                            font-size: 12px;
+                            margin-top: 5px;
+                        "
+                    ></div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    id="otpContinueBtn"
+                    onclick="verifyOtpAndSetPassword()"
+                >
+                    VERIFY & CONTINUE
+                </button>
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="backToPhoneStep()"
+                >
+                    ← Change Mobile Number
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STEP 5 : FORGOT PASSWORD - CREATE NEW PASSWORD
+            ================================================== -->
+            <div
+                id="authStepNewPassword"
+                style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        style="
+                            margin: 0 0 8px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        "
+                    >
+                        Create New Password
+                    </h3>
+
+
+                    <p
+                        style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 20px 0;
+                            line-height: 1.5;
+                        "
+                    >
+                        Your OTP has been verified.
+                        Please create a new password for your account.
+                    </p>
+
+
+                    <!-- NEW PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="position: relative;"
+                    >
+
+                        <input
+                            type="password"
+                            id="newResetPassword"
+                            class="auth-input-field"
+                            placeholder="New Password (min 4 chars)"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
+                                'newResetPassword',
+                                this
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- CONFIRM NEW PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="
+                            position: relative;
+                            margin-top: 8px;
+                        "
+                    >
+
+                        <input
+                            type="password"
+                            id="newResetConfirmPassword"
+                            class="auth-input-field"
+                            placeholder="Confirm New Password"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
+                                'newResetConfirmPassword',
+                                this
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- PASSWORD ERROR -->
+                    <span
+                        id="resetPasswordErrorMsg"
+                        style="
+                            color: #ef4444;
+                            font-size: 12px;
+                            display: none;
+                            margin-top: 7px;
+                        "
+                    >
+                        Passwords do not match!
+                    </span>
+
+
+                    <!-- PASSWORD SUCCESS INFO -->
+                    <div
+                        id="resetPasswordInfoMsg"
+                        style="
+                            display: none;
+                            color: #16a34a;
+                            font-size: 12px;
+                            margin-top: 8px;
+                        "
+                    ></div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="submitNewPasswordReset()"
+                >
+                    UPDATE PASSWORD & LOGIN
+                </button>
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="showAuthStep('otp')"
+                >
+                    ← Back to OTP
+                </div>
+
             </div>
 
         </div>
+
     </div>
+
 </div>
 
   <!-- EXACT PREMIUM FULL-SCREEN CUSTOMER DASHBOARD MODAL -->
@@ -2201,10 +2763,235 @@ function handleProductSearchSelect(serviceId) {
 
    function handleHeaderAuthClick() {
     if (currentUser) {
-        openPremiumDashboard(); // 🟢 ஏற்கனவே லாகின் செய்திருந்தால் நேரடியாக டேஷ்போர்டைத் திறக்கும்
+        openPremiumDashboard(); // ஏற்கனவே லாகின் செய்திருந்தால் டேஷ்போர்ட் திறக்கும்
     } else {
         showAuthStep('phone');
-        toggleAuthModal(true);  // 🔒 இல்லையென்றால் லாகின் பாப்-அப் காட்டும்
+        toggleAuthModal(true);  // லாகின் பாப்-அப் ஓபன் ஆகும்
+    }
+}
+async function submitNewPasswordReset() {
+
+    if (!otpVerified) {
+        alert('Please verify OTP first.');
+        showAuthStep('otp');
+        return;
+    }
+
+    const passwordInput =
+        document.getElementById('newResetPassword');
+
+    const confirmInput =
+        document.getElementById('newResetConfirmPassword');
+
+    const errorMsg =
+        document.getElementById('resetPasswordErrorMsg');
+
+    const password =
+        passwordInput
+            ? passwordInput.value.trim()
+            : '';
+
+    const confirmPassword =
+        confirmInput
+            ? confirmInput.value.trim()
+            : '';
+
+    if (errorMsg) {
+        errorMsg.style.display = 'none';
+    }
+
+    if (!password || password.length < 4) {
+        alert('Password must be at least 4 characters.');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+
+        if (errorMsg) {
+            errorMsg.textContent = 'Passwords do not match!';
+            errorMsg.style.display = 'block';
+        }
+
+        return;
+    }
+
+    if (!tempPhone) {
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
+
+    // OTP field-ல் user entered OTP இன்னும் இருக்கும்.
+    const otpInput =
+        document.getElementById('inputRegOTP');
+
+    const verifiedOtp =
+        otpInput
+            ? otpInput.value.trim()
+            : '';
+
+    if (!/^\d{4}$/.test(verifiedOtp)) {
+        alert('OTP session is invalid. Please verify again.');
+        showAuthStep('otp');
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/verify-otp-set-password`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: tempPhone,
+                    otp: verifiedOtp,
+                    password: password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert(
+                data.message ||
+                'Failed to update password.'
+            );
+            return;
+        }
+
+        currentUser = data.user;
+
+        if (
+            currentUser &&
+            currentUser.wallet === undefined
+        ) {
+            currentUser.wallet = 2500;
+        }
+
+        localStorage.setItem(
+            'catus_logged_user',
+            JSON.stringify(currentUser)
+        );
+
+        updateHeaderLoginUI();
+
+        toggleAuthModal(false);
+
+        openPremiumDashboard();
+
+        showToast(
+            'Password updated successfully!',
+            false
+        );
+
+        if (passwordInput) {
+            passwordInput.value = '';
+        }
+
+        if (confirmInput) {
+            confirmInput.value = '';
+        }
+
+        if (otpInput) {
+            otpInput.value = '';
+        }
+
+        otpVerified = false;
+        authFlowMode = null;
+
+    } catch (err) {
+
+        console.error(
+            'Password reset error:',
+            err
+        );
+
+        alert(
+            'Server connection error while updating password.'
+        );
+    }
+}
+
+async function resendCurrentOtp() {
+
+    if (!tempPhone || !authFlowMode) {
+        alert('Please restart the authentication process.');
+        return;
+    }
+
+    try {
+
+        const body = {
+    phone: tempPhone
+};
+
+// Registration OTP resend
+if (authFlowMode === 'register') {
+
+    body.mode = 'register';
+    body.resend = true;
+
+    body.name =
+        pendingRegData.name || '';
+
+    body.email =
+        pendingRegData.email || '';
+
+    body.pincode =
+        pendingRegData.pincode || '';
+}
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/send-otp`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert(
+                data.message ||
+                'Failed to resend OTP.'
+            );
+            return;
+        }
+
+        const otpInput =
+            document.getElementById('inputRegOTP');
+
+        if (otpInput) {
+            otpInput.value = '';
+            otpInput.focus();
+        }
+
+        otpVerified = false;
+
+        startTwoMinTimer();
+
+        showToast(
+            'OTP resent successfully!',
+            false
+        );
+
+    } catch (err) {
+
+        console.error(
+            'Resend OTP error:',
+            err
+        );
+
+        alert(
+            'Server error while resending OTP.'
+        );
     }
 }
 
@@ -2214,11 +3001,57 @@ function handleProductSearchSelect(serviceId) {
     }
 
 
-    function backToPhoneStep() { showAuthStep('phone'); }
+    function backToPhoneStep() {
+
+    if (twoMinTimer) {
+        clearInterval(twoMinTimer);
+        twoMinTimer = null;
+    }
+
+    tempPhone = '';
+    pendingRegData = {};
+    authFlowMode = null;
+    otpVerified = false;
+
+    const ids = [
+        'inputPassword',
+        'inputRegOTP',
+        'newResetPassword',
+        'newResetConfirmPassword'
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.value = '';
+        }
+    });
+
+    const passwordError =
+        document.getElementById('passwordErrorMsg');
+
+    if (passwordError) {
+        passwordError.style.display = 'none';
+    }
+
+    const resetError =
+        document.getElementById('resetPasswordErrorMsg');
+
+    if (resetError) {
+        resetError.style.display = 'none';
+    }
+
+    showAuthStep('phone');
+}
 
     let twoMinTimer = null;
+let pendingRegData = {};
 
-  let pendingRegData = {}; // புதிய யூசர் ஃபில் செய்யும் டேட்டாவை தற்காலிகமாக சேமிக்க
+let authFlowMode = null;
+// 'register' = new registration
+// 'forgot' = forgot password
+
+let otpVerified = false;
 
 // 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
 async function checkUserAndProceed() {
@@ -2252,55 +3085,41 @@ async function checkUserAndProceed() {
     }
 }
 
-// "New to Catus? Create an account" கிளிக் செய்தால்
 function switchToNewUserRegisterDirect() {
-    const phone = document.getElementById('inputPhone').value.trim();
-    if (phone.length !== 10) {
-        alert('Please enter a valid 10-digit mobile number first.');
-        return;
+
+    const phoneInput =
+        document.getElementById('inputPhone');
+
+    const regMobileInput =
+        document.getElementById('regMobile');
+
+    const phone =
+        phoneInput
+            ? phoneInput.value.trim()
+            : '';
+
+    if (/^\d{10}$/.test(phone)) {
+
+        tempPhone = phone;
+
+        if (regMobileInput) {
+            regMobileInput.value = phone;
+        }
+
+    } else {
+
+        tempPhone = '';
+
+        if (regMobileInput) {
+            regMobileInput.value = '';
+        }
     }
-    tempPhone = phone;
+
+    authFlowMode = 'register';
+
     showAuthStep('register');
 }
 
-// 1. Registration Form-ல் விவரங்களை வாங்கிவிட்டு OTP அனுப்புதல்
-async function proceedToOtpFromRegister() {
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pincode = document.getElementById('regPincode').value.trim();
-    const password = document.getElementById('regPassword').value.trim();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!name) { alert('Please enter your full name.'); return; }
-    if (!email || !emailPattern.test(email)) { alert('Please enter a valid Gmail address.'); return; }
-    if (!pincode || pincode.length !== 6) { alert('Please enter a valid 6-digit Pincode.'); return; }
-    if (!password || password.length < 4) { alert('Password must be at least 4 characters.'); return; }
-
-    // டேட்டாவை தற்காலிகமாக சேமித்துக்கொள்ளுதல்
-    pendingRegData = { name, email, pincode, password, address: "No address saved" };
-
-    try {
-        showToast("Sending OTP...", false);
-        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-            showAuthStep('setpassword');
-            document.getElementById('setPasswordInfo').textContent = `Please enter the OTP sent to +91 ${tempPhone}`;
-            startTwoMinTimer();
-            showToast("OTP sent successfully!", false);
-        } else {
-            alert(data.message || 'Failed to send OTP.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('Server error while sending OTP.');
-    }
-}
 
 // 3. பாஸ்வேர்ட் மூலம் லாகின் செய்தல் (பழைய யூசர்)
 async function loginWithPassword() {
@@ -2382,13 +3201,13 @@ function startTwoMinTimer() {
 }
 
 async function verifyOtpAndSetPassword() {
-    // 🛑 ID 'inputRegOTP'-ilirunthu sariyaana value-ai eduthukolla
+
     const otpInput = document.getElementById('inputRegOTP');
     const otp = otpInput ? otpInput.value.trim() : '';
 
-    if (!otp || otp.length !== 4) { 
-        alert('Please enter a valid 4-digit OTP.'); 
-        return; 
+    if (!/^\d{4}$/.test(otp)) {
+        alert('Please enter a valid 4-digit OTP.');
+        return;
     }
 
     if (!tempPhone) {
@@ -2396,239 +3215,509 @@ async function verifyOtpAndSetPassword() {
         return;
     }
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/verify-otp-set-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                phone: tempPhone, 
-                otp: otp, 
-                password: (typeof pendingRegData !== 'undefined' && pendingRegData.password) ? pendingRegData.password : 'default123' 
-            })
-        });
-        const data = await response.json();
+    if (!authFlowMode) {
+        alert('Authentication session expired. Please start again.');
+        backToPhoneStep();
+        return;
+    }
 
-        if (data.success) {
+    // ==========================================
+    // NEW USER REGISTRATION
+    // ==========================================
+    if (authFlowMode === 'register') {
+
+        const registrationPassword =
+            pendingRegData &&
+            pendingRegData.password
+                ? pendingRegData.password.trim()
+                : '';
+
+        if (!registrationPassword ||
+            registrationPassword.length < 4) {
+
+            alert(
+                'Registration password is missing. Please register again.'
+            );
+
+            showAuthStep('register');
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `${API_BASE_URL}/api/verify-otp-set-password`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: tempPhone,
+                        otp: otp,
+                        password: registrationPassword
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                alert(
+                    data.message ||
+                    'Invalid or incorrect OTP.'
+                );
+                return;
+            }
+
             currentUser = data.user;
-            if(currentUser && currentUser.wallet === undefined) currentUser.wallet = 2500;
-            
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+
+            if (
+                currentUser &&
+                currentUser.wallet === undefined
+            ) {
+                currentUser.wallet = 2500;
+            }
+
+            localStorage.setItem(
+                'catus_logged_user',
+                JSON.stringify(currentUser)
+            );
+
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
-            showToast("OTP Verified & Login Successful!", false);
-        } else {
-            alert(data.message || 'Invalid or incorrect OTP.');
+
+            showToast(
+                'Account created successfully!',
+                false
+            );
+
+            pendingRegData = {};
+            authFlowMode = null;
+            otpVerified = false;
+
+        } catch (err) {
+
+            console.error(
+                'Registration OTP verification error:',
+                err
+            );
+
+            alert(
+                'Server connection error during registration.'
+            );
         }
-    } catch (err) {
-        console.error("OTP verification error:", err);
-        alert('Server connection error during OTP verification.');
+
+        return;
+    }
+
+
+    // ==========================================
+    // FORGOT PASSWORD
+    // ==========================================
+    if (authFlowMode === 'forgot') {
+
+        try {
+
+            const response = await fetch(
+                `${API_BASE_URL}/api/verify-otp`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: tempPhone,
+                        otp: otp
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                alert(
+                    data.message ||
+                    'Invalid or incorrect OTP.'
+                );
+                return;
+            }
+
+            otpVerified = true;
+
+            showAuthStep('newpassword');
+
+            showToast(
+                'OTP verified successfully!',
+                false
+            );
+
+        } catch (err) {
+
+            console.error(
+                'Forgot password OTP error:',
+                err
+            );
+
+            alert(
+                'Server connection error during OTP verification.'
+            );
+        }
     }
 }
 
-// 🛑 எந்த ஸ்டெப் ஓபன் ஆக வேண்டும் என்பதை கன்ட்ரோல் செய்யும் பங்க்ஷன்
 function showAuthStep(step) {
-    document.getElementById('authStepPhone').style.display = (step === 'phone') ? 'flex' : 'none';
-    
-    const passStep = document.getElementById('authStepPassword');
-    if (passStep) {
-        passStep.style.display = (step === 'password') ? 'flex' : 'none';
-    }
 
-    const regStep = document.getElementById('authStepRegister');
-    if (regStep) {
-        regStep.style.display = (step === 'register') ? 'flex' : 'none';
-    }
-    
-    let newPassStep = document.getElementById('authStepNewPassword');
-    if (newPassStep) {
-        newPassStep.style.display = (step === 'newpassword') ? 'flex' : 'none';
-    }
+    const steps = [
+        'authStepPhone',
+        'authStepPassword',
+        'authStepRegister',
+        'authStepOTP',
+        'authStepNewPassword'
+    ];
 
-    let otpStepElem = document.getElementById('authStepSetPassword') || document.getElementById('authStepOTP');
-    if (otpStepElem) {
-        otpStepElem.style.display = (step === 'setpassword' || step === 'otp') ? 'flex' : 'none';
+    steps.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = 'none';
+        }
+    });
+
+    const activeId = {
+        phone: 'authStepPhone',
+        password: 'authStepPassword',
+        register: 'authStepRegister',
+        otp: 'authStepOTP',
+        newpassword: 'authStepNewPassword'
+    }[step];
+
+    if (activeId) {
+        const activeEl = document.getElementById(activeId);
+        if (activeEl) {
+            activeEl.style.display = 'flex';
+        }
     }
 
     const titleEl = document.getElementById('leftPanelTitle');
     const descEl = document.getElementById('leftPanelDesc');
 
-    if (step === 'phone') {
-        if(titleEl) titleEl.textContent = "Looks like you're new here!";
-        if(descEl) descEl.textContent = "Sign up with your mobile number to get started";
-    } else if (step === 'password') {
-        if(titleEl) titleEl.textContent = "Login";
-        if(descEl) descEl.textContent = "Get access to your Orders, Services and Recommendations";
-    } else if (step === 'newpassword') {
-        if(titleEl) titleEl.textContent = "Reset Password";
-        if(descEl) descEl.textContent = "Secure your account with a new password";
-    } else if (step === 'register') {
-        if(titleEl) titleEl.textContent = "Looks like you're new here!";
-        if(descEl) descEl.textContent = "Sign up with your mobile number to get started";
-    } else {
-        if(titleEl) titleEl.textContent = "Verify OTP";
-        if(descEl) descEl.textContent = "Please enter the OTP sent to your mobile";
-    }
-}
+    if (!titleEl || !descEl) return;
 
-function backToPhoneStep() { 
-    showAuthStep('phone'); 
-}
+    switch (step) {
 
-// பழைய யூசரா புதியவரா எனச் சரிபார்த்தல்
-async function checkUserAndProceed() {
-    const phone = document.getElementById('inputPhone').value.trim();
-    if (phone.length !== 10) {
-        alert('Please enter a valid 10-digit mobile number.');
-        return;
-    }
-    tempPhone = phone;
+        case 'phone':
+            titleEl.textContent = 'Welcome to Catus';
+            descEl.textContent =
+                'Enter your mobile number to continue';
+            break;
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/check-user`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone })
-        });
-        const data = await response.json();
+        case 'password':
+            titleEl.textContent = 'Welcome Back';
+            descEl.textContent =
+                'Login to your Catus account';
+            break;
 
-        if (data.success) {
-            if (data.exists === true) {
-                showAuthStep('password');
+        case 'register':
+            titleEl.textContent = "Looks like you're new here!";
+            descEl.textContent =
+                'Create your Catus account';
+            break;
+
+        case 'otp':
+
+            if (authFlowMode === 'register') {
+                titleEl.textContent = 'Verify Your Mobile';
+                descEl.textContent =
+                    'Enter the OTP to complete registration';
             } else {
-                showAuthStep('register');
+                titleEl.textContent = 'Verify OTP';
+                descEl.textContent =
+                    'Enter the OTP sent to your mobile';
             }
-        } else {
-            showAuthStep('register');
-        }
-    } catch (err) {
-        console.error("Check user error:", err);
-        alert('Server connection error.');
+
+            break;
+
+        case 'newpassword':
+            titleEl.textContent = 'Reset Password';
+            descEl.textContent =
+                'Create a new password for your account';
+            break;
     }
 }
-function switchToNewUserRegisterDirect() {
-    const phone = document.getElementById('inputPhone').value.trim();
-    if (phone.length !== 10) {
-        alert('Please enter a valid 10-digit mobile number first.');
-        return;
-    }
-    tempPhone = phone;
-    showAuthStep('register');
-}
+
+
+
+
 
 async function proceedToOtpFromRegister() {
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pincode = document.getElementById('regPincode').value.trim();
-    const password = document.getElementById('regPassword').value.trim();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!name) { alert('Please enter your full name.'); return; }
-    if (!email || !emailPattern.test(email)) { alert('Please enter a valid Gmail address.'); return; }
-    if (!pincode || pincode.length !== 6) { alert('Please enter a valid 6-digit Pincode.'); return; }
-    if (!password || password.length < 4) { alert('Password must be at least 4 characters.'); return; }
+    const mobileInput =
+        document.getElementById('regMobile');
 
-    pendingRegData = { name, email, pincode, password, address: "No address saved" };
+    const nameInput =
+        document.getElementById('regName');
+
+    const emailInput =
+        document.getElementById('regEmail');
+
+    const pincodeInput =
+        document.getElementById('regPincode');
+
+    const passwordInput =
+        document.getElementById('regPassword');
+
+    const confirmPasswordInput =
+        document.getElementById('regConfirmPassword');
+
+    const errorMsgEl =
+        document.getElementById('passwordErrorMsg');
+
+    const phone =
+        mobileInput
+            ? mobileInput.value.trim()
+            : '';
+
+    const name =
+        nameInput
+            ? nameInput.value.trim()
+            : '';
+
+    const email =
+        emailInput
+            ? emailInput.value.trim()
+            : '';
+
+    const pincode =
+        pincodeInput
+            ? pincodeInput.value.trim()
+            : '';
+
+    const password =
+        passwordInput
+            ? passwordInput.value.trim()
+            : '';
+
+    const confirmPassword =
+        confirmPasswordInput
+            ? confirmPasswordInput.value.trim()
+            : '';
+
+
+    // ==========================================
+    // MOBILE VALIDATION
+    // ==========================================
+
+    if (!/^\d{10}$/.test(phone)) {
+
+        alert(
+            'Please enter a valid 10-digit mobile number.'
+        );
+
+        if (mobileInput) {
+            mobileInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // NAME VALIDATION
+    // ==========================================
+
+    if (!name) {
+
+        alert('Please enter your full name.');
+
+        if (nameInput) {
+            nameInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // PINCODE VALIDATION
+    // ==========================================
+
+    if (!/^\d{6}$/.test(pincode)) {
+
+        alert('Please enter a valid 6-digit pincode.');
+
+        if (pincodeInput) {
+            pincodeInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // PASSWORD VALIDATION
+    // ==========================================
+
+    if (!password || password.length < 4) {
+
+        alert(
+            'Password must be at least 4 characters.'
+        );
+
+        if (passwordInput) {
+            passwordInput.focus();
+        }
+
+        return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+        if (errorMsgEl) {
+            errorMsgEl.textContent =
+                'Passwords do not match!';
+
+            errorMsgEl.style.display =
+                'block';
+        }
+
+        return;
+    }
+
+    if (errorMsgEl) {
+        errorMsgEl.style.display = 'none';
+    }
+
+
+    // ==========================================
+    // OPTIONAL EMAIL VALIDATION
+    // ==========================================
+
+    if (
+        email &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+
+        alert(
+            'Please enter a valid Gmail/email address or leave it empty.'
+        );
+
+        if (emailInput) {
+            emailInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // SAVE TEMP REGISTRATION DATA
+    // ==========================================
+
+    tempPhone = phone;
+
+    authFlowMode = 'register';
+
+    pendingRegData = {
+        name: name,
+        email: email,
+        pincode: pincode,
+        password: password,
+        address: 'No address saved'
+    };
+
+
+    // ==========================================
+    // SEND REGISTRATION OTP
+    // ==========================================
 
     try {
-        showToast("Sending OTP...", false);
-        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone })
-        });
-        const data = await res.json();
 
-        if (data.success) {
-            showAuthStep('setpassword');
-            const infoEl = document.getElementById('setPasswordInfo');
-            if(infoEl) infoEl.textContent = `Please enter the OTP sent to +91 ${tempPhone}`;
-            startTwoMinTimer();
-            showToast("OTP sent successfully!", false);
-        } else {
-            alert(data.message || 'Failed to send OTP.');
+        showToast(
+            'Sending OTP...',
+            false
+        );
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/send-otp`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    phone: phone,
+                    mode: 'register',
+                    name: name,
+                    email: email,
+                    pincode: pincode
+                })
+            }
+        );
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            alert(
+                data.message ||
+                'Unable to send registration OTP.'
+            );
+
+            return;
         }
-    } catch (err) {
-        console.error(err);
-        alert('Server error while sending OTP.');
+
+
+        // ==========================================
+        // OTP SCREEN
+        // ==========================================
+
+        showAuthStep('otp');
+
+        const infoEl =
+            document.getElementById(
+                'setPasswordInfo'
+            );
+
+        if (infoEl) {
+
+            infoEl.textContent =
+                `Registration OTP sent to +91 ${phone}. Please enter it below.`;
+        }
+
+        const otpInput =
+            document.getElementById(
+                'inputRegOTP'
+            );
+
+        if (otpInput) {
+            otpInput.value = '';
+            otpInput.focus();
+        }
+
+        startTwoMinTimer();
+
+        showToast(
+            'OTP sent successfully!',
+            false
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Registration OTP error:',
+            error
+        );
+
+        alert(
+            'Server connection error while sending registration OTP.'
+        );
     }
-}
-
-async function loginWithPassword() {
-    const password = document.getElementById('inputPassword').value.trim();
-    if (!password) { alert('Please enter your password.'); return; }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/login-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone, password: password })
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            currentUser = data.user;
-            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-            updateHeaderLoginUI();
-            toggleAuthModal(false);
-            openPremiumDashboard();
-            showToast("Login Successful!", false);
-        } else {
-            alert(data.message || 'Incorrect password.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('Server connection error.');
-    }
-}
-
-async function triggerForgotPassword() {
-    showToast("Sending OTP for password reset...", false);
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-            showAuthStep('setpassword');
-            const infoEl = document.getElementById('setPasswordInfo');
-            if(infoEl) infoEl.textContent = `Reset OTP sent to +91 ${tempPhone}. Please enter it below.`;
-            startTwoMinTimer();
-            showToast("OTP sent successfully!", false);
-        } else {
-            alert(data.message || 'Failed to send OTP.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('Server error.');
-    }
-}
-
-function startTwoMinTimer() {
-    let timeLeft = 120; 
-    const timerCountEl = document.getElementById('timerCount');
-    const resendBtnEl = document.getElementById('resendOtpBtn');
-
-    if (resendBtnEl) resendBtnEl.style.display = 'none';
-    if (twoMinTimer) clearInterval(twoMinTimer);
-
-    twoMinTimer = setInterval(() => {
-        let mins = Math.floor(timeLeft / 60);
-        let secs = timeLeft % 60;
-        if (timerCountEl) {
-            timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-        if (timeLeft <= 0) {
-            clearInterval(twoMinTimer);
-            if (timerCountEl && timerCountEl.parentElement) timerCountEl.parentElement.style.display = 'none';
-            if (resendBtnEl) resendBtnEl.style.display = 'inline';
-        }
-        timeLeft--;
-    }, 1000);
 }
 
 
