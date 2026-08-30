@@ -5323,6 +5323,64 @@ if (data.length === 0) {
         );
     }
 }
+/* ==========================================
+   FILTER WRONG / UNRELATED LOCATION RESULTS
+========================================== */
+
+const normalizedQuery =
+    query
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g, '');
+
+const filteredData =
+    data.filter(item => {
+
+        const address =
+            item.address || {};
+
+        /* Pincode search */
+        if (/^\d{6}$/.test(query)) {
+
+            const postcode =
+                String(
+                    address.postcode || ''
+                )
+                .replace(/\s/g, '');
+
+            return postcode === query;
+        }
+
+        /* Village / area / town search */
+        const possibleNames = [
+            address.hamlet,
+            address.village,
+            address.neighbourhood,
+            address.suburb,
+            address.quarter,
+            address.residential,
+            address.locality,
+            address.town,
+            address.municipality,
+            address.city,
+            item.namedetails?.name,
+            item.name
+        ]
+        .filter(Boolean)
+        .map(value =>
+            String(value)
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '')
+        );
+
+        return possibleNames.some(name =>
+            name.includes(normalizedQuery) ||
+            normalizedQuery.includes(name)
+        );
+    });
+
+data.length = 0;
+data.push(...filteredData);
                     if (data && data.length > 0) {
 
     let html = '';
@@ -5531,8 +5589,7 @@ function selectLocationSuggestionByIndex(index) {
         'catus_state_slug',
         stateSlug
     );
-    // Selected location-ku apram popup automatic close
-closeLocationModal();
+
 
     // Optional useful raw values
     localStorage.setItem(
