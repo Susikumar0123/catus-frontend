@@ -2366,7 +2366,8 @@ function handleProductSearchSelect(serviceId) {
     let tempPhone = "";
 
     let activeServiceId = 'tv-repair';
-    let currentLocationSlug = '';
+let currentStateSlug = '';
+let currentLocationSlug = '';
 let currentDistrictSlug = '';
 let currentLocationName = '';
 let currentDistrictName = '';
@@ -2374,51 +2375,34 @@ let locationServiceData = null;
 
 function getProductUrlParams() {
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+    const params = new URLSearchParams(window.location.search);
 
-    let serviceId =
-        params.get('id') || '';
-
-    let locationSlug =
-        params.get('location') || '';
-
-    let districtSlug =
-        params.get('district') || '';
+    let serviceId = params.get('id') || '';
+    let stateSlug = params.get('state') || '';
+    let districtSlug = params.get('district') || '';
+    let locationSlug = params.get('location') || '';
 
     // Pretty SEO URL:
     // /tamil-nadu/dharmapuri/palacode/tv-repair
-    const pathParts =
-        window.location.pathname
-            .split('/')
-            .filter(Boolean);
+    // /karnataka/bengaluru/whitefield/tv-repair
 
-    if (
-        pathParts.length === 4 &&
-        pathParts[0] === 'tamil-nadu'
-    ) {
+    const pathParts = window.location.pathname
+        .split('/')
+        .filter(Boolean);
 
-        districtSlug =
-            pathParts[1];
+    if (pathParts.length === 4) {
 
-        locationSlug =
-            pathParts[2];
-
-        serviceId =
-            pathParts[3];
+        stateSlug = pathParts[0];
+        districtSlug = pathParts[1];
+        locationSlug = pathParts[2];
+        serviceId = pathParts[3];
     }
 
     return {
-        serviceId:
-            serviceId || 'tv-repair',
-
-        location:
-            locationSlug,
-
-        district:
-            districtSlug
+        serviceId: serviceId || 'tv-repair',
+        state: stateSlug,
+        district: districtSlug,
+        location: locationSlug
     };
 }
     // ==========================================
@@ -2631,13 +2615,16 @@ function getProductUrlParams() {
         getProductUrlParams();
 
     activeServiceId =
-        pageParams.serviceId;
+    pageParams.serviceId;
 
-    currentLocationSlug =
-        pageParams.location;
+currentStateSlug =
+    pageParams.state;
 
-    currentDistrictSlug =
-        pageParams.district;
+currentLocationSlug =
+    pageParams.location;
+
+currentDistrictSlug =
+    pageParams.district;
 
     // ==========================================
 // SHOW SEO LOCATION IMMEDIATELY

@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/tamil-nadu/:district/:location/:service",
-      "destination": "/product.html?id=:service&location=:location&district=:district"
+      "source": "/:state/:district/:location/:service",
+      "destination": "/product.html?id=:service&state=:state&district=:district&location=:location"
     }
   ]
 }
