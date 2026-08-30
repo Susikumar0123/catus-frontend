@@ -5795,6 +5795,125 @@ function togglePasswordVisibility(fieldId, iconElement) {
         return result || fullAddress.substring(0, 30) + "...";
     }
 </script>
+<script>
+(function () {
+    const searchInput = document.getElementById('searchInput');
 
+    if (!searchInput) return;
+
+    const texts = [
+        'Search for TV Repair',
+        'Search for AC Service',
+        'Search for Washing Machine Repair',
+        'Search for Refrigerator Repair',
+        'Search for Laptop Repair',
+        'Search for Ceiling Fan Repair',
+        'Search for Water Purifier Service',
+        'Search for Home Services'
+    ];
+
+    let textIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let timer = null;
+    let userTyping = false;
+
+    function animatePlaceholder() {
+
+        if (userTyping || searchInput.value.length > 0) {
+            return;
+        }
+
+        const currentText = texts[textIndex];
+
+        if (!deleting) {
+
+            charIndex++;
+
+            searchInput.placeholder =
+                currentText.substring(0, charIndex);
+
+            if (charIndex === currentText.length) {
+
+                deleting = true;
+
+                timer = setTimeout(
+                    animatePlaceholder,
+                    1500
+                );
+
+                return;
+            }
+
+        } else {
+
+            charIndex--;
+
+            searchInput.placeholder =
+                currentText.substring(0, charIndex);
+
+            if (charIndex === 0) {
+
+                deleting = false;
+
+                textIndex =
+                    (textIndex + 1) % texts.length;
+            }
+        }
+
+        timer = setTimeout(
+            animatePlaceholder,
+            deleting ? 35 : 70
+        );
+    }
+
+    searchInput.addEventListener('focus', () => {
+
+        if (searchInput.value.length > 0) {
+            userTyping = true;
+        }
+    });
+
+    searchInput.addEventListener('input', () => {
+
+        if (searchInput.value.length > 0) {
+
+            userTyping = true;
+
+            clearTimeout(timer);
+
+            searchInput.placeholder = '';
+
+        } else {
+
+            userTyping = false;
+
+            charIndex = 0;
+            deleting = false;
+
+            clearTimeout(timer);
+
+            animatePlaceholder();
+        }
+    });
+
+    searchInput.addEventListener('blur', () => {
+
+        if (searchInput.value.length === 0) {
+
+            userTyping = false;
+
+            clearTimeout(timer);
+
+            animatePlaceholder();
+        }
+    });
+
+    searchInput.placeholder = '';
+
+    animatePlaceholder();
+
+})();
+</script>
 </body>
 </html>
