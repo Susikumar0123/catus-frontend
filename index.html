@@ -2608,15 +2608,21 @@ function getLocationProductUrl(serviceId) {
     const locationSlug =
         localStorage.getItem('catus_location_slug');
 
+    const safeServiceId =
+        encodeURIComponent(
+            String(serviceId || '').trim()
+        );
+
     if (
         stateSlug &&
         districtSlug &&
-        locationSlug
+        locationSlug &&
+        safeServiceId
     ) {
-        return `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceId}`;
+        return `/${stateSlug}/${districtSlug}/${locationSlug}/${safeServiceId}`;
     }
 
-    return `product.html?id=${serviceId}`;
+    return `/product.html?id=${safeServiceId}`;
 }
 
 function openServiceProduct(serviceId) {

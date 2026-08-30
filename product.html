@@ -2643,28 +2643,62 @@ let locationServiceData = null;
 
 function getProductUrlParams() {
 
-    const params = new URLSearchParams(window.location.search);
+    const params =
+        new URLSearchParams(window.location.search);
 
-    let serviceId = params.get('id') || '';
-    let stateSlug = params.get('state') || '';
-    let districtSlug = params.get('district') || '';
-    let locationSlug = params.get('location') || '';
+    let serviceId =
+        params.get('id') || '';
 
-    // Pretty SEO URL:
-    // /tamil-nadu/dharmapuri/palacode/tv-repair
-    // /karnataka/bengaluru/whitefield/tv-repair
+    let stateSlug =
+        params.get('state') || '';
 
-    const pathParts = window.location.pathname
-        .split('/')
-        .filter(Boolean);
+    let districtSlug =
+        params.get('district') || '';
 
-    if (pathParts.length === 4) {
+    let locationSlug =
+        params.get('location') || '';
+
+    const pathParts =
+        window.location.pathname
+            .split('/')
+            .filter(Boolean);
+
+
+    // ==========================================
+    // PRETTY SEO URL
+    // /tamil-nadu/dharmapuri/kadathur/tv-repair
+    // ==========================================
+
+    if (
+        pathParts.length === 4 &&
+        pathParts[3].toLowerCase() !== 'product.html'
+    ) {
 
         stateSlug = pathParts[0];
         districtSlug = pathParts[1];
         locationSlug = pathParts[2];
         serviceId = pathParts[3];
     }
+
+
+    // ==========================================
+    // LEGACY / WRONG NESTED URL SUPPORT
+    // /tamil-nadu/dharmapuri/kadathur/product.html?id=tv-repair
+    // ==========================================
+
+    else if (
+        pathParts.length === 4 &&
+        pathParts[3].toLowerCase() === 'product.html'
+    ) {
+
+        stateSlug = pathParts[0];
+        districtSlug = pathParts[1];
+        locationSlug = pathParts[2];
+
+        serviceId =
+            params.get('id') || 'tv-repair';
+    }
+
 
     return {
         serviceId: serviceId || 'tv-repair',
