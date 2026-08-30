@@ -5193,7 +5193,136 @@ for (const item of allResults) {
 /* Maximum useful results */
 const data =
     uniqueResults.slice(0, 25);
+    
+                /* ==========================================
+   PHOTON FALLBACK FOR SMALL VILLAGES / AREAS
+========================================== */
 
+if (data.length === 0) {
+
+    try {
+
+        const photonResponse = await fetch(
+            `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=20&lang=en`
+        );
+
+        if (photonResponse.ok) {
+
+            const photonData =
+                await photonResponse.json();
+
+            const photonResults =
+                photonData.features || [];
+
+            photonResults.forEach(feature => {
+
+                const p =
+                    feature.properties || {};
+
+                /* India results only */
+                const country =
+                    (p.country || '').toLowerCase();
+
+                if (
+                    country &&
+                    country !== 'india'
+                ) {
+                    return;
+                }
+
+                const locationName =
+                    p.name ||
+                    p.locality ||
+                    p.district ||
+                    p.city ||
+                    '';
+
+                if (!locationName) {
+                    return;
+                }
+
+                data.push({
+
+                    place_id:
+                        `photon-${feature.geometry?.coordinates?.join('-')}`,
+
+                    display_name: [
+                        p.name,
+                        p.locality,
+                        p.city,
+                        p.district,
+                        p.state,
+                        p.postcode,
+                        p.country
+                    ]
+                    .filter(Boolean)
+                    .filter(
+                        (value, index, array) =>
+                            array.indexOf(value) === index
+                    )
+                    .join(', '),
+
+                    lat:
+                        feature.geometry?.coordinates?.[1],
+
+                    lon:
+                        feature.geometry?.coordinates?.[0],
+
+                    address: {
+
+                        hamlet:
+                            p.type === 'hamlet'
+                                ? locationName
+                                : undefined,
+
+                        village:
+                            p.type === 'village'
+                                ? locationName
+                                : undefined,
+
+                        locality:
+                            p.locality || p.name,
+
+                        town:
+                            p.type === 'town'
+                                ? locationName
+                                : undefined,
+
+                        city:
+                            p.city,
+
+                        district:
+                            p.district ||
+                            p.county,
+
+                        state:
+                            p.state,
+
+                        postcode:
+                            p.postcode
+                    },
+
+                    name:
+                        locationName,
+
+                    namedetails: {
+                        name: locationName
+                    },
+
+                    source:
+                        'photon'
+                });
+            });
+        }
+
+    } catch (photonError) {
+
+        console.error(
+            'Photon location fallback failed:',
+            photonError
+        );
+    }
+}
                     if (data && data.length > 0) {
 
     let html = '';
