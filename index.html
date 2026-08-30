@@ -1128,6 +1128,7 @@
 }
 
 @media (max-width: 768px) {
+
     .auth-modal-wrapper {
         justify-content: center !important;
         align-items: center !important;
@@ -1136,62 +1137,81 @@
         box-sizing: border-box !important;
         z-index: 9999999 !important;
     }
-    .auth-modal-container { 
-        flex-direction: column !important; 
-        width: 90% !important; 
-        max-width: 320px !important; /* மொபைலுக்கு கச்சிதமான அகலம் */
-        height: auto !important; 
-        max-height: 80vh !important;
-        border-radius: 12px !important; 
+
+    .auth-modal-container {
+        flex-direction: column !important;
+
+        width: 90% !important;
+        max-width: 330px !important;
+
+        height: auto !important;
+        max-height: 82vh !important;
+
+        margin: 0 auto !important;
+
+        border-radius: 12px !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
-        margin: auto !important;
         position: relative !important;
     }
-    .auth-left-panel { 
-        width: 100% !important; 
-        padding: 18px 16px !important; 
+
+    .auth-left-panel {
+        width: 100% !important;
+        min-height: auto !important;
+        padding: 14px 16px !important;
         flex-shrink: 0 !important;
         box-sizing: border-box !important;
         position: relative !important;
     }
 
-    .auth-left-panel h2 { font-size: 15px !important; margin-bottom: 2px !important; }
-    .auth-left-panel p { font-size: 11px !important; }
-    .auth-left-illustration { display: none !important; }
-    
-    .auth-right-panel { 
-        width: 100% !important; 
-        height: auto !important; 
-        padding: 18px 16px !important; 
+    .auth-left-panel h2 {
+        font-size: 16px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .auth-left-panel p {
+        font-size: 11px !important;
+    }
+
+    .auth-left-illustration {
+        display: none !important;
+    }
+
+    .auth-right-panel {
+        width: 100% !important;
+        height: auto !important;
+        padding: 16px !important;
         box-sizing: border-box !important;
         overflow-y: auto !important;
     }
+
     .auth-input-field {
-        margin-top: 8px !important;
+        margin-top: 10px !important;
         font-size: 13px !important;
         padding: 8px 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
+
     .auth-primary-btn {
-        margin-top: 15px !important;
+        margin-top: 12px !important;
         padding: 10px !important;
-        font-size: 13px !important;
+        font-size: 14px !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
+
     .auth-terms-text {
         font-size: 10px !important;
         line-height: 1.4 !important;
         margin-top: 10px !important;
     }
+
     .auth-bottom-link {
         font-size: 12px !important;
         padding-top: 15px !important;
     }
 
-    /* ❌ மொபைல் நீல நிற ஹெடருக்குள் க்ளோஸ் பட்டன் கச்சிதமாக வர */
     .auth-left-panel .mobile-absolute-close,
     .auth-left-panel .mobile-header-close {
         display: flex !important;
@@ -1210,8 +1230,12 @@
         z-index: 2147483647 !important;
         border: none !important;
     }
-    .desktop-header-close { display: none !important; }
+
+    .desktop-header-close {
+        display: none !important;
+    }
 }
+
 .password-field-wrapper {
     position: relative;
     width: 100%;
