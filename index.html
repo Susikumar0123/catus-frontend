@@ -2405,6 +2405,33 @@
     ? 'http://localhost:3000' 
     : 'https://catus-backend-d2js.onrender.com';
 
+    function slugifyLocation(value) {
+    return String(value || '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function getLocationProductUrl(serviceId) {
+
+    const locationSlug =
+        localStorage.getItem('catus_location_slug');
+
+    const districtSlug =
+        localStorage.getItem('catus_district_slug');
+
+    if (locationSlug && districtSlug) {
+        return `/tamil-nadu/${districtSlug}/${locationSlug}/${serviceId}`;
+    }
+
+    return `product.html?id=${serviceId}`;
+}
+
+function openServiceProduct(serviceId) {
+    window.location.href =
+        getLocationProductUrl(serviceId);
+}
   let orderPollingInterval = null; // Clean polling reference to prevent memory leaks
 
   async function submitEditOrderAddress() {
@@ -4613,12 +4640,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleIndexSearchSelect(serviceId, serviceName) {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.value = serviceName;
-    const box = document.getElementById('suggestionsBox');
-    if (box) box.style.display = 'none';
-    
-    window.location.href = `product.html?id=${serviceId}`;
+
+    const searchInput =
+        document.getElementById('searchInput');
+
+    if (searchInput) {
+        searchInput.value =
+            serviceName;
+    }
+
+    const box =
+        document.getElementById(
+            'suggestionsBox'
+        );
+
+    if (box) {
+        box.style.display =
+            'none';
+    }
+
+    openServiceProduct(serviceId);
 }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -4735,7 +4776,7 @@ function handleIndexSearchSelect(serviceId, serviceName) {
                   catData.items.forEach((s) => {
                       let trendingBadgeHTML = (s.is_hot_deal == 1) ? `<div class="trending-badge">Hot Deal</div>` : ``;
                       html += `
-                      <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
+                      <div class="uc-card" onclick="openServiceProduct('${s.service_id}')">
                           <div class="uc-card-img-wrapper">
                               ${trendingBadgeHTML}
                               <img src="${s.image_url}" alt="${s.service_name}" loading="lazy">
@@ -4916,20 +4957,110 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// சஜஷனை க்ளிக் செய்யும் போது நாம் டைப் செய்ததை அழித்துவிட்டு, சஜஷன் டெக்ஸ்டை மட்டும் முழுமையாக செட் செய்ய
 function selectLocationSuggestion(fullAddress) {
-    const locInput = document.getElementById('locSearchInput');
-    const locBox = document.getElementById('locSuggestionsBox');
-    
-    if (locInput) locInput.value = fullAddress; // சர்ச் பாரில் சஜஷன் டெக்ஸ்ட் மட்டும் தெளிவாக இருக்கும்
-    if (locBox) locBox.style.display = 'none';
-    
-    // சுருக்கப்பட்ட அட்ரஸை ஹெடரில் செட் செய்ய
-    let shortAddress = formatShortAddress(fullAddress);
-    document.getElementById('headerLocationDisplay').textContent = shortAddress;
-    localStorage.setItem('catus_user_location', shortAddress);
+
+    const locInput =
+        document.getElementById('locSearchInput');
+
+    const locBox =
+        document.getElementById('locSuggestionsBox');
+
+    if (locInput)
+        locInput.value = fullAddress;
+
+    if (locBox)
+        locBox.style.display = 'none';
+
+
+    const parts =
+        fullAddress
+            .split(',')
+            .map(p => p.trim())
+            .filter(Boolean);
+
+
+    let locationName =
+        parts[0] || '';
+
+    let districtName = '';
+
+
+    // District கண்டுபிடிக்க
+    const districtPart =
+        parts.find(p =>
+            p.toLowerCase().includes('district')
+        );
+
+    if (districtPart) {
+
+        districtName =
+            districtPart
+                .replace(/district/gi, '')
+                .trim();
+
+    } else {
+
+        // Tamil Nadu-க்கு முன்னால் இருக்கும் value
+        const tamilNaduIndex =
+            parts.findIndex(
+                p =>
+                p.toLowerCase() ===
+                'tamil nadu'
+            );
+
+        if (tamilNaduIndex > 0) {
+            districtName =
+                parts[tamilNaduIndex - 1];
+        }
+    }
+
+
+    const locationSlug =
+        slugifyLocation(locationName);
+
+    const districtSlug =
+        slugifyLocation(districtName);
+
+
+    const shortAddress =
+        formatShortAddress(fullAddress);
+
+
+    const display =
+        document.getElementById(
+            'headerLocationDisplay'
+        );
+
+    if (display) {
+        display.textContent =
+            shortAddress;
+    }
+
+
+    // Display address
+    localStorage.setItem(
+        'catus_user_location',
+        shortAddress
+    );
+
+    // SEO routing data
+    localStorage.setItem(
+        'catus_location_slug',
+        locationSlug
+    );
+
+    localStorage.setItem(
+        'catus_district_slug',
+        districtSlug
+    );
+
+
     toggleLocationModal(false);
-    showToast(`Location set successfully!`, false);
+
+    showToast(
+        'Location set successfully!',
+        false
+    );
 }
 
 // முழு முகவரியிலிருந்து கிராமம், மாவட்டம், பின் கோடு மட்டும் கச்சிதமாக பிரித்து எடுக்க
