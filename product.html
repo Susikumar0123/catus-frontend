@@ -5004,14 +5004,18 @@ function detectCurrentLocation() {
                     data.address || {};
 
                 const locationName =
-                    address.village ||
-                    address.town ||
-                    address.city ||
-                    address.suburb ||
-                    address.hamlet ||
-                    address.neighbourhood ||
-                    address.municipality ||
-                    '';
+    address.hamlet ||
+    address.village ||
+    address.neighbourhood ||
+    address.suburb ||
+    address.quarter ||
+    address.residential ||
+    address.locality ||
+    address.town ||
+    address.municipality ||
+    address.city ||
+    address.city_district ||
+    '';
 
                 const districtName = (
                     address.state_district ||
@@ -5019,8 +5023,8 @@ function detectCurrentLocation() {
                     address.county ||
                     ''
                 )
-                    .replace(/district/gi, '')
-                    .trim();
+                    .replace(/\bdistrict\b/gi, '')
+.trim();
 
                 const stateName =
                     address.state || '';
@@ -5148,27 +5152,109 @@ document.addEventListener('DOMContentLoaded', () => {
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in&addressdetails=1&limit=10`, {
-                        headers: { 'Accept-Language': 'en' }
-                    });
-                    const data = await response.json();
+                    const searchQueries = [
+    query,
+    `${query}, India`
+];
+
+let allResults = [];
+
+for (const searchText of searchQueries) {
+
+    try {
+
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search` +
+            `?format=jsonv2` +
+            `&q=${encodeURIComponent(searchText)}` +
+            `&countrycodes=in` +
+            `&addressdetails=1` +
+            `&namedetails=1` +
+            `&dedupe=1` +
+            `&limit=20`,
+            {
+                headers: {
+                    'Accept-Language': 'en'
+                }
+            }
+        );
+
+        if (!response.ok) {
+            continue;
+        }
+
+        const results = await response.json();
+
+        if (Array.isArray(results)) {
+            allResults.push(...results);
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Location search attempt failed:',
+            searchText,
+            error
+        );
+    }
+}
+
+/* Duplicate locations remove */
+const uniqueResults = [];
+const seenPlaces = new Set();
+
+for (const item of allResults) {
+
+    const key =
+        `${item.place_id || ''}-` +
+        `${item.lat || ''}-` +
+        `${item.lon || ''}`;
+
+    if (!seenPlaces.has(key)) {
+        seenPlaces.add(key);
+        uniqueResults.push(item);
+    }
+}
+
+const data = uniqueResults.slice(0, 25);
 
                     if (data && data.length > 0) {
-                        let html = '';
-                        data.forEach(item => {
-                            let displayName = item.display_name;
-                            let safeDisplayName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                            
-                            html += `<div style="padding: 10px 12px; font-size: 13px; color: #475569; cursor: pointer; border-bottom: 1px solid #f1f5f9;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'" onclick="selectLocationSuggestion('${safeDisplayName}')">
-                                <i class="fa-solid fa-location-dot" style="margin-right:8px; color:#0284c7;"></i>${displayName}
-                            </div>`;
-                        });
-                        locBox.innerHTML = html;
-                        locBox.style.display = 'block';
-                    } else {
-                        locBox.innerHTML = `<div style="padding: 10px 12px; font-size: 13px; color: #ef4444;">No villages or locations found</div>`;
-                        locBox.style.display = 'block';
-                    }
+
+    let html = '';
+
+    window.catusLocationResults = data;
+
+    data.forEach((item, index) => {
+
+        const displayName =
+            item.display_name || '';
+
+        html += `
+            <div
+                style="
+                    padding:10px 12px;
+                    font-size:13px;
+                    color:#475569;
+                    cursor:pointer;
+                    border-bottom:1px solid #f1f5f9;
+                "
+                onmouseover="this.style.background='#e2e8f0'"
+                onmouseout="this.style.background='transparent'"
+                onclick="selectLocationSuggestionByIndex(${index})"
+            >
+                <i
+                    class="fa-solid fa-location-dot"
+                    style="margin-right:8px; color:#0284c7;"
+                ></i>
+
+                ${displayName}
+            </div>
+        `;
+    });
+
+    locBox.innerHTML = html;
+    locBox.style.display = 'block';
+}
                 } catch (err) {
                     console.error("Location search error:", err);
                 }
@@ -5187,116 +5273,76 @@ function slugify(value) {
         .replace(/-+/g, '-');
 }
 
-function selectLocationSuggestion(
-    fullAddress
-) {
+function selectLocationSuggestionByIndex(index) {
 
-    const locInput =
-        document.getElementById(
-            'locSearchInput'
+    const item =
+        window.catusLocationResults?.[index];
+
+    if (!item) {
+        console.error(
+            'Location data not found:',
+            index
         );
-
-    const locBox =
-        document.getElementById(
-            'locSuggestionsBox'
-        );
-
-    if (locInput) {
-        locInput.value =
-            fullAddress;
+        return;
     }
 
-    if (locBox) {
-        locBox.style.display =
-            'none';
-    }
+    const address =
+        item.address || {};
 
-    const parts =
-        fullAddress
-            .split(',')
-            .map(p => p.trim())
-            .filter(Boolean);
+    const fullAddress =
+        item.display_name || '';
+
+    /* =========================
+       LOCATION
+    ========================= */
 
     const locationName =
-        parts[0] || '';
+        address.hamlet ||
+        address.village ||
+        address.neighbourhood ||
+        address.suburb ||
+        address.quarter ||
+        address.residential ||
+        address.locality ||
+        address.town ||
+        address.municipality ||
+        address.city ||
+        address.city_district ||
+        item.namedetails?.name ||
+        item.name ||
+        '';
 
-    let districtName = '';
-    let stateName = '';
+    /* =========================
+       DISTRICT
+    ========================= */
 
-    const knownStates = [
-        'andhra pradesh',
-        'arunachal pradesh',
-        'assam',
-        'bihar',
-        'chhattisgarh',
-        'goa',
-        'gujarat',
-        'haryana',
-        'himachal pradesh',
-        'jharkhand',
-        'karnataka',
-        'kerala',
-        'madhya pradesh',
-        'maharashtra',
-        'manipur',
-        'meghalaya',
-        'mizoram',
-        'nagaland',
-        'odisha',
-        'punjab',
-        'rajasthan',
-        'sikkim',
-        'tamil nadu',
-        'telangana',
-        'tripura',
-        'uttar pradesh',
-        'uttarakhand',
-        'west bengal',
-        'delhi',
-        'jammu and kashmir',
-        'ladakh',
-        'puducherry',
-        'chandigarh'
-    ];
+    const districtName = (
+        address.state_district ||
+        address.district ||
+        address.county ||
+        address.city_district ||
+        ''
+    )
+        .replace(/\bdistrict\b/gi, '')
+        .trim();
 
-    const statePart =
-        parts.find(p =>
-            knownStates.includes(
-                p.toLowerCase()
-            )
-        );
+    /* =========================
+       STATE
+    ========================= */
 
-    if (statePart) {
-        stateName = statePart;
-    }
+    const stateName =
+        address.state || '';
 
-    const districtPart =
-        parts.find(p =>
-            p.toLowerCase()
-                .includes('district')
-        );
+    /* =========================
+       PINCODE
+    ========================= */
 
-    if (districtPart) {
+    const pincode =
+        address.postcode || '';
 
-        districtName =
-            districtPart
-                .replace(/district/gi, '')
-                .trim();
-
-    } else if (stateName) {
-
-        const stateIndex =
-            parts.findIndex(
-                p =>
-                    p.toLowerCase() ===
-                    stateName.toLowerCase()
-            );
-
-        if (stateIndex > 0) {
-            districtName =
-                parts[stateIndex - 1];
-        }
-    }
+    /* =========================
+       SLUGS
+    ========================= */
 
     const locationSlug =
         slugify(locationName);
@@ -5310,10 +5356,49 @@ function selectLocationSuggestion(
     const serviceSlug =
         slugify(activeServiceId);
 
-    const shortAddress =
-        formatShortAddress(
-            fullAddress
+    if (
+        !locationSlug ||
+        !districtSlug ||
+        !stateSlug
+    ) {
+
+        console.error(
+            'Incomplete location data:',
+            address
         );
+
+        showToast(
+            'Please select another nearby location.',
+            true
+        );
+
+        return;
+    }
+
+    /* =========================
+       SHORT DISPLAY ADDRESS
+    ========================= */
+
+    let shortAddress =
+        locationName;
+
+    if (
+        districtName &&
+        districtName.toLowerCase() !==
+        locationName.toLowerCase()
+    ) {
+        shortAddress +=
+            `, ${districtName}`;
+    }
+
+    if (pincode) {
+        shortAddress +=
+            ` - ${pincode}`;
+    }
+
+    /* =========================
+       HEADER UPDATE
+    ========================= */
 
     const headerDisplay =
         document.getElementById(
@@ -5324,6 +5409,10 @@ function selectLocationSuggestion(
         headerDisplay.textContent =
             shortAddress;
     }
+
+    /* =========================
+       SAVE LOCATION
+    ========================= */
 
     localStorage.setItem(
         'catus_user_location',
@@ -5345,7 +5434,57 @@ function selectLocationSuggestion(
         stateSlug
     );
 
+    localStorage.setItem(
+        'catus_location_name',
+        locationName
+    );
+
+    localStorage.setItem(
+        'catus_district_name',
+        districtName
+    );
+
+    localStorage.setItem(
+        'catus_state_name',
+        stateName
+    );
+
+    if (pincode) {
+        localStorage.setItem(
+            'catus_pincode',
+            pincode
+        );
+    }
+
+    /* =========================
+       CLOSE POPUP
+    ========================= */
+
+    const locInput =
+        document.getElementById(
+            'locSearchInput'
+        );
+
+    if (locInput) {
+        locInput.value =
+            fullAddress;
+    }
+
+    const locBox =
+        document.getElementById(
+            'locSuggestionsBox'
+        );
+
+    if (locBox) {
+        locBox.style.display =
+            'none';
+    }
+
     toggleLocationModal(false);
+
+    /* =========================
+       REDIRECT TO PRETTY URL
+    ========================= */
 
     if (
         stateSlug &&
@@ -5355,10 +5494,7 @@ function selectLocationSuggestion(
     ) {
 
         window.location.href =
-            `/${stateSlug}/` +
-            `${districtSlug}/` +
-            `${locationSlug}/` +
-            `${serviceSlug}`;
+            `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
 
         return;
     }
@@ -5401,8 +5537,8 @@ function formatShortAddress(fullAddress) {
 
         districtName =
             districtPart
-                .replace(/district/gi, '')
-                .trim();
+                .replace(/\bdistrict\b/gi, '')
+.trim();
 
     } else {
 
@@ -5610,7 +5746,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
         
         <div style="display: flex; align-items: center; gap: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; background: #ffffff;">
             <i class="fa-solid fa-magnifying-glass" style="color: #64748b; font-size: 14px;"></i>
-            <input type="text" id="locSearchInput" placeholder="Enter District / Pincode" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" autocomplete="off">
+            <input type="text" id="locSearchInput" placeholder="Search village, area, town or pincode" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" autocomplete="off">
         </div>
         <div id="locSuggestionsBox" style="max-height: 180px; overflow-y: auto; margin-top: 5px; display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px;"></div>
 
