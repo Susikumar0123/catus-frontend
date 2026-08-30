@@ -1808,91 +1808,551 @@ button,
     color: #ffffff !important;
 }
 
-/* CUSTOMER DASHBOARD INSIDE PRODUCT PAGE — same clean system */
+/* =========================================================
+   CATUS CUSTOMER DASHBOARD — PREMIUM COMPACT 2026
+   Clean, border-light, responsive, no decorative emoji tiles
+   ========================================================= */
+
 #premiumCustomerDashboard {
-    --catus-primary: #6d4aff;
-    --catus-primary-soft: #f4f1ff;
-    background: #f7f7f8 !important;
-    color: var(--catus-text) !important;
+    --catus-ink: #172033;
+    --catus-muted: #738096;
+    --catus-blue: #2563eb;
+    --catus-blue-2: #4f46e5;
+    --catus-green: #10b981;
+    --catus-amber: #f59e0b;
+    --catus-red: #ef476f;
+    --catus-surface: rgba(255,255,255,.92);
+    --catus-bg: #f4f7fb;
+    --catus-shadow: 0 12px 34px rgba(39, 55, 86, .08);
+    background:
+        radial-gradient(circle at 82% 0%, rgba(79,70,229,.08), transparent 28%),
+        radial-gradient(circle at 18% 100%, rgba(37,99,235,.06), transparent 28%),
+        var(--catus-bg) !important;
+    color: var(--catus-ink);
 }
 
 #premiumCustomerDashboard .prem-dash-sidebar {
-    background: #ffffff !important;
-    border-right: 1px solid #f0f0f2 !important;
-    box-shadow: none !important;
+    width: 224px !important;
+    padding: 16px 12px !important;
+    background: rgba(255,255,255,.93) !important;
+    border: 0 !important;
+    box-shadow: 12px 0 34px rgba(44,62,94,.055) !important;
+    backdrop-filter: blur(16px);
+}
+
+#premiumCustomerDashboard .prem-brand {
+    height: 54px !important;
+    padding: 0 10px 12px !important;
+    margin: 0 0 10px !important;
+    border: 0 !important;
+}
+#premiumCustomerDashboard .prem-brand img {
+    max-height: 38px !important;
+    width: auto !important;
 }
 
 #premiumCustomerDashboard .prem-menu-item {
-    color: #666672 !important;
+    margin: 3px 0 !important;
+    padding: 10px 12px !important;
+    min-height: 40px;
     border: 0 !important;
     border-radius: 12px !important;
-    font-weight: 500 !important;
+    color: #657188 !important;
+    font-size: 12.5px !important;
+    font-weight: 650 !important;
+    gap: 10px !important;
+}
+#premiumCustomerDashboard .prem-menu-item i {
+    width: 18px !important;
+    font-size: 14px !important;
+}
+#premiumCustomerDashboard .prem-menu-item:hover {
+    background: #f2f6ff !important;
+    color: var(--catus-blue) !important;
+    transform: translateX(2px);
+}
+#premiumCustomerDashboard .prem-menu-item.active {
+    background: linear-gradient(135deg, #eef4ff 0%, #f3f0ff 100%) !important;
+    color: var(--catus-blue) !important;
+    box-shadow: inset 0 0 0 1px rgba(37,99,235,.05) !important;
 }
 
-#premiumCustomerDashboard .prem-menu-item.active {
-    background: var(--catus-primary-soft) !important;
-    color: var(--catus-primary) !important;
-    border: 0 !important;
+#premiumCustomerDashboard .prem-dash-content {
+    background: transparent !important;
 }
 
 #premiumCustomerDashboard .prem-dash-header {
-    background: rgba(255,255,255,.96) !important;
-    color: var(--catus-text) !important;
-    border-bottom: 1px solid #f0f0f2 !important;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(247,249,253,.86) !important;
+    color: var(--catus-ink) !important;
+    border: 0 !important;
+    box-shadow: 0 8px 24px rgba(42,58,86,.045) !important;
+    backdrop-filter: blur(18px);
 }
-
+#premiumCustomerDashboard .prem-dash-header-centered {
+    min-height: 56px;
+    padding: 8px 22px !important;
+}
 #premiumCustomerDashboard .prem-greeting-text {
-    color: var(--catus-text) !important;
-    font-weight: 600 !important;
+    font-size: 15px !important;
+    font-weight: 750 !important;
+    letter-spacing: -.2px !important;
+    color: var(--catus-ink) !important;
+}
+#premiumCustomerDashboard .prem-cust-id-badge {
+    background: rgba(255,255,255,.9) !important;
+    color: #60708a !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    padding: 6px 12px !important;
+    border: 0 !important;
+    box-shadow: 0 5px 18px rgba(42,58,86,.07) !important;
+}
+#premiumCustomerDashboard .prem-icon-btn {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 11px !important;
+    background: rgba(255,255,255,.92) !important;
+    color: #38465c !important;
+    box-shadow: 0 5px 16px rgba(42,58,86,.07) !important;
+}
+#premiumCustomerDashboard .prem-icon-btn:hover {
+    transform: translateY(-1px) !important;
+    background: #fff !important;
 }
 
-#premiumCustomerDashboard .prem-cust-id-badge,
-#premiumCustomerDashboard .prem-icon-btn {
-    background: #f6f6f7 !important;
-    color: var(--catus-text-2) !important;
+#premiumCustomerDashboard .prem-tab-pane {
+    max-width: 1180px !important;
+    padding: 18px 24px 28px !important;
+}
+#premiumCustomerDashboard .prem-section-title {
+    margin: 7px 0 12px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    letter-spacing: -.15px !important;
+    color: var(--catus-ink) !important;
+}
+
+/* Summary cards: medium height, no heavy outlines */
+#premiumCustomerDashboard .prem-grid-4 {
+    gap: 12px !important;
+    margin-bottom: 18px !important;
+}
+#premiumCustomerDashboard .prem-stat-card {
+    min-height: 88px !important;
+    padding: 15px 17px !important;
+    box-sizing: border-box;
+    border: 0 !important;
+    border-radius: 18px !important;
+    text-align: left !important;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 10px 28px rgba(55,69,97,.065) !important;
+    overflow: hidden;
+    position: relative;
+}
+#premiumCustomerDashboard .prem-stat-card:nth-child(1) { background: linear-gradient(135deg,#f4f9ff,#edf5ff) !important; }
+#premiumCustomerDashboard .prem-stat-card:nth-child(2) { background: linear-gradient(135deg,#f2fbf7,#ebfaf3) !important; }
+#premiumCustomerDashboard .prem-stat-card:nth-child(3) { background: linear-gradient(135deg,#fffaf0,#fff4db) !important; }
+#premiumCustomerDashboard .prem-stat-card:nth-child(4) { background: linear-gradient(135deg,#fff5f7,#fff0f4) !important; }
+
+#premiumCustomerDashboard .prem-stat-card::after {
+    content: "";
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    right: -28px;
+    top: -30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.52);
+}
+#premiumCustomerDashboard .prem-stat-card h3 {
+    margin: 0 0 2px !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+    letter-spacing: -.8px !important;
+    color: var(--catus-ink) !important;
+}
+#premiumCustomerDashboard .prem-stat-card p {
+    margin: 4px 0 0 !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #6d7890 !important;
+}
+#premiumCustomerDashboard .prem-stat-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 15px 34px rgba(55,69,97,.10) !important;
+}
+
+#premiumCustomerDashboard .prem-summary-detail-box {
+    padding: 11px 14px !important;
+    margin-bottom: 15px !important;
+    border: 0 !important;
+    border-radius: 13px !important;
+    background: linear-gradient(135deg,#edf4ff,#f4f2ff) !important;
+    color: #34435d !important;
+    box-shadow: 0 7px 20px rgba(55,69,97,.045) !important;
+}
+#premiumCustomerDashboard .prem-summary-detail-box h5 {
+    font-size: 11.5px !important;
+    color: #284060 !important;
+}
+
+/* Live tracking card */
+#premiumCustomerDashboard .prem-live-card {
+    padding: 16px 18px !important;
+    margin-bottom: 14px !important;
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: rgba(255,255,255,.96) !important;
+    box-shadow: var(--catus-shadow) !important;
+}
+#premiumCustomerDashboard .prem-live-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 17px 40px rgba(39,55,86,.105) !important;
+}
+#premiumCustomerDashboard .prem-live-top-row {
+    margin-bottom: 10px !important;
+    gap: 14px;
+}
+#premiumCustomerDashboard .prem-live-top-row h3 {
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+    font-weight: 800 !important;
+    letter-spacing: -.25px;
+}
+#premiumCustomerDashboard .prem-live-status-badge {
+    border: 0 !important;
+    padding: 4px 8px !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    background: #edf5ff !important;
+    color: #1670d2 !important;
+    box-shadow: none !important;
+}
+#premiumCustomerDashboard .prem-live-status-badge .pulse {
+    width: 5px !important;
+    height: 5px !important;
+}
+
+/* Smaller OTP card */
+#premiumCustomerDashboard .prem-live-otp-compact {
+    min-width: 92px !important;
+    height: 56px !important;
+    box-sizing: border-box;
+    padding: 8px 11px !important;
+    border: 0 !important;
+    border-radius: 13px !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    background: linear-gradient(145deg,#182235,#212d43) !important;
+    color: #aebad0 !important;
+    font-size: 8px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: .8px !important;
+    box-shadow: 0 8px 18px rgba(24,34,53,.14) !important;
+}
+#premiumCustomerDashboard .prem-live-otp-compact span {
+    margin-top: 2px;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    color: #fff !important;
+    letter-spacing: 2px !important;
+    font-weight: 800 !important;
+}
+
+#premiumCustomerDashboard .prem-live-middle-row {
+    min-height: 58px !important;
+    margin-bottom: 12px !important;
+    padding: 9px 12px !important;
+    border-radius: 15px !important;
+    background: linear-gradient(135deg,#f8faff,#f5f4ff) !important;
+}
+#premiumCustomerDashboard .prem-tech-info-compact {
+    gap: 10px !important;
+}
+#premiumCustomerDashboard .prem-tech-img-compact {
+    width: 42px !important;
+    height: 42px !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(39,55,86,.09) !important;
+}
+#premiumCustomerDashboard .prem-tech-details-compact h4 {
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    color: var(--catus-ink) !important;
+}
+#premiumCustomerDashboard .prem-tech-details-compact p {
+    font-size: 9.5px !important;
+    color: #7a869b !important;
+}
+#premiumCustomerDashboard .prem-eta-compact strong {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+}
+#premiumCustomerDashboard .prem-eta-compact span {
+    font-size: 7.5px !important;
+}
+
+/* Compact timeline */
+#premiumCustomerDashboard .prem-timeline-compact {
+    margin: 8px 0 10px !important;
+    padding: 3px 0 0 !important;
+}
+#premiumCustomerDashboard .prem-timeline-compact::before {
+    top: 13px !important;
+    height: 2px !important;
+    background: #e8edf4 !important;
+}
+#premiumCustomerDashboard .prem-timeline-progress {
+    top: 13px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg,#14b8a6,#10b981) !important;
+}
+#premiumCustomerDashboard .prem-step-compact {
+    gap: 3px !important;
+}
+#premiumCustomerDashboard .prem-step-icon-compact {
+    width: 23px !important;
+    height: 23px !important;
+    border-width: 0 !important;
+    background: #eef2f7 !important;
+    color: #94a0b3 !important;
+    font-size: 8px !important;
+    box-shadow: 0 0 0 4px #fff !important;
+}
+#premiumCustomerDashboard .prem-step-compact.done .prem-step-icon-compact {
+    background: #10b981 !important;
+    color: #fff !important;
+}
+#premiumCustomerDashboard .prem-step-compact.active .prem-step-icon-compact {
+    background: #e8fbf4 !important;
+    box-shadow: 0 0 0 4px #fff, 0 0 0 6px rgba(16,185,129,.12) !important;
+}
+#premiumCustomerDashboard .prem-step-compact.active .prem-step-icon-compact::after {
+    width: 8px !important;
+    height: 8px !important;
+}
+#premiumCustomerDashboard .prem-step-compact > span {
+    font-size: 9px !important;
+    font-weight: 750 !important;
+}
+#premiumCustomerDashboard .prem-step-compact > div:last-child {
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+    font-weight: 650 !important;
+    color: #647086 !important;
+}
+
+#premiumCustomerDashboard .prem-actions-compact {
+    gap: 8px !important;
+    padding-top: 9px !important;
+    border: 0 !important;
+}
+#premiumCustomerDashboard .prem-btn-compact,
+#premiumCustomerDashboard .prem-btn-small {
+    min-height: 34px;
+    border: 0 !important;
+    border-radius: 10px !important;
+    font-size: 10.5px !important;
+    font-weight: 750 !important;
     box-shadow: none !important;
 }
 
-#premiumCustomerDashboard .prem-stat-card,
-#premiumCustomerDashboard .prem-live-card,
-#premiumCustomerDashboard .prem-card-box,
+/* All other dashboard tabs */
+#premiumCustomerDashboard .prem-card-box {
+    padding: 16px !important;
+    border: 0 !important;
+    border-radius: 18px !important;
+    background: rgba(255,255,255,.95) !important;
+    box-shadow: 0 10px 28px rgba(55,69,97,.065) !important;
+}
+#premiumCustomerDashboard .prem-list-item {
+    padding: 12px 4px !important;
+    border-bottom: 1px solid rgba(226,232,240,.55) !important;
+}
+#premiumCustomerDashboard .prem-list-item:last-child {
+    border-bottom: 0 !important;
+}
+#premiumCustomerDashboard .prem-list-info h5 {
+    font-size: 12.5px !important;
+    font-weight: 780 !important;
+    color: var(--catus-ink) !important;
+}
+#premiumCustomerDashboard .prem-list-info p {
+    font-size: 11px !important;
+    color: #7a869b !important;
+}
+
+/* My Bookings — modern order cards */
+#premiumCustomerDashboard #premOrdersListContainer .prem-card-box {
+    position: relative;
+    padding: 14px !important;
+    margin-bottom: 10px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 9px 26px rgba(55,69,97,.06) !important;
+}
+#premiumCustomerDashboard #premOrdersListContainer .prem-card-box > div:first-child {
+    border-bottom: 0 !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 7px !important;
+}
+#premiumCustomerDashboard #premOrdersListContainer img {
+    width: 46px !important;
+    height: 46px !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(42,58,86,.08);
+}
+#premiumCustomerDashboard #premOrdersListContainer strong {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: var(--catus-ink) !important;
+}
+#premiumCustomerDashboard #premOrdersListContainer .prem-btn-small {
+    background: #f0f5ff !important;
+    color: #315fb5 !important;
+    padding: 8px 11px !important;
+}
+
+/* Wallet, support and profile */
+#premiumCustomerDashboard .prem-wallet-card-new {
+    border: 0 !important;
+    border-radius: 20px !important;
+    padding: 18px 20px !important;
+    background: linear-gradient(135deg,#18243a,#263556) !important;
+    box-shadow: 0 14px 32px rgba(24,36,58,.14) !important;
+}
 #premiumCustomerDashboard .prem-support-card {
-    background: #ffffff !important;
     border: 0 !important;
-    box-shadow: 0 5px 18px rgba(24,24,27,.04) !important;
+    border-radius: 16px !important;
+    background: rgba(255,255,255,.95) !important;
+    box-shadow: 0 9px 26px rgba(55,69,97,.06) !important;
+    transition: transform .2s ease, box-shadow .2s ease !important;
+}
+#premiumCustomerDashboard .prem-support-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(55,69,97,.10) !important;
 }
 
-#premiumCustomerDashboard .prem-stat-card h3,
-#premiumCustomerDashboard #sumProgress,
-#premiumCustomerDashboard #sumRejected {
-    color: var(--catus-text) !important;
-    font-weight: 600 !important;
+/* Bottom nav */
+#premiumCustomerDashboard .prem-bottom-nav {
+    border: 0 !important;
+    background: rgba(255,255,255,.94) !important;
+    box-shadow: 0 -10px 30px rgba(55,69,97,.08) !important;
+    backdrop-filter: blur(18px);
+}
+#premiumCustomerDashboard .prem-nav-btn {
+    font-size: 9.5px !important;
+    font-weight: 700 !important;
+}
+#premiumCustomerDashboard .prem-nav-btn i {
+    font-size: 16px !important;
 }
 
-#premiumCustomerDashboard .prem-stat-card p {
-    color: #70707c !important;
-    font-weight: 400 !important;
+/* Tablet / mobile */
+@media (max-width: 850px) {
+    #premiumCustomerDashboard .prem-dash-content {
+        height: calc(100vh - 58px) !important;
+    }
+    #premiumCustomerDashboard .prem-dash-header-centered {
+        min-height: 52px !important;
+        padding: 7px 10px !important;
+    }
+    #premiumCustomerDashboard .prem-tab-pane {
+        padding: 13px 12px 22px !important;
+    }
+    #premiumCustomerDashboard .prem-grid-4 {
+        grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+        gap: 9px !important;
+    }
+    #premiumCustomerDashboard .prem-stat-card {
+        min-height: 76px !important;
+        padding: 12px 13px !important;
+        border-radius: 15px !important;
+    }
+    #premiumCustomerDashboard .prem-stat-card h3 {
+        font-size: 20px !important;
+    }
+    #premiumCustomerDashboard .prem-live-card {
+        padding: 13px !important;
+        border-radius: 17px !important;
+    }
+    #premiumCustomerDashboard .prem-live-otp-compact {
+        min-width: 82px !important;
+        height: 52px !important;
+        padding: 7px 9px !important;
+    }
+    #premiumCustomerDashboard .prem-live-middle-row {
+        min-height: 54px !important;
+    }
 }
 
-#premiumCustomerDashboard .prem-live-status-badge,
-#premiumCustomerDashboard .prem-btn-track-compact {
-    background: var(--catus-primary-soft) !important;
-    color: var(--catus-primary) !important;
+@media (max-width: 540px) {
+    #premiumCustomerDashboard .prem-greeting-text {
+        font-size: 12.5px !important;
+    }
+    #premiumCustomerDashboard .prem-cust-id-badge {
+        font-size: 8.5px !important;
+        padding: 5px 8px !important;
+    }
+    #premiumCustomerDashboard .prem-section-title {
+        font-size: 13px !important;
+    }
+    #premiumCustomerDashboard .prem-live-top-row h3 {
+        font-size: 13px !important;
+    }
+    #premiumCustomerDashboard .prem-live-otp-compact {
+        min-width: 74px !important;
+        height: 48px !important;
+    }
+    #premiumCustomerDashboard .prem-live-otp-compact span {
+        font-size: 14px !important;
+    }
+    #premiumCustomerDashboard .prem-tech-img-compact {
+        width: 38px !important;
+        height: 38px !important;
+    }
+    #premiumCustomerDashboard .prem-step-compact > span {
+        font-size: 8px !important;
+    }
+    #premiumCustomerDashboard .prem-step-compact > div:last-child {
+        font-size: 7.4px !important;
+    }
+}
+
+/* Dark mode refinement for the redesigned dashboard */
+body.dark-theme #premiumCustomerDashboard {
+    --catus-ink: #f7f9fc;
+    --catus-muted: #9aa7ba;
+    --catus-bg: #101521;
+    background: #101521 !important;
+}
+body.dark-theme #premiumCustomerDashboard .prem-dash-sidebar,
+body.dark-theme #premiumCustomerDashboard .prem-dash-header,
+body.dark-theme #premiumCustomerDashboard .prem-card-box,
+body.dark-theme #premiumCustomerDashboard .prem-live-card,
+body.dark-theme #premiumCustomerDashboard .prem-support-card {
+    background: #171e2c !important;
     border: 0 !important;
 }
-
-#premiumCustomerDashboard .prem-timeline-progress,
-#premiumCustomerDashboard .prem-step-compact.done .prem-step-icon-compact,
-#premiumCustomerDashboard .prem-step-compact.active .prem-step-icon-compact {
-    background: var(--catus-primary) !important;
-    border-color: var(--catus-primary) !important;
+body.dark-theme #premiumCustomerDashboard .prem-live-middle-row {
+    background: #20283a !important;
+}
+body.dark-theme #premiumCustomerDashboard .prem-stat-card {
+    background: #182132 !important;
+}
+body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
+    background: #1c2940 !important;
+    color: #d7e2f3 !important;
 }
 
-#premiumCustomerDashboard .prem-btn-cancel-compact {
-    color: #c65b67 !important;
-    background: #fff5f6 !important;
-    border: 0 !important;
-}
 
 /* Responsive spacing */
 @media (max-width: 850px) {
