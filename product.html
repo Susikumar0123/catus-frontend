@@ -2632,18 +2632,44 @@ currentDistrictSlug =
 
 if (currentLocationSlug) {
 
+    const locationNameFromUrl =
+        currentLocationSlug
+            .replace(/-/g, ' ')
+            .replace(/\b\w/g, c => c.toUpperCase());
+
     const locationDisplay =
         document.getElementById(
             'headerLocationDisplay'
         );
 
     if (locationDisplay) {
-
         locationDisplay.textContent =
-            currentLocationSlug
-                .replace(/-/g, ' ')
-                .replace(/\b\w/g, c => c.toUpperCase());
+            locationNameFromUrl;
     }
+
+    // IMPORTANT:
+    // URL location-ai immediately save pannuvom.
+    // Backend-la location row illanalum
+    // Home page same location-ai dhaan kaatum.
+    localStorage.setItem(
+        'catus_user_location',
+        locationNameFromUrl
+    );
+
+    localStorage.setItem(
+        'catus_state_slug',
+        currentStateSlug
+    );
+
+    localStorage.setItem(
+        'catus_district_slug',
+        currentDistrictSlug
+    );
+
+    localStorage.setItem(
+        'catus_location_slug',
+        currentLocationSlug
+    );
 }
 
     // ------------------------------------------
