@@ -2579,6 +2579,27 @@ function getProductUrlParams() {
         }
     }
 
+    function openRelatedService(serviceId) {
+
+    if (
+        currentStateSlug &&
+        currentDistrictSlug &&
+        currentLocationSlug
+    ) {
+
+        window.location.href =
+            `/${currentStateSlug}/` +
+            `${currentDistrictSlug}/` +
+            `${currentLocationSlug}/` +
+            `${serviceId}`;
+
+        return;
+    }
+
+    window.location.href =
+        `/product.html?id=${serviceId}`;
+}
+
     function loadRelevantServicesSection(allServices, currentCategory, currentId) {
         const relatedContainer = document.getElementById('relatedContainer');
         const relatedBox = document.getElementById('relatedServicesBox');
@@ -2602,7 +2623,7 @@ function getProductUrlParams() {
         let html = '';
         filtered.forEach(s => {
             html += `
-            <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
+            <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
                 <div class="uc-card-img-wrapper">
                     <img src="${s.image_url}" alt="${s.service_name}">
                     <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
@@ -3127,7 +3148,7 @@ if (mainGrid) {
     let html = '';
     filtered.forEach(s => {
         html += `
-        <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
+        <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
             <div class="uc-card-img-wrapper">
                 <img src="${s.image_url}" alt="${s.service_name}">
                 <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
@@ -4819,7 +4840,7 @@ function trackProfileChange(field, oldVal, newVal) {
     let html = '';
     filtered.forEach(s => {
         html += `
-        <div class="uc-card" onclick="window.location.href='product.html?id=${s.service_id}'">
+        <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
             <div class="uc-card-img-wrapper">
                 <img src="${s.image_url}" alt="${s.service_name}">
                 <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
