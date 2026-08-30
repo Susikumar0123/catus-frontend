@@ -2490,7 +2490,7 @@ function deleteHomeIcon(groupId) {
         document.getElementById('oldServiceId').value = s.service_id;
         document.getElementById('modalServiceId').value = s.service_id || '';
         document.getElementById('modalServiceName').value = s.service_name || '';
-        document.getElementById('modalServiceGroup').value = service.group_id || '';
+        document.getElementById('modalServiceGroup').value = s.group_id || '';
         document.getElementById('modalServicePrice').value = s.price || '';
         document.getElementById('modalServiceMrp').value = s.mrp || '';
         document.getElementById('modalIsHotDeal').value = (s.is_hot_deal !== undefined) ? s.is_hot_deal : 1;
@@ -2518,6 +2518,7 @@ function deleteHomeIcon(groupId) {
         if(!s) return;
 
         let newName = document.getElementById('modalServiceName').value.trim();
+        let group_id = document.getElementById('modalServiceGroup').value;
         let newPrice = parseInt(document.getElementById('modalServicePrice').value) || 0;
         let newMrp = parseInt(document.getElementById('modalServiceMrp').value) || 0;
         let is_hot_deal = parseInt(document.getElementById('modalIsHotDeal').value) || 0;
