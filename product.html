@@ -477,6 +477,18 @@
         #toastNotification.show { transform: translateY(0); opacity: 1; }
 
         /* General Modal Overlay & Drawer */
+        .cart-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 999998;
+    justify-content: flex-end;
+    align-items: stretch;
+}
         @media (max-width: 850px) {
     .cart-modal-overlay {
         z-index: 999998;
