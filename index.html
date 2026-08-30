@@ -4631,19 +4631,85 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 }
 
-    function selectChip(element) {
-        if (element.classList.contains('active')) {
-            element.classList.remove('active');
-            filterProducts('');
-            return;
-        }
+    function selectServiceGroup(element) {
 
-        document.querySelectorAll('.service-chip').forEach(c => c.classList.remove('active'));
-        element.classList.add('active');
-        
-        const keyword = element.getAttribute('data-search') || element.querySelector('span').textContent.toLowerCase();
-        filterProducts(keyword);
+    const groupId =
+        element.getAttribute('data-group-id') || '';
+
+    if (element.classList.contains('active')) {
+
+        element.classList.remove('active');
+
+        filterProductsByGroup('');
+
+        return;
     }
+
+    document
+        .querySelectorAll('.service-chip')
+        .forEach(c => c.classList.remove('active'));
+
+    element.classList.add('active');
+
+    filterProductsByGroup(groupId);
+}
+
+function filterProductsByGroup(groupId) {
+
+    const bannerContainer =
+        document.querySelector('.scroll-wrapper');
+
+    const titleContainer =
+        document.querySelector('.section-title-container');
+
+    if (groupId) {
+
+        if (bannerContainer)
+            bannerContainer.style.display = 'none';
+
+        if (titleContainer)
+            titleContainer.style.display = 'none';
+
+    } else {
+
+        if (bannerContainer)
+            bannerContainer.style.display = '';
+
+        if (titleContainer)
+            titleContainer.style.display = '';
+    }
+
+    document
+        .querySelectorAll('.uc-category-box')
+        .forEach(categoryBox => {
+
+            let hasVisibleItems = false;
+
+            categoryBox
+                .querySelectorAll('.uc-card')
+                .forEach(card => {
+
+                    const cardGroupId =
+                        card.getAttribute('data-group-id') || '';
+
+                    if (
+                        !groupId ||
+                        cardGroupId === groupId
+                    ) {
+
+                        card.style.display = 'flex';
+                        hasVisibleItems = true;
+
+                    } else {
+
+                        card.style.display = 'none';
+                    }
+                });
+
+            categoryBox.style.display =
+                hasVisibleItems ? 'block' : 'none';
+        });
+}
 
     function filterProducts(keyword) {
         const query = keyword.toLowerCase().trim();
@@ -4889,7 +4955,10 @@ function handleIndexSearchSelect(serviceId, serviceName) {
                   catData.items.forEach((s) => {
                       let trendingBadgeHTML = (s.is_hot_deal == 1) ? `<div class="trending-badge">Hot Deal</div>` : ``;
                       html += `
-                      <div class="uc-card" onclick="openServiceProduct('${s.service_id}')">
+                      <div
+    class="uc-card"
+    data-group-id="${s.group_id || ''}"
+    onclick="openServiceProduct('${s.service_id}')">
                           <div class="uc-card-img-wrapper">
                               ${trendingBadgeHTML}
                               <img src="${s.image_url}" alt="${s.service_name}" loading="lazy">
