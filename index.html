@@ -2415,14 +2415,21 @@
 
 function getLocationProductUrl(serviceId) {
 
-    const locationSlug =
-        localStorage.getItem('catus_location_slug');
+    const stateSlug =
+        localStorage.getItem('catus_state_slug');
 
     const districtSlug =
         localStorage.getItem('catus_district_slug');
 
-    if (locationSlug && districtSlug) {
-        return `/tamil-nadu/${districtSlug}/${locationSlug}/${serviceId}`;
+    const locationSlug =
+        localStorage.getItem('catus_location_slug');
+
+    if (
+        stateSlug &&
+        districtSlug &&
+        locationSlug
+    ) {
+        return `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceId}`;
     }
 
     return `product.html?id=${serviceId}`;
@@ -4884,17 +4891,118 @@ function detectCurrentLocation() {
                 const data = await response.json();
                 
                 if (data && data.display_name) {
-                    let fullAddress = data.display_name;
-                    let shortAddress = formatShortAddress(fullAddress);
-                    
-                    document.getElementById('headerLocationDisplay').textContent = shortAddress;
-                    localStorage.setItem('catus_user_location', shortAddress);
-                    toggleLocationModal(false);
-                    showToast("Live location detected successfully!", false);
-                } else {
+
+    const fullAddress =
+        data.display_name;
+
+    const shortAddress =
+        formatShortAddress(fullAddress);
+
+    const address =
+        data.address || {};
+
+
+    // ------------------------------------------
+    // LOCATION NAME
+    // ------------------------------------------
+
+    const locationName =
+        address.village ||
+        address.town ||
+        address.city ||
+        address.suburb ||
+        address.hamlet ||
+        address.county ||
+        '';
+
+
+    // ------------------------------------------
+    // DISTRICT NAME
+    // ------------------------------------------
+
+    const districtName =
+        address.state_district ||
+        address.county ||
+        address.district ||
+        '';
+
+
+    // ------------------------------------------
+    // STATE NAME
+    // ------------------------------------------
+
+    const stateName =
+        address.state || '';
+
+
+    // ------------------------------------------
+    // CREATE SEO SLUGS
+    // ------------------------------------------
+
+    const locationSlug =
+        slugifyLocation(locationName);
+
+    const districtSlug =
+        slugifyLocation(districtName);
+
+    const stateSlug =
+        slugifyLocation(stateName);
+
+
+    // ------------------------------------------
+    // UPDATE HEADER
+    // ------------------------------------------
+
+    const headerDisplay =
+        document.getElementById(
+            'headerLocationDisplay'
+        );
+
+    if (headerDisplay) {
+        headerDisplay.textContent =
+            shortAddress;
+    }
+
+
+    // ------------------------------------------
+    // SAVE LOCATION DATA
+    // ------------------------------------------
+
+    localStorage.setItem(
+        'catus_user_location',
+        shortAddress
+    );
+
+    localStorage.setItem(
+        'catus_location_slug',
+        locationSlug
+    );
+
+    localStorage.setItem(
+        'catus_district_slug',
+        districtSlug
+    );
+
+    localStorage.setItem(
+        'catus_state_slug',
+        stateSlug
+    );
+
+
+    toggleLocationModal(false);
+
+    showToast(
+        "Live location detected successfully!",
+        false
+    );
+}
+                
+                else {
                     alert("Unable to fetch address details for your location.");
                 }
-            } catch (err) {
+            } 
+            
+            catch (err) {
                 console.error("GPS Reverse Geocoding error:", err);
                 alert("Failed to connect to location server.");
             }
@@ -4980,39 +5088,95 @@ function selectLocationSuggestion(fullAddress) {
 
 
     let locationName =
-        parts[0] || '';
+    parts[0] || '';
 
-    let districtName = '';
+let districtName = '';
+let stateName = '';
 
 
-    // District கண்டுபிடிக்க
-    const districtPart =
-        parts.find(p =>
-            p.toLowerCase().includes('district')
+// ------------------------------------------
+// Detect state
+// ------------------------------------------
+
+const knownStates = [
+    'andhra pradesh',
+    'arunachal pradesh',
+    'assam',
+    'bihar',
+    'chhattisgarh',
+    'goa',
+    'gujarat',
+    'haryana',
+    'himachal pradesh',
+    'jharkhand',
+    'karnataka',
+    'kerala',
+    'madhya pradesh',
+    'maharashtra',
+    'manipur',
+    'meghalaya',
+    'mizoram',
+    'nagaland',
+    'odisha',
+    'punjab',
+    'rajasthan',
+    'sikkim',
+    'tamil nadu',
+    'telangana',
+    'tripura',
+    'uttar pradesh',
+    'uttarakhand',
+    'west bengal',
+    'delhi',
+    'jammu and kashmir',
+    'ladakh',
+    'puducherry',
+    'chandigarh'
+];
+
+const statePart =
+    parts.find(p =>
+        knownStates.includes(
+            p.toLowerCase()
+        )
+    );
+
+if (statePart) {
+    stateName = statePart;
+}
+
+
+// ------------------------------------------
+// Detect district
+// ------------------------------------------
+
+const districtPart =
+    parts.find(p =>
+        p.toLowerCase()
+            .includes('district')
+    );
+
+if (districtPart) {
+
+    districtName =
+        districtPart
+            .replace(/district/gi, '')
+            .trim();
+
+} else if (stateName) {
+
+    const stateIndex =
+        parts.findIndex(
+            p =>
+                p.toLowerCase() ===
+                stateName.toLowerCase()
         );
 
-    if (districtPart) {
-
+    if (stateIndex > 0) {
         districtName =
-            districtPart
-                .replace(/district/gi, '')
-                .trim();
-
-    } else {
-
-        // Tamil Nadu-க்கு முன்னால் இருக்கும் value
-        const tamilNaduIndex =
-            parts.findIndex(
-                p =>
-                p.toLowerCase() ===
-                'tamil nadu'
-            );
-
-        if (tamilNaduIndex > 0) {
-            districtName =
-                parts[tamilNaduIndex - 1];
-        }
+            parts[stateIndex - 1];
     }
+}
 
 
     const locationSlug =
@@ -5021,6 +5185,8 @@ function selectLocationSuggestion(fullAddress) {
     const districtSlug =
         slugifyLocation(districtName);
 
+    const stateSlug =
+    slugifyLocation(stateName);
 
     const shortAddress =
         formatShortAddress(fullAddress);
@@ -5054,6 +5220,10 @@ function selectLocationSuggestion(fullAddress) {
         districtSlug
     );
 
+    localStorage.setItem(
+    'catus_state_slug',
+    stateSlug
+    );
 
     toggleLocationModal(false);
 
