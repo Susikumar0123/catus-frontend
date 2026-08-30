@@ -2366,7 +2366,28 @@ function handleProductSearchSelect(serviceId) {
     let tempPhone = "";
 
     let activeServiceId = 'tv-repair';
+    let currentLocationSlug = '';
+let currentDistrictSlug = '';
+let currentLocationName = '';
+let currentDistrictName = '';
+let locationServiceData = null;
 
+function getProductUrlParams() {
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    return {
+        serviceId:
+            params.get('id') || 'tv-repair',
+
+        location:
+            params.get('location') || '',
+
+        district:
+            params.get('district') || ''
+    };
+}
     // ==========================================
     // DYNAMIC PRODUCT DETAILS & REVIEWS LOADER
     // ==========================================
@@ -2568,27 +2589,435 @@ function handleProductSearchSelect(serviceId) {
         relatedContainer.innerHTML = html;
     }
 
-    // ==========================================
-    // PAGE INITIALIZATION (DOMContentLoaded)
-    // ==========================================
     window.addEventListener('DOMContentLoaded', async () => {
-        updateCartUI();
-        updateHeaderLoginUI();
 
-        const urlParams = new URLSearchParams(window.location.search);
-        activeServiceId = urlParams.get('id') || 'tv-repair';
+    updateCartUI();
+    updateHeaderLoginUI();
 
-        // Dynamic Loading
-        await loadProductDetailsAndReviews(activeServiceId);
+    const pageParams =
+        getProductUrlParams();
 
-        if(currentUser) {
-            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-            fetchUserOrdersPremium(currentUser.phone);
-            renderAuditLogs();
-            if (orderPollingInterval) clearInterval(orderPollingInterval);
-            orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
+    activeServiceId =
+        pageParams.serviceId;
+
+    currentLocationSlug =
+        pageParams.location;
+
+    currentDistrictSlug =
+        pageParams.district;
+
+    // ------------------------------------------
+    // NORMAL PRODUCT PAGE
+    // ------------------------------------------
+    if (!currentLocationSlug) {
+
+        await loadProductDetailsAndReviews(
+            activeServiceId
+        );
+
+    }
+
+    // ------------------------------------------
+    // LOCATION + SERVICE PAGE
+    // ------------------------------------------
+    else {
+
+        await loadLocationAwareProduct(
+            activeServiceId,
+            currentLocationSlug
+        );
+    }
+
+    if (currentUser) {
+
+        if (
+            currentUser.wallet === undefined
+        ) {
+            currentUser.wallet = 2500;
         }
-    });
+
+        fetchUserOrdersPremium(
+            currentUser.phone
+        );
+
+        renderAuditLogs();
+
+        if (orderPollingInterval) {
+            clearInterval(orderPollingInterval);
+        }
+
+        orderPollingInterval =
+            setInterval(
+                () =>
+                    fetchUserOrdersPremium(
+                        currentUser.phone
+                    ),
+                5000
+            );
+    }
+});
+async function loadLocationAwareProduct(
+    serviceId,
+    locationSlug
+) {
+
+    const mainGrid =
+        document.getElementById(
+            'productGridMain'
+        );
+
+    if (mainGrid) {
+        mainGrid.style.opacity = '0';
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/location-page/` +
+                `${encodeURIComponent(locationSlug)}/` +
+                `${encodeURIComponent(serviceId)}`
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !data.page
+        ) {
+
+            // Location/service unavailable
+            await loadProductDetailsAndReviews(
+                serviceId
+            );
+
+            return;
+        }
+
+        const page =
+            data.page;
+
+        locationServiceData =
+            page;
+
+        currentLocationName =
+            page.location_name || '';
+
+        currentDistrictName =
+            page.district || '';
+
+        // ------------------------------------------
+        // PRODUCT DATA
+        // ------------------------------------------
+
+        currentProductData = {
+            ...page,
+
+            price:
+                page.location_price ??
+                page.service_price,
+
+            service_id:
+                page.service_id,
+
+            service_name:
+                page.service_name
+        };
+
+
+        // ------------------------------------------
+        // TITLE
+        // ------------------------------------------
+
+        const productTitle =
+            document.getElementById(
+                'prodTitle'
+            );
+
+        if (productTitle) {
+
+            productTitle.textContent =
+                `${page.service_name} in ` +
+                `${page.location_name}, ` +
+                `${page.district}`;
+        }
+
+
+        // ------------------------------------------
+        // PRICE
+        // ------------------------------------------
+
+        const priceEl =
+            document.getElementById(
+                'displayPrice'
+            );
+
+        if (priceEl) {
+
+            priceEl.textContent =
+                '₹' +
+                Math.round(
+                    parseFloat(
+                        page.location_price ??
+                        page.service_price ??
+                        0
+                    )
+                );
+        }
+
+
+        // ------------------------------------------
+        // MRP
+        // ------------------------------------------
+
+        const mrpEl =
+            document.getElementById(
+                'displayMrp'
+            );
+
+        if (mrpEl) {
+
+            mrpEl.textContent =
+                '₹' +
+                Math.round(
+                    parseFloat(
+                        page.mrp || 0
+                    )
+                );
+        }
+
+
+        // ------------------------------------------
+        // IMAGE
+        // ------------------------------------------
+
+        const imageEl =
+            document.getElementById(
+                'mainProductImage'
+            );
+
+        if (imageEl) {
+            imageEl.src =
+                page.image_url;
+        }
+
+
+        // ------------------------------------------
+        // CATEGORY
+        // ------------------------------------------
+
+        const categoryEl =
+            document.getElementById(
+                'bcCategory'
+            );
+
+        if (categoryEl) {
+
+            categoryEl.textContent =
+                page.category || 'Service';
+        }
+
+
+        // ------------------------------------------
+        // BREADCRUMB
+        // ------------------------------------------
+
+        const breadcrumbTitle =
+            document.getElementById(
+                'bcTitle'
+            );
+
+        if (breadcrumbTitle) {
+
+            breadcrumbTitle.textContent =
+                `${page.service_name} in ` +
+                `${page.location_name}`;
+        }
+
+
+        // ------------------------------------------
+        // RATING
+        // ------------------------------------------
+
+        const ratingEl =
+            document.getElementById(
+                'prodRating'
+            );
+
+        if (ratingEl) {
+
+            ratingEl.textContent =
+                page.rating || '4.8';
+        }
+
+
+        // ------------------------------------------
+        // SEO TITLE
+        // ------------------------------------------
+
+        document.title =
+            page.seo_title ||
+            `${page.service_name} in ` +
+            `${page.location_name}, ` +
+            `${page.district} | Catus`;
+
+
+        // ------------------------------------------
+        // META DESCRIPTION
+        // ------------------------------------------
+
+        let metaDescription =
+            document.querySelector(
+                'meta[name="description"]'
+            );
+
+        if (!metaDescription) {
+
+            metaDescription =
+                document.createElement('meta');
+
+            metaDescription.name =
+                'description';
+
+            document.head.appendChild(
+                metaDescription
+            );
+        }
+
+        metaDescription.content =
+            page.seo_description ||
+            `${page.service_name} in ` +
+            `${page.location_name}, ` +
+            `${page.district}. ` +
+            `Book doorstep service with Catus.`;
+
+
+        // ------------------------------------------
+        // CANONICAL
+        // ------------------------------------------
+
+        let canonical =
+            document.querySelector(
+                'link[rel="canonical"]'
+            );
+
+        if (!canonical) {
+
+            canonical =
+                document.createElement('link');
+
+            canonical.rel =
+                'canonical';
+
+            document.head.appendChild(
+                canonical
+            );
+        }
+
+        canonical.href =
+            window.location.origin +
+            window.location.pathname;
+
+
+        // ------------------------------------------
+        // LOCATION CONTENT
+        // ------------------------------------------
+
+        let locationContent =
+            document.getElementById(
+                'locationServiceContent'
+            );
+
+        if (!locationContent) {
+
+            locationContent =
+                document.createElement('div');
+
+            locationContent.id =
+                'locationServiceContent';
+
+            locationContent.style.marginTop =
+                '15px';
+
+            locationContent.style.lineHeight =
+                '1.7';
+
+            locationContent.style.color =
+                '#475569';
+
+            const infoSection =
+                document.querySelector(
+                    '.features-section'
+                );
+
+            if (infoSection) {
+                infoSection.after(
+                    locationContent
+                );
+            }
+        }
+
+        locationContent.textContent =
+            page.content ||
+            `${page.service_name} is available in ` +
+            `${page.location_name}, ` +
+            `${page.district}.`;
+
+
+        // ------------------------------------------
+        // LOCATION BAR
+        // ------------------------------------------
+
+        const locationDisplay =
+            document.getElementById(
+                'headerLocationDisplay'
+            );
+
+        if (locationDisplay) {
+
+            locationDisplay.textContent =
+                page.location_name +
+                (
+                    page.pincode
+                        ? ` - ${page.pincode}`
+                        : ''
+                );
+        }
+
+
+        localStorage.setItem(
+            'catus_user_location',
+            `${page.location_name}` +
+            (
+                page.pincode
+                    ? ` - ${page.pincode}`
+                    : ''
+            )
+        );
+
+
+        // ------------------------------------------
+        // SHOW PRODUCT
+        // ------------------------------------------
+
+        if (mainGrid) {
+            mainGrid.style.opacity = '1';
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Location product loading error:',
+            error
+        );
+
+        await loadProductDetailsAndReviews(
+            serviceId
+        );
+    }
+}
 
     function selectVariant(btn) {
         document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
@@ -4431,18 +4860,181 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function selectLocationSuggestion(fullAddress) {
-    const locInput = document.getElementById('locSearchInput');
-    const locBox = document.getElementById('locSuggestionsBox');
-    
-    if (locInput) locInput.value = fullAddress;
-    if (locBox) locBox.style.display = 'none';
-    
-    let shortAddress = formatShortAddress(fullAddress);
-    document.getElementById('headerLocationDisplay').textContent = shortAddress;
-    localStorage.setItem('catus_user_location', shortAddress);
+function slugify(value) {
+
+    return String(value || '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+}
+
+function selectLocationSuggestion(
+    fullAddress
+) {
+
+    const locInput =
+        document.getElementById(
+            'locSearchInput'
+        );
+
+    const locBox =
+        document.getElementById(
+            'locSuggestionsBox'
+        );
+
+
+    if (locInput) {
+        locInput.value =
+            fullAddress;
+    }
+
+    if (locBox) {
+        locBox.style.display =
+            'none';
+    }
+
+
+    const shortAddress =
+        formatShortAddress(
+            fullAddress
+        );
+
+
+    const parts =
+        fullAddress
+            .split(',')
+            .map(
+                p => p.trim()
+            );
+
+
+    // ------------------------------------------
+    // Extract location
+    // ------------------------------------------
+
+    const locationName =
+        parts[0] || '';
+
+
+    // ------------------------------------------
+    // Try to find district
+    // ------------------------------------------
+
+    let districtName =
+        currentDistrictName || '';
+
+
+    for (
+        let i = 1;
+        i < parts.length;
+        i++
+    ) {
+
+        const part =
+            parts[i];
+
+        if (
+            part.toLowerCase()
+                .includes('district')
+        ) {
+
+            districtName =
+                part
+                    .replace(
+                        /district/ig,
+                        ''
+                    )
+                    .trim();
+
+            break;
+        }
+    }
+
+
+    // ------------------------------------------
+    // Better district fallback
+    // ------------------------------------------
+
+    if (!districtName) {
+
+        districtName =
+            currentDistrictName ||
+            '';
+    }
+
+
+    // ------------------------------------------
+    // Update header
+    // ------------------------------------------
+
+    const headerDisplay =
+        document.getElementById(
+            'headerLocationDisplay'
+        );
+
+    if (headerDisplay) {
+
+        headerDisplay.textContent =
+            shortAddress;
+    }
+
+
+    localStorage.setItem(
+        'catus_user_location',
+        shortAddress
+    );
+
+
     toggleLocationModal(false);
-    showToast(`Location set successfully!`, false);
+
+
+    // ------------------------------------------
+    // IMPORTANT:
+    // Redirect current service to
+    // location-specific URL
+    // ------------------------------------------
+
+    if (activeServiceId) {
+
+        const districtSlug =
+            slugify(
+                districtName
+            );
+
+        const locationSlug =
+            slugify(
+                locationName
+            );
+
+        const serviceSlug =
+            slugify(
+                activeServiceId
+            );
+
+
+        if (
+            districtSlug &&
+            locationSlug &&
+            serviceSlug
+        ) {
+
+            window.location.href =
+                `/tamil-nadu/` +
+                `${districtSlug}/` +
+                `${locationSlug}/` +
+                `${serviceSlug}`;
+
+            return;
+        }
+    }
+
+
+    showToast(
+        'Location set successfully!',
+        false
+    );
 }
 
 function formatShortAddress(fullAddress) {

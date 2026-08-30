@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/tamil-nadu/:district/:location/:service",
-      "destination": "/location.html?location=:location&service=:service"
+      "destination": "/product.html?id=:service&location=:location&district=:district"
     }
   ]
 }
