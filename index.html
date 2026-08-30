@@ -101,12 +101,7 @@
     text-decoration: none !important;
 }
         .search-container { position: relative; }
-#suggestionsBox { 
-    position: absolute; top: calc(100% + 8px); left: 0; right: 0; 
-    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; 
-    max-height: 220px; overflow-y: auto; z-index: 1000; 
-    box-shadow: 0 6px 16px rgba(0,0,0,0.06); display: none; padding: 6px; 
-}
+
 .suggestion-item { 
     padding: 10px 14px; font-size: 13px; color: #475569; 
     background: #f1f5f9; margin-bottom: 4px; border-radius: 8px; 
@@ -209,7 +204,6 @@
         .search-icon { width: 18px; height: 18px; stroke: #64748b; stroke-width: 2; fill: none; flex-shrink: 0; margin-right: 10px; }
         #searchInput { width: 100%; padding: 12px 0; font-size: 14px; border: none; outline: none; background: transparent; color: #1e293b; font-family: inherit; }
         #searchInput::placeholder { color: #94a3b8; }
-        #suggestionsBox { position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; max-height: 220px; overflow-y: auto; z-index: 1000; box-shadow: 0 6px 16px rgba(0,0,0,0.06); display: none; padding: 6px; }
         .suggestion-item { padding: 10px 14px; font-size: 13px; color: #475569; background: #f1f5f9; margin-bottom: 4px; border-radius: 8px; cursor: pointer; transition: background 0.2s, color 0.2s; }
         .suggestion-item:last-child { margin-bottom: 0; }
         .suggestion-item:hover { background: #e2e8f0; color: #0284c7; }
@@ -1309,6 +1303,159 @@
     #editOrderAddressModal > div > div:last-child {
         flex-shrink: 0 !important;
         padding-bottom: 8px !important;
+    }
+}
+/* ===== MODERN SEARCH AUTOCOMPLETE ===== */
+
+#suggestionsBox {
+    position: absolute !important;
+    top: calc(100% + 6px) !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 14px !important;
+
+    max-height: 390px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 8px 0 !important;
+
+    z-index: 999999 !important;
+
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.12) !important;
+}
+
+
+/* One search result */
+
+#suggestionsBox .suggestion-item {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+
+    padding: 10px 16px !important;
+    margin: 0 !important;
+
+    background: #ffffff !important;
+    border-radius: 0 !important;
+
+    box-sizing: border-box !important;
+
+    cursor: pointer !important;
+
+    transition:
+        background 0.15s ease !important;
+}
+
+
+#suggestionsBox .suggestion-item:hover {
+    background: #f7f8fa !important;
+}
+
+
+/* Product image */
+
+.search-suggestion-image {
+    width: 44px !important;
+    height: 44px !important;
+
+    border-radius: 6px !important;
+
+    object-fit: cover !important;
+
+    flex-shrink: 0 !important;
+
+    margin-right: 14px !important;
+
+    background: #f3f4f6 !important;
+}
+
+
+/* Text area */
+
+.search-suggestion-content {
+    min-width: 0 !important;
+    flex: 1 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    justify-content: center !important;
+}
+
+
+/* Service name */
+
+.search-suggestion-title {
+    color: #333333 !important;
+
+    font-size: 14px !important;
+    font-weight: 400 !important;
+
+    line-height: 19px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+
+/* Category */
+
+.search-suggestion-category {
+    margin-top: 2px !important;
+
+    color: #2874f0 !important;
+
+    font-size: 12px !important;
+    font-weight: 400 !important;
+
+    line-height: 16px !important;
+}
+
+
+/* Scrollbar */
+
+#suggestionsBox::-webkit-scrollbar {
+    width: 6px;
+}
+
+#suggestionsBox::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 20px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    #suggestionsBox {
+        max-height: 360px !important;
+        border-radius: 12px !important;
+    }
+
+    #suggestionsBox .suggestion-item {
+        padding: 9px 12px !important;
+    }
+
+    .search-suggestion-image {
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 11px !important;
+    }
+
+    .search-suggestion-title {
+        font-size: 13px !important;
+    }
+
+    .search-suggestion-category {
+        font-size: 11px !important;
     }
 }
     </style>
@@ -4774,13 +4921,55 @@ document.addEventListener('DOMContentLoaded', () => {
                     );
 
                     if (filtered.length > 0) {
+    
                         let html = '';
-                        filtered.forEach(s => {
-                            let safeName = s.service_name.replace(/'/g, "\\'");
-                            html += `<div class="suggestion-item" onmousedown="handleIndexSearchSelect('${s.service_id}', '${safeName}')">
-                                <i class="fa-solid fa-magnifying-glass" style="margin-right:8px; color:#0284c7;"></i> ${s.service_name} <span style="font-size:11px; color:#94a3b8; float:right;">(${s.category || 'Service'})</span>
-                            </div>`;
-                        });
+
+    filtered.forEach(s => {
+
+    const safeName =
+        String(s.service_name || '')
+            .replace(/\\/g, '\\\\')
+            .replace(/'/g, "\\'");
+
+    const serviceImage =
+        s.image_url ||
+        s.image ||
+        s.icon_url ||
+        'logo.png';
+
+    const groupName =
+        s.group_name ||
+        s.category ||
+        'Home Service';
+
+    html += `
+        <div
+            class="suggestion-item"
+            onmousedown="handleIndexSearchSelect('${s.service_id}', '${safeName}')"
+        >
+
+            <img
+                src="${serviceImage}"
+                class="search-suggestion-image"
+                alt="${s.service_name || 'Service'}"
+                onerror="this.src='logo.png'"
+            >
+
+            <div class="search-suggestion-content">
+
+                <div class="search-suggestion-title">
+                    ${s.service_name || 'Service'}
+                </div>
+
+                <div class="search-suggestion-category">
+                    in ${groupName}
+                </div>
+
+            </div>
+
+        </div>
+    `;
+});
                         suggestionsBox.innerHTML = html;
                         suggestionsBox.style.display = 'block';
                     } else {
