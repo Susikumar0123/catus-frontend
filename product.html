@@ -3208,13 +3208,14 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
 
 </div>
 
-  <!-- EXACT PREMIUM FULL-SCREEN CUSTOMER DASHBOARD MODAL -->
+  <!-- PREMIUM FULL-SCREEN CUSTOMER DASHBOARD MODAL -->
   <div id="premiumCustomerDashboard" class="prem-dashboard-modal">
       
       <!-- Sidebar (Desktop View) -->
       <div class="prem-dash-sidebar">
           <div class="prem-brand" style="cursor: pointer;" onclick="closePremiumDashboard()">
-              <img src="/logo.png" alt="Catus Logo" style="height: 45px; width: auto;">
+              <img src="logo.png" alt="Catus Logo" 
+               style="height: 45px; width: auto;">
           </div>
           <div class="prem-menu-item active" onclick="switchDashTab('home', this)">
               <i class="fa-solid fa-house"></i> Home Dashboard
@@ -3233,38 +3234,51 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
           </div>
           
           <div style="flex-grow: 1;"></div>
-          <div class="prem-menu-item" style="color:#dc2626; cursor:pointer;" onclick="logoutUser()">
-    <i class="fa-solid fa-right-from-bracket"></i> Logout Securely
-</div>
+          <div class="prem-menu-item" style="color:#dc2626;" onclick="logoutUser()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout Securely
+          </div>
       </div>
 
       <!-- Main Content -->
       <div class="prem-dash-content" id="dashContentArea">
           
-          <!-- FIXED RESPONSIVE HEADER -->
+          <!-- FIXED RESPONSIVE HEADER - NOW PERFECTLY CENTERED -->
           <div class="prem-dash-header prem-dash-header-centered">
               <div class="header-left-group">
-                  <button class="prem-icon-btn" onclick="closePremiumDashboard()" title="Back to Home Page"><i class="fa-solid fa-arrow-left"></i></button>
+                  <button class="prem-icon-btn" onclick="closePremiumDashboard()" title="Back to Home Page" style="margin:0; flex-shrink:0; background:rgba(255,255,255,0.2); border-radius:8px; width:36px; height:36px;"><i class="fa-solid fa-arrow-left"></i></button>
                   <div class="prem-greeting" style="overflow: hidden;">
-                      <h1 id="greetName" class="prem-greeting-text">Welcome, Customer</h1>
+                      <h1 id="greetName" class="prem-greeting-text"> Welcome, Customer</h1>
                   </div>
               </div>
               <div class="header-center-group">
-                  <div id="headerCustomerId" class="prem-cust-id-badge">Cust ID: #-</div>
+                  <div id="headerCustomerId" class="prem-cust-id-badge">
+                      Cust ID: #-
+                  </div>
               </div>
               <div class="header-right-group">
-                  <button class="prem-icon-btn"><i class="fa-solid fa-bell"></i></button>
+                  <button class="prem-icon-btn" style="margin:0;"><i class="fa-solid fa-bell"></i></button>
               </div>
           </div>
 
           <!-- TAB 1: HOME DASHBOARD -->
           <div id="dashTabHome" class="prem-tab-pane active">
+              
               <div class="prem-section-title">Dashboard Summary</div>
+              
+              <!-- Compact Clickable Summary Cards -->
               <div class="prem-grid-4">
-                  <div class="prem-stat-card" onclick="showSummaryDetail('bookings')"><h3 id="sumTotal">0</h3><p>Total Bookings</p></div>
-                  <div class="prem-stat-card" onclick="showSummaryDetail('completed')"><h3 id="sumCompleted">0</h3><p>Completed</p></div>
-                  <div class="prem-stat-card" onclick="showSummaryDetail('progress')"><h3 id="sumProgress" style="color:#f59e0b;">0</h3><p>In Progress</p></div>
-                  <div class="prem-stat-card" onclick="showSummaryDetail('rejected')"><h3 id="sumRejected" style="color:#ef4444;">0</h3><p>Rejected Bookings</p></div>
+                  <div class="prem-stat-card" onclick="showSummaryDetail('bookings')">
+                      <h3 id="sumTotal">0</h3><p>Total Bookings</p>
+                  </div>
+                  <div class="prem-stat-card" onclick="showSummaryDetail('completed')">
+                      <h3 id="sumCompleted">0</h3><p>Completed</p>
+                  </div>
+                  <div class="prem-stat-card" onclick="showSummaryDetail('progress')">
+                      <h3 id="sumProgress" style="color:#f59e0b;">0</h3><p>In Progress</p>
+                  </div>
+                  <div class="prem-stat-card" onclick="showSummaryDetail('rejected')">
+                      <h3 id="sumRejected" style="color:#ef4444;">0</h3><p>Rejected Bookings</p>
+                  </div>
               </div>
 
               <!-- Dynamic Detail Display Box -->
@@ -3276,27 +3290,32 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
               <!-- LIVE TRACKING CONTAINER -->
               <div class="prem-section-title" id="liveTrackingTitle" style="display:none;">Live Tracking (Active Bookings)</div>
               <div id="liveTrackingContainer">
-                  <!-- Dynamic Compact Live Tracking Cards will render here -->
+                  <!-- Dynamic Compact Live Tracking Cards will render here for ALL active orders -->
               </div>
+
           </div>
 
           <!-- TAB 2: MY BOOKINGS -->
           <div id="dashTabBookings" class="prem-tab-pane">
               <div class="prem-section-title">My Booking History</div>
               <div id="premOrdersListContainer">
+                  <!-- Orders will load dynamically -->
                   <p style="color:#64748b;">Loading your orders...</p>
               </div>
           </div>
 
-          <!-- TAB 3: WALLET & OFFERS -->
+          <!-- TAB 3: WALLET & OFFERS (UPDATED TO COMING SOON) -->
           <div id="dashTabWallet" class="prem-tab-pane">
               <div class="prem-section-title"><i class="fa-solid fa-wallet"></i> My Wallet & Offers</div>
+              
               <div class="prem-card-box" style="text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;">
                   <div style="width: 80px; height: 80px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0284c7; font-size: 36px; margin-bottom: 5px;">
                       <i class="fa-solid fa-clock-rotate-left"></i>
                   </div>
                   <h2 style="margin: 0; font-size: 24px; font-weight: 700; color: #0f172a;">Coming Soon!</h2>
                   <p style="margin: 0; font-size: 14px; color: #64748b; max-width: 420px; line-height: 1.6;">We are currently building an enhanced Wallet Cash & Exclusive Offers experience for you. Stay tuned!</p>
+                  
+                  <!-- Hidden span to prevent JS errors -->
                   <span id="walletTabBalanceDisplay" style="display: none;">0</span>
               </div>
           </div>
@@ -3307,20 +3326,20 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
               <p style="font-size: 13px; color:#64748b; margin-bottom: 20px;">Need assistance with your booking or have queries about our services? Reach out to us instantly.</p>
               
               <div class="prem-grid-4" style="grid-template-columns: repeat(3, 1fr);">
-                  <div class="prem-support-card" style="background:white; padding:15px; border-radius:10px; border:1px solid #e2e8f0; text-align:center; cursor:pointer;" onclick="window.location.href='tel:+919578155827'">
-                      <i class="fa-solid fa-phone-volume" style="font-size:24px; color:#0f172a; margin-bottom:10px;"></i>
-                      <h4 style="margin:0 0 5px 0; font-size:14px; color:#0f172a;">Call Us</h4>
-                      <p style="margin:0; font-size:12px; color:#64748b;">+91 8946055856</p>
+                  <div class="prem-support-card" onclick="window.location.href='tel:+919578155827'">
+                      <i class="fa-solid fa-phone-volume"></i>
+                      <h4>Call Us</h4>
+                      <p>+91 8946055856</p>
                   </div>
-                  <div class="prem-support-card" style="background:white; padding:15px; border-radius:10px; border:1px solid #e2e8f0; text-align:center; cursor:pointer;" onclick="window.location.href='https://wa.me/919578155827'">
-                      <i class="fa-brands fa-whatsapp" style="font-size:24px; color:#10b981; margin-bottom:10px;"></i>
-                      <h4 style="margin:0 0 5px 0; font-size:14px; color:#0f172a;">WhatsApp Chat</h4>
-                      <p style="margin:0; font-size:12px; color:#64748b;">Instant Support</p>
+                  <div class="prem-support-card" onclick="window.location.href='https://wa.me/919578155827'">
+                      <i class="fa-brands fa-whatsapp" style="color:#10b981;"></i>
+                      <h4>WhatsApp Chat</h4>
+                      <p>Instant Support</p>
                   </div>
-                  <div class="prem-support-card" style="background:white; padding:15px; border-radius:10px; border:1px solid #e2e8f0; text-align:center; cursor:pointer;" onclick="window.location.href='mailto:support@catus.in'">
-                      <i class="fa-solid fa-envelope" style="font-size:24px; color:#f59e0b; margin-bottom:10px;"></i>
-                      <h4 style="margin:0 0 5px 0; font-size:14px; color:#0f172a;">Email Us</h4>
-                      <p style="margin:0; font-size:12px; color:#64748b;">support@catus.in</p>
+                  <div class="prem-support-card" onclick="window.location.href='mailto:support@catus.in'">
+                      <i class="fa-solid fa-envelope" style="color:#f59e0b;"></i>
+                      <h4>Email Us</h4>
+                      <p>support@catus.in</p>
                   </div>
               </div>
 
@@ -3339,7 +3358,7 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
 
           <!-- TAB 5: PROFILE SETTINGS -->
           <div id="dashTabProfile" class="prem-tab-pane">
-              <div class="prem-section-title">Profile Settings</div>
+              <div class="prem-section-title"> Profile Settings</div>
               <div class="prem-card-box">
                   <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                       <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
@@ -3355,12 +3374,11 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
                       <button class="prem-btn-small" id="editNameBtn" onclick="toggleEditField('Name')">Edit Name</button>
                   </div>
                   <hr style="border:none; border-top:1px solid #f1f5f9; margin:15px 0;">
-                  
                   <div class="prem-list-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
                       <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
                           <div class="prem-list-info">
-                              <h5 style="margin: 0 0 4px 0; font-size: 14px; color: #212121; font-weight: 500;">Delivery Address</h5>
-                              <p id="premProfileAddressDisplay" style="margin: 0; font-size: 13px; color: #878787;">No address saved</p>
+                              <h5>Delivery Address</h5>
+                              <p id="premProfileAddressDisplay">No address saved</p>
                           </div>
                           <button class="prem-btn-small" id="editAddressBtn" onclick="toggleProfileAddressEdit()">Edit</button>
                       </div>
@@ -3383,19 +3401,18 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
                       </div>
                   </div>
 
-                  <div class="prem-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f5f9;">
+                  <div class="prem-list-item">
                       <div class="prem-list-info" style="width: 100%;">
-                          <h5 style="margin: 0 0 4px 0; font-size: 14px; color: #212121; font-weight: 500;">Email ID (Optional)</h5>
-                          <p id="premProfileEmailDisplay" style="margin: 0; font-size: 13px; color: #878787;">email@domain.com</p>
+                          <h5>Email ID (Optional)</h5>
+                          <p id="premProfileEmailDisplay">email@domain.com</p>
                           <input type="email" id="premProfileEmailEdit" style="display:none; width:80%; padding:4px; border-radius:4px; border:1px solid #cbd5e1; margin-top: 4px;" />
                       </div>
                       <button class="prem-btn-small" id="editEmailBtn" onclick="toggleEditField('Email')">Edit</button>
                   </div>
-                  
-                  <div class="prem-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: none;">
+                  <div class="prem-list-item">
                       <div class="prem-list-info">
-                          <h5 style="margin: 0 0 4px 0; font-size: 14px; color: #212121; font-weight: 500;">App Theme</h5>
-                          <p style="margin: 0; font-size: 13px; color: #878787;">Switch between light and dark mode</p>
+                          <h5>App Theme</h5>
+                          <p>Switch between light and dark mode</p>
                       </div>
                       <button class="prem-btn-small" onclick="toggleDarkMode()"><i class="fa-solid fa-moon"></i> Toggle Theme</button>
                   </div>
@@ -3410,11 +3427,13 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
                   </div>
               </div>
 
+              <!-- Profile Audit/Tracking Logs -->
               <div class="prem-section-title" style="margin-top: 25px;">Profile Change Logs</div>
               <div class="prem-card-box" id="auditLogContainer" style="font-size:11px; color:#64748b; max-height:180px; overflow-y:auto; line-height: 1.5;">
                   <!-- Logs generated dynamically via JS -->
               </div>
           </div>
+
       </div>
 
       <!-- Bottom Navigation (Mobile View) -->
@@ -3423,11 +3442,10 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
           <button class="prem-nav-btn" onclick="switchDashTab('bookings', this, true)"><i class="fa-solid fa-clipboard-list"></i> Bookings</button>
           <button class="prem-nav-btn" onclick="switchDashTab('profile', this, true)"><i class="fa-solid fa-user"></i> Profile</button>
       </div>
+
   </div>
 
-  <!-- ACTION MODALS (Edit Address, Cancel, Invoice, Rate) -->
-  
-  <!-- EDIT ADDRESS MODAL FOR LIVE TRACKING -->
+   <!-- EDIT ADDRESS MODAL FOR LIVE TRACKING -->
   <div class="cart-modal-overlay" id="editOrderAddressModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
       <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:500px; display:flex; flex-direction:column; gap:12px; box-shadow:0 10px 25px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;">
           <h3 style="margin:0; font-size:16px; color:#0f172a;">Edit Service Address</h3>
