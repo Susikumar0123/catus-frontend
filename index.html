@@ -2429,7 +2429,7 @@
       updateHeaderLoginUI();
       loadHeroBanners();
       loadLiveServicesForFrontend(); // 🛑 இந்த வரியை ஹோம் பேஜ் லோடிங்கில் சேர்க்கவும்!
-      loadDynamicServiceCategories();
+      loadHomeServiceGroups();
   });
 
   const API_BASE_URL = window.location.hostname === 'localhost' 
@@ -4556,61 +4556,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    async function loadDynamicServiceCategories() {
+    async function loadHomeServiceGroups() {
 
-    const track =
-        document.getElementById('servicesTrack');
+    const track = document.getElementById('servicesTrack');
 
     if (!track) return;
 
     try {
 
         const response =
-            await fetch(`${API_BASE_URL}/api/services`);
+            await fetch(`${API_BASE_URL}/api/service-groups`);
 
         const data =
             await response.json();
 
         if (
             !data.success ||
-            !Array.isArray(data.services)
+            !Array.isArray(data.groups)
         ) {
-            console.error('Services not available');
+            console.error('Home service groups not available');
             return;
         }
 
-        const categoryMap = new Map();
-
-        data.services.forEach(service => {
-
-            const category =
-                String(service.category || '').trim();
-
-            if (!category) return;
-
-            const key =
-                category.toLowerCase();
-
-            // Same category multiple times varama prevent
-            if (!categoryMap.has(key)) {
-
-                categoryMap.set(key, {
-                    name: category,
-                    image:
-                        service.image_url ||
-                        service.image ||
-                        service.thumbnail ||
-                        ''
-                });
-            }
-        });
-
-        const categories =
-            Array.from(categoryMap.values());
-
         track.innerHTML = '';
 
-        categories.forEach((category, index) => {
+        data.groups.forEach((group, index) => {
 
             const button =
                 document.createElement('button');
@@ -4618,11 +4588,10 @@ document.addEventListener('DOMContentLoaded', () => {
             button.className = 'service-chip';
 
             button.setAttribute(
-                'data-search',
-                category.name.toLowerCase()
+                'data-group-id',
+                group.group_id
             );
 
-            // First category active
             if (index === 0) {
                 button.classList.add('active');
             }
@@ -4630,23 +4599,23 @@ document.addEventListener('DOMContentLoaded', () => {
             button.innerHTML = `
                 <div class="chip-icon-bg">
                     ${
-                        category.image
+                        group.icon_url
                             ? `<img
-                                src="${category.image}"
-                                alt="${category.name}"
+                                src="${group.icon_url}"
+                                alt="${group.group_name}"
                                 onerror="this.style.display='none'"
                                >`
                             : `<i class="fa-solid fa-screwdriver-wrench"></i>`
                     }
                 </div>
 
-                <span>${category.name}</span>
+                <span>${group.group_name}</span>
             `;
 
             button.addEventListener(
                 'click',
                 function () {
-                    selectChip(this);
+                    selectServiceGroup(this);
                 }
             );
 
@@ -4656,7 +4625,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
 
         console.error(
-            'Dynamic categories load error:',
+            'Home service groups load error:',
             error
         );
     }
