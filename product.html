@@ -1056,6 +1056,141 @@
         padding-bottom: 8px !important;
     }
 }
+
+/* ===== MODERN SEARCH AUTOCOMPLETE ===== */
+
+#suggestionsBox {
+    position: absolute !important;
+    top: calc(100% + 4px) !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 14px !important;
+
+    max-height: 300px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 4px 0 !important;
+
+    z-index: 999999 !important;
+
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12) !important;
+}
+
+#suggestionsBox .suggestion-item {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+
+    padding: 6px 14px !important;
+    margin: 0 !important;
+
+    background: #ffffff !important;
+    border-radius: 0 !important;
+
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+
+    transition: background 0.15s ease !important;
+}
+
+#suggestionsBox .suggestion-item:hover {
+    background: #f7f8fa !important;
+}
+
+.search-suggestion-image {
+    width: 34px !important;
+    height: 34px !important;
+
+    border-radius: 6px !important;
+    object-fit: cover !important;
+
+    flex-shrink: 0 !important;
+    margin-right: 10px !important;
+
+    background: #f3f4f6 !important;
+}
+
+.search-suggestion-content {
+    min-width: 0 !important;
+    flex: 1 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    justify-content: center !important;
+}
+
+.search-suggestion-title {
+    color: #333333 !important;
+
+    font-size: 13px !important;
+    font-weight: 400 !important;
+
+    line-height: 16px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.search-suggestion-category {
+    margin-top: 0 !important;
+
+    color: #2874f0 !important;
+
+    font-size: 11px !important;
+    font-weight: 400 !important;
+
+    line-height: 14px !important;
+}
+
+#suggestionsBox:empty {
+    display: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+#suggestionsBox::-webkit-scrollbar {
+    width: 6px;
+}
+
+#suggestionsBox::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+
+    #suggestionsBox {
+        max-height: 300px !important;
+        border-radius: 12px !important;
+    }
+
+    #suggestionsBox .suggestion-item {
+        padding: 6px 12px !important;
+    }
+
+    .search-suggestion-image {
+        width: 32px !important;
+        height: 32px !important;
+        margin-right: 9px !important;
+    }
+
+    .search-suggestion-title {
+        font-size: 12px !important;
+    }
+
+    .search-suggestion-category {
+        font-size: 10px !important;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -2381,12 +2516,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (filtered.length > 0) {
                         let html = '';
-                        filtered.forEach(s => {
-                            let safeName = s.service_name.replace(/'/g, "\\'");
-                            html += `<div class="suggestion-item" onmousedown="handleProductSearchSelect('${s.service_id}')">
-                                <i class="fa-solid fa-magnifying-glass" style="margin-right:8px; color:#0284c7;"></i> ${s.service_name} <span style="font-size:11px; color:#94a3b8; float:right;">(${s.category || 'Service'})</span>
-                            </div>`;
-                        });
+
+filtered.forEach(s => {
+
+    const serviceImage =
+        s.image_url ||
+        s.image ||
+        s.image1 ||
+        'logo.png';
+
+    const serviceCategory =
+        s.category || 'Service';
+
+    html += `
+        <div class="suggestion-item"
+             onmousedown="handleProductSearchSelect('${s.service_id}')">
+
+            <div class="suggestion-thumb">
+                <img
+                    src="${serviceImage}"
+                    alt="${s.service_name}"
+                    onerror="this.src='logo.png'"
+                >
+            </div>
+
+            <div class="suggestion-content">
+                <div class="suggestion-name">
+                    ${s.service_name}
+                </div>
+
+                <div class="suggestion-category">
+                    in ${serviceCategory}
+                </div>
+            </div>
+
+            <div class="suggestion-arrow">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+
+        </div>
+    `;
+});
                         suggestionsBox.innerHTML = html;
                         suggestionsBox.style.display = 'block';
                     } else {
