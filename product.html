@@ -2713,11 +2713,13 @@ async function loadLocationAwareProduct(
     try {
 
         const response =
-            await fetch(
-                `${API_BASE_URL}/api/location-page/` +
-                `${encodeURIComponent(locationSlug)}/` +
-                `${encodeURIComponent(serviceId)}`
-            );
+    await fetch(
+        `${API_BASE_URL}/api/location-page/` +
+        `${encodeURIComponent(currentStateSlug)}/` +
+        `${encodeURIComponent(currentDistrictSlug)}/` +
+        `${encodeURIComponent(locationSlug)}/` +
+        `${encodeURIComponent(serviceId)}`
+    );
 
         const data =
             await response.json();
