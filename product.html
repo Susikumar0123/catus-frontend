@@ -2375,17 +2375,50 @@ let locationServiceData = null;
 function getProductUrlParams() {
 
     const params =
-        new URLSearchParams(window.location.search);
+        new URLSearchParams(
+            window.location.search
+        );
+
+    let serviceId =
+        params.get('id') || '';
+
+    let locationSlug =
+        params.get('location') || '';
+
+    let districtSlug =
+        params.get('district') || '';
+
+    // Pretty SEO URL:
+    // /tamil-nadu/dharmapuri/palacode/tv-repair
+    const pathParts =
+        window.location.pathname
+            .split('/')
+            .filter(Boolean);
+
+    if (
+        pathParts.length === 4 &&
+        pathParts[0] === 'tamil-nadu'
+    ) {
+
+        districtSlug =
+            pathParts[1];
+
+        locationSlug =
+            pathParts[2];
+
+        serviceId =
+            pathParts[3];
+    }
 
     return {
         serviceId:
-            params.get('id') || 'tv-repair',
+            serviceId || 'tv-repair',
 
         location:
-            params.get('location') || '',
+            locationSlug,
 
         district:
-            params.get('district') || ''
+            districtSlug
     };
 }
     // ==========================================
@@ -2728,24 +2761,6 @@ async function loadLocationAwareProduct(
         currentDistrictName =
             page.district || '';
 
-        // ==========================================
-// UPDATE HEADER LOCATION FROM SEO URL
-// ==========================================
-
-const locationDisplay =
-    document.getElementById('headerLocationDisplay');
-
-if (locationDisplay) {
-
-    const locationText =
-        page.location_name
-            ? `${page.location_name}${page.pincode ? ' - ' + page.pincode : ''}`
-            : currentLocationSlug;
-
-    locationDisplay.textContent =
-        locationText;
-}
-
 // Save current SEO location
 localStorage.setItem(
     'catus_user_location',
@@ -3011,58 +3026,25 @@ localStorage.setItem(
             `${page.location_name}, ` +
             `${page.district}.`;
 
-
         // ------------------------------------------
-        // LOCATION BAR
-        // ------------------------------------------
+// SHOW PRODUCT
+// ------------------------------------------
 
-        const locationDisplay =
-            document.getElementById(
-                'headerLocationDisplay'
-            );
+if (mainGrid) {
+    mainGrid.style.opacity = '1';
+}
 
-        if (locationDisplay) {
+} catch (error) {
 
-            locationDisplay.textContent =
-                page.location_name +
-                (
-                    page.pincode
-                        ? ` - ${page.pincode}`
-                        : ''
-                );
-        }
+    console.error(
+        'Location product loading error:',
+        error
+    );
 
-
-        localStorage.setItem(
-            'catus_user_location',
-            `${page.location_name}` +
-            (
-                page.pincode
-                    ? ` - ${page.pincode}`
-                    : ''
-            )
-        );
-
-
-        // ------------------------------------------
-        // SHOW PRODUCT
-        // ------------------------------------------
-
-        if (mainGrid) {
-            mainGrid.style.opacity = '1';
-        }
-
-    } catch (error) {
-
-        console.error(
-            'Location product loading error:',
-            error
-        );
-
-        await loadProductDetailsAndReviews(
-            serviceId
-        );
-    }
+    await loadProductDetailsAndReviews(
+        serviceId
+    );
+}
 }
 
     function selectVariant(btn) {
@@ -5157,35 +5139,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
-window.addEventListener('DOMContentLoaded', async () => {
-    // 🛑 ரிஃப்ரேஷ் செய்யும் போது லாகின் செஷன் அழியாமல் இருக்க கட்டாயம் இருக்க வேண்டும்:
-    currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || null;
 
-    const cartModal = document.getElementById('cartModal');
-    if (cartModal) cartModal.style.display = 'none';
-
-    const authModal = document.getElementById('authModal');
-    if (authModal) authModal.style.display = 'none';
-
-    const dashModal = document.getElementById('premiumCustomerDashboard');
-    if (dashModal) dashModal.style.display = 'none';
-
-    updateCartUI();
-    updateHeaderLoginUI();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    activeServiceId = urlParams.get('id') || 'tv-repair';
-
-    await loadProductDetailsAndReviews(activeServiceId);
-
-    if (currentUser && currentUser.phone) {
-        if (currentUser.wallet === undefined) currentUser.wallet = 2500;
-        fetchUserOrdersPremium(currentUser.phone);
-        renderAuditLogs();
-        if (orderPollingInterval) clearInterval(orderPollingInterval);
-        orderPollingInterval = setInterval(() => fetchUserOrdersPremium(currentUser.phone), 5000);
-    }
-});
 // 🛑 மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிலும் பாப்-அப்புக்கு வெளியே கிளிக்/டச் செய்தால் க்ளோஸ் செய்ய
 document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('authModal');
