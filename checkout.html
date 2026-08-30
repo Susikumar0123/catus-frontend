@@ -6,14 +6,14 @@
     <title>Secure Checkout - Catus</title>
     
     <!-- Google Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Razorpay Checkout Script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
     <style>
-        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; color: #0f172a; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f8fafc; color: #0f172a; }
         .checkout-container { max-width: 1200px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
         
         /* Header */
@@ -172,14 +172,475 @@
     cursor: pointer;
     margin-left: 4px;
 }
-    </style>
+    
+
+/* =========================================================
+   CATUS CHECKOUT — URBAN CLEAN 2026
+   Same system as Home + Product + Dashboard
+   ========================================================= */
+
+:root {
+    --catus-primary: #6d4aff;
+    --catus-primary-hover: #5f3df0;
+    --catus-primary-soft: #f4f1ff;
+    --catus-text: #18181b;
+    --catus-text-2: #52525b;
+    --catus-text-3: #8a8a96;
+    --catus-page: #f7f7f8;
+    --catus-surface: #ffffff;
+    --catus-line: #ececef;
+    --catus-danger: #c65b67;
+    --catus-danger-soft: #fff5f6;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+body {
+    background: var(--catus-page) !important;
+    color: var(--catus-text) !important;
+    font-weight: 400 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+}
+
+p, span, div, a, label, li, small {
+    font-weight: 400;
+}
+
+/* HEADER */
+.checkout-header {
+    background: rgba(255,255,255,.96) !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #f0f0f2 !important;
+    padding: 12px 26px !important;
+    backdrop-filter: blur(12px);
+}
+
+.checkout-header img {
+    height: 40px !important;
+}
+
+.secure-badge {
+    color: var(--catus-text-2) !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    gap: 7px !important;
+}
+
+.secure-badge i {
+    color: var(--catus-primary) !important;
+}
+
+/* MAIN LAYOUT */
+.checkout-container {
+    max-width: 1160px !important;
+    padding: 22px 18px 30px !important;
+}
+
+.checkout-grid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(340px, 1fr) !important;
+    gap: 18px !important;
+    margin-top: 8px !important;
+}
+
+/* CARDS */
+.card-box {
+    background: #ffffff !important;
+    border: 0 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 7px 24px rgba(24,24,27,.045) !important;
+    padding: 20px !important;
+    margin-bottom: 16px !important;
+    height: auto !important;
+    min-height: 560px !important;
+}
+
+.card-title {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--catus-text) !important;
+    margin-bottom: 14px !important;
+}
+
+.card-title i {
+    color: var(--catus-primary) !important;
+}
+
+/* scrollbar */
+.card-body-scroll {
+    padding-right: 3px !important;
+}
+
+.card-body-scroll::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+.card-body-scroll::-webkit-scrollbar-thumb {
+    background: #d9d9df !important;
+    border-radius: 8px !important;
+}
+
+/* back button */
+.card-box button[onclick="goBackToProduct()"] {
+    color: var(--catus-text-2) !important;
+    font-weight: 500 !important;
+    font-size: 12.5px !important;
+}
+
+.card-box button[onclick="goBackToProduct()"] i {
+    color: var(--catus-primary) !important;
+}
+
+/* SAVED ADDRESS */
+.saved-address-card {
+    background: #f8f8f9 !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+    gap: 10px !important;
+}
+
+.saved-address-info h4 {
+    color: var(--catus-text) !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+}
+
+.saved-address-info h4 i {
+    color: var(--catus-primary) !important;
+}
+
+.saved-address-info p {
+    color: var(--catus-text-2) !important;
+    font-size: 12.5px !important;
+}
+
+.edit-text-btn {
+    color: var(--catus-primary) !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+.edit-text-btn:hover {
+    color: var(--catus-primary-hover) !important;
+}
+
+.remove-text-btn {
+    color: var(--catus-danger) !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+.remove-text-btn:hover {
+    color: #b94d59 !important;
+}
+
+.add-new-btn {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    padding: 7px 10px !important;
+    font-size: 10.5px !important;
+    font-weight: 500 !important;
+}
+
+.add-new-btn:hover {
+    background: #ece7ff !important;
+}
+
+/* FORM */
+.form-grid {
+    gap: 12px !important;
+}
+
+.form-group {
+    gap: 5px !important;
+}
+
+.form-group label {
+    color: #666672 !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+}
+
+.form-input {
+    background: #fafafa !important;
+    color: var(--catus-text) !important;
+    border: 1px solid #e5e5e8 !important;
+    border-radius: 10px !important;
+    padding: 11px 12px !important;
+    font-size: 13px !important;
+    box-shadow: none !important;
+}
+
+.form-input:focus {
+    background: #ffffff !important;
+    border-color: var(--catus-primary) !important;
+    box-shadow: 0 0 0 3px rgba(109,74,255,.07) !important;
+}
+
+.form-input.error {
+    border-color: #d97882 !important;
+    background: #fffafa !important;
+}
+
+/* save address */
+.save-addr-action-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    padding: 11px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+}
+
+.save-addr-action-btn:hover {
+    background: var(--catus-primary-hover) !important;
+}
+
+/* error box */
+#errorAlert {
+    background: var(--catus-danger-soft) !important;
+    color: var(--catus-danger) !important;
+    border: 0 !important;
+    font-weight: 500 !important;
+    border-radius: 10px !important;
+}
+
+/* SUMMARY ITEMS */
+#summaryItemsContainer > div {
+    border-bottom: 1px solid #f1f1f3 !important;
+}
+
+#summaryItemsContainer img {
+    border-radius: 10px !important;
+    box-shadow: none !important;
+}
+
+#summaryItemsContainer div[style*="font-weight: 600"] {
+    font-weight: 500 !important;
+    color: var(--catus-text) !important;
+}
+
+#summaryItemsContainer div[style*="font-weight: 700"] {
+    font-weight: 600 !important;
+    color: var(--catus-text) !important;
+}
+
+/* BILL SUMMARY */
+.bill-summary-box {
+    background: #fafafa !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+    margin-bottom: 14px !important;
+}
+
+.bill-row {
+    color: var(--catus-text-2) !important;
+    font-size: 12.5px !important;
+    margin-bottom: 9px !important;
+}
+
+.bill-row.total-bill {
+    color: var(--catus-text) !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    border-top: 1px solid #ececef !important;
+    padding-top: 10px !important;
+}
+
+.bill-row.amount-to-pay {
+    color: var(--catus-text) !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border-top: 1px solid #ececef !important;
+    padding-top: 11px !important;
+}
+
+.fee-info-icon {
+    color: #a0a0aa !important;
+}
+
+/* PAYMENT METHODS */
+.payment-method-card {
+    background: #f8f8f9 !important;
+    border: 0 !important;
+    border-radius: 11px !important;
+    padding: 10px 11px !important;
+    margin-bottom: 7px !important;
+}
+
+.payment-method-card.selected {
+    background: var(--catus-primary-soft) !important;
+    box-shadow: inset 0 0 0 1px rgba(109,74,255,.07) !important;
+}
+
+.payment-method-card input {
+    accent-color: var(--catus-primary) !important;
+}
+
+.payment-method-card strong {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+.payment-method-card span {
+    color: #777783 !important;
+}
+
+/* payment label */
+.card-body-scroll label[style*="font-weight: 700"] {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+/* CONFIRM */
+.confirm-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 11px !important;
+    padding: 13px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    margin-top: 12px !important;
+}
+
+.confirm-btn:hover {
+    background: var(--catus-primary-hover) !important;
+}
+
+/* SUCCESS / RECEIPT */
+#successPageView h1 {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#successPageView p {
+    color: var(--catus-text-2) !important;
+}
+
+.checkmark-circle {
+    background: var(--catus-primary) !important;
+}
+
+.receipt-box {
+    background: #ffffff !important;
+    border: 0 !important;
+    border-top: 4px solid var(--catus-primary) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 26px rgba(24,24,27,.05) !important;
+}
+
+.receipt-box h3 {
+    color: var(--catus-primary) !important;
+    font-weight: 600 !important;
+}
+
+.receipt-label {
+    color: #777783 !important;
+    font-weight: 400 !important;
+}
+
+.receipt-value {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+#dispTotal {
+    color: var(--catus-primary) !important;
+    font-weight: 600 !important;
+}
+
+.receipt-row[style*="background: #f8fafc"] {
+    background: #f8f8f9 !important;
+    border-radius: 10px !important;
+}
+
+/* MOBILE NAV */
+.mobile-bottom-nav {
+    background: rgba(255,255,255,.97) !important;
+    border-top: 1px solid #f0f0f2 !important;
+    box-shadow: 0 -4px 18px rgba(24,24,27,.05) !important;
+}
+
+.bot-nav-item {
+    color: #777783 !important;
+    font-weight: 400 !important;
+}
+
+.bot-nav-item:hover,
+.bot-nav-item.active {
+    color: var(--catus-primary) !important;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .checkout-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    .card-box {
+        min-height: 0 !important;
+        padding: 16px !important;
+        border-radius: 16px !important;
+    }
+
+    .checkout-container {
+        padding: 14px 12px 24px !important;
+    }
+}
+
+@media (max-width: 540px) {
+    .checkout-header {
+        padding: 10px 12px !important;
+    }
+
+    .checkout-header img {
+        height: 34px !important;
+    }
+
+    .secure-badge {
+        font-size: 10px !important;
+    }
+
+    .card-title {
+        font-size: 14px !important;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .form-group.full {
+        grid-column: span 1 !important;
+    }
+}
+
+</style>
 </head>
 <body>
 
     <!-- Header -->
     <div class="checkout-header">
-        <img src="logo.png" alt="Catus Logo"
-         onclick="window.location.href='index.html'">
+        <img src="/logo.png" alt="Catus Logo"
+         onclick="window.location.href='/'">
         <div class="secure-badge"><i class="fa-solid fa-lock"></i> 100% Secure Checkout</div>
     </div>
 
@@ -382,7 +843,7 @@
             </div>
         </div>
 
-        <button onclick="window.location.href='index.html'" class="confirm-btn" style="max-width: 300px; margin: 30px auto; background: #0f172a;">
+        <button onclick="window.location.href='/'" class="confirm-btn" style="max-width: 300px; margin: 30px auto; background: #0f172a;">
             Go to Home Dashboard
         </button>
     </div>
@@ -397,7 +858,7 @@
             if (document.referrer && document.referrer.includes('product.html')) {
                 window.location.href = document.referrer;
             } else {
-                window.location.href = 'index.html';
+                window.location.href = '/';
             }
         }
 
@@ -445,7 +906,7 @@
             const currentUser = JSON.parse(localStorage.getItem('catus_logged_user'));
             if (!currentUser) {
                 alert("Please login first!");
-                window.location.href = 'index.html';
+                window.location.href = '/';
                 return;
             }
 
@@ -762,7 +1223,7 @@
                         }
                     },
                     "prefill": { "name": custName, "contact": mobile },
-                    "theme": { "color": "#0284c7" }
+                    "theme": { "color": "#6d4aff" }
                 };
 
                 const rzp = new Razorpay(options);
@@ -923,7 +1384,7 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
     </script>
     <!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
-    <button class="bot-nav-item" onclick="window.location.href='index.html'">
+    <button class="bot-nav-item" onclick="window.location.href='/'">
         <i class="fa-solid fa-house"></i> <span>Home</span>
     </button>
     <button class="bot-nav-item" onclick="toggleCartModal(true)">

@@ -6,7 +6,7 @@
     <title id="pageTitle">Product Details - Catus</title>
     
     <!-- Google Fonts - Roboto -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -212,7 +212,7 @@
     }
 
     body {
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     margin: 0 !important;
     padding: 0 !important;
     width: 100vw !important;
@@ -232,7 +232,7 @@
            1. CORE LAYOUT & HEADER (From Index)
            ========================================================== */
         body {
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #ffffff !important; /* பியூர் ஒயிட் */
@@ -1191,7 +1191,737 @@
     }
 }
 
-    </style>
+    
+
+/* =========================================================
+   CATUS PRODUCT PAGE — URBAN CLEAN 2026
+   Same visual system as Home + Customer Dashboard
+   ========================================================= */
+
+:root {
+    --catus-primary: #6d4aff;
+    --catus-primary-hover: #5f3df0;
+    --catus-primary-soft: #f4f1ff;
+    --catus-text: #18181b;
+    --catus-text-2: #52525b;
+    --catus-text-3: #8a8a96;
+    --catus-page: #ffffff;
+    --catus-soft: #f7f7f8;
+    --catus-line: #ececef;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+body {
+    background: #ffffff !important;
+    color: var(--catus-text) !important;
+    font-weight: 400 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+}
+
+p, span, div, a, label, li, small {
+    font-weight: 400;
+}
+
+button,
+.btn,
+.uc-btn,
+.login-btn,
+.checkout-btn {
+    font-weight: 500 !important;
+}
+
+/* HEADER */
+.master-app-container {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: 0 !important;
+}
+
+.header-main-container {
+    gap: 12px !important;
+}
+
+.search-container {
+    background: #ffffff !important;
+    border: 1px solid #e5e5e8 !important;
+    box-shadow: none !important;
+    border-radius: 14px !important;
+}
+
+.search-container:focus-within {
+    border-color: var(--catus-primary) !important;
+    box-shadow: 0 0 0 3px rgba(109,74,255,.08) !important;
+}
+
+#searchInput {
+    color: var(--catus-text) !important;
+    font-weight: 400 !important;
+}
+
+#searchInput::placeholder {
+    color: #9a9aa3 !important;
+}
+
+/* location + login */
+.header-location-widget,
+.login-btn {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.header-location-widget:hover,
+.login-btn:hover {
+    background: #ece7ff !important;
+    color: var(--catus-primary) !important;
+}
+
+.header-location-widget .loc-label,
+#headerLocationDisplay,
+.header-location-widget i,
+.login-btn svg {
+    color: var(--catus-primary) !important;
+    stroke: var(--catus-primary) !important;
+}
+
+.nav-item,
+.nav-text {
+    color: var(--catus-text-2) !important;
+    font-weight: 400 !important;
+}
+
+.nav-item:hover,
+.nav-item:hover .nav-text {
+    color: var(--catus-primary) !important;
+}
+
+.nav-item svg {
+    stroke: #666672 !important;
+}
+
+.nav-item:hover svg {
+    stroke: var(--catus-primary) !important;
+}
+
+.cart-badge {
+    background: var(--catus-primary) !important;
+    box-shadow: none !important;
+}
+
+/* SEARCH SUGGESTIONS */
+#suggestionsBox {
+    background: #ffffff !important;
+    border: 0 !important;
+    box-shadow: 0 10px 28px rgba(24,24,27,.08) !important;
+    border-radius: 14px !important;
+}
+
+.suggestion-item {
+    background: #ffffff !important;
+    color: var(--catus-text-2) !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
+.suggestion-item:hover {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+}
+
+/* BREADCRUMB */
+.breadcrumb {
+    border: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 18px !important;
+    color: #858591 !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+}
+
+.breadcrumb a {
+    color: var(--catus-text-2) !important;
+    font-weight: 400 !important;
+}
+
+.breadcrumb a:hover {
+    color: var(--catus-primary) !important;
+}
+
+.breadcrumb .active {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+.breadcrumb span {
+    color: #c7c7cd !important;
+}
+
+/* MAIN PRODUCT LAYOUT */
+.product-grid {
+    gap: 32px !important;
+}
+
+.product-gallery {
+    background: #ffffff !important;
+}
+
+.main-image-container {
+    background: #f7f7f8 !important;
+    border: 0 !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+}
+
+.main-image-container img {
+    background: #f7f7f8 !important;
+}
+
+.thumbnail-row {
+    gap: 8px !important;
+    margin-top: 10px !important;
+}
+
+.thumb-box {
+    border: 0 !important;
+    border-radius: 10px !important;
+    opacity: .72 !important;
+    background: #f7f7f8 !important;
+    box-shadow: none !important;
+}
+
+.thumb-box.active {
+    opacity: 1 !important;
+    border: 0 !important;
+    box-shadow: inset 0 0 0 2px var(--catus-primary) !important;
+}
+
+/* PRODUCT INFO */
+.product-info {
+    gap: 13px !important;
+}
+
+.product-title {
+    color: var(--catus-text) !important;
+    font-size: 27px !important;
+    font-weight: 600 !important;
+    line-height: 1.28 !important;
+    letter-spacing: -0.035em !important;
+}
+
+.rating-row {
+    gap: 10px !important;
+}
+
+.rating-badge {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    border: 0 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    border-radius: 7px !important;
+}
+
+.rating-text {
+    color: #73737e !important;
+    font-weight: 400 !important;
+    font-size: 13px !important;
+}
+
+.hot-deal,
+.discount-pct {
+    color: var(--catus-primary) !important;
+    font-weight: 500 !important;
+}
+
+.price-section {
+    gap: 11px !important;
+    margin-top: 2px !important;
+}
+
+.current-price {
+    color: var(--catus-text) !important;
+    font-size: 31px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.035em !important;
+}
+
+.original-price {
+    color: #9a9aa3 !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+}
+
+.discount-pct {
+    font-size: 14px !important;
+}
+
+/* VARIANTS */
+.variant-title {
+    color: #686873 !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+}
+
+.variant-group {
+    gap: 8px !important;
+}
+
+.variant-btn {
+    padding: 10px 14px !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    background: #f6f6f7 !important;
+    color: var(--catus-text-2) !important;
+    font-weight: 400 !important;
+    box-shadow: none !important;
+}
+
+.variant-btn:hover {
+    background: #f0eef9 !important;
+    color: var(--catus-primary) !important;
+}
+
+.variant-btn.active,
+.variant-btn.active:hover {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    box-shadow: inset 0 0 0 1px rgba(109,74,255,.08) !important;
+    border: 0 !important;
+    font-weight: 500 !important;
+}
+
+/* FEATURES */
+.features-section {
+    background: #fafafa !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    padding: 14px 15px !important;
+    margin-top: 8px !important;
+}
+
+.features-title {
+    color: var(--catus-text) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.feature-item {
+    color: var(--catus-text-2) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+.feature-item i {
+    color: var(--catus-primary) !important;
+}
+
+/* CTA BUTTONS — one color system */
+.action-buttons {
+    gap: 10px !important;
+    margin-top: 14px !important;
+}
+
+.btn {
+    min-height: 46px !important;
+    padding: 12px 16px !important;
+    border-radius: 11px !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.btn-cart {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+}
+
+.btn-cart:hover {
+    background: #ece7ff !important;
+    color: var(--catus-primary) !important;
+    transform: none !important;
+}
+
+.btn-buy {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-buy:hover {
+    background: var(--catus-primary-hover) !important;
+    transform: none !important;
+}
+
+/* RELATED SERVICES */
+.uc-category-box {
+    border: 0 !important;
+    padding-top: 28px !important;
+    margin-top: 36px !important;
+}
+
+.uc-cat-header h3 {
+    color: var(--catus-text) !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+}
+
+.uc-cat-header p {
+    color: var(--catus-text-2) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+.uc-grid {
+    gap: 16px !important;
+}
+
+.uc-card {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.uc-card:hover {
+    transform: translateY(-2px) !important;
+}
+
+.uc-card-img-wrapper {
+    background: #f6f6f7 !important;
+    border-radius: 12px !important;
+}
+
+.uc-overlay-rating {
+    background: rgba(255,255,255,.94) !important;
+    color: var(--catus-text) !important;
+    box-shadow: none !important;
+    font-weight: 500 !important;
+}
+
+.uc-overlay-rating i {
+    color: var(--catus-primary) !important;
+}
+
+.uc-body h4 {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+.uc-body h4:hover {
+    color: var(--catus-primary) !important;
+}
+
+.uc-price {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+.uc-cut {
+    color: #9a9aa3 !important;
+}
+
+.uc-stars {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    border: 0 !important;
+    font-weight: 500 !important;
+}
+
+.uc-cart-btn {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    box-shadow: none !important;
+}
+
+.uc-book-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+/* CART */
+.cart-drawer {
+    background: #ffffff !important;
+}
+
+.close-cart {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    box-shadow: none !important;
+}
+
+.close-cart:hover {
+    background: #ece7ff !important;
+    color: var(--catus-primary) !important;
+    transform: none !important;
+}
+
+.remove-item-btn {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+}
+
+.remove-item-btn:hover {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+}
+
+.cart-header span[onclick*="clearCart"],
+.clear-cart-text {
+    color: var(--catus-primary) !important;
+    font-weight: 500 !important;
+}
+
+.checkout-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    font-weight: 500 !important;
+}
+
+.checkout-btn:hover {
+    background: var(--catus-primary-hover) !important;
+    transform: none !important;
+}
+
+/* AUTH */
+.auth-modal-container,
+.auth-right-panel {
+    background: #ffffff !important;
+}
+
+.auth-left-panel {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-text) !important;
+}
+
+.auth-left-panel h2 {
+    font-weight: 600 !important;
+}
+
+.auth-left-panel p {
+    color: var(--catus-text-2) !important;
+    font-weight: 400 !important;
+}
+
+.auth-primary-btn,
+.login-submit-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+.auth-primary-btn:hover,
+.login-submit-btn:hover {
+    background: var(--catus-primary-hover) !important;
+}
+
+.auth-input-field:focus,
+.login-input:focus {
+    border-color: var(--catus-primary) !important;
+    box-shadow: 0 0 0 3px rgba(109,74,255,.08) !important;
+}
+
+.auth-switch-text,
+.auth-bottom-link,
+.auth-terms-text a {
+    color: var(--catus-primary) !important;
+}
+
+/* TOAST */
+#toastNotification {
+    background: #18181b !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 24px rgba(24,24,27,.14) !important;
+}
+
+/* MODALS */
+#productReviewsPopupModal > div,
+#editOrderAddressModal > div,
+#cancelBookingModal > div,
+#invoiceViewModal > div,
+#ratingModal > div {
+    border: 0 !important;
+    box-shadow: 0 18px 46px rgba(24,24,27,.14) !important;
+}
+
+.uc-fk-field label {
+    color: var(--catus-text-2) !important;
+    font-weight: 500 !important;
+}
+
+.uc-fk-field input {
+    border: 1px solid #e5e5e8 !important;
+    border-radius: 10px !important;
+}
+
+.uc-fk-field input:focus {
+    border-color: var(--catus-primary) !important;
+    box-shadow: 0 0 0 3px rgba(109,74,255,.08) !important;
+}
+
+/* MOBILE BOTTOM NAV */
+.mobile-bottom-nav {
+    background: rgba(255,255,255,.97) !important;
+    border-top: 1px solid #f0f0f2 !important;
+    box-shadow: 0 -4px 18px rgba(24,24,27,.05) !important;
+}
+
+.bot-nav-item {
+    color: #777783 !important;
+    font-weight: 400 !important;
+}
+
+.bot-nav-item:hover,
+.bot-nav-item.active {
+    color: var(--catus-primary) !important;
+}
+
+/* FOOTER */
+.footer-wrapper {
+    background: #18181b !important;
+    color: #c8c8cf !important;
+}
+
+.footer-wrapper a,
+.footer-inner a {
+    color: #c8c8cf !important;
+    font-weight: 400 !important;
+}
+
+.footer-wrapper a:hover,
+.footer-inner a:hover {
+    color: #ffffff !important;
+}
+
+/* CUSTOMER DASHBOARD INSIDE PRODUCT PAGE — same clean system */
+#premiumCustomerDashboard {
+    --catus-primary: #6d4aff;
+    --catus-primary-soft: #f4f1ff;
+    background: #f7f7f8 !important;
+    color: var(--catus-text) !important;
+}
+
+#premiumCustomerDashboard .prem-dash-sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid #f0f0f2 !important;
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item {
+    color: #666672 !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    font-weight: 500 !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item.active {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    border: 0 !important;
+}
+
+#premiumCustomerDashboard .prem-dash-header {
+    background: rgba(255,255,255,.96) !important;
+    color: var(--catus-text) !important;
+    border-bottom: 1px solid #f0f0f2 !important;
+}
+
+#premiumCustomerDashboard .prem-greeting-text {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#premiumCustomerDashboard .prem-cust-id-badge,
+#premiumCustomerDashboard .prem-icon-btn {
+    background: #f6f6f7 !important;
+    color: var(--catus-text-2) !important;
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card,
+#premiumCustomerDashboard .prem-live-card,
+#premiumCustomerDashboard .prem-card-box,
+#premiumCustomerDashboard .prem-support-card {
+    background: #ffffff !important;
+    border: 0 !important;
+    box-shadow: 0 5px 18px rgba(24,24,27,.04) !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card h3,
+#premiumCustomerDashboard #sumProgress,
+#premiumCustomerDashboard #sumRejected {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card p {
+    color: #70707c !important;
+    font-weight: 400 !important;
+}
+
+#premiumCustomerDashboard .prem-live-status-badge,
+#premiumCustomerDashboard .prem-btn-track-compact {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    border: 0 !important;
+}
+
+#premiumCustomerDashboard .prem-timeline-progress,
+#premiumCustomerDashboard .prem-step-compact.done .prem-step-icon-compact,
+#premiumCustomerDashboard .prem-step-compact.active .prem-step-icon-compact {
+    background: var(--catus-primary) !important;
+    border-color: var(--catus-primary) !important;
+}
+
+#premiumCustomerDashboard .prem-btn-cancel-compact {
+    color: #c65b67 !important;
+    background: #fff5f6 !important;
+    border: 0 !important;
+}
+
+/* Responsive spacing */
+@media (max-width: 850px) {
+    .product-grid {
+        gap: 16px !important;
+    }
+
+    .product-title {
+        font-size: 22px !important;
+    }
+
+    .current-price {
+        font-size: 27px !important;
+    }
+
+    .main-image-container {
+        border-radius: 14px !important;
+    }
+
+    .action-buttons {
+        gap: 8px !important;
+    }
+
+    .btn {
+        min-height: 44px !important;
+        font-size: 13px !important;
+    }
+}
+
+</style>
 </head>
 <body>
 
@@ -1202,7 +1932,7 @@
     <div class="uc-homepage-wrapper">
       <div class="header-main-container">
           <div class="brand-logo" onclick="window.location.href='/'">
-              <img src="logo.png" alt="Catus Logo">
+              <img src="/logo.png" alt="Catus Logo">
           </div>
           
           <div class="search-container">
@@ -2023,7 +2753,7 @@
       <!-- Sidebar (Desktop View) -->
       <div class="prem-dash-sidebar">
           <div class="prem-brand" style="cursor: pointer;" onclick="closePremiumDashboard()">
-              <img src="logo.png" alt="Catus Logo" style="height: 45px; width: auto;">
+              <img src="/logo.png" alt="Catus Logo" style="height: 45px; width: auto;">
           </div>
           <div class="prem-menu-item active" onclick="switchDashTab('home', this)">
               <i class="fa-solid fa-house"></i> Home Dashboard
