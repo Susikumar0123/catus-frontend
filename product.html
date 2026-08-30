@@ -1003,6 +1003,59 @@
 .feature-item i {
     color: #7c3aed !important;     /* டிக் மார்க் ஐகான் கலர் */
 }
+/* ===== MOBILE LIVE TRACKING EDIT ADDRESS MODAL FIX ===== */
+@media (max-width: 768px) {
+
+    #editOrderAddressModal {
+        position: fixed !important;
+        inset: 0 !important;
+
+        width: 100% !important;
+        height: 100dvh !important;
+
+        padding: 16px !important;
+        box-sizing: border-box !important;
+
+        justify-content: center !important;
+        align-items: center !important;
+
+        overflow: hidden !important;
+
+        z-index: 99999999 !important;
+    }
+
+    #editOrderAddressModal > div {
+        width: 100% !important;
+        max-width: 420px !important;
+
+        max-height: calc(100dvh - 32px) !important;
+        height: auto !important;
+
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain;
+
+        padding: 18px !important;
+        box-sizing: border-box !important;
+
+        margin: 0 !important;
+    }
+
+    #editOrderAddressModal .uc-fk-form-grid {
+        flex-shrink: 0 !important;
+    }
+
+    #editOrderAddressModal .uc-fk-field {
+        flex-shrink: 0 !important;
+    }
+
+    #editOrderAddressModal > div > div:last-child {
+        flex-shrink: 0 !important;
+        padding-bottom: 8px !important;
+    }
+}
     </style>
 </head>
 <body>
