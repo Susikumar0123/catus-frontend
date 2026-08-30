@@ -2593,10 +2593,31 @@ filtered.forEach(s => {
 });
 
 function handleProductSearchSelect(serviceId) {
-    const box = document.getElementById('suggestionsBox');
-    if (box) box.style.display = 'none';
-    window.location.href = `product.html?id=${serviceId}`;
+
+    const box =
+        document.getElementById('suggestionsBox');
+
+    if (box) {
+        box.style.display = 'none';
+    }
+
+    // Current location irundha pretty URL use pannu
+    if (
+        currentStateSlug &&
+        currentDistrictSlug &&
+        currentLocationSlug
+    ) {
+        window.location.href =
+            `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceId}`;
+
+        return;
+    }
+
+    // Location illa na root product page
+    window.location.href =
+        `/product.html?id=${encodeURIComponent(serviceId)}`;
 }
+
     let currentProductData = {
         service_id: 'tv-repair',
         service_name: "Smart TV Repair & Service",
