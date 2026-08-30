@@ -313,6 +313,10 @@
 
         </div>
 
+        <div class="nav-item" onclick="switchMainPage('home-icons', 'Manage Home Icons', this)">
+    <i class="fa-solid fa-icons"></i> Home Icons
+</div>
+
         <div class="nav-item" onclick="switchMainPage('coupons', 'Coupons & Discounts', this)">
 
             <i class="fa-solid fa-ticket"></i> Coupons Master
@@ -545,7 +549,71 @@
                 <!-- Category wise tables will be rendered here dynamically -->
             </div>
         </div>
+        <!-- ==========================================
+     HOME ICONS MANAGEMENT
+     ========================================== -->
+<div id="page-home-icons" class="main-tab-pane">
 
+    <div class="panel-card" style="padding:20px; height:auto;">
+
+        <div class="panel-header"
+             style="padding:0 0 15px 0; display:flex; justify-content:space-between; align-items:center;">
+
+            <div>
+                <h3 style="margin:0; font-size:16px; color:#0f172a;">
+                    <i class="fa-solid fa-icons" style="color:#0284c7; margin-right:7px;"></i>
+                    Manage Home Icons
+                </h3>
+
+                <p style="margin:5px 0 0; font-size:12px; color:#64748b;">
+                    Control the service icons displayed below the homepage search bar.
+                </p>
+            </div>
+
+            <button
+                class="action-btn"
+                style="width:auto; padding:9px 16px; margin:0;"
+                onclick="openAddHomeIconModal()">
+
+                <i class="fa-solid fa-plus"></i>
+                Add New Home Icon
+            </button>
+
+        </div>
+
+        <div class="table-responsive" style="margin-top:15px;">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Group Name</th>
+                        <th>Group ID</th>
+                        <th>Display Order</th>
+                        <th>Status</th>
+                        <th style="text-align:right;">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="homeIconsTableBody">
+
+                    <tr>
+                        <td colspan="6"
+                            style="text-align:center; padding:30px; color:#64748b;">
+                            Loading home icons...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
         <!-- TAB 5: COUPONS MANAGEMENT -->
         <div id="page-coupons" class="main-tab-pane">
             <div class="panel-card" style="padding: 20px;">
@@ -1257,11 +1325,155 @@
 
         if(pageId === 'customers') renderCustomerTable();
         if(pageId === 'wallet') renderWalletTable(); 
+
         if(pageId === 'services') {
-            fetchAdminServices();
-            fetchAdminBanners();
-        }
+        fetchAdminServices();
+        fetchAdminBanners();
+}
+
+if(pageId === 'home-icons') {
+    fetchHomeIcons();
+}
     }
+
+    // ==========================================
+// HOME ICONS MANAGEMENT
+// ==========================================
+
+let adminHomeIcons = [];
+
+function fetchHomeIcons() {
+
+    const tbody = document.getElementById('homeIconsTableBody');
+
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6"
+                    style="text-align:center; padding:30px; color:#64748b;">
+                    Loading home icons...
+                </td>
+            </tr>
+        `;
+    }
+
+    fetch(`${API_BASE_URL}/api/admin/service-groups`)
+        .then(res => res.json())
+        .then(data => {
+
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to load home icons');
+            }
+
+            adminHomeIcons = data.groups || [];
+
+            renderHomeIconsTable();
+        })
+        .catch(err => {
+
+            console.error('Home Icons Fetch Error:', err);
+
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6"
+                            style="text-align:center; padding:30px; color:#dc2626;">
+                            Failed to load home icons.
+                        </td>
+                    </tr>
+                `;
+            }
+        });
+}
+
+
+function renderHomeIconsTable() {
+
+    const tbody = document.getElementById('homeIconsTableBody');
+
+    if (!tbody) return;
+
+    if (adminHomeIcons.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6"
+                    style="text-align:center; padding:30px; color:#64748b;">
+                    No home icons found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML = adminHomeIcons.map(group => {
+
+        const statusBadge = group.is_active
+            ? `<span class="badge badge-active">Active</span>`
+            : `<span class="badge badge-inactive">Hidden</span>`;
+
+        const icon = group.icon_url
+            ? `
+                <img
+                    src="${group.icon_url}"
+                    alt="${group.group_name}"
+                    style="
+                        width:48px;
+                        height:48px;
+                        object-fit:contain;
+                        border:1px solid #e2e8f0;
+                        border-radius:10px;
+                        padding:4px;
+                        background:#fff;
+                    "
+                >
+              `
+            : `
+                <div style="
+                    width:48px;
+                    height:48px;
+                    border-radius:10px;
+                    background:#f1f5f9;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    color:#94a3b8;
+                ">
+                    <i class="fa-solid fa-image"></i>
+                </div>
+              `;
+
+        return `
+            <tr>
+
+                <td>${icon}</td>
+
+                <td>
+                    <strong>${group.group_name}</strong>
+                </td>
+
+                <td>
+                    <code>${group.group_id}</code>
+                </td>
+
+                <td>${group.display_order}</td>
+
+                <td>${statusBadge}</td>
+
+                <td style="text-align:right;">
+                    <button
+                        class="manage-btn"
+                        onclick="openEditHomeIconModal('${group.group_id}')">
+                        <i class="fa-solid fa-pen"></i> Edit
+                    </button>
+                </td>
+
+            </tr>
+        `;
+
+    }).join('');
+}
 
     function fetchLiveBookings() {
         fetch(`${API_BASE_URL}/api/admin/orders`)
