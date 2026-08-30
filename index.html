@@ -5235,37 +5235,110 @@ if (districtPart) {
     );
 }
 
-// முழு முகவரியிலிருந்து கிராமம், மாவட்டம், பின் கோடு மட்டும் கச்சிதமாக பிரித்து எடுக்க
 function formatShortAddress(fullAddress) {
-    if (!fullAddress) return "Tiruppur - 641601";
-    let parts = fullAddress.split(',').map(p => p.trim());
-    
-    let pincode = parts.find(p => /^\d{6}$/.test(p)) || "";
-    let village = parts[0] || "";
-    let district = "";
-    
-    for (let i = 1; i < parts.length; i++) {
-        let p = parts[i].toLowerCase();
-        if (p.includes('district') || p.includes('taluk') || p.includes('tamil nadu') || p.includes('india') || /^\d{6}$/.test(parts[i])) {
-            if (!p.includes('tamil nadu') && !p.includes('india') && !/^\d{6}$/.test(parts[i])) {
-                district = parts[i].replace('District', '').trim();
-            }
-        }
-    }
-    
-    if (!district && parts.length > 2) {
-        district = parts[parts.length - 3] || parts[1] || "";
+
+    if (!fullAddress) {
+        return "Select Location";
     }
 
-    let result = village;
-    if (district && district.toLowerCase() !== village.toLowerCase()) {
-        result += `, ${district}`;
+    const parts =
+        fullAddress
+            .split(',')
+            .map(p => p.trim())
+            .filter(Boolean);
+
+    const pincode =
+        parts.find(p =>
+            /^\d{6}$/.test(p)
+        ) || '';
+
+    const locationName =
+        parts[0] || '';
+
+    let districtName = '';
+
+    const districtPart =
+        parts.find(p =>
+            p.toLowerCase()
+                .includes('district')
+        );
+
+    if (districtPart) {
+
+        districtName =
+            districtPart
+                .replace(/district/gi, '')
+                .trim();
+
+    } else {
+
+        const stateNames = [
+            'andhra pradesh',
+            'arunachal pradesh',
+            'assam',
+            'bihar',
+            'chhattisgarh',
+            'goa',
+            'gujarat',
+            'haryana',
+            'himachal pradesh',
+            'jharkhand',
+            'karnataka',
+            'kerala',
+            'madhya pradesh',
+            'maharashtra',
+            'manipur',
+            'meghalaya',
+            'mizoram',
+            'nagaland',
+            'odisha',
+            'punjab',
+            'rajasthan',
+            'sikkim',
+            'tamil nadu',
+            'telangana',
+            'tripura',
+            'uttar pradesh',
+            'uttarakhand',
+            'west bengal',
+            'delhi',
+            'jammu and kashmir',
+            'ladakh',
+            'puducherry',
+            'chandigarh'
+        ];
+
+        const stateIndex =
+            parts.findIndex(p =>
+                stateNames.includes(
+                    p.toLowerCase()
+                )
+            );
+
+        if (stateIndex > 0) {
+            districtName =
+                parts[stateIndex - 1];
+        }
     }
+
+    let result =
+        locationName;
+
+    if (
+        districtName &&
+        districtName.toLowerCase() !==
+        locationName.toLowerCase()
+    ) {
+        result +=
+            `, ${districtName}`;
+    }
+
     if (pincode) {
-        result += ` - ${pincode}`;
+        result +=
+            ` - ${pincode}`;
     }
-    
-    return result || fullAddress.substring(0, 30) + "...";
+
+    return result || fullAddress;
 }
 
 function selectLocationModal(fullAddress) {
