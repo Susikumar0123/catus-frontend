@@ -4497,18 +4497,55 @@ document.addEventListener('DOMContentLoaded', () => {
                         progressWidth = '75%';
                     }
                     
-                    if(stat === 'assigned' || stat === 'on the way' || stat === 'in service' || stat === 'service' || stat === 'active') {
-                        let aDate = new Date(orderDateObj.getTime() + 15*60000);
-                        assignedStr = `<b>${aDate.toLocaleDateString()}</b><br><b>${aDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
-                    }
-                    if(stat === 'on the way' || stat === 'in service' || stat === 'service' || stat === 'active') {
-                        let wDate = new Date(orderDateObj.getTime() + 45*60000);
-                        wayStr = `<b>${wDate.toLocaleDateString()}</b><br><b>${wDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
-                    }
-                    if(stat === 'in service' || stat === 'service' || stat === 'active') {
-                        let sDate = new Date(orderDateObj.getTime() + 60*60000);
-                        serviceStr = `<b>${sDate.toLocaleDateString()}</b><br><b>${sDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
-                    }
+                    function formatIndiaTimelineTime(dateValue) {
+
+    if (!dateValue) {
+        return "--<br>--";
+    }
+
+    const d = new Date(dateValue);
+
+    if (isNaN(d.getTime())) {
+        return "--<br>--";
+    }
+
+    const dateText = d.toLocaleDateString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
+    const timeText = d.toLocaleTimeString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    return `<b>${dateText}</b><br><b>${timeText}</b>`;
+}
+
+bookedStr =
+    formatIndiaTimelineTime(
+        currentOrder.booked_at ||
+        currentOrder.order_date
+    );
+
+assignedStr =
+    formatIndiaTimelineTime(
+        currentOrder.assigned_at
+    );
+
+wayStr =
+    formatIndiaTimelineTime(
+        currentOrder.on_the_way_at
+    );
+
+serviceStr =
+    formatIndiaTimelineTime(
+        currentOrder.service_started_at
+    );
 
                     let actionButtons = '';
                     if (stat === 'pending') {
