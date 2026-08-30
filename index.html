@@ -5124,12 +5124,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in&addressdetails=1&limit=10`, {
-                        headers: {
-                            'Accept-Language': 'en'
-                        }
-                    });
-                    const data = await response.json();
+                    const searchQueries = [
+    query,
+    `${query}, India`
+];
+
+let allResults = [];
+
+for (const searchText of searchQueries) {
+
+    try {
+
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search` +
+            `?format=jsonv2` +
+            `&q=${encodeURIComponent(searchText)}` +
+            `&countrycodes=in` +
+            `&addressdetails=1` +
+            `&namedetails=1` +
+            `&dedupe=1` +
+            `&limit=20`,
+            {
+                headers: {
+                    'Accept-Language': 'en'
+                }
+            }
+        );
+
+        if (!response.ok) {
+            continue;
+        }
+
+        const results =
+            await response.json();
+
+        if (Array.isArray(results)) {
+            allResults.push(...results);
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Location search attempt failed:',
+            searchText,
+            error
+        );
+    }
+}
+
+/* Duplicate locations remove */
+const uniqueResults = [];
+const seenPlaces = new Set();
+
+for (const item of allResults) {
+
+    const key =
+        `${item.place_id || ''}-` +
+        `${item.lat || ''}-` +
+        `${item.lon || ''}`;
+
+    if (!seenPlaces.has(key)) {
+
+        seenPlaces.add(key);
+        uniqueResults.push(item);
+    }
+}
+
+/* Maximum useful results */
+const data =
+    uniqueResults.slice(0, 25);
 
                     if (data && data.length > 0) {
 
@@ -5206,15 +5269,20 @@ function selectLocationSuggestionByIndex(index) {
     // ------------------------------------------
 
     const locationName =
-        address.village ||
-        address.town ||
-        address.city ||
-        address.suburb ||
-        address.hamlet ||
-        address.neighbourhood ||
-        address.municipality ||
-        address.city_district ||
-        '';
+    address.hamlet ||
+    address.village ||
+    address.neighbourhood ||
+    address.suburb ||
+    address.quarter ||
+    address.residential ||
+    address.locality ||
+    address.town ||
+    address.municipality ||
+    address.city ||
+    address.city_district ||
+    item.namedetails?.name ||
+    item.name ||
+    '';
 
     // ------------------------------------------
     // DISTRICT
@@ -5697,7 +5765,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
         
         <div style="display: flex; align-items: center; gap: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; background: #ffffff;">
             <i class="fa-solid fa-magnifying-glass" style="color: #64748b; font-size: 14px;"></i>
-            <input type="text" id="locSearchInput" placeholder="Enter District / Pincode" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" autocomplete="off">
+            <input type="text" id="locSearchInput" placeholder="Search village, area, town or pincode" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" autocomplete="off">
         </div>
         <div id="locSuggestionsBox" style="max-height: 180px; overflow-y: auto; margin-top: 5px; display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px;"></div>
 
