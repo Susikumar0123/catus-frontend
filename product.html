@@ -2606,6 +2606,26 @@ function getProductUrlParams() {
     currentDistrictSlug =
         pageParams.district;
 
+    // ==========================================
+// SHOW SEO LOCATION IMMEDIATELY
+// ==========================================
+
+if (currentLocationSlug) {
+
+    const locationDisplay =
+        document.getElementById(
+            'headerLocationDisplay'
+        );
+
+    if (locationDisplay) {
+
+        locationDisplay.textContent =
+            currentLocationSlug
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+    }
+}
+
     // ------------------------------------------
     // NORMAL PRODUCT PAGE
     // ------------------------------------------
@@ -2707,6 +2727,32 @@ async function loadLocationAwareProduct(
 
         currentDistrictName =
             page.district || '';
+
+        // ==========================================
+// UPDATE HEADER LOCATION FROM SEO URL
+// ==========================================
+
+const locationDisplay =
+    document.getElementById('headerLocationDisplay');
+
+if (locationDisplay) {
+
+    const locationText =
+        page.location_name
+            ? `${page.location_name}${page.pincode ? ' - ' + page.pincode : ''}`
+            : currentLocationSlug;
+
+    locationDisplay.textContent =
+        locationText;
+}
+
+// Save current SEO location
+localStorage.setItem(
+    'catus_user_location',
+    page.location_name
+        ? `${page.location_name}${page.pincode ? ' - ' + page.pincode : ''}`
+        : currentLocationSlug
+);
 
         // ------------------------------------------
         // PRODUCT DATA
@@ -5070,11 +5116,45 @@ function formatShortAddress(fullAddress) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    let savedLoc = localStorage.getItem('catus_user_location');
-    if (savedLoc) {
-        const disp = document.getElementById('headerLocationDisplay');
-        if (disp) disp.textContent = savedLoc;
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const seoLocation =
+        params.get('location');
+
+    const disp =
+        document.getElementById(
+            'headerLocationDisplay'
+        );
+
+    if (!disp) return;
+
+
+    // SEO URL has location
+    if (seoLocation) {
+
+        disp.textContent =
+            seoLocation
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+
+        return;
     }
+
+
+    // Otherwise use saved location
+    const savedLoc =
+        localStorage.getItem(
+            'catus_user_location'
+        );
+
+    if (savedLoc) {
+        disp.textContent = savedLoc;
+    }
+
 });
 
 window.addEventListener('DOMContentLoaded', async () => {
