@@ -1076,6 +1076,98 @@
 
 </div>
 
+<!-- ==========================================
+     ADD / EDIT HOME ICON MODAL
+     ========================================== -->
+<div class="modal-overlay" id="homeIconModal" style="display:none; justify-content:center; align-items:center;">
+
+    <div class="modal-box" style="max-width:520px;">
+
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-icons" style="color:#0284c7;"></i>
+                <span id="homeIconModalTitle">Add Home Icon</span>
+            </h3>
+
+            <button class="close-modal" onclick="closeHomeIconModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div style="padding:22px; overflow-y:auto;">
+
+            <input type="hidden" id="oldHomeGroupId">
+
+            <div class="form-group">
+                <label>Group Name</label>
+                <input
+                    type="text"
+                    id="homeGroupName"
+                    class="form-input"
+                    placeholder="e.g. Smart TV">
+            </div>
+
+            <div class="form-group">
+                <label>Group ID</label>
+                <input
+                    type="text"
+                    id="homeGroupId"
+                    class="form-input"
+                    placeholder="e.g. tv-repair">
+            </div>
+
+            <div class="form-group">
+                <label>Icon Image URL</label>
+                <input
+                    type="text"
+                    id="homeIconUrl"
+                    class="form-input"
+                    placeholder="e.g. tvlogo1.png">
+            </div>
+
+            <div class="form-group">
+                <label>Display Order</label>
+                <input
+                    type="number"
+                    id="homeDisplayOrder"
+                    class="form-input"
+                    value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select id="homeIconStatus" class="form-input">
+                    <option value="true">Active</option>
+                    <option value="false">Hidden</option>
+                </select>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+
+                <button
+                    type="button"
+                    class="action-btn"
+                    style="background:#64748b;"
+                    onclick="closeHomeIconModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    class="action-btn"
+                    onclick="saveHomeIcon()">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save Home Icon
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <!-- EDIT SERVICE MODAL POPUP -->
 <div class="modal-overlay" id="editServiceModal" style="display:none; justify-content:center; align-items:center;">
     <div class="modal-box" style="max-width: 600px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
@@ -1096,6 +1188,23 @@
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Service Name</label>
                 <input type="text" id="modalServiceName" class="form-input" style="width:100%; box-sizing:border-box;">
             </div>
+
+            <div class="form-group">
+    <label>
+        Home Icon / Service Group
+    </label>
+
+    <select
+        id="modalServiceGroup"
+        class="form-input">
+
+        <option value="">
+            -- Select Home Icon --
+        </option>
+
+    </select>
+
+</div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="form-group" style="margin:0;">
@@ -1367,7 +1476,8 @@ function fetchHomeIcons() {
 
             adminHomeIcons = data.groups || [];
 
-            renderHomeIconsTable();
+renderHomeIconsTable();
+populateServiceGroupDropdowns();
         })
         .catch(err => {
 
@@ -1386,6 +1496,49 @@ function fetchHomeIcons() {
         });
 }
 
+function populateServiceGroupDropdowns(selectedGroupId = '') {
+
+    const dropdownIds = [
+        'newServiceGroup',
+        'modalServiceGroup'
+    ];
+
+    dropdownIds.forEach(id => {
+
+        const select = document.getElementById(id);
+
+        if (!select) return;
+
+        select.innerHTML = `
+            <option value="">
+                -- Select Home Icon --
+            </option>
+        `;
+
+        adminHomeIcons
+            .filter(group => group.is_active)
+            .forEach(group => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value = group.group_id;
+
+                option.textContent =
+                    group.group_name;
+
+                if (
+                    selectedGroupId &&
+                    String(group.group_id) ===
+                    String(selectedGroupId)
+                ) {
+                    option.selected = true;
+                }
+
+                select.appendChild(option);
+            });
+    });
+}
 
 function renderHomeIconsTable() {
 
@@ -1462,17 +1615,363 @@ function renderHomeIconsTable() {
                 <td>${statusBadge}</td>
 
                 <td style="text-align:right;">
-                    <button
-                        class="manage-btn"
-                        onclick="openEditHomeIconModal('${group.group_id}')">
-                        <i class="fa-solid fa-pen"></i> Edit
-                    </button>
-                </td>
+
+    <div style="
+        display:flex;
+        gap:6px;
+        justify-content:flex-end;
+        flex-wrap:wrap;
+    ">
+
+        <!-- EDIT -->
+        <button
+            class="manage-btn"
+            onclick="openEditHomeIconModal('${group.group_id}')">
+            <i class="fa-solid fa-pen"></i>
+            Edit
+        </button>
+
+
+        <!-- HIDE / SHOW -->
+        <button
+            class="manage-btn"
+            style="
+                background:${group.is_active ? '#f59e0b' : '#16a34a'};
+            "
+            onclick="toggleHomeIcon(
+                '${group.group_id}',
+                ${group.is_active ? 'false' : 'true'}
+            )">
+
+            <i class="fa-solid ${
+                group.is_active ? 'fa-eye-slash' : 'fa-eye'
+            }"></i>
+
+            ${group.is_active ? 'Hide' : 'Show'}
+
+        </button>
+
+
+        <!-- DELETE -->
+        <button
+            class="manage-btn btn-danger"
+            onclick="deleteHomeIcon('${group.group_id}')">
+
+            <i class="fa-solid fa-trash"></i>
+            Delete
+
+        </button>
+
+    </div>
+
+</td>
 
             </tr>
         `;
 
     }).join('');
+}
+
+// ==========================================
+// OPEN ADD HOME ICON MODAL
+// ==========================================
+
+function openAddHomeIconModal() {
+
+    document.getElementById('homeIconModalTitle').textContent =
+        'Add New Home Icon';
+
+    document.getElementById('oldHomeGroupId').value = '';
+
+    document.getElementById('homeGroupName').value = '';
+    document.getElementById('homeGroupId').value = '';
+    document.getElementById('homeIconUrl').value = '';
+
+    document.getElementById('homeDisplayOrder').value =
+        adminHomeIcons.length + 1;
+
+    document.getElementById('homeIconStatus').value = 'true';
+
+    document.getElementById('homeIconModal').style.display = 'flex';
+}
+
+
+// ==========================================
+// OPEN EDIT HOME ICON MODAL
+// ==========================================
+
+function openEditHomeIconModal(groupId) {
+
+    const group = adminHomeIcons.find(
+        item => String(item.group_id) === String(groupId)
+    );
+
+    if (!group) {
+        alert('Home Icon data not found!');
+        return;
+    }
+
+    document.getElementById('homeIconModalTitle').textContent =
+        'Edit Home Icon';
+
+    document.getElementById('oldHomeGroupId').value =
+        group.group_id;
+
+    document.getElementById('homeGroupName').value =
+        group.group_name || '';
+
+    document.getElementById('homeGroupId').value =
+        group.group_id || '';
+
+    document.getElementById('homeIconUrl').value =
+        group.icon_url || '';
+
+    document.getElementById('homeDisplayOrder').value =
+        group.display_order ?? 0;
+
+    document.getElementById('homeIconStatus').value =
+        group.is_active ? 'true' : 'false';
+
+    document.getElementById('homeIconModal').style.display = 'flex';
+}
+
+
+// ==========================================
+// CLOSE HOME ICON MODAL
+// ==========================================
+
+function closeHomeIconModal() {
+    document.getElementById('homeIconModal').style.display = 'none';
+}
+
+
+// ==========================================
+// SAVE ADD / EDIT HOME ICON
+// ==========================================
+
+function saveHomeIcon() {
+
+    const oldGroupId =
+        document.getElementById('oldHomeGroupId').value.trim();
+
+    const groupName =
+        document.getElementById('homeGroupName').value.trim();
+
+    const groupId =
+        document.getElementById('homeGroupId').value
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
+    const iconUrl =
+        document.getElementById('homeIconUrl').value.trim();
+
+    const displayOrder =
+        parseInt(
+            document.getElementById('homeDisplayOrder').value
+        ) || 0;
+
+    const isActive =
+        document.getElementById('homeIconStatus').value === 'true';
+
+
+    if (!groupName) {
+        alert('Please enter Group Name!');
+        return;
+    }
+
+    if (!groupId) {
+        alert('Please enter Group ID!');
+        return;
+    }
+
+    const isEdit = oldGroupId !== '';
+
+    const apiUrl = isEdit
+        ? `${API_BASE_URL}/api/admin/update-service-group`
+        : `${API_BASE_URL}/api/admin/add-service-group`;
+
+
+    const payload = {
+        group_id: groupId,
+        group_name: groupName,
+        icon_url: iconUrl,
+        display_order: displayOrder,
+        is_active: isActive
+    };
+
+
+    if (isEdit) {
+        payload.old_group_id = oldGroupId;
+    }
+
+
+    fetch(apiUrl, {
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify(payload)
+    })
+    .then(async response => {
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                data.error ||
+                'Failed to save Home Icon'
+            );
+        }
+
+        return data;
+    })
+    .then(data => {
+
+        alert(data.message || 'Home Icon saved successfully!');
+
+        closeHomeIconModal();
+
+        fetchHomeIcons();
+    })
+    .catch(error => {
+
+        console.error(
+            'Save Home Icon Error:',
+            error
+        );
+
+        alert(error.message);
+    });
+}
+
+// ==========================================
+// HIDE / SHOW HOME ICON
+// ==========================================
+
+function toggleHomeIcon(groupId, newStatus) {
+
+    const actionText = newStatus ? 'show' : 'hide';
+
+    if (!confirm(`Are you sure you want to ${actionText} this Home Icon?`)) {
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/api/admin/toggle-service-group`, {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+            group_id: groupId,
+            is_active: newStatus
+        })
+
+    })
+    .then(async response => {
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                data.error ||
+                'Unable to update Home Icon'
+            );
+        }
+
+        return data;
+    })
+    .then(data => {
+
+        alert(data.message || 'Home Icon updated!');
+
+        fetchHomeIcons();
+    })
+    .catch(error => {
+
+        console.error('Toggle Home Icon Error:', error);
+
+        alert(error.message);
+    });
+}
+
+
+// ==========================================
+// DELETE HOME ICON
+// ==========================================
+
+function deleteHomeIcon(groupId) {
+
+    const group = adminHomeIcons.find(
+        item => String(item.group_id) === String(groupId)
+    );
+
+    const groupName = group
+        ? group.group_name
+        : groupId;
+
+
+    if (!confirm(
+        `Delete "${groupName}" Home Icon?\n\n` +
+        `This cannot be undone.`
+    )) {
+        return;
+    }
+
+
+    fetch(`${API_BASE_URL}/api/admin/delete-service-group`, {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+            group_id: groupId
+        })
+
+    })
+    .then(async response => {
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                data.error ||
+                'Unable to delete Home Icon'
+            );
+        }
+
+        return data;
+    })
+    .then(data => {
+
+        alert(
+            data.message ||
+            'Home Icon deleted successfully!'
+        );
+
+        fetchHomeIcons();
+    })
+    .catch(error => {
+
+        console.error(
+            'Delete Home Icon Error:',
+            error
+        );
+
+        alert(error.message);
+    });
 }
 
     function fetchLiveBookings() {
@@ -1991,6 +2490,7 @@ function renderHomeIconsTable() {
         document.getElementById('oldServiceId').value = s.service_id;
         document.getElementById('modalServiceId').value = s.service_id || '';
         document.getElementById('modalServiceName').value = s.service_name || '';
+        document.getElementById('modalServiceGroup').value = service.group_id || '';
         document.getElementById('modalServicePrice').value = s.price || '';
         document.getElementById('modalServiceMrp').value = s.mrp || '';
         document.getElementById('modalIsHotDeal').value = (s.is_hot_deal !== undefined) ? s.is_hot_deal : 1;
@@ -2047,6 +2547,7 @@ function renderHomeIconsTable() {
                 service_id: newServiceId,
                 service_name: newName,
                 category: s.category,
+                group_id: group_id,
                 price: newPrice,
                 mrp: newMrp,
                 is_hot_deal: is_hot_deal,
@@ -2084,6 +2585,12 @@ function renderHomeIconsTable() {
         document.getElementById('addModalCatTitle').textContent = categoryName; 
         document.getElementById('newServiceId').value = '';
         document.getElementById('newServiceName').value = '';
+        const newServiceGroup =
+    document.getElementById('newServiceGroup');
+
+if (newServiceGroup) {
+    newServiceGroup.value = '';
+}
         document.getElementById('newServicePrice').value = '';
         document.getElementById('newServiceMrp').value = '';
         
@@ -2106,6 +2613,7 @@ function renderHomeIconsTable() {
         let category = document.getElementById('addServiceCategory').value;
         let serviceId = document.getElementById('newServiceId').value.trim();
         let serviceName = document.getElementById('newServiceName').value.trim();
+        let group_id = document.getElementById('newServiceGroup').value;
         let price = parseInt(document.getElementById('newServicePrice').value) || 0;
         let mrp = parseInt(document.getElementById('newServiceMrp').value) || 0;
         
@@ -2130,7 +2638,8 @@ function renderHomeIconsTable() {
             body: JSON.stringify({ 
                 service_id: serviceId, 
                 service_name: serviceName, 
-                category, 
+                category,
+                group_id,
                 price, 
                 mrp, 
                 discount_text, 
@@ -2348,6 +2857,31 @@ function renderHomeIconsTable() {
                 <label style="font-size: 12px; font-weight: 700; color: #334155;">Service Name *</label>
                 <input type="text" id="newServiceName" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="Product Name">
             </div>
+
+            <div class="form-group">
+    <label>
+        Home Icon / Service Group
+    </label>
+
+    <select
+        id="newServiceGroup"
+        class="form-input">
+
+        <option value="">
+            -- Select Home Icon --
+        </option>
+
+    </select>
+
+    <small style="
+        display:block;
+        margin-top:5px;
+        color:#64748b;
+        font-size:11px;
+    ">
+        Example: TV related services → Smart TV
+    </small>
+</div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="form-group" style="margin:0;">
