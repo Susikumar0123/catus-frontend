@@ -1368,66 +1368,7 @@
     <!-- 2. Quick Services Bar (Catus Unique Flipkart-Style) -->
     <div class="quick-services-bar">
       <div class="services-track" id="servicesTrack">
-        <button class="service-chip active" data-search="tv" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="tvlogo1.png" alt="Smart TV">
-          </div>
-          <span>Smart TV</span>
-        </button>
-        <button class="service-chip" data-search="ac" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="Aclogo.png" alt="AC Service">
-          </div>
-          <span>AC Service</span>
-        </button>
-        <button class="service-chip" data-search="washing machine" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="whashinglogo.png" alt="Washing M/C">
-          </div>
-          <span>Washing M/C</span>
-        </button>
-        <button class="service-chip" data-search="refrigerator" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="fridgelogo.png" alt="Refrigerator">
-          </div>
-          <span>Refrigerator</span>
-        </button>
-        <button class="service-chip" data-search="purifier" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="rologo.png" alt="RO Purifier">
-          </div>
-          <span>RO Purifier</span>
-        </button>
-        <button class="service-chip" data-search="inverter" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="upslogo.png" alt="UPS & Battery">
-          </div>
-          <span>UPS & Battery</span>
-        </button>
-        <button class="service-chip" data-search="cctv" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="cctvlogo.png" alt="CCTV Setup">
-          </div>
-          <span>CCTV Setup</span>
-        </button>
-        <button class="service-chip" data-search="chimney" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="chimnylogo.png" alt="Chimney">
-          </div>
-          <span>Chimney</span>
-        </button>
-        <button class="service-chip" data-search="lock" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="locklogo.png" alt="Smart Lock">
-          </div>
-          <span>Smart Lock</span>
-        </button>
-        <button class="service-chip" data-search="microwave" onclick="selectChip(this)">
-          <div class="chip-icon-bg">
-              <img src="micrologo.png" alt="Microwave">
-          </div>
-          <span>Microwave</span>
-        </button>
+        
       </div>
     </div>
 
@@ -2488,6 +2429,7 @@
       updateHeaderLoginUI();
       loadHeroBanners();
       loadLiveServicesForFrontend(); // 🛑 இந்த வரியை ஹோம் பேஜ் லோடிங்கில் சேர்க்கவும்!
+      loadDynamicServiceCategories();
   });
 
   const API_BASE_URL = window.location.hostname === 'localhost' 
@@ -4613,6 +4555,112 @@ document.addEventListener('DOMContentLoaded', () => {
             loginBtnText.textContent = 'Login';
         }
     }
+    
+    async function loadDynamicServiceCategories() {
+
+    const track =
+        document.getElementById('servicesTrack');
+
+    if (!track) return;
+
+    try {
+
+        const response =
+            await fetch(`${API_BASE_URL}/api/services`);
+
+        const data =
+            await response.json();
+
+        if (
+            !data.success ||
+            !Array.isArray(data.services)
+        ) {
+            console.error('Services not available');
+            return;
+        }
+
+        const categoryMap = new Map();
+
+        data.services.forEach(service => {
+
+            const category =
+                String(service.category || '').trim();
+
+            if (!category) return;
+
+            const key =
+                category.toLowerCase();
+
+            // Same category multiple times varama prevent
+            if (!categoryMap.has(key)) {
+
+                categoryMap.set(key, {
+                    name: category,
+                    image:
+                        service.image_url ||
+                        service.image ||
+                        service.thumbnail ||
+                        ''
+                });
+            }
+        });
+
+        const categories =
+            Array.from(categoryMap.values());
+
+        track.innerHTML = '';
+
+        categories.forEach((category, index) => {
+
+            const button =
+                document.createElement('button');
+
+            button.className = 'service-chip';
+
+            button.setAttribute(
+                'data-search',
+                category.name.toLowerCase()
+            );
+
+            // First category active
+            if (index === 0) {
+                button.classList.add('active');
+            }
+
+            button.innerHTML = `
+                <div class="chip-icon-bg">
+                    ${
+                        category.image
+                            ? `<img
+                                src="${category.image}"
+                                alt="${category.name}"
+                                onerror="this.style.display='none'"
+                               >`
+                            : `<i class="fa-solid fa-screwdriver-wrench"></i>`
+                    }
+                </div>
+
+                <span>${category.name}</span>
+            `;
+
+            button.addEventListener(
+                'click',
+                function () {
+                    selectChip(this);
+                }
+            );
+
+            track.appendChild(button);
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Dynamic categories load error:',
+            error
+        );
+    }
+}
 
     function selectChip(element) {
         if (element.classList.contains('active')) {
