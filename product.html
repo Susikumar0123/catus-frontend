@@ -2354,6 +2354,413 @@ body.dark-theme #premiumCustomerDashboard .prem-summary-detail-box {
 }
 
 
+
+/* =========================================================
+   CATUS — URBAN CLEAN TYPOGRAPHY + SINGLE ACCENT SYSTEM
+   ========================================================= */
+
+:root {
+    --catus-primary: #6d4aff;
+    --catus-primary-soft: #f4f1ff;
+    --catus-text: #18181b;
+    --catus-text-2: #52525b;
+    --catus-text-3: #8a8a96;
+    --catus-page: #f7f7f8;
+    --catus-surface: #ffffff;
+    --catus-line: #ececef;
+}
+
+/* PAGE-WIDE TYPOGRAPHY NORMALIZATION */
+body,
+button,
+input,
+select,
+textarea {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+body {
+    color: var(--catus-text) !important;
+    font-weight: 400 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+}
+
+p, span, div, a, label, li, small {
+    font-weight: 400;
+}
+
+button,
+.login-btn,
+.checkout-btn,
+.prem-btn-compact,
+.prem-btn-small,
+.prem-menu-item,
+.prem-nav-btn {
+    font-weight: 500 !important;
+}
+
+/* Main homepage text */
+.section-title-container,
+.uc-cat-header h3,
+.uc-body h4,
+.card-content h3 {
+    font-weight: 600 !important;
+    color: var(--catus-text) !important;
+}
+
+.uc-cat-header p,
+.uc-reviews,
+.uc-list-info p,
+.card-content p {
+    color: var(--catus-text-2) !important;
+    font-weight: 400 !important;
+}
+
+.uc-price {
+    font-weight: 600 !important;
+}
+
+.header-location-widget,
+.login-btn {
+    font-weight: 500 !important;
+}
+
+/* CUSTOMER DASHBOARD — SINGLE ACCENT, WHITE/GRAY SURFACES */
+#premiumCustomerDashboard {
+    --catus-ink: var(--catus-text);
+    --catus-muted: var(--catus-text-2);
+    --catus-blue: var(--catus-primary);
+    --catus-blue-2: var(--catus-primary);
+    --catus-green: var(--catus-primary);
+    --catus-amber: var(--catus-primary);
+    --catus-red: var(--catus-primary);
+    --catus-surface: #ffffff;
+    --catus-bg: var(--catus-page);
+    --catus-shadow: 0 6px 22px rgba(24,24,27,.045);
+    background: var(--catus-page) !important;
+    color: var(--catus-text) !important;
+}
+
+/* sidebar */
+#premiumCustomerDashboard .prem-dash-sidebar {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border-right: 1px solid #f0f0f2 !important;
+}
+
+#premiumCustomerDashboard .prem-brand {
+    border: 0 !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item {
+    color: #666672 !important;
+    font-weight: 500 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item:hover {
+    color: var(--catus-text) !important;
+    background: #f7f7f8 !important;
+    transform: none !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item.active {
+    color: var(--catus-primary) !important;
+    background: var(--catus-primary-soft) !important;
+    box-shadow: none !important;
+}
+
+/* top header */
+#premiumCustomerDashboard .prem-dash-header {
+    background: rgba(255,255,255,.96) !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #f0f0f2 !important;
+    backdrop-filter: blur(10px);
+}
+
+#premiumCustomerDashboard .prem-greeting-text {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#premiumCustomerDashboard .prem-cust-id-badge {
+    background: #f6f6f7 !important;
+    color: #6d6d78 !important;
+    box-shadow: none !important;
+    font-weight: 500 !important;
+}
+
+#premiumCustomerDashboard .prem-icon-btn {
+    background: #f6f6f7 !important;
+    color: var(--catus-text) !important;
+    box-shadow: none !important;
+}
+
+/* section titles */
+#premiumCustomerDashboard .prem-section-title {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: var(--catus-text) !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* summary cards: one clean visual language, no rainbow cards */
+#premiumCustomerDashboard .prem-stat-card,
+#premiumCustomerDashboard .prem-stat-card:nth-child(1),
+#premiumCustomerDashboard .prem-stat-card:nth-child(2),
+#premiumCustomerDashboard .prem-stat-card:nth-child(3),
+#premiumCustomerDashboard .prem-stat-card:nth-child(4) {
+    background: #ffffff !important;
+    box-shadow: 0 5px 18px rgba(24,24,27,.04) !important;
+    border: 0 !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card::after {
+    display: none !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card h3 {
+    color: var(--catus-text) !important;
+    font-size: 23px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.04em !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card p {
+    color: #70707c !important;
+    font-weight: 400 !important;
+    font-size: 11px !important;
+}
+
+#premiumCustomerDashboard #sumProgress,
+#premiumCustomerDashboard #sumRejected {
+    color: var(--catus-text) !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(24,24,27,.065) !important;
+}
+
+/* detail box */
+#premiumCustomerDashboard .prem-summary-detail-box {
+    background: #ffffff !important;
+    color: var(--catus-text-2) !important;
+    box-shadow: none !important;
+    border: 1px solid #f0f0f2 !important;
+}
+
+#premiumCustomerDashboard .prem-summary-detail-box h5 {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+/* live tracking */
+#premiumCustomerDashboard .prem-live-card {
+    background: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(24,24,27,.04) !important;
+    border: 0 !important;
+}
+
+#premiumCustomerDashboard .prem-live-top-row h3 {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#premiumCustomerDashboard .prem-live-status-badge {
+    color: var(--catus-primary) !important;
+    background: var(--catus-primary-soft) !important;
+    font-weight: 500 !important;
+}
+
+#premiumCustomerDashboard .prem-live-status-badge .pulse {
+    background: var(--catus-primary) !important;
+    box-shadow: none !important;
+    animation: none !important;
+}
+
+#premiumCustomerDashboard .prem-live-otp-compact {
+    background: #f6f6f7 !important;
+    color: #777783 !important;
+    box-shadow: none !important;
+    font-weight: 500 !important;
+}
+
+#premiumCustomerDashboard .prem-live-otp-compact span {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#premiumCustomerDashboard .prem-live-middle-row {
+    background: #f8f8f9 !important;
+}
+
+#premiumCustomerDashboard .prem-tech-details-compact h4 {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#premiumCustomerDashboard .prem-tech-details-compact p,
+#premiumCustomerDashboard .prem-eta-compact span {
+    color: #84848f !important;
+    font-weight: 400 !important;
+}
+
+#premiumCustomerDashboard .prem-eta-compact strong {
+    color: var(--catus-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* timeline */
+#premiumCustomerDashboard .prem-timeline-compact::before {
+    background: #e9e9ed !important;
+}
+
+#premiumCustomerDashboard .prem-timeline-progress {
+    background: var(--catus-primary) !important;
+}
+
+#premiumCustomerDashboard .prem-step-icon-compact {
+    background: #f0f0f2 !important;
+    color: #9a9aa5 !important;
+    box-shadow: 0 0 0 4px #fff !important;
+}
+
+#premiumCustomerDashboard .prem-step-compact.done .prem-step-icon-compact,
+#premiumCustomerDashboard .prem-step-compact.active .prem-step-icon-compact {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 4px #fff !important;
+}
+
+#premiumCustomerDashboard .prem-step-compact.active .prem-step-icon-compact::after {
+    display: none !important;
+}
+
+#premiumCustomerDashboard .prem-step-compact > span,
+#premiumCustomerDashboard .prem-step-compact > div:last-child {
+    font-weight: 400 !important;
+    color: #777783 !important;
+}
+
+#premiumCustomerDashboard .prem-step-compact.active > span,
+#premiumCustomerDashboard .prem-step-compact.done > span {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+/* actions */
+#premiumCustomerDashboard .prem-btn-compact,
+#premiumCustomerDashboard .prem-btn-small {
+    font-weight: 500 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-btn-track-compact,
+#premiumCustomerDashboard #premOrdersListContainer .prem-btn-small {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+}
+
+#premiumCustomerDashboard .prem-btn-cancel-compact {
+    background: #f6f6f7 !important;
+    color: #666672 !important;
+}
+
+/* booking cards / wallet / support / profile */
+#premiumCustomerDashboard .prem-card-box,
+#premiumCustomerDashboard .prem-support-card {
+    background: #ffffff !important;
+    box-shadow: 0 5px 18px rgba(24,24,27,.04) !important;
+    border: 0 !important;
+}
+
+#premiumCustomerDashboard .prem-list-info h5,
+#premiumCustomerDashboard #premOrdersListContainer strong {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#premiumCustomerDashboard .prem-list-info p {
+    color: #797985 !important;
+    font-weight: 400 !important;
+}
+
+#premiumCustomerDashboard .prem-wallet-card-new {
+    background: #1f1f23 !important;
+    box-shadow: none !important;
+    border: 0 !important;
+}
+
+/* remove over-styled decorative effects */
+#premiumCustomerDashboard .prem-wallet-card-new::after,
+#premiumCustomerDashboard .prem-coupon-badge {
+    display: none !important;
+}
+
+/* single accent for icons/links inside dashboard */
+#premiumCustomerDashboard a,
+#premiumCustomerDashboard .fa-star,
+#premiumCustomerDashboard .fa-whatsapp,
+#premiumCustomerDashboard .fa-envelope {
+    color: var(--catus-primary) !important;
+}
+
+/* mobile bottom navigation */
+#premiumCustomerDashboard .prem-bottom-nav {
+    background: rgba(255,255,255,.97) !important;
+    box-shadow: 0 -4px 18px rgba(24,24,27,.05) !important;
+    border-top: 1px solid #f0f0f2 !important;
+}
+
+#premiumCustomerDashboard .prem-nav-btn {
+    color: #777783 !important;
+    font-weight: 400 !important;
+}
+
+#premiumCustomerDashboard .prem-nav-btn.active {
+    color: var(--catus-primary) !important;
+}
+
+/* compactness refinement */
+#premiumCustomerDashboard .prem-stat-card {
+    min-height: 78px !important;
+    padding: 13px 16px !important;
+}
+
+#premiumCustomerDashboard .prem-live-card {
+    padding: 14px 16px !important;
+}
+
+#premiumCustomerDashboard .prem-live-otp-compact {
+    min-width: 82px !important;
+    height: 50px !important;
+    padding: 7px 9px !important;
+}
+
+#premiumCustomerDashboard .prem-live-middle-row {
+    min-height: 50px !important;
+    padding: 8px 10px !important;
+}
+
+@media (max-width: 850px) {
+    #premiumCustomerDashboard .prem-stat-card {
+        min-height: 70px !important;
+    }
+
+    #premiumCustomerDashboard .prem-live-card {
+        padding: 12px !important;
+    }
+}
+
+
+
 /* Responsive spacing */
 @media (max-width: 850px) {
     .product-grid {
