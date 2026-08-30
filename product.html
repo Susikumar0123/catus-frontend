@@ -2750,13 +2750,26 @@ async function loadLocationAwareProduct(
         currentDistrictName =
             page.district || '';
 
-// Save current SEO location
-localStorage.setItem(
-    'catus_user_location',
+// Save + instantly show current SEO location
+const seoLocationText =
     page.location_name
         ? `${page.location_name}${page.pincode ? ' - ' + page.pincode : ''}`
-        : currentLocationSlug
+        : currentLocationSlug;
+
+localStorage.setItem(
+    'catus_user_location',
+    seoLocationText
 );
+
+const headerLocationDisplay =
+    document.getElementById(
+        'headerLocationDisplay'
+    );
+
+if (headerLocationDisplay) {
+    headerLocationDisplay.textContent =
+        seoLocationText;
+}
 
         // ------------------------------------------
         // PRODUCT DATA
@@ -5086,47 +5099,7 @@ function formatShortAddress(fullAddress) {
     return result || fullAddress.substring(0, 30) + "...";
 }
 
-window.addEventListener('DOMContentLoaded', () => {
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    const seoLocation =
-        params.get('location');
-
-    const disp =
-        document.getElementById(
-            'headerLocationDisplay'
-        );
-
-    if (!disp) return;
-
-
-    // SEO URL has location
-    if (seoLocation) {
-
-        disp.textContent =
-            seoLocation
-                .replace(/-/g, ' ')
-                .replace(/\b\w/g, c => c.toUpperCase());
-
-        return;
-    }
-
-
-    // Otherwise use saved location
-    const savedLoc =
-        localStorage.getItem(
-            'catus_user_location'
-        );
-
-    if (savedLoc) {
-        disp.textContent = savedLoc;
-    }
-
-});
 
 
 // 🛑 மொபைல் மற்றும் டெஸ்க்டாப் இரண்டிலும் பாப்-அப்புக்கு வெளியே கிளிக்/டச் செய்தால் க்ளோஸ் செய்ய
