@@ -2761,6 +2761,22 @@ localStorage.setItem(
     seoLocationText
 );
 
+// Keep homepage location synced with current SEO URL
+localStorage.setItem(
+    'catus_state_slug',
+    currentStateSlug
+);
+
+localStorage.setItem(
+    'catus_district_slug',
+    currentDistrictSlug
+);
+
+localStorage.setItem(
+    'catus_location_slug',
+    currentLocationSlug
+);
+
 const headerLocationDisplay =
     document.getElementById(
         'headerLocationDisplay'
