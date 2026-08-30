@@ -5043,19 +5043,46 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await response.json();
 
                     if (data && data.length > 0) {
-                        let html = '';
-                        data.forEach(item => {
-                            let displayName = item.display_name;
-                            let safeDisplayName = displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                            
-                            // சஜஷனை க்ளிக் செய்யும்போது 'selectLocationSuggestion' பங்க்ஷன் அழைக்கப்படும்
-                            html += `<div style="padding: 10px 12px; font-size: 13px; color: #475569; cursor: pointer; border-bottom: 1px solid #f1f5f9;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'" onclick="selectLocationSuggestion('${safeDisplayName}')">
-                                <i class="fa-solid fa-location-dot" style="margin-right:8px; color:#0284c7;"></i>${displayName}
-                            </div>`;
-                        });
-                        locBox.innerHTML = html;
-                        locBox.style.display = 'block';
-                    } else {
+
+    let html = '';
+
+    window.catusLocationResults = data;
+
+    data.forEach((item, index) => {
+
+        const displayName =
+            item.display_name || '';
+
+        html += `
+            <div
+                style="
+                    padding: 10px 12px;
+                    font-size: 13px;
+                    color: #475569;
+                    cursor: pointer;
+                    border-bottom: 1px solid #f1f5f9;
+                "
+                onmouseover="this.style.background='#e2e8f0'"
+                onmouseout="this.style.background='transparent'"
+                onclick="selectLocationSuggestionByIndex(${index})"
+            >
+                <i
+                    class="fa-solid fa-location-dot"
+                    style="
+                        margin-right:8px;
+                        color:#0284c7;
+                    "
+                ></i>
+
+                ${displayName}
+            </div>
+        `;
+    });
+
+    locBox.innerHTML = html;
+    locBox.style.display = 'block';
+
+} else {
                         locBox.innerHTML = `<div style="padding: 10px 12px; font-size: 13px; color: #ef4444;">No villages or locations found</div>`;
                         locBox.style.display = 'block';
                     }
@@ -5066,120 +5093,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+function selectLocationSuggestionByIndex(index) {
 
-function selectLocationSuggestion(fullAddress) {
+    const item =
+        window.catusLocationResults?.[index];
 
-    const locInput =
-        document.getElementById('locSearchInput');
-
-    const locBox =
-        document.getElementById('locSuggestionsBox');
-
-    if (locInput)
-        locInput.value = fullAddress;
-
-    if (locBox)
-        locBox.style.display = 'none';
-
-
-    const parts =
-        fullAddress
-            .split(',')
-            .map(p => p.trim())
-            .filter(Boolean);
-
-
-    let locationName =
-    parts[0] || '';
-
-let districtName = '';
-let stateName = '';
-
-
-// ------------------------------------------
-// Detect state
-// ------------------------------------------
-
-const knownStates = [
-    'andhra pradesh',
-    'arunachal pradesh',
-    'assam',
-    'bihar',
-    'chhattisgarh',
-    'goa',
-    'gujarat',
-    'haryana',
-    'himachal pradesh',
-    'jharkhand',
-    'karnataka',
-    'kerala',
-    'madhya pradesh',
-    'maharashtra',
-    'manipur',
-    'meghalaya',
-    'mizoram',
-    'nagaland',
-    'odisha',
-    'punjab',
-    'rajasthan',
-    'sikkim',
-    'tamil nadu',
-    'telangana',
-    'tripura',
-    'uttar pradesh',
-    'uttarakhand',
-    'west bengal',
-    'delhi',
-    'jammu and kashmir',
-    'ladakh',
-    'puducherry',
-    'chandigarh'
-];
-
-const statePart =
-    parts.find(p =>
-        knownStates.includes(
-            p.toLowerCase()
-        )
-    );
-
-if (statePart) {
-    stateName = statePart;
-}
-
-
-// ------------------------------------------
-// Detect district
-// ------------------------------------------
-
-const districtPart =
-    parts.find(p =>
-        p.toLowerCase()
-            .includes('district')
-    );
-
-if (districtPart) {
-
-    districtName =
-        districtPart
-            .replace(/district/gi, '')
-            .trim();
-
-} else if (stateName) {
-
-    const stateIndex =
-        parts.findIndex(
-            p =>
-                p.toLowerCase() ===
-                stateName.toLowerCase()
+    if (!item) {
+        console.error(
+            'Location data not found:',
+            index
         );
-
-    if (stateIndex > 0) {
-        districtName =
-            parts[stateIndex - 1];
+        return;
     }
-}
 
+    const address =
+        item.address || {};
+
+    const fullAddress =
+        item.display_name || '';
+
+    // ------------------------------------------
+    // LOCATION
+    // ------------------------------------------
+
+    const locationName =
+        address.village ||
+        address.town ||
+        address.city ||
+        address.suburb ||
+        address.hamlet ||
+        address.neighbourhood ||
+        address.municipality ||
+        address.city_district ||
+        '';
+
+    // ------------------------------------------
+    // DISTRICT
+    // ------------------------------------------
+
+    const districtName = (
+        address.state_district ||
+        address.district ||
+        address.county ||
+        address.city_district ||
+        ''
+    )
+        .replace(/\bdistrict\b/gi, '')
+        .trim();
+
+    // ------------------------------------------
+    // STATE
+    // ------------------------------------------
+
+    const stateName =
+        address.state || '';
+
+    // ------------------------------------------
+    // SLUGS
+    // ------------------------------------------
 
     const locationSlug =
         slugifyLocation(locationName);
@@ -5188,30 +5159,78 @@ if (districtPart) {
         slugifyLocation(districtName);
 
     const stateSlug =
-    slugifyLocation(stateName);
+        slugifyLocation(stateName);
 
-    const shortAddress =
-        formatShortAddress(fullAddress);
+    // ------------------------------------------
+    // VALIDATION
+    // ------------------------------------------
 
+    if (
+        !locationSlug ||
+        !districtSlug ||
+        !stateSlug
+    ) {
 
-    const display =
+        console.error(
+            'Incomplete location data:',
+            address
+        );
+
+        showToast(
+            'Please select another nearby location.',
+            true
+        );
+
+        return;
+    }
+
+    // ------------------------------------------
+    // DISPLAY ADDRESS
+    // ------------------------------------------
+
+    const pincode =
+        address.postcode || '';
+
+    let shortAddress =
+        locationName;
+
+    if (
+        districtName &&
+        districtName.toLowerCase() !==
+        locationName.toLowerCase()
+    ) {
+        shortAddress +=
+            `, ${districtName}`;
+    }
+
+    if (pincode) {
+        shortAddress +=
+            ` - ${pincode}`;
+    }
+
+    // ------------------------------------------
+    // UPDATE HEADER
+    // ------------------------------------------
+
+    const headerDisplay =
         document.getElementById(
             'headerLocationDisplay'
         );
 
-    if (display) {
-        display.textContent =
+    if (headerDisplay) {
+        headerDisplay.textContent =
             shortAddress;
     }
 
+    // ------------------------------------------
+    // SAVE EXACT LOCATION
+    // ------------------------------------------
 
-    // Display address
     localStorage.setItem(
         'catus_user_location',
         shortAddress
     );
 
-    // SEO routing data
     localStorage.setItem(
         'catus_location_slug',
         locationSlug
@@ -5223,9 +5242,56 @@ if (districtPart) {
     );
 
     localStorage.setItem(
-    'catus_state_slug',
-    stateSlug
+        'catus_state_slug',
+        stateSlug
     );
+
+    // Optional useful raw values
+    localStorage.setItem(
+        'catus_location_name',
+        locationName
+    );
+
+    localStorage.setItem(
+        'catus_district_name',
+        districtName
+    );
+
+    localStorage.setItem(
+        'catus_state_name',
+        stateName
+    );
+
+    if (pincode) {
+        localStorage.setItem(
+            'catus_pincode',
+            pincode
+        );
+    }
+
+    // ------------------------------------------
+    // CLOSE LOCATION POPUP
+    // ------------------------------------------
+
+    const locInput =
+        document.getElementById(
+            'locSearchInput'
+        );
+
+    if (locInput) {
+        locInput.value =
+            fullAddress;
+    }
+
+    const locBox =
+        document.getElementById(
+            'locSuggestionsBox'
+        );
+
+    if (locBox) {
+        locBox.style.display =
+            'none';
+    }
 
     toggleLocationModal(false);
 
@@ -5234,6 +5300,7 @@ if (districtPart) {
         false
     );
 }
+
 
 function formatShortAddress(fullAddress) {
 
