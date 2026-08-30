@@ -7562,56 +7562,58 @@ function togglePasswordVisibility(fieldId, iconElement) {
     </button>
 </div>
 <!-- Professional Footer Section -->
-<footer style="background: #0f172a; color: #cbd5e1; padding: 40px 20px 20px 20px; margin-top: 50px; font-size: 13px;">
-    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-bottom: 30px;">
-        
-        <!-- Column 1: Brand Info -->
-        <div>
-            <h3 style="color: #ffffff; font-size: 16px; font-weight: 700; margin-bottom: 12px;">Catus Electronics</h3>
-            <p style="margin: 0 0 10px 0; line-height: 1.6; color: #94a3b8;">Doorstep home appliance repair, installation, and maintenance services at your convenience.</p>
-            <div style="display: flex; gap: 12px; margin-top: 15px;">
-                <a href="https://wa.me/919578155827" style="color: #cbd5e1; font-size: 18px; transition: 0.2s;"><i class="fa-brands fa-whatsapp"></i></a>
-                <a href="tel:+919578155827" style="color: #cbd5e1; font-size: 18px; transition: 0.2s;"><i class="fa-solid fa-phone"></i></a>
-                <a href="mailto:support@catus.in" style="color: #cbd5e1; font-size: 18px; transition: 0.2s;"><i class="fa-solid fa-envelope"></i></a>
+<div class="footer-wrapper">
+    <footer class="footer-inner">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-bottom: 30px;">
+            
+            <!-- Column 1: Brand Info -->
+            <div>
+                <h3 style="color: #18181b; font-size: 16px; font-weight: 700; margin-bottom: 12px;">Catus Electronics</h3>
+                <p style="margin: 0 0 10px 0; line-height: 1.6; color: #52525b;">Doorstep home appliance repair, installation, and maintenance services at your convenience.</p>
+                <div style="display: flex; gap: 12px; margin-top: 15px;">
+                    <a href="https://wa.me/919578155827" style="color: #6d4aff; font-size: 18px; transition: 0.2s;"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="tel:+919578155827" style="color: #6d4aff; font-size: 18px; transition: 0.2s;"><i class="fa-solid fa-phone"></i></a>
+                    <a href="mailto:support@catus.in" style="color: #6d4aff; font-size: 18px; transition: 0.2s;"><i class="fa-solid fa-envelope"></i></a>
+                </div>
             </div>
+
+            <!-- Column 2: Quick Links -->
+            <div>
+                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                    <li><a href="index.html" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
+                    <li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">My Cart</a></li>
+                    <li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Services -->
+            <div>
+                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Top Services</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; color: #52525b;">
+                    <li>Smart TV Repair</li>
+                    <li>AC General Service</li>
+                    <li>Washing Machine Repair</li>
+                    <li>RO Water Purifier Service</li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Contact & Support -->
+            <div>
+                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Contact Us</h4>
+                <p style="margin: 0 0 8px 0;"><i class="fa-solid fa-phone" style="color: #6d4aff; margin-right: 8px;"></i> +91 8946055856</p>
+                <p style="margin: 0 0 8px 0;"><i class="fa-solid fa-envelope" style="color: #6d4aff; margin-right: 8px;"></i> support@catus.in</p>
+                <p style="margin: 0;"><i class="fa-solid fa-location-dot" style="color: #6d4aff; margin-right: 8px;"></i> Tiruppur, Tamil Nadu, India</p>
+            </div>
+
         </div>
 
-        <!-- Column 2: Quick Links -->
-        <div>
-            <h4 style="color: #ffffff; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Links</h4>
-            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
-                <li><a href="/" style="color: #cbd5e1; text-decoration: none; transition: 0.2s;">Home</a></li>
-                <li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #cbd5e1; text-decoration: none; transition: 0.2s;">My Cart</a></li>
-                <li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #cbd5e1; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
-            </ul>
+        <!-- Bottom Copyright Bar -->
+        <div style="border-top: 1px solid #ddd6fe; padding-top: 20px; text-align: center; color: #71717a; font-size: 12px;">
+            <p style="margin: 0;">© 2026 Catus Electronics & Home Services. All Rights Reserved.</p>
         </div>
-
-        <!-- Column 3: Services -->
-        <div>
-            <h4 style="color: #ffffff; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Top Services</h4>
-            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; color: #94a3b8;">
-                <li>Smart TV Repair</li>
-                <li>AC General Service</li>
-                <li>Washing Machine Repair</li>
-                <li>RO Water Purifier Service</li>
-            </ul>
-        </div>
-
-        <!-- Column 4: Contact & Support -->
-        <div>
-            <h4 style="color: #ffffff; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Contact Us</h4>
-            <p style="margin: 0 0 8px 0;"><i class="fa-solid fa-phone" style="color: #38bdf8; margin-right: 8px;"></i> +91 8946055856</p>
-            <p style="margin: 0 0 8px 0;"><i class="fa-solid fa-envelope" style="color: #38bdf8; margin-right: 8px;"></i> support@catus.in</p>
-            <p style="margin: 0;"><i class="fa-solid fa-location-dot" style="color: #38bdf8; margin-right: 8px;"></i> Tiruppur, Tamil Nadu, India</p>
-        </div>
-
-    </div>
-
-    <!-- Bottom Copyright Bar -->
-    <div style="border-top: 1px solid #1e293b; padding-top: 20px; text-align: center; color: #64748b; font-size: 12px;">
-        <p style="margin: 0;">© 2026 Catus Electronics & Home Services. All Rights Reserved.</p>
-    </div>
-</footer>
+    </footer>
+</div>
 
 <!-- Location Change Popup Modal (இது ஃபுட்டருக்கு வெளியே இருக்க வேண்டும்) -->
 <div class="cart-modal-overlay" id="locationPopupModal" onclick="checkCloseLocationModal(event)" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 99999;">
