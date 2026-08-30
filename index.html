@@ -5274,14 +5274,25 @@ function selectLocationModal(fullAddress) {
     showToast(`Location set successfully!`, false);
 }
 
-// ஏற்கனவே சேமித்த லொகேஷனை பேஜ் லோட் ஆனதும் காட்ட
+// ஏற்கனவே சேமித்த location-ஐ page load ஆனதும் direct-ah காட்ட
 window.addEventListener('DOMContentLoaded', () => {
-    let savedLoc = localStorage.getItem('catus_user_location');
-    if (savedLoc) {
-        const disp = document.getElementById('headerLocationDisplay');
-        if (disp) disp.textContent = formatShortAddress(savedLoc);
+
+    const savedLoc =
+        localStorage.getItem('catus_user_location');
+
+    if (!savedLoc) return;
+
+    const disp =
+        document.getElementById(
+            'headerLocationDisplay'
+        );
+
+    if (disp) {
+        disp.textContent = savedLoc;
     }
+
 });
+
 let otpCountdownTimer = null;
 
 // OTP டைமரைத் தொடங்கும் பங்க்ஷன்
