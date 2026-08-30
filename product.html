@@ -2522,36 +2522,35 @@ filtered.forEach(s => {
     const serviceImage =
         s.image_url ||
         s.image ||
-        s.image1 ||
-        'logo.png';
+        s.icon_url ||
+        '/logo.png';
 
     const serviceCategory =
         s.category || 'Service';
 
     html += `
-        <div class="suggestion-item"
-             onmousedown="handleProductSearchSelect('${s.service_id}')">
+        <div
+            class="suggestion-item"
+            onmousedown="handleProductSearchSelect('${s.service_id}')"
+        >
 
-            <div class="suggestion-thumb">
-                <img
-                    src="${serviceImage}"
-                    alt="${s.service_name}"
-                    onerror="this.src='logo.png'"
-                >
-            </div>
+            <img
+                src="${serviceImage}"
+                class="search-suggestion-image"
+                alt="${s.service_name || 'Service'}"
+                onerror="this.src='/logo.png'"
+            >
 
-            <div class="suggestion-content">
-                <div class="suggestion-name">
-                    ${s.service_name}
+            <div class="search-suggestion-content">
+
+                <div class="search-suggestion-title">
+                    ${s.service_name || 'Service'}
                 </div>
 
-                <div class="suggestion-category">
+                <div class="search-suggestion-category">
                     in ${serviceCategory}
                 </div>
-            </div>
 
-            <div class="suggestion-arrow">
-                <i class="fa-solid fa-chevron-right"></i>
             </div>
 
         </div>
