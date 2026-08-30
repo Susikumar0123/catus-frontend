@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/tamil-nadu/:district/:location/:service",
+      "destination": "/location.html?location=:location&service=:service"
+    }
+  ]
+}
