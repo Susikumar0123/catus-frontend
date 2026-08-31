@@ -5693,51 +5693,8 @@ dynamicSchema.textContent =
     });
 
 document.head.appendChild(dynamicSchema);
-        // ------------------------------------------
-        // LOCATION CONTENT
-        // ------------------------------------------
 
-        let locationContent =
-            document.getElementById(
-                'locationServiceContent'
-            );
-
-        if (!locationContent) {
-
-            locationContent =
-                document.createElement('div');
-
-            locationContent.id =
-                'locationServiceContent';
-
-            locationContent.style.marginTop =
-                '15px';
-
-            locationContent.style.lineHeight =
-                '1.7';
-
-            locationContent.style.color =
-                '#475569';
-
-            const infoSection =
-                document.querySelector(
-                    '.features-section'
-                );
-
-            if (infoSection) {
-                infoSection.after(
-                    locationContent
-                );
-            }
-        }
-
-        locationContent.textContent =
-            page.content ||
-            `${page.service_name} is available in ` +
-            `${page.location_name}, ` +
-            `${page.district}.`;
-
-        // ------------------------------------------
+// ------------------------------------------
 // SHOW PRODUCT
 // ------------------------------------------
 
