@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "https://catus-backend-d2js.onrender.com/api/sitemap.xml"
+    },
+    {
       "source": "/:state/:district/:location/:service",
       "destination": "/product.html?id=:service&state=:state&district=:district&location=:location"
     }
