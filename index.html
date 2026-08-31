@@ -3172,6 +3172,31 @@ a.book-btn {
     }
 }
 
+@media (max-width: 850px) {
+
+    .mobile-bottom-nav .catus-bottom-icon {
+        display: block !important;
+        width: 23px !important;
+        height: 23px !important;
+
+        fill: none !important;
+        stroke: #ffffff !important;
+        stroke-width: 1.9 !important;
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+
+        flex-shrink: 0 !important;
+    }
+
+    .mobile-bottom-nav .bot-nav-item {
+        color: #ffffff !important;
+    }
+
+    .mobile-bottom-nav .bot-nav-item span {
+        color: #ffffff !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -7958,25 +7983,43 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
   </script>
 <div class="mobile-bottom-nav">
+
     <button class="bot-nav-item active" onclick="window.location.href='index.html'">
-        <i data-lucide="house"></i>
+        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+            <path d="M3 10.5L12 3l9 7.5"></path>
+            <path d="M5 9.5V21h14V9.5"></path>
+            <path d="M9 21v-7h6v7"></path>
+        </svg>
         <span>Home</span>
     </button>
 
     <button class="bot-nav-item" onclick="toggleCartModal(true)">
-        <i data-lucide="shopping-cart"></i>
+        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="18" cy="20" r="1"></circle>
+            <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
+        </svg>
         <span>Cart</span>
     </button>
 
     <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-        <i data-lucide="user"></i>
+        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4.5 21c.7-4 3.2-6 7.5-6s6.8 2 7.5 6"></path>
+        </svg>
         <span>Account</span>
     </button>
 
     <button class="bot-nav-item" onclick="scrollToCategories()">
-        <i data-lucide="layers-3"></i>
+        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+        </svg>
         <span>Categories</span>
     </button>
+
 </div>
 
 <!-- Professional Footer Section -->
