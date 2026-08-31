@@ -7648,6 +7648,14 @@ function detectCurrentLocation() {
                 const nominatimPincode =
                     address.postcode || '';
 
+                    console.log('GPS LOCATION DEBUG:', {
+                    locationName,
+                    districtName,
+                    stateName,
+                    nominatimPincode,
+                    fullAddress: data.display_name
+            });
+
                 const matched =
                     await matchCatusLocation(
                         locationName,
