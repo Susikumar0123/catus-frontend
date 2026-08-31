@@ -10,6 +10,7 @@
     
     <!-- FontAwesome Icons for Stars & Trash -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         @media (max-width: 768px) {
@@ -2822,6 +2823,69 @@ a.book-btn {
     }
 }
 
+/* =====================================================
+   CATUS MOBILE NAV — INSTAGRAM STYLE OUTLINE ICONS
+   ===================================================== */
+
+.mobile-bottom-nav,
+#premiumCustomerDashboard .prem-bottom-nav {
+    background: #ffffff !important;
+    border-top: 1px solid #e8e8e8 !important;
+    box-shadow: none !important;
+    height: 58px !important;
+    padding: 4px 0 calc(4px + env(safe-area-inset-bottom)) !important;
+    align-items: center !important;
+}
+
+/* normal nav buttons */
+.bot-nav-item,
+#premiumCustomerDashboard .prem-nav-btn {
+    flex: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    color: #737373 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    padding: 4px 0 !important;
+    font-size: 10px !important;
+    font-weight: 400 !important;
+}
+
+/* Lucide outline icons */
+.bot-nav-item svg,
+#premiumCustomerDashboard .prem-nav-btn svg {
+    width: 23px !important;
+    height: 23px !important;
+    stroke: #111111 !important;
+    stroke-width: 2 !important;
+    fill: none !important;
+    margin: 0 !important;
+}
+
+/* labels */
+.bot-nav-item span,
+#premiumCustomerDashboard .prem-nav-btn span {
+    color: #737373 !important;
+    font-size: 9.5px !important;
+    font-weight: 400 !important;
+}
+
+/* active item */
+.bot-nav-item.active svg,
+#premiumCustomerDashboard .prem-nav-btn.active svg {
+    stroke: #6d4aff !important;
+    stroke-width: 2.4 !important;
+}
+
+.bot-nav-item.active span,
+#premiumCustomerDashboard .prem-nav-btn.active span {
+    color: #6d4aff !important;
+    font-weight: 500 !important;
+}
+
 </style>
 </head>
 <body>
@@ -3835,12 +3899,21 @@ a.book-btn {
 
       <!-- Bottom Navigation (Mobile View) -->
       <div class="prem-bottom-nav">
-          <button class="prem-nav-btn active" onclick="switchDashTab('home', this, true)"><i class="fa-solid fa-house"></i> Dashboard</button>
-          <button class="prem-nav-btn" onclick="switchDashTab('bookings', this, true)"><i class="fa-solid fa-clipboard-list"></i> Bookings</button>
-          <button class="prem-nav-btn" onclick="switchDashTab('profile', this, true)"><i class="fa-solid fa-user"></i> Profile</button>
-      </div>
+    <button class="prem-nav-btn active" onclick="switchDashTab('home', this, true)">
+        <i data-lucide="house"></i>
+        <span>Dashboard</span>
+    </button>
 
-  </div>
+    <button class="prem-nav-btn" onclick="switchDashTab('bookings', this, true)">
+        <i data-lucide="clipboard-list"></i>
+        <span>Bookings</span>
+    </button>
+
+    <button class="prem-nav-btn" onclick="switchDashTab('profile', this, true)">
+        <i data-lucide="user"></i>
+        <span>Profile</span>
+    </button>
+</div>
 
    <!-- EDIT ADDRESS MODAL FOR LIVE TRACKING -->
   <div class="cart-modal-overlay" id="editOrderAddressModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
@@ -7597,19 +7670,25 @@ function togglePasswordVisibility(fieldId, iconElement) {
 }
 
   </script>
-<!-- Mobile Bottom Navigation Bar -->
 <div class="mobile-bottom-nav">
-    <button class="bot-nav-item" onclick="window.location.href='index.html'">
-        <i class="fa-solid fa-house"></i> <span>Home</span>
+    <button class="bot-nav-item active" onclick="window.location.href='index.html'">
+        <i data-lucide="house"></i>
+        <span>Home</span>
     </button>
+
     <button class="bot-nav-item" onclick="toggleCartModal(true)">
-        <i class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
+        <i data-lucide="shopping-cart"></i>
+        <span>Cart</span>
     </button>
+
     <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-        <i class="fa-solid fa-user"></i> <span>Account</span>
+        <i data-lucide="user"></i>
+        <span>Account</span>
     </button>
+
     <button class="bot-nav-item" onclick="scrollToCategories()">
-        <i class="fa-solid fa-layer-group"></i> <span>Categories</span>
+        <i data-lucide="layers-3"></i>
+        <span>Categories</span>
     </button>
 </div>
 
@@ -7811,6 +7890,11 @@ function togglePasswordVisibility(fieldId, iconElement) {
     animatePlaceholder();
 
 })();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    lucide.createIcons();
+});
 </script>
 </body>
 </html>
