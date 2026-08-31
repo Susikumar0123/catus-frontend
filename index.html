@@ -3283,6 +3283,94 @@ a.book-btn {
         visibility: visible !important;
     }
 }
+
+/* ==========================================
+   CUSTOMER DASHBOARD — DARK MOBILE NAV
+   ========================================== */
+
+@media (max-width: 850px) {
+
+    #premiumCustomerDashboard .prem-bottom-nav {
+        display: flex !important;
+        background: #111111 !important;
+        border-top: 1px solid #292929 !important;
+        box-shadow: none !important;
+
+        height: 64px !important;
+
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+
+        z-index: 2147483000 !important;
+
+        align-items: center !important;
+        justify-content: space-around !important;
+
+        padding: 0 !important;
+    }
+
+    #premiumCustomerDashboard .prem-nav-btn {
+        flex: 1 1 33.33% !important;
+        height: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 3px !important;
+
+        background: transparent !important;
+        border: none !important;
+
+        color: #ffffff !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #premiumCustomerDashboard .prem-nav-btn svg {
+        display: block !important;
+
+        width: 23px !important;
+        height: 23px !important;
+
+        fill: none !important;
+        stroke: #ffffff !important;
+
+        stroke-width: 2 !important;
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+
+        color: #ffffff !important;
+    }
+
+    #premiumCustomerDashboard .prem-nav-btn svg * {
+        fill: none !important;
+        stroke: #ffffff !important;
+    }
+
+    #premiumCustomerDashboard .prem-nav-btn span {
+        color: #ffffff !important;
+        font-size: 9px !important;
+        font-weight: 400 !important;
+    }
+
+    /* Active Dashboard tab */
+    #premiumCustomerDashboard .prem-nav-btn.active svg {
+        stroke: #ffffff !important;
+        stroke-width: 2.5 !important;
+    }
+
+    #premiumCustomerDashboard .prem-nav-btn.active span {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }
+}
 </style>
 </head>
 <body>
