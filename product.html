@@ -7649,12 +7649,13 @@ function detectCurrentLocation() {
                     address.postcode || '';
 
                     console.log('GPS LOCATION DEBUG:', {
-                    locationName,
-                    districtName,
-                    stateName,
-                    nominatimPincode,
-                    fullAddress: data.display_name
-            });
+    locationName,
+    districtName,
+    stateName,
+    nominatimPincode,
+    fullAddress: data.display_name,
+    addressObject: address
+});
 
                 const matched =
                     await matchCatusLocation(
