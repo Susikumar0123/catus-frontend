@@ -7658,12 +7658,25 @@ function detectCurrentLocation() {
 });
 
                 const matched =
-                    await matchCatusLocation(
-                        locationName,
-                        districtName,
-                        stateName,
-                        nominatimPincode
-                    );
+    await matchCatusLocationCandidates(
+        [
+            address.hamlet,
+            address.village,
+            address.neighbourhood,
+            address.suburb,
+            address.quarter,
+            address.residential,
+            address.locality,
+            address.town,
+            address.municipality,
+            address.county,
+            address.city,
+            address.city_district
+        ],
+        districtName,
+        stateName,
+        nominatimPincode
+    );
 
                 if (matched === null) {
 
@@ -8024,6 +8037,36 @@ async function matchCatusLocation(locationName, districtName, stateName, pincode
     }
 }
 
+async function matchCatusLocationCandidates(
+    candidates,
+    districtName,
+    stateName,
+    pincode = ''
+) {
+    const uniqueCandidates = [
+        ...new Set(
+            candidates
+                .map(value => String(value || '').trim())
+                .filter(Boolean)
+        )
+    ];
+
+    for (const candidate of uniqueCandidates) {
+
+        const matched = await matchCatusLocation(
+            candidate,
+            districtName,
+            stateName,
+            pincode
+        );
+
+        if (matched && !matched.ambiguous) {
+            return matched;
+        }
+    }
+
+    return null;
+}
 
 async function selectLocationSuggestionByIndex(index) {
 
