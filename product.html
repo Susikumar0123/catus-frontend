@@ -7551,7 +7551,7 @@ function detectCurrentLocation() {
 
                 if (
                     !data ||
-                    !data.display_name
+                    !data.address
                 ) {
                     alert(
                         "Unable to fetch address details for your location."
@@ -7559,25 +7559,22 @@ function detectCurrentLocation() {
                     return;
                 }
 
-                const fullAddress =
-                    data.display_name;
-
                 const address =
                     data.address || {};
 
                 const locationName =
-    address.hamlet ||
-    address.village ||
-    address.neighbourhood ||
-    address.suburb ||
-    address.quarter ||
-    address.residential ||
-    address.locality ||
-    address.town ||
-    address.municipality ||
-    address.city ||
-    address.city_district ||
-    '';
+                    address.hamlet ||
+                    address.village ||
+                    address.neighbourhood ||
+                    address.suburb ||
+                    address.quarter ||
+                    address.residential ||
+                    address.locality ||
+                    address.town ||
+                    address.municipality ||
+                    address.city ||
+                    address.city_district ||
+                    '';
 
                 const districtName = (
                     address.state_district ||
@@ -7586,35 +7583,80 @@ function detectCurrentLocation() {
                     ''
                 )
                     .replace(/\bdistrict\b/gi, '')
-.trim();
+                    .trim();
 
                 const stateName =
                     address.state || '';
 
-                const locationSlug =
-                    slugify(
-                        locationName
+                const nominatimPincode =
+                    address.postcode || '';
+
+                const matched =
+                    await matchCatusLocation(
+                        locationName,
+                        districtName,
+                        stateName,
+                        nominatimPincode
                     );
+
+                if (matched === null) {
+
+                    showToast(
+                        "Sorry, Catus service is not available at this location yet.",
+                        true
+                    );
+
+                    return;
+                }
+
+                if (matched.ambiguous === true) {
+
+                    showToast(
+                        "Multiple matching areas found. Please search and select your exact location manually.",
+                        true
+                    );
+
+                    openLocationModal();
+
+                    return;
+                }
+
+                const locationSlug =
+                    matched.slug;
 
                 const districtSlug =
                     slugify(
-                        districtName
+                        matched.district
                     );
 
                 const stateSlug =
                     slugify(
-                        stateName
+                        matched.state
                     );
 
                 const serviceSlug =
-                    slugify(
-                        activeServiceId
-                    );
+                    activeServiceId;
 
-                const shortAddress =
-                    formatShortAddress(
-                        fullAddress
-                    );
+                const finalPincode =
+                    matched.pincode ||
+                    nominatimPincode;
+
+                let shortAddress =
+                    matched.name;
+
+                if (
+                    matched.district &&
+                    matched.district.toLowerCase() !==
+                    matched.name.toLowerCase()
+                ) {
+                    shortAddress +=
+                        `, ${matched.district}`;
+                }
+
+                if (finalPincode) {
+                    shortAddress +=
+                        ` - ${finalPincode}`;
+                }
 
                 const headerDisplay =
                     document.getElementById(
@@ -7646,6 +7688,37 @@ function detectCurrentLocation() {
                     stateSlug
                 );
 
+                localStorage.setItem(
+                    'catus_location_id',
+                    matched.id
+                );
+
+                localStorage.setItem(
+                    'catus_location_name',
+                    matched.name
+                );
+
+                localStorage.setItem(
+                    'catus_district_name',
+                    matched.district
+                );
+
+                localStorage.setItem(
+                    'catus_state_name',
+                    matched.state
+                );
+
+                if (finalPincode) {
+                    localStorage.setItem(
+                        'catus_pincode',
+                        finalPincode
+                    );
+                } else {
+                    localStorage.removeItem(
+                        'catus_pincode'
+                    );
+                }
+
                 toggleLocationModal(false);
 
                 if (
@@ -7656,10 +7729,7 @@ function detectCurrentLocation() {
                 ) {
 
                     window.location.href =
-                        `/${stateSlug}/` +
-                        `${districtSlug}/` +
-                        `${locationSlug}/` +
-                        `${serviceSlug}`;
+                        `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
 
                     return;
                 }
@@ -7835,7 +7905,45 @@ function slugify(value) {
         .replace(/-+/g, '-');
 }
 
-function selectLocationSuggestionByIndex(index) {
+
+// ✅ ADD THIS
+async function matchCatusLocation(locationName, districtName, stateName, pincode = '') {
+    try {
+        const params = new URLSearchParams({
+            name: locationName || '',
+            district: districtName || '',
+            state: stateName || '',
+            pincode: pincode || ''
+        });
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/match-location?${params.toString()}`
+        );
+
+        const data = await response.json();
+
+        if (response.status === 200 && data.success) {
+            return data.location;
+        }
+
+        if (response.status === 409 && data.ambiguous) {
+            return data;
+        }
+
+        if (response.status === 404) {
+            return null;
+        }
+
+        return null;
+
+    } catch (error) {
+        console.error('Match Catus Location error:', error);
+        return null;
+    }
+}
+
+
+async function selectLocationSuggestionByIndex(index) {
 
     const item =
         window.catusLocationResults?.[index];
@@ -7854,10 +7962,6 @@ function selectLocationSuggestionByIndex(index) {
     const fullAddress =
         item.display_name || '';
 
-    /* =========================
-       LOCATION
-    ========================= */
-
     const locationName =
         address.hamlet ||
         address.village ||
@@ -7874,10 +7978,6 @@ function selectLocationSuggestionByIndex(index) {
         item.name ||
         '';
 
-    /* =========================
-       DISTRICT
-    ========================= */
-
     const districtName = (
         address.state_district ||
         address.district ||
@@ -7888,35 +7988,47 @@ function selectLocationSuggestionByIndex(index) {
         .replace(/\bdistrict\b/gi, '')
         .trim();
 
-    /* =========================
-       STATE
-    ========================= */
-
     const stateName =
         address.state || '';
-
-    /* =========================
-       PINCODE
-    ========================= */
 
     const pincode =
         address.postcode || '';
 
-    /* =========================
-       SLUGS
-    ========================= */
+    const matched = await matchCatusLocation(
+        locationName,
+        districtName,
+        stateName,
+        pincode
+    );
+
+    if (matched === null) {
+        showToast(
+            'Sorry, Catus service is not available at this location yet.',
+            true
+        );
+        return;
+    }
+
+    if (matched.ambiguous === true) {
+        showToast(
+            'Multiple matching Catus areas found. Please choose your exact area.',
+            true
+        );
+        console.log(matched.locations);
+        return;
+    }
 
     const locationSlug =
-        slugify(locationName);
+        matched.slug;
 
     const districtSlug =
-        slugify(districtName);
+        slugify(matched.district);
 
     const stateSlug =
-        slugify(stateName);
+        slugify(matched.state);
 
     const serviceSlug =
-        slugify(activeServiceId);
+        activeServiceId;
 
     if (
         !locationSlug ||
@@ -7925,8 +8037,8 @@ function selectLocationSuggestionByIndex(index) {
     ) {
 
         console.error(
-            'Incomplete location data:',
-            address
+            'Incomplete location data from DB:',
+            matched
         );
 
         showToast(
@@ -7937,30 +8049,25 @@ function selectLocationSuggestionByIndex(index) {
         return;
     }
 
-    /* =========================
-       SHORT DISPLAY ADDRESS
-    ========================= */
+    const finalPincode =
+        matched.pincode || pincode;
 
     let shortAddress =
-        locationName;
+        matched.name;
 
     if (
-        districtName &&
-        districtName.toLowerCase() !==
-        locationName.toLowerCase()
+        matched.district &&
+        matched.district.toLowerCase() !==
+        matched.name.toLowerCase()
     ) {
         shortAddress +=
-            `, ${districtName}`;
+            `, ${matched.district}`;
     }
 
-    if (pincode) {
+    if (finalPincode) {
         shortAddress +=
-            ` - ${pincode}`;
+            ` - ${finalPincode}`;
     }
-
-    /* =========================
-       HEADER UPDATE
-    ========================= */
 
     const headerDisplay =
         document.getElementById(
@@ -7971,10 +8078,6 @@ function selectLocationSuggestionByIndex(index) {
         headerDisplay.textContent =
             shortAddress;
     }
-
-    /* =========================
-       SAVE LOCATION
-    ========================= */
 
     localStorage.setItem(
         'catus_user_location',
@@ -7996,32 +8099,36 @@ function selectLocationSuggestionByIndex(index) {
         stateSlug
     );
 
+    localStorage.setItem(
+        'catus_location_id',
+        matched.id
+    );
 
     localStorage.setItem(
         'catus_location_name',
-        locationName
+        matched.name
     );
 
     localStorage.setItem(
         'catus_district_name',
-        districtName
+        matched.district
     );
 
     localStorage.setItem(
         'catus_state_name',
-        stateName
+        matched.state
     );
 
-    if (pincode) {
+    if (finalPincode) {
         localStorage.setItem(
             'catus_pincode',
-            pincode
+            finalPincode
+        );
+    } else {
+        localStorage.removeItem(
+            'catus_pincode'
         );
     }
-
-    /* =========================
-       CLOSE POPUP
-    ========================= */
 
     const locInput =
         document.getElementById(
@@ -8045,17 +8152,12 @@ function selectLocationSuggestionByIndex(index) {
 
     toggleLocationModal(false);
 
-    /* =========================
-       REDIRECT TO PRETTY URL
-    ========================= */
-
     if (
         stateSlug &&
         districtSlug &&
         locationSlug &&
         serviceSlug
     ) {
-
         window.location.href =
             `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
 
