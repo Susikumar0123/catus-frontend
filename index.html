@@ -3626,6 +3626,73 @@ a.book-btn {
     stroke-linecap: round !important;
     stroke-linejoin: round !important;
 }
+/* ===============================
+   MOBILE TOP LOCATION WIDGET
+   =============================== */
+
+.mobile-location-widget {
+    display: none;
+}
+
+@media (max-width: 850px) {
+
+    .header-main-container {
+        display: grid !important;
+        grid-template-columns: auto 1fr auto !important;
+        grid-template-areas:
+            "logo . location"
+            "search search search";
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .brand-logo {
+        grid-area: logo;
+        margin: 0 !important;
+    }
+
+    .search-container {
+        grid-area: search;
+        width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .mobile-location-widget {
+        grid-area: location;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 5px;
+
+        max-width: 180px;
+        padding: 5px 8px;
+
+        background: #f5f3ff;
+        border-radius: 20px;
+
+        font-size: 11px;
+        font-weight: 600;
+        color: #6d4aff;
+
+        cursor: pointer;
+
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    #mobileHeaderLocationDisplay {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mobile-location-widget i {
+        font-size: 10px;
+        flex-shrink: 0;
+    }
+}
 </style>
 </head>
 <body>
@@ -3640,7 +3707,14 @@ a.book-btn {
           <div class="brand-logo" onclick="window.location.reload()">
               <img src="logo.png" alt="Catus Logo">
           </div>
-          
+
+          <div class="mobile-location-widget"
+     onclick="openLocationModal()">
+    <i class="fa-solid fa-location-dot"></i>
+    <span id="mobileHeaderLocationDisplay">Select Location</span>
+    <i class="fa-solid fa-chevron-down"></i>
+</div>
+
           <div class="search-container">
               <svg class="search-icon" viewBox="0 0 24 24">
                   <circle cx="11" cy="11" r="8"></circle>
@@ -4767,6 +4841,23 @@ a.book-btn {
         .trim()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
+}
+
+function updateLocationDisplays(locationText) {
+
+    const desktopLocation =
+        document.getElementById('headerLocationDisplay');
+
+    const mobileLocation =
+        document.getElementById('mobileHeaderLocationDisplay');
+
+    if (desktopLocation) {
+        desktopLocation.textContent = locationText;
+    }
+
+    if (mobileLocation) {
+        mobileLocation.textContent = locationText;
+    }
 }
 
 async function matchCatusLocation(locationName, districtName, stateName, pincode = '') {
@@ -7670,15 +7761,7 @@ function detectCurrentLocation() {
                     shortAddress += ` - ${finalPincode}`;
                 }
 
-                const headerDisplay =
-                    document.getElementById(
-                        'headerLocationDisplay'
-                    );
-
-                if (headerDisplay) {
-                    headerDisplay.textContent =
-                        shortAddress;
-                }
+                updateLocationDisplays(shortAddress);
 
                 localStorage.setItem(
                     'catus_user_location',
@@ -8244,15 +8327,7 @@ async function selectLocationSuggestionByIndex(index) {
     // UPDATE HEADER
     // ------------------------------------------
 
-    const headerDisplay =
-        document.getElementById(
-            'headerLocationDisplay'
-        );
-
-    if (headerDisplay) {
-        headerDisplay.textContent =
-            shortAddress;
-    }
+    updateLocationDisplays(shortAddress);
 
     // ------------------------------------------
     // SAVE LOCATION DATA
@@ -8447,7 +8522,7 @@ function formatShortAddress(fullAddress) {
 
 function selectLocationModal(fullAddress) {
     let shortAddress = formatShortAddress(fullAddress);
-    document.getElementById('headerLocationDisplay').textContent = shortAddress;
+    updateLocationDisplays(shortAddress);
     localStorage.setItem('catus_user_location', shortAddress);
     toggleLocationModal(false);
     showToast(`Location set successfully!`, false);
@@ -8461,14 +8536,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (!savedLoc) return;
 
-    const disp =
-        document.getElementById(
-            'headerLocationDisplay'
-        );
-
-    if (disp) {
-        disp.textContent = savedLoc;
-    }
+    updateLocationDisplays(savedLoc);
 
 });
 
