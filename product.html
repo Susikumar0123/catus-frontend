@@ -3258,12 +3258,50 @@ button,
         padding-bottom: 12px !important;
     }
 
-    body {
-        padding-bottom: 0 !important;
-    }
 
     .mobile-bottom-nav {
         margin-top: 0 !important;
+    }
+}
+/* MOBILE FOOTER + FIXED NAV CORRECT SPACING */
+@media (max-width: 768px) {
+
+    body {
+        padding-bottom: 64px !important;
+    }
+
+    .footer-wrapper {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    .footer-wrapper > .footer-inner > div:last-child,
+    .footer-wrapper > footer > div:last-child {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        padding: 14px 10px 16px !important;
+        margin: 0 !important;
+
+        text-align: center !important;
+        font-size: 11px !important;
+        line-height: 1.4 !important;
+
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .mobile-bottom-nav {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+
+        height: 64px !important;
+        margin: 0 !important;
+
+        z-index: 999999 !important;
     }
 }
 
