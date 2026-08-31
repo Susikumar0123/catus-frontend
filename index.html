@@ -2950,6 +2950,148 @@ a.book-btn {
     }
 }
 
+/* =====================================================
+   FINAL MOBILE POPUP FIX
+   Cart + Live Tracking Edit Address
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+    /* ---------- CART OVERLAY ---------- */
+    #cartModal {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        background: rgba(0,0,0,.45) !important;
+        display: none;
+        align-items: flex-end !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        z-index: 2147482000 !important;
+        box-sizing: border-box !important;
+    }
+
+    #cartModal[style*="display: flex"] {
+        display: flex !important;
+    }
+
+    #cartDrawer {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+        max-width: none !important;
+        height: min(82dvh, 720px) !important;
+        max-height: 82dvh !important;
+
+        border-radius: 20px 20px 0 0 !important;
+        background: #ffffff !important;
+        box-shadow: 0 -10px 40px rgba(0,0,0,.16) !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    #cartDrawer .cart-header {
+        padding: 14px 16px !important;
+        flex-shrink: 0 !important;
+    }
+
+    #cartDrawer .cart-header h3 {
+        font-size: 16px !important;
+    }
+
+    #cartDrawer .cart-items-list {
+        flex: 1 !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        padding: 12px 16px !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    #cartDrawer .cart-footer {
+        position: relative !important;
+        bottom: auto !important;
+        padding: 14px 16px calc(14px + env(safe-area-inset-bottom)) !important;
+        flex-shrink: 0 !important;
+        background: #ffffff !important;
+    }
+
+    /* ---------- EDIT ADDRESS OVERLAY ---------- */
+    #editOrderAddressModal {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+
+        padding: 12px !important;
+        box-sizing: border-box !important;
+
+        justify-content: center !important;
+        align-items: center !important;
+
+        background: rgba(0,0,0,.48) !important;
+        z-index: 2147482500 !important;
+
+        overflow: hidden !important;
+    }
+
+    #editOrderAddressModal > div {
+        width: 100% !important;
+        max-width: 420px !important;
+
+        max-height: calc(100dvh - 24px) !important;
+        height: auto !important;
+
+        margin: 0 !important;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+
+        border-radius: 16px !important;
+        background: #ffffff !important;
+
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+    }
+
+    #editOrderAddressModal .uc-fk-form-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    #editOrderAddressModal .uc-fk-field,
+    #editOrderAddressModal .uc-fk-field.full {
+        width: 100% !important;
+        grid-column: 1 !important;
+    }
+
+    #editOrderAddressModal .uc-fk-field input {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 11px 12px !important;
+        font-size: 13px !important;
+    }
+
+    #editOrderAddressModal > div > div:last-child {
+        position: sticky !important;
+        bottom: -16px !important;
+        background: #ffffff !important;
+        padding-top: 10px !important;
+        padding-bottom: 16px !important;
+        margin-top: 8px !important;
+        z-index: 2 !important;
+    }
+}
+
 </style>
 </head>
 <body>
