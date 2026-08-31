@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Product Details - Catus</title>
+
+    <meta name="description"
+      content="Book trusted home appliance repair and doorstep service near you with Catus.">
+
+    <meta name="robots"
+      content="index, follow, max-image-preview:large">
     
     <!-- Google Fonts - Roboto -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -5578,7 +5584,115 @@ if (headerLocationDisplay) {
             window.location.origin +
             window.location.pathname;
 
+        // ------------------------------------------
+// DYNAMIC SERVICE + BREADCRUMB SCHEMA
+// ------------------------------------------
 
+const oldSeoSchema =
+    document.getElementById('catusDynamicSeoSchema');
+
+if (oldSeoSchema) {
+    oldSeoSchema.remove();
+}
+
+const dynamicSchema =
+    document.createElement('script');
+
+dynamicSchema.type =
+    'application/ld+json';
+
+dynamicSchema.id =
+    'catusDynamicSeoSchema';
+
+dynamicSchema.textContent =
+    JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Service",
+                "@id":
+                    window.location.origin +
+                    window.location.pathname +
+                    "#service",
+
+                "name":
+                    `${page.service_name} in ${page.location_name}, ${page.district}`,
+
+                "description":
+                    page.seo_description ||
+                    `${page.service_name} doorstep service in ${page.location_name}, ${page.district}. Book trusted home appliance service with Catus.`,
+
+                "url":
+                    window.location.origin +
+                    window.location.pathname,
+
+                "provider": {
+                    "@type": "Organization",
+                    "name": "Catus Electronics & Home Services",
+                    "url": "https://catus-frontend-nu.vercel.app/"
+                },
+
+                "areaServed": {
+                    "@type": "Place",
+                    "name":
+                        `${page.location_name}, ${page.district}`
+                },
+
+                "serviceType":
+                    page.service_name
+            },
+
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item":
+                            window.location.origin + "/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name":
+                            page.district,
+                        "item":
+                            window.location.origin +
+                            "/" +
+                            currentStateSlug +
+                            "/" +
+                            currentDistrictSlug
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name":
+                            page.location_name,
+                        "item":
+                            window.location.origin +
+                            "/" +
+                            currentStateSlug +
+                            "/" +
+                            currentDistrictSlug +
+                            "/" +
+                            currentLocationSlug
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name":
+                            page.service_name,
+                        "item":
+                            window.location.origin +
+                            window.location.pathname
+                    }
+                ]
+            }
+        ]
+    });
+
+document.head.appendChild(dynamicSchema);
         // ------------------------------------------
         // LOCATION CONTENT
         // ------------------------------------------
