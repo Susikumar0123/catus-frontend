@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://catus-frontend-nu.vercel.app/sitemap.xml
