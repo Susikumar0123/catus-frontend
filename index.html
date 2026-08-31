@@ -3111,6 +3111,67 @@ a.book-btn {
     }
 }
 
+/* =========================================
+   MOBILE BOTTOM NAV — DARK INSTAGRAM STYLE
+   ========================================= */
+
+@media (max-width: 850px) {
+
+    .mobile-bottom-nav {
+        background: #111111 !important;
+        border-top: 1px solid #27272a !important;
+        box-shadow: none !important;
+
+        height: 62px !important;
+
+        padding:
+            5px 0
+            calc(5px + env(safe-area-inset-bottom))
+            0 !important;
+    }
+
+    .bot-nav-item {
+        background: transparent !important;
+        color: #ffffff !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 3px !important;
+    }
+
+    /* Lucide outline icons */
+    .bot-nav-item svg {
+        width: 23px !important;
+        height: 23px !important;
+
+        stroke: #ffffff !important;
+        fill: none !important;
+
+        stroke-width: 2 !important;
+    }
+
+    /* Labels */
+    .bot-nav-item span {
+        color: #ffffff !important;
+        font-size: 9px !important;
+        font-weight: 400 !important;
+    }
+
+    /* Active page */
+    .bot-nav-item.active svg {
+        stroke: #ffffff !important;
+        stroke-width: 2.6 !important;
+    }
+
+    .bot-nav-item.active span {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }
+}
+
 </style>
 </head>
 <body>
