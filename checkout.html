@@ -1257,7 +1257,9 @@ p, span, div, a, label, li, small {
 
             const rawItems = localStorage.getItem('catus_checkout_items');
             discount = parseInt(localStorage.getItem('catus_checkout_discount')) || 0;
-            
+            const appliedCoupon = String(
+    localStorage.getItem('catus_checkout_coupon') || ''
+).trim().toUpperCase();
             if (!rawItems || rawItems === "[]") {
                 document.getElementById('summaryItemsContainer').innerHTML = "<p style='color:#ef4444; font-size:14px;'>No items in cart!</p>";
                 return;
@@ -1501,14 +1503,48 @@ p, span, div, a, label, li, small {
 
             let subtotal = 0;
             orderItems.forEach(item => { subtotal += Math.round(parseFloat(item.price)) * (item.quantity || 1); });
-            let inspectionFee = 49; 
-            let finalAmt = (subtotal + inspectionFee) - discount;
-            if(finalAmt < 0) finalAmt = 0;
+            let visitationFee = 49;
+let platformFee = 15;
+let taxes = Math.round((subtotal + visitationFee) * 0.05);
+
+let finalAmt = subtotal + visitationFee + platformFee + taxes - discount;
+if (finalAmt < 0) finalAmt = 0;
 
             if (selectedMode === 'later') {
-                await saveOrderToDatabase('PAY_LATER_' + Date.now(), finalAmt, 'Pay Later (Cash / Service Pay)', 'Pending');
-                return;
-            }
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/calculate-order-total`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                items: orderItems.map(item => ({
+                    product_id: item.product_id,
+                    quantity: item.quantity || 1
+                }))
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert(data.message || 'Unable to calculate order total.');
+            return;
+        }
+
+        await saveOrderToDatabase(
+            'PAY_LATER_' + Date.now(),
+            data.finalAmount,
+            'Pay Later (Cash / Service Pay)',
+            'Pending'
+        );
+
+        return;
+
+    } catch (error) {
+        console.error('Pay Later Pricing Error:', error);
+        alert('Unable to confirm order amount. Please try again.');
+        return;
+    }
+}
 
             const custName = document.getElementById('fieldName').value.trim();
             const mobile = document.getElementById('fieldMobile').value.trim();
@@ -1517,7 +1553,12 @@ p, span, div, a, label, li, small {
                 const response = await fetch(`${API_BASE_URL}/api/create-razorpay-order`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ amount: finalAmt * 100 })
+                    body: JSON.stringify({
+    items: orderItems.map(item => ({
+        product_id: item.product_id,
+        quantity: item.quantity || 1
+    }))
+})
                 });
 
                 const data = await response.json();
@@ -1534,8 +1575,36 @@ p, span, div, a, label, li, small {
                     "description": "Service Booking Payment",
                     "order_id": data.id,
                     "handler": async function (response) {
-                        await saveOrderToDatabase(response.razorpay_payment_id, finalAmt, 'Online Paid (Razorpay)', 'Paid');
-                    },
+
+    const verifyResponse = await fetch(`${API_BASE_URL}/api/verify-razorpay-payment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature
+        })
+    });
+
+    const verifyData = await verifyResponse.json();
+
+    if (!verifyData.success) {
+        showFailurePage('Payment verification failed. Booking was not created.');
+        return;
+    }
+
+    await saveOrderToDatabase(
+    response.razorpay_payment_id,
+    data.amount / 100,
+    'Online Paid (Razorpay)',
+    'Paid',
+    {
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature
+    }
+);
+},
                     "modal": {
                         "escape": false,
                         "ondismiss": function() {
@@ -1591,7 +1660,13 @@ p, span, div, a, label, li, small {
             }
         }   
 
-            async function saveOrderToDatabase(paymentId, finalAmt, paymentModeText, orderStatus = 'Pending') {
+            async function saveOrderToDatabase(
+    paymentId,
+    finalAmt,
+    paymentModeText,
+    orderStatus = 'Pending',
+    paymentVerification = null
+) {
             const custName = document.getElementById('fieldName').value.trim();
             const mobile = document.getElementById('fieldMobile').value.trim();
             const streetEl = document.getElementById('fieldStreet');
@@ -1635,13 +1710,21 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
             let lastOrderData = {};
             try {
                 let combinedServiceName = orderItems.map(i => i.name).join(', ');
-                let combinedProductIds = orderItems.map(i => i.product_id || 'tv-repair').join(', ');
+                let combinedProductIds = orderItems.map(i => i.product_id || '').filter(Boolean).join(', ');
+                if (!combinedProductIds) {
+    alert('Unable to identify the selected service. Please go back and select the service again.');
+    return;
+}
                 
                 const orderPayload = {
                     order_id: Math.floor(100000 + Math.random() * 900000),
                     customer_id: permanentCustId,
                     product_id: combinedProductIds, 
                     service_name: combinedServiceName,
+                    items: orderItems.map(item => ({
+    product_id: item.product_id,
+    quantity: item.quantity || 1
+})),
                     customer_name: custName,
                     phone: mobile,
                     mobile: mobile,
@@ -1652,7 +1735,8 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
                     district_pincode: districtPincode,
                     amount: finalAmt, 
                     order_date: currentDate,
-                    status: orderStatus
+                    status: orderStatus,
+                    payment_verification: paymentVerification
                 };
 
                 lastOrderData = orderPayload;

@@ -5886,6 +5886,7 @@ if (mainGrid) {
 
         localStorage.setItem('catus_checkout_items', JSON.stringify(singleItem));
         localStorage.setItem('catus_checkout_discount', 0);
+        localStorage.removeItem('catus_checkout_coupon');
         localStorage.setItem('catus_checkout_mode', 'single');
         window.location.href = '/checkout.html';
     }
@@ -5979,6 +5980,7 @@ if (mainGrid) {
         }
         localStorage.setItem('catus_checkout_items', JSON.stringify(cartItems));
         localStorage.setItem('catus_checkout_discount', 0);
+        localStorage.removeItem('catus_checkout_coupon');
         localStorage.setItem('catus_checkout_mode', 'cart');
         window.location.href = '/checkout.html';
     }
