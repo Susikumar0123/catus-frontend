@@ -7671,16 +7671,99 @@ function detectCurrentLocation() {
 
                 if (matched === null) {
 
+    const gpsCandidates = [
+        address.hamlet,
+        address.village,
+        address.neighbourhood,
+        address.suburb,
+        address.locality,
+        address.town,
+        address.municipality,
+        address.county,
+        address.city
+    ].filter(Boolean);
+
+    let searchResults = [];
+
+    for (const candidate of gpsCandidates) {
+
+        try {
+
+            const searchResponse = await fetch(
+                `${API_BASE_URL}/api/search-locations?q=${encodeURIComponent(candidate)}`
+            );
+
+            const searchData =
+                await searchResponse.json();
+
+            if (
+                searchData.success &&
+                Array.isArray(searchData.locations) &&
+                searchData.locations.length > 0
+            ) {
+
+                searchResults =
+                    searchData.locations.filter(item => {
+
+                        const sameState =
+                            !stateName ||
+                            String(item.state || '').toLowerCase() ===
+                            String(stateName).toLowerCase();
+
+                        const sameDistrict =
+                            !districtName ||
+                            String(item.district || '').toLowerCase() ===
+                            String(districtName).toLowerCase();
+
+                        return sameState && sameDistrict;
+                    });
+
+                if (searchResults.length > 0) {
+                    break;
+                }
+            }
+
+        } catch (error) {
+            console.error(
+                'GPS Catus search error:',
+                error
+            );
+        }
+    }
+
+    if (searchResults.length === 1) {
+
+        window.catusLocationResults =
+            searchResults;
+
+        await selectLocationSuggestionByIndex(0);
+
+        return;
+    }
+
     showToast(
-        "We found your area, but couldn't match the exact Catus location. Please select your area manually.",
-        true
+        "Select your exact service location.",
+        false
     );
 
     openLocationModal();
 
-    const locInput = document.getElementById('locSearchInput');
+    const locInput =
+        document.getElementById(
+            'locSearchInput'
+        );
 
     if (locInput) {
+
+        locInput.value =
+            gpsCandidates[0] || '';
+
+        locInput.dispatchEvent(
+            new Event('input', {
+                bubbles: true
+            })
+        );
+
         locInput.focus();
     }
 
