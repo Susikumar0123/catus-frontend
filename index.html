@@ -8067,22 +8067,22 @@ const data =
 
     data.forEach((item, index) => {
 
-        const displayName = [
-    item.name,
-    item.district,
-    item.state,
-    item.pincode
-].filter(Boolean).join(', ');
+    const displayName = [
+        item.name,
+        item.district,
+        item.state,
+        item.pincode
+    ].filter(Boolean).join(', ');
 
-        return `
-    <div
-        class="location-suggestion-item"
-        onclick="selectLocationSuggestionByIndex(${index})"
-    >
-        ${displayName}
-    </div>
-`;
-    });
+    html += `
+        <div
+            class="location-suggestion-item"
+            onclick="selectLocationSuggestionByIndex(${index})"
+        >
+            ${displayName}
+        </div>
+    `;
+});
 
     locBox.innerHTML = html;
     locBox.style.display = 'block';
