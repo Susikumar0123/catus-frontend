@@ -8074,30 +8074,14 @@ const data =
     item.pincode
 ].filter(Boolean).join(', ');
 
-        html += `
-            <div
-                style="
-                    padding: 10px 12px;
-                    font-size: 13px;
-                    color: #475569;
-                    cursor: pointer;
-                    border-bottom: 1px solid #f1f5f9;
-                "
-                onmouseover="this.style.background='#e2e8f0'"
-                onmouseout="this.style.background='transparent'"
-                onclick="selectLocationSuggestionByIndex(${index})"
-            >
-                <i
-                    class="fa-solid fa-location-dot"
-                    style="
-                        margin-right:8px;
-                        color:#0284c7;
-                    "
-                ></i>
-
-                ${displayName}
-            </div>
-        `;
+        return `
+    <div
+        class="location-suggestion-item"
+        onclick="selectLocationSuggestionByIndex(${index})"
+    >
+        ${displayName}
+    </div>
+`;
     });
 
     locBox.innerHTML = html;
