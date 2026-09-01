@@ -1123,6 +1123,16 @@
                     id="homeIconUrl"
                     class="form-input"
                     placeholder="e.g. tvlogo1.png">
+                    <input type="file" id="homeIconFile" accept="image/*" class="form-input">
+
+<button 
+type="button"
+class="action-btn"
+style="margin-top:8px;"
+onclick="uploadHomeIconImage()">
+<i class="fa-solid fa-upload"></i>
+Upload Image
+</button>
             </div>
 
             <div class="form-group">
@@ -2832,6 +2842,58 @@ if (newServiceGroup) {
         fileInput.value = '';
     }
 }
+
+// ==========================================
+// UPLOAD HOME ICON IMAGE TO SUPABASE
+// ==========================================
+
+async function uploadHomeIconImage() {
+
+    const fileInput = document.getElementById('homeIconFile');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select an image first!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/upload-image`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(
+                data.message || "Upload failed"
+            );
+        }
+
+        document.getElementById('homeIconUrl').value =
+            data.imageUrl;
+
+        alert("Image uploaded successfully!");
+
+    } catch(error) {
+
+        console.error(
+            "Home Icon Upload Error:",
+            error
+        );
+
+        alert(error.message);
+    }
+}
+
 </script>
 
 <!-- ADD NEW PRODUCT / SERVICE MODAL -->
