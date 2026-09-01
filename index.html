@@ -7602,7 +7602,9 @@ function handleIndexSearchSelect(serviceId, serviceName) {
                           <div class="uc-card-img-wrapper">
                               ${trendingBadgeHTML}
                               <img src="${s.image_url}" alt="${s.service_name}" loading="lazy">
-                              <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
+                              <div class="uc-overlay-rating" id="home-rating-${s.service_id}">
+    <i class="fa-solid fa-star"></i> 0.0
+</div>
                           </div>
                           <div class="uc-body">
                               <div>
@@ -7615,6 +7617,27 @@ function handleIndexSearchSelect(serviceId, serviceName) {
                   html += `</div></div>`;
               }
               container.innerHTML = html;
+
+              for (const s of data.services) {
+    try {
+        const reviewRes = await fetch(`${API_BASE_URL}/api/reviews/${s.service_id}`);
+        const reviewData = await reviewRes.json();
+
+        const ratingEl = document.getElementById(`home-rating-${s.service_id}`);
+
+        if (ratingEl && reviewData.success) {
+            const avg = Number(reviewData.average_rating || 0).toFixed(1);
+            const count = Number(reviewData.review_count || 0);
+
+            ratingEl.innerHTML = `
+                <i class="fa-solid fa-star"></i>
+                ${avg} (${count})
+            `;
+        }
+    } catch (err) {
+        console.error("Home rating load error:", s.service_id, err);
+    }
+}
           } else {
               container.innerHTML = `<p style="text-align: center; color: #64748b; padding: 20px;">No active services found.</p>`;
           }
