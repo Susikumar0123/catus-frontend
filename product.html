@@ -5488,12 +5488,9 @@ updateLocationDisplays(seoLocationText);
             );
 
         if (productTitle) {
-
-            productTitle.textContent =
-                `${page.service_name} in ` +
-                `${page.location_name}, ` +
-                `${page.district}`;
-        }
+    productTitle.textContent =
+        page.service_name;
+}
 
 
         // ------------------------------------------
@@ -5581,11 +5578,9 @@ updateLocationDisplays(seoLocationText);
             );
 
         if (breadcrumbTitle) {
-
-            breadcrumbTitle.textContent =
-                `${page.service_name} in ` +
-                `${page.location_name}`;
-        }
+    breadcrumbTitle.textContent =
+        page.service_name;
+}
 
 
         // ------------------------------------------
