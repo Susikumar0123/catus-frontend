@@ -7773,12 +7773,110 @@ function detectCurrentLocation() {
     );
 
                 if (matched === null) {
-                    showToast(
-                        "Sorry, Catus service is not available at this location yet.",
-                        true
-                    );
-                    return;
+
+    const gpsCandidates = [
+        address.hamlet,
+        address.village,
+        address.neighbourhood,
+        address.suburb,
+        address.locality,
+        address.town,
+        address.municipality,
+        address.county,
+        address.city
+    ].filter(Boolean);
+
+    let searchResults = [];
+    let matchedSearchCandidate = '';
+
+    for (const candidate of gpsCandidates) {
+
+        try {
+
+            const searchResponse = await fetch(
+                `${API_BASE_URL}/api/search-locations?q=${encodeURIComponent(candidate)}`
+            );
+
+            const searchData =
+                await searchResponse.json();
+
+            if (
+                searchData.success &&
+                Array.isArray(searchData.locations) &&
+                searchData.locations.length > 0
+            ) {
+
+                const filteredResults =
+                    searchData.locations.filter(item => {
+
+                        const sameState =
+                            !stateName ||
+                            String(item.state || '').toLowerCase() ===
+                            String(stateName).toLowerCase();
+
+                        const sameDistrict =
+                            !districtName ||
+                            String(item.district || '').toLowerCase() ===
+                            String(districtName).toLowerCase();
+
+                        return sameState && sameDistrict;
+                    });
+
+                if (filteredResults.length > 0) {
+                    searchResults = filteredResults;
+                    matchedSearchCandidate = candidate;
+                    break;
                 }
+            }
+
+        } catch (error) {
+            console.error(
+                'GPS Catus search error:',
+                error
+            );
+        }
+    }
+
+    if (searchResults.length === 1) {
+
+        window.catusLocationResults =
+            searchResults;
+
+        await selectLocationSuggestionByIndex(0);
+
+        return;
+    }
+
+    showToast(
+        "Select your exact service location.",
+        false
+    );
+
+    openLocationModal();
+
+    const locInput =
+        document.getElementById(
+            'locSearchInput'
+        );
+
+    if (locInput) {
+
+        locInput.value =
+            matchedSearchCandidate ||
+            gpsCandidates[0] ||
+            '';
+
+        locInput.dispatchEvent(
+            new Event('input', {
+                bubbles: true
+            })
+        );
+
+        locInput.focus();
+    }
+
+    return;
+}
 
                 if (matched.ambiguous === true) {
                     showToast(
@@ -7921,263 +8019,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    const searchQueries = [
-    query,
-    `${query}, India`
-];
+                    const response = await fetch(
+    `${API_BASE_URL}/api/search-locations?q=${encodeURIComponent(query)}`
+);
 
-let allResults = [];
+const result = await response.json();
 
-for (const searchText of searchQueries) {
-
-    try {
-
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/search` +
-            `?format=jsonv2` +
-            `&q=${encodeURIComponent(searchText)}` +
-            `&countrycodes=in` +
-            `&addressdetails=1` +
-            `&namedetails=1` +
-            `&dedupe=1` +
-            `&limit=20`,
-            {
-                headers: {
-                    'Accept-Language': 'en'
-                }
-            }
-        );
-
-        if (!response.ok) {
-            continue;
-        }
-
-        const results =
-            await response.json();
-
-        if (Array.isArray(results)) {
-            allResults.push(...results);
-        }
-
-    } catch (error) {
-
-        console.error(
-            'Location search attempt failed:',
-            searchText,
-            error
-        );
-    }
-}
-
-/* Duplicate locations remove */
-const uniqueResults = [];
-const seenPlaces = new Set();
-
-for (const item of allResults) {
-
-    const key =
-        `${item.place_id || ''}-` +
-        `${item.lat || ''}-` +
-        `${item.lon || ''}`;
-
-    if (!seenPlaces.has(key)) {
-
-        seenPlaces.add(key);
-        uniqueResults.push(item);
-    }
-}
-
-/* Maximum useful results */
 const data =
-    uniqueResults.slice(0, 25);
-    
-                /* ==========================================
-   PHOTON FALLBACK FOR SMALL VILLAGES / AREAS
-========================================== */
-
-if (data.length === 0) {
-
-    try {
-
-        const photonResponse = await fetch(
-            `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=20&lang=en`
-        );
-
-        if (photonResponse.ok) {
-
-            const photonData =
-                await photonResponse.json();
-
-            const photonResults =
-                photonData.features || [];
-
-            photonResults.forEach(feature => {
-
-                const p =
-                    feature.properties || {};
-
-                /* India results only */
-                const country =
-                    (p.country || '').toLowerCase();
-
-                if (
-                    country &&
-                    country !== 'india'
-                ) {
-                    return;
-                }
-
-                const locationName =
-                    p.name ||
-                    p.locality ||
-                    p.district ||
-                    p.city ||
-                    '';
-
-                if (!locationName) {
-                    return;
-                }
-
-                data.push({
-
-                    place_id:
-                        `photon-${feature.geometry?.coordinates?.join('-')}`,
-
-                    display_name: [
-                        p.name,
-                        p.locality,
-                        p.city,
-                        p.district,
-                        p.state,
-                        p.postcode,
-                        p.country
-                    ]
-                    .filter(Boolean)
-                    .filter(
-                        (value, index, array) =>
-                            array.indexOf(value) === index
-                    )
-                    .join(', '),
-
-                    lat:
-                        feature.geometry?.coordinates?.[1],
-
-                    lon:
-                        feature.geometry?.coordinates?.[0],
-
-                    address: {
-
-                        hamlet:
-                            p.type === 'hamlet'
-                                ? locationName
-                                : undefined,
-
-                        village:
-                            p.type === 'village'
-                                ? locationName
-                                : undefined,
-
-                        locality:
-                            p.locality || p.name,
-
-                        town:
-                            p.type === 'town'
-                                ? locationName
-                                : undefined,
-
-                        city:
-                            p.city,
-
-                        district:
-                            p.district ||
-                            p.county,
-
-                        state:
-                            p.state,
-
-                        postcode:
-                            p.postcode
-                    },
-
-                    name:
-                        locationName,
-
-                    namedetails: {
-                        name: locationName
-                    },
-
-                    source:
-                        'photon'
-                });
-            });
-        }
-
-    } catch (photonError) {
-
-        console.error(
-            'Photon location fallback failed:',
-            photonError
-        );
-    }
-}
-/* ==========================================
-   FILTER WRONG / UNRELATED LOCATION RESULTS
-========================================== */
-
-const normalizedQuery =
-    query
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]/g, '');
-
-const filteredData =
-    data.filter(item => {
-
-        const address =
-            item.address || {};
-
-        /* Pincode search */
-        if (/^\d{6}$/.test(query)) {
-
-            const postcode =
-                String(
-                    address.postcode || ''
-                )
-                .replace(/\s/g, '');
-
-            return postcode === query;
-        }
-
-        /* Village / area / town search */
-        const possibleNames = [
-            address.hamlet,
-            address.village,
-            address.neighbourhood,
-            address.suburb,
-            address.quarter,
-            address.residential,
-            address.locality,
-            address.town,
-            address.municipality,
-            address.city,
-            item.namedetails?.name,
-            item.name
-        ]
-        .filter(Boolean)
-        .map(value =>
-            String(value)
-                .toLowerCase()
-                .replace(/[^a-z0-9]/g, '')
-        );
-
-        return possibleNames.some(name =>
-            name.includes(normalizedQuery) ||
-            normalizedQuery.includes(name)
-        );
-    });
-
-data.length = 0;
-data.push(...filteredData);
+    result.success && Array.isArray(result.locations)
+        ? result.locations
+        : [];
                     if (data && data.length > 0) {
 
     let html = '';
@@ -8186,8 +8037,12 @@ data.push(...filteredData);
 
     data.forEach((item, index) => {
 
-        const displayName =
-            item.display_name || '';
+        const displayName = [
+    item.name,
+    item.district,
+    item.state,
+    item.pincode
+].filter(Boolean).join(', ');
 
         html += `
             <div
@@ -8243,149 +8098,45 @@ async function selectLocationSuggestionByIndex(index) {
         return;
     }
 
-    const address =
-        item.address || {};
-
-    const fullAddress =
-        item.display_name || '';
-
-    // ------------------------------------------
-    // LOCATION
-    // ------------------------------------------
-
-    const locationName =
-        address.hamlet ||
-        address.village ||
-        address.neighbourhood ||
-        address.suburb ||
-        address.quarter ||
-        address.residential ||
-        address.locality ||
-        address.town ||
-        address.municipality ||
-        address.city ||
-        address.city_district ||
-        item.namedetails?.name ||
-        item.name ||
-        '';
-
-    // ------------------------------------------
-    // DISTRICT
-    // ------------------------------------------
-
-    const districtName = (
-        address.state_district ||
-        address.district ||
-        address.county ||
-        address.city_district ||
-        ''
-    )
-        .replace(/\bdistrict\b/gi, '')
-        .trim();
-
-    // ------------------------------------------
-    // STATE
-    // ------------------------------------------
-
-    const stateName =
-        address.state || '';
-
-    // ------------------------------------------
-    // PINCODE
-    // ------------------------------------------
-
-    const pincode =
-        address.postcode || '';
-
-    // ------------------------------------------
-    // BACKEND MATCHING
-    // ------------------------------------------
-
-    const matched = await matchCatusLocation(
-        locationName,
-        districtName,
-        stateName,
-        pincode
-    );
-
-    if (matched === null) {
-        showToast(
-            'Sorry, Catus service is not available at this location yet.',
-            true
-        );
-        return;
-    }
-
-    if (matched.ambiguous === true) {
-        showToast(
-            'Multiple matching Catus areas found. Please choose your exact area.',
-            true
-        );
-        console.log(matched.locations);
-        return;
-    }
-
     const locationSlug =
-        matched.slug;
+        item.slug;
 
     const districtSlug =
-        slugifyLocation(matched.district);
+        slugifyLocation(item.district);
 
     const stateSlug =
-        slugifyLocation(matched.state);
+        slugifyLocation(item.state);
 
     if (
         !locationSlug ||
         !districtSlug ||
         !stateSlug
     ) {
-
-        console.error(
-            'Incomplete location data from DB:',
-            matched
-        );
-
         showToast(
-            'Please select another nearby location.',
+            'Please select another location.',
             true
         );
-
         return;
     }
 
-    // ------------------------------------------
-    // DISPLAY ADDRESS
-    // ------------------------------------------
-
-    const finalPincode =
-        matched.pincode || pincode;
-
     let shortAddress =
-        matched.name;
+        item.name || '';
 
     if (
-        matched.district &&
-        matched.district.toLowerCase() !==
-        matched.name.toLowerCase()
+        item.district &&
+        item.district.toLowerCase() !==
+        String(item.name || '').toLowerCase()
     ) {
         shortAddress +=
-            `, ${matched.district}`;
+            `, ${item.district}`;
     }
 
-    if (finalPincode) {
+    if (item.pincode) {
         shortAddress +=
-            ` - ${finalPincode}`;
+            ` - ${item.pincode}`;
     }
-
-    // ------------------------------------------
-    // UPDATE HEADER
-    // ------------------------------------------
 
     updateLocationDisplays(shortAddress);
-
-    // ------------------------------------------
-    // SAVE LOCATION DATA
-    // ------------------------------------------
 
     localStorage.setItem(
         'catus_user_location',
@@ -8409,45 +8160,33 @@ async function selectLocationSuggestionByIndex(index) {
 
     localStorage.setItem(
         'catus_location_id',
-        matched.id
+        item.id
     );
 
     localStorage.setItem(
         'catus_location_name',
-        matched.name
+        item.name || ''
     );
 
     localStorage.setItem(
         'catus_district_name',
-        matched.district
+        item.district || ''
     );
 
     localStorage.setItem(
         'catus_state_name',
-        matched.state
+        item.state || ''
     );
 
-    if (finalPincode) {
+    if (item.pincode) {
         localStorage.setItem(
             'catus_pincode',
-            finalPincode
+            item.pincode
         );
     } else {
-        localStorage.removeItem('catus_pincode');
-    }
-
-    // ------------------------------------------
-    // CLOSE SUGGESTIONS & POPUP
-    // ------------------------------------------
-
-    const locInput =
-        document.getElementById(
-            'locSearchInput'
+        localStorage.removeItem(
+            'catus_pincode'
         );
-
-    if (locInput) {
-        locInput.value =
-            fullAddress;
     }
 
     const locBox =
@@ -8456,8 +8195,7 @@ async function selectLocationSuggestionByIndex(index) {
         );
 
     if (locBox) {
-        locBox.style.display =
-            'none';
+        locBox.style.display = 'none';
     }
 
     toggleLocationModal(false);
