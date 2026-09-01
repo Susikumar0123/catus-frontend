@@ -7648,15 +7648,6 @@ function detectCurrentLocation() {
                 const nominatimPincode =
                     address.postcode || '';
 
-                    console.log('GPS LOCATION DEBUG:', {
-    locationName,
-    districtName,
-    stateName,
-    nominatimPincode,
-    fullAddress: data.display_name,
-    addressObject: address
-});
-
                 const matched =
     await matchCatusLocationCandidates(
         [
@@ -7680,13 +7671,21 @@ function detectCurrentLocation() {
 
                 if (matched === null) {
 
-                    showToast(
-                        "Sorry, Catus service is not available at this location yet.",
-                        true
-                    );
+    showToast(
+        "We found your area, but couldn't match the exact Catus location. Please select your area manually.",
+        true
+    );
 
-                    return;
-                }
+    openLocationModal();
+
+    const locInput = document.getElementById('locSearchInput');
+
+    if (locInput) {
+        locInput.focus();
+    }
+
+    return;
+}
 
                 if (matched.ambiguous === true) {
 
