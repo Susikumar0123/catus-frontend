@@ -3450,6 +3450,36 @@ button,
     }
 }
 
+#locSuggestionsBox {
+    background: #ffffff !important;
+    border: 1px solid #eadfe3 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+    padding: 6px !important;
+}
+
+.location-suggestion-item {
+    padding: 11px 12px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-size: 13px !important;
+    color: #334155 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #f1e8eb !important;
+    transition: all 0.2s ease !important;
+    line-height: 1.4 !important;
+}
+
+.location-suggestion-item:last-child {
+    border-bottom: none !important;
+}
+
+.location-suggestion-item:hover {
+    background: #f8eef0 !important;
+    color: #111111 !important;
+    transform: translateX(2px);
+}
+
 </style>
 </head>
 <body>
@@ -7963,35 +7993,22 @@ const data =
 
     data.forEach((item, index) => {
 
-        const displayName = [
-    item.name,
-    item.district,
-    item.state,
-    item.pincode
-].filter(Boolean).join(', ');
+    const displayName = [
+        item.name,
+        item.district,
+        item.state,
+        item.pincode
+    ].filter(Boolean).join(', ');
 
-        html += `
-            <div
-                style="
-                    padding:10px 12px;
-                    font-size:13px;
-                    color:#475569;
-                    cursor:pointer;
-                    border-bottom:1px solid #f1f5f9;
-                "
-                onmouseover="this.style.background='#e2e8f0'"
-                onmouseout="this.style.background='transparent'"
-                onclick="selectLocationSuggestionByIndex(${index})"
-            >
-                <i
-                    class="fa-solid fa-location-dot"
-                    style="margin-right:8px; color:#0284c7;"
-                ></i>
-
-                ${displayName}
-            </div>
-        `;
-    });
+    html += `
+        <div
+            class="location-suggestion-item"
+            onclick="selectLocationSuggestionByIndex(${index})"
+        >
+            ${displayName}
+        </div>
+    `;
+});
 
     locBox.innerHTML = html;
     locBox.style.display = 'block';
