@@ -1259,17 +1259,7 @@ Upload Image
                 <textarea id="modalWhyChooseUs" class="form-input" style="width:100%; box-sizing:border-box; height: 60px;" placeholder="Verified Professionals: ... | 30-Day Warranty: ..."></textarea>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div class="form-group" style="margin:0;">
-                    <label style="font-size: 12px; font-weight: 700; color: #334155;">Total Artificial Ratings / Comments Count</label>
-                    <input type="number" id="modalArtificialReviewsCount" class="form-input" style="width:100%; box-sizing:border-box;" placeholder="500">
-                </div>
-            </div>
-
-            <div class="form-group" style="margin:0;">
-                <label style="font-size: 12px; font-weight: 700; color: #334155;">Artificial Reviews & Comments (Format: Name | Rating | Comment )</label>
-                <textarea id="modalArtificialReviewsData" class="form-input" style="width:100%; box-sizing:border-box; height: 80px;" placeholder="Rahul Sharma | 5 | Excellent service!&#10;Priya Sundar | 4 | Good work."></textarea>
-            </div>
+            
 
             <div class="form-group" style="margin:0;">
     <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL (1)</label>
@@ -2511,8 +2501,7 @@ function deleteHomeIcon(groupId) {
 
         document.getElementById('modalSelectOptions').value = s.select_options || 'Standard Service';
         document.getElementById('modalWhyChooseUs').value = s.why_choose_us || 'Verified Professionals: Background-verified expert technicians.|30-Day Warranty: Post-service warranty on all repairs.';
-        document.getElementById('modalArtificialReviewsCount').value = s.artificial_reviews_count || 500;
-        document.getElementById('modalArtificialReviewsData').value = s.artificial_reviews_data || '';
+        
         document.getElementById('modalDiscountText').value = s.discount_text || '';
         document.getElementById('modalImg1').value = s.image_url || '';
         document.getElementById('modalImg2').value = s.image_url_2 || '';
@@ -2538,8 +2527,7 @@ function deleteHomeIcon(groupId) {
         let select_options = document.getElementById('modalSelectOptions').value.trim() || 'Standard Service';
         let why_choose_us = document.getElementById('modalWhyChooseUs').value.trim() || '';
         let discount_text = document.getElementById('modalDiscountText').value.trim() || '3% off';
-        let artificial_reviews_count = parseInt(document.getElementById('modalArtificialReviewsCount').value) || 500;
-        let artificial_reviews_data = document.getElementById('modalArtificialReviewsData').value.trim();
+        
 
         let newImg1 = document.getElementById('modalImg1').value.trim();
         let newImg2 = document.getElementById('modalImg2').value.trim();
@@ -2566,8 +2554,7 @@ function deleteHomeIcon(groupId) {
                 select_options: select_options,
                 why_choose_us: why_choose_us,
                 discount_text: discount_text,
-                artificial_reviews_count: artificial_reviews_count,
-                artificial_reviews_data: artificial_reviews_data,
+                
                 image_url: newImg1,
                 image_url_2: newImg2,
                 image_url_3: newImg3,

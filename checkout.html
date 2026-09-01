@@ -1442,7 +1442,6 @@ p, span, div, a, label, li, small {
     container.innerHTML = '';
 
     orderItems.forEach((item) => {
-        if (!item.product_id) item.product_id = Math.floor(1000 + Math.random() * 9000);
         let total = Math.round(parseFloat(item.price)) * (item.quantity || 1);
         itemTotal += total;
         

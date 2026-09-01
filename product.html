@@ -3558,8 +3558,8 @@ button,
             <h1 class="product-title" id="prodTitle">Smart TV Repair & Service</h1>
             
             <div class="rating-row" style="cursor: pointer;" onclick="openReviewsPopup()">
-    <span class="rating-badge"><span id="prodRating">4.8</span> <i class="fa-solid fa-star" style="font-size:10px;"></i></span>
-    <span class="rating-text" id="prodReviewsCount">500 Ratings & Reviews</span>
+    <span class="rating-badge"><span id="prodRating">0.0</span> <i class="fa-solid fa-star" style="font-size:10px;"></i></span>
+    <span class="rating-text" id="prodReviewsCount">No ratings yet</span>
 </div>
 
             <div class="hot-deal">Hot Deal</div>
@@ -4750,64 +4750,8 @@ function logoutUser() {
 }
   
 async function loadProductReviews(serviceId) {
-    const container = document.getElementById('popupReviewsListContainer');
-    const headerCount = document.getElementById('popupReviewsCountHeader');
-    if(!container) return;
-
-    try {
-        const prodRes = await fetch(`${API_BASE_URL}/api/services`);
-        const prodData = await prodRes.json();
-        let currentProd = prodData.services.find(item => String(item.service_id) === String(serviceId));
-        
-        let artCount = currentProd ? (currentProd.artificial_reviews_count || 500) : 500;
-        
-        if(headerCount) headerCount.textContent = artCount;
-        let reviewsCountTextEl = document.getElementById('prodReviewsCount');
-        if(reviewsCountTextEl) reviewsCountTextEl.textContent = artCount + " Ratings & Reviews";
-
-        let customReviews = [];
-        if (currentProd && currentProd.artificial_reviews_data) {
-            let lines = currentProd.artificial_reviews_data.split('\n');
-            lines.forEach(line => {
-                let parts = line.split('|').map(p => p.trim());
-                if(parts.length >= 3) {
-                    customReviews.push({
-                        customer_name: parts[0],
-                        rating: parseInt(parts[1]) || 5,
-                        review_text: parts[2]
-                    });
-                }
-            });
-        }
-
-        const res = await fetch(`${API_BASE_URL}/api/reviews/${serviceId}`);
-        const data = await res.json();
-        let dbReviews = (data.success && data.reviews) ? data.reviews : [];
-
-        let combinedReviews = [...dbReviews, ...customReviews];
-
-        let html = '';
-        if(combinedReviews.length === 0) {
-            html = `<p style="text-align:center; color:#64748b; padding:20px;">No reviews yet.</p>`;
-        } else {
-            combinedReviews.forEach(r => {
-                let stars = '⭐'.repeat(parseInt(r.rating) || 5);
-                html += `
-                    <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                            <strong style="font-size: 13px; color: #0f172a;">${r.customer_name}</strong>
-                            <span style="font-size: 11px; color: #15803d; background: #f0fdf4; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${stars} (${r.rating}/5)</span>
-                        </div>
-                        <p style="margin: 0; font-size: 12.5px; color: #475569; line-height: 1.4;">${r.review_text}</p>
-                    </div>`;
-            });
-        }
-        container.innerHTML = html;
-    } catch(e) {
-        console.log("Error loading reviews:", e);
-    }
-}
-  
+    await loadCombinedProductReviews(serviceId, {});
+} 
 
 function openReviewsPopup() {
     const modal = document.getElementById('productReviewsPopupModal');
@@ -5068,7 +5012,7 @@ function getProductUrlParams() {
                     document.getElementById('mainProductImage').src = s.image_url;
                     document.getElementById('bcCategory').innerText = s.category || 'Service';
                     document.getElementById('bcTitle').innerText = s.service_name;
-                    document.getElementById('prodRating').innerText = s.rating || '4.8';
+                    
 
                     // 1. Discount Percentage Text (e.g. 50% off)
                     const discountEl = document.getElementById('displayDiscount');
@@ -5155,58 +5099,149 @@ function getProductUrlParams() {
     }
 
     async function loadCombinedProductReviews(serviceId, productObj) {
-        const container = document.getElementById('popupReviewsListContainer');
-        const headerCount = document.getElementById('popupReviewsCountHeader');
-        
-        let totalReviewCount = productObj.artificial_reviews_count || 500;
-        if(headerCount) headerCount.textContent = totalReviewCount;
-        
-        let reviewsCountTextEl = document.getElementById('prodReviewsCount');
-        if(reviewsCountTextEl) reviewsCountTextEl.textContent = totalReviewCount + " Ratings & Reviews";
 
-        let customReviews = [];
-        if (productObj.artificial_reviews_data) {
-            let lines = productObj.artificial_reviews_data.split('\n');
-            lines.forEach(line => {
-                let parts = line.split('|').map(p => p.trim());
-                if(parts.length >= 3) {
-                    customReviews.push({
-                        customer_name: parts[0],
-                        rating: parseInt(parts[1]) || 5,
-                        review_text: parts[2]
-                    });
-                }
-            });
+    const container =
+        document.getElementById('popupReviewsListContainer');
+
+    const headerCount =
+        document.getElementById('popupReviewsCountHeader');
+
+    const reviewsCountTextEl =
+        document.getElementById('prodReviewsCount');
+
+    const ratingEl =
+        document.getElementById('prodRating');
+
+    try {
+
+        const res =
+            await fetch(`${API_BASE_URL}/api/reviews/${serviceId}`);
+
+        const data = await res.json();
+
+        const reviews =
+            (data.success && Array.isArray(data.reviews))
+                ? data.reviews
+                : [];
+
+        const validReviews = reviews;
+
+const reviewCount =
+    Number(data.review_count) || 0;
+
+const averageRating =
+    Number(data.average_rating) || 0;
+
+        if (ratingEl) {
+            ratingEl.textContent =
+                reviewCount > 0
+                    ? averageRating.toFixed(1)
+                    : '0.0';
         }
 
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/reviews/${serviceId}`);
-            const data = await res.json();
-            let dbReviews = (data.success && data.reviews) ? data.reviews : [];
-
-            let combinedReviews = [...dbReviews, ...customReviews];
-            
-            let html = '';
-            if(combinedReviews.length === 0) {
-                html = `<p style="text-align:center; color:#64748b; padding:20px;">No reviews yet.</p>`;
-            } else {
-                combinedReviews.forEach(r => {
-                    let stars = '⭐'.repeat(parseInt(r.rating) || 5);
-                    html += `
-                        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                <strong style="font-size: 13px; color: #0f172a;">${r.customer_name}</strong>
-                                <span style="font-size: 11px; color: #15803d; background: #f0fdf4; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${stars} (${r.rating}/5)</span>
-                            </div>
-                            <p style="margin: 0; font-size: 12.5px; color: #475569; line-height: 1.4;">${r.review_text}</p>
-                        </div>`;
-                });
-            }
-            if(container) container.innerHTML = html;
-        } catch(err) {
-            console.error("Error fetching live reviews:", err);
+        if (headerCount) {
+            headerCount.textContent = reviewCount;
         }
+
+        if (reviewsCountTextEl) {
+            reviewsCountTextEl.textContent =
+                reviewCount > 0
+                    ? `${reviewCount} Ratings & Reviews`
+                    : 'No ratings yet';
+        }
+
+        if (!container) return;
+
+        if (reviewCount === 0) {
+
+            container.innerHTML = `
+                <p style="
+                    text-align:center;
+                    color:#64748b;
+                    padding:20px;
+                ">
+                    No CATUS customer reviews yet.
+                </p>
+            `;
+
+            return;
+        }
+
+        let html = '';
+
+        validReviews.forEach(r => {
+
+            const stars =
+                '⭐'.repeat(Number(r.rating));
+
+            html += `
+                <div style="
+                    background:#ffffff;
+                    padding:12px;
+                    border-radius:8px;
+                    border:1px solid #e2e8f0;
+                    margin-bottom:8px;
+                ">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        margin-bottom:4px;
+                    ">
+
+                        <strong style="
+                            font-size:13px;
+                            color:#0f172a;
+                        ">
+                            ${r.customer_name || 'CATUS Customer'}
+                        </strong>
+
+                        <span style="
+                            font-size:11px;
+                            color:#15803d;
+                            background:#f0fdf4;
+                            padding:2px 6px;
+                            border-radius:4px;
+                            font-weight:600;
+                        ">
+                            ${stars} (${r.rating}/5)
+                        </span>
+
+                    </div>
+
+                    <div style="
+                        font-size:10px;
+                        color:#16a34a;
+                        font-weight:600;
+                        margin-bottom:5px;
+                    ">
+                        ✓ CATUS customer review
+                    </div>
+
+                    <p style="
+                        margin:0;
+                        font-size:12.5px;
+                        color:#475569;
+                        line-height:1.4;
+                    ">
+                        ${r.review_text || ''}
+                    </p>
+
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+
+    } catch (err) {
+
+        console.error(
+            "Error fetching CATUS reviews:",
+            err
+        );
     }
+}
 
     function openRelatedService(serviceId) {
 
@@ -5255,7 +5290,7 @@ function getProductUrlParams() {
             <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
                 <div class="uc-card-img-wrapper">
                     <img src="${s.image_url}" alt="${s.service_name}">
-                    <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
+                    <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
                 </div>
                 <div class="uc-body">
                     <div>
@@ -5587,16 +5622,7 @@ updateLocationDisplays(seoLocationText);
         // RATING
         // ------------------------------------------
 
-        const ratingEl =
-            document.getElementById(
-                'prodRating'
-            );
-
-        if (ratingEl) {
-
-            ratingEl.textContent =
-                page.rating || '4.8';
-        }
+        
 
 
         // ------------------------------------------
@@ -5824,7 +5850,7 @@ if (mainGrid) {
         <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
             <div class="uc-card-img-wrapper">
                 <img src="${s.image_url}" alt="${s.service_name}">
-                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
+                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
             </div>
             <div class="uc-body">
                 <div>
@@ -7414,18 +7440,19 @@ serviceStr =
     
     const reviewText = document.getElementById('ratingReviewText').value.trim();
     const orderId = document.getElementById('currentRatingOrderId').value;
-    const customerName = currentUser ? currentUser.name : "Customer";
+    
     
     try {
         const res = await fetch(`${API_BASE_URL}/api/reviews`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                service_id: activeServiceId, 
-                customer_name: customerName, 
-                rating: rating, 
-                review_text: reviewText 
-            })
+    service_id: activeServiceId,
+    order_id: orderId,
+    phone: currentUser ? currentUser.phone : '',
+    rating: rating,
+    review_text: reviewText
+})
         });
         const data = await res.json();
         
@@ -7553,7 +7580,7 @@ function trackProfileChange(field, oldVal, newVal) {
         <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
             <div class="uc-card-img-wrapper">
                 <img src="${s.image_url}" alt="${s.service_name}">
-                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '4.8'}</div>
+                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
             </div>
             <div class="uc-body">
                 <div>
