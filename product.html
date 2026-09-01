@@ -7862,72 +7862,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    const searchQueries = [
-    query,
-    `${query}, India`
-];
+                    const response = await fetch(
+    `${API_BASE_URL}/api/search-locations?q=${encodeURIComponent(query)}`
+);
 
-let allResults = [];
+const result = await response.json();
 
-for (const searchText of searchQueries) {
-
-    try {
-
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/search` +
-            `?format=jsonv2` +
-            `&q=${encodeURIComponent(searchText)}` +
-            `&countrycodes=in` +
-            `&addressdetails=1` +
-            `&namedetails=1` +
-            `&dedupe=1` +
-            `&limit=20`,
-            {
-                headers: {
-                    'Accept-Language': 'en'
-                }
-            }
-        );
-
-        if (!response.ok) {
-            continue;
-        }
-
-        const results = await response.json();
-
-        if (Array.isArray(results)) {
-            allResults.push(...results);
-        }
-
-    } catch (error) {
-
-        console.error(
-            'Location search attempt failed:',
-            searchText,
-            error
-        );
-    }
-}
-
-/* Duplicate locations remove */
-const uniqueResults = [];
-const seenPlaces = new Set();
-
-for (const item of allResults) {
-
-    const key =
-        `${item.place_id || ''}-` +
-        `${item.lat || ''}-` +
-        `${item.lon || ''}`;
-
-    if (!seenPlaces.has(key)) {
-        seenPlaces.add(key);
-        uniqueResults.push(item);
-    }
-}
-
-const data = uniqueResults.slice(0, 25);
-
+const data =
+    result.success && Array.isArray(result.locations)
+        ? result.locations
+        : [];
                     if (data && data.length > 0) {
 
     let html = '';
