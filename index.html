@@ -567,6 +567,250 @@
         .uc-price { font-size: 16px; font-weight: 600; color: #212121; margin-bottom: 10px; }
         .uc-cut { font-size: 13px; font-weight: 400; color: #878787; text-decoration: line-through; margin-left: 6px; }
 
+        /* =====================================================
+   CATUS DESKTOP - URBAN STYLE SERVICE CAROUSEL
+   Desktop only
+===================================================== */
+@media (min-width: 993px) {
+
+    .uc-category-box {
+        padding: 0 !important;
+        margin-bottom: 88px !important;
+        overflow: visible !important;
+    }
+
+    .uc-cat-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-bottom: 28px !important;
+        padding: 0 !important;
+    }
+
+    .uc-cat-header h3 {
+        margin: 0 !important;
+        font-size: 34px !important;
+        line-height: 1.2 !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.7px !important;
+        color: #0f0f0f !important;
+    }
+
+    .uc-see-all-btn {
+        height: 48px;
+        padding: 0 17px;
+        background: #ffffff;
+        border: 1px solid #e1e1e1;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        color: #6c35f2;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .uc-see-all-btn:hover {
+        background: #fafafa;
+    }
+
+    .uc-carousel-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .uc-grid {
+        display: flex !important;
+        grid-template-columns: none !important;
+        gap: 16px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        padding: 0 !important;
+    }
+
+    .uc-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .uc-card {
+        flex: 0 0 calc((100% - 64px) / 5) !important;
+        min-width: 0 !important;
+        transform: none !important;
+    }
+
+    .uc-card:hover {
+        transform: none !important;
+    }
+
+    .uc-card-img-wrapper {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
+        margin-bottom: 17px !important;
+        border-radius: 9px !important;
+        background: #f5f5f5 !important;
+        overflow: hidden !important;
+    }
+
+    .uc-card img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    .uc-card:hover img {
+        transform: none !important;
+    }
+
+    .uc-body {
+        padding: 0 !important;
+    }
+
+    .uc-body h4 {
+        margin: 0 0 7px 0 !important;
+        font-size: 16px !important;
+        line-height: 22px !important;
+        font-weight: 500 !important;
+        color: #171717 !important;
+
+        white-space: normal !important;
+        overflow: hidden !important;
+        text-overflow: unset !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .uc-home-rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 7px;
+        font-size: 14px;
+        line-height: 18px;
+        color: #4b4b4b;
+    }
+
+    .uc-home-rating i {
+        font-size: 11px;
+        color: #555555;
+    }
+
+    .uc-price {
+        margin: 0 !important;
+        font-size: 14px !important;
+        line-height: 20px !important;
+        font-weight: 400 !important;
+        color: #222222 !important;
+    }
+
+    .uc-cut {
+        margin-left: 6px !important;
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        color: #777777 !important;
+    }
+
+    .uc-carousel-arrow {
+        position: absolute;
+        right: -22px;
+        top: 108px;
+        transform: translateY(-50%);
+        width: 47px;
+        height: 47px;
+        border-radius: 50%;
+        border: 1px solid #dedede;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 20;
+        box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    .uc-carousel-arrow svg {
+        width: 21px;
+        height: 21px;
+        stroke-width: 1.8;
+    }
+}
+
+    /* =========================================
+   CATUS LARGE PROMO BANNERS - DESKTOP
+========================================= */
+@media (min-width: 993px) {
+
+    .catus-promo-banner {
+        width: 100%;
+        height: 410px;
+        margin: 15px 0 90px 0;
+        border-radius: 0;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        background: #f5f5f5;
+    }
+
+    .catus-promo-banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .catus-promo-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        padding: 45px;
+        box-sizing: border-box;
+        pointer-events: none;
+    }
+
+    .catus-promo-content {
+        max-width: 480px;
+        color: #ffffff;
+    }
+
+    .catus-promo-tag {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 7px 12px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        background: #a50050;
+        color: #ffffff;
+    }
+
+    .catus-promo-title {
+        margin: 0 0 24px 0;
+        font-size: 36px;
+        line-height: 1.35;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+    }
+
+    .catus-promo-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 130px;
+        height: 54px;
+        padding: 0 24px;
+        background: #ffffff;
+        color: #111111;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: 600;
+    }
+}
+
         /* Modals / Drawers Shared Styles */
        @media (max-width: 850px) {
     .cart-modal-overlay {
@@ -7617,49 +7861,323 @@ function handleIndexSearchSelect(serviceId, serviceName) {
           if(!container) return;
 
           if(data.success && data.services && data.services.length > 0) {
-              let categoriesMap = {};
-              data.services.forEach(s => {
-                  let catName = s.category || 'Other Services';
-                  if(!categoriesMap[catName]) categoriesMap[catName] = { items: [] };
-                  if (categoriesMap[catName].items.length < 4) categoriesMap[catName].items.push(s);
-              });
+              let categoriesMap = {
+    'Most booked services': { items: [] },
+    'Appliance repair & service': { items: [] },
+    'Home repair & installation': { items: [] },
+    'Cleaning & home care': { items: [] },
+    'New and noteworthy': { items: [] }
+};
 
+const allServices = [...data.services];
+
+const usedServiceIds = new Set();
+
+function pickSmartServices(items, limit = 12, minimum = 5) {
+    const result = [];
+    const localIds = new Set();
+
+    // First preference: homepage-la already use aagatha services
+    for (const service of items) {
+        const id = String(service.service_id);
+
+        if (
+            result.length < limit &&
+            !usedServiceIds.has(id) &&
+            !localIds.has(id)
+        ) {
+            result.push(service);
+            localIds.add(id);
+        }
+    }
+
+    // Section romba empty-a irundha mattum old services use pannalaam
+    if (result.length < minimum) {
+        for (const service of items) {
+            const id = String(service.service_id);
+
+            if (
+                result.length < minimum &&
+                !localIds.has(id)
+            ) {
+                result.push(service);
+                localIds.add(id);
+            }
+        }
+    }
+
+    result.forEach(service => {
+        usedServiceIds.add(String(service.service_id));
+    });
+
+    return result.slice(0, limit);
+}
+
+function matchesService(service, keywords) {
+    const text =
+        ` ${service.category || ''} ${service.service_name || ''} `
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ' ');
+
+    return keywords.some(keyword => {
+        const cleanKeyword = keyword
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, ' ')
+            .trim();
+
+        return (` ${text} `).includes(` ${cleanKeyword} `) ||
+               text.includes(cleanKeyword);
+    });
+}
+
+/* 1. Most booked services */
+let mostBookedCandidates = allServices
+    .filter(service => Number(service.is_hot_deal) === 1);
+
+if (mostBookedCandidates.length < 5) {
+    mostBookedCandidates = allServices;
+}
+
+categoriesMap['Most booked services'].items =
+    pickSmartServices(mostBookedCandidates);
+
+
+/* 2. Appliance repair & service */
+const applianceServices = allServices.filter(service =>
+    matchesService(service, [
+        'ac',
+        'air conditioner',
+        'tv',
+        'television',
+        'washing machine',
+        'washing',
+        'refrigerator',
+        'fridge',
+        'water purifier',
+        'purifier',
+        'ro',
+        'geyser',
+        'water heater',
+        'heater',
+        'microwave',
+        'chimney'
+    ])
+);
+
+categoriesMap['Appliance repair & service'].items =
+    pickSmartServices(applianceServices);
+
+
+/* 3. Home repair & installation */
+const homeRepairServices = allServices.filter(service =>
+    matchesService(service, [
+        'electrician',
+        'electric',
+        'fan',
+        'light',
+        'switch',
+        'plumber',
+        'plumbing',
+        'tap',
+        'door',
+        'lock',
+        'carpenter',
+        'cupboard',
+        'installation',
+        'fitting'
+    ])
+);
+
+categoriesMap['Home repair & installation'].items =
+    pickSmartServices(homeRepairServices);
+
+
+/* 4. Cleaning & home care */
+const cleaningServices = allServices.filter(service =>
+    matchesService(service, [
+        'cleaning',
+        'clean',
+        'pest',
+        'bathroom',
+        'kitchen',
+        'sofa',
+        'painting',
+        'waterproofing',
+        'waterproof'
+    ])
+);
+
+categoriesMap['Cleaning & home care'].items =
+    pickSmartServices(cleaningServices);
+
+
+/* 5. New and noteworthy */
+const newestServices = [...allServices].reverse();
+
+categoriesMap['New and noteworthy'].items =
+    pickSmartServices(newestServices);
+
+
+/* Empty sections remove */
+Object.keys(categoriesMap).forEach(sectionName => {
+    if (!categoriesMap[sectionName].items.length) {
+        delete categoriesMap[sectionName];
+    }
+});
+
+    const promoBanners = [
+    {
+        image: 'PROMO_IMAGE_1_URL',
+        tag: 'Special offer',
+        title: 'Expert home services at your doorstep',
+        button: 'Book now',
+        serviceId: '10086'
+    },
+    {
+        image: 'PROMO_IMAGE_2_URL',
+        tag: 'Catus Care',
+        title: 'Trusted repair and installation services',
+        button: 'Explore now',
+        serviceId: '10086'
+    }
+];
+
+let renderedSectionCount = 0;
+           
               let html = '';
               for(let catName in categoriesMap) {
                   let catData = categoriesMap[catName];
                   html += `
-                  <div class="uc-category-box">
-                      <div class="uc-cat-header">
-                          <h3>${catName}</h3>
-                          
-                      </div>
-                      <div class="uc-grid">`;
+<div class="uc-category-box">
+
+    <div class="uc-cat-header">
+        <h3>${catName}</h3>
+
+        <button
+            class="uc-see-all-btn"
+            onclick="event.stopPropagation(); showAllCategoryServices('${catName.replace(/'/g, "\\'")}')">
+            See all
+        </button>
+    </div>
+
+    <div class="uc-carousel-wrapper">
+
+        <div class="uc-grid"
+             data-category="${catName.replace(/"/g, '&quot;')}">`;
               
                   catData.items.forEach((s) => {
-                      let trendingBadgeHTML = (s.is_hot_deal == 1) ? `<div class="trending-badge">Hot Deal</div>` : ``;
-                      html += `
-                      <div
-    class="uc-card"
-    data-group-id="${s.group_id || ''}"
-    onclick="openServiceProduct('${s.service_id}')">
-                          <div class="uc-card-img-wrapper">
-                              ${trendingBadgeHTML}
-                              <img src="${s.image_url}" alt="${s.service_name}" loading="lazy">
-                              <div class="uc-overlay-rating" id="home-rating-${s.service_id}">
-    <i class="fa-solid fa-star"></i> 0.0
-</div>
-                          </div>
-                          <div class="uc-body">
-                              <div>
-                                  <h4>${s.service_name}</h4>
-                                  <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
-                              </div>
-                          </div>
-                      </div>`;
-                  });
-                  html += `</div></div>`;
+
+    let trendingBadgeHTML =
+    (catName !== 'New and noteworthy' && s.is_hot_deal == 1)
+    ? `<div class="trending-badge">Hot Deal</div>`
+    : ``;
+
+    const price = Number(s.price || 0);
+const mrp = Number(s.mrp || 0);
+
+const isNameOnlySection = catName === 'New and noteworthy';
+
+const priceHTML = (!isNameOnlySection && price > 0)
+    ? `
+        <div class="uc-price">
+            ₹${Math.round(price)}
+            ${mrp > price
+                ? `<span class="uc-cut">₹${Math.round(mrp)}</span>`
+                : ''}
+        </div>
+      `
+    : '';
+
+    html += `
+        <div
+            class="uc-card"
+            data-group-id="${s.group_id || ''}"
+            onclick="openServiceProduct('${s.service_id}')">
+
+            <div class="uc-card-img-wrapper">
+                ${trendingBadgeHTML}
+
+                <img
+                    src="${s.image_url}"
+                    alt="${s.service_name}"
+                    loading="lazy">
+            </div>
+
+            <div class="uc-body">
+
+                <h4>${s.service_name}</h4>
+
+                ${!isNameOnlySection ? `
+    <div
+        class="uc-home-rating"
+        id="home-rating-${s.service_id}">
+    </div>
+` : ''}
+
+${priceHTML}
+
+            </div>
+
+        </div>
+    `;
+});
+
+                  html += `
+        </div>
+
+        ${catData.items.length > 5 ? `
+            <button
+                class="uc-carousel-arrow"
+                onclick="event.stopPropagation(); scrollCategoryCarousel(this)">
+                <i data-lucide="arrow-right"></i>
+            </button>
+        ` : ''}
+
+    </div>
+</div>`;
+
+          renderedSectionCount++;
+
+if (renderedSectionCount === 2 || renderedSectionCount === 4) {
+
+    const promo = renderedSectionCount === 2
+        ? promoBanners[0]
+        : promoBanners[1];
+
+    html += `
+        <div
+            class="catus-promo-banner"
+            onclick="openServiceProduct('${promo.serviceId}')">
+
+            <img
+                src="${promo.image}"
+                alt="${promo.title}"
+                loading="lazy">
+
+            <div class="catus-promo-overlay">
+                <div class="catus-promo-content">
+
+                    <span class="catus-promo-tag">
+                        ${promo.tag}
+                    </span>
+
+                    <h2 class="catus-promo-title">
+                        ${promo.title}
+                    </h2>
+
+                    <span class="catus-promo-btn">
+                        ${promo.button}
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    `;
+}
+
               }
               container.innerHTML = html;
+              if (window.lucide) lucide.createIcons();
 
               for (const s of data.services) {
     try {
@@ -7669,14 +8187,18 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         const ratingEl = document.getElementById(`home-rating-${s.service_id}`);
 
         if (ratingEl && reviewData.success) {
-            const avg = Number(reviewData.average_rating || 0).toFixed(1);
-            const count = Number(reviewData.review_count || 0);
+    const avg = Number(reviewData.average_rating || 0).toFixed(1);
+    const count = Number(reviewData.review_count || 0);
 
-            ratingEl.innerHTML = `
-                <i class="fa-solid fa-star"></i>
-                ${avg}
-            `;
-        }
+    if (count > 0) {
+        ratingEl.innerHTML = `
+            <i class="fa-solid fa-star"></i>
+            ${avg} (${count})
+        `;
+    } else {
+        ratingEl.style.display = 'none';
+    }
+}
     } catch (err) {
         console.error("Home rating load error:", s.service_id, err);
     }
@@ -7690,6 +8212,41 @@ function handleIndexSearchSelect(serviceId, serviceName) {
           if(container) container.innerHTML = `<p style="text-align: center; color: #ef4444; padding: 20px;">Failed to load services from server.</p>`;
       }
   }
+
+  function scrollCategoryCarousel(button) {
+    const wrapper = button.closest('.uc-carousel-wrapper');
+    const track = wrapper?.querySelector('.uc-grid');
+
+    if (!track) return;
+
+    const card = track.querySelector('.uc-card');
+    if (!card) return;
+
+    const gap = 16;
+    const moveBy = (card.offsetWidth + gap) * 4;
+
+    track.scrollBy({
+        left: moveBy,
+        behavior: 'smooth'
+    });
+}
+
+function showAllCategoryServices(categoryName) {
+    const categoryBox = [...document.querySelectorAll('.uc-category-box')]
+        .find(box =>
+            box.querySelector('.uc-cat-header h3')?.textContent.trim()
+            === categoryName.trim()
+        );
+
+    const track = categoryBox?.querySelector('.uc-grid');
+
+    if (!track) return;
+
+    track.scrollTo({
+        left: track.scrollWidth,
+        behavior: 'smooth'
+    });
+}
 
     async function loadHeroBanners() {
     try {
@@ -7732,6 +8289,8 @@ function handleIndexSearchSelect(serviceId, serviceName) {
         console.error("Error loading hero banners:", e);
     }
 }
+
+
     function scrollToCategories() {
         const firstCat = document.querySelector('#productGridContainer');
         if (firstCat) {
