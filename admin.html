@@ -860,13 +860,31 @@
 
                         <div class="form-group">
 
-                            <label>Select Registered Technician (or type below)</label>
+                            <label>Search Registered Technician</label>
 
-                            <select id="techDropdownSelect" class="form-input" onchange="fillTechDataFromDropdown(this)">
+<input
+    type="text"
+    id="techSearchInput"
+    class="form-input"
+    placeholder="Search by Name, Tech ID, Mobile or Service"
+    oninput="searchTechnicians(this.value)"
+    autocomplete="off"
+>
 
-                                <option value="">-- Choose Registered Technician --</option>
-
-                            </select>
+<div
+    id="techSearchResults"
+    style="
+        display:none;
+        margin-top:6px;
+        border:1px solid #cbd5e1;
+        border-radius:6px;
+        background:#fff;
+        max-height:220px;
+        overflow-y:auto;
+        position:relative;
+        z-index:20;
+    ">
+</div>
 
                         </div>
 
@@ -1584,33 +1602,130 @@ async function updateTechnicianStatus(technicianId, newStatus) {
     }
 }
 
-    function loadTechniciansDropdown() {
-        const selectEl = document.getElementById('techDropdownSelect');
-        if(!selectEl) return;
+   let activeTechnicians = [];
 
-        let registeredTechs = JSON.parse(localStorage.getItem('catus_registered_technicians')) || [
-            { id: 'TECH-101', name: 'Ramesh Kumar', phone: '9578155827', spec: 'Smart TV & AC Specialist' }
-        ];
+async function loadTechniciansDropdown() {
 
-        let html = '<option value="">-- Choose Registered Technician --</option>';
-        registeredTechs.forEach(t => {
-            html += `<option value="${t.name}|${t.phone}|${t.id}">${t.name} (${t.id}) - ${t.spec}</option>`;
-        });
-        selectEl.innerHTML = html;
-    }
+    try {
 
-    function fillTechDataFromDropdown(selectEl) {
-        let val = selectEl.value;
-        if(val) {
-            let parts = val.split('|');
-            document.getElementById('techNameInput').value = `${parts[0]} (${parts[2]})`;
-            document.getElementById('techPhoneInput').value = parts[1];
-        } else {
-            document.getElementById('techNameInput').value = '';
-            document.getElementById('techPhoneInput').value = '';
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/technicians`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message || 'Unable to load technicians.'
+            );
         }
+
+        activeTechnicians = (data.technicians || []).filter(t =>
+            String(t.status || '').toLowerCase() === 'active'
+        );
+
+    } catch (error) {
+        console.error('Active Technicians Load Error:', error);
+        activeTechnicians = [];
+    }
+}
+
+function searchTechnicians(searchText) {
+
+    const resultsBox =
+        document.getElementById('techSearchResults');
+
+    if (!resultsBox) return;
+
+    const term =
+        String(searchText || '').trim().toLowerCase();
+
+    if (!term) {
+        resultsBox.style.display = 'none';
+        resultsBox.innerHTML = '';
+        return;
     }
 
+    const matches = activeTechnicians
+        .filter(t => {
+
+            const searchable = [
+                t.name,
+                t.technician_id,
+                t.phone,
+                t.specialization,
+                t.district,
+                t.city
+            ]
+            .join(' ')
+            .toLowerCase();
+
+            return searchable.includes(term);
+        })
+        .slice(0, 20);
+
+    if (matches.length === 0) {
+        resultsBox.innerHTML = `
+            <div style="padding:12px;color:#64748b;font-size:12px;">
+                No active technicians found.
+            </div>
+        `;
+        resultsBox.style.display = 'block';
+        return;
+    }
+
+    resultsBox.innerHTML = matches.map(t => `
+        <div
+            onclick="selectTechnician(
+                '${t.technician_id}',
+                '${String(t.name || '').replace(/'/g, "\\'")}',
+                '${t.phone}'
+            )"
+            style="
+                padding:10px 12px;
+                border-bottom:1px solid #e2e8f0;
+                cursor:pointer;
+                font-size:12px;
+            "
+            onmouseover="this.style.background='#f0f9ff'"
+            onmouseout="this.style.background='#fff'"
+        >
+            <div style="font-weight:800;color:#0f172a;">
+                ${t.name}
+            </div>
+
+            <div style="color:#0284c7;margin-top:3px;">
+                ${t.technician_id} • ${t.phone}
+            </div>
+
+            <div style="color:#64748b;margin-top:3px;">
+                ${t.specialization || '-'}
+                ${t.district ? ' • ' + t.district : ''}
+            </div>
+        </div>
+    `).join('');
+
+    resultsBox.style.display = 'block';
+}
+
+function selectTechnician(
+    technicianId,
+    technicianName,
+    technicianPhone
+) {
+
+    document.getElementById('techNameInput').value =
+        `${technicianName} (${technicianId})`;
+
+    document.getElementById('techPhoneInput').value =
+        technicianPhone;
+
+    document.getElementById('techSearchInput').value =
+        `${technicianName} - ${technicianId}`;
+
+    document.getElementById('techSearchResults').style.display =
+        'none';
+}
     let allBookings = [];
     let currentTab = 'All';
     let currentWalletTab = 'All'; 
