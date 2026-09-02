@@ -45,8 +45,51 @@
 <script>
 const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://catus-backend-d2js.onrender.com';
 const form=document.getElementById('techForm'),btn=document.getElementById('submitBtn'),msg=document.getElementById('msg');
+const serviceInput = document.getElementById('serviceInput');
+const addServiceBtn = document.getElementById('addServiceBtn');
+const serviceTags = document.getElementById('serviceTags');
+
+let technicianServices = [];
+
+function addService() {
+    const serviceName = serviceInput.value.trim();
+
+    if (!serviceName) return;
+
+    if (technicianServices.some(s => s.toLowerCase() === serviceName.toLowerCase())) {
+        showError('This service is already added.');
+        return;
+    }
+
+    technicianServices.push(serviceName);
+    serviceInput.value = '';
+    renderServiceTags();
+}
+
+function renderServiceTags() {
+    serviceTags.innerHTML = technicianServices.map((service, index) => `
+        <span style="background:#e0f2fe;color:#0369a1;padding:8px 12px;border-radius:20px;font-size:13px;font-weight:700;">
+            ${service}
+            <span onclick="removeService(${index})" style="margin-left:8px;cursor:pointer;">×</span>
+        </span>
+    `).join('');
+}
+
+function removeService(index) {
+    technicianServices.splice(index, 1);
+    renderServiceTags();
+}
+
+addServiceBtn.addEventListener('click', addService);
+
+serviceInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        addService();
+    }
+});
 function digits(v){return String(v||'').replace(/\D/g,'')}
-form.addEventListener('submit',async(e)=>{e.preventDefault();const phone=digits(document.getElementById('phone').value),altPhone=digits(document.getElementById('altPhone').value),pincode=digits(document.getElementById('pincode').value),specializations=[...document.querySelectorAll('#services input:checked')].map(x=>x.value);if(phone.length!==10)return showError('Enter a valid 10-digit mobile number.');if(altPhone&&altPhone.length!==10)return showError('Alternative mobile number must be 10 digits.');if(pincode.length!==6)return showError('Enter a valid 6-digit pincode.');if(specializations.length===0)return showError('Select at least one service specialization.');const payload={name:document.getElementById('name').value.trim(),phone,alt_phone:altPhone||null,email:document.getElementById('email').value.trim()||null,experience_years:Number(document.getElementById('experience').value),work_type:document.getElementById('workType').value,specialization:specializations.join(', '),district:document.getElementById('district').value.trim(),city:document.getElementById('city').value.trim(),pincode,service_radius_km:Number(document.getElementById('radius').value||20),home_address:document.getElementById('homeAddress').value.trim(),shop_address:document.getElementById('shopAddress').value.trim()||null,notes:document.getElementById('notes').value.trim()||null};btn.disabled=true;btn.textContent='Submitting...';msg.style.display='none';try{const res=await fetch(`${API_BASE_URL}/api/technicians/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await res.json();if(!res.ok||!data.success)throw new Error(data.message||data.error||'Registration failed');msg.className='msg ok';msg.innerHTML=`Registration submitted successfully.<br>Technician ID: <b>${data.technician_id}</b><br>Status: <b>${data.status||'Pending'}</b>`;msg.style.display='block';form.reset();document.getElementById('radius').value=20;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}catch(err){showError(err.message||'Unable to submit registration. Please try again.')}finally{btn.disabled=false;btn.textContent='Submit Technician Registration'}});
+form.addEventListener('submit',async(e)=>{e.preventDefault();const phone=digits(document.getElementById('phone').value),altPhone=digits(document.getElementById('altPhone').value),pincode=digits(document.getElementById('pincode').value),specializations = technicianServices;if(phone.length!==10)return showError('Enter a valid 10-digit mobile number.');if(altPhone&&altPhone.length!==10)return showError('Alternative mobile number must be 10 digits.');if(pincode.length!==6)return showError('Enter a valid 6-digit pincode.');if(specializations.length===0)return showError('Add at least one service you handle.');const payload={name:document.getElementById('name').value.trim(),phone,alt_phone:altPhone||null,email:document.getElementById('email').value.trim()||null,experience_years:Number(document.getElementById('experience').value),work_type:document.getElementById('workType').value,specialization:specializations.join(', '),district:document.getElementById('district').value.trim(),city:document.getElementById('city').value.trim(),pincode,service_radius_km:Number(document.getElementById('radius').value||20),home_address:document.getElementById('homeAddress').value.trim(),shop_address:document.getElementById('shopAddress').value.trim()||null,notes:document.getElementById('notes').value.trim()||null};btn.disabled=true;btn.textContent='Submitting...';msg.style.display='none';try{const res=await fetch(`${API_BASE_URL}/api/technicians/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await res.json();if(!res.ok||!data.success)throw new Error(data.message||data.error||'Registration failed');msg.className='msg ok';msg.innerHTML=`Registration submitted successfully.<br>Technician ID: <b>${data.technician_id}</b><br>Status: <b>${data.status||'Pending'}</b>`;msg.style.display='block';form.reset();document.getElementById('radius').value=20;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}catch(err){showError(err.message||'Unable to submit registration. Please try again.')}finally{btn.disabled=false;btn.textContent='Submit Technician Registration'}});
 function showError(text){msg.className='msg err';msg.textContent=text;msg.style.display='block'}
 </script>
 </body>
