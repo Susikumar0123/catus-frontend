@@ -1380,12 +1380,24 @@ p, span, div, a, label, li, small {
         : 'https://catus-backend-d2js.onrender.com';
         
         function goBackToProduct() {
-            if (document.referrer && document.referrer.includes('product.html')) {
-                window.location.href = document.referrer;
-            } else {
-                window.location.href = '/';
-            }
+    const rawItems = localStorage.getItem('catus_checkout_items');
+
+    try {
+        const items = JSON.parse(rawItems || '[]');
+
+        if (items.length > 0 && items[0].product_id) {
+            window.location.href =
+                `/product.html?id=${encodeURIComponent(items[0].product_id)}`;
+            return;
         }
+    } catch (e) {
+        console.error('Checkout back navigation error:', e);
+    }
+
+    if (document.referrer) {
+        window.location.href = document.referrer;
+    }
+}
 
         let selectedMode = 'razorpay';
         const indiaData = {
