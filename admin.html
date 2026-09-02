@@ -646,7 +646,7 @@
             <div class="panel-card" style="padding: 20px;">
                 <div class="panel-header" style="padding:0 0 15px 0;">
                     <h3 style="margin:0; font-size:16px;">Verified Technicians Master</h3>
-                    <a href="technician_register.php" target="_blank" class="action-btn" style="width: auto; padding: 8px 16px; font-size: 12px; text-decoration:none;"><i class="fa-solid fa-user-plus"></i> Register New Tech</a>
+                    <a href="technician_register.html" target="_blank" class="action-btn" style="width: auto; padding: 8px 16px; font-size: 12px; text-decoration:none;"><i class="fa-solid fa-user-plus"></i> Register New Tech</a>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -1420,29 +1420,117 @@ window.fetch = async function(url, options = {}) {
         fetchDashboardStats();
     });
 
-    function renderTechniciansMasterTable() {
-        let tbody = document.getElementById('techniciansTableBody');
-        if(!tbody) return;
+    async function renderTechniciansMasterTable() {
 
-        let registeredTechs = JSON.parse(localStorage.getItem('catus_registered_technicians')) || [
-            { id: 'TECH-101', name: 'Ramesh Kumar', phone: '9578155827', altPhone: 'N/A', spec: 'Smart TV & AC Specialist', homeAddress: '12, Main Road, Tiruppur', shopAddress: 'Shop 4, Market St' }
-        ];
+    const tbody = document.getElementById('techniciansTableBody');
+    if (!tbody) return;
 
-        let html = '';
-        registeredTechs.forEach(t => {
-            html += `<tr>
-                <td><b>${t.id}</b></td>
-                <td><strong>${t.name}</strong></td>
-                <td>${t.phone}</td>
-                <td><span style="color:#0284c7; font-weight:600;">${t.spec}</span></td>
-                <td><small>${t.homeAddress}</small></td>
-                <td><small>${t.shopAddress}</small></td>
-                <td><span class="badge badge-active">${t.status || 'Available'}</span></td>
-                <td><button class="manage-btn" onclick="alert('Tech: ${t.name} | Alt Phone: ${t.altPhone}')">View</button></td>
-            </tr>`;
-        });
-        tbody.innerHTML = html;
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="8" style="text-align:center;padding:25px;">
+                Loading technicians...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/technicians`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message || 'Unable to load technicians.'
+            );
+        }
+
+        const technicians = data.technicians || [];
+
+        if (technicians.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8"
+                        style="text-align:center;padding:25px;color:#64748b;">
+                        No technicians registered yet.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = technicians.map(t => {
+
+            const status = t.status || 'Pending';
+
+            const badgeClass =
+                status.toLowerCase() === 'active'
+                    ? 'badge-active'
+                    : 'badge-pending';
+
+            return `
+                <tr>
+                    <td><b>${t.technician_id || '-'}</b></td>
+
+                    <td>
+                        <strong>${t.name || '-'}</strong>
+                    </td>
+
+                    <td>${t.phone || '-'}</td>
+
+                    <td>
+                        <span style="color:#0284c7;font-weight:600;">
+                            ${t.specialization || '-'}
+                        </span>
+                    </td>
+
+                    <td>
+                        <small>${t.home_address || '-'}</small>
+                    </td>
+
+                    <td>
+                        <small>${t.shop_address || '-'}</small>
+                    </td>
+
+                    <td>
+                        <span class="badge ${badgeClass}">
+                            ${status}
+                        </span>
+                    </td>
+
+                    <td>
+                        <button
+                            class="manage-btn"
+                            onclick="alert(
+                                'Technician: ${t.name || ''}\\n' +
+                                'Phone: ${t.phone || ''}\\n' +
+                                'Alt Phone: ${t.alt_phone || '-'}\\n' +
+                                'District: ${t.district || '-'}\\n' +
+                                'City: ${t.city || '-'}'
+                            )">
+                            View
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+    } catch (error) {
+
+        console.error('Technicians Load Error:', error);
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8"
+                    style="text-align:center;padding:25px;color:#dc2626;">
+                    Unable to load technicians.
+                </td>
+            </tr>
+        `;
     }
+}
 
     function loadTechniciansDropdown() {
         const selectEl = document.getElementById('techDropdownSelect');
