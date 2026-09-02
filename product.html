@@ -7031,6 +7031,109 @@ async function proceedToOtpFromRegister() {
         textContainer.innerHTML = html;
     }
 
+    function parseCatusDateValue(value) {
+    if (!value) return null;
+
+    if (value instanceof Date) {
+        return Number.isNaN(value.getTime()) ? null : value;
+    }
+
+    let raw = String(value).trim();
+    if (!raw) return null;
+
+    const hasZone =
+        /(?:Z|[+\-]\d{2}:?\d{2})$/i.test(raw);
+
+    if (
+        !hasZone &&
+        /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(raw)
+    ) {
+        raw = raw.replace(' ', 'T') + '+05:30';
+    }
+
+    const d = new Date(raw);
+
+    return Number.isNaN(d.getTime())
+        ? null
+        : d;
+}
+
+function getCatusBookedDate(order) {
+
+    const booked =
+        parseCatusDateValue(order && order.booked_at);
+
+    const legacy =
+        parseCatusDateValue(order && order.order_date);
+
+    if (booked && legacy) {
+
+        const diffMinutes =
+            Math.abs(
+                booked.getTime() - legacy.getTime()
+            ) / 60000;
+
+        if (
+            diffMinutes >= 325 &&
+            diffMinutes <= 335
+        ) {
+            return legacy;
+        }
+    }
+
+    return booked || legacy;
+}
+
+function formatIndiaTimelineTime(value) {
+
+    const d =
+        value instanceof Date
+            ? value
+            : parseCatusDateValue(value);
+
+    if (!d) {
+        return "--<br>--";
+    }
+
+    const dateText =
+        d.toLocaleDateString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+
+    const timeText =
+        d.toLocaleTimeString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+
+    return `<b>${dateText}</b><br><b>${timeText}</b>`;
+}
+
+function formatIndiaInlineTime(value) {
+
+    const d =
+        value instanceof Date
+            ? value
+            : parseCatusDateValue(value);
+
+    if (!d) return '--';
+
+    return d.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+}
+
     async function fetchUserOrdersPremium(phone) {
     try {
         // Fetch services map first so we can grab the correct image per product_id
@@ -7099,8 +7202,11 @@ async function proceedToOtpFromRegister() {
                     let techPhoneText = currentOrder.technician_phone ? `+91 ${currentOrder.technician_phone}` : "Assigning soon...";
                     let eta = currentOrder.eta || "-- Min";
                     
-                    let orderDateObj = new Date(currentOrder.order_date);
-                    let dateStringLive = orderDateObj.toLocaleDateString() + ' ' + orderDateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    let orderDateObj =
+    getCatusBookedDate(currentOrder);
+
+let dateStringLive =
+    formatIndiaInlineTime(orderDateObj);
                     let displayProductId = currentOrder.product_id || 'tv-repair';
                     
                     // Match the correct product image dynamically
@@ -7164,10 +7270,7 @@ async function proceedToOtpFromRegister() {
 }
 
 bookedStr =
-    formatIndiaTimelineTime(
-        currentOrder.booked_at ||
-        currentOrder.order_date
-    );
+    formatIndiaTimelineTime(orderDateObj);
 
 assignedStr =
     formatIndiaTimelineTime(
@@ -7271,7 +7374,10 @@ serviceStr =
                     let statusColor = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#ef4444' : '#16a34a';
                     let statusBg = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#fef2f2' : '#f0fdf4';
                     
-                    let dateString = new Date(order.order_date).toLocaleDateString() + ' ' + new Date(order.order_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    let dateString =
+    formatIndiaInlineTime(
+        getCatusBookedDate(order)
+    );
                     
                     let displayProductId = order.product_id || 'tv-repair';
                     let safeCustName = currentUser.name ? currentUser.name.replace(/'/g, "\\'") : 'Customer';
