@@ -1348,7 +1348,31 @@ Upload Image
         <div style="display: flex; flex-direction: column; gap: 12px; max-height: 65vh; overflow-y: auto; padding-right: 4px;">
             <div class="form-group"><label>Card Title *</label><input type="text" id="newBannerTitle" class="form-input" placeholder="e.g. Expert TV Repair"></div>
             <div class="form-group"><label>Subtitle *</label><input type="text" id="newBannerSubtitle" class="form-input" placeholder="e.g. Fast doorstep service"></div>
-            <div class="form-group"><label>Image URL *</label><input type="text" id="newBannerImg" class="form-input" placeholder="https://images.unsplash.com/..."></div>
+            <div class="form-group">
+    <label>Banner Image URL *</label>
+
+    <div style="display:flex; gap:8px; align-items:center;">
+        <input
+            type="text"
+            id="newBannerImg"
+            class="form-input"
+            style="flex-grow:1;"
+            placeholder="https://...">
+
+        <label
+            for="hiddenBannerImageFile"
+            style="background:#0284c7; color:white; padding:10px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;">
+            <i class="fa-solid fa-upload"></i> Upload
+        </label>
+
+        <input
+            type="file"
+            id="hiddenBannerImageFile"
+            accept="image/*"
+            style="display:none;"
+            onchange="uploadAdminImage(this, 'newBannerImg')">
+    </div>
+</div>
             <div class="form-group"><label>Product / Service ID (for link)</label><input type="text" id="newBannerProdId" class="form-input" placeholder="e.g. tv-repair"></div>
             <div class="form-group"><label>Background Color (Hex code)</label><input type="text" id="newBannerBg" class="form-input" value="#f4f3f1"></div>
             <div class="form-group"><label>Text Color (Hex code)</label><input type="text" id="newBannerTextColor" class="form-input" value="#111"></div>
