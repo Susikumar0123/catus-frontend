@@ -260,12 +260,15 @@
 <body>
 
     <script>
-        // Login aagatha yarum direct-ah admin.html-ai open panna mudiyaathu
-    if (sessionStorage.getItem("adminAuthenticated") !== "true") {
-        alert("Please login first!");
+
+    if (
+        sessionStorage.getItem("adminAuthenticated") !== "true" ||
+        !sessionStorage.getItem("adminToken")
+    ) {
         window.location.href = "admin_login.html";
     }
-    </script>
+
+</script>
 
 
 
@@ -349,9 +352,12 @@
 
 <script>
     function adminLogout() {
-        sessionStorage.removeItem("adminAuthenticated");
-        window.location.href = "admin_login.html"; // Logout aana odane login page-kku anpidum
-    }
+
+    sessionStorage.removeItem("adminAuthenticated");
+    sessionStorage.removeItem("adminToken");
+
+    window.location.href = "admin_login.html";
+}
 </script>
 
 </div>
@@ -1342,6 +1348,51 @@ Upload Image
     const API_BASE_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000' 
     : 'https://catus-backend-d2js.onrender.com';
+
+    const originalFetch = window.fetch.bind(window);
+
+window.fetch = async function(url, options = {}) {
+
+    const requestUrl = String(url);
+
+    if (requestUrl.includes('/api/admin/')) {
+
+        const adminToken =
+            sessionStorage.getItem('adminToken');
+
+        const headers =
+            new Headers(options.headers || {});
+
+        if (adminToken) {
+            headers.set(
+                'Authorization',
+                `Bearer ${adminToken}`
+            );
+        }
+
+        options = {
+            ...options,
+            headers
+        };
+    }
+
+    const response =
+        await originalFetch(url, options);
+
+    if (
+        requestUrl.includes('/api/admin/') &&
+        response.status === 401
+    ) {
+
+        sessionStorage.removeItem('adminAuthenticated');
+        sessionStorage.removeItem('adminToken');
+
+        window.location.href =
+            'admin_login.html';
+    }
+
+    return response;
+};
 
     function closeEditOrderAddressModal() {
         const modal = document.getElementById('editOrderAddressModal');

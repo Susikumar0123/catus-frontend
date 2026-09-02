@@ -36,18 +36,78 @@
 </div>
 
 <script>
-    function validateLogin() {
-        let user = document.getElementById('username').value.trim();
-        let pass = document.getElementById('password').value.trim();
 
-        // Inga ungaloda admin username matrum password-ai set pannikonga
-        if (user === "admin" && pass === "Maxel@123") {
-            sessionStorage.setItem("adminAuthenticated", "true");
-            window.location.href = "admin.html"; // Login aana odane admin panel-kku pogum
-        } else {
-            document.getElementById('errorMsg').style.display = 'block';
+    const API_BASE_URL =
+        window.location.hostname === 'localhost'
+            ? 'http://localhost:3000'
+            : 'https://catus-backend-d2js.onrender.com';
+
+    async function validateLogin() {
+
+        const user =
+            document.getElementById('username').value.trim();
+
+        const pass =
+            document.getElementById('password').value;
+
+        const errorBox =
+            document.getElementById('errorMsg');
+
+        errorBox.style.display = 'none';
+
+        try {
+
+            const response = await fetch(
+                `${API_BASE_URL}/api/admin/login`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: user,
+                        password: pass
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (
+                response.ok &&
+                data.success &&
+                data.token
+            ) {
+
+                sessionStorage.setItem(
+                    'adminAuthenticated',
+                    'true'
+                );
+
+                sessionStorage.setItem(
+                    'adminToken',
+                    data.token
+                );
+
+                window.location.href = 'admin.html';
+
+                return;
+            }
+
+            errorBox.textContent =
+                data.message || 'Invalid Login ID or Password!';
+
+            errorBox.style.display = 'block';
+
+        } catch (error) {
+
+            errorBox.textContent =
+                'Unable to connect to server.';
+
+            errorBox.style.display = 'block';
         }
     }
+
 </script>
 
 </body>
