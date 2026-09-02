@@ -1500,19 +1500,38 @@ window.fetch = async function(url, options = {}) {
                         </span>
                     </td>
 
-                    <td>
-                        <button
-                            class="manage-btn"
-                            onclick="alert(
-                                'Technician: ${t.name || ''}\\n' +
-                                'Phone: ${t.phone || ''}\\n' +
-                                'Alt Phone: ${t.alt_phone || '-'}\\n' +
-                                'District: ${t.district || '-'}\\n' +
-                                'City: ${t.city || '-'}'
-                            )">
-                            View
-                        </button>
-                    </td>
+                    <td style="display:flex;gap:6px;align-items:center;">
+    <button
+        class="manage-btn"
+        onclick="alert(
+            'Technician: ${t.name || ''}\\n' +
+            'Phone: ${t.phone || ''}\\n' +
+            'Alt Phone: ${t.alt_phone || '-'}\\n' +
+            'District: ${t.district || '-'}\\n' +
+            'City: ${t.city || '-'}'
+        )">
+        View
+    </button>
+
+    ${
+        status === 'Pending'
+        ? `
+            <button
+                class="manage-btn"
+                style="background:#16a34a;"
+                onclick="updateTechnicianStatus('${t.technician_id}', 'Active')">
+                Approve
+            </button>
+        `
+        : `
+            <button
+                class="manage-btn btn-danger"
+                onclick="updateTechnicianStatus('${t.technician_id}', 'Inactive')">
+                Inactive
+            </button>
+        `
+    }
+</td>
                 </tr>
             `;
         }).join('');
@@ -1529,6 +1548,39 @@ window.fetch = async function(url, options = {}) {
                 </td>
             </tr>
         `;
+    }
+}
+
+async function updateTechnicianStatus(technicianId, newStatus) {
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/update-technician-status`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    technician_id: technicianId,
+                    status: newStatus
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message || 'Unable to update technician status.'
+            );
+        }
+
+        await renderTechniciansMasterTable();
+
+    } catch (error) {
+        alert(error.message);
     }
 }
 
