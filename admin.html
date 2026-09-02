@@ -3254,10 +3254,16 @@ async function uploadHomeIconImage() {
     <label style="font-size: 12px; font-weight: 700; color: #334155;">Main Image URL *</label>
     <div style="display: flex; gap: 8px; align-items: center;">
         <input type="text" id="newImg1" class="form-input" style="flex-grow:1; box-sizing:border-box;" placeholder="https://...">
-        <label for="hiddenImageFile2" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
-            <i class="fa-solid fa-upload"></i> Upload
-        </label>
-        <input type="file" id="hiddenImageFile2" accept="image/*" style="display: none;" onchange="uploadAdminImage(this, 'newImg1')">
+        <label for="hiddenImageFileNew1" style="background: #0284c7; color: white; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+    <i class="fa-solid fa-upload"></i> Upload
+</label>
+
+<input
+    type="file"
+    id="hiddenImageFileNew1"
+    accept="image/*"
+    style="display:none;"
+    onchange="uploadAdminImage(this, 'newImg1')">
     </div>
 </div>
             <div class="form-group" style="margin:0;">
