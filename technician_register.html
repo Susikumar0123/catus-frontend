@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Catus Technician</title>
+  <meta name="description" content="Register as a Catus service technician in Tamil Nadu.">
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f8fafc;color:#0f172a}.top{background:#fff;border-bottom:1px solid #e2e8f0;padding:16px 22px;position:sticky;top:0;z-index:5}.top-inner{max-width:940px;margin:auto;display:flex;align-items:center;justify-content:space-between}.brand{font-size:24px;font-weight:900;letter-spacing:.5px}.brand span{color:#0284c7}.support{font-size:13px;color:#64748b}.wrap{max-width:940px;margin:30px auto;padding:0 18px 40px}.hero{background:linear-gradient(135deg,#0f172a,#0369a1);color:#fff;padding:28px;border-radius:18px;margin-bottom:20px}.hero h1{margin:0 0 8px;font-size:29px}.hero p{margin:0;color:#dbeafe;line-height:1.6}.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 10px 28px rgba(15,23,42,.05);padding:24px}.section{margin-bottom:25px}.section-title{font-size:15px;font-weight:800;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid #e2e8f0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:6px}.req{color:#dc2626}input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:11px 12px;font-size:14px;outline:none;background:#fff;color:#0f172a}input:focus,select:focus,textarea:focus{border-color:#0284c7;box-shadow:0 0 0 3px rgba(2,132,199,.1)}textarea{min-height:86px;resize:vertical}.services{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.service{border:1px solid #e2e8f0;border-radius:9px;padding:10px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}.service input{width:auto}.terms{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#475569;line-height:1.5}.terms input{width:auto;margin-top:3px}button{width:100%;border:0;border-radius:10px;padding:13px 18px;background:#0284c7;color:#fff;font-weight:800;font-size:15px;cursor:pointer}button:hover{background:#0369a1}button:disabled{opacity:.65;cursor:not-allowed}.msg{display:none;margin-top:15px;padding:13px;border-radius:9px;font-size:13px;font-weight:650;line-height:1.55}.ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}.err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}.note{font-size:11px;color:#64748b;margin-top:8px}@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.services{grid-template-columns:1fr 1fr}.hero h1{font-size:24px}}@media(max-width:440px){.services{grid-template-columns:1fr}.card{padding:18px}.support{display:none}}
+  </style>
+</head>
+<body>
+  <div class="top"><div class="top-inner"><div class="brand">CATUS <span>Care</span></div><div class="support">Technician Partner Registration</div></div></div>
+  <main class="wrap">
+    <section class="hero"><h1>Become a Catus Technician</h1><p>Register your details to join the Catus technician network. Your application will be reviewed by the Catus team before activation.</p></section>
+    <form class="card" id="techForm">
+      <div class="section"><div class="section-title">Personal Details</div><div class="grid">
+        <div><label>Full Name <span class="req">*</span></label><input id="name" required maxlength="100" autocomplete="name"></div>
+        <div><label>Mobile Number <span class="req">*</span></label><input id="phone" required inputmode="numeric" maxlength="10" placeholder="10 digit mobile number"></div>
+        <div><label>Alternative Mobile</label><input id="altPhone" inputmode="numeric" maxlength="10"></div>
+        <div><label>Email Address</label><input id="email" type="email" maxlength="150" autocomplete="email"></div>
+        <div><label>Experience (Years) <span class="req">*</span></label><input id="experience" type="number" min="0" max="60" required></div>
+        <div><label>Work Type <span class="req">*</span></label><select id="workType" required><option value="">Select</option><option>Independent Technician</option><option>Shop / Service Center</option><option>Both</option></select></div>
+      </div></div>
+      <div class="section">
+        <div class="section-title">Services You Handle</div>
+        <div>
+          <label>Enter Service Name <span class="req">*</span></label>
+          <div style="display:flex;gap:8px;">
+            <input id="serviceInput" type="text" maxlength="100" placeholder="e.g. Smart TV Repair">
+            <button type="button" id="addServiceBtn" style="width:auto;padding:11px 18px;">+ Add</button>
+          </div>
+          <div id="serviceTags" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;"></div>
+          <div class="note">Type a service name and press Add. You can add as many services as you handle.</div>
+        </div>
+      </div>
+      <div class="section"><div class="section-title">Service Location</div><div class="grid">
+        <div><label>District <span class="req">*</span></label><input id="district" required maxlength="80"></div><div><label>City / Taluk <span class="req">*</span></label><input id="city" required maxlength="80"></div><div><label>Pincode <span class="req">*</span></label><input id="pincode" required inputmode="numeric" maxlength="6"></div><div><label>Preferred Service Radius (KM)</label><input id="radius" type="number" min="1" max="200" value="20"></div><div class="full"><label>Home Address <span class="req">*</span></label><textarea id="homeAddress" required maxlength="500"></textarea></div><div class="full"><label>Shop / Service Center Address</label><textarea id="shopAddress" maxlength="500" placeholder="Leave blank if you don't have a shop"></textarea></div>
+      </div></div>
+      <div class="section"><div class="section-title">Additional Information</div><div class="grid"><div class="full"><label>About Your Experience</label><textarea id="notes" maxlength="800" placeholder="Brands handled, installation/repair experience, etc."></textarea></div></div></div>
+      <label class="terms"><input type="checkbox" id="agree" required><span>I confirm that the information provided is correct and understand that registration does not guarantee activation until Catus verifies and approves my application.</span></label>
+      <div style="height:16px"></div><button id="submitBtn" type="submit">Submit Technician Registration</button><div class="note">Your application status will initially be <b>Pending</b>.</div><div id="msg" class="msg"></div>
+    </form>
+  </main>
+<script>
+const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://catus-backend-d2js.onrender.com';
+const form=document.getElementById('techForm'),btn=document.getElementById('submitBtn'),msg=document.getElementById('msg');
+function digits(v){return String(v||'').replace(/\D/g,'')}
+form.addEventListener('submit',async(e)=>{e.preventDefault();const phone=digits(document.getElementById('phone').value),altPhone=digits(document.getElementById('altPhone').value),pincode=digits(document.getElementById('pincode').value),specializations=[...document.querySelectorAll('#services input:checked')].map(x=>x.value);if(phone.length!==10)return showError('Enter a valid 10-digit mobile number.');if(altPhone&&altPhone.length!==10)return showError('Alternative mobile number must be 10 digits.');if(pincode.length!==6)return showError('Enter a valid 6-digit pincode.');if(specializations.length===0)return showError('Select at least one service specialization.');const payload={name:document.getElementById('name').value.trim(),phone,alt_phone:altPhone||null,email:document.getElementById('email').value.trim()||null,experience_years:Number(document.getElementById('experience').value),work_type:document.getElementById('workType').value,specialization:specializations.join(', '),district:document.getElementById('district').value.trim(),city:document.getElementById('city').value.trim(),pincode,service_radius_km:Number(document.getElementById('radius').value||20),home_address:document.getElementById('homeAddress').value.trim(),shop_address:document.getElementById('shopAddress').value.trim()||null,notes:document.getElementById('notes').value.trim()||null};btn.disabled=true;btn.textContent='Submitting...';msg.style.display='none';try{const res=await fetch(`${API_BASE_URL}/api/technicians/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await res.json();if(!res.ok||!data.success)throw new Error(data.message||data.error||'Registration failed');msg.className='msg ok';msg.innerHTML=`Registration submitted successfully.<br>Technician ID: <b>${data.technician_id}</b><br>Status: <b>${data.status||'Pending'}</b>`;msg.style.display='block';form.reset();document.getElementById('radius').value=20;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}catch(err){showError(err.message||'Unable to submit registration. Please try again.')}finally{btn.disabled=false;btn.textContent='Submit Technician Registration'}});
+function showError(text){msg.className='msg err';msg.textContent=text;msg.style.display='block'}
+</script>
+</body>
+</html>
