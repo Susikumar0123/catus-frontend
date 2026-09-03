@@ -9303,75 +9303,52 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     openServiceProduct(serviceId);
 }
 
-    /* ===== CATUS MOBILE HERO AUTO SLIDER ===== */
+    /* ===== CATUS CONTINUOUS HERO FLOW ===== */
 document.addEventListener('DOMContentLoaded', () => {
 
     const container = document.getElementById('cardsContainer');
     if (!container) return;
 
-    let currentBanner = 0;
-    let bannerTimer = null;
+    let animationId = null;
+    let paused = false;
 
-    function startMobileBannerSlider() {
+    const speed = 0.35;
 
-        clearInterval(bannerTimer);
+    function continuousBannerFlow() {
 
-        bannerTimer = setInterval(() => {
+        if (!paused) {
 
+            container.scrollLeft += speed;
 
-            const cards = container.querySelectorAll('.card-link');
-            if (cards.length <= 1) return;
+            const maxScroll =
+                container.scrollWidth - container.clientWidth;
 
-            currentBanner++;
-
-            if (currentBanner >= cards.length) {
-                currentBanner = 0;
+            if (container.scrollLeft >= maxScroll) {
+                container.scrollLeft = 0;
             }
+        }
 
-            container.scrollTo({
-                left: cards[currentBanner].offsetLeft - container.offsetLeft,
-                behavior: 'smooth'
-            });
-
-        }, 2800);
+        animationId =
+            requestAnimationFrame(continuousBannerFlow);
     }
 
-    container.addEventListener('scroll', () => {
-
-        const cards = container.querySelectorAll('.card-link');
-        if (!cards.length) return;
-
-        let closestIndex = 0;
-        let closestDistance = Infinity;
-
-        cards.forEach((card, index) => {
-
-            const distance = Math.abs(
-                card.offsetLeft -
-                container.offsetLeft -
-                container.scrollLeft
-            );
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestIndex = index;
-            }
-
-        });
-
-        currentBanner = closestIndex;
-
-    }, { passive: true });
-
     container.addEventListener('touchstart', () => {
-        clearInterval(bannerTimer);
+        paused = true;
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
-        startMobileBannerSlider();
+        paused = false;
     }, { passive: true });
 
-    startMobileBannerSlider();
+    container.addEventListener('mouseenter', () => {
+        paused = true;
+    });
+
+    container.addEventListener('mouseleave', () => {
+        paused = false;
+    });
+
+    continuousBannerFlow();
 });
 
     function toggleProfileAddressEdit() {
