@@ -7873,7 +7873,7 @@ const allServices = [...data.services];
 
 const usedServiceIds = new Set();
 
-function pickSmartServices(items, limit = 12, minimum = 5) {
+function pickSmartServices(items, limit = 12) {
     const result = [];
     const localIds = new Set();
 
@@ -7891,20 +7891,6 @@ function pickSmartServices(items, limit = 12, minimum = 5) {
         }
     }
 
-    // Section romba empty-a irundha mattum old services use pannalaam
-    if (result.length < minimum) {
-        for (const service of items) {
-            const id = String(service.service_id);
-
-            if (
-                result.length < minimum &&
-                !localIds.has(id)
-            ) {
-                result.push(service);
-                localIds.add(id);
-            }
-        }
-    }
 
     result.forEach(service => {
         usedServiceIds.add(String(service.service_id));

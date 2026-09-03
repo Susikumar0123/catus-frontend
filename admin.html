@@ -551,6 +551,24 @@
                 </div>
             </div>
 
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:0 0 15px 0;">
+    <div>
+        <h3 style="margin:0; font-size:17px; color:#0f172a;">Service Categories</h3>
+        <p style="margin:4px 0 0; font-size:12px; color:#64748b;">
+            Create a new category and add products under it.
+        </p>
+    </div>
+
+    <button
+        class="action-btn"
+        style="width:auto; padding:9px 16px; margin:0; background:#0284c7;"
+        onclick="createNewServiceCategory()">
+
+        <i class="fa-solid fa-folder-plus"></i>
+        Add New Category
+    </button>
+</div>
+
             <div id="adminServicesCategoriesContainer" style="display: flex; flex-direction: column; gap: 20px;">
                 <!-- Category wise tables will be rendered here dynamically -->
             </div>
@@ -2909,6 +2927,32 @@ function deleteHomeIcon(groupId) {
         });
     }
 
+    function createNewServiceCategory() {
+
+    let categoryName = prompt(
+        "Enter new service category name\nExample: Microwave, Geyser, Ceiling Fan, Plumbing"
+    );
+
+    if (!categoryName) return;
+
+    categoryName = categoryName.trim();
+
+    if (!categoryName) return;
+
+    const existingCategory = adminServices.some(service =>
+        String(service.category || '')
+            .trim()
+            .toLowerCase() === categoryName.toLowerCase()
+    );
+
+    if (existingCategory) {
+        alert("This category already exists.");
+        return;
+    }
+
+    openAddServiceModal(categoryName);
+}
+
     function openAddServiceModal(categoryName) {
         document.getElementById('addServiceCategory').value = categoryName;
         document.getElementById('addModalCatTitle').textContent = categoryName; 
@@ -3217,7 +3261,11 @@ async function uploadHomeIconImage() {
 <div class="modal-overlay" id="addNewServiceModal" style="display:none; justify-content:center; align-items:center;">
     <div class="modal-box" style="max-width: 550px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 15px;">
-            <h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-plus-circle" style="color:#0284c7;"></i> Add New Product to <span id="addModalCatTitle" style="color:#0284c7;"></span></h3>
+            <h3 style="margin:0; font-size:16px; color:#0f172a;">
+    <i class="fa-solid fa-plus-circle" style="color:#0284c7;"></i>
+    Add Product —
+    <span id="addModalCatTitle" style="color:#0284c7;"></span>
+</h3>
             <button class="close-modal" onclick="closeAddServiceModal()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
