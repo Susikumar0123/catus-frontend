@@ -4297,7 +4297,8 @@ padding: 0 12px !important;
 
         box-sizing: border-box !important;
 
-        scroll-snap-type: x proximity !important;
+        scroll-snap-type: none !important;
+        scroll-behavior: auto !important;
 
         scrollbar-width: none !important;
 
@@ -4316,7 +4317,7 @@ padding: 0 12px !important;
     min-width: 82% !important;
     max-width: 82% !important;
 
-    scroll-snap-align: start !important;
+    scroll-snap-align: none !important;
 }
 
 .card {
@@ -9344,9 +9345,7 @@ if (position <= 0) {
     direction = 1;
 }
 
-if (!paused) {
-    container.scrollLeft = position;
-}
+container.scrollLeft = position;
         }
 
         requestAnimationFrame(animate);
