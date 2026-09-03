@@ -831,28 +831,306 @@
         position: static !important; /* Mobile-la sticky remove aagum */
     }
 }
-/* --- Mobile Bottom Nav & Header Clean Fix --- */
+/* =====================================================
+   CATUS PRODUCT PAGE MOBILE BOTTOM NAV
+===================================================== */
+
 .mobile-bottom-nav {
-    display: none; 
-    position: fixed; bottom: 0; left: 0; width: 100%;
-    background: #ffffff;
-    border-top: 1px solid #e2e8f0;
-    z-index: 99999;
-    justify-content: space-around;
-    padding: 10px 0;
+    display: none;
 }
-.bot-nav-item {
-    display: flex; flex-direction: column; align-items: center;
-    background: none; border: none; font-size: 11px; color: #64748b; cursor: pointer;
-}
-.bot-nav-item i { font-size: 18px; margin-bottom: 4px; }
 
 @media (max-width: 850px) {
-    .mobile-bottom-nav { display: flex !important; }
-    .header-nav-right { display: none !important; }
-    .header-main-container { justify-content: flex-start !important; }
-    body { padding-bottom: 70px !important; }
-}/* Mobile view-la footer bottom nav-kku mela space irukka */
+
+    .mobile-bottom-nav {
+        display: flex !important;
+        position: fixed !important;
+
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+        height: 56px !important;
+
+        padding:
+            5px 4px
+            calc(5px + env(safe-area-inset-bottom))
+            4px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+        border-top: 1px solid #eeeeee !important;
+        box-shadow: 0 -1px 5px rgba(0,0,0,0.04) !important;
+
+        justify-content: space-around !important;
+        align-items: center !important;
+
+        z-index: 2147483000 !important;
+    }
+
+    .mobile-bottom-nav .bot-nav-item {
+        flex: 1 !important;
+        min-width: 0 !important;
+
+        height: 48px !important;
+        padding: 3px 0 7px 0 !important;
+        margin: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
+    }
+
+    /* COLOUR RING */
+    .mobile-bottom-nav .nav-icon-ring {
+        --nav-accent: #6d4aff;
+
+        position: relative !important;
+
+        width: 34px !important;
+        height: 34px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 50% !important;
+
+        background:
+            conic-gradient(
+                var(--nav-accent) 0deg 72deg,
+                #dfe3e8 72deg 360deg
+            ) !important;
+    }
+
+    /* WHITE INNER CIRCLE */
+    .mobile-bottom-nav .nav-icon-ring::before {
+        content: "" !important;
+
+        position: absolute !important;
+        inset: 2px !important;
+
+        background: #ffffff !important;
+        border-radius: 50% !important;
+    }
+
+    /* BLACK CENTER ICON */
+    .mobile-bottom-nav .nav-icon-ring svg {
+        position: relative !important;
+        z-index: 2 !important;
+
+        width: 19px !important;
+        height: 19px !important;
+
+        fill: none !important;
+        stroke: #111827 !important;
+        stroke-width: 1.8 !important;
+
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+    }
+
+    .mobile-bottom-nav .nav-icon-ring svg path,
+    .mobile-bottom-nav .nav-icon-ring svg rect,
+    .mobile-bottom-nav .nav-icon-ring svg circle {
+        fill: none !important;
+        stroke: #111827 !important;
+        stroke-width: 1.8 !important;
+    }
+
+    /* EACH ICON RING COLOUR */
+
+    .nav-home {
+        --nav-accent: #6d4aff !important;
+    }
+
+    .nav-services {
+        --nav-accent: #22c7df !important;
+    }
+
+    .nav-cart {
+        --nav-accent: #f59e0b !important;
+    }
+
+    .nav-bookings {
+        --nav-accent: #4caf50 !important;
+    }
+
+    .nav-account {
+        --nav-accent: #ec4899 !important;
+    }
+
+    .mobile-bottom-nav .bot-nav-item.active
+.nav-icon-ring::after {
+    content: "" !important;
+    position: absolute !important;
+
+    width: 6px !important;
+    height: 6px !important;
+
+    left: 50% !important;
+    bottom: -8px !important;
+
+    transform: translateX(-50%) !important;
+
+    border-radius: 50% !important;
+    background: #6d4aff !important;
+}
+
+    /* HIDE TEXT */
+    .mobile-bottom-nav .bot-nav-item > span {
+        display: none !important;
+    }
+
+    body {
+        padding-bottom:
+            calc(56px + env(safe-area-inset-bottom))
+            !important;
+    }
+
+    .header-nav-right {
+        display: none !important;
+    }
+
+    .header-main-container {
+        justify-content: flex-start !important;
+    }
+}
+
+/* =====================================================
+   PRODUCT PAGE - MATCH INDEX MOBILE HEADER
+===================================================== */
+
+@media (max-width: 768px) {
+
+    /* FULL MOBILE HEADER WIDTH */
+
+    /* SAME OUTER WIDTH AS INDEX MOBILE */
+.master-app-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 6px !important;
+    box-sizing: border-box !important;
+}
+
+.uc-homepage-wrapper {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+    .header-main-container {
+        width: 100% !important;
+        max-width: none !important;
+
+        margin: 0 !important;
+        padding: 7px 6px 6px 6px !important;
+
+        box-sizing: border-box !important;
+
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        align-items: center !important;
+
+        column-gap: 8px !important;
+        row-gap: 6px !important;
+    }
+
+
+    /* CATUS LOGO */
+    .brand-logo {
+        width: auto !important;
+        margin: 0 !important;
+
+        justify-self: start !important;
+        align-self: center !important;
+    }
+
+    .brand-logo img {
+        width: auto !important;
+        height: 26px !important;
+
+        max-width: none !important;
+
+        display: block !important;
+        object-fit: contain !important;
+    }
+
+
+    /* LOCATION - TOP RIGHT */
+    .mobile-location-widget {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: 125px !important;
+
+        height: 28px !important;
+
+        margin: 0 !important;
+        padding: 0 9px !important;
+
+        justify-self: end !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 4px !important;
+
+        border-radius: 16px !important;
+
+        font-size: 9.5px !important;
+        line-height: 1 !important;
+
+        white-space: nowrap !important;
+    }
+
+
+    /* SEARCH - NEXT FULL ROW */
+    .search-container {
+        grid-column: 1 / -1 !important;
+
+        width: 100% !important;
+        max-width: none !important;
+
+        height: 40px !important;
+
+        margin: 0 !important;
+        padding: 0 12px !important;
+
+        box-sizing: border-box !important;
+
+        border-radius: 9px !important;
+    }
+
+
+    .search-container .search-icon,
+    .search-icon {
+        width: 18px !important;
+        height: 18px !important;
+
+        flex: 0 0 18px !important;
+    }
+
+
+    #searchInput {
+        height: 100% !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        font-size: 12.5px !important;
+        line-height: 40px !important;
+    }
+
+}
+
+/* Mobile view-la footer bottom nav-kku mela space irukka */
 @media (max-width: 850px) {
     footer {
         margin-bottom: 60px; /* Bottom nav bar-kku space */
@@ -2816,93 +3094,7 @@ button,
         font-size: 13px !important;
     }
 }
-/* ==========================================
-   PRODUCT PAGE — DARK MOBILE NAVS
-   ========================================== */
 
-@media (max-width: 850px) {
-
-    .mobile-bottom-nav,
-    #premiumCustomerDashboard .prem-bottom-nav {
-        display: flex !important;
-        background: #111111 !important;
-        border-top: 1px solid #292929 !important;
-        box-shadow: none !important;
-
-        height: 64px !important;
-
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-
-        width: 100% !important;
-
-        z-index: 2147483000 !important;
-
-        align-items: center !important;
-        justify-content: space-around !important;
-
-        padding: 0 !important;
-    }
-
-    .mobile-bottom-nav .bot-nav-item,
-    #premiumCustomerDashboard .prem-nav-btn {
-        flex: 1 !important;
-        height: 100% !important;
-
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-
-        gap: 3px !important;
-
-        background: transparent !important;
-        border: 0 !important;
-
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    .mobile-bottom-nav .catus-bottom-icon,
-    #premiumCustomerDashboard .catus-dash-icon {
-        display: block !important;
-
-        width: 23px !important;
-        height: 23px !important;
-
-        fill: none !important;
-        stroke: #ffffff !important;
-
-        stroke-width: 2 !important;
-        stroke-linecap: round !important;
-        stroke-linejoin: round !important;
-
-        color: #ffffff !important;
-    }
-
-    .mobile-bottom-nav .catus-bottom-icon *,
-    #premiumCustomerDashboard .catus-dash-icon * {
-        fill: none !important;
-        stroke: #ffffff !important;
-    }
-
-    .mobile-bottom-nav .bot-nav-item span,
-    #premiumCustomerDashboard .prem-nav-btn span {
-        color: #ffffff !important;
-        font-size: 9px !important;
-        font-weight: 400 !important;
-    }
-
-    #premiumCustomerDashboard .prem-nav-btn.active .catus-dash-icon {
-        stroke-width: 2.5 !important;
-    }
-
-    #premiumCustomerDashboard .prem-nav-btn.active span {
-        font-weight: 500 !important;
-    }
-}
 /* =====================================================
    PRODUCT PAGE — FINAL MOBILE CART + EDIT ADDRESS FIX
    ===================================================== */
@@ -3308,7 +3500,7 @@ button,
         left: 0 !important;
         right: 0 !important;
 
-        height: 64px !important;
+        height: 56px !important;
         margin: 0 !important;
 
         z-index: 999999 !important;
@@ -3482,6 +3674,136 @@ button,
     background: #f8eef0 !important;
     color: #111111 !important;
     transform: translateX(2px);
+}
+
+/* =====================================================
+   PRODUCT PAGE CUSTOMER DASHBOARD MODERN MOBILE NAV
+===================================================== */
+
+@media (max-width: 850px) {
+
+    #premiumCustomerDashboard .catus-modern-dash-nav {
+        display: flex !important;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+        height: 62px !important;
+
+        background: #ffffff !important;
+        border-top: 1px solid #eeeeee !important;
+        box-shadow: 0 -2px 10px rgba(0,0,0,.03) !important;
+
+        padding: 0 !important;
+        z-index: 2147483000 !important;
+    }
+
+    #premiumCustomerDashboard .catus-modern-dash-nav .prem-nav-btn {
+        flex: 1 1 20% !important;
+        height: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 2px !important;
+        padding: 2px 0 !important;
+
+        background: transparent !important;
+        border: 0 !important;
+    }
+
+    #premiumCustomerDashboard .dash-nav-ring {
+        position: relative !important;
+
+        width: 32px !important;
+        height: 32px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 50% !important;
+        background: #ffffff !important;
+
+        border: 2px solid #e5e7eb !important;
+        box-sizing: border-box !important;
+    }
+
+    #premiumCustomerDashboard .dash-nav-ring svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        fill: none !important;
+        stroke: #111827 !important;
+        stroke-width: 1.9 !important;
+
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+    }
+
+    #premiumCustomerDashboard .dash-nav-ring svg * {
+        fill: none !important;
+        stroke: #111827 !important;
+    }
+
+    #premiumCustomerDashboard .dash-home-ring {
+        border-top-color: #7047ff !important;
+    }
+
+    #premiumCustomerDashboard .dash-services-ring {
+        border-top-color: #20cfe3 !important;
+    }
+
+    #premiumCustomerDashboard .dash-cart-ring {
+        border-top-color: #ff9800 !important;
+    }
+
+    #premiumCustomerDashboard .dash-bookings-ring {
+        border-top-color: #35c759 !important;
+    }
+
+    #premiumCustomerDashboard .dash-account-ring {
+        border-top-color: #ff3b8d !important;
+    }
+
+    #premiumCustomerDashboard
+    .catus-modern-dash-nav
+    .prem-nav-btn > span:last-child {
+        color: #626262 !important;
+        font-size: 9px !important;
+        font-weight: 400 !important;
+        line-height: 11px !important;
+    }
+
+    #premiumCustomerDashboard
+    .catus-modern-dash-nav
+    .prem-nav-btn.active > span:last-child {
+        color: #6d4aff !important;
+        font-weight: 500 !important;
+    }
+
+    #premiumCustomerDashboard
+    .catus-modern-dash-nav
+    .prem-nav-btn.active
+    .dash-nav-ring::after {
+        content: "" !important;
+
+        position: absolute !important;
+        left: 50% !important;
+        bottom: -6px !important;
+
+        transform: translateX(-50%) !important;
+
+        width: 5px !important;
+        height: 5px !important;
+
+        border-radius: 50% !important;
+        background: #6d4aff !important;
+    }
 }
 
 </style>
@@ -4544,35 +4866,68 @@ button,
 
       </div>
 
-      <!-- Bottom Navigation (Mobile View) -->
-      <div class="prem-bottom-nav">
+      <!-- CUSTOMER DASHBOARD MOBILE NAV -->
+<div class="prem-bottom-nav catus-modern-dash-nav">
 
-    <button class="prem-nav-btn active" onclick="switchDashTab('home', this, true)">
-        <svg viewBox="0 0 24 24" class="catus-dash-icon">
-            <path d="M3 10.5L12 3l9 7.5"></path>
-            <path d="M5 9.5V21h14V9.5"></path>
-            <path d="M9 21v-7h6v7"></path>
-        </svg>
-        <span>Dashboard</span>
+    <button class="prem-nav-btn active"
+            onclick="switchDashTab('home', this, true)">
+        <span class="dash-nav-ring dash-home-ring">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 10.5L12 3l9 7.5"></path>
+                <path d="M5 9.5V21h14V9.5"></path>
+                <path d="M9 21v-7h6v7"></path>
+            </svg>
+        </span>
+        <span>Home</span>
     </button>
 
-    <button class="prem-nav-btn" onclick="switchDashTab('bookings', this, true)">
-        <svg viewBox="0 0 24 24" class="catus-dash-icon">
-            <rect x="5" y="4" width="14" height="17" rx="2"></rect>
-            <path d="M9 4V2h6v2"></path>
-            <path d="M9 9h6"></path>
-            <path d="M9 13h6"></path>
-            <path d="M9 17h4"></path>
-        </svg>
+    <button class="prem-nav-btn"
+            onclick="closePremiumDashboard(); setTimeout(scrollToCategories, 100);">
+        <span class="dash-nav-ring dash-services-ring">
+            <svg viewBox="0 0 24 24">
+                <rect x="4" y="4" width="6" height="6" rx="1.5"></rect>
+                <rect x="14" y="4" width="6" height="6" rx="1.5"></rect>
+                <rect x="4" y="14" width="6" height="6" rx="1.5"></rect>
+                <rect x="14" y="14" width="6" height="6" rx="1.5"></rect>
+            </svg>
+        </span>
+        <span>Services</span>
+    </button>
+
+    <button class="prem-nav-btn"
+            onclick="closePremiumDashboard(); setTimeout(() => toggleCartModal(true), 100);">
+        <span class="dash-nav-ring dash-cart-ring">
+            <svg viewBox="0 0 24 24">
+                <circle cx="9" cy="20" r="1"></circle>
+                <circle cx="18" cy="20" r="1"></circle>
+                <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
+            </svg>
+        </span>
+        <span>Cart</span>
+    </button>
+
+    <button class="prem-nav-btn"
+            onclick="switchDashTab('bookings', this, true)">
+        <span class="dash-nav-ring dash-bookings-ring">
+            <svg viewBox="0 0 24 24">
+                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                <path d="M8 3v4"></path>
+                <path d="M16 3v4"></path>
+                <path d="M7 10h10"></path>
+            </svg>
+        </span>
         <span>Bookings</span>
     </button>
 
-    <button class="prem-nav-btn" onclick="switchDashTab('profile', this, true)">
-        <svg viewBox="0 0 24 24" class="catus-dash-icon">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4.5 21c.7-4 3.2-6 7.5-6s6.8 2 7.5 6"></path>
-        </svg>
-        <span>Profile</span>
+    <button class="prem-nav-btn"
+            onclick="switchDashTab('profile', this, true)">
+        <span class="dash-nav-ring dash-account-ring">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="3.5"></circle>
+                <path d="M5 20c.8-3.7 3.2-5.5 7-5.5s6.2 1.8 7 5.5"></path>
+            </svg>
+        </span>
+        <span>Account</span>
     </button>
 
 </div>
@@ -7712,6 +8067,21 @@ function scrollToCategories() {
         window.location.href = 'index.html#productGridContainer';
     }
 }
+
+function openProductMobileBookings() {
+
+    if (!currentUser) {
+        handleHeaderAuthClick();
+        return;
+    }
+
+    openPremiumDashboard();
+
+    setTimeout(() => {
+        switchDashTab('bookings', null, true);
+    }, 50);
+}
+
 function openLocationModal() {
     const modal = document.getElementById('locationPopupModal');
     if (modal) modal.style.display = 'flex';
@@ -8536,40 +8906,87 @@ function togglePasswordVisibility(fieldId, iconElement) {
   </div>
  <div class="mobile-bottom-nav">
 
-    <button class="bot-nav-item" onclick="window.location.href='/'">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <path d="M3 10.5L12 3l9 7.5"></path>
-            <path d="M5 9.5V21h14V9.5"></path>
-            <path d="M9 21v-7h6v7"></path>
-        </svg>
+    <!-- 1. HOME -->
+    <button class="bot-nav-item active"
+        onclick="window.location.href='index.html'">
+
+        <div class="nav-icon-ring nav-home">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 10.5L12 3l9 7.5"></path>
+                <path d="M5 9.5V21h14V9.5"></path>
+                <path d="M9 21v-7h6v7"></path>
+            </svg>
+        </div>
+
         <span>Home</span>
     </button>
 
-    <button class="bot-nav-item" onclick="toggleCartModal(true)">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <circle cx="9" cy="20" r="1"></circle>
-            <circle cx="18" cy="20" r="1"></circle>
-            <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
-        </svg>
+
+    <!-- 2. SERVICES -->
+    <button class="bot-nav-item"
+            onclick="scrollToCategories()">
+
+        <div class="nav-icon-ring nav-services">
+            <svg viewBox="0 0 24 24">
+                <rect x="4" y="4" width="6" height="6" rx="1.5"></rect>
+                <rect x="14" y="4" width="6" height="6" rx="1.5"></rect>
+                <rect x="4" y="14" width="6" height="6" rx="1.5"></rect>
+                <rect x="14" y="14" width="6" height="6" rx="1.5"></rect>
+            </svg>
+        </div>
+
+        <span>Services</span>
+    </button>
+
+
+    <!-- 3. CART -->
+    <button class="bot-nav-item"
+            onclick="toggleCartModal(true)">
+
+        <div class="nav-icon-ring nav-cart">
+            <svg viewBox="0 0 24 24">
+                <circle cx="9" cy="20" r="1"></circle>
+                <circle cx="18" cy="20" r="1"></circle>
+                <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
+            </svg>
+        </div>
+
         <span>Cart</span>
     </button>
 
-    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4.5 21c.7-4 3.2-6 7.5-6s6.8 2 7.5 6"></path>
-        </svg>
-        <span>Account</span>
+
+    <!-- 4. BOOKINGS -->
+    <button class="bot-nav-item"
+            onclick="openProductMobileBookings()">
+
+        <div class="nav-icon-ring nav-bookings">
+            <svg viewBox="0 0 24 24">
+                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                <path d="M8 3v4"></path>
+                <path d="M16 3v4"></path>
+                <path d="M7 10h10"></path>
+                <circle cx="9" cy="14" r=".7"></circle>
+                <circle cx="13" cy="14" r=".7"></circle>
+                <circle cx="17" cy="14" r=".7"></circle>
+            </svg>
+        </div>
+
+        <span>Bookings</span>
     </button>
 
-    <button class="bot-nav-item" onclick="window.location.href='/#categories'">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-        </svg>
-        <span>Categories</span>
+
+    <!-- 5. ACCOUNT -->
+    <button class="bot-nav-item"
+            onclick="handleHeaderAuthClick()">
+
+        <div class="nav-icon-ring nav-account">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="3.5"></circle>
+                <path d="M5 20c.8-3.7 3.2-5.5 7-5.5s6.2 1.8 7 5.5"></path>
+            </svg>
+        </div>
+
+        <span>Account</span>
     </button>
 
 </div>

@@ -110,7 +110,7 @@
     }
 
     .uc-price {
-        font-size: 13px !important;
+        font-size: 12px !important;
     }
 }
 
@@ -3465,7 +3465,7 @@ a.book-btn {
         width: 23px !important;
         height: 23px !important;
 
-        stroke: #ffffff !important;
+        
         fill: none !important;
 
         stroke-width: 2 !important;
@@ -3480,7 +3480,7 @@ a.book-btn {
 
     /* Active page */
     .bot-nav-item.active svg {
-        stroke: #ffffff !important;
+        
         stroke-width: 2.6 !important;
     }
 
@@ -3490,117 +3490,7 @@ a.book-btn {
     }
 }
 
-@media (max-width: 850px) {
 
-    .mobile-bottom-nav .catus-bottom-icon {
-        display: block !important;
-        width: 23px !important;
-        height: 23px !important;
-
-        fill: none !important;
-        stroke: #ffffff !important;
-        stroke-width: 1.9 !important;
-        stroke-linecap: round !important;
-        stroke-linejoin: round !important;
-
-        flex-shrink: 0 !important;
-    }
-
-    .mobile-bottom-nav .bot-nav-item {
-        color: #ffffff !important;
-    }
-
-    .mobile-bottom-nav .bot-nav-item span {
-        color: #ffffff !important;
-    }
-}
-/* ==========================================
-   FINAL FINAL MOBILE NAV ICON FIX
-   ========================================== */
-
-@media screen and (max-width: 850px) {
-
-    .mobile-bottom-nav {
-        display: flex !important;
-        background: #111111 !important;
-        border-top: 1px solid #292929 !important;
-        height: 64px !important;
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        z-index: 999999 !important;
-        align-items: center !important;
-        justify-content: space-around !important;
-    }
-
-    .mobile-bottom-nav > .bot-nav-item {
-        display: flex !important;
-        flex: 1 1 25% !important;
-        height: 100% !important;
-
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-
-        background: transparent !important;
-        border: 0 !important;
-
-        visibility: visible !important;
-        opacity: 1 !important;
-
-        padding: 0 !important;
-        margin: 0 !important;
-        gap: 3px !important;
-    }
-
-    .mobile-bottom-nav > .bot-nav-item > svg.catus-bottom-icon {
-        display: block !important;
-
-        width: 23px !important;
-        min-width: 23px !important;
-        max-width: 23px !important;
-
-        height: 23px !important;
-        min-height: 23px !important;
-        max-height: 23px !important;
-
-        overflow: visible !important;
-
-        fill: none !important;
-        stroke: #ffffff !important;
-
-        color: #ffffff !important;
-
-        stroke-width: 2 !important;
-        stroke-linecap: round !important;
-        stroke-linejoin: round !important;
-
-        opacity: 1 !important;
-        visibility: visible !important;
-
-        margin: 0 auto !important;
-
-        flex: none !important;
-    }
-
-    .mobile-bottom-nav > .bot-nav-item > svg.catus-bottom-icon * {
-        fill: none !important;
-        stroke: #ffffff !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-
-    .mobile-bottom-nav > .bot-nav-item > span {
-        display: block !important;
-        color: #ffffff !important;
-        font-size: 9px !important;
-        font-weight: 400 !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-}
 
 /* ==========================================
    CUSTOMER DASHBOARD — DARK MOBILE NAV
@@ -3971,6 +3861,1443 @@ a.book-btn {
     color: #111111 !important;
     transform: translateX(2px);
 }
+/* =====================================================
+   CATUS MOBILE HOMEPAGE V1
+   Horizontal service carousel
+===================================================== */
+
+@media (max-width: 768px) {
+
+    /* CATEGORY SECTION */
+    .uc-category-box {
+        width: 100% !important;
+        padding: 28px 0 30px 0 !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+        overflow: hidden !important;
+        border-radius: 0 !important;
+        border-bottom: 8px solid #f7f7f7 !important;
+    }
+
+    /* HEADING + SEE ALL */
+    .uc-cat-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+
+        padding: 0 16px !important;
+        margin: 0 0 18px 0 !important;
+    }
+
+    .uc-cat-header h3 {
+    margin: 0 !important;
+
+    font-size: 18px !important;
+    line-height: 1.3 !important;
+
+    font-weight: 600 !important;
+
+    color: #111111 !important;
+
+    letter-spacing: -0.2px !important;
+}
+
+    /* MOBILE SEE ALL */
+    .uc-see-all-btn {
+        display: block !important;
+
+        width: auto !important;
+        height: auto !important;
+
+        padding: 4px 0 !important;
+
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+
+        font-family: inherit !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+
+        color: #7c3aed !important;
+
+        flex-shrink: 0 !important;
+    }
+
+    /* CAROUSEL */
+    .uc-carousel-wrapper {
+        width: 100% !important;
+        position: relative !important;
+        overflow: visible !important;
+    }
+
+    .uc-grid {
+        display: flex !important;
+
+        grid-template-columns: none !important;
+
+        gap: 12px !important;
+
+        width: 100% !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        padding: 0 16px 4px 16px !important;
+
+        box-sizing: border-box !important;
+
+        scroll-behavior: smooth !important;
+        scroll-snap-type: x proximity;
+
+        scrollbar-width: none !important;
+
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .uc-grid::-webkit-scrollbar {
+        display: none !important;
+    }
+
+
+    /* MOBILE PRODUCT CARD
+       Approx 2.6 cards visible */
+    .uc-card {
+    flex: 0 0 28.5% !important;
+
+    width: 28.5% !important;
+    min-width: 28.5% !important;
+    max-width: 28.5% !important;
+
+    margin: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    overflow: visible !important;
+
+    scroll-snap-align: start !important;
+
+    transform: none !important;
+}
+
+    .uc-card:hover {
+        transform: none !important;
+    }
+
+    /* PRODUCT IMAGE */
+    .uc-card-img-wrapper {
+        width: 100% !important;
+
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
+
+        margin: 0 0 10px 0 !important;
+
+        border-radius: 9px !important;
+
+        overflow: hidden !important;
+
+        background: #f5f5f5 !important;
+    }
+
+    .uc-card-img-wrapper img,
+    .uc-card img {
+        width: 100% !important;
+        height: 100% !important;
+
+        object-fit: cover !important;
+
+        display: block !important;
+
+        transform: none !important;
+    }
+
+    /* PRODUCT DETAILS */
+    .uc-body {
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    .uc-body h4 {
+        margin: 0 0 6px 0 !important;
+
+        font-size: 12.5px !important;
+        line-height: 17px !important;
+        font-weight: 500 !important;
+
+        color: #171717 !important;
+
+        white-space: normal !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+
+        overflow: hidden !important;
+
+        min-height: 38px !important;
+    }
+
+    /* RATING */
+    .uc-home-rating {
+        display: flex !important;
+        align-items: center !important;
+
+        gap: 4px !important;
+
+        margin: 0 0 5px 0 !important;
+
+        font-size: 11px !important;
+        line-height: 16px !important;
+
+        color: #555555 !important;
+    }
+
+    .uc-home-rating i {
+        font-size: 10px !important;
+        color: #555555 !important;
+    }
+
+    /* PRICE */
+    .uc-price {
+        margin: 0 !important;
+
+        font-size: 12px !important;
+        line-height: 18px !important;
+        font-weight: 500 !important;
+
+        color: #171717 !important;
+    }
+
+    .uc-cut {
+        margin-left: 4px !important;
+
+        font-size: 12px !important;
+        font-weight: 400 !important;
+
+        color: #8a8a8a !important;
+    }
+
+    /* Desktop carousel arrow mobile-la vendaam */
+    .uc-carousel-arrow {
+        display: none !important;
+    }
+}
+
+/* =====================================================
+   CATUS MOBILE HOMEPAGE V2
+   Search + Top Banner
+===================================================== */
+
+@media (max-width: 768px) {
+
+    /* MAIN MOBILE PAGE */
+    .master-app-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        overflow: hidden !important;
+    }
+
+    /* HEADER AREA */
+    .uc-homepage-wrapper {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 14px 0 0 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .header-main-container {
+    display: grid !important;
+
+    grid-template-columns: auto 1fr auto !important;
+
+    grid-template-areas:
+        "logo . location"
+        "search search search";
+
+    align-items: center !important;
+
+    column-gap: 10px !important;
+    row-gap: 12px !important;
+
+    width: 100% !important;
+
+    padding: 0 16px !important;
+
+    box-sizing: border-box !important;
+}
+
+/* CATUS LOGO MOBILE */
+.brand-logo {
+    grid-area: logo !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    margin: 0 !important;
+}
+
+.brand-logo img {
+    display: block !important;
+
+    width: auto !important;
+    height: 38px !important;
+
+    object-fit: contain !important;
+}
+
+/* desktop right controls mobile-la mattum hide */
+.header-nav-right,
+.header-location-widget {
+    display: none !important;
+}
+
+/* MOBILE LOCATION */
+.mobile-location-widget {
+    grid-area: location !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 6px !important;
+
+    width: auto !important;
+    max-width: 150px !important;
+
+height: 36px !important;
+
+padding: 0 12px !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 18px !important;
+
+    background: #f5f3ff !important;
+
+    color: #6d4aff !important;
+
+    font-size: 11px !important;
+    font-weight: 500 !important;
+
+    overflow: hidden !important;
+}
+
+#mobileHeaderLocationDisplay {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+/* SEARCH SECOND ROW */
+.search-container {
+    grid-area: search !important;
+}
+
+    /* SEARCH BAR */
+    .search-container {
+        display: flex !important;
+        position: relative !important;
+
+        width: 100% !important;
+        height: 52px !important;
+
+        margin: 0 !important;
+        padding: 0 16px !important;
+
+        border: 1px solid #dddddd !important;
+        border-radius: 10px !important;
+
+        background: #ffffff !important;
+
+        box-shadow: none !important;
+
+        box-sizing: border-box !important;
+
+        order: unset !important;
+        flex: none !important;
+    }
+
+    .search-container:focus-within {
+        border-color: #bdbdbd !important;
+        box-shadow: none !important;
+    }
+
+    .search-icon {
+        width: 20px !important;
+        height: 20px !important;
+
+        margin-right: 12px !important;
+
+        stroke: #333333 !important;
+        stroke-width: 2 !important;
+    }
+
+    #searchInput {
+        width: 100% !important;
+
+        padding: 0 !important;
+
+        font-size: 14px !important;
+        font-weight: 400 !important;
+
+        color: #222222 !important;
+
+        background: transparent !important;
+    }
+
+    #searchInput::placeholder {
+        color: #777777 !important;
+        opacity: 1 !important;
+    }
+
+    /* SEARCH SUGGESTIONS */
+    #suggestionsBox {
+        left: 16px !important;
+        right: 16px !important;
+        width: auto !important;
+        top: 62px !important;
+
+        border-radius: 10px !important;
+        z-index: 999999 !important;
+    }
+
+    /* TOP BANNER SECTION */
+    .scroll-wrapper {
+        width: 100% !important;
+
+        margin: 0 !important;
+        padding: 14px 0 24px 0 !important;
+
+        overflow: visible !important;
+    }
+
+    .cards-container {
+        display: flex !important;
+
+        width: 100% !important;
+
+        gap: 12px !important;
+
+        padding: 0 16px !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        box-sizing: border-box !important;
+
+        scroll-snap-type: x proximity !important;
+
+        scrollbar-width: none !important;
+
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .cards-container::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /* Reference maari 1 main banner + next card visible */
+    .card-link {
+    flex: 0 0 82% !important;
+
+    width: 82% !important;
+    min-width: 82% !important;
+    max-width: 82% !important;
+
+    scroll-snap-align: start !important;
+}
+
+.card {
+    width: 100% !important;
+
+    height: 132px !important;
+
+    padding: 14px !important;
+
+    border-radius: 10px !important;
+
+    box-shadow: none !important;
+
+    transform: none !important;
+
+    overflow: hidden !important;
+}
+
+    .card:hover {
+        transform: none !important;
+    }
+
+    /* LEFT BANNER CONTENT */
+    .card-content {
+        width: 48% !important;
+        max-width: 48% !important;
+
+        padding: 0 !important;
+
+        justify-content: center !important;
+
+        z-index: 2 !important;
+    }
+
+    .card-content h3 {
+        margin: 0 0 7px 0 !important;
+
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+        font-weight: 600 !important;
+
+        color: inherit !important;
+
+        -webkit-line-clamp: 2 !important;
+    }
+
+    .card-content p {
+        margin: 0 0 13px 0 !important;
+
+        font-size: 11px !important;
+        line-height: 1.35 !important;
+
+        white-space: normal !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+
+        overflow: hidden !important;
+    }
+
+    .book-btn,
+    .card .book-btn,
+    a.book-btn {
+        padding: 8px 13px !important;
+
+        border-radius: 7px !important;
+
+        font-size: 11px !important;
+        line-height: 1 !important;
+        font-weight: 600 !important;
+
+        width: auto !important;
+        min-width: unset !important;
+
+        box-shadow: none !important;
+    }
+
+    /* RIGHT SIDE BANNER IMAGE */
+    .card img {
+        position: absolute !important;
+
+        right: 0 !important;
+        top: 0 !important;
+
+        width: 52% !important;
+        height: 100% !important;
+
+        object-fit: cover !important;
+
+        border-radius: 0 !important;
+
+        margin: 0 !important;
+
+        z-index: 1 !important;
+    }
+
+    /* Desktop arrow mobile-la hide */
+    .scroll-btn {
+        display: none !important;
+    }
+
+    /* Quick service chips banner-keela konjam gap */
+    .quick-services-bar {
+        margin-top: 0 !important;
+        margin-bottom: 18px !important;
+        padding-top: 0 !important;
+    }
+}
+
+/* =====================================================
+   CATUS MOBILE HOMEPAGE V3
+   Promo Banner + Section Spacing
+===================================================== */
+
+@media (max-width: 768px) {
+
+    /* LARGE PROMO BANNER */
+    .catus-promo-banner {
+        width: calc(100% - 32px) !important;
+
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
+
+        margin: 28px 16px 38px 16px !important;
+
+        border-radius: 14px !important;
+
+        overflow: hidden !important;
+
+        position: relative !important;
+
+        background: #f5f5f5 !important;
+
+        cursor: pointer !important;
+    }
+
+    .catus-promo-banner img {
+        width: 100% !important;
+        height: 100% !important;
+
+        object-fit: cover !important;
+
+        display: block !important;
+    }
+
+    /* DARK OVERLAY FOR TEXT READABILITY */
+    .catus-promo-banner::after {
+        content: "" !important;
+
+        position: absolute !important;
+        inset: 0 !important;
+
+        background:
+            linear-gradient(
+                to right,
+                rgba(0,0,0,0.56) 0%,
+                rgba(0,0,0,0.30) 42%,
+                rgba(0,0,0,0.05) 72%,
+                rgba(0,0,0,0) 100%
+            ) !important;
+
+        pointer-events: none !important;
+
+        z-index: 1 !important;
+    }
+
+    .catus-promo-overlay {
+        position: absolute !important;
+
+        inset: 0 !important;
+
+        display: flex !important;
+
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+
+        padding: 24px 22px !important;
+
+        box-sizing: border-box !important;
+
+        z-index: 2 !important;
+
+        pointer-events: none !important;
+    }
+
+    .catus-promo-content {
+        width: 72% !important;
+        max-width: none !important;
+
+        color: #ffffff !important;
+    }
+
+    /* PROMO TAG */
+    .catus-promo-tag {
+        display: inline-block !important;
+
+        margin: 0 0 18px 0 !important;
+
+        padding: 6px 11px !important;
+
+        border-radius: 6px !important;
+
+        background: #8b0050 !important;
+
+        color: #ffffff !important;
+
+        font-size: 12px !important;
+        line-height: 1 !important;
+        font-weight: 600 !important;
+    }
+
+    /* PROMO TITLE */
+    .catus-promo-title {
+        margin: 0 0 18px 0 !important;
+
+        font-size: 28px !important;
+        line-height: 1.28 !important;
+
+        font-weight: 650 !important;
+
+        letter-spacing: -0.4px !important;
+
+        color: #ffffff !important;
+
+        text-shadow: 0 1px 4px rgba(0,0,0,0.18) !important;
+    }
+
+    /* PROMO BUTTON */
+    .catus-promo-btn {
+        position: absolute !important;
+
+        left: 22px !important;
+        bottom: 22px !important;
+
+        display: inline-flex !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        min-width: 100px !important;
+        height: 44px !important;
+
+        padding: 0 18px !important;
+
+        border-radius: 9px !important;
+
+        background: #ffffff !important;
+
+        color: #111111 !important;
+
+        font-size: 14px !important;
+        font-weight: 600 !important;
+
+        box-shadow: none !important;
+    }
+
+    /* CATEGORY SECTION GAP */
+    .uc-category-box + .uc-category-box {
+        margin-top: 0 !important;
+    }
+
+    /* Promo-ku next category close-a ottama */
+    .catus-promo-banner + .uc-category-box {
+        padding-top: 30px !important;
+    }
+
+    /* Main product container */
+    #productGridContainer {
+        width: 100% !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow: hidden !important;
+    }
+
+}
+
+/* =====================================================
+   CATUS MOBILE HOMEPAGE V4
+   5 Item Bottom Navigation
+===================================================== */
+
+@media (max-width: 850px) {
+
+    .mobile-bottom-nav {
+        display: flex !important;
+
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+        height: 56px !important;
+
+        padding:
+            5px 4px
+            calc(5px + env(safe-area-inset-bottom))
+            4px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        border-top: 1px solid #eeeeee !important;
+
+        box-shadow: 0 -1px 5px rgba(0,0,0,0.04) !important;
+
+        justify-content: space-around !important;
+        align-items: center !important;
+
+        z-index: 2147483000 !important;
+    }
+
+    .mobile-bottom-nav .bot-nav-item {
+        flex: 1 !important;
+
+        min-width: 0 !important;
+
+        height: 48px !important;
+
+        margin: 0 !important;
+        padding: 3px 1px !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 3px !important;
+
+        background: transparent !important;
+        border: none !important;
+
+        color: #777777 !important;
+
+        font-family: inherit !important;
+
+        cursor: pointer !important;
+    }
+
+    .mobile-bottom-nav .catus-bottom-icon {
+        width: 22px !important;
+        height: 22px !important;
+
+        fill: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        stroke: #777777 !important;
+        stroke-width: 1.8 !important;
+
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+    }
+
+    .mobile-bottom-nav .catus-bottom-icon * {
+    fill: none !important;
+    stroke: #777777 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.mobile-bottom-nav .bot-nav-item.active
+.catus-bottom-icon * {
+    stroke: #6d4aff !important;
+}
+
+    /* HOME ACTIVE */
+    .mobile-bottom-nav .bot-nav-item.active {
+    color: #6d4aff !important;
+}
+
+.mobile-bottom-nav .bot-nav-item.active
+.catus-bottom-icon {
+    stroke: #6d4aff !important;
+    stroke-width: 2 !important;
+}
+
+.mobile-bottom-nav .bot-nav-item.active span {
+    color: #6d4aff !important;
+    font-weight: 500 !important;
+}
+
+    body {
+    padding-bottom:
+        calc(56px + env(safe-area-inset-bottom))
+        !important;
+}
+/* FINAL MOBILE NAV VISIBILITY FIX */
+
+.mobile-bottom-nav .bot-nav-item {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.mobile-bottom-nav .bot-nav-item span {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    font-size: 10px !important;
+    line-height: 12px !important;
+    font-weight: 400 !important;
+
+    color: #555555 !important;
+}
+
+.mobile-bottom-nav .bot-nav-item svg {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    width: 23px !important;
+    height: 23px !important;
+
+    fill: none !important;
+
+    stroke: #222222 !important;
+    stroke-width: 2.2 !important;
+
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+}
+
+.mobile-bottom-nav .bot-nav-item svg path,
+.mobile-bottom-nav .bot-nav-item svg rect,
+.mobile-bottom-nav .bot-nav-item svg circle {
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    fill: none !important;
+
+    stroke: #222222 !important;
+    stroke-width: 2.2 !important;
+
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+}
+
+.mobile-bottom-nav .bot-nav-item.active span {
+    color: #6d4aff !important;
+}
+
+/* ===== 2030 CATUS NAV ICON RINGS ===== */
+
+.mobile-bottom-nav .bot-nav-item {
+    position: relative !important;
+    gap: 0 !important;
+}
+
+.mobile-bottom-nav .nav-icon-ring {
+    --nav-accent: #6d4aff;
+
+    width: 34px !important;
+    height: 34px !important;
+
+    position: relative !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    background:
+        conic-gradient(
+            var(--nav-accent) 0deg 72deg,
+            #dfe3e8 72deg 360deg
+        ) !important;
+}
+
+/* white inner circle */
+.mobile-bottom-nav .nav-icon-ring::before {
+    content: "" !important;
+
+    position: absolute !important;
+    inset: 2px !important;
+
+    background: #ffffff !important;
+
+    border-radius: 50% !important;
+}
+
+/* icon */
+.mobile-bottom-nav .nav-icon-ring svg {
+    position: relative !important;
+    z-index: 2 !important;
+
+    width: 19px !important;
+    height: 19px !important;
+
+    stroke: #111827 !important;
+    stroke-width: 1.8 !important;
+}
+
+/* SVG child lines black */
+.mobile-bottom-nav .nav-icon-ring svg path,
+.mobile-bottom-nav .nav-icon-ring svg rect,
+.mobile-bottom-nav .nav-icon-ring svg circle {
+    stroke: #111827 !important;
+    stroke-width: 1.8 !important;
+}
+
+/* individual accent colours */
+.mobile-bottom-nav .nav-home {
+    --nav-accent: #6d4aff;
+}
+
+.mobile-bottom-nav .nav-services {
+    --nav-accent: #22c7df;
+}
+
+.mobile-bottom-nav .nav-cart {
+    --nav-accent: #f59e0b;
+}
+
+.mobile-bottom-nav .nav-bookings {
+    --nav-accent: #4caf50;
+}
+
+.mobile-bottom-nav .nav-account {
+    --nav-accent: #ec4899;
+}
+
+/* Home active small dot */
+.mobile-bottom-nav .bot-nav-item.active
+.nav-icon-ring::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    width: 6px !important;
+    height: 6px !important;
+
+    left: 50% !important;
+    bottom: -8px !important;
+
+    transform: translateX(-50%) !important;
+
+    border-radius: 50% !important;
+
+    background: #6d4aff !important;
+}
+
+/* reference image maari labels hide */
+.mobile-bottom-nav .bot-nav-item > span {
+    display: none !important;
+}
+
+.mobile-bottom-nav .bot-nav-item {
+    height: 48px !important;
+    padding: 3px 0 7px 0 !important;
+}
+
+}
+
+
+/* =====================================================
+   CATUS MOBILE FINAL COMPACT SIZE
+   Target: Urban-style vertical density
+===================================================== */
+
+@media (max-width: 768px) {
+
+    /* ---------- TOP HEADER ---------- */
+
+    .uc-homepage-wrapper {
+        padding-top: 5px !important;
+    }
+
+    .header-main-container {
+        padding: 0 12px !important;
+
+        column-gap: 8px !important;
+        row-gap: 6px !important;
+    }
+
+    /* CATUS LOGO */
+    .brand-logo img {
+        height: 26px !important;
+        width: auto !important;
+    }
+
+    /* LOCATION */
+    .mobile-location-widget {
+        height: 28px !important;
+
+        max-width: 125px !important;
+
+        padding: 0 9px !important;
+
+        border-radius: 18px !important;
+
+        font-size: 9.5px !important;
+    }
+
+    /* ---------- SEARCH ---------- */
+
+    .search-container {
+        height: 40px !important;
+
+        padding: 0 12px !important;
+
+        border-radius: 10px !important;
+    }
+
+    .search-icon {
+        width: 18px !important;
+        height: 18px !important;
+
+        margin-right: 10px !important;
+    }
+
+    #searchInput {
+        font-size: 12.5px !important;
+    }
+
+    /* ---------- QUICK SERVICES ---------- */
+
+    .quick-services-bar {
+        margin-top: 0 !important;
+        margin-bottom: 4px !important;
+
+        padding-top: 0 !important;
+    }
+
+    .services-track {
+        gap: 2px !important;
+    }
+
+    .service-chip {
+        min-width: 64px !important;
+
+        padding:
+            2px 4px 6px 4px !important;
+
+        gap: 4px !important;
+
+        font-size: 9.5px !important;
+    }
+
+    .chip-icon-bg {
+        width: 34px !important;
+        height: 34px !important;
+
+        border-radius: 10px !important;
+    }
+
+    /* ---------- TOP BANNER ---------- */
+
+    .scroll-wrapper {
+        padding: 4px 0 5px 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .cards-container {
+        gap: 8px !important;
+
+        padding: 0 10px !important;
+    }
+
+    .card-link {
+        flex: 0 0 82% !important;
+
+        width: 82% !important;
+        min-width: 82% !important;
+        max-width: 82% !important;
+    }
+
+    .card {
+        height: 90px !important;
+
+        padding: 10px !important;
+
+        border-radius: 10px !important;
+    }
+
+    .card-content h3 {
+        margin-bottom: 5px !important;
+
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+    }
+
+    .card-content p {
+        margin-bottom: 8px !important;
+
+        font-size: 9px !important;
+        line-height: 1.3 !important;
+    }
+
+    .book-btn,
+    .card .book-btn,
+    a.book-btn {
+        padding: 7px 11px !important;
+
+        font-size: 10px !important;
+
+        border-radius: 6px !important;
+    }
+
+    /* ---------- BANNER DOTS ---------- */
+
+    .mobile-banner-dots {
+        height: 10px !important;
+
+        margin-top: 3px !important;
+
+        gap: 6px !important;
+    }
+
+    .mobile-banner-dot {
+        width: 6px !important;
+        height: 6px !important;
+    }
+
+    .mobile-banner-dot.active {
+        width: 22px !important;
+        height: 6px !important;
+    }
+
+    /* ---------- CATEGORY SECTION ---------- */
+
+    .uc-category-box {
+        padding: 11px 0 14px 0 !important;
+
+        border-bottom: 0 !important;
+    }
+
+    .uc-cat-header {
+        margin-bottom: 9px !important;
+
+        padding: 0 12px !important;
+    }
+
+    .uc-cat-header h3 {
+        font-size: 16px !important;
+        line-height: 20px !important;
+
+        font-weight: 600 !important;
+    }
+
+    .uc-see-all-btn {
+        font-size: 12px !important;
+        font-weight: 500 !important;
+    }
+
+    /* ---------- MOBILE PRODUCTS : IMAGE + NAME ONLY ---------- */
+
+.uc-grid {
+    display: grid !important;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+
+    gap: 18px 10px !important;
+
+    width: 100% !important;
+
+    padding: 0 10px 4px 10px !important;
+
+    box-sizing: border-box !important;
+
+    overflow: visible !important;
+}
+
+.uc-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+
+    display: block !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    overflow: visible !important;
+
+    transform: none !important;
+}
+
+/* PRODUCT IMAGE BOX */
+.uc-card-img-wrapper {
+    width: 100% !important;
+
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+
+    margin: 0 0 7px 0 !important;
+
+    border-radius: 9px !important;
+
+    background: #f5f5f5 !important;
+
+    overflow: hidden !important;
+}
+
+.uc-card-img-wrapper img,
+.uc-card img {
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover !important;
+
+    display: block !important;
+}
+
+/* PRODUCT NAME */
+.uc-body {
+    padding: 0 !important;
+    display: block !important;
+}
+
+.uc-body h4 {
+    margin: 0 !important;
+
+    min-height: 30px !important;
+
+    font-size: 11.5px !important;
+    line-height: 15px !important;
+
+    font-weight: 400 !important;
+
+    color: #171717 !important;
+
+    white-space: normal !important;
+
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+
+    overflow: hidden !important;
+
+    text-overflow: unset !important;
+}
+
+
+
+}
+
+@media (max-width: 768px) {
+
+    .section-title-container {
+        display: none !important;
+    }
+    
+
+}
+
+/* =====================================================
+   CATUS CUSTOMER DASHBOARD — MODERN 2030 MOBILE NAV
+===================================================== */
+
+@media (max-width: 850px) {
+
+    #premiumCustomerDashboard .catus-modern-dash-nav {
+        display: flex !important;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+        height: 62px !important;
+
+        background: #ffffff !important;
+        border-top: 1px solid #eeeeee !important;
+        box-shadow: 0 -2px 10px rgba(0,0,0,.03) !important;
+
+        padding: 0 !important;
+        z-index: 2147483000 !important;
+
+        align-items: center !important;
+        justify-content: space-around !important;
+    }
+
+    #premiumCustomerDashboard .catus-modern-dash-nav .prem-nav-btn {
+        flex: 1 1 20% !important;
+        height: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 2px !important;
+        padding: 2px 0 !important;
+        margin: 0 !important;
+
+        background: transparent !important;
+        border: 0 !important;
+        color: #626262 !important;
+    }
+
+    /* CIRCULAR ICON */
+    #premiumCustomerDashboard .dash-nav-ring {
+        position: relative !important;
+
+        width: 32px !important;
+        height: 32px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 50% !important;
+        background: #ffffff !important;
+        border: 2px solid #e5e7eb !important;
+
+        box-sizing: border-box !important;
+    }
+
+    #premiumCustomerDashboard .dash-nav-ring svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        stroke: #111827 !important;
+        color: #111827 !important;
+        fill: none !important;
+
+        stroke-width: 1.9 !important;
+    }
+
+    #premiumCustomerDashboard .dash-nav-ring svg * {
+        stroke: inherit !important;
+        fill: none !important;
+    }
+
+    /* DIFFERENT ACCENT RINGS */
+    #premiumCustomerDashboard .dash-home-ring {
+        border-top-color: #7047ff !important;
+    }
+
+    #premiumCustomerDashboard .dash-services-ring {
+        border-top-color: #20cfe3 !important;
+    }
+
+    #premiumCustomerDashboard .dash-cart-ring {
+        border-top-color: #ff9800 !important;
+    }
+
+    #premiumCustomerDashboard .dash-bookings-ring {
+        border-top-color: #35c759 !important;
+    }
+
+    #premiumCustomerDashboard .dash-account-ring {
+        border-top-color: #ff3b8d !important;
+    }
+
+    /* LABEL */
+    #premiumCustomerDashboard .catus-modern-dash-nav .prem-nav-btn > span:last-child {
+        color: #626262 !important;
+        font-size: 9px !important;
+        line-height: 11px !important;
+        font-weight: 400 !important;
+    }
+
+    /* ACTIVE */
+    #premiumCustomerDashboard .catus-modern-dash-nav .prem-nav-btn.active > span:last-child {
+        color: #6d4aff !important;
+        font-weight: 500 !important;
+    }
+
+    #premiumCustomerDashboard .catus-modern-dash-nav .prem-nav-btn.active .dash-nav-ring::after {
+        content: "" !important;
+
+        position: absolute !important;
+        bottom: -6px !important;
+        left: 50% !important;
+
+        transform: translateX(-50%) !important;
+
+        width: 5px !important;
+        height: 5px !important;
+
+        border-radius: 50% !important;
+        background: #6d4aff !important;
+    }
+}
 
 </style>
 </head>
@@ -3989,6 +5316,7 @@ a.book-btn {
 
           <div class="mobile-location-widget"
      onclick="openLocationModal()">
+     <i class="fa-solid fa-location-dot"></i>
     <span id="mobileHeaderLocationDisplay">Select Location</span>
     <i class="fa-solid fa-chevron-down"></i>
 </div>
@@ -4046,9 +5374,15 @@ a.book-btn {
 
     <!-- 4. Top Banner Scroll Cards Container -->
     <div class="scroll-wrapper extra-container">
-        <div class="cards-container" id="cardsContainer">
-        </div>
+
+    <div class="cards-container" id="cardsContainer">
     </div>
+
+    <div class="mobile-banner-dots"
+         id="mobileBannerDots">
+    </div>
+
+</div>
 
     <!-- 5. Product Categories & Grids (இதைக் கட்டாயம் சேர்க்கவும்) -->
     <div id="productGridContainer"></div>
@@ -4989,22 +6323,49 @@ a.book-btn {
 
       </div>
 
-      <!-- Bottom Navigation (Mobile View) -->
-      <div class="prem-bottom-nav">
-    <button class="prem-nav-btn active" onclick="switchDashTab('home', this, true)">
-        <i data-lucide="house"></i>
-        <span>Dashboard</span>
+      <!-- CUSTOMER DASHBOARD MOBILE NAV -->
+<div class="prem-bottom-nav catus-modern-dash-nav">
+
+    <button class="prem-nav-btn active"
+            onclick="switchDashTab('home', this, true)">
+        <span class="dash-nav-ring dash-home-ring">
+            <i data-lucide="house"></i>
+        </span>
+        <span>Home</span>
     </button>
 
-    <button class="prem-nav-btn" onclick="switchDashTab('bookings', this, true)">
-        <i data-lucide="clipboard-list"></i>
+    <button class="prem-nav-btn"
+            onclick="closePremiumDashboard(); setTimeout(scrollToCategories, 100);">
+        <span class="dash-nav-ring dash-services-ring">
+            <i data-lucide="layout-grid"></i>
+        </span>
+        <span>Services</span>
+    </button>
+
+    <button class="prem-nav-btn"
+            onclick="closePremiumDashboard(); setTimeout(() => toggleCartModal(true), 100);">
+        <span class="dash-nav-ring dash-cart-ring">
+            <i data-lucide="shopping-cart"></i>
+        </span>
+        <span>Cart</span>
+    </button>
+
+    <button class="prem-nav-btn"
+            onclick="switchDashTab('bookings', this, true)">
+        <span class="dash-nav-ring dash-bookings-ring">
+            <i data-lucide="calendar-days"></i>
+        </span>
         <span>Bookings</span>
     </button>
 
-    <button class="prem-nav-btn" onclick="switchDashTab('profile', this, true)">
-        <i data-lucide="user"></i>
-        <span>Profile</span>
+    <button class="prem-nav-btn"
+            onclick="switchDashTab('profile', this, true)">
+        <span class="dash-nav-ring dash-account-ring">
+            <i data-lucide="user-round"></i>
+        </span>
+        <span>Account</span>
     </button>
+
 </div>
 
 </div>
@@ -5975,6 +7336,20 @@ function openServiceProduct(serviceId) {
         document.getElementById('premiumCustomerDashboard').style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
+
+    function openMobileBookings() {
+
+    if (!currentUser) {
+        handleHeaderAuthClick();
+        return;
+    }
+
+    openPremiumDashboard();
+
+    setTimeout(() => {
+        switchDashTab('bookings', null, true);
+    }, 50);
+}
 
     function closePremiumDashboard() {
         document.getElementById('premiumCustomerDashboard').style.display = 'none';
@@ -7768,39 +9143,76 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     openServiceProduct(serviceId);
 }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const cardsContainer = document.getElementById('cardsContainer');
-        let scrollAmount = 1; 
-        let scrollDirection = 1; 
-        let autoScrollTimer;
+    /* ===== CATUS MOBILE HERO AUTO SLIDER ===== */
+document.addEventListener('DOMContentLoaded', () => {
 
-        function startAutoScroll() {
-            autoScrollTimer = setInterval(() => {
-                if (cardsContainer) {
-                    cardsContainer.scrollLeft += (scrollAmount * scrollDirection);
-                    if (cardsContainer.scrollLeft + cardsContainer.clientWidth >= cardsContainer.scrollWidth - 1) {
-                        scrollDirection = -1; 
-                    } 
-                    else if (cardsContainer.scrollLeft <= 0) {
-                        scrollDirection = 1; 
-                    }
-                }
-            }, 20); 
-        }
+    const container = document.getElementById('cardsContainer');
+    if (!container) return;
 
-        function stopAutoScroll() {
-            clearInterval(autoScrollTimer);
-        }
+    let currentBanner = 0;
+    let bannerTimer = null;
 
-        startAutoScroll();
+    function startMobileBannerSlider() {
 
-        if(cardsContainer) {
-            cardsContainer.addEventListener('mouseenter', stopAutoScroll);
-            cardsContainer.addEventListener('mouseleave', startAutoScroll);
-            cardsContainer.addEventListener('touchstart', stopAutoScroll);
-            cardsContainer.addEventListener('touchend', startAutoScroll);
-        }
-    });
+        clearInterval(bannerTimer);
+
+        bannerTimer = setInterval(() => {
+
+
+            const cards = container.querySelectorAll('.card-link');
+            if (cards.length <= 1) return;
+
+            currentBanner++;
+
+            if (currentBanner >= cards.length) {
+                currentBanner = 0;
+            }
+
+            container.scrollTo({
+                left: cards[currentBanner].offsetLeft - container.offsetLeft,
+                behavior: 'smooth'
+            });
+
+        }, 2800);
+    }
+
+    container.addEventListener('scroll', () => {
+
+        const cards = container.querySelectorAll('.card-link');
+        if (!cards.length) return;
+
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+
+        cards.forEach((card, index) => {
+
+            const distance = Math.abs(
+                card.offsetLeft -
+                container.offsetLeft -
+                container.scrollLeft
+            );
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = index;
+            }
+
+        });
+
+        currentBanner = closestIndex;
+
+    }, { passive: true });
+
+    container.addEventListener('touchstart', () => {
+        clearInterval(bannerTimer);
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => {
+        startMobileBannerSlider();
+    }, { passive: true });
+
+    startMobileBannerSlider();
+});
 
     function toggleProfileAddressEdit() {
         const displayEl = document.getElementById('premProfileAddressDisplay');
@@ -7947,7 +9359,13 @@ let renderedSectionCount = 0;
     const price = Number(s.price || 0);
 const mrp = Number(s.mrp || 0);
 
-const isNameOnlySection = catName === 'New and noteworthy';
+const nameOnlyCategories = [
+    'New and noteworthy',
+    'Home repair & installation'
+];
+
+const isNameOnlySection =
+    nameOnlyCategories.includes(catName);
 
 const priceHTML = (!isNameOnlySection && price > 0)
     ? `
@@ -8169,12 +9587,75 @@ function showAllCategoryServices(categoryName) {
                 </a>`;
             });
             container.innerHTML = dynamicHTML;
+            setupMobileBannerDots();
         } else {
             container.innerHTML = `<p style="padding: 10px; color: #64748b;">No banners found. Please add from Admin Panel.</p>`;
         }
     } catch(e) {
         console.error("Error loading hero banners:", e);
     }
+}
+
+function setupMobileBannerDots() {
+
+    const container =
+        document.getElementById('cardsContainer');
+
+    const dotsBox =
+        document.getElementById('mobileBannerDots');
+
+    if (!container || !dotsBox) return;
+
+    const cards =
+        Array.from(
+            container.querySelectorAll('.card-link')
+        );
+
+    if (!cards.length) {
+        dotsBox.innerHTML = '';
+        return;
+    }
+
+    dotsBox.innerHTML = cards.map((_, index) => `
+        <span
+            class="mobile-banner-dot ${index === 0 ? 'active' : ''}">
+        </span>
+    `).join('');
+
+    const dots =
+        Array.from(
+            dotsBox.querySelectorAll('.mobile-banner-dot')
+        );
+
+    function updateDots() {
+
+        const cardWidth =
+            cards[0].offsetWidth + 12;
+
+        const activeIndex =
+            Math.min(
+                cards.length - 1,
+                Math.max(
+                    0,
+                    Math.round(container.scrollLeft / cardWidth)
+                )
+            );
+
+        dots.forEach((dot, index) => {
+            dot.classList.toggle(
+                'active',
+                index === activeIndex
+            );
+        });
+    }
+
+    container.addEventListener(
+        'scroll',
+        updateDots,
+        { passive: true }
+    );
+
+    updateDots();
 }
 
 
@@ -8952,40 +10433,87 @@ function togglePasswordVisibility(fieldId, iconElement) {
   </script>
 <div class="mobile-bottom-nav">
 
-    <button class="bot-nav-item active" onclick="window.location.href='index.html'">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <path d="M3 10.5L12 3l9 7.5"></path>
-            <path d="M5 9.5V21h14V9.5"></path>
-            <path d="M9 21v-7h6v7"></path>
-        </svg>
+    <!-- HOME -->
+    <button class="bot-nav-item active"
+            onclick="window.location.href='index.html'">
+
+        <div class="nav-icon-ring nav-home">
+            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+                <path d="M3 10.5L12 3l9 7.5"></path>
+                <path d="M5 9.5V21h14V9.5"></path>
+                <path d="M9 21v-7h6v7"></path>
+            </svg>
+        </div>
+
         <span>Home</span>
     </button>
 
-    <button class="bot-nav-item" onclick="toggleCartModal(true)">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <circle cx="9" cy="20" r="1"></circle>
-            <circle cx="18" cy="20" r="1"></circle>
-            <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
-        </svg>
+
+    <!-- SERVICES -->
+    <button class="bot-nav-item"
+            onclick="scrollToCategories()">
+
+        <div class="nav-icon-ring nav-services">
+            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+                <rect x="4" y="4" width="6" height="6" rx="1.5"></rect>
+                <rect x="14" y="4" width="6" height="6" rx="1.5"></rect>
+                <rect x="4" y="14" width="6" height="6" rx="1.5"></rect>
+                <rect x="14" y="14" width="6" height="6" rx="1.5"></rect>
+            </svg>
+        </div>
+
+        <span>Services</span>
+    </button>
+
+
+    <!-- CART -->
+    <button class="bot-nav-item"
+            onclick="toggleCartModal(true)">
+
+        <div class="nav-icon-ring nav-cart">
+            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+                <circle cx="9" cy="20" r="1"></circle>
+                <circle cx="18" cy="20" r="1"></circle>
+                <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
+            </svg>
+        </div>
+
         <span>Cart</span>
     </button>
 
-    <button class="bot-nav-item" onclick="handleHeaderAuthClick()">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4.5 21c.7-4 3.2-6 7.5-6s6.8 2 7.5 6"></path>
-        </svg>
-        <span>Account</span>
+
+    <!-- BOOKINGS -->
+    <button class="bot-nav-item"
+            onclick="openMobileBookings()">
+
+        <div class="nav-icon-ring nav-bookings">
+            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                <path d="M8 3v4"></path>
+                <path d="M16 3v4"></path>
+                <path d="M7 10h10"></path>
+                <circle cx="9" cy="14" r=".7"></circle>
+                <circle cx="13" cy="14" r=".7"></circle>
+                <circle cx="17" cy="14" r=".7"></circle>
+            </svg>
+        </div>
+
+        <span>Bookings</span>
     </button>
 
-    <button class="bot-nav-item" onclick="scrollToCategories()">
-        <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-        </svg>
-        <span>Categories</span>
+
+    <!-- ACCOUNT -->
+    <button class="bot-nav-item"
+            onclick="handleHeaderAuthClick()">
+
+        <div class="nav-icon-ring nav-account">
+            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
+                <circle cx="12" cy="8" r="3.5"></circle>
+                <path d="M5 20c.8-3.7 3.2-5.5 7-5.5s6.2 1.8 7 5.5"></path>
+            </svg>
+        </div>
+
+        <span>Account</span>
     </button>
 
 </div>
