@@ -3868,6 +3868,10 @@ a.book-btn {
 
 @media (max-width: 768px) {
 
+    .uc-grid .uc-card:nth-child(n+5) {
+    display: none !important;
+}
+
     /* CATEGORY SECTION */
     .uc-category-box {
         width: 100% !important;
@@ -9488,7 +9492,7 @@ let renderedSectionCount = 0;
         <div class="uc-grid"
              data-category="${catName.replace(/"/g, '&quot;')}">`;
               
-                  catData.items.slice(0, 5).forEach((s) => {
+                  catData.items.forEach((s) => {
 
     let trendingBadgeHTML =
     (catName !== 'New and noteworthy' && s.is_hot_deal == 1)
@@ -9551,7 +9555,7 @@ ${priceHTML}
     `;
 });
 
-  if (catData.items.length > 5) {
+if (catData.items.length > 5) {
     html += `
         <button
             class="uc-carousel-arrow"
@@ -9561,10 +9565,8 @@ ${priceHTML}
     `;
 }
 
-                  html += `
-        </div>
-
-        
+html += `
+    </div>
 
     </div>
 </div>`;
@@ -9680,6 +9682,26 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
 }
 
 function showAllCategoryServices(categoryName) {
+
+    if (window.innerWidth >= 993) {
+
+        const categoryBox = [...document.querySelectorAll('.uc-category-box')]
+            .find(box =>
+                box.querySelector('.uc-cat-header h3')?.textContent.trim()
+                === categoryName.trim()
+            );
+
+        const track = categoryBox?.querySelector('.uc-grid');
+
+        if (track) {
+            track.scrollTo({
+                left: track.scrollWidth,
+                behavior: 'smooth'
+            });
+        }
+
+        return;
+    }
 
     const allServices = window.catusAllServices || [];
 
