@@ -5309,6 +5309,114 @@ padding: 0 12px !important;
         background: #6d4aff !important;
     }
 }
+/* ==============================
+   CATUS SEE ALL BOTTOM SHEET
+============================== */
+
+.catus-seeall-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.58);
+    z-index: 2147483500;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.catus-seeall-overlay.active {
+    display: flex;
+}
+
+.catus-seeall-sheet {
+    width: 100%;
+    max-width: 760px;
+    max-height: 82vh;
+    background: #ffffff;
+    border-radius: 24px 24px 0 0;
+    padding: 22px 18px 30px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    animation: catusSheetUp .28s ease;
+}
+
+@keyframes catusSheetUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.catus-seeall-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.catus-seeall-header h2 {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 600;
+    color: #111111;
+}
+
+.catus-seeall-close {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #e5e5e5;
+    background: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.catus-seeall-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px 14px;
+}
+
+.catus-seeall-item {
+    cursor: pointer;
+    text-align: center;
+}
+
+.catus-seeall-item img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f5f5f5;
+    display: block;
+}
+
+.catus-seeall-item span {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 17px;
+    color: #111111;
+}
+
+@media (max-width: 768px) {
+
+    .catus-seeall-sheet {
+        max-height: 80vh;
+        padding: 20px 16px 28px;
+    }
+
+    .catus-seeall-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px 10px;
+    }
+
+    .catus-seeall-item span {
+        font-size: 11px;
+        line-height: 15px;
+    }
+}
 
 </style>
 </head>
@@ -5397,6 +5505,22 @@ padding: 0 12px !important;
 
     <!-- 5. Product Categories & Grids (இதைக் கட்டாயம் சேர்க்கவும்) -->
     <div id="productGridContainer"></div>
+    <!-- CATUS SEE ALL BOTTOM SHEET -->
+<div id="catusSeeAllOverlay" class="catus-seeall-overlay" onclick="closeCatusSeeAll(event)">
+    <div class="catus-seeall-sheet" onclick="event.stopPropagation()">
+
+        <div class="catus-seeall-header">
+            <h2 id="catusSeeAllTitle">Services</h2>
+
+            <button onclick="closeCatusSeeAll()" class="catus-seeall-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div id="catusSeeAllGrid" class="catus-seeall-grid"></div>
+
+    </div>
+</div>
 
   <!-- Toast Notification Pop-up -->
   <div id="toastNotification">
@@ -9297,6 +9421,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if(data.success && data.services && data.services.length > 0) {
               let categoriesMap = {};
 
+window.catusAllServices = [...data.services];
+
 const allServices = [...data.services];
 
 const usedServiceIds = new Set();
@@ -9348,11 +9474,13 @@ let renderedSectionCount = 0;
     <div class="uc-cat-header">
         <h3>${catName}</h3>
 
-        <button
-            class="uc-see-all-btn"
-            onclick="event.stopPropagation(); showAllCategoryServices('${catName.replace(/'/g, "\\'")}')">
-            See all
-        </button>
+        ${catData.items.length > 5 ? `
+<button
+    class="uc-see-all-btn"
+    onclick="event.stopPropagation(); showAllCategoryServices('${catName.replace(/'/g, "\\'")}')">
+    See all
+</button>
+` : ''}
     </div>
 
     <div class="uc-carousel-wrapper">
@@ -9360,7 +9488,7 @@ let renderedSectionCount = 0;
         <div class="uc-grid"
              data-category="${catName.replace(/"/g, '&quot;')}">`;
               
-                  catData.items.forEach((s) => {
+                  catData.items.slice(0, 5).forEach((s) => {
 
     let trendingBadgeHTML =
     (catName !== 'New and noteworthy' && s.is_hot_deal == 1)
