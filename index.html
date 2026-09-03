@@ -9320,24 +9320,31 @@ function startCatusBannerFlow() {
     catusBannerAnimationStarted = true;
 
     let paused = false;
-    let position = container.scrollLeft;
+let position = container.scrollLeft;
 
-    const speed = 0.35;
+let direction = 1;
+const speed = 0.65;
 
     function animate() {
 
         if (!paused) {
 
-            position += speed;
-
             const maxScroll =
-                container.scrollWidth - container.clientWidth;
+    container.scrollWidth - container.clientWidth;
 
-            if (position >= maxScroll) {
-                position = 0;
-            }
+position += speed * direction;
 
-            container.scrollLeft = position;
+if (position >= maxScroll) {
+    position = maxScroll;
+    direction = -1;
+}
+
+if (position <= 0) {
+    position = 0;
+    direction = 1;
+}
+
+container.scrollLeft = position;
         }
 
         requestAnimationFrame(animate);
