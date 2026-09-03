@@ -7861,172 +7861,47 @@ function handleIndexSearchSelect(serviceId, serviceName) {
           if(!container) return;
 
           if(data.success && data.services && data.services.length > 0) {
-              let categoriesMap = {
-    'Most booked services': { items: [] },
-    'Appliance repair & service': { items: [] },
-    'Home repair & installation': { items: [] },
-    'Cleaning & home care': { items: [] },
-    'New and noteworthy': { items: [] }
-};
+              let categoriesMap = {};
 
 const allServices = [...data.services];
 
 const usedServiceIds = new Set();
 
-function pickSmartServices(items, limit = 12) {
-    const result = [];
-    const localIds = new Set();
+/* =========================================
+   DYNAMIC ADMIN CATEGORY → HOMEPAGE SECTION
+   ========================================= */
 
-    // First preference: homepage-la already use aagatha services
-    for (const service of items) {
-        const id = String(service.service_id);
+allServices.forEach(service => {
 
-        if (
-            result.length < limit &&
-            !usedServiceIds.has(id) &&
-            !localIds.has(id)
-        ) {
-            result.push(service);
-            localIds.add(id);
-        }
+    const categoryName =
+        String(service.category || 'Other Services').trim();
+
+    if (!categoriesMap[categoryName]) {
+        categoriesMap[categoryName] = {
+            items: []
+        };
     }
 
+    const serviceId = String(service.service_id);
 
-    result.forEach(service => {
-        usedServiceIds.add(String(service.service_id));
-    });
+    if (!usedServiceIds.has(serviceId)) {
 
-    return result.slice(0, limit);
-}
+        categoriesMap[categoryName].items.push(service);
 
-function matchesService(service, keywords) {
-    const text =
-        ` ${service.category || ''} ${service.service_name || ''} `
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, ' ');
-
-    return keywords.some(keyword => {
-        const cleanKeyword = keyword
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, ' ')
-            .trim();
-
-        return (` ${text} `).includes(` ${cleanKeyword} `) ||
-               text.includes(cleanKeyword);
-    });
-}
-
-/* 1. Most booked services */
-let mostBookedCandidates = allServices
-    .filter(service => Number(service.is_hot_deal) === 1);
-
-if (mostBookedCandidates.length < 5) {
-    mostBookedCandidates = allServices;
-}
-
-categoriesMap['Most booked services'].items =
-    pickSmartServices(mostBookedCandidates);
-
-
-/* 2. Appliance repair & service */
-const applianceServices = allServices.filter(service =>
-    matchesService(service, [
-        'ac',
-        'air conditioner',
-        'tv',
-        'television',
-        'washing machine',
-        'washing',
-        'refrigerator',
-        'fridge',
-        'water purifier',
-        'purifier',
-        'ro',
-        'geyser',
-        'water heater',
-        'heater',
-        'microwave',
-        'chimney'
-    ])
-);
-
-categoriesMap['Appliance repair & service'].items =
-    pickSmartServices(applianceServices);
-
-
-/* 3. Home repair & installation */
-const homeRepairServices = allServices.filter(service =>
-    matchesService(service, [
-        'electrician',
-        'electric',
-        'fan',
-        'light',
-        'switch',
-        'plumber',
-        'plumbing',
-        'tap',
-        'door',
-        'lock',
-        'carpenter',
-        'cupboard',
-        'installation',
-        'fitting'
-    ])
-);
-
-categoriesMap['Home repair & installation'].items =
-    pickSmartServices(homeRepairServices);
-
-
-/* 4. Cleaning & home care */
-const cleaningServices = allServices.filter(service =>
-    matchesService(service, [
-        'cleaning',
-        'clean',
-        'pest',
-        'bathroom',
-        'kitchen',
-        'sofa',
-        'painting',
-        'waterproofing',
-        'waterproof'
-    ])
-);
-
-categoriesMap['Cleaning & home care'].items =
-    pickSmartServices(cleaningServices);
-
-
-/* 5. New and noteworthy */
-const newestServices = [...allServices].reverse();
-
-categoriesMap['New and noteworthy'].items =
-    pickSmartServices(newestServices);
-
-
-/* Empty sections remove */
-Object.keys(categoriesMap).forEach(sectionName => {
-    if (!categoriesMap[sectionName].items.length) {
-        delete categoriesMap[sectionName];
+        usedServiceIds.add(serviceId);
     }
 });
 
-    const promoBanners = [
-    {
-        image: 'PROMO_IMAGE_1_URL',
-        tag: 'Special offer',
-        title: 'Expert home services at your doorstep',
-        button: 'Book now',
-        serviceId: '10086'
-    },
-    {
-        image: 'PROMO_IMAGE_2_URL',
-        tag: 'Catus Care',
-        title: 'Trusted repair and installation services',
-        button: 'Explore now',
-        serviceId: '10086'
+/* Empty category sections remove */
+Object.keys(categoriesMap).forEach(categoryName => {
+
+    if (!categoriesMap[categoryName].items.length) {
+        delete categoriesMap[categoryName];
     }
-];
+
+});
+    
+       
 
 let renderedSectionCount = 0;
            

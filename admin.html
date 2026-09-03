@@ -636,7 +636,41 @@
         </div>
 
     </div>
+   <!-- ==========================================
+     HOMEPAGE PROMO BANNERS
+     ========================================== -->
 
+<div class="panel-card"
+     style="padding:20px; height:auto; margin-top:20px;">
+
+    <div class="panel-header" style="padding:0 0 15px 0;">
+        <div>
+            <h3 style="margin:0; font-size:16px; color:#0f172a;">
+                <i class="fa-solid fa-images"
+                   style="color:#0284c7; margin-right:7px;"></i>
+                Homepage Promo Banners
+            </h3>
+
+            <p style="margin:5px 0 0; font-size:12px; color:#64748b;">
+                Manage the 2 promotional banners shown between homepage service sections.
+            </p>
+        </div>
+    </div>
+
+    <div id="promoBannersAdminContainer"
+         style="
+            display:grid;
+            grid-template-columns:repeat(2, minmax(0,1fr));
+            gap:16px;
+         ">
+
+        <div style="padding:25px; text-align:center; color:#64748b;">
+            Loading promo banners...
+        </div>
+
+    </div>
+
+</div>
 </div>
         <!-- TAB 5: COUPONS MANAGEMENT -->
         <div id="page-coupons" class="main-tab-pane">
@@ -1791,6 +1825,7 @@ function selectTechnician(
 
 if(pageId === 'home-icons') {
     fetchHomeIcons();
+    fetchPromoBanners();
 }
     }
 
@@ -2019,6 +2054,326 @@ function renderHomeIconsTable() {
         `;
 
     }).join('');
+}
+
+// ==========================================
+// HOMEPAGE PROMO BANNERS MANAGEMENT
+// ==========================================
+
+let adminPromoBanners = [];
+
+async function fetchPromoBanners() {
+
+    const container =
+        document.getElementById('promoBannersAdminContainer');
+
+    if (!container) return;
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/promo-banners`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.error || 'Failed to load promo banners'
+            );
+        }
+
+        adminPromoBanners = data.banners || [];
+
+        renderPromoBanners();
+
+    } catch (error) {
+
+        console.error('Promo Banner Fetch Error:', error);
+
+        container.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                padding:25px;
+                text-align:center;
+                color:#dc2626;
+            ">
+                Failed to load promo banners.
+            </div>
+        `;
+    }
+}
+
+
+function renderPromoBanners() {
+
+    const container =
+        document.getElementById('promoBannersAdminContainer');
+
+    if (!container) return;
+
+    const slots = [1, 2];
+
+    container.innerHTML = slots.map(slot => {
+
+        const banner =
+            adminPromoBanners.find(
+                item => Number(item.slot_no) === slot
+            ) || {};
+
+        const imageUrl =
+            String(banner.image_url || '');
+
+        return `
+            <div style="
+                border:1px solid #e2e8f0;
+                border-radius:12px;
+                padding:15px;
+                background:#fff;
+            ">
+
+                <h4 style="
+                    margin:0 0 12px;
+                    color:#0f172a;
+                ">
+                    Promo Banner ${slot}
+                </h4>
+
+                <div style="
+                    height:140px;
+                    background:#f8fafc;
+                    border:1px dashed #cbd5e1;
+                    border-radius:10px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    overflow:hidden;
+                    margin-bottom:12px;
+                ">
+
+                    ${
+                        imageUrl
+                        ? `
+                            <img
+                                src="${imageUrl}"
+                                style="
+                                    width:100%;
+                                    height:100%;
+                                    object-fit:cover;
+                                "
+                            >
+                          `
+                        : `
+                            <span style="
+                                font-size:12px;
+                                color:#94a3b8;
+                            ">
+                                No banner image
+                            </span>
+                          `
+                    }
+
+                </div>
+
+                <div class="form-group">
+                    <label>Banner Image</label>
+
+                    <div style="display:flex; gap:8px;">
+
+                        <input
+                            id="promoImage${slot}"
+                            class="form-input"
+                            value="${imageUrl}"
+                            placeholder="Image URL"
+                            style="flex:1;"
+                        >
+
+                        <label
+                            for="promoFile${slot}"
+                            class="action-btn"
+                            style="
+                                width:auto;
+                                margin:0;
+                                padding:10px 14px;
+                                cursor:pointer;
+                            ">
+                            <i class="fa-solid fa-upload"></i>
+                            Upload
+                        </label>
+
+                        <input
+                            type="file"
+                            id="promoFile${slot}"
+                            accept="image/*"
+                            style="display:none;"
+                            onchange="uploadAdminImage(
+                                this,
+                                'promoImage${slot}'
+                            )"
+                        >
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Offer Tag</label>
+                    <input
+                        id="promoTag${slot}"
+                        class="form-input"
+                        value="${banner.tag || ''}"
+                        placeholder="LIMITED OFFER"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input
+                        id="promoTitle${slot}"
+                        class="form-input"
+                        value="${banner.title || ''}"
+                        placeholder="AC Service Special Offer"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Button Text</label>
+                    <input
+                        id="promoButton${slot}"
+                        class="form-input"
+                        value="${banner.button_text || 'Book now'}"
+                        placeholder="Book now"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Service ID</label>
+                    <input
+                        id="promoService${slot}"
+                        class="form-input"
+                        value="${banner.service_id || ''}"
+                        placeholder="Example: 10086"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Status</label>
+
+                    <select
+                        id="promoStatus${slot}"
+                        class="form-input">
+
+                        <option value="true"
+                            ${banner.is_active !== false ? 'selected' : ''}>
+                            Active
+                        </option>
+
+                        <option value="false"
+                            ${banner.is_active === false ? 'selected' : ''}>
+                            Hidden
+                        </option>
+
+                    </select>
+                </div>
+
+                <button
+                    class="action-btn"
+                    style="
+                        width:100%;
+                        margin-top:5px;
+                        background:#0284c7;
+                    "
+                    onclick="savePromoBanner(${slot})">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save Promo Banner ${slot}
+
+                </button>
+
+            </div>
+        `;
+
+    }).join('');
+}
+
+
+async function savePromoBanner(slot) {
+
+    try {
+
+        const payload = {
+
+            slot_no: slot,
+
+            image_url:
+                document.getElementById(
+                    `promoImage${slot}`
+                ).value.trim(),
+
+            tag:
+                document.getElementById(
+                    `promoTag${slot}`
+                ).value.trim(),
+
+            title:
+                document.getElementById(
+                    `promoTitle${slot}`
+                ).value.trim(),
+
+            button_text:
+                document.getElementById(
+                    `promoButton${slot}`
+                ).value.trim(),
+
+            service_id:
+                document.getElementById(
+                    `promoService${slot}`
+                ).value.trim(),
+
+            is_active:
+                document.getElementById(
+                    `promoStatus${slot}`
+                ).value === 'true'
+        };
+
+        if (!payload.image_url) {
+            alert('Please upload promo banner image.');
+            return;
+        }
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/update-promo-banner`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                data.error ||
+                'Unable to save promo banner.'
+            );
+        }
+
+        alert(`Promo Banner ${slot} saved successfully!`);
+
+        await fetchPromoBanners();
+
+    } catch (error) {
+
+        console.error(
+            'Promo Banner Save Error:',
+            error
+        );
+
+        alert(error.message);
+    }
 }
 
 // ==========================================
