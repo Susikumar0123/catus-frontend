@@ -7853,9 +7853,20 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     }
    
     async function loadLiveServicesForFrontend() {
-      try {
-          const response = await fetch(`${API_BASE_URL}/api/home-services`);
-          const data = await response.json();
+  try {
+
+      const [servicesResponse, promoResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/home-services`),
+          fetch(`${API_BASE_URL}/api/promo-banners`)
+      ]);
+
+      const data = await servicesResponse.json();
+      const promoData = await promoResponse.json();
+
+      const promoBanners =
+          promoData.success && Array.isArray(promoData.banners)
+              ? promoData.banners
+              : [];
           
           let container = document.getElementById('productGridContainer');
           if(!container) return;
@@ -8001,41 +8012,56 @@ ${priceHTML}
 
 if (renderedSectionCount === 2 || renderedSectionCount === 4) {
 
-    const promo = renderedSectionCount === 2
-        ? promoBanners[0]
-        : promoBanners[1];
+    const promoSlot =
+        renderedSectionCount === 2 ? 1 : 2;
 
-    html += `
-        <div
-            class="catus-promo-banner"
-            onclick="openServiceProduct('${promo.serviceId}')">
+    const promo = promoBanners.find(
+        item => Number(item.slot_no) === promoSlot
+    );
 
-            <img
-                src="${promo.image}"
-                alt="${promo.title}"
-                loading="lazy">
+    if (promo && promo.image_url) {
 
-            <div class="catus-promo-overlay">
-                <div class="catus-promo-content">
+        html += `
+            <div
+                class="catus-promo-banner"
+                onclick="${promo.service_id
+                    ? `openServiceProduct('${promo.service_id}')`
+                    : ''}">
 
-                    <span class="catus-promo-tag">
-                        ${promo.tag}
-                    </span>
+                <img
+                    src="${promo.image_url}"
+                    alt="${promo.title || 'Catus Promo'}"
+                    loading="lazy">
 
-                    <h2 class="catus-promo-title">
-                        ${promo.title}
-                    </h2>
+                <div class="catus-promo-overlay">
+                    <div class="catus-promo-content">
 
-                    <span class="catus-promo-btn">
-                        ${promo.button}
-                    </span>
+                        ${promo.tag ? `
+                            <span class="catus-promo-tag">
+                                ${promo.tag}
+                            </span>
+                        ` : ''}
 
+                        ${promo.title ? `
+                            <h2 class="catus-promo-title">
+                                ${promo.title}
+                            </h2>
+                        ` : ''}
+
+                        ${promo.button_text ? `
+                            <span class="catus-promo-btn">
+                                ${promo.button_text}
+                            </span>
+                        ` : ''}
+
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 }
 
+            
               }
               container.innerHTML = html;
               if (window.lucide) lucide.createIcons();
