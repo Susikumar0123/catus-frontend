@@ -9554,13 +9554,7 @@ ${priceHTML}
                   html += `
         </div>
 
-        ${catData.items.length > 5 ? `
-            <button
-                class="uc-carousel-arrow"
-                onclick="event.stopPropagation(); scrollCategoryCarousel(this)">
-                <i data-lucide="arrow-right"></i>
-            </button>
-        ` : ''}
+        
 
     </div>
 </div>`;
@@ -9676,20 +9670,51 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
 }
 
 function showAllCategoryServices(categoryName) {
-    const categoryBox = [...document.querySelectorAll('.uc-category-box')]
-        .find(box =>
-            box.querySelector('.uc-cat-header h3')?.textContent.trim()
-            === categoryName.trim()
-        );
 
-    const track = categoryBox?.querySelector('.uc-grid');
+    const allServices = window.catusAllServices || [];
 
-    if (!track) return;
+    const categoryServices = allServices.filter(service =>
+        String(service.category || 'Other Services').trim() === categoryName.trim()
+    );
 
-    track.scrollTo({
-        left: track.scrollWidth,
-        behavior: 'smooth'
-    });
+    const overlay = document.getElementById('catusSeeAllOverlay');
+    const title = document.getElementById('catusSeeAllTitle');
+    const grid = document.getElementById('catusSeeAllGrid');
+
+    if (!overlay || !title || !grid) return;
+
+    title.textContent = categoryName;
+
+    grid.innerHTML = categoryServices.map(service => `
+        <div
+            class="catus-seeall-item"
+            onclick="openServiceProduct('${service.service_id}')">
+
+            <img
+                src="${service.image_url || 'logo.png'}"
+                alt="${service.service_name || 'Service'}">
+
+            <span>${service.service_name || 'Service'}</span>
+        </div>
+    `).join('');
+
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCatusSeeAll(event) {
+
+    if (event && event.target.id !== 'catusSeeAllOverlay') {
+        return;
+    }
+
+    const overlay = document.getElementById('catusSeeAllOverlay');
+
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+
+    document.body.style.overflow = '';
 }
 
     async function loadHeroBanners() {
