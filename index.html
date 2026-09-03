@@ -9344,20 +9344,43 @@ if (position <= 0) {
     direction = 1;
 }
 
-container.scrollLeft = position;
+if (!paused) {
+    container.scrollLeft = position;
+}
         }
 
         requestAnimationFrame(animate);
     }
 
-    container.addEventListener('touchstart', () => {
-        paused = true;
-    }, { passive: true });
+    let resumeTimer = null;
 
-    container.addEventListener('touchend', () => {
+container.addEventListener('touchstart', () => {
+    paused = true;
+
+    if (resumeTimer) {
+        clearTimeout(resumeTimer);
+    }
+}, { passive: true });
+
+container.addEventListener('touchmove', () => {
+    paused = true;
+    position = container.scrollLeft;
+}, { passive: true });
+
+container.addEventListener('touchend', () => {
+
+    position = container.scrollLeft;
+
+    if (resumeTimer) {
+        clearTimeout(resumeTimer);
+    }
+
+    resumeTimer = setTimeout(() => {
         position = container.scrollLeft;
         paused = false;
-    }, { passive: true });
+    }, 700);
+
+}, { passive: true });
 
     container.addEventListener('mouseenter', () => {
         paused = true;
