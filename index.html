@@ -9551,6 +9551,16 @@ ${priceHTML}
     `;
 });
 
+  if (catData.items.length > 5) {
+    html += `
+        <button
+            class="uc-carousel-arrow"
+            onclick="event.stopPropagation(); scrollCategoryCarousel(this)">
+            <i data-lucide="arrow-right"></i>
+        </button>
+    `;
+}
+
                   html += `
         </div>
 
