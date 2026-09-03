@@ -9083,6 +9083,9 @@ function filterProductsByGroup(groupId) {
     const titleContainer =
         document.querySelector('.section-title-container');
 
+    const promoBanners =
+        document.querySelectorAll('.catus-promo-banner');
+
     if (groupId) {
 
         if (bannerContainer)
@@ -9091,6 +9094,10 @@ function filterProductsByGroup(groupId) {
         if (titleContainer)
             titleContainer.style.display = 'none';
 
+        promoBanners.forEach(promo => {
+            promo.style.display = 'none';
+        });
+
     } else {
 
         if (bannerContainer)
@@ -9098,6 +9105,10 @@ function filterProductsByGroup(groupId) {
 
         if (titleContainer)
             titleContainer.style.display = '';
+
+        promoBanners.forEach(promo => {
+            promo.style.display = '';
+        });
     }
 
     document
