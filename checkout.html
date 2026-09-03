@@ -624,8 +624,16 @@ p, span, div, a, label, li, small {
 
 @media (max-width: 540px) {
     .checkout-header {
-        padding: 10px 12px !important;
-    }
+    padding: 10px 12px !important;
+
+    position: sticky !important;
+    top: 0 !important;
+
+    z-index: 99990 !important;
+
+    background: #ffffff !important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05) !important;
+}
 
     .checkout-header img {
         height: 34px !important;
