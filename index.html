@@ -9304,32 +9304,43 @@ function handleIndexSearchSelect(serviceId, serviceName) {
 }
 
     /* ===== CATUS CONTINUOUS HERO FLOW ===== */
-document.addEventListener('DOMContentLoaded', () => {
+
+let catusBannerAnimationStarted = false;
+
+function startCatusBannerFlow() {
+
+    if (catusBannerAnimationStarted) return;
 
     const container = document.getElementById('cardsContainer');
     if (!container) return;
 
-    let animationId = null;
+    const cards = container.querySelectorAll('.card-link');
+    if (cards.length <= 1) return;
+
+    catusBannerAnimationStarted = true;
+
     let paused = false;
+    let position = container.scrollLeft;
 
     const speed = 0.35;
 
-    function continuousBannerFlow() {
+    function animate() {
 
         if (!paused) {
 
-            container.scrollLeft += speed;
+            position += speed;
 
             const maxScroll =
                 container.scrollWidth - container.clientWidth;
 
-            if (container.scrollLeft >= maxScroll) {
-                container.scrollLeft = 0;
+            if (position >= maxScroll) {
+                position = 0;
             }
+
+            container.scrollLeft = position;
         }
 
-        animationId =
-            requestAnimationFrame(continuousBannerFlow);
+        requestAnimationFrame(animate);
     }
 
     container.addEventListener('touchstart', () => {
@@ -9337,6 +9348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
+        position = container.scrollLeft;
         paused = false;
     }, { passive: true });
 
@@ -9345,11 +9357,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     container.addEventListener('mouseleave', () => {
+        position = container.scrollLeft;
         paused = false;
     });
 
-    continuousBannerFlow();
-});
+    animate();
+}
 
     function toggleProfileAddressEdit() {
         const displayEl = document.getElementById('premProfileAddressDisplay');
@@ -9780,8 +9793,11 @@ function closeCatusSeeAll(event) {
                     </div>
                 </a>`;
             });
+
             container.innerHTML = dynamicHTML;
             setupMobileBannerDots();
+            startCatusBannerFlow();
+
         } else {
             container.innerHTML = `<p style="padding: 10px; color: #64748b;">No banners found. Please add from Admin Panel.</p>`;
         }
