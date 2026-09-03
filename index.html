@@ -9499,7 +9499,7 @@ let renderedSectionCount = 0;
     <div class="uc-cat-header">
         <h3>${catName}</h3>
 
-        ${catData.items.length > 5 ? `
+        ${catData.items.length > 4 ? `
 <button
     class="uc-see-all-btn"
     onclick="event.stopPropagation(); showAllCategoryServices('${catName.replace(/'/g, "\\'")}')">
@@ -9576,7 +9576,7 @@ ${priceHTML}
     `;
 });
 
-if (catData.items.length > 5) {
+if (catData.items.length > 4) {
     html += `
         <button
             class="uc-carousel-arrow"
