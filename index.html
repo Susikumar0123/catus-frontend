@@ -8997,16 +8997,31 @@ serviceStr =
 
     let currentHomeGroupId = '';
 
+    let promoForceHidden = false;
+
     function keepPromoState() {
+
     const promoBanners =
         document.querySelectorAll('.catus-promo-banner');
 
+    const searchInput =
+        document.getElementById('searchInput');
+
+    const hasSearch =
+        searchInput &&
+        searchInput.value.trim().length > 0;
+
+    const shouldHidePromo =
+        !!currentHomeGroupId ||
+        promoForceHidden ||
+        hasSearch;
+
     promoBanners.forEach(promo => {
-        if (currentHomeGroupId) {
-            promo.style.display = 'none';
-        }
+        promo.style.display =
+            shouldHidePromo ? 'none' : '';
     });
 }
+
     
     async function loadHomeServiceGroups() {
 
@@ -9143,9 +9158,7 @@ function filterProductsByGroup(groupId) {
         if (titleContainer)
             titleContainer.style.display = '';
 
-        promoBanners.forEach(promo => {
-            promo.style.display = '';
-        });
+        keepPromoState();
     }
 
     document
@@ -9185,6 +9198,8 @@ function filterProductsByGroup(groupId) {
 
         const bannerContainer = document.querySelector('.scroll-wrapper');
         const titleContainer = document.querySelector('.section-title-container');
+
+        keepPromoState();
 
         if (query.length > 0) {
             if (bannerContainer) bannerContainer.style.display = 'none';
@@ -9844,11 +9859,8 @@ if (currentHomeGroupId) {
 function showAllCategoryServices(categoryName) {
 
     // See All click panna promo cards hide
-    document
-        .querySelectorAll('.catus-promo-banner')
-        .forEach(promo => {
-            promo.style.display = 'none';
-        });
+    promoForceHidden = true;
+    keepPromoState();
 
     if (window.innerWidth >= 993) {
 
