@@ -9934,8 +9934,9 @@ function closeCatusSeeAll(event) {
     }
 
     document.body.style.overflow = '';
-    // See All close aana homepage promo cards thirumba show
-keepPromoState();
+
+    promoForceHidden = false;
+    keepPromoState();
 }
 
     async function loadHeroBanners() {
