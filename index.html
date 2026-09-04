@@ -8568,7 +8568,7 @@ function toggleAuthModal(open) {
             twoMinTimer = null;
         }
     }
-    keepPromoState();
+    
 }
 
 // 🛑 எளிமையான மற்றும் துல்லியமான Backdrop Close லாஜிக் (Mobile & Desktop)
@@ -8997,7 +8997,7 @@ serviceStr =
 
     let currentHomeGroupId = '';
 
-    let promoForceHidden = false;
+    
 
     function keepPromoState() {
 
@@ -9012,9 +9012,8 @@ serviceStr =
         searchInput.value.trim().length > 0;
 
     const shouldHidePromo =
-        !!currentHomeGroupId ||
-        promoForceHidden ||
-        hasSearch;
+    !!currentHomeGroupId ||
+    hasSearch;
 
     promoBanners.forEach(promo => {
         promo.style.display =
@@ -9933,8 +9932,7 @@ function closeCatusSeeAll(event) {
 
     document.body.style.overflow = '';
 
-    promoForceHidden = false;
-    keepPromoState();
+    
 }
 
     async function loadHeroBanners() {
@@ -10061,7 +10059,7 @@ function setupMobileBannerDots() {
 
     document.body.style.overflow = 'hidden';
 
-    keepPromoState();
+    
 }
 
 function toggleLocationModal(open) {
