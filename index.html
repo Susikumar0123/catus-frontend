@@ -7302,8 +7302,6 @@ function openServiceProduct(serviceId) {
     if (open) {
         updateCartUI();
     }
-
-    keepPromoState();
 }
 
     function applyQuickCoupon(code) {
@@ -9012,8 +9010,8 @@ serviceStr =
         searchInput.value.trim().length > 0;
 
     const shouldHidePromo =
-    !!currentHomeGroupId ||
-    hasSearch;
+        !!currentHomeGroupId ||
+        hasSearch;
 
     promoBanners.forEach(promo => {
         promo.style.display =
