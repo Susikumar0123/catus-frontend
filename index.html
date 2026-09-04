@@ -6625,12 +6625,15 @@ padding: 0 12px !important;
   <!-- JavaScript Integration -->
   <script>
     window.addEventListener('DOMContentLoaded', () => {
-      updateCartUI();
-      updateHeaderLoginUI();
-      loadHeroBanners();
-      loadLiveServicesForFrontend(); // 🛑 இந்த வரியை ஹோம் பேஜ் லோடிங்கில் சேர்க்கவும்!
-      loadHomeServiceGroups();
-  });
+
+    updateCartUI();
+    updateHeaderLoginUI();
+
+    // Previous homepage immediate-ah display
+    showCachedHomeServices();
+
+    loadHomeServiceGroups();
+});
 
   const API_BASE_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000' 
@@ -8976,6 +8979,8 @@ serviceStr =
             loginBtnText.textContent = 'Login';
         }
     }
+
+    let currentHomeGroupId = '';
     
     async function loadHomeServiceGroups() {
 
@@ -9013,9 +9018,7 @@ serviceStr =
                 group.group_id
             );
 
-            if (index === 0) {
-                button.classList.add('active');
-            }
+            
 
             button.innerHTML = `
                 <div class="chip-icon-bg">
@@ -9057,23 +9060,31 @@ serviceStr =
     const groupId =
         element.getAttribute('data-group-id') || '';
 
+    // Same icon-ai second time click panna → back to full homepage
     if (element.classList.contains('active')) {
 
         element.classList.remove('active');
+
+        currentHomeGroupId = '';
 
         filterProductsByGroup('');
 
         return;
     }
 
+    // Previous active icon remove
     document
         .querySelectorAll('.service-chip')
         .forEach(c => c.classList.remove('active'));
 
+    // Current icon active
     element.classList.add('active');
+
+    currentHomeGroupId = groupId;
 
     filterProductsByGroup(groupId);
 }
+
 
 function filterProductsByGroup(groupId) {
 
@@ -9453,6 +9464,33 @@ container.addEventListener('touchend', () => {
         toggleProfileAddressEdit();
         showToast("Delivery Address updated successfully!", false);
     }
+
+    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache';
+
+function showCachedHomeServices() {
+
+    const container =
+        document.getElementById('productGridContainer');
+
+    if (!container) return false;
+
+    const cachedHTML =
+        localStorage.getItem(CATUS_HOME_HTML_CACHE);
+
+    if (!cachedHTML) return false;
+
+    container.innerHTML = cachedHTML;
+
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+
+    if (currentHomeGroupId) {
+        filterProductsByGroup(currentHomeGroupId);
+    }
+
+    return true;
+}
    
     async function loadLiveServicesForFrontend() {
   try {
@@ -9582,9 +9620,10 @@ const priceHTML = (!isNameOnlySection && price > 0)
                 ${trendingBadgeHTML}
 
                 <img
-                    src="${s.image_url}"
-                    alt="${s.service_name}"
-                    loading="lazy">
+    src="${s.image_url}"
+    alt="${s.service_name}"
+    loading="eager"
+    decoding="async">
             </div>
 
             <div class="uc-body">
@@ -9643,9 +9682,10 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
                     : ''}">
 
                 <img
-                    src="${promo.image_url}"
-                    alt="${promo.title || 'Catus Promo'}"
-                    loading="lazy">
+    src="${promo.image_url}"
+    alt="${promo.title || 'Catus Promo'}"
+    loading="eager"
+    decoding="async">
 
                 <div class="catus-promo-overlay">
                     <div class="catus-promo-content">
@@ -9678,7 +9718,27 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
             
               }
               container.innerHTML = html;
-              if (window.lucide) lucide.createIcons();
+
+// Full homepage normal state cache
+try {
+    localStorage.setItem(
+        CATUS_HOME_HTML_CACHE,
+        html
+    );
+} catch (error) {
+    console.warn('Catus homepage cache save failed:', error);
+}
+
+if (window.lucide) {
+    lucide.createIcons();
+}
+
+// A service group already selected-na,
+// async render mudinja apram filter-ai thirumba apply pannu.
+// Ithu promo banners category view-la appear aaguradhai stop pannum.
+if (currentHomeGroupId) {
+    filterProductsByGroup(currentHomeGroupId);
+}
 
               for (const s of data.services) {
     try {
