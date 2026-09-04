@@ -9649,7 +9649,13 @@ if (catData.items.length > 4) {
     html += `
         <button
             class="uc-carousel-arrow"
-            onclick="event.stopPropagation(); scrollCategoryCarousel(this)">
+            onclick="
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    scrollCategoryCarousel(this);
+    return false;
+">
             <i data-lucide="arrow-right"></i>
         </button>
     `;
@@ -9841,6 +9847,12 @@ function showAllCategoryServices(categoryName) {
         </div>
     `).join('');
 
+    document
+    .querySelectorAll('.catus-promo-banner')
+    .forEach(promo => {
+        promo.style.display = 'none';
+    });
+
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -9858,6 +9870,14 @@ function closeCatusSeeAll(event) {
     }
 
     document.body.style.overflow = '';
+    // See All close aana homepage promo cards thirumba show
+if (!currentHomeGroupId) {
+    document
+        .querySelectorAll('.catus-promo-banner')
+        .forEach(promo => {
+            promo.style.display = '';
+        });
+}
 }
 
     async function loadHeroBanners() {
