@@ -9843,6 +9843,13 @@ if (currentHomeGroupId) {
 
 function showAllCategoryServices(categoryName) {
 
+    // See All click panna promo cards hide
+    document
+        .querySelectorAll('.catus-promo-banner')
+        .forEach(promo => {
+            promo.style.display = 'none';
+        });
+
     if (window.innerWidth >= 993) {
 
         const categoryBox = [...document.querySelectorAll('.uc-category-box')]
@@ -9854,15 +9861,16 @@ function showAllCategoryServices(categoryName) {
         const track = categoryBox?.querySelector('.uc-grid');
 
         if (track) {
-    track.scrollTo({
-        left: track.scrollWidth,
-        behavior: 'smooth'
-    });
-}
+            track.scrollTo({
+                left: track.scrollWidth,
+                behavior: 'smooth'
+            });
+        }
 
-keepPromoState();
-return;
-}
+        return;
+    }
+
+    // கீழே இருக்கிற mobile code அப்படியே இருக்கட்டும்
 
     const allServices = window.catusAllServices || [];
 
