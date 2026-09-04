@@ -9241,11 +9241,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const query = e.target.value.toLowerCase().trim();
 
             if (query.length === 0) {
-                suggestionsBox.style.display = 'none';
-                suggestionsBox.innerHTML = '';
-                filterProducts('');
-                return;
-            }
+    suggestionsBox.style.display = 'none';
+    suggestionsBox.innerHTML = '';
+    keepPromoState();
+    return;
+}
 
             try {
                 const response = await fetch(`${API_BASE_URL}/api/services`);
@@ -9318,7 +9318,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Search error:", err);
             }
 
-            filterProducts(query);
+            keepPromoState();
         });
 
         searchInput.addEventListener('focus', () => {
