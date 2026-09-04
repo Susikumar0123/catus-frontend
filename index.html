@@ -9569,8 +9569,15 @@ let renderedSectionCount = 0;
 
         ${catData.items.length > 4 ? `
 <button
+    type="button"
     class="uc-see-all-btn"
-    onclick="event.stopPropagation(); showAllCategoryServices('${catName.replace(/'/g, "\\'")}')">
+    onclick="
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        showAllCategoryServices('${catName.replace(/'/g, "\\'")}');
+        return false;
+    ">
     See all
 </button>
 ` : ''}
@@ -9648,6 +9655,7 @@ ${priceHTML}
 if (catData.items.length > 4) {
     html += `
         <button
+            type="button"
             class="uc-carousel-arrow"
             onclick="
     event.preventDefault();
@@ -9681,11 +9689,7 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
     if (promo && promo.image_url) {
 
         html += `
-            <div
-                class="catus-promo-banner"
-                onclick="${promo.service_id
-                    ? `openServiceProduct('${promo.service_id}')`
-                    : ''}">
+            <div class="catus-promo-banner">
 
                 <img
     src="${promo.image_url}"
@@ -9709,10 +9713,19 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
                         ` : ''}
 
                         ${promo.button_text ? `
-                            <span class="catus-promo-btn">
-                                ${promo.button_text}
-                            </span>
-                        ` : ''}
+    <span
+        class="catus-promo-btn"
+        onclick="
+            event.preventDefault();
+            event.stopPropagation();
+            ${promo.service_id
+                ? `openServiceProduct('${promo.service_id}');`
+                : ''}
+            return false;
+        ">
+        ${promo.button_text}
+    </span>
+` : ''}
 
                     </div>
                 </div>
