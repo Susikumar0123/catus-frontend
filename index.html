@@ -5455,7 +5455,13 @@ padding: 0 12px !important;
     <div class="uc-homepage-wrapper">
       <div class="header-main-container">
           
-          <div class="brand-logo" onclick="window.location.reload()">
+          <div class="brand-logo"
+     onclick="
+        event.preventDefault();
+        event.stopPropagation();
+        window.location.href = window.location.pathname;
+        return false;
+     ">
               <img src="logo.png" alt="Catus Logo">
           </div>
 
@@ -9465,7 +9471,9 @@ container.addEventListener('touchend', () => {
         showToast("Delivery Address updated successfully!", false);
     }
 
-    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache';
+    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v2';
+
+    localStorage.removeItem('catus_home_html_cache');
 
 function showCachedHomeServices() {
 
