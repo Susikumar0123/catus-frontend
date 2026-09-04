@@ -7293,10 +7293,18 @@ function openServiceProduct(serviceId) {
     }
     
     function toggleCartModal(open) { 
-        const modal = document.getElementById('cartModal');
-        if (modal) modal.style.display = open ? 'flex' : 'none';
-        if (open) updateCartUI();
+    const modal = document.getElementById('cartModal');
+
+    if (modal) {
+        modal.style.display = open ? 'flex' : 'none';
     }
+
+    if (open) {
+        updateCartUI();
+    }
+
+    keepPromoState();
+}
 
     function applyQuickCoupon(code) {
         document.getElementById('couponInput').value = code;
@@ -8560,6 +8568,7 @@ function toggleAuthModal(open) {
             twoMinTimer = null;
         }
     }
+    keepPromoState();
 }
 
 // 🛑 எளிமையான மற்றும் துல்லியமான Backdrop Close லாஜிக் (Mobile & Desktop)
@@ -8987,6 +8996,17 @@ serviceStr =
     }
 
     let currentHomeGroupId = '';
+
+    function keepPromoState() {
+    const promoBanners =
+        document.querySelectorAll('.catus-promo-banner');
+
+    promoBanners.forEach(promo => {
+        if (currentHomeGroupId) {
+            promo.style.display = 'none';
+        }
+    });
+}
     
     async function loadHomeServiceGroups() {
 
@@ -9817,6 +9837,8 @@ if (currentHomeGroupId) {
         left: moveBy,
         behavior: 'smooth'
     });
+
+    keepPromoState();
 }
 
 function showAllCategoryServices(categoryName) {
@@ -9832,14 +9854,15 @@ function showAllCategoryServices(categoryName) {
         const track = categoryBox?.querySelector('.uc-grid');
 
         if (track) {
-            track.scrollTo({
-                left: track.scrollWidth,
-                behavior: 'smooth'
-            });
-        }
+    track.scrollTo({
+        left: track.scrollWidth,
+        behavior: 'smooth'
+    });
+}
 
-        return;
-    }
+keepPromoState();
+return;
+}
 
     const allServices = window.catusAllServices || [];
 
@@ -9892,13 +9915,7 @@ function closeCatusSeeAll(event) {
 
     document.body.style.overflow = '';
     // See All close aana homepage promo cards thirumba show
-if (!currentHomeGroupId) {
-    document
-        .querySelectorAll('.catus-promo-banner')
-        .forEach(promo => {
-            promo.style.display = '';
-        });
-}
+keepPromoState();
 }
 
     async function loadHeroBanners() {
@@ -10018,8 +10035,14 @@ function setupMobileBannerDots() {
     }
     function openLocationModal() {
     const modal = document.getElementById('locationPopupModal');
-    if (modal) modal.style.display = 'flex';
+
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+
     document.body.style.overflow = 'hidden';
+
+    keepPromoState();
 }
 
 function toggleLocationModal(open) {
