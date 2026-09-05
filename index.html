@@ -7410,10 +7410,15 @@ function openServiceProduct(serviceId) {
 
     function handleHeaderAuthClick() {
     if (currentUser) {
-        openPremiumDashboard(); // ஏற்கனவே லாகின் செய்திருந்தால் டேஷ்போர்ட் திறக்கும்
+        openPremiumDashboard();
+
+        setTimeout(() => {
+            switchDashTab('home', null, true);
+        }, 50);
+
     } else {
         showAuthStep('phone');
-        toggleAuthModal(true);  // லாகின் பாப்-அப் ஓபன் ஆகும்
+        toggleAuthModal(true);
     }
 }
 
