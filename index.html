@@ -8136,6 +8136,15 @@ async function triggerForgotPassword() {
 
     authFlowMode = 'forgot';
 
+    showAuthStep('otp');
+
+const infoEl = document.getElementById('setPasswordInfo');
+
+if (infoEl) {
+    infoEl.textContent =
+        `Sending password reset OTP to +91 ${tempPhone}...`;
+}
+
     showToast(
         "Sending OTP for password reset...",
         false
