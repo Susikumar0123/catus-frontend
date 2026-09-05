@@ -7690,25 +7690,101 @@ function getMsg91ReqId(data) {
     return deepSearch(data);
 }
 function getMsg91AccessToken(data) {
+
     if (!data) return '';
 
     if (typeof data === 'string') {
         return data.trim();
     }
 
-    return String(
-        data.accessToken ||
-        data['access-token'] ||
-        data.access_token ||
-        data.token ||
-        data.data?.accessToken ||
-        data.data?.['access-token'] ||
-        data.data?.access_token ||
-        data.data?.token ||
-        ''
-    ).trim();
-}
+    const directValues = [
+        data.accessToken,
+        data.access_token,
+        data['access-token'],
+        data.token,
+        data.message,
 
+        data.data?.accessToken,
+        data.data?.access_token,
+        data.data?.['access-token'],
+        data.data?.token,
+        data.data?.message,
+
+        data.response?.accessToken,
+        data.response?.access_token,
+        data.response?.['access-token'],
+        data.response?.token,
+
+        data.result?.accessToken,
+        data.result?.access_token,
+        data.result?.['access-token'],
+        data.result?.token
+    ];
+
+    for (const value of directValues) {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim()
+        ) {
+            return String(value).trim();
+        }
+    }
+
+    function deepSearch(obj, depth = 0) {
+
+        if (
+            !obj ||
+            typeof obj !== 'object' ||
+            depth > 6
+        ) {
+            return '';
+        }
+
+        for (const [key, value] of Object.entries(obj)) {
+
+            const normalizedKey =
+                String(key)
+                    .replace(/[-_]/g, '')
+                    .toLowerCase();
+
+            if (
+                normalizedKey === 'accesstoken' ||
+                normalizedKey === 'token'
+            ) {
+
+                if (
+                    value !== undefined &&
+                    value !== null &&
+                    String(value).trim()
+                ) {
+                    return String(value).trim();
+                }
+            }
+
+            if (
+                value &&
+                typeof value === 'object'
+            ) {
+
+                const nested =
+                    deepSearch(
+                        value,
+                        depth + 1
+                    );
+
+                if (nested) {
+                    return nested;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    return deepSearch(data);
+}
 
 // 🛑 மொபைல் நம்பரை செக் செய்து டேட்டாபேஸில் இருந்தால் நேராக பாஸ்வேர்ட் பக்கத்திற்கு அனுப்பும் சரியான லாஜிக்
 async function checkUserAndProceed() {
@@ -8499,6 +8575,10 @@ async function verifyOtpAndSetPassword() {
                 'MSG91 OTP verified:',
                 data
             );
+            console.log(
+    'MSG91 FULL VERIFY RESPONSE:',
+    JSON.stringify(data, null, 2)
+);
 
             msg91AccessToken =
                 getMsg91AccessToken(data);
