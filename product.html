@@ -7907,7 +7907,7 @@ let dateStringLive =
                     let stepServiceClass = 'prem-step-compact';
                     let progressWidth = '0%';
 
-                    let bookedStr = `<b>${orderDateObj.toLocaleDateString()}</b><br><b>${orderDateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
+                    let bookedStr = "--<br>--";
                     let assignedStr = "--<br>--";
                     let wayStr = "--<br>--";
                     let serviceStr = "--<br>--";
@@ -7929,34 +7929,6 @@ let dateStringLive =
                         progressWidth = '75%';
                     }
                     
-                    function formatIndiaTimelineTime(dateValue) {
-
-    if (!dateValue) {
-        return "--<br>--";
-    }
-
-    const d = new Date(dateValue);
-
-    if (isNaN(d.getTime())) {
-        return "--<br>--";
-    }
-
-    const dateText = d.toLocaleDateString('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-
-    const timeText = d.toLocaleTimeString('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    });
-
-    return `<b>${dateText}</b><br><b>${timeText}</b>`;
-}
 
 bookedStr =
     formatIndiaTimelineTime(orderDateObj);

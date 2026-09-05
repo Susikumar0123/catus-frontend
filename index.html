@@ -7581,114 +7581,6 @@ function openServiceProduct(serviceId) {
      let msg91ReqId = '';
 let msg91AccessToken = '';
 
-function getMsg91ReqId(data) {
-
-    if (!data) return '';
-
-    if (typeof data === 'string') {
-
-        const value = data.trim();
-
-        if (/^[a-zA-Z0-9_-]{10,}$/.test(value)) {
-            return value;
-        }
-
-        return '';
-    }
-
-    const directValues = [
-        data.message,
-        data.reqId,
-        data.req_id,
-        data.requestId,
-        data.request_id,
-        data.requestID,
-        data.reqID,
-        data.requestid,
-
-        data.data?.reqId,
-        data.data?.req_id,
-        data.data?.requestId,
-        data.data?.request_id,
-        data.data?.requestID,
-
-        data.response?.reqId,
-        data.response?.requestId,
-        data.response?.request_id,
-
-        data.result?.reqId,
-        data.result?.requestId,
-        data.result?.request_id,
-
-        data.message?.reqId,
-        data.message?.requestId,
-        data.message?.request_id
-    ];
-
-    for (const value of directValues) {
-
-        if (
-            value !== undefined &&
-            value !== null &&
-            String(value).trim()
-        ) {
-            return String(value).trim();
-        }
-    }
-
-    function deepSearch(obj, depth = 0) {
-
-        if (
-            !obj ||
-            typeof obj !== 'object' ||
-            depth > 6
-        ) {
-            return '';
-        }
-
-        for (const [key, value] of Object.entries(obj)) {
-
-            const normalizedKey =
-                String(key)
-                    .replace(/[-_]/g, '')
-                    .toLowerCase();
-
-            if (
-                normalizedKey === 'reqid' ||
-                normalizedKey === 'requestid'
-            ) {
-
-                if (
-                    value !== undefined &&
-                    value !== null &&
-                    String(value).trim()
-                ) {
-                    return String(value).trim();
-                }
-            }
-
-            if (
-                value &&
-                typeof value === 'object'
-            ) {
-
-                const nested =
-                    deepSearch(
-                        value,
-                        depth + 1
-                    );
-
-                if (nested) {
-                    return nested;
-                }
-            }
-        }
-
-        return '';
-    }
-
-    return deepSearch(data);
-}
 function getMsg91AccessToken(data) {
 
     if (!data) return '';
@@ -7785,6 +7677,7 @@ function getMsg91AccessToken(data) {
 
     return deepSearch(data);
 }
+
 
 // 🛑 மொபைல் நம்பரை செக் செய்து டேட்டாபேஸில் இருந்தால் நேராக பாஸ்வேர்ட் பக்கத்திற்கு அனுப்பும் சரியான லாஜிக்
 async function checkUserAndProceed() {
