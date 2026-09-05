@@ -8068,6 +8068,8 @@ async function proceedToOtpFromRegister() {
         false
     );
 
+    await waitForMsg91Captcha();
+
     if (typeof window.sendOtp !== 'function') {
         alert(
             'OTP service is loading. Please try again.'
