@@ -8055,6 +8055,17 @@ async function proceedToOtpFromRegister() {
     // SEND REGISTRATION OTP
     // ==========================================
 
+    // Show OTP step first so MSG91 captcha is visible
+showAuthStep('otp');
+
+const infoEl =
+    document.getElementById('setPasswordInfo');
+
+if (infoEl) {
+    infoEl.textContent =
+        `Complete the security check to send OTP to +91 ${phone}.`;
+}
+
     try {
 
     showToast(
@@ -8099,12 +8110,7 @@ if (!msg91ReqId) {
 msg91AccessToken = '';
 otpVerified = false;
 
-            showAuthStep('otp');
-
-            const infoEl =
-                document.getElementById(
-                    'setPasswordInfo'
-                );
+            
 
             if (infoEl) {
                 infoEl.textContent =
