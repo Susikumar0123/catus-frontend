@@ -8127,6 +8127,32 @@ async function loginWithPassword() {
     }
 }
 
+async function waitForMsg91Captcha() {
+
+    if (typeof window.isCaptchaVerified !== 'function') {
+        return;
+    }
+
+    const startedAt = Date.now();
+
+    while (Date.now() - startedAt < 120000) {
+
+        try {
+
+            if (window.isCaptchaVerified() === true) {
+                return;
+            }
+
+        } catch (error) {
+            console.log('Captcha status waiting...');
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    throw new Error('Captcha verification timeout');
+}
+
 async function triggerForgotPassword() {
 
     if (!tempPhone) {
@@ -8146,11 +8172,13 @@ if (infoEl) {
 }
 
     showToast(
-        "Sending OTP for password reset...",
-        false
-    );
+    "Sending OTP for password reset...",
+    false
+);
 
-   try {
+try {
+
+    await waitForMsg91Captcha();
 
     if (typeof window.sendOtp !== 'function') {
         alert('OTP service is loading. Please try again.');
