@@ -9502,7 +9502,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
 <script>
     function formatShortAddress(fullAddress) {
-        if (!fullAddress) return "Tiruppur - 641601";
+        if (!fullAddress) return "Select Location";
         let parts = fullAddress.split(',').map(p => p.trim());
         
         let pincode = parts.find(p => /^\d{6}$/.test(p)) || "";

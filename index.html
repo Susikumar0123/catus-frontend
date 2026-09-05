@@ -8520,10 +8520,7 @@ async function verifyOtpAndSetPassword() {
                 'MSG91 OTP verified:',
                 data
             );
-            console.log(
-    'MSG91 FULL VERIFY RESPONSE:',
-    JSON.stringify(data, null, 2)
-);
+            
 
             msg91AccessToken =
                 getMsg91AccessToken(data);
