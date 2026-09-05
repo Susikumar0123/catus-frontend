@@ -8779,42 +8779,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // Catus canonical India-time helpers.
     // New orders use booked_at from PostgreSQL. Legacy rows whose old backfill
     // was shifted by exactly 5h30m fall back to the original order_date.
-    function parseCatusDateValue(value) {
-        if (!value) return null;
+   function parseCatusDateValue(value) {
 
-        if (value instanceof Date) {
-            return Number.isNaN(value.getTime()) ? null : value;
-        }
+    if (!value) return null;
 
-        let raw = String(value).trim();
-        if (!raw) return null;
-
-        // PostgreSQL/checkout legacy naive timestamps are India-local.
-        const hasZone = /(?:Z|[+\-]\d{2}:?\d{2})$/i.test(raw);
-        if (!hasZone && /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(raw)) {
-            raw = raw.replace(' ', 'T') + '+05:30';
-        }
-
-        const d = new Date(raw);
-        return Number.isNaN(d.getTime()) ? null : d;
+    if (value instanceof Date) {
+        return Number.isNaN(value.getTime())
+            ? null
+            : value;
     }
+
+    let raw = String(value).trim();
+
+    if (!raw) return null;
+
+    const d = new Date(raw);
+
+    return Number.isNaN(d.getTime())
+        ? null
+        : d;
+}
 
     function getCatusBookedDate(order) {
-        const booked = parseCatusDateValue(order && order.booked_at);
-        const legacy = parseCatusDateValue(order && order.order_date);
 
-        if (booked && legacy) {
-            const diffMinutes = Math.abs(booked.getTime() - legacy.getTime()) / 60000;
+    const booked =
+        parseCatusDateValue(
+            order && order.booked_at
+        );
 
-            // Fix old rows created by the earlier order_date::timestamptz backfill
-            // when a naive IST value was interpreted in UTC.
-            if (diffMinutes >= 325 && diffMinutes <= 335) {
-                return legacy;
-            }
-        }
-
-        return booked || legacy;
+    if (booked) {
+        return booked;
     }
+
+    return parseCatusDateValue(
+        order && order.order_date
+    );
+}
 
     function formatIndiaTimelineTime(value) {
         const d = value instanceof Date ? value : parseCatusDateValue(value);
