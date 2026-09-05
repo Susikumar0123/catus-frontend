@@ -6004,6 +6004,139 @@ updateLocationDisplays(seoLocationText);
                 page.image_url;
         }
 
+        // ------------------------------------------
+// LOAD FULL PRODUCT DATA FOR LOCATION PAGE
+// ------------------------------------------
+
+const servicesResponse =
+    await fetch(
+        `${API_BASE_URL}/api/services`
+    );
+
+const servicesData =
+    await servicesResponse.json();
+
+if (
+    servicesData.success &&
+    Array.isArray(servicesData.services)
+) {
+
+    const fullService =
+        servicesData.services.find(
+            service =>
+                String(service.service_id) ===
+                String(serviceId)
+        );
+
+    if (fullService) {
+
+        currentProductData = {
+            ...fullService,
+            ...currentProductData,
+
+            price:
+                page.location_price ??
+                fullService.price
+        };
+
+
+        // MAIN IMAGE
+        if (
+            imageEl &&
+            fullService.image_url
+        ) {
+            imageEl.src =
+                fullService.image_url;
+        }
+
+
+        // THUMBNAILS
+        const thumbContainer =
+            document.getElementById(
+                'thumbnailContainer'
+            );
+
+        if (thumbContainer) {
+
+            let thumbsHTML = '';
+
+            if (fullService.image_url) {
+                thumbsHTML += `
+                    <div
+                        class="thumb-box active"
+                        onclick="changeMainImage(this)"
+                    >
+                        <img
+                            src="${fullService.image_url}"
+                            alt="Thumb"
+                        >
+                    </div>
+                `;
+            }
+
+            if (fullService.image_url_2) {
+                thumbsHTML += `
+                    <div
+                        class="thumb-box"
+                        onclick="changeMainImage(this)"
+                    >
+                        <img
+                            src="${fullService.image_url_2}"
+                            alt="Thumb"
+                        >
+                    </div>
+                `;
+            }
+
+            if (fullService.image_url_3) {
+                thumbsHTML += `
+                    <div
+                        class="thumb-box"
+                        onclick="changeMainImage(this)"
+                    >
+                        <img
+                            src="${fullService.image_url_3}"
+                            alt="Thumb"
+                        >
+                    </div>
+                `;
+            }
+
+            if (fullService.image_url_4) {
+                thumbsHTML += `
+                    <div
+                        class="thumb-box"
+                        onclick="changeMainImage(this)"
+                    >
+                        <img
+                            src="${fullService.image_url_4}"
+                            alt="Thumb"
+                        >
+                    </div>
+                `;
+            }
+
+            thumbContainer.innerHTML =
+                thumbsHTML;
+        }
+
+
+        // REVIEWS
+        await loadCombinedProductReviews(
+            serviceId,
+            fullService
+        );
+
+
+        // RELATED SERVICES
+        loadRelevantServicesSection(
+            servicesData.services,
+            fullService.category,
+            fullService.service_id
+        );
+    }
+}
+
 
         // ------------------------------------------
         // CATEGORY
