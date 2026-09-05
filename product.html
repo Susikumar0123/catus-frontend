@@ -6111,6 +6111,74 @@ updateLocationDisplays(seoLocationText);
             window.location.pathname;
 
         // ------------------------------------------
+// DYNAMIC OPEN GRAPH SEO
+// ------------------------------------------
+
+const currentSeoUrl =
+    window.location.origin +
+    window.location.pathname;
+
+const seoTitle =
+    page.seo_title ||
+    `${page.service_name} in ${page.location_name}, ${page.district} | Cerood`;
+
+const seoDescription =
+    page.seo_description ||
+    `${page.service_name} in ${page.location_name}, ${page.district}. Book doorstep service with Cerood.`;
+
+function setOgMeta(property, content) {
+
+    let tag =
+        document.querySelector(
+            `meta[property="${property}"]`
+        );
+
+    if (!tag) {
+        tag =
+            document.createElement('meta');
+
+        tag.setAttribute(
+            'property',
+            property
+        );
+
+        document.head.appendChild(tag);
+    }
+
+    tag.setAttribute(
+        'content',
+        content || ''
+    );
+}
+
+setOgMeta(
+    'og:title',
+    seoTitle
+);
+
+setOgMeta(
+    'og:description',
+    seoDescription
+);
+
+setOgMeta(
+    'og:url',
+    currentSeoUrl
+);
+
+setOgMeta(
+    'og:type',
+    'website'
+);
+
+if (page.image_url) {
+    setOgMeta(
+        'og:image',
+        page.image_url
+    );
+}
+
+        // ------------------------------------------
 // DYNAMIC SERVICE + BREADCRUMB SCHEMA
 // ------------------------------------------
 
