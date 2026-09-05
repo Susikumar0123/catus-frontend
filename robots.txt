@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://catus-frontend-nu.vercel.app/sitemap.xml
+Sitemap: https://www.cerood.com/sitemap.xml

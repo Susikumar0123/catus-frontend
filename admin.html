@@ -9,7 +9,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Catus Admin Control Center</title>
+        <title>Cerood Admin Control Center</title>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -278,7 +278,7 @@
 
         <div class="sidebar-header">
 
-            <img src="logo.png" alt="Catus Logo">
+            <img src="logo.png" alt="Cerood Logo">
 
             <div>
 
@@ -761,8 +761,8 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px;">
                         <div class="info-card" style="margin-bottom: 0;">
                             <div class="info-title"><i class="fa-solid fa-mobile-screen"></i> General Details</div>
-                            <div class="form-group"><label>Platform Name</label><input type="text" class="form-input" value="Catus Home Services"></div>
-                            <div class="form-group"><label>Support Email Address</label><input type="email" class="form-input" value="support@catusapp.com"></div>
+                            <div class="form-group"><label>Platform Name</label><input type="text" class="form-input" value="Cerood Home Services"></div>
+                            <div class="form-group"><label>Support Email Address</label><input type="email" class="form-input" value=""></div>
                             <div class="form-group"><label>Customer Helpline No.</label><input type="text" class="form-input" value="+91 9876543210"></div>
                             <div class="form-group"><label>Head Office Address</label><textarea class="form-input" rows="2" style="resize: none;">123, Tech Park Road, Coimbatore, Tamil Nadu.</textarea></div>
                         </div>
@@ -3095,7 +3095,7 @@
             let html = table.outerHTML.replace(/ /g, '%20');
             let downloadLink = document.createElement("a");
             downloadLink.href = 'data:application/vnd.ms-excel,' + html;
-            downloadLink.download = 'Catus_Bookings_Report.xls';
+            downloadLink.download = 'Cerood_Bookings_Report.xls';
             downloadLink.click();
         }
 
@@ -3105,7 +3105,7 @@
             printWin.document.write(`
                 <html>
                 <head>
-                    <title>Catus Bookings Report</title>
+                    <title>Cerood Bookings Report</title>
                     <style>
                         body { font-family: Arial, sans-serif; padding: 20px; color: #1e293b; }
                         h2 { text-align: center; margin-bottom: 20px; color: #0284c7; }
@@ -3116,7 +3116,7 @@
                     </style>
                 </head>
                 <body>
-                    <h2>Catus Admin - Bookings Report</h2>
+                    <h2>Cerood Admin - Bookings Report</h2>
                     ${tableHtml}
                 </body>
                 </html>
