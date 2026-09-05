@@ -4417,6 +4417,15 @@ button,
                         Please enter the OTP sent to your mobile.
                     </p>
 
+                    <div
+    id="msg91Captcha"
+    style="
+        display: flex;
+        justify-content: center;
+        margin-bottom: 12px;
+    "
+></div>
+
 
                     <!-- OTP -->
                     <input
@@ -6381,7 +6390,7 @@ if (mainGrid) {
 }
 async function submitNewPasswordReset() {
 
-    if (!otpVerified) {
+    if (!otpVerified || !msg91AccessToken) {
         alert('Please verify OTP first.');
         showAuthStep('otp');
         return;
@@ -6391,10 +6400,14 @@ async function submitNewPasswordReset() {
         document.getElementById('newResetPassword');
 
     const confirmInput =
-        document.getElementById('newResetConfirmPassword');
+        document.getElementById(
+            'newResetConfirmPassword'
+        );
 
     const errorMsg =
-        document.getElementById('resetPasswordErrorMsg');
+        document.getElementById(
+            'resetPasswordErrorMsg'
+        );
 
     const password =
         passwordInput
@@ -6411,60 +6424,53 @@ async function submitNewPasswordReset() {
     }
 
     if (!password || password.length < 4) {
-        alert('Password must be at least 4 characters.');
+        alert(
+            'Password must be at least 4 characters.'
+        );
         return;
     }
 
     if (password !== confirmPassword) {
 
         if (errorMsg) {
-            errorMsg.textContent = 'Passwords do not match!';
-            errorMsg.style.display = 'block';
+            errorMsg.textContent =
+                'Passwords do not match!';
+
+            errorMsg.style.display =
+                'block';
         }
 
-        return;
-    }
-
-    if (!tempPhone) {
-        alert('Mobile number missing. Please re-enter.');
-        return;
-    }
-
-    // OTP field-ல் user entered OTP இன்னும் இருக்கும்.
-    const otpInput =
-        document.getElementById('inputRegOTP');
-
-    const verifiedOtp =
-        otpInput
-            ? otpInput.value.trim()
-            : '';
-
-    if (!/^\d{4}$/.test(verifiedOtp)) {
-        alert('OTP session is invalid. Please verify again.');
-        showAuthStep('otp');
         return;
     }
 
     try {
 
         const response = await fetch(
-            `${API_BASE_URL}/api/verify-otp-set-password`,
+            `${API_BASE_URL}/api/msg91/reset-password`,
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type':
+                        'application/json'
                 },
                 body: JSON.stringify({
-                    phone: tempPhone,
-                    otp: verifiedOtp,
-                    password: password
+                    accessToken:
+                        msg91AccessToken,
+                    phone:
+                        tempPhone,
+                    password:
+                        password
                 })
             }
         );
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        if (!response.ok || !data.success) {
+        if (
+            !response.ok ||
+            !data.success
+        ) {
             alert(
                 data.message ||
                 'Failed to update password.'
@@ -6472,13 +6478,14 @@ async function submitNewPasswordReset() {
             return;
         }
 
-        currentUser = data.user;
+        currentUser =
+            data.user;
 
         if (
             currentUser &&
             currentUser.wallet === undefined
         ) {
-            currentUser.wallet = 2500;
+            currentUser.wallet = 0;
         }
 
         localStorage.setItem(
@@ -6487,9 +6494,7 @@ async function submitNewPasswordReset() {
         );
 
         updateHeaderLoginUI();
-
         toggleAuthModal(false);
-
         openPremiumDashboard();
 
         showToast(
@@ -6505,102 +6510,29 @@ async function submitNewPasswordReset() {
             confirmInput.value = '';
         }
 
+        const otpInput =
+            document.getElementById(
+                'inputRegOTP'
+            );
+
         if (otpInput) {
             otpInput.value = '';
         }
 
         otpVerified = false;
         authFlowMode = null;
+        msg91ReqId = '';
+        msg91AccessToken = '';
 
-    } catch (err) {
+    } catch (error) {
 
         console.error(
-            'Password reset error:',
-            err
+            'MSG91 password reset error:',
+            error
         );
 
         alert(
             'Server connection error while updating password.'
-        );
-    }
-}
-
-async function resendCurrentOtp() {
-
-    if (!tempPhone || !authFlowMode) {
-        alert('Please restart the authentication process.');
-        return;
-    }
-
-    try {
-
-        const body = {
-    phone: tempPhone
-};
-
-// Registration OTP resend
-if (authFlowMode === 'register') {
-
-    body.mode = 'register';
-    body.resend = true;
-
-    body.name =
-        pendingRegData.name || '';
-
-    body.email =
-        pendingRegData.email || '';
-
-    body.pincode =
-        pendingRegData.pincode || '';
-}
-
-        const response = await fetch(
-            `${API_BASE_URL}/api/send-otp`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-            alert(
-                data.message ||
-                'Failed to resend OTP.'
-            );
-            return;
-        }
-
-        const otpInput =
-            document.getElementById('inputRegOTP');
-
-        if (otpInput) {
-            otpInput.value = '';
-            otpInput.focus();
-        }
-
-        otpVerified = false;
-
-        startTwoMinTimer();
-
-        showToast(
-            'OTP resent successfully!',
-            false
-        );
-
-    } catch (err) {
-
-        console.error(
-            'Resend OTP error:',
-            err
-        );
-
-        alert(
-            'Server error while resending OTP.'
         );
     }
 }
@@ -6622,6 +6554,8 @@ if (authFlowMode === 'register') {
     pendingRegData = {};
     authFlowMode = null;
     otpVerified = false;
+    msg91ReqId = '';
+    msg91AccessToken = '';
 
     const ids = [
         'inputPassword',
@@ -6662,6 +6596,66 @@ let authFlowMode = null;
 // 'forgot' = forgot password
 
 let otpVerified = false;
+let msg91ReqId = '';
+let msg91AccessToken = '';
+
+function getMsg91ReqId(data) {
+
+    if (!data) return '';
+
+    if (typeof data === 'string') {
+        return data.trim();
+    }
+
+    return String(
+        data.reqId ||
+        data.req_id ||
+        data.requestId ||
+        data.request_id ||
+        data.message ||
+        data.data?.reqId ||
+        data.data?.req_id ||
+        data.data?.requestId ||
+        data.data?.request_id ||
+        ''
+    ).trim();
+}
+
+function getMsg91AccessToken(data) {
+
+    if (!data) return '';
+
+    if (typeof data === 'string') {
+        return data.trim();
+    }
+
+    const directValues = [
+        data.accessToken,
+        data.access_token,
+        data['access-token'],
+        data.token,
+        data.message,
+
+        data.data?.accessToken,
+        data.data?.access_token,
+        data.data?.['access-token'],
+        data.data?.token,
+        data.data?.message
+    ];
+
+    for (const value of directValues) {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim()
+        ) {
+            return String(value).trim();
+        }
+    }
+
+    return '';
+}
 
 // 1. மொபைல் நம்பரை செக் செய்து பழையவரா, புதியவரா எனப் பார்த்தல்
 async function checkUserAndProceed() {
@@ -6761,59 +6755,321 @@ async function loginWithPassword() {
     }
 }
 
+async function waitForMsg91Captcha() {
+
+    if (typeof window.isCaptchaVerified !== 'function') {
+        return;
+    }
+
+    const startedAt = Date.now();
+
+    while (Date.now() - startedAt < 120000) {
+
+        try {
+
+            if (window.isCaptchaVerified() === true) {
+                return;
+            }
+
+        } catch (error) {
+            console.log('Captcha status waiting...');
+        }
+
+        await new Promise(
+            resolve => setTimeout(resolve, 500)
+        );
+    }
+
+    throw new Error(
+        'Captcha verification timeout'
+    );
+}
+
 // 4. Forgot Password - OTP அனுப்புவது
 async function triggerForgotPassword() {
-    showToast("Sending OTP for password reset...", false);
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: tempPhone })
-        });
-        const data = await res.json();
 
-        if (data.success) {
-            showAuthStep('setpassword');
-            document.getElementById('setPasswordInfo').textContent = `Reset OTP sent to +91 ${tempPhone}.`;
-            startTwoMinTimer();
-            showToast("OTP sent successfully!", false);
-        } else {
-            alert(data.message || 'Failed to send OTP.');
+    if (!tempPhone) {
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
+
+    if (twoMinTimer) {
+        clearInterval(twoMinTimer);
+        twoMinTimer = null;
+    }
+
+    msg91ReqId = '';
+    msg91AccessToken = '';
+    otpVerified = false;
+    authFlowMode = 'forgot';
+
+    const otpInput =
+        document.getElementById('inputRegOTP');
+
+    if (otpInput) {
+        otpInput.value = '';
+    }
+
+    showAuthStep('otp');
+
+    const infoEl =
+        document.getElementById(
+            'setPasswordInfo'
+        );
+
+    if (infoEl) {
+        infoEl.textContent =
+            `Complete captcha to receive password reset OTP on +91 ${tempPhone}.`;
+    }
+
+    showToast(
+        'Preparing OTP...',
+        false
+    );
+
+    try {
+
+        await waitForMsg91Captcha();
+
+        if (typeof window.sendOtp !== 'function') {
+            alert(
+                'OTP service is loading. Please try again.'
+            );
+            return;
         }
-    } catch (err) {
-        console.error(err);
-        alert('Server error.');
+
+        if (infoEl) {
+            infoEl.textContent =
+                `Sending password reset OTP to +91 ${tempPhone}...`;
+        }
+
+        window.sendOtp(
+            `91${tempPhone}`,
+
+            function (data) {
+
+                console.log(
+                    'MSG91 Forgot Password OTP sent:',
+                    data
+                );
+
+                msg91ReqId =
+                    getMsg91ReqId(data);
+
+                if (!msg91ReqId) {
+
+                    console.error(
+                        'MSG91 reqId missing:',
+                        data
+                    );
+
+                    alert(
+                        'OTP session could not be created. Please try again.'
+                    );
+
+                    return;
+                }
+
+                msg91AccessToken = '';
+                otpVerified = false;
+
+                if (infoEl) {
+                    infoEl.textContent =
+                        `Reset OTP sent to +91 ${tempPhone}. Please enter it below.`;
+                }
+
+                if (otpInput) {
+                    otpInput.value = '';
+                    otpInput.focus();
+                }
+
+                startTwoMinTimer();
+
+                showToast(
+                    'OTP sent successfully!',
+                    false
+                );
+            },
+
+            function (error) {
+
+                console.error(
+                    'MSG91 Forgot Password OTP error:',
+                    error
+                );
+
+                alert(
+                    'Unable to send OTP. Please try again.'
+                );
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Captcha / OTP error:',
+            error
+        );
+
+        alert(
+            'Please complete captcha and try again.'
+        );
     }
 }
 
-// ⏱️ 2 நிமிடங்கள் டைமர் லாஜிக்
-function startTwoMinTimer() {
-    let timeLeft = 120; 
-    const timerCountEl = document.getElementById('timerCount');
-    const resendBtnEl = document.getElementById('resendOtpBtn');
+async function resendCurrentOtp() {
 
-    if (resendBtnEl) resendBtnEl.style.display = 'none';
-    if (twoMinTimer) clearInterval(twoMinTimer);
+    if (!tempPhone || !authFlowMode) {
+        alert(
+            'Please restart the authentication process.'
+        );
+        return;
+    }
+
+    if (!msg91ReqId) {
+        alert(
+            'OTP session expired. Please restart.'
+        );
+        return;
+    }
+
+    if (typeof window.retryOtp !== 'function') {
+        alert(
+            'OTP service is loading. Please try again.'
+        );
+        return;
+    }
+
+    window.retryOtp(
+        null,
+
+        function (data) {
+
+            console.log(
+                'MSG91 OTP resent:',
+                data
+            );
+
+            const newReqId =
+                getMsg91ReqId(data);
+
+            if (newReqId) {
+                msg91ReqId = newReqId;
+            }
+
+            msg91AccessToken = '';
+            otpVerified = false;
+
+            const otpInput =
+                document.getElementById(
+                    'inputRegOTP'
+                );
+
+            if (otpInput) {
+                otpInput.value = '';
+                otpInput.focus();
+            }
+
+            startTwoMinTimer();
+
+            showToast(
+                'OTP resent successfully!',
+                false
+            );
+        },
+
+        function (error) {
+
+            console.error(
+                'MSG91 resend OTP error:',
+                error
+            );
+
+            alert(
+                'Unable to resend OTP. Please try again.'
+            );
+        },
+
+        msg91ReqId
+    );
+}
+
+function startTwoMinTimer() {
+
+    let timeLeft = 120;
+
+    const timerCountEl =
+        document.getElementById('timerCount');
+
+    const resendBtnEl =
+        document.getElementById('resendOtpBtn');
+
+    if (twoMinTimer) {
+        clearInterval(twoMinTimer);
+        twoMinTimer = null;
+    }
+
+    if (timerCountEl) {
+
+        timerCountEl.textContent = '2:00';
+
+        if (timerCountEl.parentElement) {
+            timerCountEl.parentElement.style.display = '';
+        }
+    }
+
+    if (resendBtnEl) {
+        resendBtnEl.style.display = 'none';
+    }
 
     twoMinTimer = setInterval(() => {
-        let mins = Math.floor(timeLeft / 60);
-        let secs = timeLeft % 60;
+
+        const mins =
+            Math.floor(timeLeft / 60);
+
+        const secs =
+            timeLeft % 60;
+
         if (timerCountEl) {
-            timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            timerCountEl.textContent =
+                `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
+
         if (timeLeft <= 0) {
+
             clearInterval(twoMinTimer);
-            if (timerCountEl) timerCountEl.parentElement.style.display = 'none';
-            if (resendBtnEl) resendBtnEl.style.display = 'inline';
+            twoMinTimer = null;
+
+            if (
+                timerCountEl &&
+                timerCountEl.parentElement
+            ) {
+                timerCountEl.parentElement.style.display =
+                    'none';
+            }
+
+            if (resendBtnEl) {
+                resendBtnEl.style.display =
+                    'inline';
+            }
+
+            return;
         }
+
         timeLeft--;
+
     }, 1000);
 }
 
 async function verifyOtpAndSetPassword() {
 
-    const otpInput = document.getElementById('inputRegOTP');
-    const otp = otpInput ? otpInput.value.trim() : '';
+    const otpInput =
+        document.getElementById('inputRegOTP');
+
+    const otp =
+        otpInput
+            ? otpInput.value.trim()
+            : '';
 
     if (!/^\d{4}$/.test(otp)) {
         alert('Please enter a valid 4-digit OTP.');
@@ -6826,155 +7082,184 @@ async function verifyOtpAndSetPassword() {
     }
 
     if (!authFlowMode) {
-        alert('Authentication session expired. Please start again.');
+        alert(
+            'Authentication session expired. Please start again.'
+        );
         backToPhoneStep();
         return;
     }
 
-    // ==========================================
-    // NEW USER REGISTRATION
-    // ==========================================
-    if (authFlowMode === 'register') {
-
-        const registrationPassword =
-            pendingRegData &&
-            pendingRegData.password
-                ? pendingRegData.password.trim()
-                : '';
-
-        if (!registrationPassword ||
-            registrationPassword.length < 4) {
-
-            alert(
-                'Registration password is missing. Please register again.'
-            );
-
-            showAuthStep('register');
-            return;
-        }
-
-        try {
-
-            const response = await fetch(
-                `${API_BASE_URL}/api/verify-otp-set-password`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        phone: tempPhone,
-                        otp: otp,
-                        password: registrationPassword
-                    })
-                }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok || !data.success) {
-                alert(
-                    data.message ||
-                    'Invalid or incorrect OTP.'
-                );
-                return;
-            }
-
-            currentUser = data.user;
-
-            if (
-                currentUser &&
-                currentUser.wallet === undefined
-            ) {
-                currentUser.wallet = 2500;
-            }
-
-            localStorage.setItem(
-                'catus_logged_user',
-                JSON.stringify(currentUser)
-            );
-
-            updateHeaderLoginUI();
-            toggleAuthModal(false);
-            openPremiumDashboard();
-
-            showToast(
-                'Account created successfully!',
-                false
-            );
-
-            pendingRegData = {};
-            authFlowMode = null;
-            otpVerified = false;
-
-        } catch (err) {
-
-            console.error(
-                'Registration OTP verification error:',
-                err
-            );
-
-            alert(
-                'Server connection error during registration.'
-            );
-        }
-
+    if (!msg91ReqId) {
+        alert(
+            'OTP session expired. Please request OTP again.'
+        );
         return;
     }
 
+    if (typeof window.verifyOtp !== 'function') {
+        alert(
+            'OTP service is loading. Please try again.'
+        );
+        return;
+    }
 
-    // ==========================================
-    // FORGOT PASSWORD
-    // ==========================================
-    if (authFlowMode === 'forgot') {
+    window.verifyOtp(
+        otp,
 
-        try {
+        async function (data) {
 
-            const response = await fetch(
-                `${API_BASE_URL}/api/verify-otp`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        phone: tempPhone,
-                        otp: otp
-                    })
-                }
+            console.log(
+                'MSG91 OTP verified:',
+                data
             );
 
-            const data = await response.json();
+            msg91AccessToken =
+                getMsg91AccessToken(data);
 
-            if (!response.ok || !data.success) {
-                alert(
-                    data.message ||
-                    'Invalid or incorrect OTP.'
+            if (!msg91AccessToken) {
+
+                console.error(
+                    'MSG91 access token missing:',
+                    data
                 );
+
+                alert(
+                    'OTP verification token missing. Please try again.'
+                );
+
                 return;
             }
 
-            otpVerified = true;
 
-            showAuthStep('newpassword');
+            // =============================
+            // REGISTRATION
+            // =============================
+            if (authFlowMode === 'register') {
 
-            showToast(
-                'OTP verified successfully!',
-                false
-            );
+                try {
 
-        } catch (err) {
+                    const response = await fetch(
+                        `${API_BASE_URL}/api/msg91/complete-registration`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+                            body: JSON.stringify({
+                                accessToken:
+                                    msg91AccessToken,
+
+                                phone:
+                                    tempPhone,
+
+                                name:
+                                    pendingRegData.name || '',
+
+                                email:
+                                    pendingRegData.email || '',
+
+                                pincode:
+                                    pendingRegData.pincode || '',
+
+                                password:
+                                    pendingRegData.password || ''
+                            })
+                        }
+                    );
+
+                    const result =
+                        await response.json();
+
+                    if (
+                        !response.ok ||
+                        !result.success
+                    ) {
+                        alert(
+                            result.message ||
+                            'Unable to complete registration.'
+                        );
+                        return;
+                    }
+
+                    currentUser =
+                        result.user;
+
+                    if (
+                        currentUser &&
+                        currentUser.wallet === undefined
+                    ) {
+                        currentUser.wallet = 0;
+                    }
+
+                    localStorage.setItem(
+                        'catus_logged_user',
+                        JSON.stringify(currentUser)
+                    );
+
+                    updateHeaderLoginUI();
+                    toggleAuthModal(false);
+                    openPremiumDashboard();
+
+                    showToast(
+                        'Account created successfully!',
+                        false
+                    );
+
+                    pendingRegData = {};
+                    authFlowMode = null;
+                    otpVerified = false;
+                    msg91ReqId = '';
+                    msg91AccessToken = '';
+
+                } catch (error) {
+
+                    console.error(
+                        'MSG91 registration error:',
+                        error
+                    );
+
+                    alert(
+                        'Server connection error during registration.'
+                    );
+                }
+
+                return;
+            }
+
+
+            // =============================
+            // FORGOT PASSWORD
+            // =============================
+            if (authFlowMode === 'forgot') {
+
+                otpVerified = true;
+
+                showAuthStep('newpassword');
+
+                showToast(
+                    'OTP verified successfully!',
+                    false
+                );
+
+                return;
+            }
+        },
+
+        function (error) {
 
             console.error(
-                'Forgot password OTP error:',
-                err
+                'MSG91 OTP verification failed:',
+                error
             );
 
             alert(
-                'Server connection error during OTP verification.'
+                'Invalid or incorrect OTP. Please try again.'
             );
-        }
-    }
+        },
+
+        msg91ReqId
+    );
 }
 
 function showAuthStep(step) {
@@ -7238,96 +7523,123 @@ async function proceedToOtpFromRegister() {
     };
 
 
-    // ==========================================
-    // SEND REGISTRATION OTP
-    // ==========================================
+ // ==========================================
+// SEND REGISTRATION OTP - MSG91
+// ==========================================
 
-    try {
+msg91ReqId = '';
+msg91AccessToken = '';
+otpVerified = false;
 
-        showToast(
-            'Sending OTP...',
-            false
+const otpInput =
+    document.getElementById('inputRegOTP');
+
+const infoEl =
+    document.getElementById('setPasswordInfo');
+
+if (otpInput) {
+    otpInput.value = '';
+}
+
+showAuthStep('otp');
+
+if (infoEl) {
+    infoEl.textContent =
+        `Complete captcha to receive registration OTP on +91 ${phone}.`;
+}
+
+showToast(
+    'Preparing OTP...',
+    false
+);
+
+try {
+
+    await waitForMsg91Captcha();
+
+    if (typeof window.sendOtp !== 'function') {
+        alert(
+            'OTP service is loading. Please try again.'
         );
+        return;
+    }
 
-        const response = await fetch(
-            `${API_BASE_URL}/api/send-otp`,
-            {
-                method: 'POST',
+    if (infoEl) {
+        infoEl.textContent =
+            `Sending registration OTP to +91 ${phone}...`;
+    }
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+    window.sendOtp(
+        `91${phone}`,
 
-                body: JSON.stringify({
-                    phone: phone,
-                    mode: 'register',
-                    name: name,
-                    email: email,
-                    pincode: pincode
-                })
+        function (data) {
+
+            console.log(
+                'MSG91 Registration OTP sent:',
+                data
+            );
+
+            msg91ReqId =
+                getMsg91ReqId(data);
+
+            if (!msg91ReqId) {
+
+                console.error(
+                    'MSG91 reqId missing in registration:',
+                    data
+                );
+
+                alert(
+                    'OTP session could not be created. Please try again.'
+                );
+
+                return;
             }
-        );
 
-        const data =
-            await response.json();
+            msg91AccessToken = '';
+            otpVerified = false;
 
+            if (infoEl) {
+                infoEl.textContent =
+                    `Registration OTP sent to +91 ${phone}. Please enter it below.`;
+            }
 
-        if (!response.ok || !data.success) {
+            if (otpInput) {
+                otpInput.value = '';
+                otpInput.focus();
+            }
+
+            startTwoMinTimer();
+
+            showToast(
+                'OTP sent successfully!',
+                false
+            );
+        },
+
+        function (error) {
+
+            console.error(
+                'MSG91 Registration OTP error:',
+                error
+            );
 
             alert(
-                data.message ||
-                'Unable to send registration OTP.'
+                'Unable to send registration OTP. Please try again.'
             );
-
-            return;
         }
+    );
 
+} catch (error) {
 
-        // ==========================================
-        // OTP SCREEN
-        // ==========================================
+    console.error(
+        'Registration captcha / OTP error:',
+        error
+    );
 
-        showAuthStep('otp');
-
-        const infoEl =
-            document.getElementById(
-                'setPasswordInfo'
-            );
-
-        if (infoEl) {
-
-            infoEl.textContent =
-                `Registration OTP sent to +91 ${phone}. Please enter it below.`;
-        }
-
-        const otpInput =
-            document.getElementById(
-                'inputRegOTP'
-            );
-
-        if (otpInput) {
-            otpInput.value = '';
-            otpInput.focus();
-        }
-
-        startTwoMinTimer();
-
-        showToast(
-            'OTP sent successfully!',
-            false
-        );
-
-    } catch (error) {
-
-        console.error(
-            'Registration OTP error:',
-            error
-        );
-
-        alert(
-            'Server connection error while sending registration OTP.'
-        );
-    }
+    alert(
+        'Please complete captcha and try again.'
+    );
 }
 
 
@@ -9323,6 +9635,36 @@ function togglePasswordVisibility(fieldId, iconElement) {
     animatePlaceholder();
 
 })();
+</script>
+<script>
+const MSG91_WIDGET_ID = '366965657347303138353039';
+const MSG91_WIDGET_TOKEN = '567815T0OZZpNFK06a9ba743P1';
+
+const msg91Configuration = {
+    widgetId: MSG91_WIDGET_ID,
+    tokenAuth: MSG91_WIDGET_TOKEN,
+    exposeMethods: true,
+    captchaRenderId: 'msg91Captcha',
+
+    success: function (data) {
+        console.log(
+            'MSG91 success:',
+            data
+        );
+    },
+
+    failure: function (error) {
+        console.error(
+            'MSG91 failure:',
+            error
+        );
+    }
+};
+</script>
+<script
+    type="text/javascript"
+    onload="initSendOTP(msg91Configuration)"
+    src="https://verify.msg91.com/otp-provider.js">
 </script>
 </body>
 </html>
