@@ -7582,25 +7582,112 @@ function openServiceProduct(serviceId) {
 let msg91AccessToken = '';
 
 function getMsg91ReqId(data) {
+
     if (!data) return '';
 
     if (typeof data === 'string') {
-        return data.trim();
+
+        const value = data.trim();
+
+        if (/^[a-zA-Z0-9_-]{10,}$/.test(value)) {
+            return value;
+        }
+
+        return '';
     }
 
-    return String(
-        data.reqId ||
-        data.req_id ||
-        data.requestId ||
-        data.request_id ||
-        data.data?.reqId ||
-        data.data?.req_id ||
-        data.data?.requestId ||
-        data.data?.request_id ||
-        ''
-    ).trim();
-}
+    const directValues = [
+        data.reqId,
+        data.req_id,
+        data.requestId,
+        data.request_id,
+        data.requestID,
+        data.reqID,
+        data.requestid,
 
+        data.data?.reqId,
+        data.data?.req_id,
+        data.data?.requestId,
+        data.data?.request_id,
+        data.data?.requestID,
+
+        data.response?.reqId,
+        data.response?.requestId,
+        data.response?.request_id,
+
+        data.result?.reqId,
+        data.result?.requestId,
+        data.result?.request_id,
+
+        data.message?.reqId,
+        data.message?.requestId,
+        data.message?.request_id
+    ];
+
+    for (const value of directValues) {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim()
+        ) {
+            return String(value).trim();
+        }
+    }
+
+    function deepSearch(obj, depth = 0) {
+
+        if (
+            !obj ||
+            typeof obj !== 'object' ||
+            depth > 6
+        ) {
+            return '';
+        }
+
+        for (const [key, value] of Object.entries(obj)) {
+
+            const normalizedKey =
+                String(key)
+                    .replace(/[-_]/g, '')
+                    .toLowerCase();
+
+            if (
+                normalizedKey === 'reqid' ||
+                normalizedKey === 'requestid'
+            ) {
+
+                if (
+                    value !== undefined &&
+                    value !== null &&
+                    String(value).trim()
+                ) {
+                    return String(value).trim();
+                }
+            }
+
+            if (
+                value &&
+                typeof value === 'object'
+            ) {
+
+                const nested =
+                    deepSearch(
+                        value,
+                        depth + 1
+                    );
+
+                if (nested) {
+                    return nested;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    return deepSearch(data);
+}
 function getMsg91AccessToken(data) {
     if (!data) return '';
 
@@ -8160,6 +8247,40 @@ async function triggerForgotPassword() {
         return;
     }
 
+    if (twoMinTimer) {
+    clearInterval(twoMinTimer);
+    twoMinTimer = null;
+}
+
+msg91ReqId = '';
+msg91AccessToken = '';
+otpVerified = false;
+
+const oldOtpInput =
+    document.getElementById('inputRegOTP');
+
+if (oldOtpInput) {
+    oldOtpInput.value = '';
+}
+const timerCountEl =
+    document.getElementById('timerCount');
+
+const resendBtnEl =
+    document.getElementById('resendOtpBtn');
+
+if (timerCountEl) {
+
+    timerCountEl.textContent = '2:00';
+
+    if (timerCountEl.parentElement) {
+        timerCountEl.parentElement.style.display = '';
+    }
+}
+
+if (resendBtnEl) {
+    resendBtnEl.style.display = 'none';
+}
+
     authFlowMode = 'forgot';
 
     showAuthStep('otp');
@@ -8194,6 +8315,10 @@ try {
                 'MSG91 Forgot Password OTP sent:',
                 data
             );
+            console.log(
+    'MSG91 FULL SEND RESPONSE:',
+    JSON.stringify(data, null, 2)
+);
 
             msg91ReqId = getMsg91ReqId(data);
 
@@ -8267,25 +8392,64 @@ otpVerified = false;
 
 // ⏱️ 2 நிமிடங்கள் டைமர் லாஜிக்
 function startTwoMinTimer() {
-    let timeLeft = 120; 
-    const timerCountEl = document.getElementById('timerCount');
-    const resendBtnEl = document.getElementById('resendOtpBtn');
 
-    if (resendBtnEl) resendBtnEl.style.display = 'none';
-    if (twoMinTimer) clearInterval(twoMinTimer);
+    let timeLeft = 120;
+
+    const timerCountEl =
+        document.getElementById('timerCount');
+
+    const resendBtnEl =
+        document.getElementById('resendOtpBtn');
+
+    if (twoMinTimer) {
+        clearInterval(twoMinTimer);
+        twoMinTimer = null;
+    }
+
+    if (timerCountEl) {
+
+        timerCountEl.textContent = '2:00';
+
+        if (timerCountEl.parentElement) {
+            timerCountEl.parentElement.style.display = '';
+        }
+    }
+
+    if (resendBtnEl) {
+        resendBtnEl.style.display = 'none';
+    }
 
     twoMinTimer = setInterval(() => {
+
         let mins = Math.floor(timeLeft / 60);
         let secs = timeLeft % 60;
+
         if (timerCountEl) {
-            timerCountEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            timerCountEl.textContent =
+                `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
+
         if (timeLeft <= 0) {
+
             clearInterval(twoMinTimer);
-            if (timerCountEl) timerCountEl.parentElement.style.display = 'none';
-            if (resendBtnEl) resendBtnEl.style.display = 'inline';
+            twoMinTimer = null;
+
+            if (
+                timerCountEl &&
+                timerCountEl.parentElement
+            ) {
+                timerCountEl.parentElement.style.display = 'none';
+            }
+
+            if (resendBtnEl) {
+                resendBtnEl.style.display = 'inline';
+            }
+
+            return;
         }
+
         timeLeft--;
+
     }, 1000);
 }
 
