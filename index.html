@@ -6342,9 +6342,22 @@ padding: 0 12px !important;
                       Cust ID: #-
                   </div>
               </div>
-              <div class="header-right-group">
-                  <button class="prem-icon-btn" style="margin:0;"><i class="fa-solid fa-bell"></i></button>
-              </div>
+              <div class="header-right-group" style="gap:4px;">
+
+    <button class="prem-icon-btn"
+            style="margin:0;"
+            title="Profile Settings"
+            onclick="switchDashTab('profile', null, true)">
+        <i class="fa-solid fa-user"></i>
+    </button>
+
+    <button class="prem-icon-btn"
+            style="margin:0;"
+            title="Notifications">
+        <i class="fa-solid fa-bell"></i>
+    </button>
+
+</div>
           </div>
 
           <!-- TAB 1: HOME DASHBOARD -->
@@ -7577,19 +7590,7 @@ function openServiceProduct(serviceId) {
     }, 50);
 }
 
-function openMobileAccount() {
 
-    if (!currentUser) {
-        handleHeaderAuthClick();
-        return;
-    }
-
-    openPremiumDashboard();
-
-    setTimeout(() => {
-        switchDashTab('profile', null, true);
-    }, 50);
-}
 
     function closePremiumDashboard() {
         document.getElementById('premiumCustomerDashboard').style.display = 'none';
@@ -11204,7 +11205,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- ACCOUNT -->
     <button class="bot-nav-item"
-        onclick="openMobileAccount()">
+        onclick="handleHeaderAuthClick()">
 
         <div class="nav-icon-ring nav-account">
             <svg viewBox="0 0 24 24" class="catus-bottom-icon">
