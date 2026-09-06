@@ -12561,5 +12561,91 @@ document.addEventListener('DOMContentLoaded', function () {
     onload="initSendOTP(msg91Configuration)"
     src="https://verify.msg91.com/otp-provider.js">
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const mobileNav = document.querySelector('.mobile-bottom-nav');
+
+    if (!mobileNav) {
+        console.error('Homepage mobile bottom nav not found');
+        return;
+    }
+
+    /* IMPORTANT:
+       எந்த parent/container உள்ளே இருந்தாலும்
+       nav-ஐ direct body child ஆக move செய்யும்
+    */
+    document.body.appendChild(mobileNav);
+
+    if (window.innerWidth <= 850) {
+
+        mobileNav.style.setProperty('display', 'flex', 'important');
+        mobileNav.style.setProperty('visibility', 'visible', 'important');
+        mobileNav.style.setProperty('opacity', '1', 'important');
+
+        mobileNav.style.setProperty('position', 'fixed', 'important');
+
+        mobileNav.style.setProperty('left', '0', 'important');
+        mobileNav.style.setProperty('right', '0', 'important');
+        mobileNav.style.setProperty('bottom', '0', 'important');
+
+        mobileNav.style.setProperty('width', '100%', 'important');
+        mobileNav.style.setProperty('height', '62px', 'important');
+
+        mobileNav.style.setProperty('margin', '0', 'important');
+        mobileNav.style.setProperty(
+            'padding',
+            '4px 4px calc(4px + env(safe-area-inset-bottom)) 4px',
+            'important'
+        );
+
+        mobileNav.style.setProperty('box-sizing', 'border-box', 'important');
+
+        mobileNav.style.setProperty('background', '#ffffff', 'important');
+        mobileNav.style.setProperty(
+            'border-top',
+            '1px solid #eeeeee',
+            'important'
+        );
+
+        mobileNav.style.setProperty(
+            'box-shadow',
+            '0 -2px 10px rgba(0,0,0,0.05)',
+            'important'
+        );
+
+        mobileNav.style.setProperty(
+            'justify-content',
+            'space-around',
+            'important'
+        );
+
+        mobileNav.style.setProperty(
+            'align-items',
+            'center',
+            'important'
+        );
+
+        mobileNav.style.setProperty(
+            'z-index',
+            '2147483647',
+            'important'
+        );
+
+        mobileNav.style.setProperty(
+            'transform',
+            'translateZ(0)',
+            'important'
+        );
+
+        mobileNav.style.setProperty(
+            'pointer-events',
+            'auto',
+            'important'
+        );
+    }
+
+});
+</script>
 </body>
 </html>
