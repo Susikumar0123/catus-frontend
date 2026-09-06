@@ -3304,10 +3304,13 @@ a.book-btn {
 
     #cartModal {
         position: fixed !important;
-        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 56px !important;
 
         width: 100vw !important;
-        height: 100dvh !important;
+        height: calc(100dvh - 56px) !important;
 
         margin: 0 !important;
         padding: 0 !important;
@@ -3328,15 +3331,15 @@ a.book-btn {
         position: fixed !important;
 
         top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
+left: 0 !important;
+right: 0 !important;
+bottom: 56px !important;
 
-        width: 100vw !important;
-        max-width: 100vw !important;
+width: 100vw !important;
+max-width: 100vw !important;
 
-        height: 100dvh !important;
-        max-height: 100dvh !important;
+height: calc(100dvh - 56px) !important;
+max-height: calc(100dvh - 56px) !important;
 
         margin: 0 !important;
         padding: 0 !important;
@@ -3447,10 +3450,6 @@ a.book-btn {
         box-sizing: border-box !important;
     }
 
-    /* Cart open-a irukkumbodhu page bottom nav pinnadi hide */
-    body:has(#cartModal[style*="display: flex"]) .mobile-bottom-nav {
-        display: none !important;
-    }
 }
 
 /* =========================================
@@ -6332,7 +6331,7 @@ padding: 0 12px !important;
           <!-- FIXED RESPONSIVE HEADER - NOW PERFECTLY CENTERED -->
           <div class="prem-dash-header prem-dash-header-centered">
               <div class="header-left-group">
-                  <button class="prem-icon-btn" onclick="closePremiumDashboard()" title="Back to Home Page" style="margin:0; flex-shrink:0; background:rgba(255,255,255,0.2); border-radius:8px; width:36px; height:36px;"><i class="fa-solid fa-arrow-left"></i></button>
+                  <button class="prem-icon-btn" onclick="handleDashboardBack()" title="Back to Home Page" style="margin:0; flex-shrink:0; background:rgba(255,255,255,0.2); border-radius:8px; width:36px; height:36px;"><i class="fa-solid fa-arrow-left"></i></button>
                   <div class="prem-greeting" style="overflow: hidden;">
                       <h1 id="greetName" class="prem-greeting-text"> Welcome, Customer</h1>
                   </div>
@@ -6342,19 +6341,13 @@ padding: 0 12px !important;
                       Cust ID: #-
                   </div>
               </div>
-              <div class="header-right-group" style="gap:4px;">
+             <div class="header-right-group">
 
     <button class="prem-icon-btn"
             style="margin:0;"
             title="Profile Settings"
             onclick="switchDashTab('profile', null, true)">
         <i class="fa-solid fa-user"></i>
-    </button>
-
-    <button class="prem-icon-btn"
-            style="margin:0;"
-            title="Notifications">
-        <i class="fa-solid fa-bell"></i>
     </button>
 
 </div>
@@ -7590,7 +7583,17 @@ function openServiceProduct(serviceId) {
     }, 50);
 }
 
+function handleDashboardBack() {
 
+    const profileTab = document.getElementById('dashTabProfile');
+
+    if (profileTab && profileTab.classList.contains('active')) {
+        switchDashTab('home', null, true);
+        return;
+    }
+
+    closePremiumDashboard();
+}
 
     function closePremiumDashboard() {
         document.getElementById('premiumCustomerDashboard').style.display = 'none';
