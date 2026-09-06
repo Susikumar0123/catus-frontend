@@ -5475,28 +5475,204 @@ padding: 0 12px !important;
     }
 }
 
-/* ==============================================
-   HIDE HOMEPAGE NAV WHILE CUSTOMER DASHBOARD OPEN
-============================================== */
+/* =====================================================
+   CEROOD SINGLE GLOBAL MOBILE NAV
+===================================================== */
+
+.cerood-global-mobile-nav {
+    display: none;
+}
+
 
 @media (max-width: 850px) {
 
-    body.cerood-dashboard-open .mobile-bottom-nav {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
+    body {
+        padding-bottom:
+            calc(64px + env(safe-area-inset-bottom))
+            !important;
+    }
 
-    body.cerood-dashboard-open
-    #premiumCustomerDashboard
-    .catus-modern-dash-nav {
+
+    .cerood-global-mobile-nav {
 
         display: flex !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
+
+        position: fixed !important;
+
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+
+        height:
+            calc(62px + env(safe-area-inset-bottom))
+            !important;
+
+        padding:
+            3px 0 env(safe-area-inset-bottom)
+            !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        border-top:
+            1px solid #eeeeee !important;
+
+        box-shadow:
+            0 -3px 14px rgba(0,0,0,.04)
+            !important;
+
+        align-items: center !important;
+        justify-content: space-around !important;
 
         z-index: 2147483647 !important;
+    }
+
+
+    .cerood-global-nav-btn {
+
+        flex: 1 1 20% !important;
+
+        height: 100% !important;
+
+        margin: 0 !important;
+        padding: 2px 0 !important;
+
+        border: 0 !important;
+
+        background: transparent !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 3px !important;
+
+        font-family: inherit !important;
+
+        color: #666666 !important;
+
+        cursor: pointer !important;
+
+        position: relative !important;
+    }
+
+
+    .cerood-global-nav-ring {
+
+        position: relative !important;
+
+        width: 35px !important;
+        height: 35px !important;
+
+        border-radius: 50% !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        background: #ffffff !important;
+
+        border: 2px solid #e3e6ea !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .cerood-global-nav-ring svg {
+
+        width: 18px !important;
+        height: 18px !important;
+
+        stroke: #111827 !important;
+
+        stroke-width: 1.8 !important;
+    }
+
+
+    /* individual accent */
+
+    .ring-home {
+        border-top-color: #6d4aff !important;
+    }
+
+    .ring-services {
+        border-top-color: #20bfd4 !important;
+    }
+
+    .ring-cart {
+        border-top-color: #f4a000 !important;
+    }
+
+    .ring-bookings {
+        border-top-color: #34b95a !important;
+    }
+
+    .ring-account {
+        border-top-color: #f43f86 !important;
+    }
+
+
+    /* LABEL */
+
+    .cerood-global-nav-btn > span:last-child {
+
+        font-size: 9px !important;
+
+        line-height: 11px !important;
+
+        font-weight: 400 !important;
+
+        color: #666666 !important;
+    }
+
+
+    /* ACTIVE */
+
+    .cerood-global-nav-btn.active
+    > span:last-child {
+
+        color: #6d4aff !important;
+
+        font-weight: 500 !important;
+    }
+
+
+    .cerood-global-nav-btn.active
+    .cerood-global-nav-ring::after {
+
+        content: "";
+
+        position: absolute;
+
+        left: 50%;
+        bottom: -6px;
+
+        transform: translateX(-50%);
+
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: #6d4aff;
+    }
+
+
+    /* dashboard content bottom spacing */
+
+    #premiumCustomerDashboard
+    .prem-dash-content {
+
+        padding-bottom: 64px !important;
+
+        box-sizing: border-box !important;
     }
 }
 
@@ -6561,49 +6737,7 @@ padding: 0 12px !important;
       </div>
 
       <!-- CUSTOMER DASHBOARD MOBILE NAV -->
-<div class="prem-bottom-nav catus-modern-dash-nav">
 
-    <button class="prem-nav-btn active"
-            onclick="switchDashTab('home', this, true)">
-        <span class="dash-nav-ring dash-home-ring">
-            <i data-lucide="house"></i>
-        </span>
-        <span>Home</span>
-    </button>
-
-    <button class="prem-nav-btn"
-            onclick="closePremiumDashboard(); setTimeout(scrollToCategories, 100);">
-        <span class="dash-nav-ring dash-services-ring">
-            <i data-lucide="layout-grid"></i>
-        </span>
-        <span>Services</span>
-    </button>
-
-    <button class="prem-nav-btn"
-            onclick="closePremiumDashboard(); setTimeout(() => toggleCartModal(true), 100);">
-        <span class="dash-nav-ring dash-cart-ring">
-            <i data-lucide="shopping-cart"></i>
-        </span>
-        <span>Cart</span>
-    </button>
-
-    <button class="prem-nav-btn"
-            onclick="switchDashTab('bookings', this, true)">
-        <span class="dash-nav-ring dash-bookings-ring">
-            <i data-lucide="calendar-days"></i>
-        </span>
-        <span>Bookings</span>
-    </button>
-
-    <button class="prem-nav-btn"
-            onclick="switchDashTab('profile', this, true)">
-        <span class="dash-nav-ring dash-account-ring">
-            <i data-lucide="user-round"></i>
-        </span>
-        <span>Account</span>
-    </button>
-
-</div>
 
 </div>
    <!-- EDIT ADDRESS MODAL FOR LIVE TRACKING -->
@@ -7633,10 +7767,19 @@ function handleDashboardBack() {
 }
 
     function closePremiumDashboard() {
-        document.getElementById('premiumCustomerDashboard').style.display = 'none';
-        document.body.classList.remove('cerood-dashboard-open');
-        document.body.style.overflow = 'auto';
-    }
+
+    document.getElementById(
+        'premiumCustomerDashboard'
+    ).style.display = 'none';
+
+    document.body.classList.remove(
+        'cerood-dashboard-open'
+    );
+
+    document.body.style.overflow = 'auto';
+
+    
+}
 
     function switchDashTab(tabId, element, isMobile = false) {
         document.querySelectorAll('.prem-tab-pane').forEach(tab => tab.classList.remove('active'));
@@ -10338,6 +10481,146 @@ function setupMobileBannerDots() {
             firstCat.scrollIntoView({ behavior: 'smooth' });
         }
     }
+
+    function ceroodSetMobileNavActive(tab) {
+
+    document.querySelectorAll('.cerood-global-nav-btn')
+        .forEach(btn => {
+            btn.classList.toggle(
+                'active',
+                btn.dataset.nav === tab
+            );
+        });
+}
+
+
+function ceroodMobileNavigate(tab, button) {
+
+    // close cart first
+    toggleCartModal(false);
+
+    const dashboard =
+        document.getElementById('premiumCustomerDashboard');
+
+    // -------------------------
+    // HOME
+    // -------------------------
+    if (tab === 'home') {
+
+        if (dashboard) {
+            dashboard.style.display = 'none';
+        }
+
+        document.body.classList.remove('cerood-dashboard-open');
+        document.body.style.overflow = 'auto';
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+        ceroodSetMobileNavActive('home');
+        return;
+    }
+
+
+    // -------------------------
+    // SERVICES
+    // -------------------------
+    if (tab === 'services') {
+
+        if (dashboard) {
+            dashboard.style.display = 'none';
+        }
+
+        document.body.classList.remove('cerood-dashboard-open');
+        document.body.style.overflow = 'auto';
+
+        setTimeout(() => {
+            scrollToCategories();
+        }, 100);
+
+        ceroodSetMobileNavActive('services');
+        return;
+    }
+
+
+    // -------------------------
+    // CART
+    // -------------------------
+    if (tab === 'cart') {
+
+        if (dashboard) {
+            dashboard.style.display = 'none';
+        }
+
+        document.body.classList.remove('cerood-dashboard-open');
+        document.body.style.overflow = 'auto';
+
+        setTimeout(() => {
+            toggleCartModal(true);
+        }, 50);
+
+        ceroodSetMobileNavActive('cart');
+        return;
+    }
+
+
+    // -------------------------
+    // BOOKINGS
+    // -------------------------
+    if (tab === 'bookings') {
+
+        if (!currentUser) {
+
+            showAuthStep('phone');
+            toggleAuthModal(true);
+
+            return;
+        }
+
+        openPremiumDashboard();
+
+        setTimeout(() => {
+            switchDashTab(
+                'bookings',
+                null,
+                true
+            );
+        }, 50);
+
+        ceroodSetMobileNavActive('bookings');
+        return;
+    }
+
+
+    // -------------------------
+    // ACCOUNT
+    // -------------------------
+    if (tab === 'account') {
+
+        if (!currentUser) {
+
+            showAuthStep('phone');
+            toggleAuthModal(true);
+
+            return;
+        }
+
+        openPremiumDashboard();
+
+        setTimeout(() => {
+            switchDashTab(
+                'profile',
+                null,
+                true
+            );
+        }, 50);
+
+        ceroodSetMobileNavActive('account');
+    }
+}
+
     function openLocationModal() {
     const modal = document.getElementById('locationPopupModal');
 
@@ -11173,87 +11456,66 @@ function togglePasswordVisibility(fieldId, iconElement) {
 }
 
   </script>
-<div class="mobile-bottom-nav">
+<!-- ==========================================
+     CERood GLOBAL MOBILE NAV
+=========================================== -->
+<div class="cerood-global-mobile-nav" id="ceroodGlobalMobileNav">
 
-    <!-- HOME -->
-    <button class="bot-nav-item active"
-            onclick="toggleCartModal(false); window.location.href='/'">
+    <button class="cerood-global-nav-btn active"
+            data-nav="home"
+            onclick="ceroodMobileNavigate('home', this)">
 
-        <div class="nav-icon-ring nav-home">
-            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-                <path d="M3 10.5L12 3l9 7.5"></path>
-                <path d="M5 9.5V21h14V9.5"></path>
-                <path d="M9 21v-7h6v7"></path>
-            </svg>
-        </div>
+        <span class="cerood-global-nav-ring ring-home">
+            <i data-lucide="house"></i>
+        </span>
 
         <span>Home</span>
     </button>
 
 
-    <!-- SERVICES -->
-    <button class="bot-nav-item"
-            onclick="toggleCartModal(false); setTimeout(scrollToCategories, 50);">
+    <button class="cerood-global-nav-btn"
+            data-nav="services"
+            onclick="ceroodMobileNavigate('services', this)">
 
-        <div class="nav-icon-ring nav-services">
-            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-                <rect x="4" y="4" width="6" height="6" rx="1.5"></rect>
-                <rect x="14" y="4" width="6" height="6" rx="1.5"></rect>
-                <rect x="4" y="14" width="6" height="6" rx="1.5"></rect>
-                <rect x="14" y="14" width="6" height="6" rx="1.5"></rect>
-            </svg>
-        </div>
+        <span class="cerood-global-nav-ring ring-services">
+            <i data-lucide="layout-grid"></i>
+        </span>
 
         <span>Services</span>
     </button>
 
 
-    <!-- CART -->
-    <button class="bot-nav-item"
-            onclick="toggleCartModal(true)">
+    <button class="cerood-global-nav-btn"
+            data-nav="cart"
+            onclick="ceroodMobileNavigate('cart', this)">
 
-        <div class="nav-icon-ring nav-cart">
-            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-                <circle cx="9" cy="20" r="1"></circle>
-                <circle cx="18" cy="20" r="1"></circle>
-                <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
-            </svg>
-        </div>
+        <span class="cerood-global-nav-ring ring-cart">
+            <i data-lucide="shopping-cart"></i>
+        </span>
 
         <span>Cart</span>
     </button>
 
 
-    <!-- BOOKINGS -->
-    <button class="bot-nav-item"
-            onclick="toggleCartModal(false); setTimeout(openMobileBookings, 50);">
+    <button class="cerood-global-nav-btn"
+            data-nav="bookings"
+            onclick="ceroodMobileNavigate('bookings', this)">
 
-        <div class="nav-icon-ring nav-bookings">
-            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
-                <path d="M8 3v4"></path>
-                <path d="M16 3v4"></path>
-                <path d="M7 10h10"></path>
-                <circle cx="9" cy="14" r=".7"></circle>
-                <circle cx="13" cy="14" r=".7"></circle>
-                <circle cx="17" cy="14" r=".7"></circle>
-            </svg>
-        </div>
+        <span class="cerood-global-nav-ring ring-bookings">
+            <i data-lucide="calendar-days"></i>
+        </span>
 
         <span>Bookings</span>
     </button>
 
 
-    <!-- ACCOUNT -->
-    <button class="bot-nav-item"
-        onclick="toggleCartModal(false); setTimeout(handleHeaderAuthClick, 50);">
+    <button class="cerood-global-nav-btn"
+            data-nav="account"
+            onclick="ceroodMobileNavigate('account', this)">
 
-        <div class="nav-icon-ring nav-account">
-            <svg viewBox="0 0 24 24" class="catus-bottom-icon">
-                <circle cx="12" cy="8" r="3.5"></circle>
-                <path d="M5 20c.8-3.7 3.2-5.5 7-5.5s6.2 1.8 7 5.5"></path>
-            </svg>
-        </div>
+        <span class="cerood-global-nav-ring ring-account">
+            <i data-lucide="user-round"></i>
+        </span>
 
         <span>Account</span>
     </button>
