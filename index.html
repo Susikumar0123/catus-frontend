@@ -812,12 +812,20 @@
     }
 }
 
-        /* Modals / Drawers Shared Styles */
-       @media (max-width: 850px) {
-    .cart-modal-overlay {
-        z-index: 999998;
+        @media (max-width: 850px) {
+    #cartModal {
+        z-index: 99998 !important;
+    }
+
+    #cartDrawer {
+        z-index: 99998 !important;
+    }
+
+    .mobile-bottom-nav {
+        z-index: 99999 !important;
     }
 }
+
         .cart-drawer {
     position: fixed;
     top: 0;
@@ -3322,7 +3330,7 @@ a.book-btn {
 
         overflow: hidden !important;
 
-        z-index: 2147483600 !important;
+        z-index: 99998 !important;
 
         box-sizing: border-box !important;
     }
@@ -11142,7 +11150,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- HOME -->
     <button class="bot-nav-item active"
-            onclick="window.location.href='/'">
+            onclick="toggleCartModal(false); window.location.href='/'">
 
         <div class="nav-icon-ring nav-home">
             <svg viewBox="0 0 24 24" class="catus-bottom-icon">
@@ -11158,7 +11166,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- SERVICES -->
     <button class="bot-nav-item"
-            onclick="scrollToCategories()">
+            onclick="toggleCartModal(false); setTimeout(scrollToCategories, 50);">
 
         <div class="nav-icon-ring nav-services">
             <svg viewBox="0 0 24 24" class="catus-bottom-icon">
@@ -11191,7 +11199,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- BOOKINGS -->
     <button class="bot-nav-item"
-            onclick="openMobileBookings()">
+            onclick="toggleCartModal(false); setTimeout(openMobileBookings, 50);">
 
         <div class="nav-icon-ring nav-bookings">
             <svg viewBox="0 0 24 24" class="catus-bottom-icon">
@@ -11211,7 +11219,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- ACCOUNT -->
     <button class="bot-nav-item"
-        onclick="handleHeaderAuthClick()">
+        onclick="toggleCartModal(false); setTimeout(handleHeaderAuthClick, 50);">
 
         <div class="nav-icon-ring nav-account">
             <svg viewBox="0 0 24 24" class="catus-bottom-icon">
