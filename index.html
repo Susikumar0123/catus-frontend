@@ -7577,6 +7577,20 @@ function openServiceProduct(serviceId) {
     }, 50);
 }
 
+function openMobileAccount() {
+
+    if (!currentUser) {
+        handleHeaderAuthClick();
+        return;
+    }
+
+    openPremiumDashboard();
+
+    setTimeout(() => {
+        switchDashTab('profile', null, true);
+    }, 50);
+}
+
     function closePremiumDashboard() {
         document.getElementById('premiumCustomerDashboard').style.display = 'none';
         document.body.style.overflow = 'auto';
@@ -11190,7 +11204,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- ACCOUNT -->
     <button class="bot-nav-item"
-            onclick="handleHeaderAuthClick()">
+        onclick="openMobileAccount()">
 
         <div class="nav-icon-ring nav-account">
             <svg viewBox="0 0 24 24" class="catus-bottom-icon">
