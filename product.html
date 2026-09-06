@@ -6037,6 +6037,33 @@ if (
                 fullService.price
         };
 
+        // ADMIN / DATABASE PRODUCT DATA -> LOCATION PAGE UI
+
+const finalPrice =
+    page.location_price ??
+    fullService.price ??
+    0;
+
+const finalMrp =
+    fullService.mrp ??
+    finalPrice;
+
+const displayPriceEl =
+    document.getElementById('displayPrice');
+
+if (displayPriceEl) {
+    displayPriceEl.textContent =
+        '₹' + Math.round(parseFloat(finalPrice));
+}
+
+const displayMrpEl =
+    document.getElementById('displayMrp');
+
+if (displayMrpEl) {
+    displayMrpEl.textContent =
+        '₹' + Math.round(parseFloat(finalMrp));
+}
+
 
         // MAIN IMAGE
         if (
