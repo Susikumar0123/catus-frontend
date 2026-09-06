@@ -5475,6 +5475,30 @@ padding: 0 12px !important;
     }
 }
 
+/* ==============================================
+   HIDE HOMEPAGE NAV WHILE CUSTOMER DASHBOARD OPEN
+============================================== */
+
+@media (max-width: 850px) {
+
+    body.cerood-dashboard-open > .mobile-bottom-nav {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
+    body.cerood-dashboard-open
+    #premiumCustomerDashboard
+    .catus-modern-dash-nav {
+
+        display: flex !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+
+        z-index: 2147483647 !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -7577,6 +7601,7 @@ function openServiceProduct(serviceId) {
             renderAuditLogs();
         }
         document.getElementById('premiumCustomerDashboard').style.display = 'flex';
+        document.body.classList.add('cerood-dashboard-open');
         document.body.style.overflow = 'hidden';
     }
 
@@ -7608,6 +7633,7 @@ function handleDashboardBack() {
 
     function closePremiumDashboard() {
         document.getElementById('premiumCustomerDashboard').style.display = 'none';
+        document.body.classList.remove('cerood-dashboard-open');
         document.body.style.overflow = 'auto';
     }
 
