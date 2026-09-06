@@ -5583,7 +5583,10 @@ padding: 0 12px !important;
   </div>
 
   <!-- Cart Modal Drawer Structure -->
-  <div class="cart-modal-overlay" id="cartModal" onclick="checkCloseModal(event, 'cartDrawer', 'cartModal')">
+  <div class="cart-modal-overlay"
+     id="cartModal"
+     style="display:none;"
+     onclick="checkCloseModal(event, 'cartDrawer', 'cartModal')">
       <div class="cart-drawer" id="cartDrawer">
           <div class="cart-header">
               <h3>Your Shopping Cart</h3>
