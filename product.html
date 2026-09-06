@@ -6632,9 +6632,16 @@ if (mainGrid) {
 }
 
     function addToCartCurrentProduct() {
-        if(!currentProductData) return;
-        addToCart(currentProductData.service_name, currentProductData.price, currentProductData.image_url, document.getElementById('addToCartBtn'));
-    }
+    if (!currentProductData) return;
+
+    addToCart(
+        currentProductData.service_name,
+        currentProductData.price,
+        currentProductData.image_url,
+        currentProductData.service_id,
+        document.getElementById('addToCartBtn')
+    );
+}
 
     function proceedToCheckoutCurrentProduct() {
         if(!currentUser) {
@@ -6705,22 +6712,47 @@ if (mainGrid) {
         if (totalPriceEl) totalPriceEl.textContent = "₹" + subtotal;
     }
 
-    function addToCart(productName, productPrice, productImage, buttonElement) {
-        let existingItem = cartItems.find(item => item.name.toLowerCase() === productName.toLowerCase());
-        if (existingItem) {
-            showToast(`"${productName}" is already in your cart!`, true);
-            return;
-        }
-        cartItems.push({ name: productName, price: productPrice, image: productImage, quantity: 1 });
-        localStorage.setItem('catus_cart', JSON.stringify(cartItems));
-        updateCartUI();
-        if(buttonElement) {
-            buttonElement.innerHTML = '<i class="fa-solid fa-check"></i> Added';
-            buttonElement.style.background = "linear-gradient(135deg, #059669 0%, #047857 100%)";
-            buttonElement.style.color = "#ffffff";
-        }
-        showToast(`"${productName}" Added Successfully!`, false);
+    function addToCart(productName, productPrice, productImage, productId, buttonElement) {
+
+    let existingItem = cartItems.find(
+        item => String(item.product_id) === String(productId)
+    );
+
+    if (existingItem) {
+        showToast(`"${productName}" is already in your cart!`, true);
+        return;
     }
+
+    cartItems.push({
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        product_id: productId,
+        quantity: 1
+    });
+
+    localStorage.setItem(
+        'catus_cart',
+        JSON.stringify(cartItems)
+    );
+
+    updateCartUI();
+
+    if (buttonElement) {
+        buttonElement.innerHTML =
+            '<i class="fa-solid fa-check"></i> Added';
+
+        buttonElement.style.background =
+            "linear-gradient(135deg, #059669 0%, #047857 100%)";
+
+        buttonElement.style.color = "#ffffff";
+    }
+
+    showToast(
+        `"${productName}" Added Successfully!`,
+        false
+    );
+}
 
     function removeFromCart(productName) {
         cartItems = cartItems.filter(item => item.name !== productName);
