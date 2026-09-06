@@ -10599,26 +10599,30 @@ function ceroodMobileNavigate(tab, button) {
     // -------------------------
     if (tab === 'account') {
 
-        if (!currentUser) {
+    if (!currentUser) {
 
-            showAuthStep('phone');
-            toggleAuthModal(true);
+        showAuthStep('phone');
+        toggleAuthModal(true);
 
-            return;
-        }
-
-        openPremiumDashboard();
-
-        setTimeout(() => {
-            switchDashTab(
-                'profile',
-                null,
-                true
-            );
-        }, 50);
-
-        ceroodSetMobileNavActive('account');
+        return;
     }
+
+    openPremiumDashboard();
+
+    setTimeout(() => {
+
+        switchDashTab(
+            'home',
+            null,
+            true
+        );
+
+    }, 50);
+
+    ceroodSetMobileNavActive('account');
+
+    return;
+}
 }
 
     function openLocationModal() {
