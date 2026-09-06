@@ -1437,6 +1437,56 @@
     }
 }
 
+/* CEROOD PROFILE - FORCE DASHBOARD MOBILE NAV VISIBLE */
+@media (max-width: 850px) {
+
+    #premiumCustomerDashboard .prem-bottom-nav.catus-modern-dash-nav {
+        display: flex !important;
+        position: fixed !important;
+
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+        height: 62px !important;
+
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        background: #ffffff !important;
+        z-index: 2147483640 !important;
+
+        align-items: center !important;
+        justify-content: space-around !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #premiumCustomerDashboard .prem-bottom-nav.catus-modern-dash-nav .prem-nav-btn {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        flex: 1 1 20% !important;
+        height: 100% !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+        flex-direction: column !important;
+
+        background: transparent !important;
+        border: 0 !important;
+    }
+
+    #premiumCustomerDashboard .prem-bottom-nav.catus-modern-dash-nav .dash-nav-ring {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
+
         .prem-bottom-nav { display: none; background: white; border-top: 1px solid #e2e8f0; padding: 10px 0; padding-bottom: calc(10px + env(safe-area-inset-bottom)); position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; justify-content: space-around; }
         .prem-nav-btn { background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: #64748b; font-size: 11px; font-weight: 500; cursor: pointer; }
         .prem-nav-btn.active { color: #0284c7; }
