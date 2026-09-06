@@ -10053,7 +10053,20 @@ const msg91Configuration = {
     src="https://verify.msg91.com/otp-provider.js">
 </script>
 <script>
-    lucide.createIcons();
+document.addEventListener('DOMContentLoaded', function () {
+
+    const mobileNav =
+        document.getElementById('ceroodGlobalMobileNav');
+
+    if (mobileNav) {
+        document.body.appendChild(mobileNav);
+    }
+
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+
+});
 </script>
 </body>
 </html>
