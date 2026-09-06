@@ -8232,6 +8232,7 @@ function openServiceProduct(serviceId) {
         }
         document.getElementById('premiumCustomerDashboard').style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        syncMainMobileNav();
     }
 
     function openMobileBookings() {
@@ -8263,6 +8264,7 @@ function handleDashboardBack() {
     function closePremiumDashboard() {
         document.getElementById('premiumCustomerDashboard').style.display = 'none';
         document.body.style.overflow = 'auto';
+        syncMainMobileNav();
     }
 
     function switchDashTab(tabId, element, isMobile = false) {
@@ -11800,7 +11802,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 }
 
   </script>
-<div class="mobile-bottom-nav">
+<div class="mobile-bottom-nav" id="mainMobileBottomNav"></div>
 
     <!-- HOME -->
     <button class="bot-nav-item active"
@@ -12132,6 +12134,38 @@ function togglePasswordVisibility(fieldId, iconElement) {
 document.addEventListener('DOMContentLoaded', function () {
     lucide.createIcons();
 });
+</script>
+<script>
+function syncMainMobileNav() {
+    const nav = document.getElementById('mainMobileBottomNav');
+    const dashboard = document.getElementById('premiumCustomerDashboard');
+
+    if (!nav) return;
+
+    const isMobile = window.innerWidth <= 850;
+    const dashboardOpen =
+        dashboard &&
+        window.getComputedStyle(dashboard).display !== 'none';
+
+    if (isMobile && !dashboardOpen) {
+        nav.style.setProperty('display', 'flex', 'important');
+        nav.style.setProperty('position', 'fixed', 'important');
+        nav.style.setProperty('left', '0', 'important');
+        nav.style.setProperty('right', '0', 'important');
+        nav.style.setProperty('bottom', '0', 'important');
+        nav.style.setProperty('width', '100%', 'important');
+        nav.style.setProperty('height', '56px', 'important');
+        nav.style.setProperty('z-index', '2147483646', 'important');
+        nav.style.setProperty('visibility', 'visible', 'important');
+        nav.style.setProperty('opacity', '1', 'important');
+        nav.style.setProperty('pointer-events', 'auto', 'important');
+    } else {
+        nav.style.setProperty('display', 'none', 'important');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', syncMainMobileNav);
+window.addEventListener('resize', syncMainMobileNav);
 </script>
 <script
     type="text/javascript"
