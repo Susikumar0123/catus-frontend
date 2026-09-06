@@ -9635,7 +9635,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
     
     <!-- 1. HOME -->
 <button class="bot-nav-item active"
-    onclick="window.location.href='/'">
+    onclick="toggleCartModal(false); window.location.href='/'">
 
         <div class="nav-icon-ring nav-home">
             <svg viewBox="0 0 24 24">
@@ -9651,7 +9651,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- 2. SERVICES -->
     <button class="bot-nav-item"
-            onclick="scrollToCategories()">
+        onclick="toggleCartModal(false); setTimeout(scrollToCategories, 50);">
 
         <div class="nav-icon-ring nav-services">
             <svg viewBox="0 0 24 24">
@@ -9684,7 +9684,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- 4. BOOKINGS -->
     <button class="bot-nav-item"
-            onclick="openProductMobileBookings()">
+        onclick="toggleCartModal(false); setTimeout(openProductMobileBookings, 50);">
 
         <div class="nav-icon-ring nav-bookings">
             <svg viewBox="0 0 24 24">
@@ -9704,7 +9704,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
     <!-- 5. ACCOUNT -->
     <button class="bot-nav-item"
-            onclick="handleHeaderAuthClick()">
+        onclick="toggleCartModal(false); setTimeout(handleHeaderAuthClick, 50);">
 
         <div class="nav-icon-ring nav-account">
             <svg viewBox="0 0 24 24">
