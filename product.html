@@ -6064,6 +6064,130 @@ if (displayMrpEl) {
         '₹' + Math.round(parseFloat(finalMrp));
 }
 
+// ADMIN CONTROL -> DISCOUNT
+const discountEl =
+    document.getElementById('displayDiscount');
+
+if (discountEl) {
+    discountEl.textContent =
+        fullService.discount_text || '';
+}
+
+
+// ADMIN CONTROL -> HOT DEAL
+const hotDealEl =
+    document.querySelector('.hot-deal');
+
+if (hotDealEl) {
+    hotDealEl.style.display =
+        Number(fullService.is_hot_deal) === 1
+            ? 'block'
+            : 'none';
+}
+
+
+// ADMIN CONTROL -> SELECT OPTIONS
+const variantContainer =
+    document.getElementById('variantContainer');
+
+const variantTitleEl =
+    document.querySelector('.variant-title');
+
+if (variantContainer) {
+
+    if (Number(fullService.enable_select_options) === 0) {
+
+        variantContainer.style.display = 'none';
+
+        if (variantTitleEl) {
+            variantTitleEl.style.display = 'none';
+        }
+
+    } else {
+
+        variantContainer.style.display = 'flex';
+
+        if (variantTitleEl) {
+            variantTitleEl.style.display = 'block';
+        }
+
+        const optionsArr =
+            String(
+                fullService.select_options ||
+                'Standard Service'
+            )
+            .split(',')
+            .map(item => item.trim())
+            .filter(Boolean);
+
+        variantContainer.innerHTML =
+            optionsArr.map((opt, idx) => `
+                <button
+                    class="variant-btn ${idx === 0 ? 'active' : ''}"
+                    onclick="selectVariant(this)"
+                >
+                    ${opt}
+                </button>
+            `).join('');
+    }
+}
+
+
+// ADMIN CONTROL -> WHY CHOOSE US
+const featuresContainer =
+    document.getElementById('featuresContainer');
+
+if (featuresContainer) {
+
+    const whyStr =
+        String(fullService.why_choose_us || '').trim();
+
+    if (!whyStr) {
+
+        featuresContainer.innerHTML = '';
+
+    } else {
+
+        const pointsArr =
+            whyStr
+                .split('|')
+                .map(item => item.trim())
+                .filter(Boolean);
+
+        featuresContainer.innerHTML =
+            pointsArr.map(point => {
+
+                const separatorIndex =
+                    point.indexOf(':');
+
+                let title = point;
+                let description = '';
+
+                if (separatorIndex !== -1) {
+                    title =
+                        point.slice(
+                            0,
+                            separatorIndex
+                        ).trim();
+
+                    description =
+                        point.slice(
+                            separatorIndex + 1
+                        ).trim();
+                }
+
+                return `
+                    <div class="feature-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <b>${title}${description ? ':' : ''}</b>
+                            ${description ? ' ' + description : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+    }
+}
 
         // MAIN IMAGE
         if (
