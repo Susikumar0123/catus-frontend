@@ -6556,11 +6556,12 @@ padding: 0 12px !important;
              <div class="header-right-group">
 
     <button class="prem-icon-btn"
-            style="margin:0;"
-            title="Profile Settings"
-            onclick="switchDashTab('profile', null, true)">
-        <i class="fa-solid fa-user"></i>
-    </button>
+        id="dashboardProfileBtn"
+        style="margin:0;"
+        title="Profile Settings"
+        onclick="switchDashTab('profile', null, true)">
+    <i class="fa-solid fa-user"></i>
+</button>
 
 </div>
           </div>
@@ -10571,27 +10572,34 @@ function ceroodMobileNavigate(tab, button) {
     // -------------------------
     if (tab === 'bookings') {
 
-        if (!currentUser) {
-
-            showAuthStep('phone');
-            toggleAuthModal(true);
-
-            return;
-        }
-
-        openPremiumDashboard();
-
-        setTimeout(() => {
-            switchDashTab(
-                'bookings',
-                null,
-                true
-            );
-        }, 50);
-
-        ceroodSetMobileNavActive('bookings');
+    if (!currentUser) {
+        showAuthStep('phone');
+        toggleAuthModal(true);
         return;
     }
+
+    openPremiumDashboard();
+
+    const profileBtn = document.getElementById('dashboardProfileBtn');
+
+    if (profileBtn) {
+        profileBtn.style.display = 'none';
+    }
+
+    setTimeout(() => {
+
+        switchDashTab(
+            'bookings',
+            null,
+            true
+        );
+
+    }, 50);
+
+    ceroodSetMobileNavActive('bookings');
+
+    return;
+}
 
 
     // -------------------------
@@ -10600,14 +10608,18 @@ function ceroodMobileNavigate(tab, button) {
     if (tab === 'account') {
 
     if (!currentUser) {
-
         showAuthStep('phone');
         toggleAuthModal(true);
-
         return;
     }
 
     openPremiumDashboard();
+
+    const profileBtn = document.getElementById('dashboardProfileBtn');
+
+    if (profileBtn) {
+        profileBtn.style.display = 'flex';
+    }
 
     setTimeout(() => {
 
