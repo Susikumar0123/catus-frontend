@@ -6005,11 +6005,11 @@ if (
 ) {
 
     const fullService =
-        servicesData.services.find(
-            service =>
-                String(service.service_id) ===
-                String(serviceId)
-        );
+    servicesData.services.find(service =>
+        String(service.service_id) === String(serviceId) ||
+        String(service.slug || '').trim().toLowerCase() ===
+        String(serviceId || '').trim().toLowerCase()
+    );
 
     if (fullService) {
 
