@@ -5783,6 +5783,27 @@ padding: 0 12px !important;
     font-size: 11px;
 }
 
+.seo-location-service-group {
+    margin: 8px 0 12px;
+}
+
+.seo-location-service-group strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.seo-location-service-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+}
+
+.seo-location-service-links a {
+    font-size: 11px;
+    text-decoration: none;
+}
+
 
 </style>
 </head>
@@ -7077,17 +7098,29 @@ async function loadSeoServiceAreas() {
                         return;
                     }
 
-                    const url =
-                        `/${stateSlug}/` +
-                        `${districtSlug}/` +
-                        `${locationSlug}/` +
-                        `tv-repair`;
+                    const mainServices = [
+    { name: 'TV Repair', slug: 'tv-repair' },
+    { name: 'AC Service', slug: 'ac-service' },
+    { name: 'Washing Machine Repair', slug: 'washing-machine-repair' },
+    { name: 'Refrigerator Repair', slug: 'refrigerator-repair' },
+    { name: 'RO Water Purifier Service', slug: 'ro-water-purifier-service' }
+];
 
-                    html += `
-                        <a href="${url}">
-                            ${location.location_name}
-                        </a>
-                    `;
+html += `
+    <div class="seo-location-service-group">
+        <strong>${location.location_name}</strong>
+
+        <div class="seo-location-service-links">
+            ${mainServices.map(service => `
+                <a href="/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}">
+                    ${service.name}
+                </a>
+            `).join('')}
+        </div>
+    </div>
+`;
+
+                    
                 });
 
                 html += `
