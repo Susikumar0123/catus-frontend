@@ -3091,7 +3091,10 @@
                     normalizedStatus = 'In Service';
                 }
 
-                let payModeText = (item.status === 'Paid') ? 'Online Paid' : 'Pay Later';
+                let payModeText =
+    item.payment_status === 'Paid'
+        ? 'Online Paid'
+        : 'Pay Later';
 
                 let matchesTab = false;
                 if (currentTab === 'All') {
@@ -3148,8 +3151,14 @@
 
                     let checkboxHTML = currentTab === 'Trash' ? `<td class="chk-col"><input type="checkbox" class="trash-checkbox" value="${item.order_id}" onclick="checkSelectedCount()"></td>` : (item.is_deleted == 1 ? '<td class="chk-col"></td>' : '');
 
-                    let payModeText = item.status === 'Paid' ? 'Online Paid' : 'Pay Later';
-                    let payModeBadgeClass = item.status === 'Paid' ? 'badge-completed' : 'badge-pending';
+                    let payModeText =
+    item.payment_status === 'Paid'
+        ? 'Online Paid'
+        : 'Pay Later';
+                    let payModeBadgeClass =
+    item.payment_status === 'Paid'
+        ? 'badge-completed'
+        : 'badge-pending';
 
                     html += `<tr>${checkboxHTML}
                     <td><b>#${item.order_id}</b></td>
