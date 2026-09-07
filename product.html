@@ -5856,6 +5856,33 @@ updateLocationDisplays(seoLocationText);
                 page.service_name
         };
 
+        // ==========================================
+// LOAD MORE RELEVANT SERVICES FOR SEO PAGE
+// ==========================================
+try {
+    const servicesResponse =
+        await fetch(`${API_BASE_URL}/api/services`);
+
+    const servicesData =
+        await servicesResponse.json();
+
+    if (
+        servicesData.success &&
+        Array.isArray(servicesData.services)
+    ) {
+        loadRelevantServicesSection(
+            servicesData.services,
+            page.category,
+            page.service_id
+        );
+    }
+} catch (relatedError) {
+    console.error(
+        'Relevant services loading error:',
+        relatedError
+    );
+}
+
 
         // ------------------------------------------
         // TITLE
