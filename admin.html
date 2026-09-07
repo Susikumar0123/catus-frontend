@@ -3797,58 +3797,67 @@
         }
 
         function submitNewService() {
-            let category = document.getElementById('addServiceCategory').value;
-            let serviceId = document.getElementById('newServiceId').value.trim();
-            let serviceName = document.getElementById('newServiceName').value.trim();
-            let group_id = document.getElementById('newServiceGroup').value;
-            let price = parseInt(document.getElementById('newServicePrice').value) || 0;
-            let mrp = parseInt(document.getElementById('newServiceMrp').value) || 0;
-            
-            let product_note = document.getElementById('modalProductNote').value.trim(); 
-            
-            let discountInput = document.getElementById('modalDiscountText');
-            let discount_text = discountInput ? discountInput.value.trim() : '3% off';
-            
-            let image_url = document.getElementById('newImg1').value.trim();
-            let image_url_2 = document.getElementById('newImg2').value.trim();
-            let image_url_3 = document.getElementById('newImg3').value.trim();
-            let image_url_4 = document.getElementById('newImg4').value.trim();
+    let category = document.getElementById('addServiceCategory').value;
+    let serviceId = document.getElementById('newServiceId').value.trim();
+    let serviceName = document.getElementById('newServiceName').value.trim();
+    let group_id = document.getElementById('newServiceGroup').value;
 
-            if(!serviceId || !serviceName || !image_url) {
-                alert("Please fill Service ID, Name, and Main Image URL!");
-                return;
-            }
+    let price = parseInt(document.getElementById('newServicePrice').value) || 0;
+    let mrp = parseInt(document.getElementById('newServiceMrp').value) || 0;
 
-            fetch(`${API_BASE_URL}/api/admin/add-service`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    service_id: serviceId, 
-                    service_name: serviceName, 
-                    category,
-                    group_id,
-                    price, 
-                    mrp, 
-                    discount_text, 
-                    image_url, 
-                    image_url_2, 
-                    image_url_3, 
-                    image_url_4,
-                    product_note: product_note 
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.success) {
-                    alert("New product added successfully!");
-                    closeAddServiceModal();
-                    fetchAdminServices();
-                } else { 
-                    alert("Error: " + (data.error || "Failed to add product")); 
-                }
-            }).catch(err => alert("Server connection error."));
+    let product_note =
+        document.getElementById('newProductNote')?.value.trim() || '';
+
+    let image_url = document.getElementById('newImg1').value.trim();
+    let image_url_2 = document.getElementById('newImg2').value.trim();
+    let image_url_3 = document.getElementById('newImg3').value.trim();
+    let image_url_4 = document.getElementById('newImg4').value.trim();
+
+    if (!serviceId || !serviceName || !image_url) {
+        alert("Please fill Service ID, Name, and Main Image URL!");
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/api/admin/add-service`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+
+        body: JSON.stringify({
+            service_id: serviceId,
+            service_name: serviceName,
+            category,
+            group_id,
+            price,
+            mrp,
+
+            is_hot_deal: 0,
+            discount_text: '',
+            enable_select_options: 0,
+            select_options: '',
+            why_choose_us: '',
+
+            image_url,
+            image_url_2,
+            image_url_3,
+            image_url_4,
+            product_note
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("New product added successfully!");
+            closeAddServiceModal();
+            fetchAdminServices();
+        } else {
+            alert("Error: " + (data.error || "Failed to add product"));
         }
-
+    })
+    .catch(err => {
+        console.error("Add product error:", err);
+        alert("Server connection error.");
+    });
+}
         let allAdminBanners = [];
 
         function fetchAdminBanners() {
@@ -4242,7 +4251,7 @@
 
                 <div class="form-group" style="margin:0;">
                     <label style="font-size: 12px; font-weight: 700; color: #334155;">Future Note / Description (2 rows below price)</label>
-                    <textarea id="modalProductNote" class="form-input" style="width:100%; box-sizing:border-box; height: 60px;" placeholder="Write custom notes here..."></textarea>
+                    <textarea id="newProductNote" class="form-input" style="width:100%; box-sizing:border-box; height: 60px;" placeholder="Write custom notes here..."></textarea>
                 </div>
 
                 <div class="form-group" style="margin:0;">
