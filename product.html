@@ -8226,15 +8226,12 @@ function formatIndiaInlineTime(value) {
                     let techPhoneText = currentOrder.technician_phone ? `+91 ${currentOrder.technician_phone}` : "Assigning soon...";
                     let eta = currentOrder.eta || "-- Min";
                     
-                    let orderDateObj =
-    getCatusBookedDate(currentOrder);
-
-let dateStringLive =
-    formatIndiaInlineTime(orderDateObj);
-                    let displayProductId = currentOrder.product_id || 'tv-repair';
+                    let orderDateObj = getCatusBookedDate(currentOrder);
+                    let dateStringLive = formatIndiaInlineTime(orderDateObj);
+                    let displayProductId = currentOrder.product_id || '';
                     
                     // Match the correct product image dynamically
-                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[currentOrder.service_name.toLowerCase().trim()] || 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=150&q=80';
+                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[currentOrder.service_name.toLowerCase().trim()] || 'logo.png';
 
                     let stepBookedClass = 'prem-step-compact done';
                     let stepAssignedClass = 'prem-step-compact';
@@ -8242,7 +8239,7 @@ let dateStringLive =
                     let stepServiceClass = 'prem-step-compact';
                     let progressWidth = '0%';
 
-                    let bookedStr = "--<br>--";
+                    let bookedStr = formatIndiaTimelineTime(orderDateObj);
                     let assignedStr = "--<br>--";
                     let wayStr = "--<br>--";
                     let serviceStr = "--<br>--";
@@ -8263,10 +8260,7 @@ let dateStringLive =
                         stepServiceClass = 'prem-step-compact active';
                         progressWidth = '75%';
                     }
-                    
-
-bookedStr =
-    formatIndiaTimelineTime(orderDateObj);
+bookedStr = formatIndiaTimelineTime(orderDateObj);
 
 assignedStr =
     formatIndiaTimelineTime(
@@ -8302,9 +8296,9 @@ serviceStr =
                             <div>
                                 <h3 style="margin: 0 0 4px 0; font-size: 14px; color: #0f172a;">${currentOrder.service_name}</h3>
                                 <div style="font-size:10px; color:#64748b; display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:6px;">
-                                    <span><b>Order ID:</b> #${currentOrder.order_id}</span> <span style="color:#cbd5e1;">|</span>
-                                    <span><b>Product ID:</b> #${displayProductId}</span> <span style="color:#cbd5e1;">|</span>
-                                    <span><b>Date:</b> ${dateStringLive}</span>
+                                    <span><b>#${currentOrder.order_id}</b></span>
+                                    <span>${displayProductId}</span>
+                                    <span>${dateStringLive}</span>
                                 </div>
                                 <div class="prem-live-status-badge"><span class="pulse"></span> ${currentOrder.status.toUpperCase()}</div>
                             </div>
@@ -8319,7 +8313,7 @@ serviceStr =
                                 <img src="${orderImgUrl}" alt="Service Image" class="prem-tech-img-compact">
                                 <div class="prem-tech-details-compact">
                                     <h4>${techName}</h4>
-                                    <p><i class="fa-solid fa-star" style="color:#f59e0b;"></i> 4.9 • ${techPhoneText}</p>
+                                    <p>${techPhoneText}</p>
                                 </div>
                             </div>
                             <div class="prem-eta-compact">
@@ -8375,12 +8369,12 @@ serviceStr =
         getCatusBookedDate(order)
     );
                     
-                    let displayProductId = order.product_id || 'tv-repair';
+                    let displayProductId = order.product_id || '';
                     let safeCustName = currentUser.name ? currentUser.name.replace(/'/g, "\\'") : 'Customer';
                     let safeServiceName = order.service_name.replace(/'/g, "\\'");
                     
                     // Match the correct product image dynamically for history list
-                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[order.service_name.toLowerCase().trim()] || 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=150&q=80';
+                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[order.service_name.toLowerCase().trim()] || 'logo.png';
 
                     let isRated = ratedOrders.includes(String(order.order_id));
                     let ratingBtnHTML = '';
