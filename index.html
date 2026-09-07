@@ -5736,7 +5736,53 @@ padding: 0 12px !important;
     .seo-location-links {
         gap: 8px 12px;
     }
+
 }
+
+/* COMPACT FOOTER SERVICE AREAS */
+
+.seo-service-areas {
+    display: none !important;
+}
+
+.seo-service-areas-footer {
+    width: 100%;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #dedbea;
+    padding-bottom: 15px;
+}
+
+.seo-service-areas-footer > summary {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #18181b;
+    list-style-position: inside;
+    padding: 8px 0;
+}
+
+.seo-service-areas-inner {
+    padding: 10px 0 5px;
+}
+
+.seo-service-areas-inner > p {
+    font-size: 12px;
+    color: #71717a;
+    margin: 0 0 12px;
+}
+
+.seo-service-areas-footer .seo-district-group {
+    padding: 7px 0;
+}
+
+.seo-service-areas-footer .seo-district-group summary {
+    font-size: 12px;
+}
+
+.seo-service-areas-footer .seo-location-links a {
+    font-size: 11px;
+}
+
 
 </style>
 </head>
@@ -11779,12 +11825,16 @@ function togglePasswordVisibility(fieldId, iconElement) {
     <footer class="footer-inner">
 
         <!-- SEO SERVICE AREAS -->
-<section id="seoServiceAreasSection" class="seo-service-areas">
-    <h2>Service Areas</h2>
-    <p>Explore Cerood home appliance services available across Tamil Nadu.</p>
+<details class="seo-service-areas-footer">
+    <summary>Service Areas</summary>
 
-    <div id="seoServiceAreasContainer"></div>
-</section>
+    <div class="seo-service-areas-inner">
+        <p>Explore Cerood home appliance services across Tamil Nadu.</p>
+        <div id="seoServiceAreasContainer"></div>
+    </div>
+</details>
+
+<div id="seoServiceAreasSection"></div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-bottom: 30px;">
             
