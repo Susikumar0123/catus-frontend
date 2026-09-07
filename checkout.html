@@ -1281,33 +1281,41 @@ p, span, div, a, label, li, small {
 
         <!-- Bill Breakdown Box (Neenga ketta image maari) -->
         <div class="bill-summary-box">
-            <div class="bill-row">
-                <span>Item total</span>
-                <span id="billItemTotal">₹0</span>
-            </div>
-            <div class="bill-row">
-                <span>Visitation Fee <i class="fa-solid fa-circle-info fee-info-icon" title="Expert visit charges"></i></span>
-                <span id="billVisitationFee">₹49</span>
-            </div>
-            <div class="bill-row">
-                <span>Platform fee <i class="fa-solid fa-circle-info fee-info-icon" title="Server & maintenance"></i></span>
-                <span id="billPlatformFee">₹15</span>
-            </div>
-            <div class="bill-row">
-                <span>Est Govt. taxes <i class="fa-solid fa-circle-info fee-info-icon" title="GST"></i></span>
-                <span id="billTaxes">₹0</span>
-            </div>
-            
-            <div class="bill-row total-bill">
-                <span>Total bill</span>
-                <span id="billTotalSum">₹0</span>
-            </div>
-            
-            <div class="bill-row amount-to-pay">
-                <span>Amount to pay</span>
-                <span id="billAmountToPay">₹0</span>
-            </div>
-        </div>
+
+    <div class="bill-row">
+        <span>Service Charge</span>
+        <span id="billItemTotal">₹0</span>
+    </div>
+
+    <div class="bill-row" id="convenienceFeeRow">
+        <span>
+            Convenience Fee
+            <i class="fa-solid fa-circle-info fee-info-icon"
+               title="Online booking & platform convenience fee"></i>
+        </span>
+        <span id="billConvenienceFee">₹0</span>
+    </div>
+
+    <div class="bill-row" id="gstRow" style="display:none;">
+        <span>
+            GST
+            <i class="fa-solid fa-circle-info fee-info-icon"
+               title="Applicable GST"></i>
+        </span>
+        <span id="billTaxes">₹0</span>
+    </div>
+
+    <div class="bill-row total-bill">
+        <span>Total Amount</span>
+        <span id="billTotalSum">₹0</span>
+    </div>
+
+    <div class="bill-row amount-to-pay">
+        <span>Amount to Pay</span>
+        <span id="billAmountToPay">₹0</span>
+    </div>
+
+</div>
 
         <!-- Payment Mode Selection -->
         <div style="margin-top: 12px;">
@@ -1561,11 +1569,7 @@ p, span, div, a, label, li, small {
                 document.getElementById('addressFormContainer').style.display = 'grid';
             }
 
-            const rawItems = localStorage.getItem('catus_checkout_items');
-            discount = parseInt(localStorage.getItem('catus_checkout_discount')) || 0;
-            const appliedCoupon = String(
-    localStorage.getItem('catus_checkout_coupon') || ''
-).trim().toUpperCase();
+            
             if (!rawItems || rawItems === "[]") {
                 document.getElementById('summaryItemsContainer').innerHTML = "<p style='color:#ef4444; font-size:14px;'>No items in cart!</p>";
                 return;
@@ -1573,6 +1577,7 @@ p, span, div, a, label, li, small {
 
             orderItems = JSON.parse(rawItems);
             renderSummary();
+            await loadBackendBillSummary();
         });
 
         function toggleEditAddressForm() {
@@ -1780,23 +1785,130 @@ p, span, div, a, label, li, small {
             </div>`;
     });
 
-    // Bill breakdown calculations (Visitation fee, Platform fee, Taxes)
-    let visitationFee = 49;
-    let platformFee = 15;
-    let taxes = Math.round((itemTotal + visitationFee) * 0.05); // 5% tax estimate
-    
-    let totalBill = itemTotal + visitationFee + platformFee + taxes - discount;
-    if (totalBill < 0) totalBill = 0;
-    
-    grandTotal = totalBill;
+    // Initial bill summary.
+// Final Convenience Fee / GST / Total comes from backend.
+grandTotal = itemTotal;
 
-    // UI-la values-ai update seyyarathu
-    document.getElementById('billItemTotal').textContent = "₹" + itemTotal;
-    document.getElementById('billVisitationFee').textContent = "₹" + visitationFee;
-    document.getElementById('billPlatformFee').textContent = "₹" + platformFee;
-    document.getElementById('billTaxes').textContent = "₹" + taxes;
-    document.getElementById('billTotalSum').textContent = "₹" + totalBill;
-    document.getElementById('billAmountToPay').textContent = "₹" + totalBill;
+document.getElementById('billItemTotal').textContent =
+    "₹" + itemTotal;
+
+document.getElementById('billConvenienceFee').textContent =
+    "₹0";
+
+document.getElementById('convenienceFeeRow').style.display =
+    "none";
+
+document.getElementById('gstRow').style.display =
+    "none";
+
+document.getElementById('billTaxes').textContent =
+    "₹0";
+
+document.getElementById('billTotalSum').textContent =
+    "₹" + grandTotal;
+
+document.getElementById('billAmountToPay').textContent =
+    "₹" + grandTotal;
+}
+
+async function loadBackendBillSummary() {
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/calculate-order-total`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    items: orderItems.map(item => ({
+                        product_id: item.product_id,
+                        quantity: item.quantity || 1
+                    }))
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                'Unable to calculate bill.'
+            );
+        }
+
+        const subtotal =
+            Number(data.subtotal) || 0;
+
+        const convenienceFee =
+            Number(data.convenienceFee) || 0;
+
+        const gstPercent =
+            Number(data.gstPercent) || 0;
+
+        const convenienceFeeEnabled =
+    data.convenienceFeeEnabled === true;
+
+const gstEnabled =
+    data.gstEnabled === true;
+
+        const taxes =
+            Number(data.taxes) || 0;
+
+        const finalAmount =
+            Number(data.finalAmount) || 0;
+
+        document.getElementById(
+            'billItemTotal'
+        ).textContent =
+            '₹' + subtotal;
+
+        document.getElementById(
+            'billConvenienceFee'
+        ).textContent =
+            '₹' + convenienceFee;
+
+        document.getElementById(
+    'convenienceFeeRow'
+).style.display =
+    convenienceFeeEnabled
+        ? 'flex'
+        : 'none';
+
+        document.getElementById(
+            'billTaxes'
+        ).textContent =
+            '₹' + taxes;
+
+        document.getElementById(
+    'gstRow'
+).style.display =
+    gstEnabled
+        ? 'flex'
+        : 'none';
+
+        document.getElementById(
+            'billTotalSum'
+        ).textContent =
+            '₹' + finalAmount;
+
+        document.getElementById(
+            'billAmountToPay'
+        ).textContent =
+            '₹' + finalAmount;
+
+        grandTotal = finalAmount;
+
+    } catch (error) {
+
+        console.error(
+            'Bill Summary Error:',
+            error
+        );
+    }
 }
 
         async function submitOrder() {
@@ -1823,12 +1935,7 @@ p, span, div, a, label, li, small {
 
             let subtotal = 0;
             orderItems.forEach(item => { subtotal += Math.round(parseFloat(item.price)) * (item.quantity || 1); });
-            let visitationFee = 49;
-let platformFee = 15;
-let taxes = Math.round((subtotal + visitationFee) * 0.05);
-
-let finalAmt = subtotal + visitationFee + platformFee + taxes - discount;
-if (finalAmt < 0) finalAmt = 0;
+            
 
             if (selectedMode === 'later') {
     try {
