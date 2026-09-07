@@ -9,8 +9,8 @@
       "destination": "https://catus-backend-d2js.onrender.com/api/sitemap/:page"
     },
     {
-      "source": "/:state/:district/:location/:service",
-      "destination": "/product.html?id=:service&state=:state&district=:district&location=:location"
-    }
+  "source": "/:state/:district/:location/:service",
+  "destination": "/api/seo-product?state=:state&district=:district&location=:location&service=:service"
+}
   ]
 }
