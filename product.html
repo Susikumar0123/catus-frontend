@@ -5398,18 +5398,48 @@ function getProductUrlParams() {
 
                     // 5. Why Choose Us Dynamic Content
                     const featuresContainer = document.getElementById('featuresContainer');
-                    if (featuresContainer) {
-                        let whyStr = s.why_choose_us || 'Verified Professionals: Background-verified expert technicians.|30-Day Warranty: Post-service warranty on all repairs.';
-                        let pointsArr = whyStr.split('|');
-                        let pointsHtml = '';
-                        pointsArr.forEach(pt => {
-                            let parts = pt.split(':');
-                            let title = parts[0] || 'Feature';
-                            let desc = parts[1] || '';
-                            pointsHtml += `<div class="feature-item"><i class="fa-solid fa-circle-check"></i> <div><b>${title}:</b>${desc}</div></div>`;
-                        });
-                        featuresContainer.innerHTML = pointsHtml;
-                    }
+const featuresSection = document.querySelector('.features-section');
+
+if (featuresContainer && featuresSection) {
+
+    const whyStr = String(s.why_choose_us || '').trim();
+
+    if (!whyStr) {
+        featuresContainer.innerHTML = '';
+        featuresSection.style.display = 'none';
+    } else {
+        featuresSection.style.display = 'block';
+
+        const pointsArr = whyStr
+            .split('|')
+            .map(item => item.trim())
+            .filter(Boolean);
+
+        featuresContainer.innerHTML = pointsArr.map(point => {
+            const separatorIndex = point.indexOf(':');
+
+            const title =
+                separatorIndex >= 0
+                    ? point.slice(0, separatorIndex).trim()
+                    : point;
+
+            const desc =
+                separatorIndex >= 0
+                    ? point.slice(separatorIndex + 1).trim()
+                    : '';
+
+            return `
+                <div class="feature-item">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <div>
+                        <b>${title}${desc ? ':' : ''}</b>
+                        ${desc ? ' ' + desc : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+}
 
                     // 6. Thumbnails
                     let thumbContainer = document.getElementById('thumbnailContainer');
