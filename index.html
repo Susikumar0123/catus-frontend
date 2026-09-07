@@ -7449,26 +7449,50 @@ function openServiceProduct(serviceId) {
     }
 }
 
-    function addToCart(productName, productPrice, productImage, buttonElement) {
-        let existingItem = cartItems.find(item => item.name.toLowerCase() === productName.toLowerCase());
-        
-        if (existingItem) {
-            showToast(`"${productName}" is already in your cart!`, true);
-            return;
-        }
+    function addToCart(
+    productName,
+    productPrice,
+    productImage,
+    productId,
+    buttonElement
+) {
 
-        cartItems.push({ name: productName, price: productPrice, image: productImage, quantity: 1 });
-        saveCartToStorage();
-        updateCartUI();
-        
-        if(buttonElement) {
-            buttonElement.textContent = "Added ✓";
-            buttonElement.style.backgroundColor = "#059669";
-            buttonElement.style.color = "#ffffff";
-        }
+    let existingItem = cartItems.find(
+        item =>
+            String(item.product_id) ===
+            String(productId)
+    );
 
-        showToast(`"${productName}" Added Successfully!`, false);
+    if (existingItem) {
+        showToast(
+            `"${productName}" is already in your cart!`,
+            true
+        );
+        return;
     }
+
+    cartItems.push({
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        product_id: productId,
+        quantity: 1
+    });
+
+    saveCartToStorage();
+    updateCartUI();
+
+    if (buttonElement) {
+        buttonElement.textContent = "Added ✓";
+        buttonElement.style.backgroundColor = "#059669";
+        buttonElement.style.color = "#ffffff";
+    }
+
+    showToast(
+        `"${productName}" Added Successfully!`,
+        false
+    );
+}
 
     function saveCartToStorage() {
         localStorage.setItem('catus_cart', JSON.stringify(cartItems));

@@ -2027,81 +2027,77 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
             let phoneDigits = String(mobile || currentUser.phone || '40001').replace(/[^0-9]/g, '');
             let permanentCustId = 40000 + parseInt(phoneDigits.slice(-4)); 
 
-            let createdOrders = [];
+           let createdOrders = [];
 
 try {
 
-    for (const item of orderItems) {
+    const bulkItems = orderItems
+        .filter(item => item.product_id)
+        .map(item => ({
+            product_id: String(item.product_id).trim(),
+            quantity: Math.max(
+                1,
+                parseInt(item.quantity, 10) || 1
+            )
+        }));
 
-        if (!item.product_id) {
-            continue;
-        }
-
-        const itemQty = Math.max(
-            1,
-            parseInt(item.quantity, 10) || 1
-        );
-
-        for (let q = 0; q < itemQty; q++) {
-
-            const orderId =
-                Math.floor(100000 + Math.random() * 900000);
-
-            const orderPayload = {
-                order_id: orderId,
-                customer_id: permanentCustId,
-
-                product_id: String(item.product_id).trim(),
-                service_name: item.name,
-
-                items: [{
-                    product_id: String(item.product_id).trim(),
-                    quantity: 1
-                }],
-
-                customer_name: custName,
-                phone: mobile,
-                mobile: mobile,
-                whatsapp: mobile,
-
-                address: addressStr,
-                district: district,
-                pincode: pincode,
-                district_pincode: districtPincode,
-
-                amount:
-                    Number(item.price || 0),
-
-                order_date: currentDate,
-                status: orderStatus,
-                payment_verification: paymentVerification
-            };
-
-            const response = await fetch(
-                `${API_BASE_URL}/api/orders`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(orderPayload)
-                }
-            );
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(
-                    `Failed to create order for ${item.name}`
-                );
-            }
-
-            createdOrders.push(orderPayload);
-        }
+    if (bulkItems.length === 0) {
+        alert('No valid service orders were found.');
+        return;
     }
 
+    const bulkPayload = {
+        customer_id: permanentCustId,
+        customer_name: custName,
+
+        phone: mobile,
+        whatsapp: mobile,
+
+        address: addressStr,
+        district: district,
+        pincode: pincode,
+
+        order_date: currentDate,
+        status: orderStatus,
+
+        payment_verification: paymentVerification,
+
+        items: bulkItems
+    };
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/orders/bulk`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bulkPayload)
+        }
+    );
+
+    const data = await response.json();
+
+    if (
+        !response.ok ||
+        !data.success ||
+        !Array.isArray(data.orders)
+    ) {
+        throw new Error(
+            data.message ||
+            'Unable to create service orders.'
+        );
+    }
+
+    createdOrders = data.orders.map(order => ({
+        ...order,
+        customer_id: permanentCustId,
+        customer_name: custName,
+        phone: mobile
+    }));
+
     if (createdOrders.length === 0) {
-        alert('No valid service orders were created.');
+        alert('No service orders were created.');
         return;
     }
 
@@ -2114,16 +2110,19 @@ try {
     showSuccessPage(
         createdOrders,
         addressStr,
-        finalAmt,
+        data.total_amount || finalAmt,
         paymentModeText
     );
 
 } catch (err) {
 
-    console.error('Database error:', err);
+    console.error(
+        'Bulk order database error:',
+        err
+    );
 
     alert(
-        'One or more orders could not be created. Please try again.'
+        'Order could not be created. Please try again.'
     );
 }
         }
