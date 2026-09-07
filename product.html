@@ -5153,7 +5153,7 @@ filtered.forEach(s => {
     html += `
         <div
             class="suggestion-item"
-            onmousedown="handleProductSearchSelect('${s.service_id}')"
+            onmousedown="handleProductSearchSelect('${s.slug || s.service_id}')"
         >
 
             <img
@@ -5626,7 +5626,7 @@ const averageRating =
         let html = '';
         filtered.forEach(s => {
             html += `
-            <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
+            <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
                 <div class="uc-card-img-wrapper">
                     <img src="${s.image_url}" alt="${s.service_name}">
                     <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
@@ -5796,10 +5796,15 @@ async function loadLocationAwareProduct(
             data.page;
 
         locationServiceData =
-            page;
+    page;
 
-        currentLocationName =
-            page.location_name || '';
+// URL-la slug irundhalum,
+// internal operations-ku permanent numeric service_id use pannanum.
+activeServiceId =
+    String(page.service_id);
+
+currentLocationName =
+    page.location_name || '';
 
         currentDistrictName =
             page.district || '';
@@ -6534,7 +6539,7 @@ if (mainGrid) {
     let html = '';
     filtered.forEach(s => {
         html += `
-        <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
+        <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
             <div class="uc-card-img-wrapper">
                 <img src="${s.image_url}" alt="${s.service_name}">
                 <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
@@ -8677,7 +8682,7 @@ function trackProfileChange(field, oldVal, newVal) {
     let html = '';
     filtered.forEach(s => {
         html += `
-        <div class="uc-card" onclick="openRelatedService('${s.service_id}')">
+        <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
             <div class="uc-card-img-wrapper">
                 <img src="${s.image_url}" alt="${s.service_name}">
                 <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
