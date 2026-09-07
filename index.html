@@ -5676,6 +5676,68 @@ padding: 0 12px !important;
     }
 }
 
+/* ==========================================
+   SEO SERVICE AREAS
+========================================== */
+
+.seo-service-areas {
+    max-width: 1200px;
+    margin: 45px auto 10px;
+    padding: 0 10px;
+}
+
+.seo-service-areas h2 {
+    font-size: 22px;
+    margin: 0 0 6px;
+    color: #18181b;
+}
+
+.seo-service-areas > p {
+    margin: 0 0 20px;
+    color: #71717a;
+    font-size: 14px;
+}
+
+.seo-district-group {
+    border-bottom: 1px solid #eeeeee;
+    padding: 12px 0;
+}
+
+.seo-district-group summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #27272a;
+    font-size: 14px;
+}
+
+.seo-location-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 12px;
+}
+
+.seo-location-links a {
+    font-size: 13px;
+    color: #52525b;
+    text-decoration: none;
+}
+
+.seo-location-links a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .seo-service-areas {
+        margin-top: 30px;
+        padding: 0 4px;
+    }
+
+    .seo-location-links {
+        gap: 8px 12px;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -5769,6 +5831,15 @@ padding: 0 12px !important;
 
     <!-- 5. Product Categories & Grids (இதைக் கட்டாயம் சேர்க்கவும்) -->
     <div id="productGridContainer"></div>
+
+    <!-- SEO SERVICE AREAS -->
+<section id="seoServiceAreasSection" class="seo-service-areas">
+    <h2>Service Areas</h2>
+    <p>Explore Cerood home appliance services available across Tamil Nadu.</p>
+
+    <div id="seoServiceAreasContainer"></div>
+</section>
+
     <!-- CATUS SEE ALL BOTTOM SHEET -->
 <div id="catusSeeAllOverlay" class="catus-seeall-overlay" onclick="closeCatusSeeAll(event)">
     <div class="catus-seeall-sheet" onclick="event.stopPropagation()">
@@ -6866,6 +6937,144 @@ const msg91Configuration = {
         console.error('MSG91 failure:', error);
     }
 };
+
+async function loadSeoServiceAreas() {
+
+    const container =
+        document.getElementById(
+            'seoServiceAreasContainer'
+        );
+
+    const section =
+        document.getElementById(
+            'seoServiceAreasSection'
+        );
+
+    if (!container || !section) return;
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/seo-locations`
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !Array.isArray(data.locations) ||
+            data.locations.length === 0
+        ) {
+            section.style.display = 'none';
+            return;
+        }
+
+        const districtMap = {};
+
+        data.locations.forEach(location => {
+
+            const district =
+                String(
+                    location.district || ''
+                ).trim();
+
+            if (!district) return;
+
+            if (!districtMap[district]) {
+                districtMap[district] = [];
+            }
+
+            districtMap[district].push(location);
+        });
+
+
+        const slugify = value =>
+            String(value || '')
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+
+
+        let html = '';
+
+        Object.keys(districtMap)
+            .sort()
+            .forEach(district => {
+
+                const locations =
+                    districtMap[district];
+
+                html += `
+                    <details class="seo-district-group">
+                        <summary>
+                            ${district}
+                        </summary>
+
+                        <div class="seo-location-links">
+                `;
+
+                locations.forEach(location => {
+
+                    const stateSlug =
+                        slugify(location.state);
+
+                    const districtSlug =
+                        slugify(location.district);
+
+                    const locationSlug =
+                        String(
+                            location.location_slug || ''
+                        ).trim();
+
+                    if (
+                        !stateSlug ||
+                        !districtSlug ||
+                        !locationSlug
+                    ) {
+                        return;
+                    }
+
+                    const url =
+                        `/${stateSlug}/` +
+                        `${districtSlug}/` +
+                        `${locationSlug}/` +
+                        `tv-repair`;
+
+                    html += `
+                        <a href="${url}">
+                            ${location.location_name}
+                        </a>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </details>
+                `;
+            });
+
+        container.innerHTML = html;
+
+    } catch (error) {
+
+        console.error(
+            'SEO service areas loading error:',
+            error
+        );
+
+        section.style.display = 'none';
+    }
+}
+
+
+document.addEventListener(
+    'DOMContentLoaded',
+    loadSeoServiceAreas
+);
 
     function slugifyLocation(value) {
     return String(value || '')
