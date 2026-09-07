@@ -9176,7 +9176,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let displayProductId = currentOrder.product_id || '';
                     
                     // Match the correct product image dynamically
-                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[currentOrder.service_name.toLowerCase().trim()] || 'logo.png';
+                    let orderImgUrl =
+    servicesMap[String(displayProductId).trim()] ||
+    servicesMap[currentOrder.service_name.toLowerCase().trim()] ||
+    '';
 
                     let stepBookedClass = 'prem-step-compact done';
                     let stepAssignedClass = 'prem-step-compact';
@@ -9255,7 +9258,9 @@ serviceStr =
                         
                         <div class="prem-live-middle-row">
                             <div class="prem-tech-info-compact">
-                                <img src="${orderImgUrl}" alt="Service Image" class="prem-tech-img-compact">
+                                ${orderImgUrl
+    ? `<img src="${orderImgUrl}" alt="Service Image" class="prem-tech-img-compact">`
+    : ''}
                                 <div class="prem-tech-details-compact">
                                     <h4>${techName}</h4>
                                     <p>${techPhoneText}</p>
