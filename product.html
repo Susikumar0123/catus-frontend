@@ -5952,20 +5952,16 @@ if (
     if (fullService) {
 
         currentProductData = {
-            ...fullService,
-            ...currentProductData,
+    ...fullService,
+    ...currentProductData,
 
-            price:
-                page.location_price ??
-                fullService.price
-        };
+    price: fullService.price
+};
 
         // ADMIN / DATABASE PRODUCT DATA -> LOCATION PAGE UI
 
 const finalPrice =
-    page.location_price ??
-    fullService.price ??
-    0;
+    fullService.price ?? 0;
 
 const finalMrp =
     fullService.mrp ??
