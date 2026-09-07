@@ -3950,7 +3950,7 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
             </div>
         </div>
     </div>
-    
+   
 
     <div class="uc-category-box" id="relatedServicesBox">
         <div class="uc-cat-header">
@@ -5655,8 +5655,20 @@ const averageRating =
 
         let html = '';
         filtered.forEach(s => {
-            html += `
-            <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
+
+    const serviceSlug = s.slug || s.service_id;
+
+    const serviceUrl =
+        currentStateSlug &&
+        currentDistrictSlug &&
+        currentLocationSlug
+            ? `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceSlug}`
+            : `/product.html?id=${serviceSlug}`;
+
+    html += `
+    <a class="uc-card"
+       href="${serviceUrl}"
+       style="text-decoration:none;color:inherit;">
                 <div class="uc-card-img-wrapper">
                     <img src="${s.image_url}" alt="${s.service_name}">
                     <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
@@ -5667,7 +5679,7 @@ const averageRating =
                         <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
                     </div>
                 </div>
-            </div>`;
+            </a>`;
         });
         relatedContainer.innerHTML = html;
     }
@@ -5925,7 +5937,7 @@ try {
 
         if (productTitle) {
     productTitle.textContent =
-        page.service_name;
+    page.service_name;
 }
 
 
@@ -6311,10 +6323,8 @@ if (featuresContainer) {
         // ------------------------------------------
 
         document.title =
-            page.seo_title ||
-            `${page.service_name} in ` +
-            `${page.location_name}, ` +
-            `${page.district} | Cerood`;
+    page.seo_title ||
+    `${page.service_name} Near You in ${page.location_name} | Cerood`;
 
 
         // ------------------------------------------
@@ -6340,11 +6350,8 @@ if (featuresContainer) {
         }
 
         metaDescription.content =
-            page.seo_description ||
-            `${page.service_name} in ` +
-            `${page.location_name}, ` +
-            `${page.district}. ` +
-            `Book doorstep service with Cerood.`;
+    page.seo_description ||
+    `Book ${page.service_name.toLowerCase()} near you in ${page.location_name}, ${page.district}. Trusted doorstep service with Cerood.`;
 
 
         // ------------------------------------------
@@ -6383,11 +6390,11 @@ const currentSeoUrl =
 
 const seoTitle =
     page.seo_title ||
-    `${page.service_name} in ${page.location_name}, ${page.district} | Cerood`;
+    `${page.service_name} Near You in ${page.location_name} | Cerood`;
 
 const seoDescription =
     page.seo_description ||
-    `${page.service_name} in ${page.location_name}, ${page.district}. Book doorstep service with Cerood.`;
+    `Book ${page.service_name.toLowerCase()} near you in ${page.location_name}, ${page.district}. Trusted doorstep service with Cerood.`;
 
 function setOgMeta(property, content) {
 
@@ -9858,10 +9865,10 @@ function togglePasswordVisibility(fieldId, iconElement) {
             <div>
                 <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Top Services</h4>
                 <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; color: #52525b;">
-                    <li>Smart TV Repair</li>
-                    <li>AC General Service</li>
-                    <li>Washing Machine Repair</li>
-                    <li>RO Water Purifier Service</li>
+                    <li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">Smart TV Repair</a></li>
+<li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">AC Service</a></li>
+<li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">Washing Machine Repair</a></li>
+<li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">RO Water Purifier Service</a></li>
                 </ul>
             </div>
 
