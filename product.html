@@ -8231,7 +8231,10 @@ function formatIndiaInlineTime(value) {
                     let displayProductId = currentOrder.product_id || '';
                     
                     // Match the correct product image dynamically
-                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[currentOrder.service_name.toLowerCase().trim()] || 'logo.png';
+                    let orderImgUrl =
+    servicesMap[String(displayProductId).trim()] ||
+    servicesMap[currentOrder.service_name.toLowerCase().trim()] ||
+    '';
 
                     let stepBookedClass = 'prem-step-compact done';
                     let stepAssignedClass = 'prem-step-compact';
@@ -8374,7 +8377,10 @@ serviceStr =
                     let safeServiceName = order.service_name.replace(/'/g, "\\'");
                     
                     // Match the correct product image dynamically for history list
-                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[order.service_name.toLowerCase().trim()] || 'logo.png';
+                    let orderImgUrl =
+    servicesMap[String(displayProductId).trim()] ||
+    servicesMap[order.service_name.toLowerCase().trim()] ||
+    '';
 
                     let isRated = ratedOrders.includes(String(order.order_id));
                     let ratingBtnHTML = '';

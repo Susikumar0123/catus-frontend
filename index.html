@@ -9321,7 +9321,10 @@ serviceStr =
                     let safeServiceName = order.service_name.replace(/'/g, "\\'");
                     
                     // Match the correct product image dynamically for history list
-                    let orderImgUrl = servicesMap[String(displayProductId).trim()] || servicesMap[order.service_name.toLowerCase().trim()] || 'logo.png';
+                    let orderImgUrl =
+    servicesMap[String(displayProductId).trim()] ||
+    servicesMap[order.service_name.toLowerCase().trim()] ||
+    '';
 
                     let isRated = ratedOrders.includes(String(order.order_id));
                     let ratingBtnHTML = '';

@@ -2027,81 +2027,159 @@ const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.sec
             let phoneDigits = String(mobile || currentUser.phone || '40001').replace(/[^0-9]/g, '');
             let permanentCustId = 40000 + parseInt(phoneDigits.slice(-4)); 
 
-            let lastOrderData = {};
-            try {
-                let combinedServiceName = orderItems.map(i => i.name).join(', ');
-                let combinedProductIds = orderItems.map(i => i.product_id || '').filter(Boolean).join(', ');
-                if (!combinedProductIds) {
-    alert('Unable to identify the selected service. Please go back and select the service again.');
-    return;
-}
-                
-                const orderPayload = {
-                    order_id: Math.floor(100000 + Math.random() * 900000),
-                    customer_id: permanentCustId,
-                    product_id: combinedProductIds, 
-                    service_name: combinedServiceName,
-                    items: orderItems.map(item => ({
-    product_id: item.product_id,
-    quantity: item.quantity || 1
-})),
-                    customer_name: custName,
-                    phone: mobile,
-                    mobile: mobile,
-                    whatsapp: mobile,
-                    address: addressStr,
-                    district: district,
-                    pincode: pincode,
-                    district_pincode: districtPincode,
-                    amount: finalAmt, 
-                    order_date: currentDate,
-                    status: orderStatus,
-                    payment_verification: paymentVerification
-                };
+            let createdOrders = [];
 
-                lastOrderData = orderPayload;
+try {
 
-                const response = await fetch(`${API_BASE_URL}/api/orders`, {
+    for (const item of orderItems) {
+
+        if (!item.product_id) {
+            continue;
+        }
+
+        const itemQty = Math.max(
+            1,
+            parseInt(item.quantity, 10) || 1
+        );
+
+        for (let q = 0; q < itemQty; q++) {
+
+            const orderId =
+                Math.floor(100000 + Math.random() * 900000);
+
+            const orderPayload = {
+                order_id: orderId,
+                customer_id: permanentCustId,
+
+                product_id: String(item.product_id).trim(),
+                service_name: item.name,
+
+                items: [{
+                    product_id: String(item.product_id).trim(),
+                    quantity: 1
+                }],
+
+                customer_name: custName,
+                phone: mobile,
+                mobile: mobile,
+                whatsapp: mobile,
+
+                address: addressStr,
+                district: district,
+                pincode: pincode,
+                district_pincode: districtPincode,
+
+                amount:
+                    Number(item.price || 0),
+
+                order_date: currentDate,
+                status: orderStatus,
+                payment_verification: paymentVerification
+            };
+
+            const response = await fetch(
+                `${API_BASE_URL}/api/orders`,
+                {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(orderPayload)
-                });
-                
-                const data = await response.json();
-
-                if (data.success) {
-                    if (localStorage.getItem('catus_checkout_mode') === 'cart') {
-                        localStorage.removeItem('catus_cart');
-                    }
-
-                    showSuccessPage(lastOrderData, combinedServiceName, combinedProductIds, addressStr, finalAmt, paymentModeText);
-                } else {
-                    alert('Failed to save order in database.');
                 }
-            } catch (err) {
-                console.error('Database error:', err);
-                alert('Server connection error.');
+            );
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(
+                    `Failed to create order for ${item.name}`
+                );
             }
+
+            createdOrders.push(orderPayload);
+        }
+    }
+
+    if (createdOrders.length === 0) {
+        alert('No valid service orders were created.');
+        return;
+    }
+
+    if (
+        localStorage.getItem('catus_checkout_mode') === 'cart'
+    ) {
+        localStorage.removeItem('catus_cart');
+    }
+
+    showSuccessPage(
+        createdOrders,
+        addressStr,
+        finalAmt,
+        paymentModeText
+    );
+
+} catch (err) {
+
+    console.error('Database error:', err);
+
+    alert(
+        'One or more orders could not be created. Please try again.'
+    );
+}
         }
 
-        function showSuccessPage(orderData, productNames, productIds, fullAddress, total, paymentModeText) {
-            document.getElementById('checkoutMainSection').style.display = 'none';
-            document.getElementById('successPageView').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function showSuccessPage(createdOrders, fullAddress, total, paymentModeText) {
 
-            document.getElementById('circleAnim').classList.add('animate');
-            document.getElementById('checkAnim').classList.add('animate');
+    document.getElementById('checkoutMainSection').style.display = 'none';
+    document.getElementById('successPageView').style.display = 'block';
 
-            document.getElementById('dispOrderId').textContent = '#' + orderData.order_id;
-            document.getElementById('dispCustomerId').textContent = '#' + orderData.customer_id;
-            document.getElementById('dispProductId').textContent = productIds;
-            document.getElementById('dispProductName').textContent = productNames;
-            document.getElementById('dispDate').textContent = new Date().toLocaleString();
-            document.getElementById('dispCustomerName').textContent = orderData.customer_name;
-            document.getElementById('dispMobile').textContent = "+91 " + orderData.phone;
-            document.getElementById('dispAddress').textContent = fullAddress;
-            document.getElementById('dispTotal').textContent = "₹" + total + ` (${paymentModeText})`;
-        }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    document.getElementById('circleAnim').classList.add('animate');
+    document.getElementById('checkAnim').classList.add('animate');
+
+    const firstOrder = createdOrders[0];
+
+    const orderIds = createdOrders
+        .map(order => '#' + order.order_id)
+        .join(', ');
+
+    const productIds = createdOrders
+        .map(order => order.product_id)
+        .join(', ');
+
+    const productNames = createdOrders
+        .map(order => order.service_name)
+        .join(', ');
+
+    document.getElementById('dispOrderId').textContent = orderIds;
+
+    document.getElementById('dispCustomerId').textContent =
+        '#' + firstOrder.customer_id;
+
+    document.getElementById('dispProductId').textContent =
+        productIds;
+
+    document.getElementById('dispProductName').textContent =
+        productNames;
+
+    document.getElementById('dispDate').textContent =
+        new Date().toLocaleString();
+
+    document.getElementById('dispCustomerName').textContent =
+        firstOrder.customer_name;
+
+    document.getElementById('dispMobile').textContent =
+        "+91 " + firstOrder.phone;
+
+    document.getElementById('dispAddress').textContent =
+        fullAddress;
+
+    document.getElementById('dispTotal').textContent =
+        "₹" + total + ` (${paymentModeText})`;
+}
+
+
         function scrollToCategories() {
     window.location.href = '/#productGridContainer';
 }
