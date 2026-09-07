@@ -1535,6 +1535,8 @@ p, span, div, a, label, li, small {
         let grandTotal = 0;
 
         window.addEventListener('DOMContentLoaded', async () => {
+            const rawItems =
+    localStorage.getItem('catus_checkout_items');
             await fetchAllCountries();
             loadStates();
 
