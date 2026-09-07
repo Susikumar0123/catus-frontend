@@ -1,4 +1,5 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
       "source": "/sitemap.xml",
@@ -9,8 +10,12 @@
       "destination": "https://catus-backend-d2js.onrender.com/api/sitemap/:page"
     },
     {
-  "source": "/:state/:district/:location/:service",
-  "destination": "/api/seo-product?state=:state&district=:district&location=:location&service=:service"
-}
+      "source": "/:state/:district/:location/:serviceId(\\d{1,})",
+      "destination": "https://catus-backend-d2js.onrender.com/api/seo-redirect/:state/:district/:location/:serviceId"
+    },
+    {
+      "source": "/:state/:district/:location/:service",
+      "destination": "/api/seo-product?state=:state&district=:district&location=:location&service=:service"
+    }
   ]
 }
