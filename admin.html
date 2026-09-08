@@ -1605,6 +1605,7 @@
             </div>
 
             <input type="hidden" id="oldServiceId">
+            <input type="hidden" id="modalServiceCategory">
 
             <div style="display: flex; flex-direction: column; gap: 14px; max-height: 72vh; overflow-y: auto; padding-right: 5px;">
                 <div class="form-group" style="margin:0;">
@@ -3562,6 +3563,7 @@
             if(!s) return;
             
             document.getElementById('oldServiceId').value = s.service_id;
+            document.getElementById('modalServiceCategory').value = s.category || '';
             document.getElementById('modalServiceId').value = s.service_id || '';
             document.getElementById('modalServiceName').value = s.service_name || '';
             document.getElementById('modalServiceGroup').value = s.group_id || '';
@@ -3999,7 +4001,30 @@
         if (!file) return;
 
         const formData = new FormData();
-        formData.append('image', file);
+formData.append('image', file);
+
+let folderName = 'home-icons';
+
+let categoryInput = null;
+
+if (targetInputId.startsWith('modalImg')) {
+    categoryInput =
+        document.getElementById('modalServiceCategory');
+} else if (targetInputId.startsWith('newImg')) {
+    categoryInput =
+        document.getElementById('addServiceCategory');
+}
+
+if (categoryInput && categoryInput.value.trim()) {
+    folderName =
+        categoryInput.value
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '');
+}
+
+formData.append('folder', folderName);
 
         const uploadLabel = fileInput.previousElementSibling;
         let originalText = uploadLabel.innerHTML;
