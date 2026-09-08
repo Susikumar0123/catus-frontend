@@ -7189,6 +7189,31 @@ html += `
             });
 
         container.innerHTML = html;
+        const districtDetails =
+    container.querySelectorAll(
+        '.seo-district-group'
+    );
+
+districtDetails.forEach(detail => {
+
+    detail.addEventListener(
+        'toggle',
+        () => {
+
+            if (!detail.open) return;
+
+            districtDetails.forEach(other => {
+
+                if (other !== detail) {
+                    other.open = false;
+                }
+
+            });
+
+        }
+    );
+
+});
 
     } catch (error) {
 
