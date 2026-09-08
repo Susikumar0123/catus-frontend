@@ -5935,10 +5935,8 @@ try {
                 'prodTitle'
             );
 
-        if (productTitle) {
-    productTitle.textContent =
-    page.service_name;
-}
+        productTitle.textContent =
+    `${page.service_name} in ${page.location_name}`;
 
 
         // ------------------------------------------
