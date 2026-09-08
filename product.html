@@ -420,66 +420,7 @@
     transform: translateY(-2px); 
 }
 
-/* ==========================================
-   LOCATION SEO CONTENT
-========================================== */
 
-.location-seo-content {
-    margin-top: 45px;
-    padding: 28px 30px;
-    background: #fafafa;
-    border: 1px solid #eeeeee;
-    border-radius: 14px;
-    color: #334155;
-    line-height: 1.7;
-}
-
-.location-seo-content h2 {
-    margin: 0 0 14px;
-    font-size: 24px;
-    color: #0f172a;
-}
-
-.location-seo-content h3 {
-    margin: 22px 0 10px;
-    font-size: 18px;
-    color: #0f172a;
-}
-
-.location-seo-content p {
-    margin: 0 0 14px;
-    font-size: 15px;
-}
-
-.location-seo-content ul {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.location-seo-content li {
-    margin-bottom: 7px;
-    font-size: 14px;
-}
-
-@media (max-width: 768px) {
-    .location-seo-content {
-        margin-top: 28px;
-        padding: 20px 16px;
-    }
-
-    .location-seo-content h2 {
-        font-size: 20px;
-    }
-
-    .location-seo-content h3 {
-        font-size: 17px;
-    }
-
-    .location-seo-content p,
-    .location-seo-content li {
-        font-size: 13px;
-    }
-}
 
         /* Related Services (Borderless Modern Cards matching Index) */
         .uc-category-box { background: transparent; padding: 0; margin-top: 50px; border-top: 1px solid #e2e8f0; padding-top: 40px; }
@@ -4012,7 +3953,7 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
         </div>
     </div>
    
-<section id="locationSeoContent" class="location-seo-content"></section>
+
 
     <div class="uc-category-box" id="relatedServicesBox">
         <div class="uc-cat-header">
@@ -5411,6 +5352,7 @@ function getProductUrlParams() {
                     document.getElementById('displayPrice').innerText = "₹" + Math.round(parseFloat(s.price));
                     document.getElementById('displayMrp').innerText = "₹" + Math.round(parseFloat(s.mrp));
                     document.getElementById('mainProductImage').src = s.image_url;
+                    document.getElementById('mainProductImage').alt = s.service_name || 'Cerood service';
                     document.getElementById('bcCategory').innerText = s.category || 'Service';
                     document.getElementById('bcTitle').innerText = s.service_name;
                     
@@ -5506,10 +5448,10 @@ if (featuresContainer && featuresSection) {
                     // 6. Thumbnails
                     let thumbContainer = document.getElementById('thumbnailContainer');
                     if (thumbContainer) {
-                        let thumbsHTML = `<div class="thumb-box active" onclick="changeMainImage(this)"><img src="${s.image_url}" alt="Thumb"></div>`;
-                        if(s.image_url_2) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_2}" alt="Thumb"></div>`;
-                        if(s.image_url_3) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_3}" alt="Thumb"></div>`;
-                        if(s.image_url_4) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_4}" alt="Thumb"></div>`;
+                        let thumbsHTML = `<div class="thumb-box active" onclick="changeMainImage(this)"><img src="${s.image_url}" alt="${s.service_name || 'Cerood service'}"></div>`;
+                        if(s.image_url_2) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_2}" alt="${s.service_name || 'Cerood service'}"></div>`;
+                        if(s.image_url_3) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_3}" alt="${s.service_name || 'Cerood service'}"></div>`;
+                        if(s.image_url_4) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_4}" alt="${s.service_name || 'Cerood service'}"></div>`;
                         thumbContainer.innerHTML = thumbsHTML;
                     }
 
@@ -6000,38 +5942,7 @@ try {
         productTitle.textContent =
     `${page.service_name} in ${page.location_name}`;
 
-    const locationSeoContent =
-    document.getElementById('locationSeoContent');
-
-if (locationSeoContent) {
-    locationSeoContent.innerHTML = `
-        <h2>${page.service_name} in ${page.location_name}</h2>
-
-        <p>
-            Looking for ${page.service_name.toLowerCase()} in
-            ${page.location_name}, ${page.district}?
-            Cerood helps you book trusted doorstep service
-            with service professionals in your area.
-        </p>
-
-        <p>
-            Our ${page.service_name.toLowerCase()} service in
-            ${page.location_name} includes inspection,
-            diagnosis and suitable repair or service assistance
-            based on the appliance condition.
-        </p>
-
-        <h3>Why choose Cerood in ${page.location_name}?</h3>
-
-        <ul>
-            <li>Doorstep service booking</li>
-            <li>Service professionals in your area</li>
-            <li>Transparent service pricing</li>
-            <li>Easy online booking</li>
-            <li>Service support after booking</li>
-        </ul>
-    `;
-}
+    
 
 
         // ------------------------------------------
@@ -6083,14 +5994,17 @@ if (locationSeoContent) {
         // ------------------------------------------
 
         const imageEl =
-            document.getElementById(
-                'mainProductImage'
-            );
+    document.getElementById(
+        'mainProductImage'
+    );
 
-        if (imageEl) {
-            imageEl.src =
-                page.image_url;
-        }
+if (imageEl) {
+    imageEl.src =
+        page.image_url;
+
+    imageEl.alt =
+        `${page.service_name} in ${page.location_name}`;
+}
 
         // ------------------------------------------
 // LOAD FULL PRODUCT DATA FOR LOCATION PAGE
@@ -6302,9 +6216,9 @@ if (featuresContainer) {
                         onclick="changeMainImage(this)"
                     >
                         <img
-                            src="${fullService.image_url}"
-                            alt="Thumb"
-                        >
+    src="${fullService.image_url}"
+    alt="${page.service_name} in ${page.location_name}"
+>
                     </div>
                 `;
             }
@@ -6317,7 +6231,7 @@ if (featuresContainer) {
                     >
                         <img
                             src="${fullService.image_url_2}"
-                            alt="Thumb"
+                            alt="${page.service_name} in ${page.location_name}"
                         >
                     </div>
                 `;
@@ -6331,7 +6245,7 @@ if (featuresContainer) {
                     >
                         <img
                             src="${fullService.image_url_3}"
-                            alt="Thumb"
+                            alt="${page.service_name} in ${page.location_name}"
                         >
                     </div>
                 `;
@@ -6345,7 +6259,7 @@ if (featuresContainer) {
                     >
                         <img
                             src="${fullService.image_url_4}"
-                            alt="Thumb"
+                            alt="${page.service_name} in ${page.location_name}"
                         >
                     </div>
                 `;
@@ -6470,7 +6384,7 @@ if (featuresContainer) {
         }
 
         canonical.href =
-            window.location.origin +
+            'https://www.cerood.com' +
             window.location.pathname;
 
         // ------------------------------------------
@@ -6478,7 +6392,7 @@ if (featuresContainer) {
 // ------------------------------------------
 
 const currentSeoUrl =
-    window.location.origin +
+    'https://www.cerood.com' +
     window.location.pathname;
 
 const seoTitle =
@@ -6534,9 +6448,70 @@ setOgMeta(
     'website'
 );
 
+setOgMeta(
+    'og:site_name',
+    'Cerood'
+);
+
 if (page.image_url) {
     setOgMeta(
         'og:image',
+        page.image_url
+    );
+
+    setOgMeta(
+        'og:image:alt',
+        `${page.service_name} in ${page.location_name}`
+    );
+}
+
+// ------------------------------------------
+// TWITTER / X SEO
+// ------------------------------------------
+
+function setTwitterMeta(name, content) {
+
+    let tag =
+        document.querySelector(
+            `meta[name="${name}"]`
+        );
+
+    if (!tag) {
+        tag =
+            document.createElement('meta');
+
+        tag.setAttribute(
+            'name',
+            name
+        );
+
+        document.head.appendChild(tag);
+    }
+
+    tag.setAttribute(
+        'content',
+        content || ''
+    );
+}
+
+setTwitterMeta(
+    'twitter:card',
+    'summary_large_image'
+);
+
+setTwitterMeta(
+    'twitter:title',
+    seoTitle
+);
+
+setTwitterMeta(
+    'twitter:description',
+    seoDescription
+);
+
+if (page.image_url) {
+    setTwitterMeta(
+        'twitter:image',
         page.image_url
     );
 }
@@ -6546,7 +6521,7 @@ if (page.image_url) {
 // ------------------------------------------
 
 const oldSeoSchema =
-    document.getElementById('catusDynamicSeoSchema');
+    document.getElementById('ceroodDynamicSeoSchema');
 
 if (oldSeoSchema) {
     oldSeoSchema.remove();
@@ -6559,7 +6534,7 @@ dynamicSchema.type =
     'application/ld+json';
 
 dynamicSchema.id =
-    'catusDynamicSeoSchema';
+    'ceroodDynamicSeoSchema';
 
 dynamicSchema.textContent =
     JSON.stringify({
@@ -6568,7 +6543,7 @@ dynamicSchema.textContent =
             {
                 "@type": "Service",
                 "@id":
-                    window.location.origin +
+                    'https://www.cerood.com' +
                     window.location.pathname +
                     "#service",
 
@@ -6578,10 +6553,12 @@ dynamicSchema.textContent =
                 "description":
                     page.seo_description ||
                     `${page.service_name} doorstep service in ${page.location_name}, ${page.district}. Book trusted home appliance service with Cerood.`,
+"url":
+    'https://www.cerood.com' +
+    window.location.pathname,
 
-                "url":
-                    window.location.origin +
-                    window.location.pathname,
+"image":
+    page.image_url,
 
                 "provider": {
                     "@type": "Organization",
@@ -6607,7 +6584,7 @@ dynamicSchema.textContent =
                         "position": 1,
                         "name": "Home",
                         "item":
-                            window.location.origin + "/"
+                            'https://www.cerood.com' + "/"
                     },
                     {
                         "@type": "ListItem",
@@ -6615,7 +6592,7 @@ dynamicSchema.textContent =
                         "name":
                             page.district,
                         "item":
-                            window.location.origin +
+                            'https://www.cerood.com' +
                             "/" +
                             currentStateSlug +
                             "/" +
@@ -6627,7 +6604,7 @@ dynamicSchema.textContent =
                         "name":
                             page.location_name,
                         "item":
-                            window.location.origin +
+                            'https://www.cerood.com' +
                             "/" +
                             currentStateSlug +
                             "/" +
@@ -6641,7 +6618,7 @@ dynamicSchema.textContent =
                         "name":
                             page.service_name,
                         "item":
-                            window.location.origin +
+                            'https://www.cerood.com' +
                             window.location.pathname
                     }
                 ]
