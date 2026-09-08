@@ -9038,8 +9038,28 @@ async function loginWithPassword() {
 
 async function waitForMsg91Captcha() {
 
-    if (typeof window.isCaptchaVerified !== 'function') {
-        return;
+    const initStartedAt = Date.now();
+
+    // Wait until MSG91 + captcha methods are fully initialized
+    while (
+        (
+            typeof window.isCaptchaVerified !== 'function' ||
+            typeof window.sendOtp !== 'function'
+        ) &&
+        Date.now() - initStartedAt < 10000
+    ) {
+        await new Promise(
+            resolve => setTimeout(resolve, 100)
+        );
+    }
+
+    if (
+        typeof window.isCaptchaVerified !== 'function' ||
+        typeof window.sendOtp !== 'function'
+    ) {
+        throw new Error(
+            'MSG91 captcha did not initialize'
+        );
     }
 
     const startedAt = Date.now();
@@ -9056,10 +9076,14 @@ async function waitForMsg91Captcha() {
             console.log('Captcha status waiting...');
         }
 
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(
+            resolve => setTimeout(resolve, 500)
+        );
     }
 
-    throw new Error('Captcha verification timeout');
+    throw new Error(
+        'Captcha verification timeout'
+    );
 }
 
 async function triggerForgotPassword() {

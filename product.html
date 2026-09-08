@@ -7397,8 +7397,27 @@ async function loginWithPassword() {
 
 async function waitForMsg91Captcha() {
 
-    if (typeof window.isCaptchaVerified !== 'function') {
-        return;
+    const initStartedAt = Date.now();
+
+    while (
+        (
+            typeof window.isCaptchaVerified !== 'function' ||
+            typeof window.sendOtp !== 'function'
+        ) &&
+        Date.now() - initStartedAt < 10000
+    ) {
+        await new Promise(
+            resolve => setTimeout(resolve, 100)
+        );
+    }
+
+    if (
+        typeof window.isCaptchaVerified !== 'function' ||
+        typeof window.sendOtp !== 'function'
+    ) {
+        throw new Error(
+            'MSG91 captcha did not initialize'
+        );
     }
 
     const startedAt = Date.now();
