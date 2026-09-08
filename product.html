@@ -420,6 +420,67 @@
     transform: translateY(-2px); 
 }
 
+/* ==========================================
+   LOCATION SEO CONTENT
+========================================== */
+
+.location-seo-content {
+    margin-top: 45px;
+    padding: 28px 30px;
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 14px;
+    color: #334155;
+    line-height: 1.7;
+}
+
+.location-seo-content h2 {
+    margin: 0 0 14px;
+    font-size: 24px;
+    color: #0f172a;
+}
+
+.location-seo-content h3 {
+    margin: 22px 0 10px;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+.location-seo-content p {
+    margin: 0 0 14px;
+    font-size: 15px;
+}
+
+.location-seo-content ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.location-seo-content li {
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .location-seo-content {
+        margin-top: 28px;
+        padding: 20px 16px;
+    }
+
+    .location-seo-content h2 {
+        font-size: 20px;
+    }
+
+    .location-seo-content h3 {
+        font-size: 17px;
+    }
+
+    .location-seo-content p,
+    .location-seo-content li {
+        font-size: 13px;
+    }
+}
+
         /* Related Services (Borderless Modern Cards matching Index) */
         .uc-category-box { background: transparent; padding: 0; margin-top: 50px; border-top: 1px solid #e2e8f0; padding-top: 40px; }
         .uc-cat-header { margin-bottom: 25px; }
@@ -3951,6 +4012,7 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
         </div>
     </div>
    
+<section id="locationSeoContent" class="location-seo-content"></section>
 
     <div class="uc-category-box" id="relatedServicesBox">
         <div class="uc-cat-header">
@@ -5937,6 +5999,39 @@ try {
 
         productTitle.textContent =
     `${page.service_name} in ${page.location_name}`;
+
+    const locationSeoContent =
+    document.getElementById('locationSeoContent');
+
+if (locationSeoContent) {
+    locationSeoContent.innerHTML = `
+        <h2>${page.service_name} in ${page.location_name}</h2>
+
+        <p>
+            Looking for ${page.service_name.toLowerCase()} in
+            ${page.location_name}, ${page.district}?
+            Cerood helps you book trusted doorstep service
+            with service professionals in your area.
+        </p>
+
+        <p>
+            Our ${page.service_name.toLowerCase()} service in
+            ${page.location_name} includes inspection,
+            diagnosis and suitable repair or service assistance
+            based on the appliance condition.
+        </p>
+
+        <h3>Why choose Cerood in ${page.location_name}?</h3>
+
+        <ul>
+            <li>Doorstep service booking</li>
+            <li>Service professionals in your area</li>
+            <li>Transparent service pricing</li>
+            <li>Easy online booking</li>
+            <li>Service support after booking</li>
+        </ul>
+    `;
+}
 
 
         // ------------------------------------------
