@@ -5863,6 +5863,126 @@ padding: 0 12px !important;
     margin-right: 0;
 }
 
+/* =========================================
+   CEROOD SERVICE AREA - CLEAN ACCORDION UI
+========================================= */
+
+.seo-service-areas-inner #seoServiceAreasContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0;
+}
+
+/* District button row */
+.seo-service-areas-footer .seo-district-group {
+    display: contents;
+}
+
+.seo-service-areas-footer .seo-district-group > summary {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #27272a;
+    cursor: pointer;
+    white-space: nowrap;
+    list-style: none;
+}
+
+.seo-service-areas-footer .seo-district-group > summary::-webkit-details-marker {
+    display: none;
+}
+
+.seo-service-areas-footer .seo-district-group:not(:last-child) > summary::after {
+    content: "|";
+    margin: 0 10px;
+    color: #c7c9d1;
+    font-weight: 400;
+}
+
+/* Selected district */
+.seo-service-areas-footer .seo-district-group[open] > summary {
+    color: #6d4aff;
+}
+
+/* Open district content becomes full width */
+.seo-service-areas-footer .seo-district-group[open] > .seo-location-links {
+    order: 999;
+    flex-basis: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 24px;
+    margin: 14px 0 18px;
+    padding: 16px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid #e3e3ec;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* Location block */
+.seo-location-service-group {
+    margin: 0;
+    min-width: 0;
+}
+
+.seo-location-service-group strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 7px;
+}
+
+/* Services under each location */
+.seo-location-service-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+}
+
+.seo-location-service-links a {
+    font-size: 11px;
+    color: #475569;
+    text-decoration: none;
+    padding-right: 9px;
+    margin-right: 9px;
+    border-right: 1px solid #cbd5e1;
+    line-height: 1.6;
+}
+
+.seo-location-service-links a:last-child {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+}
+
+.seo-location-service-links a:hover {
+    color: #6d4aff;
+    text-decoration: underline;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .seo-service-areas-footer .seo-district-group[open] > .seo-location-links {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .seo-service-areas-footer .seo-district-group > summary {
+        font-size: 11px;
+        padding: 5px 0;
+    }
+
+    .seo-service-areas-footer .seo-district-group:not(:last-child) > summary::after {
+        margin: 0 7px;
+    }
+}
 
 </style>
 </head>
