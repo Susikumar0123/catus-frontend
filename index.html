@@ -5791,12 +5791,41 @@ padding: 0 12px !important;
     margin: 0 0 12px;
 }
 
+.seo-service-areas-inner #seoServiceAreasContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    padding-top: 4px;
+}
+
 .seo-service-areas-footer .seo-district-group {
-    padding: 7px 0;
+    display: inline-block;
+    padding: 4px 0;
+    margin: 0;
+    border-bottom: none;
 }
 
 .seo-service-areas-footer .seo-district-group summary {
+    display: inline-flex;
+    align-items: center;
     font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    white-space: nowrap;
+    color: #27272a;
+}
+
+.seo-service-areas-footer .seo-district-group summary::-webkit-details-marker {
+    display: none;
+}
+
+.seo-service-areas-footer .seo-district-group:not(:last-child) summary::after {
+    content: "|";
+    color: #b8b8c3;
+    font-weight: 400;
+    margin: 0 10px;
 }
 
 .seo-service-areas-footer .seo-location-links a {
