@@ -6059,9 +6059,9 @@ padding: 0 12px !important;
     </div>
 
     <!-- 3. Title Container -->
-    <div class="section-title-container extra-container">
-      Doorstep Home Appliance Repair & Installation 
-    </div>
+    <h1 class="section-title-container">
+    Doorstep Home Appliance Repair & Installation
+</h1>
 
     <!-- 4. Top Banner Scroll Cards Container -->
     <div class="scroll-wrapper extra-container">
@@ -10619,9 +10619,9 @@ const priceHTML = (!isNameOnlySection && price > 0)
 
                 <img
     src="${s.image_url}"
-    alt="${s.service_name}"
-    loading="eager"
-    decoding="async">
+alt="${s.service_name}"
+loading="lazy"
+decoding="async">
             </div>
 
             <div class="uc-body">
@@ -10684,8 +10684,8 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
 
                 <img
     src="${promo.image_url}"
-    alt="${promo.title || 'Cerood Promo'}"
-    loading="eager"
+    alt="${promo.title || 'Cerood Home Appliance Service'}"
+    loading="lazy"
     decoding="async">
 
                 <div class="catus-promo-overlay">
@@ -10894,7 +10894,7 @@ function closeCatusSeeAll(event) {
 
         if (data.success && data.banners.length > 0) {
             let dynamicHTML = '';
-            data.banners.forEach(b => {
+            data.banners.forEach((b, index) => {
                 let btnTextColor = (b.text_color === '#111' || b.text_color === '#000') ? '#fff' : (b.text_color || '#fff');
                 let btnBgColor = (b.text_color === '#111' || b.text_color === '#000') ? '#111' : (b.text_color || '#111');
 
@@ -10913,7 +10913,12 @@ function closeCatusSeeAll(event) {
                                 ${b.button_data || b.button_text || 'Book now'}
                             </span>
                         </div>
-                        <img src="${b.image_url}" alt="${b.title}">
+                        <img
+    src="${b.image_url}"
+    alt="${b.title || 'Cerood Home Appliance Service'}"
+    loading="${index === 0 ? 'eager' : 'lazy'}"
+    fetchpriority="${index === 0 ? 'high' : 'auto'}"
+    decoding="async">
                     </div>
                 </a>`;
             });
