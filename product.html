@@ -3927,7 +3927,13 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
     <div class="product-grid" id="productGridMain">
         <div class="product-gallery">
             <div class="main-image-container">
-                <img id="mainProductImage" src="" alt="Product">
+                <img
+    id="mainProductImage"
+    src=""
+    alt="Product"
+    fetchpriority="high"
+    loading="eager"
+>
             </div>
             <div class="thumbnail-row" id="thumbnailContainer"></div>
         </div>
@@ -5370,8 +5376,11 @@ function getProductUrlParams() {
                     document.getElementById('prodTitle').innerText = s.service_name;
                     document.getElementById('displayPrice').innerText = "₹" + Math.round(parseFloat(s.price));
                     document.getElementById('displayMrp').innerText = "₹" + Math.round(parseFloat(s.mrp));
-                    document.getElementById('mainProductImage').src = s.image_url;
-                    document.getElementById('mainProductImage').alt = s.service_name || 'Cerood service';
+                    applyResponsiveProductImage(
+    document.getElementById('mainProductImage'),
+    s.image_url,
+    s.service_name || 'Cerood service'
+);
                     document.getElementById('bcCategory').innerText = s.category || 'Service';
                     document.getElementById('bcTitle').innerText = s.service_name;
                     
@@ -5466,13 +5475,61 @@ if (featuresContainer && featuresSection) {
 
                     // 6. Thumbnails
                     let thumbContainer = document.getElementById('thumbnailContainer');
-                    if (thumbContainer) {
-                        let thumbsHTML = `<div class="thumb-box active" onclick="changeMainImage(this)"><img src="${s.image_url}" alt="${s.service_name || 'Cerood service'}"></div>`;
-                        if(s.image_url_2) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_2}" alt="${s.service_name || 'Cerood service'}"></div>`;
-                        if(s.image_url_3) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_3}" alt="${s.service_name || 'Cerood service'}"></div>`;
-                        if(s.image_url_4) thumbsHTML += `<div class="thumb-box" onclick="changeMainImage(this)"><img src="${s.image_url_4}" alt="${s.service_name || 'Cerood service'}"></div>`;
-                        thumbContainer.innerHTML = thumbsHTML;
-                    }
+
+if (thumbContainer) {
+
+    let thumbsHTML = `
+        <div class="thumb-box active" onclick="changeMainImage(this)">
+            <img
+                src="${getSmallProductImageUrl(s.image_url)}"
+                data-full-image="${s.image_url}"
+                alt="${s.service_name || 'Cerood service'}"
+                loading="lazy"
+            >
+        </div>
+    `;
+
+    if (s.image_url_2) {
+        thumbsHTML += `
+            <div class="thumb-box" onclick="changeMainImage(this)">
+                <img
+                    src="${getSmallProductImageUrl(s.image_url_2)}"
+                    data-full-image="${s.image_url_2}"
+                    alt="${s.service_name || 'Cerood service'}"
+                    loading="lazy"
+                >
+            </div>
+        `;
+    }
+
+    if (s.image_url_3) {
+        thumbsHTML += `
+            <div class="thumb-box" onclick="changeMainImage(this)">
+                <img
+                    src="${getSmallProductImageUrl(s.image_url_3)}"
+                    data-full-image="${s.image_url_3}"
+                    alt="${s.service_name || 'Cerood service'}"
+                    loading="lazy"
+                >
+            </div>
+        `;
+    }
+
+    if (s.image_url_4) {
+        thumbsHTML += `
+            <div class="thumb-box" onclick="changeMainImage(this)">
+                <img
+                    src="${getSmallProductImageUrl(s.image_url_4)}"
+                    data-full-image="${s.image_url_4}"
+                    alt="${s.service_name || 'Cerood service'}"
+                    loading="lazy"
+                >
+            </div>
+        `;
+    }
+
+    thumbContainer.innerHTML = thumbsHTML;
+}
 
                     // 7. Load Combined Reviews
                     await loadCombinedProductReviews(serviceId, s);
@@ -5693,7 +5750,12 @@ const averageRating =
        href="${serviceUrl}"
        style="text-decoration:none;color:inherit;">
                 <div class="uc-card-img-wrapper">
-                    <img src="${s.image_url}" alt="${s.service_name}">
+                    <img
+    src="${getSmallProductImageUrl(s.image_url)}"
+    data-full-image="${s.image_url}"
+    alt="${s.service_name}"
+    loading="lazy"
+>
                     <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
                 </div>
                 <div class="uc-body">
@@ -6018,11 +6080,12 @@ try {
     );
 
 if (imageEl) {
-    imageEl.src =
-        page.image_url;
+    applyResponsiveProductImage(
+    imageEl,
+    page.image_url,
+    `${page.service_name} in ${page.location_name}`
+);
 
-    imageEl.alt =
-        `${page.service_name} in ${page.location_name}`;
 }
 
         // ------------------------------------------
@@ -6210,12 +6273,15 @@ if (featuresContainer) {
 
         // MAIN IMAGE
         if (
-            imageEl &&
-            fullService.image_url
-        ) {
-            imageEl.src =
-                fullService.image_url;
-        }
+    imageEl &&
+    fullService.image_url
+) {
+    applyResponsiveProductImage(
+        imageEl,
+        fullService.image_url,
+        fullService.service_name || 'Cerood service'
+    );
+}
 
 
         // THUMBNAILS
@@ -6224,69 +6290,76 @@ if (featuresContainer) {
                 'thumbnailContainer'
             );
 
-        if (thumbContainer) {
+       if (thumbContainer) {
 
-            let thumbsHTML = '';
+    let thumbsHTML = '';
 
-            if (fullService.image_url) {
-                thumbsHTML += `
-                    <div
-                        class="thumb-box active"
-                        onclick="changeMainImage(this)"
-                    >
-                        <img
-    src="${fullService.image_url}"
-    alt="${page.service_name} in ${page.location_name}"
->
-                    </div>
-                `;
-            }
+    if (fullService.image_url) {
+        thumbsHTML += `
+            <div
+                class="thumb-box active"
+                onclick="changeMainImage(this)"
+            >
+                <img
+                    src="${getSmallProductImageUrl(fullService.image_url)}"
+                    data-full-image="${fullService.image_url}"
+                    alt="${page.service_name} in ${page.location_name}"
+                    loading="lazy"
+                >
+            </div>
+        `;
+    }
 
-            if (fullService.image_url_2) {
-                thumbsHTML += `
-                    <div
-                        class="thumb-box"
-                        onclick="changeMainImage(this)"
-                    >
-                        <img
-                            src="${fullService.image_url_2}"
-                            alt="${page.service_name} in ${page.location_name}"
-                        >
-                    </div>
-                `;
-            }
+    if (fullService.image_url_2) {
+        thumbsHTML += `
+            <div
+                class="thumb-box"
+                onclick="changeMainImage(this)"
+            >
+                <img
+                    src="${getSmallProductImageUrl(fullService.image_url_2)}"
+                    data-full-image="${fullService.image_url_2}"
+                    alt="${page.service_name} in ${page.location_name}"
+                    loading="lazy"
+                >
+            </div>
+        `;
+    }
 
-            if (fullService.image_url_3) {
-                thumbsHTML += `
-                    <div
-                        class="thumb-box"
-                        onclick="changeMainImage(this)"
-                    >
-                        <img
-                            src="${fullService.image_url_3}"
-                            alt="${page.service_name} in ${page.location_name}"
-                        >
-                    </div>
-                `;
-            }
+    if (fullService.image_url_3) {
+        thumbsHTML += `
+            <div
+                class="thumb-box"
+                onclick="changeMainImage(this)"
+            >
+                <img
+                    src="${getSmallProductImageUrl(fullService.image_url_3)}"
+                    data-full-image="${fullService.image_url_3}"
+                    alt="${page.service_name} in ${page.location_name}"
+                    loading="lazy"
+                >
+            </div>
+        `;
+    }
 
-            if (fullService.image_url_4) {
-                thumbsHTML += `
-                    <div
-                        class="thumb-box"
-                        onclick="changeMainImage(this)"
-                    >
-                        <img
-                            src="${fullService.image_url_4}"
-                            alt="${page.service_name} in ${page.location_name}"
-                        >
-                    </div>
-                `;
-            }
+    if (fullService.image_url_4) {
+        thumbsHTML += `
+            <div
+                class="thumb-box"
+                onclick="changeMainImage(this)"
+            >
+                <img
+                    src="${getSmallProductImageUrl(fullService.image_url_4)}"
+                    data-full-image="${fullService.image_url_4}"
+                    alt="${page.service_name} in ${page.location_name}"
+                    loading="lazy"
+                >
+            </div>
+        `;
+    }
 
-            thumbContainer.innerHTML =
-                thumbsHTML;
-        }
+    thumbContainer.innerHTML = thumbsHTML;
+}
 
 
         // REVIEWS
@@ -6673,12 +6746,81 @@ if (mainGrid) {
         btn.classList.add('active');
     }
 
-    function changeMainImage(thumbElement) {
-        document.querySelectorAll('.thumb-box').forEach(b => b.classList.remove('active'));
-        thumbElement.classList.add('active');
-        let img = thumbElement.querySelector('img');
-        if(img) document.getElementById('mainProductImage').src = img.src;
+    function applyResponsiveProductImage(
+    imageElement,
+    imageUrl,
+    altText = 'Cerood service'
+) {
+
+    if (!imageElement || !imageUrl) return;
+
+    imageElement.src = imageUrl;
+    imageElement.alt = altText;
+
+    const responsiveMatch =
+        imageUrl.match(/-800\.webp(\?.*)?$/i);
+
+    if (!responsiveMatch) {
+        imageElement.removeAttribute('srcset');
+        imageElement.removeAttribute('sizes');
+        return;
     }
+
+    const url240 =
+        imageUrl.replace(
+            /-800\.webp(\?.*)?$/i,
+            '-240.webp$1'
+        );
+
+    const url480 =
+        imageUrl.replace(
+            /-800\.webp(\?.*)?$/i,
+            '-480.webp$1'
+        );
+
+    imageElement.srcset =
+        `${url240} 240w, ` +
+        `${url480} 480w, ` +
+        `${imageUrl} 800w`;
+
+    imageElement.sizes =
+        '(max-width: 850px) 100vw, 58vw';
+}
+
+    function changeMainImage(thumbElement) {
+    document.querySelectorAll('.thumb-box').forEach(
+        b => b.classList.remove('active')
+    );
+
+    thumbElement.classList.add('active');
+
+    const img = thumbElement.querySelector('img');
+    const mainImage = document.getElementById('mainProductImage');
+
+    if (!img || !mainImage) return;
+
+    const fullImageUrl =
+        img.dataset.fullImage || img.src;
+
+    applyResponsiveProductImage(
+        mainImage,
+        fullImageUrl,
+        img.alt || 'Cerood service'
+    );
+}
+
+function getSmallProductImageUrl(imageUrl) {
+    if (!imageUrl) return '';
+
+    if (/-800\.webp(\?.*)?$/i.test(imageUrl)) {
+        return imageUrl.replace(
+            /-800\.webp(\?.*)?$/i,
+            '-240.webp$1'
+        );
+    }
+
+    return imageUrl;
+}
 
     function loadRelatedServices(allServices, currentCategory, currentId) {
     const relatedContainer = document.getElementById('relatedContainer');
@@ -6694,7 +6836,12 @@ if (mainGrid) {
         html += `
         <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
             <div class="uc-card-img-wrapper">
-                <img src="${s.image_url}" alt="${s.service_name}">
+                <img
+    src="${getSmallProductImageUrl(s.image_url)}"
+    data-full-image="${s.image_url}"
+    alt="${s.service_name}"
+    loading="lazy"
+>
                 <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
             </div>
             <div class="uc-body">
@@ -8837,7 +8984,11 @@ function trackProfileChange(field, oldVal, newVal) {
         html += `
         <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
             <div class="uc-card-img-wrapper">
-                <img src="${s.image_url}" alt="${s.service_name}">
+                <img
+    src="${getSmallProductImageUrl(s.image_url)}"
+    alt="${s.service_name}"
+    loading="lazy"
+>
                 <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
             </div>
             <div class="uc-body">

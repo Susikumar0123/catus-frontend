@@ -4026,6 +4026,14 @@ if (categoryInput && categoryInput.value.trim()) {
 
 formData.append('folder', folderName);
 
+const isProductImage =
+    targetInputId.startsWith('newImg') ||
+    targetInputId.startsWith('modalImg');
+
+if (isProductImage) {
+    formData.append('generateResponsive', 'true');
+}
+
         const uploadLabel = fileInput.previousElementSibling;
         let originalText = uploadLabel.innerHTML;
         uploadLabel.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';

@@ -10160,6 +10160,19 @@ function filterProductsByGroup(groupId) {
         });
 }
 
+function getSmallProductImageUrl(imageUrl) {
+    if (!imageUrl) return '';
+
+    if (/-800\.webp(\?.*)?$/i.test(imageUrl)) {
+        return imageUrl.replace(
+            /-800\.webp(\?.*)?$/i,
+            '-240.webp$1'
+        );
+    }
+
+    return imageUrl;
+}
+
     function filterProducts(keyword) {
         const query = keyword.toLowerCase().trim();
 
@@ -10637,7 +10650,7 @@ const priceHTML = (!isNameOnlySection && price > 0)
                 ${trendingBadgeHTML}
 
                 <img
-    src="${s.image_url}"
+    src="${getSmallProductImageUrl(s.image_url)}"
 alt="${s.service_name}"
 loading="lazy"
 decoding="async">
