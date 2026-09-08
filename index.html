@@ -7196,6 +7196,75 @@ const msg91Configuration = {
     }
 };
 
+let msg91LoadPromise = null;
+
+function loadMsg91() {
+
+    // Already loaded
+    if (
+        typeof window.sendOtp === 'function' &&
+        typeof window.verifyOtp === 'function'
+    ) {
+        return Promise.resolve();
+    }
+
+    // Already loading
+    if (msg91LoadPromise) {
+        return msg91LoadPromise;
+    }
+
+    msg91LoadPromise = new Promise((resolve, reject) => {
+
+        const script =
+            document.createElement('script');
+
+        script.src =
+            'https://verify.msg91.com/otp-provider.js';
+
+        script.async = true;
+
+        script.onload = () => {
+
+            try {
+
+                if (
+                    typeof window.initSendOTP !== 'function'
+                ) {
+                    throw new Error(
+                        'MSG91 initSendOTP not available'
+                    );
+                }
+
+                window.initSendOTP(
+                    msg91Configuration
+                );
+
+                resolve();
+
+            } catch (error) {
+
+                msg91LoadPromise = null;
+                reject(error);
+            }
+        };
+
+        script.onerror = () => {
+
+            msg91LoadPromise = null;
+
+            reject(
+                new Error(
+                    'MSG91 script failed to load'
+                )
+            );
+        };
+
+        document.head.appendChild(script);
+    });
+
+    return msg91LoadPromise;
+}
+
 async function loadSeoServiceAreas() {
 
     const container =
@@ -8848,6 +8917,7 @@ if (infoEl) {
         false
     );
 
+    await loadMsg91();
     await waitForMsg91Captcha();
 
     if (typeof window.sendOtp !== 'function') {
@@ -9051,6 +9121,7 @@ if (infoEl) {
 
 try {
 
+    await loadMsg91();
     await waitForMsg91Captcha();
 
     if (typeof window.sendOtp !== 'function') {
@@ -12352,11 +12423,6 @@ function togglePasswordVisibility(fieldId, iconElement) {
 document.addEventListener('DOMContentLoaded', function () {
     lucide.createIcons();
 });
-</script>
-<script
-    type="text/javascript"
-    onload="initSendOTP(msg91Configuration)"
-    src="https://verify.msg91.com/otp-provider.js">
 </script>
 </body>
 </html>
