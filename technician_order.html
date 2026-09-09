@@ -543,16 +543,18 @@ function renderOrder(order) {
                 </div>
 
 
-        <div class="card">
+        <div class="card" id="workProofCard">
 
-            <div class="section-heading">
-                Work Proof
-            </div>
+    <div class="section-heading">
+        Work Proof
+    </div>
 
             <div
     id="existingWorkProof"
     style="display:none; margin-bottom:16px;"
 ></div>
+
+<div id="workProofForm">
 
             <div class="detail-row">
                 <span class="label">
@@ -622,6 +624,7 @@ function renderOrder(order) {
             >
                 Submit Work Proof
             </button>
+            </div>
 
 
             <div
@@ -717,6 +720,93 @@ async function loadExistingWorkProof() {
         const status =
             proof.status ||
             'Submitted';
+
+        const workProofForm =
+    document.getElementById(
+        'workProofForm'
+    );
+
+const workProofMessage =
+    document.getElementById(
+        'workProofMessage'
+    );
+
+
+if (status === 'Submitted') {
+
+    if (workProofForm) {
+        workProofForm.style.display =
+            'none';
+    }
+
+    if (workProofMessage) {
+
+        workProofMessage.textContent =
+            'Work proof submitted. Waiting for Admin Approval.';
+
+        workProofMessage.className =
+            'message';
+
+        workProofMessage.style.display =
+            'block';
+
+        workProofMessage.style.background =
+            '#eff6ff';
+
+        workProofMessage.style.borderColor =
+            '#bfdbfe';
+
+        workProofMessage.style.color =
+            '#1d4ed8';
+    }
+
+} else if (status === 'Approved') {
+
+    if (workProofForm) {
+        workProofForm.style.display =
+            'none';
+    }
+
+    if (workProofMessage) {
+
+        workProofMessage.textContent =
+            'Work Approved. This order has been completed.';
+
+        workProofMessage.className =
+            'message';
+
+        workProofMessage.style.display =
+            'block';
+
+        workProofMessage.style.background =
+            '#f0fdf4';
+
+        workProofMessage.style.borderColor =
+            '#bbf7d0';
+
+        workProofMessage.style.color =
+            '#166534';
+    }
+
+} else if (status === 'Rejected') {
+
+    if (workProofForm) {
+        workProofForm.style.display =
+            'block';
+    }
+
+    if (workProofMessage) {
+
+        workProofMessage.textContent =
+            'Work proof was rejected. Please correct it and submit again.';
+
+        workProofMessage.className =
+            'message error';
+
+        workProofMessage.style.display =
+            'block';
+    }
+}
 
 
         let statusBackground =
@@ -1088,6 +1178,18 @@ async function submitWorkProof() {
             'Work proof submitted successfully. Waiting for Cerood approval.',
             'success'
         );
+
+        const workProofForm =
+    document.getElementById(
+        'workProofForm'
+    );
+
+if (workProofForm) {
+    workProofForm.style.display =
+        'none';
+}
+
+await loadExistingWorkProof();
 
 
         document.getElementById(
