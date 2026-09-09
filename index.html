@@ -7167,6 +7167,101 @@ padding: 0 12px !important;
       </div>
   </div>
 
+  <!-- GOOGLE REVIEW SUCCESS POPUP -->
+<div
+    id="googleReviewPopup"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(15,23,42,0.55);
+        z-index:999999999;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+    <div
+        style="
+            width:100%;
+            max-width:390px;
+            background:#ffffff;
+            border-radius:18px;
+            padding:26px 22px;
+            text-align:center;
+            box-shadow:0 20px 50px rgba(0,0,0,0.18);
+        "
+    >
+
+        <div style="font-size:42px; margin-bottom:10px;">
+            ⭐
+        </div>
+
+        <h3
+            style="
+                margin:0 0 8px;
+                font-size:20px;
+                color:#111827;
+            "
+        >
+            Thank you for your review!
+        </h3>
+
+        <p
+            style="
+                margin:0 0 22px;
+                font-size:13px;
+                line-height:1.6;
+                color:#64748b;
+            "
+        >
+            Your feedback helps Cerood improve.
+            Would you also like to share your experience on Google?
+        </p>
+
+        <a
+            href="https://g.page/r/CfI4xdZRpLixEBM/review"
+            target="_blank"
+            rel="noopener noreferrer"
+            onclick="closeGoogleReviewPopup()"
+            style="
+                display:block;
+                width:100%;
+                background:#111827;
+                color:#ffffff;
+                padding:13px;
+                border-radius:10px;
+                font-size:14px;
+                font-weight:600;
+                text-decoration:none;
+                box-sizing:border-box;
+                margin-bottom:10px;
+            "
+        >
+            ★ Review Cerood on Google
+        </a>
+
+        <button
+            type="button"
+            onclick="closeGoogleReviewPopup()"
+            style="
+                width:100%;
+                background:#f1f5f9;
+                border:none;
+                color:#475569;
+                padding:12px;
+                border-radius:10px;
+                font-size:13px;
+                font-weight:600;
+                cursor:pointer;
+            "
+        >
+            Maybe Later
+        </button>
+
+    </div>
+</div>
+
   <!-- JavaScript Integration -->
   <script>
     window.addEventListener('DOMContentLoaded', () => {
@@ -7929,6 +8024,18 @@ function openServiceProduct(serviceId) {
         document.getElementById('ratingModal').style.display = 'none';
     }
 
+    function closeGoogleReviewPopup() {
+
+    const popup =
+        document.getElementById(
+            'googleReviewPopup'
+        );
+
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
+
     function setRating(val) {
         document.getElementById('currentRatingVal').value = val;
         const stars = document.getElementById('starRatingContainer').children;
@@ -8008,12 +8115,20 @@ function openServiceProduct(serviceId) {
 
         closeRatingModal();
 
-        showToast(
-            reviewText
-                ? "Thanks for your review & rating!"
-                : "Thanks for your rating!",
-            false
-        );
+showToast(
+    reviewText
+        ? "Thanks for your review & rating!"
+        : "Thanks for your rating!",
+    false
+);
+
+setTimeout(() => {
+
+    document.getElementById(
+        'googleReviewPopup'
+    ).style.display = 'flex';
+
+}, 500);
 
         if (currentUser && currentUser.phone) {
             fetchUserOrdersPremium(currentUser.phone);

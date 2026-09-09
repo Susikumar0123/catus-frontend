@@ -545,6 +545,30 @@
                 class="message"
             ></div>
 
+            <a
+    id="googleReviewBtn"
+    href="https://g.page/r/CfI4xdZRpLixEBM/review"
+    target="_blank"
+    rel="noopener noreferrer"
+    style="
+        display:none;
+        width:100%;
+        margin-top:14px;
+        padding:14px 16px;
+        border-radius:11px;
+        background:#ffffff;
+        border:1px solid #d1d5db;
+        color:#111827;
+        text-decoration:none;
+        text-align:center;
+        font-size:15px;
+        font-weight:700;
+        box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    "
+>
+    ★ Review Cerood on Google
+</a>
+
 
             <div class="privacy-note">
                 Reviews are checked before
@@ -912,11 +936,15 @@ if (data.already_reviewed) {
 
 
     showMessage(
-        message,
-        'success'
-    );
+    message,
+    'success'
+);
 
-    return;
+document.getElementById(
+    'googleReviewBtn'
+).style.display = 'block';
+
+return;
 }
 
 
@@ -1209,6 +1237,10 @@ if (data.already_reviewed) {
                     'Thank you! Your review has been submitted successfully.',
                     'success'
                 );
+
+                document.getElementById(
+    'googleReviewBtn'
+).style.display = 'block';
 
 
                 stars.forEach(

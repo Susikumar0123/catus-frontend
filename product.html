@@ -3978,7 +3978,45 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
         </div>
     </div>
    
+<!-- REAL CEROOD WORK PROOF -->
+<section
+    id="ceroodWorkProofSection"
+    style="
+        display:none;
+        margin-top:40px;
+        padding-top:30px;
+        border-top:1px solid #e2e8f0;
+    "
+>
+    <div style="margin-bottom:18px;">
+        <h3 style="
+            margin:0 0 6px 0;
+            font-size:22px;
+            font-weight:700;
+            color:#0f172a;
+        ">
+            Real Work by Cerood
+        </h3>
 
+        <p style="
+            margin:0;
+            font-size:14px;
+            color:#64748b;
+            line-height:1.5;
+        ">
+            See genuine before and after photos from completed Cerood services.
+        </p>
+    </div>
+
+    <div
+        id="ceroodWorkProofContainer"
+        style="
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+            gap:18px;
+        "
+    ></div>
+</section>
 
     <div class="uc-category-box" id="relatedServicesBox">
         <div class="uc-cat-header">
@@ -5533,6 +5571,8 @@ if (thumbContainer) {
 
                     // 7. Load Combined Reviews
                     await loadCombinedProductReviews(serviceId, s);
+                    
+                    await loadCeroodWorkProofs(serviceId);
 
                     // 8. Load More Relevant Services
                     loadRelevantServicesSection(data.services, s.category, s.service_id);
@@ -5546,6 +5586,173 @@ if (thumbContainer) {
             if (mainGrid) mainGrid.style.opacity = '1'; // எர்ரர் வந்தாலும் பேஜ் தெரியும்படி
         }
     }
+
+    async function loadCeroodWorkProofs(serviceId) {
+
+    const section =
+        document.getElementById('ceroodWorkProofSection');
+
+    const container =
+        document.getElementById('ceroodWorkProofContainer');
+
+    if (!section || !container) return;
+
+    // Default hidden
+    section.style.display = 'none';
+    container.innerHTML = '';
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/public/work-proofs/service/${encodeURIComponent(serviceId)}`
+        );
+
+        const data = await response.json();
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !Array.isArray(data.work_proofs) ||
+            data.work_proofs.length === 0
+        ) {
+            return;
+        }
+
+        const proofs = data.work_proofs.filter(
+            proof =>
+                proof.before_photo_url &&
+                proof.after_photo_url
+        );
+
+        if (proofs.length === 0) return;
+
+        container.innerHTML = proofs.map(proof => {
+
+            const technicianName =
+                proof.technician_name
+                    ? proof.technician_name
+                    : 'Cerood Technician';
+
+            const district =
+                proof.district
+                    ? proof.district
+                    : '';
+
+            return `
+                <div style="
+                    border:1px solid #e2e8f0;
+                    border-radius:16px;
+                    overflow:hidden;
+                    background:#ffffff;
+                    box-shadow:0 3px 12px rgba(15,23,42,0.06);
+                ">
+
+                    <div style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                    ">
+
+                        <div style="position:relative;">
+                            <img
+                                src="${proof.before_photo_url}"
+                                alt="Before Cerood service"
+                                loading="lazy"
+                                style="
+                                    width:100%;
+                                    aspect-ratio:1/1;
+                                    object-fit:cover;
+                                    display:block;
+                                "
+                            >
+
+                            <span style="
+                                position:absolute;
+                                left:8px;
+                                bottom:8px;
+                                background:rgba(15,23,42,0.82);
+                                color:#ffffff;
+                                padding:5px 9px;
+                                border-radius:6px;
+                                font-size:11px;
+                                font-weight:700;
+                            ">
+                                BEFORE
+                            </span>
+                        </div>
+
+                        <div style="position:relative;">
+                            <img
+                                src="${proof.after_photo_url}"
+                                alt="After Cerood service"
+                                loading="lazy"
+                                style="
+                                    width:100%;
+                                    aspect-ratio:1/1;
+                                    object-fit:cover;
+                                    display:block;
+                                "
+                            >
+
+                            <span style="
+                                position:absolute;
+                                left:8px;
+                                bottom:8px;
+                                background:rgba(15,23,42,0.82);
+                                color:#ffffff;
+                                padding:5px 9px;
+                                border-radius:6px;
+                                font-size:11px;
+                                font-weight:700;
+                            ">
+                                AFTER
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div style="padding:13px 14px;">
+
+                        <div style="
+                            font-size:13px;
+                            font-weight:700;
+                            color:#0f172a;
+                        ">
+                            ${technicianName}
+                        </div>
+
+                        ${
+                            district
+                                ? `
+                                    <div style="
+                                        margin-top:3px;
+                                        font-size:12px;
+                                        color:#64748b;
+                                    ">
+                                        Completed service in ${district}
+                                    </div>
+                                `
+                                : ''
+                        }
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join('');
+
+        section.style.display = 'block';
+
+    } catch (error) {
+
+        console.error(
+            'Work proofs load error:',
+            error
+        );
+
+        section.style.display = 'none';
+    }
+}
 
     async function loadCombinedProductReviews(serviceId, productObj) {
 
