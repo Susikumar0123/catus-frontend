@@ -86,6 +86,106 @@
             margin-bottom: 22px;
         }
 
+        .service-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+
+    padding: 15px;
+
+    margin-bottom: 22px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.product-image {
+    width: 90px;
+    height: 90px;
+
+    flex-shrink: 0;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    display: none;
+}
+
+.service-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: 700;
+
+    color: #111827;
+
+    line-height: 1.35;
+
+    margin-bottom: 7px;
+}
+
+.service-order-id {
+    font-size: 13px;
+    color: #64748b;
+
+    margin-bottom: 7px;
+}
+
+.service-status {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.service-status.completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.service-status.pending {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.service-extra {
+    margin-top: 10px;
+
+    font-size: 12px;
+    color: #64748b;
+
+    line-height: 1.6;
+}
+
+@media (max-width: 520px) {
+
+    .product-image {
+        width: 78px;
+        height: 78px;
+    }
+
+    .product-name {
+        font-size: 15px;
+    }
+}
+
         .order-box {
             background: #f8fafc;
 
@@ -302,18 +402,46 @@
             </p>
 
 
-            <div class="order-box">
+            <div class="service-card" id="serviceCard">
 
-                <div class="order-label">
-                    Service Order
-                </div>
+    <img
+        id="productImage"
+        class="product-image"
+        src=""
+        alt="Service"
+    >
 
-                <div
-                    class="order-number"
-                    id="orderNumber"
-                >
-                    Loading...
-                </div>
+    <div class="service-info">
+
+        <div
+            class="product-name"
+            id="productName"
+        >
+            Loading service...
+        </div>
+
+        <div class="service-order-id">
+            Order
+            <strong id="orderNumber">
+                Loading...
+            </strong>
+        </div>
+
+        <div
+            class="service-status"
+            id="serviceStatus"
+        >
+            Checking status...
+        </div>
+
+        <div
+            class="service-extra"
+            id="serviceExtra"
+        ></div>
+
+    </div>
+
+</div>
 
             </div>
 
@@ -452,6 +580,8 @@
                 params.get('order') || ''
             ).trim();
 
+        let loadedOrder = null;
+
 
         const orderNumber =
             document.getElementById(
@@ -471,22 +601,116 @@
 
         if (orderId) {
 
-            orderNumber.textContent =
-                `#${orderId}`;
+    loadReviewOrder();
 
-        } else {
+} else {
 
-            orderNumber.textContent =
-                'Invalid Order';
+    orderNumber.textContent =
+        'Invalid Order';
 
-            submitButton.disabled = true;
+    submitButton.disabled = true;
 
-            showMessage(
-                'Invalid review link. Order ID is missing.',
-                'error'
+    showMessage(
+        'Invalid review link. Order ID is missing.',
+        'error'
+    );
+}
+
+// ==========================================
+// LOAD ORDER DETAILS FOR REVIEW
+// ==========================================
+
+async function loadReviewOrder() {
+
+    try {
+
+        orderNumber.textContent =
+            `#${orderId}`;
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/customer-reviews/order/${encodeURIComponent(orderId)}`
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !data.order
+        ) {
+            throw new Error(
+                data.message ||
+                'Unable to load service order.'
             );
         }
 
+        loadedOrder =
+            data.order;
+
+        orderNumber.textContent =
+            `#${loadedOrder.order_id}`;
+
+
+        if (!data.review_allowed) {
+
+            submitButton.disabled = true;
+
+            document.getElementById(
+                'stars'
+            ).style.display = 'none';
+
+            document.getElementById(
+                'ratingText'
+            ).style.display = 'none';
+
+            document.getElementById(
+                'customerPhone'
+            ).style.display = 'none';
+
+            document.getElementById(
+                'reviewText'
+            ).style.display = 'none';
+
+            document.querySelectorAll(
+                '.field-label'
+            ).forEach(label => {
+                label.style.display = 'none';
+            });
+
+            submitButton.style.display =
+                'none';
+
+            showMessage(
+                `Review will be available after this service is completed. Current status: ${loadedOrder.status || 'Unknown'}.`,
+                'error'
+            );
+
+            return;
+        }
+
+
+        showMessage(
+            'Service completed. You can now submit your review.',
+            'success'
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Review Order Load Error:',
+            error
+        );
+
+        submitButton.disabled = true;
+
+        showMessage(
+            error.message,
+            'error'
+        );
+    }
+}
 
         // ==========================================
         // STAR RATING
