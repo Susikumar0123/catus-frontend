@@ -335,6 +335,18 @@
             <div
     class="nav-item"
     onclick="switchMainPage(
+        'inactive-technicians',
+        'Inactive Technicians',
+        this
+    )"
+>
+    <i class="fa-solid fa-user-slash"></i>
+    Inactive Technicians
+</div>
+
+            <div
+    class="nav-item"
+    onclick="switchMainPage(
         'work-proofs',
         'Technician Work Proofs',
         this
@@ -747,6 +759,101 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ==========================================
+     INACTIVE TECHNICIANS
+     ========================================== -->
+
+<div id="page-inactive-technicians" class="main-tab-pane">
+
+    <div class="panel-card" style="padding:20px;">
+
+        <div
+            class="panel-header"
+            style="
+                padding:0 0 15px 0;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:12px;
+            "
+        >
+            <div>
+                <h3 style="margin:0; font-size:16px; color:#0f172a;">
+                    <i
+                        class="fa-solid fa-user-slash"
+                        style="color:#dc2626; margin-right:7px;"
+                    ></i>
+                    Inactive Technicians
+                </h3>
+
+                <p
+                    style="
+                        margin:5px 0 0;
+                        font-size:12px;
+                        color:#64748b;
+                    "
+                >
+                    Technicians disabled from receiving new service orders.
+                </p>
+            </div>
+
+            <button
+                class="action-btn"
+                style="
+                    width:auto;
+                    padding:8px 14px;
+                    margin:0;
+                    background:#0284c7;
+                "
+                onclick="renderInactiveTechniciansTable()"
+            >
+                <i class="fa-solid fa-rotate"></i>
+                Refresh
+            </button>
+        </div>
+
+        <div class="table-responsive">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Tech ID</th>
+                        <th>Name</th>
+                        <th>Mobile No</th>
+                        <th>Specialization</th>
+                        <th>Home Address</th>
+                        <th>Shop Address</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="inactiveTechniciansTableBody">
+
+                    <tr>
+                        <td
+                            colspan="8"
+                            style="
+                                text-align:center;
+                                padding:25px;
+                                color:#64748b;
+                            "
+                        >
+                            No inactive technicians loaded.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
             <!-- ==========================================
      TECHNICIAN WORK PROOFS
@@ -2366,7 +2473,11 @@
                 );
             }
 
-            const technicians = data.technicians || [];
+            const technicians = (data.technicians || []).filter(t => {
+    const status = String(t.status || 'Pending').toLowerCase();
+
+    return status === 'active' || status === 'pending';
+});
 
             if (technicians.length === 0) {
                 tbody.innerHTML = `
@@ -2433,23 +2544,25 @@
         </button>
 
         ${
-            status === 'Pending'
-            ? `
-                <button
-                    class="manage-btn"
-                    style="background:#16a34a;"
-                    onclick="updateTechnicianStatus('${t.technician_id}', 'Active')">
-                    Approve
-                </button>
-            `
-            : `
-                <button
-                    class="manage-btn btn-danger"
-                    onclick="updateTechnicianStatus('${t.technician_id}', 'Inactive')">
-                    Inactive
-                </button>
-            `
-        }
+    String(status).toLowerCase() === 'pending'
+    ? `
+        <button
+            class="manage-btn"
+            style="background:#16a34a;"
+            onclick="updateTechnicianStatus('${t.technician_id}', 'Active')">
+            Approve
+        </button>
+    `
+    : String(status).toLowerCase() === 'active'
+    ? `
+        <button
+            class="manage-btn btn-danger"
+            onclick="updateTechnicianStatus('${t.technician_id}', 'Inactive')">
+            Inactive
+        </button>
+    `
+    : ''
+}
     </td>
                     </tr>
                 `;
@@ -2498,10 +2611,193 @@
 
             await renderTechniciansMasterTable();
 
+const inactiveTable =
+    document.getElementById(
+        'inactiveTechniciansTableBody'
+    );
+
+if (inactiveTable) {
+    await renderInactiveTechniciansTable();
+}
+
+await loadTechniciansDropdown();
+
         } catch (error) {
             alert(error.message);
         }
     }
+
+    async function renderInactiveTechniciansTable() {
+
+    const tbody =
+        document.getElementById(
+            'inactiveTechniciansTableBody'
+        );
+
+    if (!tbody) return;
+
+    tbody.innerHTML = `
+        <tr>
+            <td
+                colspan="8"
+                style="text-align:center;padding:25px;"
+            >
+                Loading inactive technicians...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/technicians`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                'Unable to load inactive technicians.'
+            );
+        }
+
+        const inactiveTechnicians =
+            (data.technicians || []).filter(t =>
+                String(t.status || '')
+                    .toLowerCase() === 'inactive'
+            );
+
+        if (inactiveTechnicians.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="8"
+                        style="
+                            text-align:center;
+                            padding:25px;
+                            color:#64748b;
+                        "
+                    >
+                        No inactive technicians.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        tbody.innerHTML =
+            inactiveTechnicians.map(t => `
+
+                <tr>
+
+                    <td>
+                        <b>${t.technician_id || '-'}</b>
+                    </td>
+
+                    <td>
+                        <strong>${t.name || '-'}</strong>
+                    </td>
+
+                    <td>
+                        ${t.phone || '-'}
+                    </td>
+
+                    <td>
+                        <span
+                            style="
+                                color:#0284c7;
+                                font-weight:600;
+                            "
+                        >
+                            ${t.specialization || '-'}
+                        </span>
+                    </td>
+
+                    <td>
+                        <small>
+                            ${t.home_address || '-'}
+                        </small>
+                    </td>
+
+                    <td>
+                        <small>
+                            ${t.shop_address || '-'}
+                        </small>
+                    </td>
+
+                    <td>
+                        <span
+                            class="badge badge-inactive"
+                        >
+                            Inactive
+                        </span>
+                    </td>
+
+                    <td
+                        style="
+                            display:flex;
+                            gap:6px;
+                            align-items:center;
+                        "
+                    >
+
+                        <button
+                            class="manage-btn"
+                            onclick="alert(
+                                'Technician: ${t.name || ''}\\n' +
+                                'Phone: ${t.phone || ''}\\n' +
+                                'District: ${t.district || '-'}\\n' +
+                                'City: ${t.city || '-'}'
+                            )"
+                        >
+                            View
+                        </button>
+
+                        <button
+                            class="manage-btn"
+                            style="background:#16a34a;"
+                            onclick="
+                                updateTechnicianStatus(
+                                    '${t.technician_id}',
+                                    'Active'
+                                )
+                            "
+                        >
+                            Activate
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `).join('');
+
+    } catch (error) {
+
+        console.error(
+            'Inactive Technicians Load Error:',
+            error
+        );
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    style="
+                        text-align:center;
+                        padding:25px;
+                        color:#dc2626;
+                    "
+                >
+                    Unable to load inactive technicians.
+                </td>
+            </tr>
+        `;
+    }
+}
 
     let activeTechnicians = [];
 
@@ -3523,6 +3819,9 @@ function rejectWorkProof() {
             if(pageId === 'wallet') renderWalletTable(); 
             if (pageId === 'work-proofs') {
     loadTechnicianWorkProofs();
+}
+if (pageId === 'inactive-technicians') {
+    renderInactiveTechniciansTable();
 }
 
             if(pageId === 'services') {
