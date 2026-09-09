@@ -443,7 +443,6 @@
 
 </div>
 
-            </div>
 
 
             <label class="field-label">
@@ -646,16 +645,140 @@ async function loadReviewOrder() {
             );
         }
 
-        loadedOrder =
-            data.order;
+        loadedOrder = data.order;
 
+
+        // ==========================================
+        // SHOW ORDER / PRODUCT DETAILS FIRST
+        // Works for Assigned + Completed
+        // ==========================================
+
+        const productImage =
+            document.getElementById(
+                'productImage'
+            );
+
+        const productName =
+            document.getElementById(
+                'productName'
+            );
+
+        const serviceStatus =
+            document.getElementById(
+                'serviceStatus'
+            );
+
+        const serviceExtra =
+            document.getElementById(
+                'serviceExtra'
+            );
+
+
+        // ORDER NUMBER
         orderNumber.textContent =
             `#${loadedOrder.order_id}`;
 
 
-        if (!data.review_allowed) {
+        // PRODUCT / SERVICE NAME
+        productName.textContent =
+            loadedOrder.product_name ||
+            'Cerood Service';
 
-            submitButton.disabled = true;
+
+        // PRODUCT IMAGE
+        if (
+            loadedOrder.product_image &&
+            String(
+                loadedOrder.product_image
+            ).trim()
+        ) {
+
+            productImage.src =
+                loadedOrder.product_image;
+
+            productImage.alt =
+                loadedOrder.product_name ||
+                'Cerood Service';
+
+            productImage.style.display =
+                'block';
+
+        } else {
+
+            productImage.style.display =
+                'none';
+
+            console.warn(
+                'Product image not available:',
+                loadedOrder
+            );
+        }
+
+
+        // STATUS
+        const currentStatus =
+            String(
+                loadedOrder.status || ''
+            ).trim();
+
+
+        serviceStatus.textContent =
+            currentStatus || 'Unknown';
+
+
+        if (
+            currentStatus.toLowerCase() ===
+            'completed'
+        ) {
+
+            serviceStatus.className =
+                'service-status completed';
+
+        } else {
+
+            serviceStatus.className =
+                'service-status pending';
+        }
+
+
+        // EXTRA ORDER DETAILS
+        const extraDetails = [];
+
+
+        if (loadedOrder.service_category) {
+
+            extraDetails.push(
+                `Service: ${loadedOrder.service_category}`
+            );
+        }
+
+
+        if (loadedOrder.district) {
+
+            extraDetails.push(
+                `📍 ${loadedOrder.district}`
+            );
+        }
+
+
+        if (loadedOrder.technician_name) {
+
+            extraDetails.push(
+                `Technician: ${loadedOrder.technician_name}`
+            );
+        }
+
+
+        serviceExtra.innerHTML =
+            extraDetails.join('<br>');
+
+
+        // ==========================================
+        // ONLY AFTER DETAILS ARE DISPLAYED
+        // CHECK WHETHER REVIEW IS ALLOWED
+        // ==========================================
+
+        if (!data.review_allowed) {
 
             document.getElementById(
                 'stars'
@@ -673,17 +796,23 @@ async function loadReviewOrder() {
                 'reviewText'
             ).style.display = 'none';
 
+
             document.querySelectorAll(
                 '.field-label'
             ).forEach(label => {
-                label.style.display = 'none';
+
+                label.style.display =
+                    'none';
+
             });
+
 
             submitButton.style.display =
                 'none';
 
+
             showMessage(
-                `Review will be available after this service is completed. Current status: ${loadedOrder.status || 'Unknown'}.`,
+                `Review will be available after this service is completed. Current status: ${currentStatus || 'Unknown'}.`,
                 'error'
             );
 
@@ -691,10 +820,49 @@ async function loadReviewOrder() {
         }
 
 
+        // ==========================================
+        // COMPLETED ORDER
+        // ==========================================
+
+        document.getElementById(
+            'stars'
+        ).style.display = 'flex';
+
+        document.getElementById(
+            'ratingText'
+        ).style.display = 'block';
+
+        document.getElementById(
+            'customerPhone'
+        ).style.display = 'block';
+
+        document.getElementById(
+            'reviewText'
+        ).style.display = 'block';
+
+
+        document.querySelectorAll(
+            '.field-label'
+        ).forEach(label => {
+
+            label.style.display =
+                'block';
+
+        });
+
+
+        submitButton.style.display =
+            'block';
+
+        submitButton.disabled =
+            false;
+
+
         showMessage(
             'Service completed. You can now submit your review.',
             'success'
         );
+
 
     } catch (error) {
 
@@ -703,7 +871,20 @@ async function loadReviewOrder() {
             error
         );
 
-        submitButton.disabled = true;
+
+        productName.textContent =
+            'Unable to load service';
+
+
+        document.getElementById(
+            'serviceStatus'
+        ).textContent =
+            'Unavailable';
+
+
+        submitButton.style.display =
+            'none';
+
 
         showMessage(
             error.message,
@@ -711,7 +892,6 @@ async function loadReviewOrder() {
         );
     }
 }
-
         // ==========================================
         // STAR RATING
         // ==========================================
