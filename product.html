@@ -5571,7 +5571,7 @@ if (thumbContainer) {
 
                     // 7. Load Combined Reviews
                     await loadCombinedProductReviews(serviceId, s);
-                    
+
                     await loadCeroodWorkProofs(serviceId);
 
                     // 8. Load More Relevant Services
@@ -6575,6 +6575,11 @@ if (featuresContainer) {
             serviceId,
             fullService
         );
+
+        // APPROVED CEROOD WORK PROOFS
+await loadCeroodWorkProofs(
+    activeServiceId
+);
 
 
         // RELATED SERVICES
