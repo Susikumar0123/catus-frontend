@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Rate Your Service | Cerood</title>
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f6f7f9;
+            color: #111827;
+        }
+
+        .review-page {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .review-card {
+            width: 100%;
+            max-width: 480px;
+
+            background: #ffffff;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+
+            padding: 28px 22px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .brand {
+            text-align: center;
+
+            font-size: 25px;
+            font-weight: 800;
+
+            margin-bottom: 6px;
+        }
+
+        .brand span {
+            color: #6d4aff;
+        }
+
+        .title {
+            text-align: center;
+
+            margin: 18px 0 6px;
+
+            font-size: 22px;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #64748b;
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            margin-bottom: 22px;
+        }
+
+        .order-box {
+            background: #f8fafc;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+
+            padding: 13px 15px;
+
+            margin-bottom: 22px;
+        }
+
+        .order-label {
+            font-size: 12px;
+            color: #64748b;
+
+            margin-bottom: 4px;
+        }
+
+        .order-number {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .field-label {
+            display: block;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 9px;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+
+            margin: 5px 0 24px;
+        }
+
+        .star {
+            border: 0;
+            background: transparent;
+
+            padding: 0;
+
+            font-size: 42px;
+            line-height: 1;
+
+            color: #d1d5db;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.15s ease,
+                color 0.15s ease;
+        }
+
+        .star:hover {
+            transform: scale(1.08);
+        }
+
+        .star.active {
+            color: #f59e0b;
+        }
+
+        .rating-text {
+            text-align: center;
+
+            min-height: 20px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            color: #64748b;
+
+            margin-top: -14px;
+            margin-bottom: 20px;
+        }
+
+        .input {
+            width: 100%;
+
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+
+            padding: 12px 13px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            margin-bottom: 18px;
+        }
+
+        .input:focus {
+            border-color: #6d4aff;
+
+            box-shadow:
+                0 0 0 3px rgba(109, 74, 255, 0.10);
+        }
+
+        textarea.input {
+            min-height: 115px;
+            resize: vertical;
+
+            font-family: inherit;
+        }
+
+        .submit-btn {
+            width: 100%;
+
+            border: 0;
+            border-radius: 11px;
+
+            padding: 14px 16px;
+
+            background: #111827;
+            color: #ffffff;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+
+            margin-top: 16px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            display: block;
+
+            background: #ecfdf5;
+            color: #166534;
+
+            border: 1px solid #bbf7d0;
+        }
+
+        .message.error {
+            display: block;
+
+            background: #fef2f2;
+            color: #b91c1c;
+
+            border: 1px solid #fecaca;
+        }
+
+        .privacy-note {
+            text-align: center;
+
+            margin-top: 17px;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 520px) {
+
+            .review-page {
+                align-items: flex-start;
+
+                padding:
+                    18px 14px;
+            }
+
+            .review-card {
+                padding:
+                    24px 18px;
+
+                border-radius: 15px;
+            }
+
+            .star {
+                font-size: 38px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="review-page">
+
+        <section class="review-card">
+
+            <div class="brand">
+                <span>Cerood</span>
+            </div>
+
+            <h1 class="title">
+                How was your service?
+            </h1>
+
+            <p class="subtitle">
+                Your feedback helps us improve
+                Cerood services.
+            </p>
+
+
+            <div class="order-box">
+
+                <div class="order-label">
+                    Service Order
+                </div>
+
+                <div
+                    class="order-number"
+                    id="orderNumber"
+                >
+                    Loading...
+                </div>
+
+            </div>
+
+
+            <label class="field-label">
+                Your rating
+            </label>
+
+            <div
+                class="stars"
+                id="stars"
+            >
+
+                <button
+                    type="button"
+                    class="star"
+                    data-rating="1"
+                    aria-label="1 star"
+                >★</button>
+
+                <button
+                    type="button"
+                    class="star"
+                    data-rating="2"
+                    aria-label="2 stars"
+                >★</button>
+
+                <button
+                    type="button"
+                    class="star"
+                    data-rating="3"
+                    aria-label="3 stars"
+                >★</button>
+
+                <button
+                    type="button"
+                    class="star"
+                    data-rating="4"
+                    aria-label="4 stars"
+                >★</button>
+
+                <button
+                    type="button"
+                    class="star"
+                    data-rating="5"
+                    aria-label="5 stars"
+                >★</button>
+
+            </div>
+
+            <div
+                class="rating-text"
+                id="ratingText"
+            >
+                Select a rating
+            </div>
+
+
+            <label
+                class="field-label"
+                for="customerPhone"
+            >
+                Mobile Number
+            </label>
+
+            <input
+                id="customerPhone"
+                class="input"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                placeholder="Enter service booking mobile number"
+            >
+
+
+            <label
+                class="field-label"
+                for="reviewText"
+            >
+                Tell us about your experience
+            </label>
+
+            <textarea
+                id="reviewText"
+                class="input"
+                maxlength="1000"
+                placeholder="Write your genuine service experience..."
+            ></textarea>
+
+
+            <button
+                id="submitReviewBtn"
+                class="submit-btn"
+                type="button"
+            >
+                Submit Review
+            </button>
+
+
+            <div
+                id="reviewMessage"
+                class="message"
+            ></div>
+
+
+            <div class="privacy-note">
+                Reviews are checked before
+                being published on Cerood.
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const API_BASE_URL =
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:3000'
+                : 'https://catus-backend-d2js.onrender.com';
+
+
+        // ==========================================
+        // ORDER ID FROM URL
+        // ==========================================
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const orderId =
+            String(
+                params.get('order') || ''
+            ).trim();
+
+
+        const orderNumber =
+            document.getElementById(
+                'orderNumber'
+            );
+
+        const submitButton =
+            document.getElementById(
+                'submitReviewBtn'
+            );
+
+        const messageBox =
+            document.getElementById(
+                'reviewMessage'
+            );
+
+
+        if (orderId) {
+
+            orderNumber.textContent =
+                `#${orderId}`;
+
+        } else {
+
+            orderNumber.textContent =
+                'Invalid Order';
+
+            submitButton.disabled = true;
+
+            showMessage(
+                'Invalid review link. Order ID is missing.',
+                'error'
+            );
+        }
+
+
+        // ==========================================
+        // STAR RATING
+        // ==========================================
+
+        let selectedRating = 0;
+
+        const stars =
+            Array.from(
+                document.querySelectorAll(
+                    '.star'
+                )
+            );
+
+        const ratingText =
+            document.getElementById(
+                'ratingText'
+            );
+
+
+        const ratingLabels = {
+            1: 'Poor',
+            2: 'Fair',
+            3: 'Good',
+            4: 'Very Good',
+            5: 'Excellent'
+        };
+
+
+        stars.forEach(star => {
+
+            star.addEventListener(
+                'click',
+                () => {
+
+                    selectedRating =
+                        Number(
+                            star.dataset.rating
+                        );
+
+                    updateStars();
+                }
+            );
+        });
+
+
+        function updateStars() {
+
+            stars.forEach(star => {
+
+                const rating =
+                    Number(
+                        star.dataset.rating
+                    );
+
+                star.classList.toggle(
+                    'active',
+                    rating <= selectedRating
+                );
+            });
+
+
+            ratingText.textContent =
+                selectedRating
+                    ? `${selectedRating}/5 — ${
+                        ratingLabels[
+                            selectedRating
+                        ]
+                    }`
+                    : 'Select a rating';
+        }
+
+
+        // ==========================================
+        // MESSAGE
+        // ==========================================
+
+        function showMessage(
+            message,
+            type
+        ) {
+
+            messageBox.textContent =
+                message;
+
+            messageBox.className =
+                `message ${type}`;
+        }
+
+
+        // ==========================================
+        // SUBMIT REVIEW
+        // ==========================================
+
+        async function submitReview() {
+
+            const customerPhone =
+                String(
+                    document
+                        .getElementById(
+                            'customerPhone'
+                        )
+                        .value || ''
+                )
+                    .replace(/\D/g, '')
+                    .slice(-10);
+
+
+            const reviewText =
+                String(
+                    document
+                        .getElementById(
+                            'reviewText'
+                        )
+                        .value || ''
+                ).trim();
+
+
+            if (!orderId) {
+
+                showMessage(
+                    'Invalid service order.',
+                    'error'
+                );
+
+                return;
+            }
+
+
+            if (!selectedRating) {
+
+                showMessage(
+                    'Please select your rating.',
+                    'error'
+                );
+
+                return;
+            }
+
+
+            if (
+                !/^[6-9]\d{9}$/.test(
+                    customerPhone
+                )
+            ) {
+
+                showMessage(
+                    'Enter the 10-digit mobile number used for this booking.',
+                    'error'
+                );
+
+                return;
+            }
+
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                'Submitting...';
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/api/customer-reviews/submit`,
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            body: JSON.stringify({
+                                order_id:
+                                    orderId,
+
+                                customer_phone:
+                                    customerPhone,
+
+                                rating:
+                                    selectedRating,
+
+                                review_text:
+                                    reviewText
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        'Unable to submit review.'
+                    );
+                }
+
+
+                showMessage(
+                    'Thank you! Your review has been submitted successfully.',
+                    'success'
+                );
+
+
+                stars.forEach(
+                    star => {
+                        star.disabled = true;
+                    }
+                );
+
+                document
+                    .getElementById(
+                        'customerPhone'
+                    )
+                    .disabled = true;
+
+                document
+                    .getElementById(
+                        'reviewText'
+                    )
+                    .disabled = true;
+
+
+                submitButton.textContent =
+                    'Review Submitted';
+
+
+            } catch (error) {
+
+                console.error(
+                    'Review Submit Error:',
+                    error
+                );
+
+
+                showMessage(
+                    error.message,
+                    'error'
+                );
+
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    'Submit Review';
+            }
+        }
+
+
+        submitButton.addEventListener(
+            'click',
+            submitReview
+        );
+
+    </script>
+
+</body>
+
+</html>
