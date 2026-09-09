@@ -3977,6 +3977,58 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
             </div>
         </div>
     </div>
+
+    <!-- WORK PROOF IMAGE POPUP -->
+<div
+    id="workProofImagePopup"
+    onclick="closeWorkProofImage(event)"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.82);
+        z-index:999999999;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+    <button
+        type="button"
+        onclick="closeWorkProofImage()"
+        style="
+            position:absolute;
+            top:18px;
+            right:20px;
+            width:40px;
+            height:40px;
+            border:0;
+            border-radius:50%;
+            background:#ffffff;
+            color:#111827;
+            font-size:24px;
+            cursor:pointer;
+        "
+    >
+        ×
+    </button>
+
+    <img
+        id="workProofPopupImage"
+        src=""
+        alt="Cerood completed service work"
+        onclick="event.stopPropagation()"
+        style="
+            max-width:92vw;
+            max-height:88vh;
+            width:auto;
+            height:auto;
+            object-fit:contain;
+            border-radius:12px;
+            background:#ffffff;
+        "
+    >
+</div>
    
 <!-- REAL CEROOD WORK PROOF -->
 <section
@@ -5587,6 +5639,50 @@ if (thumbContainer) {
         }
     }
 
+    function openWorkProofImage(imageUrl) {
+
+    const popup =
+        document.getElementById('workProofImagePopup');
+
+    const image =
+        document.getElementById('workProofPopupImage');
+
+    if (!popup || !image || !imageUrl) return;
+
+    image.src = imageUrl;
+    popup.style.display = 'flex';
+
+    document.body.style.overflow = 'hidden';
+}
+
+
+function closeWorkProofImage(event) {
+
+    if (
+        event &&
+        event.target &&
+        event.target.id !== 'workProofImagePopup'
+    ) {
+        return;
+    }
+
+    const popup =
+        document.getElementById('workProofImagePopup');
+
+    const image =
+        document.getElementById('workProofPopupImage');
+
+    if (popup) {
+        popup.style.display = 'none';
+    }
+
+    if (image) {
+        image.src = '';
+    }
+
+    document.body.style.overflow = '';
+}
+
     async function loadCeroodWorkProofs(serviceId) {
 
     const section =
@@ -5648,20 +5744,25 @@ if (thumbContainer) {
                 ">
 
                     <div style="
-                        display:grid;
-                        grid-template-columns:1fr 1fr;
-                    ">
+    display:flex;
+    align-items:flex-start;
+    gap:24px;
+    padding:16px;
+">
 
                         <div style="position:relative;">
                             <img
-                                src="${proof.before_photo_url}"
+    src="${proof.before_photo_url}"
+    onclick="openWorkProofImage('${proof.before_photo_url}')"
                                 alt="Before Cerood service"
                                 loading="lazy"
                                 style="
-                                    width:100%;
-                                    aspect-ratio:1/1;
+                                    width:120px;
+                                    height:150px;
                                     object-fit:cover;
                                     display:block;
+                                    border-radius:10px;
+                                    cursor:pointer;
                                 "
                             >
 
@@ -5682,7 +5783,8 @@ if (thumbContainer) {
 
                         <div style="position:relative;">
                             <img
-                                src="${proof.after_photo_url}"
+    src="${proof.after_photo_url}"
+    onclick="openWorkProofImage('${proof.after_photo_url}')"
                                 alt="After Cerood service"
                                 loading="lazy"
                                 style="
