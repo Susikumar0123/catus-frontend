@@ -356,6 +356,18 @@
     Work Proofs
 </div>
 
+<div
+    class="nav-item"
+    onclick="switchMainPage(
+        'customer-reviews',
+        'Customer Reviews',
+        this
+    )"
+>
+    <i class="fa-solid fa-star"></i>
+    Customer Reviews
+</div>
+
             <div class="nav-item" onclick="switchMainPage('notifications', 'Push Notifications', this)">
 
                 <i class="fa-solid fa-bullhorn"></i> Notifications / SMS
@@ -984,6 +996,96 @@
                             Click Work Proofs to load submissions.
                         </td>
 
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     CUSTOMER REVIEWS MANAGEMENT
+     ========================================== -->
+
+<div id="page-customer-reviews" class="main-tab-pane">
+
+    <div class="panel-card" style="padding:20px;">
+
+        <div
+            class="panel-header"
+            style="
+                padding:0 0 15px 0;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:12px;
+            "
+        >
+            <div>
+                <h3 style="margin:0; font-size:16px; color:#0f172a;">
+                    <i
+                        class="fa-solid fa-star"
+                        style="color:#f59e0b; margin-right:7px;"
+                    ></i>
+                    Customer Reviews
+                </h3>
+
+                <p style="margin:5px 0 0; font-size:12px; color:#64748b;">
+                    View and moderate genuine customer service reviews.
+                </p>
+            </div>
+
+            <button
+                class="action-btn"
+                style="
+                    width:auto;
+                    padding:8px 14px;
+                    margin:0;
+                    background:#0284c7;
+                "
+                onclick="loadAdminCustomerReviews()"
+            >
+                <i class="fa-solid fa-rotate"></i>
+                Refresh
+            </button>
+        </div>
+
+        <div class="table-responsive">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Technician</th>
+                        <th>Rating</th>
+                        <th>Review</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="customerReviewsTableBody">
+
+                    <tr>
+                        <td
+                            colspan="9"
+                            style="
+                                text-align:center;
+                                padding:30px;
+                                color:#64748b;
+                            "
+                        >
+                            Click Customer Reviews to load reviews.
+                        </td>
                     </tr>
 
                 </tbody>
@@ -2971,6 +3073,427 @@ function escapeHtml(value) {
         .replace(/'/g, '&#039;');
 }
 
+// ==========================================
+// LOAD ADMIN CUSTOMER REVIEWS
+// ==========================================
+
+async function loadAdminCustomerReviews() {
+
+    const tbody =
+        document.getElementById(
+            'customerReviewsTableBody'
+        );
+
+    if (!tbody) {
+        return;
+    }
+
+    tbody.innerHTML = `
+        <tr>
+            <td
+                colspan="9"
+                style="
+                    text-align:center;
+                    padding:30px;
+                    color:#64748b;
+                "
+            >
+                Loading customer reviews...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/admin/customer-reviews`
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+            throw new Error(
+                data.message ||
+                'Unable to load customer reviews.'
+            );
+        }
+
+        const reviews =
+            Array.isArray(data.reviews)
+                ? data.reviews
+                : [];
+
+        if (reviews.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="9"
+                        style="
+                            text-align:center;
+                            padding:35px;
+                            color:#64748b;
+                        "
+                    >
+                        No customer reviews found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        tbody.innerHTML =
+            reviews.map(review => {
+
+                const status =
+                    review.moderation_status ||
+                    'Visible';
+
+                const statusBadge =
+                    status === 'Hidden'
+                        ? `
+                            <span class="badge badge-inactive">
+                                Hidden
+                            </span>
+                          `
+                        : `
+                            <span class="badge badge-active">
+                                Visible
+                            </span>
+                          `;
+
+                const actionButton =
+                    status === 'Hidden'
+                        ? `
+                            <button
+                                class="action-btn"
+                                style="
+                                    width:auto;
+                                    padding:6px 10px;
+                                    margin:0;
+                                    background:#16a34a;
+                                "
+                                onclick="restoreCustomerReview(
+                                    '${escapeHtml(review.id)}'
+                                )"
+                            >
+                                Restore
+                            </button>
+                          `
+                        : `
+                            <button
+                                class="action-btn"
+                                style="
+                                    width:auto;
+                                    padding:6px 10px;
+                                    margin:0;
+                                    background:#dc2626;
+                                "
+                                onclick="hideCustomerReview(
+                                    '${escapeHtml(review.id)}'
+                                )"
+                            >
+                                Hide
+                            </button>
+                          `;
+
+                const rating =
+                    Math.max(
+                        1,
+                        Math.min(
+                            5,
+                            Number(review.rating) || 1
+                        )
+                    );
+
+                const stars =
+                    '★'.repeat(rating) +
+                    '☆'.repeat(5 - rating);
+
+                return `
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    review.order_id || '-'
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            <div style="font-weight:700;">
+                                ${escapeHtml(
+                                    review.customer_name || '-'
+                                )}
+                            </div>
+
+                            <div
+                                style="
+                                    font-size:11px;
+                                    color:#64748b;
+                                    margin-top:3px;
+                                "
+                            >
+                                ${escapeHtml(
+                                    review.customer_phone || ''
+                                )}
+                            </div>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                review.service_name || '-'
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                review.technician_name || '-'
+                            )}
+                        </td>
+
+                        <td>
+                            <div
+                                style="
+                                    color:#f59e0b;
+                                    font-weight:800;
+                                    white-space:nowrap;
+                                "
+                            >
+                                ${stars}
+                            </div>
+
+                            <div
+                                style="
+                                    font-size:11px;
+                                    color:#64748b;
+                                    margin-top:2px;
+                                "
+                            >
+                                ${rating}/5
+                            </div>
+                        </td>
+
+                        <td
+                            style="
+                                max-width:280px;
+                                white-space:normal;
+                            "
+                        >
+                            ${escapeHtml(
+                                review.review_text ||
+                                'No written review'
+                            )}
+                        </td>
+
+                        <td>
+                            ${formatDate(
+                                review.created_at
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusBadge}
+                        </td>
+
+                        <td>
+                            ${actionButton}
+                        </td>
+
+                    </tr>
+                `;
+            }).join('');
+
+    } catch (error) {
+
+        console.error(
+            'Customer Reviews Load Error:',
+            error
+        );
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="9"
+                    style="
+                        text-align:center;
+                        padding:35px;
+                        color:#dc2626;
+                    "
+                >
+                    ${
+                        escapeHtml(
+                            error.message ||
+                            'Unable to load customer reviews.'
+                        )
+                    }
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// ==========================================
+// HIDE CUSTOMER REVIEW
+// ==========================================
+
+async function hideCustomerReview(reviewId) {
+
+    const reason =
+        prompt(
+            'Why are you hiding this review?\n\n' +
+            'Example: Spam / Abusive content / Personal information'
+        );
+
+    if (reason === null) {
+        return;
+    }
+
+    const cleanReason =
+        String(reason || '').trim();
+
+    if (!cleanReason) {
+        alert('Please enter a moderation reason.');
+        return;
+    }
+
+    if (
+        !confirm(
+            'Hide this customer review from the website?'
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/admin/customer-reviews/${encodeURIComponent(reviewId)}/moderation`,
+                {
+                    method: 'PATCH',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        moderation_status: 'Hidden',
+                        moderation_reason: cleanReason
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+            throw new Error(
+                data.message ||
+                'Unable to hide review.'
+            );
+        }
+
+        alert(
+            data.message ||
+            'Review hidden successfully.'
+        );
+
+        await loadAdminCustomerReviews();
+
+    } catch (error) {
+
+        console.error(
+            'Hide Customer Review Error:',
+            error
+        );
+
+        alert(
+            error.message ||
+            'Unable to hide review.'
+        );
+    }
+}
+
+
+// ==========================================
+// RESTORE CUSTOMER REVIEW
+// ==========================================
+
+async function restoreCustomerReview(reviewId) {
+
+    if (
+        !confirm(
+            'Restore this customer review to the website?'
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/admin/customer-reviews/${encodeURIComponent(reviewId)}/moderation`,
+                {
+                    method: 'PATCH',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        moderation_status: 'Visible',
+                        moderation_reason: ''
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+            throw new Error(
+                data.message ||
+                'Unable to restore review.'
+            );
+        }
+
+        alert(
+            data.message ||
+            'Review restored successfully.'
+        );
+
+        await loadAdminCustomerReviews();
+
+    } catch (error) {
+
+        console.error(
+            'Restore Customer Review Error:',
+            error
+        );
+
+        alert(
+            error.message ||
+            'Unable to restore review.'
+        );
+    }
+}
 
 // ==========================================
 // LOAD TECHNICIAN WORK PROOFS
@@ -3820,6 +4343,10 @@ function rejectWorkProof() {
             if (pageId === 'work-proofs') {
     loadTechnicianWorkProofs();
 }
+if (pageId === 'customer-reviews') {
+    loadAdminCustomerReviews();
+}
+
 if (pageId === 'inactive-technicians') {
     renderInactiveTechniciansTable();
 }
