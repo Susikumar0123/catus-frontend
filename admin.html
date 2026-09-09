@@ -332,6 +332,18 @@
 
             </div>
 
+            <div
+    class="nav-item"
+    onclick="switchMainPage(
+        'work-proofs',
+        'Technician Work Proofs',
+        this
+    )"
+>
+    <i class="fa-solid fa-camera"></i>
+    Work Proofs
+</div>
+
             <div class="nav-item" onclick="switchMainPage('notifications', 'Push Notifications', this)">
 
                 <i class="fa-solid fa-bullhorn"></i> Notifications / SMS
@@ -736,6 +748,147 @@
                 </div>
             </div>
 
+            <!-- ==========================================
+     TECHNICIAN WORK PROOFS
+     ========================================== -->
+
+<div
+    id="page-work-proofs"
+    class="main-tab-pane"
+>
+
+    <div
+        class="panel-card"
+        style="padding:20px;"
+    >
+
+        <div
+            class="panel-header"
+            style="
+                padding:0 0 15px 0;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:12px;
+            "
+        >
+
+            <div>
+
+                <h3
+                    style="
+                        margin:0;
+                        font-size:16px;
+                        color:#0f172a;
+                    "
+                >
+                    <i
+                        class="fa-solid fa-camera"
+                        style="color:#0284c7; margin-right:7px;"
+                    ></i>
+
+                    Technician Work Proofs
+                </h3>
+
+                <p
+                    style="
+                        margin:5px 0 0;
+                        font-size:12px;
+                        color:#64748b;
+                    "
+                >
+                    Review technician submitted photos,
+                    videos and work notes.
+                </p>
+
+            </div>
+
+
+            <button
+                class="action-btn"
+                style="
+                    width:auto;
+                    padding:8px 14px;
+                    margin:0;
+                    background:#0284c7;
+                "
+                onclick="loadTechnicianWorkProofs()"
+            >
+                <i class="fa-solid fa-rotate"></i>
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Order ID
+                        </th>
+
+                        <th>
+                            Technician
+                        </th>
+
+                        <th>
+                            Proof
+                        </th>
+
+                        <th>
+                            Note
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Submitted
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="workProofsTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            style="
+                                text-align:center;
+                                padding:30px;
+                                color:#64748b;
+                            "
+                        >
+                            Click Work Proofs to load submissions.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
             <!-- TAB 7: PUSH NOTIFICATIONS -->
             <div id="page-notifications" class="main-tab-pane">
                 <div class="panel-card" style="padding: 25px; max-width: 600px;">
@@ -1119,7 +1272,335 @@
                         </div>
                 </div>
             </div>
+<!-- ==========================================
+     TECHNICIAN WORK PROOF REVIEW MODAL
+     ========================================== -->
 
+<div
+    class="modal-overlay"
+    id="workProofReviewModal"
+>
+
+    <div
+        class="modal-box"
+        style="max-width:1000px;"
+    >
+
+        <div class="modal-header">
+
+            <h3>
+                <i
+                    class="fa-solid fa-camera"
+                    style="color:#0284c7;"
+                ></i>
+
+                Review Work Proof
+
+                <span
+                    id="workProofModalOrderId"
+                    style="
+                        color:#64748b;
+                        font-size:13px;
+                        margin-left:8px;
+                    "
+                >
+                </span>
+            </h3>
+
+
+            <button
+                class="close-modal"
+                onclick="closeWorkProofReview()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <div
+            style="
+                padding:22px;
+                overflow-y:auto;
+            "
+        >
+
+            <!-- TECHNICIAN DETAILS -->
+
+            <div class="info-card">
+
+                <div class="info-title">
+
+                    <span>
+                        <i class="fa-solid fa-user-gear"></i>
+                        Technician Details
+                    </span>
+
+                    <span
+                        id="workProofModalStatus"
+                        class="badge badge-pending"
+                    >
+                        Submitted
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>Technician:</span>
+
+                    <strong id="workProofModalTechName">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>Technician ID:</span>
+
+                    <strong id="workProofModalTechId">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span>Mobile:</span>
+
+                    <strong id="workProofModalTechPhone">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- PHOTOS -->
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:
+                        repeat(
+                            auto-fit,
+                            minmax(280px, 1fr)
+                        );
+                    gap:18px;
+                    margin-top:18px;
+                "
+            >
+
+                <!-- BEFORE -->
+
+                <div class="info-card">
+
+                    <div class="info-title">
+
+                        <span>
+                            <i class="fa-solid fa-image"></i>
+                            Before Photo
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="workProofBeforeContainer"
+                        style="
+                            min-height:220px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            background:#f8fafc;
+                            border-radius:8px;
+                            overflow:hidden;
+                        "
+                    >
+
+                        <span
+                            style="
+                                color:#94a3b8;
+                                font-size:12px;
+                            "
+                        >
+                            No before photo
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AFTER -->
+
+                <div class="info-card">
+
+                    <div class="info-title">
+
+                        <span>
+                            <i class="fa-solid fa-image"></i>
+                            After Photo
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="workProofAfterContainer"
+                        style="
+                            min-height:220px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            background:#f8fafc;
+                            border-radius:8px;
+                            overflow:hidden;
+                        "
+                    >
+
+                        <span
+                            style="
+                                color:#94a3b8;
+                                font-size:12px;
+                            "
+                        >
+                            No after photo
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO -->
+
+            <div
+                class="info-card"
+                style="margin-top:18px;"
+            >
+
+                <div class="info-title">
+
+                    <span>
+                        <i class="fa-solid fa-video"></i>
+                        Work Video
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="workProofVideoContainer"
+                    style="
+                        min-height:100px;
+                        display:flex;
+                        justify-content:center;
+                        align-items:center;
+                    "
+                >
+
+                    <span
+                        style="
+                            color:#94a3b8;
+                            font-size:12px;
+                        "
+                    >
+                        No work video
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- NOTE -->
+
+            <div
+                class="info-card"
+                style="margin-top:18px;"
+            >
+
+                <div class="info-title">
+
+                    <span>
+                        <i class="fa-solid fa-note-sticky"></i>
+                        Technician Note
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="workProofModalNote"
+                    style="
+                        font-size:13px;
+                        color:#334155;
+                        line-height:1.7;
+                        white-space:pre-wrap;
+                    "
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN ACTION AREA -->
+
+            <div
+                id="workProofAdminActions"
+                style="
+                    display:flex;
+                    gap:12px;
+                    justify-content:flex-end;
+                    margin-top:20px;
+                    padding-top:18px;
+                    border-top:1px solid #e2e8f0;
+                "
+            >
+
+                <button
+                    class="action-btn btn-danger"
+                    style="
+                        width:auto;
+                        min-width:130px;
+                        margin:0;
+                    "
+                    onclick="rejectWorkProof()"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                    Reject
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    style="
+                        width:auto;
+                        min-width:130px;
+                        margin:0;
+                    "
+                    onclick="approveWorkProof()"
+                >
+                    <i class="fa-solid fa-check"></i>
+                    Approve
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 
     <!-- ==========================================
@@ -2128,28 +2609,870 @@
         resultsBox.style.display = 'block';
     }
 
-    function selectTechnician(
-        technicianId,
-        technicianName,
-        technicianPhone
-    ) {
+    let selectedTechnicianId = '';
 
-        document.getElementById('techNameInput').value =
-            `${technicianName} (${technicianId})`;
+function selectTechnician(
+    technicianId,
+    technicianName,
+    technicianPhone
+) {
 
-        document.getElementById('techPhoneInput').value =
-            technicianPhone;
+    selectedTechnicianId = technicianId;
 
-        document.getElementById('techSearchInput').value =
-            `${technicianName} - ${technicianId}`;
+    document.getElementById('techNameInput').value =
+        technicianName;
 
-        document.getElementById('techSearchResults').style.display =
-            'none';
-    }
+    document.getElementById('techPhoneInput').value =
+        technicianPhone;
+
+    document.getElementById('techSearchInput').value =
+        `${technicianName} - ${technicianId}`;
+
+    document.getElementById('techSearchResults').style.display =
+        'none';
+}
+
+
         let allBookings = [];
         let currentTab = 'All';
         let currentWalletTab = 'All'; 
         const techCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
+        let adminWorkProofs = [];
+// ==========================================
+// LOAD TECHNICIAN WORK PROOFS
+// ==========================================
+
+async function loadTechnicianWorkProofs() {
+
+    const tbody =
+        document.getElementById(
+            'workProofsTableBody'
+        );
+
+    if (!tbody) {
+        return;
+    }
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td
+                colspan="7"
+                style="
+                    text-align:center;
+                    padding:30px;
+                    color:#64748b;
+                "
+            >
+                Loading work proofs...
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/admin/technician-work-proofs`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                'Unable to load work proofs.'
+            );
+        }
+
+
+        const proofs =
+            Array.isArray(data.work_proofs)
+                ? data.work_proofs
+                : [];
+
+                adminWorkProofs = proofs;
+
+
+        if (proofs.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="7"
+                        style="
+                            text-align:center;
+                            padding:35px;
+                            color:#64748b;
+                        "
+                    >
+                        No technician work proofs submitted yet.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        tbody.innerHTML =
+            proofs.map(proof => {
+
+                const status =
+                    proof.status ||
+                    'Submitted';
+
+
+                let badgeClass =
+                    'badge-pending';
+
+
+                if (status === 'Approved') {
+
+                    badgeClass =
+                        'badge-active';
+
+                } else if (status === 'Rejected') {
+
+                    badgeClass =
+                        'badge-failed';
+                }
+
+
+                let proofLinks = '';
+
+
+                if (proof.before_photo_url) {
+
+                    proofLinks += `
+                        <a
+                            href="${escapeHtml(proof.before_photo_url)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="
+                                display:block;
+                                margin-bottom:5px;
+                                color:#0284c7;
+                                text-decoration:none;
+                                font-weight:700;
+                            "
+                        >
+                            <i class="fa-solid fa-image"></i>
+                            Before Photo
+                        </a>
+                    `;
+                }
+
+
+                if (proof.after_photo_url) {
+
+                    proofLinks += `
+                        <a
+                            href="${escapeHtml(proof.after_photo_url)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="
+                                display:block;
+                                margin-bottom:5px;
+                                color:#16a34a;
+                                text-decoration:none;
+                                font-weight:700;
+                            "
+                        >
+                            <i class="fa-solid fa-image"></i>
+                            After Photo
+                        </a>
+                    `;
+                }
+
+
+                if (proof.work_video_url) {
+
+                    proofLinks += `
+                        <a
+                            href="${escapeHtml(proof.work_video_url)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="
+                                display:block;
+                                color:#9333ea;
+                                text-decoration:none;
+                                font-weight:700;
+                            "
+                        >
+                            <i class="fa-solid fa-video"></i>
+                            Work Video
+                        </a>
+                    `;
+                }
+
+
+                if (!proofLinks) {
+                    proofLinks = '-';
+                }
+
+
+                const technicianName =
+                    proof.technician_name ||
+                    '-';
+
+
+                const technicianId =
+                    proof.technician_id ||
+                    '-';
+
+
+                const technicianPhone =
+                    proof.technician_phone ||
+                    '';
+
+
+                const submittedDate =
+                    proof.updated_at ||
+                    proof.created_at ||
+                    '';
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    proof.order_id || '-'
+                                )}
+                            </strong>
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                style="
+                                    font-weight:700;
+                                    margin-bottom:3px;
+                                "
+                            >
+                                ${escapeHtml(
+                                    technicianName
+                                )}
+                            </div>
+
+                            <div
+                                style="
+                                    font-size:10px;
+                                    color:#64748b;
+                                "
+                            >
+                                ${escapeHtml(
+                                    technicianId
+                                )}
+                            </div>
+
+                            ${
+                                technicianPhone
+                                    ? `
+                                        <div
+                                            style="
+                                                font-size:10px;
+                                                color:#64748b;
+                                                margin-top:2px;
+                                            "
+                                        >
+                                            ${escapeHtml(
+                                                technicianPhone
+                                            )}
+                                        </div>
+                                    `
+                                    : ''
+                            }
+
+                        </td>
+
+
+                        <td>
+                            ${proofLinks}
+                        </td>
+
+
+                        <td
+                            style="
+                                max-width:220px;
+                                line-height:1.5;
+                            "
+                        >
+                            ${escapeHtml(
+                                proof.technician_note ||
+                                '-'
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="badge ${badgeClass}"
+                            >
+                                ${escapeHtml(status)}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            ${
+                                submittedDate
+                                    ? escapeHtml(
+                                        formatDate(
+                                            submittedDate
+                                        )
+                                    )
+                                    : '-'
+                            }
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="manage-btn"
+                                onclick="openWorkProofReview(
+                                    ${Number(proof.id)}
+                                )"
+                            >
+                                Review
+                            </button>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join('');
+
+
+    } catch (error) {
+
+        console.error(
+            'Load Technician Work Proofs Error:',
+            error
+        );
+
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="7"
+                    style="
+                        text-align:center;
+                        padding:30px;
+                        color:#b91c1c;
+                    "
+                >
+                    Unable to load technician work proofs.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// ==========================================
+// OPEN WORK PROOF REVIEW
+// ==========================================
+
+function openWorkProofReview(proofId) {
+
+    const proof =
+        adminWorkProofs.find(
+            item =>
+                Number(item.id) ===
+                Number(proofId)
+        );
+
+    if (!proof) {
+        alert('Work proof not found.');
+        return;
+    }
+
+
+    document.getElementById(
+        'workProofModalOrderId'
+    ).textContent =
+        proof.order_id
+            ? `#${proof.order_id}`
+            : '';
+
+
+    document.getElementById(
+        'workProofModalTechName'
+    ).textContent =
+        proof.technician_name || '-';
+
+
+    document.getElementById(
+        'workProofModalTechId'
+    ).textContent =
+        proof.technician_id || '-';
+
+
+    document.getElementById(
+        'workProofModalTechPhone'
+    ).textContent =
+        proof.technician_phone || '-';
+
+
+    document.getElementById(
+        'workProofModalNote'
+    ).textContent =
+        proof.technician_note || '-';
+
+
+    // ======================================
+    // STATUS BADGE
+    // ======================================
+
+    const status =
+        proof.status || 'Submitted';
+
+    const statusEl =
+        document.getElementById(
+            'workProofModalStatus'
+        );
+
+    statusEl.textContent = status;
+
+    statusEl.className =
+        'badge badge-pending';
+
+
+    if (status === 'Approved') {
+
+        statusEl.className =
+            'badge badge-active';
+
+    } else if (status === 'Rejected') {
+
+        statusEl.className =
+            'badge badge-failed';
+    }
+
+
+    // ======================================
+    // BEFORE PHOTO
+    // ======================================
+
+    const beforeContainer =
+        document.getElementById(
+            'workProofBeforeContainer'
+        );
+
+
+    if (proof.before_photo_url) {
+
+        beforeContainer.innerHTML = `
+            <a
+                href="${escapeHtml(
+                    proof.before_photo_url
+                )}"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                    display:block;
+                    width:100%;
+                "
+            >
+                <img
+                    src="${escapeHtml(
+                        proof.before_photo_url
+                    )}"
+                    alt="Before service work proof"
+                    style="
+                        width:100%;
+                        max-height:420px;
+                        object-fit:contain;
+                        display:block;
+                        border-radius:8px;
+                    "
+                >
+            </a>
+        `;
+
+    } else {
+
+        beforeContainer.innerHTML = `
+            <span
+                style="
+                    color:#94a3b8;
+                    font-size:12px;
+                "
+            >
+                No before photo
+            </span>
+        `;
+    }
+
+
+    // ======================================
+    // AFTER PHOTO
+    // ======================================
+
+    const afterContainer =
+        document.getElementById(
+            'workProofAfterContainer'
+        );
+
+
+    if (proof.after_photo_url) {
+
+        afterContainer.innerHTML = `
+            <a
+                href="${escapeHtml(
+                    proof.after_photo_url
+                )}"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                    display:block;
+                    width:100%;
+                "
+            >
+                <img
+                    src="${escapeHtml(
+                        proof.after_photo_url
+                    )}"
+                    alt="After service work proof"
+                    style="
+                        width:100%;
+                        max-height:420px;
+                        object-fit:contain;
+                        display:block;
+                        border-radius:8px;
+                    "
+                >
+            </a>
+        `;
+
+    } else {
+
+        afterContainer.innerHTML = `
+            <span
+                style="
+                    color:#94a3b8;
+                    font-size:12px;
+                "
+            >
+                No after photo
+            </span>
+        `;
+    }
+
+
+    // ======================================
+    // WORK VIDEO
+    // ======================================
+
+    const videoContainer =
+        document.getElementById(
+            'workProofVideoContainer'
+        );
+
+
+    if (proof.work_video_url) {
+
+        videoContainer.innerHTML = `
+            <video
+                controls
+                preload="metadata"
+                style="
+                    width:100%;
+                    max-height:500px;
+                    border-radius:8px;
+                    background:#000;
+                "
+            >
+                <source
+                    src="${escapeHtml(
+                        proof.work_video_url
+                    )}"
+                >
+                Your browser does not support video playback.
+            </video>
+        `;
+
+    } else {
+
+        videoContainer.innerHTML = `
+            <span
+                style="
+                    color:#94a3b8;
+                    font-size:12px;
+                "
+            >
+                No work video
+            </span>
+        `;
+    }
+
+
+    // ======================================
+    // SAVE CURRENT PROOF ID
+    // ======================================
+
+    const modal =
+        document.getElementById(
+            'workProofReviewModal'
+        );
+
+    modal.dataset.proofId =
+        String(proof.id);
+
+
+    // ======================================
+    // ACTION BUTTON VISIBILITY
+    // ======================================
+
+    const actions =
+        document.getElementById(
+            'workProofAdminActions'
+        );
+
+    if (
+        status === 'Approved' ||
+        status === 'Rejected'
+    ) {
+
+        actions.style.display = 'none';
+
+    } else {
+
+        actions.style.display = 'flex';
+    }
+
+
+    modal.style.display = 'flex';
+}
+
+
+// ==========================================
+// CLOSE WORK PROOF REVIEW
+// ==========================================
+
+function closeWorkProofReview() {
+
+    const modal =
+        document.getElementById(
+            'workProofReviewModal'
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.style.display = 'none';
+
+    modal.dataset.proofId = '';
+
+
+    const videoContainer =
+        document.getElementById(
+            'workProofVideoContainer'
+        );
+
+    if (videoContainer) {
+
+        const video =
+            videoContainer.querySelector(
+                'video'
+            );
+
+        if (video) {
+            video.pause();
+        }
+    }
+}
+
+// ==========================================
+// UPDATE WORK PROOF STATUS
+// ==========================================
+
+async function updateWorkProofStatus(status) {
+
+    const modal =
+        document.getElementById(
+            'workProofReviewModal'
+        );
+
+    if (!modal) {
+        return;
+    }
+
+
+    const proofId =
+        String(
+            modal.dataset.proofId || ''
+        ).trim();
+
+
+    if (!proofId) {
+
+        alert(
+            'Work proof ID not found.'
+        );
+
+        return;
+    }
+
+
+    if (
+        status !== 'Approved' &&
+        status !== 'Rejected'
+    ) {
+        return;
+    }
+
+
+    const confirmationMessage =
+        status === 'Approved'
+            ? 'Approve this technician work proof?'
+            : 'Reject this technician work proof?';
+
+
+    if (!confirm(confirmationMessage)) {
+        return;
+    }
+
+
+    const actions =
+        document.getElementById(
+            'workProofAdminActions'
+        );
+
+
+    if (actions) {
+
+        actions
+            .querySelectorAll('button')
+            .forEach(button => {
+
+                button.disabled = true;
+
+            });
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/admin/technician-work-proofs/${encodeURIComponent(proofId)}/status`,
+                {
+                    method: 'PATCH',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        status
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                'Unable to update work proof.'
+            );
+        }
+
+
+        alert(
+            data.message ||
+            (
+                status === 'Approved'
+                    ? 'Work proof approved successfully.'
+                    : 'Work proof rejected successfully.'
+            )
+        );
+
+
+        closeWorkProofReview();
+
+
+        await loadTechnicianWorkProofs();
+
+
+    } catch (error) {
+
+        console.error(
+            'Work Proof Status Update Error:',
+            error
+        );
+
+
+        alert(
+            error.message ||
+            'Unable to update work proof.'
+        );
+
+
+    } finally {
+
+        if (actions) {
+
+            actions
+                .querySelectorAll('button')
+                .forEach(button => {
+
+                    button.disabled = false;
+
+                });
+        }
+    }
+}
+
+
+// ==========================================
+// APPROVE WORK PROOF
+// ==========================================
+
+function approveWorkProof() {
+
+    updateWorkProofStatus(
+        'Approved'
+    );
+}
+
+
+// ==========================================
+// REJECT WORK PROOF
+// ==========================================
+
+function rejectWorkProof() {
+
+    updateWorkProofStatus(
+        'Rejected'
+    );
+}
+
 
         function switchMainPage(pageId, title, btnElement) {
             document.querySelectorAll('.main-tab-pane').forEach(el => el.classList.remove('active'));
@@ -2160,6 +3483,9 @@
 
             if(pageId === 'customers') renderCustomerTable();
             if(pageId === 'wallet') renderWalletTable(); 
+            if (pageId === 'work-proofs') {
+    loadTechnicianWorkProofs();
+}
 
             if(pageId === 'services') {
         fetchAdminServices();
@@ -3199,10 +4525,17 @@
             if(!["Pending", "Assigned", "On the way", "In Service", "Completed", "Re-Service Requested", "Trash"].includes(currentStatus)) currentStatus = 'Pending'; 
             document.getElementById('statusUpdateSelect').value = currentStatus;
 
+            selectedTechnicianId = order.technician_id || '';
+
             let tName = order.technician_name || '', tPhone = order.technician_phone || '', tEta = order.eta || '';
             document.getElementById('techNameInput').value = tName;
             document.getElementById('techPhoneInput').value = tPhone;
             document.getElementById('techEtaInput').value = tEta;
+
+            document.getElementById('techSearchInput').value =
+    selectedTechnicianId && tName
+        ? `${tName} - ${selectedTechnicianId}`
+        : '';
 
             let saveBtn = document.getElementById('saveOrderBtn');
             saveBtn.disabled = false; 
@@ -3237,6 +4570,7 @@
         let tName = document.getElementById('techNameInput').value.trim();
         let tPhone = document.getElementById('techPhoneInput').value.trim();
         let tEta = document.getElementById('techEtaInput').value.trim();
+        let tId = selectedTechnicianId;
         let saveBtn = document.getElementById('saveOrderBtn');
 
         if(newStatus === 'Trash' && !confirm("Move to Trash?")) return;
@@ -3304,7 +4638,14 @@
                 fetch(`${API_BASE_URL}/api/admin/assign-technician-manual`, { 
                     method: 'POST', 
                     headers: {'Content-Type': 'application/json'}, 
-                    body: JSON.stringify({order_id: orderId, technician_name: tName, technician_phone: tPhone, eta: tEta}) 
+                    body: JSON.stringify({
+                    order_id: orderId,
+                    technician_id: tId,
+                    technician_name: tName,
+                    technician_phone: tPhone,
+                    eta: tEta
+             }) 
+
                 }).catch(e => null);
             }
         } catch(e) {

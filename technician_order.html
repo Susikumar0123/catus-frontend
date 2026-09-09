@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cerood Technician Order</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Arial, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 15px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            border: 0;
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .brand span {
+            color: #0284c7;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 22px 15px 50px;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 900;
+            margin: 0 0 18px;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .order-id {
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .status {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .service-name {
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 18px;
+        }
+
+        .section-heading {
+            font-size: 16px;
+            font-weight: 900;
+            margin-bottom: 14px;
+        }
+
+        .detail-row {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .detail-row:last-child {
+            border-bottom: 0;
+        }
+
+        .label {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .value {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .phone-link {
+            color: #0284c7;
+            text-decoration: none;
+        }
+
+        .message {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 22px;
+            border-radius: 14px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .error {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        .dashboard-btn {
+            width: 100%;
+            border: 0;
+            background: #0284c7;
+            color: #ffffff;
+            padding: 13px;
+            border-radius: 9px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px 12px 40px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <button
+        class="back-btn"
+        onclick="goBack()"
+    >
+        ← Back
+    </button>
+
+    <div class="brand">
+        CER<span>OOD</span>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <h1 class="title">
+        Service Order
+    </h1>
+
+    <div id="orderContainer">
+
+        <div class="message">
+            Loading order details...
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const API_BASE_URL =
+    window.location.hostname === 'localhost'
+        ? 'http://localhost:3000'
+        : 'https://catus-backend-d2js.onrender.com';
+
+
+const technicianToken =
+    localStorage.getItem(
+        'cerood_technician_token'
+    );
+
+
+const orderId =
+    sessionStorage.getItem(
+        'cerood_technician_order_id'
+    );
+
+
+// ==========================================
+// LOGIN + ORDER CHECK
+// ==========================================
+
+if (!technicianToken) {
+
+    window.location.replace(
+        'technician_login.html'
+    );
+
+} else if (!orderId) {
+
+    window.location.replace(
+        'technician_dashboard.html'
+    );
+}
+
+
+// ==========================================
+// LOAD SINGLE ORDER
+// ==========================================
+
+async function loadOrder() {
+
+    const container =
+        document.getElementById(
+            'orderContainer'
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/technicians/orders/${encodeURIComponent(orderId)}`,
+                {
+                    method: 'GET',
+
+                    headers: {
+                        'Authorization':
+                            `Bearer ${technicianToken}`
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.status === 401 ||
+            response.status === 403
+        ) {
+
+            logoutTechnician();
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !data.order
+        ) {
+
+            container.innerHTML = `
+                <div class="message error">
+                    ${escapeHtml(
+                        data.message ||
+                        'Unable to load this order.'
+                    )}
+                </div>
+
+                <button
+                    class="dashboard-btn"
+                    onclick="goBack()"
+                >
+                    Back to Dashboard
+                </button>
+            `;
+
+            return;
+        }
+
+
+        renderOrder(
+            data.order
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Technician Single Order Error:',
+            error
+        );
+
+        container.innerHTML = `
+            <div class="message error">
+                Unable to connect to server.
+            </div>
+
+            <button
+                class="dashboard-btn"
+                onclick="goBack()"
+            >
+                Back to Dashboard
+            </button>
+        `;
+    }
+}
+
+
+// ==========================================
+// RENDER ORDER
+// ==========================================
+
+function renderOrder(order) {
+
+    const container =
+        document.getElementById(
+            'orderContainer'
+        );
+
+
+    const serviceName =
+        order.service_name ||
+        order.product_name ||
+        order.service ||
+        'Service Order';
+
+
+    const customerName =
+        order.customer_name ||
+        order.name ||
+        '-';
+
+
+    const customerPhone =
+        String(
+            order.customer_phone ||
+            order.phone ||
+            ''
+        ).replace(/\D/g, '');
+
+
+    const displayPhone =
+        customerPhone || '-';
+
+
+    const address =
+        order.address ||
+        order.customer_address ||
+        '-';
+
+
+    const pincode =
+        order.pincode ||
+        order.customer_pincode ||
+        '-';
+
+
+    const status =
+        order.status ||
+        'Assigned';
+
+
+    const eta =
+        order.eta ||
+        '-';
+
+
+    const bookingDate =
+        order.booking_date ||
+        order.created_at ||
+        '-';
+
+
+    const safeOrderId =
+        order.order_id ||
+        orderId;
+
+
+    const phoneHtml =
+        customerPhone
+            ? `
+                <a
+                    class="phone-link"
+                    href="tel:${escapeHtml(customerPhone)}"
+                >
+                    ${escapeHtml(displayPhone)}
+                </a>
+            `
+            : '-';
+
+
+    container.innerHTML = `
+
+        <div class="card">
+
+            <div class="order-top">
+
+                <div class="order-id">
+                    Order #${escapeHtml(safeOrderId)}
+                </div>
+
+                <div class="status">
+                    ${escapeHtml(status)}
+                </div>
+
+            </div>
+
+
+            <div class="service-name">
+                ${escapeHtml(serviceName)}
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Booking Date
+                </span>
+
+                <div class="value">
+                    ${escapeHtml(
+                        formatDate(bookingDate)
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Estimated Visit
+                </span>
+
+                <div class="value">
+                    ${escapeHtml(eta)}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="section-heading">
+                Customer Details
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Customer Name
+                </span>
+
+                <div class="value">
+                    ${escapeHtml(customerName)}
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Mobile Number
+                </span>
+
+                <div class="value">
+                    ${phoneHtml}
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Address
+                </span>
+
+                <div class="value">
+                    ${escapeHtml(address)}
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Pincode
+                </span>
+
+                <div class="value">
+                    ${escapeHtml(pincode)}
+                </div>
+
+            </div>
+
+                </div>
+
+
+        <div class="card">
+
+            <div class="section-heading">
+                Work Proof
+            </div>
+
+            <div
+    id="existingWorkProof"
+    style="display:none; margin-bottom:16px;"
+></div>
+
+            <div class="detail-row">
+                <span class="label">
+                    Before Photo
+                </span>
+
+                <input
+                    type="file"
+                    id="beforePhoto"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+            </div>
+
+
+            <div class="detail-row">
+                <span class="label">
+                    After Photo
+                </span>
+
+                <input
+                    type="file"
+                    id="afterPhoto"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+            </div>
+
+
+            <div class="detail-row">
+                <span class="label">
+                    Work Video
+                </span>
+
+                <input
+                    type="file"
+                    id="workVideo"
+                    accept="video/mp4,video/webm"
+                >
+            </div>
+
+
+            <div class="detail-row">
+                <span class="label">
+                    Technician Note
+                </span>
+
+                <textarea
+                    id="technicianNote"
+                    rows="4"
+                    maxlength="1000"
+                    placeholder="Example: TV backlight replaced and tested successfully."
+                    style="
+                        width:100%;
+                        padding:12px;
+                        border:1px solid #cbd5e1;
+                        border-radius:9px;
+                        resize:vertical;
+                        font-family:inherit;
+                    "
+                ></textarea>
+            </div>
+
+
+            <button
+                id="submitWorkProofBtn"
+                class="dashboard-btn"
+                onclick="submitWorkProof()"
+            >
+                Submit Work Proof
+            </button>
+
+
+            <div
+                id="workProofMessage"
+                class="message"
+                style="display:none; margin-top:12px;"
+            ></div>
+
+        </div>
+
+
+        <button
+            class="dashboard-btn"
+            onclick="goBack()"
+        >
+            Back to My Orders
+        </button>
+    `;
+}
+
+// ==========================================
+// LOAD EXISTING WORK PROOF
+// ==========================================
+
+async function loadExistingWorkProof() {
+
+    const container =
+        document.getElementById(
+            'existingWorkProof'
+        );
+
+    if (!container) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/technicians/orders/${encodeURIComponent(orderId)}/work-proof`,
+                {
+                    method: 'GET',
+
+                    headers: {
+                        'Authorization':
+                            `Bearer ${technicianToken}`
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.status === 401 ||
+            response.status === 403
+        ) {
+
+            logoutTechnician();
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            console.error(
+                'Unable to load existing work proof:',
+                data.message
+            );
+
+            return;
+        }
+
+
+        const proof =
+            data.work_proof;
+
+
+        if (!proof) {
+
+            container.style.display =
+                'none';
+
+            return;
+        }
+
+
+        const status =
+            proof.status ||
+            'Submitted';
+
+
+        let statusBackground =
+            '#e0f2fe';
+
+        let statusColor =
+            '#0369a1';
+
+
+        if (status === 'Approved') {
+
+            statusBackground =
+                '#dcfce7';
+
+            statusColor =
+                '#166534';
+
+        } else if (status === 'Rejected') {
+
+            statusBackground =
+                '#fee2e2';
+
+            statusColor =
+                '#b91c1c';
+        }
+
+
+        let mediaHtml = '';
+
+
+        if (proof.before_photo_url) {
+
+            mediaHtml += `
+                <div style="margin-top:12px;">
+
+                    <div class="label">
+                        Submitted Before Photo
+                    </div>
+
+                    <img
+                        src="${escapeHtml(proof.before_photo_url)}"
+                        alt="Before work proof"
+                        style="
+                            width:100%;
+                            max-height:320px;
+                            object-fit:contain;
+                            border-radius:10px;
+                            margin-top:7px;
+                            background:#f8fafc;
+                        "
+                    >
+
+                </div>
+            `;
+        }
+
+
+        if (proof.after_photo_url) {
+
+            mediaHtml += `
+                <div style="margin-top:14px;">
+
+                    <div class="label">
+                        Submitted After Photo
+                    </div>
+
+                    <img
+                        src="${escapeHtml(proof.after_photo_url)}"
+                        alt="After work proof"
+                        style="
+                            width:100%;
+                            max-height:320px;
+                            object-fit:contain;
+                            border-radius:10px;
+                            margin-top:7px;
+                            background:#f8fafc;
+                        "
+                    >
+
+                </div>
+            `;
+        }
+
+
+        if (proof.work_video_url) {
+
+            mediaHtml += `
+                <div style="margin-top:14px;">
+
+                    <div class="label">
+                        Submitted Work Video
+                    </div>
+
+                    <video
+                        controls
+                        preload="metadata"
+                        style="
+                            width:100%;
+                            max-height:360px;
+                            border-radius:10px;
+                            margin-top:7px;
+                            background:#000;
+                        "
+                    >
+                        <source
+                            src="${escapeHtml(proof.work_video_url)}"
+                        >
+                    </video>
+
+                </div>
+            `;
+        }
+
+
+        const noteHtml =
+            proof.technician_note
+                ? `
+                    <div style="margin-top:14px;">
+
+                        <div class="label">
+                            Technician Note
+                        </div>
+
+                        <div
+                            class="value"
+                            style="margin-top:5px;"
+                        >
+                            ${escapeHtml(
+                                proof.technician_note
+                            )}
+                        </div>
+
+                    </div>
+                `
+                : '';
+
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    padding:14px;
+                    border:1px solid #e2e8f0;
+                    border-radius:11px;
+                    background:#f8fafc;
+                "
+            >
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        gap:10px;
+                    "
+                >
+
+                    <strong>
+                        Previous Submission
+                    </strong>
+
+                    <span
+                        style="
+                            background:${statusBackground};
+                            color:${statusColor};
+                            padding:5px 9px;
+                            border-radius:999px;
+                            font-size:11px;
+                            font-weight:800;
+                        "
+                    >
+                        ${escapeHtml(status)}
+                    </span>
+
+                </div>
+
+                ${mediaHtml}
+
+                ${noteHtml}
+
+            </div>
+        `;
+
+
+        container.style.display =
+            'block';
+
+
+    } catch (error) {
+
+        console.error(
+            'Load Existing Work Proof Error:',
+            error
+        );
+    }
+}
+
+// ==========================================
+// SUBMIT WORK PROOF
+// ==========================================
+
+async function submitWorkProof() {
+
+    const beforePhoto =
+        document.getElementById(
+            'beforePhoto'
+        ).files[0];
+
+    const afterPhoto =
+        document.getElementById(
+            'afterPhoto'
+        ).files[0];
+
+    const workVideo =
+        document.getElementById(
+            'workVideo'
+        ).files[0];
+
+    const technicianNote =
+        document.getElementById(
+            'technicianNote'
+        ).value.trim();
+
+    const button =
+        document.getElementById(
+            'submitWorkProofBtn'
+        );
+
+    const messageBox =
+        document.getElementById(
+            'workProofMessage'
+        );
+
+
+    if (
+        !beforePhoto &&
+        !afterPhoto &&
+        !workVideo &&
+        !technicianNote
+    ) {
+
+        showWorkProofMessage(
+            'Upload at least one photo/video or enter a note.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    const maxSize =
+        30 * 1024 * 1024;
+
+
+    const files = [
+        beforePhoto,
+        afterPhoto,
+        workVideo
+    ].filter(Boolean);
+
+
+    for (const file of files) {
+
+        if (file.size > maxSize) {
+
+            showWorkProofMessage(
+                `${file.name} is larger than 30 MB.`,
+                'error'
+            );
+
+            return;
+        }
+    }
+
+
+    const formData =
+        new FormData();
+
+
+    if (beforePhoto) {
+        formData.append(
+            'before_photo',
+            beforePhoto
+        );
+    }
+
+
+    if (afterPhoto) {
+        formData.append(
+            'after_photo',
+            afterPhoto
+        );
+    }
+
+
+    if (workVideo) {
+        formData.append(
+            'work_video',
+            workVideo
+        );
+    }
+
+
+    if (technicianNote) {
+        formData.append(
+            'technician_note',
+            technicianNote
+        );
+    }
+
+
+    button.disabled = true;
+    button.textContent =
+        'Uploading Work Proof...';
+
+    messageBox.style.display =
+        'none';
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/technicians/orders/${encodeURIComponent(orderId)}/work-proof`,
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Authorization':
+                            `Bearer ${technicianToken}`
+                    },
+
+                    body:
+                        formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.status === 401 ||
+            response.status === 403
+        ) {
+
+            logoutTechnician();
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            showWorkProofMessage(
+                data.message ||
+                'Unable to submit work proof.',
+                'error'
+            );
+
+            return;
+        }
+
+
+        showWorkProofMessage(
+            'Work proof submitted successfully. Waiting for Cerood approval.',
+            'success'
+        );
+
+
+        document.getElementById(
+            'beforePhoto'
+        ).value = '';
+
+        document.getElementById(
+            'afterPhoto'
+        ).value = '';
+
+        document.getElementById(
+            'workVideo'
+        ).value = '';
+
+        document.getElementById(
+            'technicianNote'
+        ).value = '';
+
+
+    } catch (error) {
+
+        console.error(
+            'Work Proof Submit Error:',
+            error
+        );
+
+        showWorkProofMessage(
+            'Unable to connect to server.',
+            'error'
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            'Submit Work Proof';
+    }
+}
+
+
+function showWorkProofMessage(
+    text,
+    type
+) {
+
+    const messageBox =
+        document.getElementById(
+            'workProofMessage'
+        );
+
+
+    messageBox.textContent =
+        text;
+
+
+    messageBox.className =
+        type === 'success'
+            ? 'message'
+            : 'message error';
+
+
+    if (type === 'success') {
+
+        messageBox.style.background =
+            '#f0fdf4';
+
+        messageBox.style.borderColor =
+            '#bbf7d0';
+
+        messageBox.style.color =
+            '#166534';
+    }
+
+
+    messageBox.style.display =
+        'block';
+}
+
+// ==========================================
+// BACK
+// ==========================================
+
+function goBack() {
+
+    window.location.href =
+        'technician_dashboard.html';
+}
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+function logoutTechnician() {
+
+    localStorage.removeItem(
+        'cerood_technician_token'
+    );
+
+    localStorage.removeItem(
+        'cerood_technician'
+    );
+
+    sessionStorage.removeItem(
+        'cerood_technician_order_id'
+    );
+
+    window.location.replace(
+        'technician_login.html'
+    );
+}
+
+
+// ==========================================
+// HELPERS
+// ==========================================
+
+function escapeHtml(value) {
+
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+
+function formatDate(value) {
+
+    if (!value || value === '-') {
+        return '-';
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return String(value);
+    }
+
+    return date.toLocaleString(
+        'en-IN',
+        {
+            dateStyle: 'medium',
+            timeStyle: 'short'
+        }
+    );
+}
+
+
+// ==========================================
+// START
+// ==========================================
+
+if (technicianToken && orderId) {
+
+    loadOrder();
+
+    setTimeout(() => {
+        loadExistingWorkProof();
+    }, 100);
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cerood Technician Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Arial, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .brand span {
+            color: #0284c7;
+        }
+
+        .logout-btn {
+            width: auto;
+            border: 0;
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 22px 16px 50px;
+        }
+
+        .profile-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .welcome {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .tech-meta {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .active-badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-top: 8px;
+        }
+
+        .section-title {
+            font-size: 19px;
+            font-weight: 800;
+            margin: 0 0 14px;
+        }
+
+        .orders {
+            display: grid;
+            gap: 14px;
+        }
+
+        .order-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .order-id {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .status {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .service-name {
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .detail {
+            margin: 6px 0;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #475569;
+        }
+
+        .detail strong {
+            color: #0f172a;
+        }
+
+        .view-btn {
+            width: 100%;
+            margin-top: 14px;
+            border: 0;
+            background: #0284c7;
+            color: #ffffff;
+            padding: 11px;
+            border-radius: 9px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .view-btn:hover {
+            background: #0369a1;
+        }
+
+        .message {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 14px 15px;
+            }
+
+            .brand {
+                font-size: 21px;
+            }
+
+            .container {
+                padding: 16px 12px 40px;
+            }
+
+            .profile-card {
+                padding: 17px;
+            }
+
+            .order-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+        CER<span>OOD</span>
+    </div>
+
+    <button
+        class="logout-btn"
+        onclick="logoutTechnician()"
+    >
+        Logout
+    </button>
+
+</header>
+
+
+<main class="container">
+
+    <div class="profile-card">
+
+        <div
+            class="welcome"
+            id="welcomeName"
+        >
+            Welcome
+        </div>
+
+        <div
+            class="tech-meta"
+            id="technicianInfo"
+        >
+            Loading technician details...
+        </div>
+
+        <div class="active-badge">
+            Active Technician
+        </div>
+
+    </div>
+
+
+    <h2 class="section-title">
+        My Assigned Orders
+    </h2>
+
+
+    <div
+        id="ordersContainer"
+        class="orders"
+    >
+        <div class="message">
+            Loading your orders...
+        </div>
+    </div>
+
+</main>
+
+
+<script>
+
+const API_BASE_URL =
+    window.location.hostname === 'localhost'
+        ? 'http://localhost:3000'
+        : 'https://catus-backend-d2js.onrender.com';
+
+
+const technicianToken =
+    localStorage.getItem(
+        'cerood_technician_token'
+    );
+
+
+let technicianData = null;
+
+try {
+
+    technicianData =
+        JSON.parse(
+            localStorage.getItem(
+                'cerood_technician'
+            ) || 'null'
+        );
+
+} catch (error) {
+
+    technicianData = null;
+}
+
+
+// ==========================================
+// LOGIN CHECK
+// ==========================================
+
+if (!technicianToken || !technicianData) {
+
+    localStorage.removeItem(
+        'cerood_technician_token'
+    );
+
+    localStorage.removeItem(
+        'cerood_technician'
+    );
+
+    window.location.replace(
+        'technician_login.html'
+    );
+}
+
+
+// ==========================================
+// SHOW TECHNICIAN DETAILS
+// ==========================================
+
+function showTechnicianProfile() {
+
+    if (!technicianData) {
+        return;
+    }
+
+    document.getElementById(
+        'welcomeName'
+    ).textContent =
+        `Hi, ${technicianData.name || 'Technician'}`;
+
+
+    const technicianId =
+        technicianData.technician_id || '-';
+
+    const phone =
+        technicianData.phone || '-';
+
+    const specialization =
+        technicianData.specialization || '-';
+
+    const district =
+        technicianData.district || '-';
+
+    const city =
+        technicianData.city || '-';
+
+
+    document.getElementById(
+        'technicianInfo'
+    ).innerHTML = `
+        Technician ID: <strong>${escapeHtml(technicianId)}</strong><br>
+        Phone: <strong>${escapeHtml(phone)}</strong><br>
+        Service: <strong>${escapeHtml(specialization)}</strong><br>
+        Location: <strong>${escapeHtml(city)}, ${escapeHtml(district)}</strong>
+    `;
+}
+
+
+// ==========================================
+// LOAD ASSIGNED ORDERS
+// ==========================================
+
+async function loadAssignedOrders() {
+
+    const container =
+        document.getElementById(
+            'ordersContainer'
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/technicians/orders`,
+                {
+                    method: 'GET',
+
+                    headers: {
+                        'Authorization':
+                            `Bearer ${technicianToken}`
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.status === 401 ||
+            response.status === 403
+        ) {
+
+            logoutTechnician();
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            container.innerHTML = `
+                <div class="message error-message">
+                    ${escapeHtml(
+                        data.message ||
+                        'Unable to load orders.'
+                    )}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        renderOrders(
+            data.orders || []
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Technician Orders Error:',
+            error
+        );
+
+        container.innerHTML = `
+            <div class="message error-message">
+                Unable to connect to server.
+            </div>
+        `;
+    }
+}
+
+
+// ==========================================
+// RENDER ORDERS
+// ==========================================
+
+function renderOrders(orders) {
+
+    const container =
+        document.getElementById(
+            'ordersContainer'
+        );
+
+
+    if (!orders.length) {
+
+        container.innerHTML = `
+            <div class="message">
+                No orders assigned to you yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        orders.map(order => {
+
+            const orderId =
+                order.order_id || '-';
+
+            const serviceName =
+                order.service_name ||
+                order.product_name ||
+                order.service ||
+                'Service Order';
+
+            const customerName =
+                order.customer_name ||
+                order.name ||
+                '-';
+
+            const phone =
+                order.customer_phone ||
+                order.phone ||
+                '-';
+
+            const address =
+                order.address ||
+                order.customer_address ||
+                '-';
+
+            const status =
+                order.status ||
+                'Assigned';
+
+            const bookingDate =
+                order.booking_date ||
+                order.created_at ||
+                '-';
+
+
+            return `
+                <div class="order-card">
+
+                    <div class="order-top">
+
+                        <div class="order-id">
+                            Order #${escapeHtml(orderId)}
+                        </div>
+
+                        <div class="status">
+                            ${escapeHtml(status)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="service-name">
+                        ${escapeHtml(serviceName)}
+                    </div>
+
+
+                    <div class="detail">
+                        <strong>Customer:</strong>
+                        ${escapeHtml(customerName)}
+                    </div>
+
+
+                    <div class="detail">
+                        <strong>Phone:</strong>
+                        ${escapeHtml(phone)}
+                    </div>
+
+
+                    <div class="detail">
+                        <strong>Address:</strong>
+                        ${escapeHtml(address)}
+                    </div>
+
+
+                    <div class="detail">
+                        <strong>Booking:</strong>
+                        ${escapeHtml(
+                            formatDate(bookingDate)
+                        )}
+                    </div>
+
+
+                    <button
+                        class="view-btn"
+                        onclick="viewOrder(
+                            '${escapeJsString(orderId)}'
+                        )"
+                    >
+                        View Order
+                    </button>
+
+                </div>
+            `;
+
+        }).join('');
+}
+
+
+// ==========================================
+// VIEW ORDER
+// ==========================================
+
+function viewOrder(orderId) {
+
+    sessionStorage.setItem(
+        'cerood_technician_order_id',
+        orderId
+    );
+
+    window.location.href =
+        'technician_order.html';
+}
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+function logoutTechnician() {
+
+    localStorage.removeItem(
+        'cerood_technician_token'
+    );
+
+    localStorage.removeItem(
+        'cerood_technician'
+    );
+
+    sessionStorage.removeItem(
+        'cerood_technician_order_id'
+    );
+
+    window.location.replace(
+        'technician_login.html'
+    );
+}
+
+
+// ==========================================
+// HELPERS
+// ==========================================
+
+function escapeHtml(value) {
+
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+
+function escapeJsString(value) {
+
+    return String(value ?? '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/\r/g, '')
+        .replace(/\n/g, '');
+}
+
+
+function formatDate(value) {
+
+    if (!value || value === '-') {
+        return '-';
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return String(value);
+    }
+
+    return date.toLocaleString(
+        'en-IN',
+        {
+            dateStyle: 'medium',
+            timeStyle: 'short'
+        }
+    );
+}
+
+
+// ==========================================
+// START DASHBOARD
+// ==========================================
+
+showTechnicianProfile();
+loadAssignedOrders();
+
+</script>
+
+</body>
+</html>
