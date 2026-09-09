@@ -8505,7 +8505,43 @@ function formatIndiaInlineTime(value) {
         if (!ordersList) return; 
 
         const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
-        const ratedOrders = JSON.parse(localStorage.getItem('catus_rated_orders')) || [];
+        const ratedOrders = new Set();
+
+if (data.success && Array.isArray(data.orders)) {
+
+    await Promise.all(
+        data.orders.map(async (order) => {
+
+            try {
+
+                const reviewRes = await fetch(
+                    `${API_BASE_URL}/api/reviews/order-status/${encodeURIComponent(order.order_id)}`
+                );
+
+                const reviewData =
+                    await reviewRes.json();
+
+                if (
+                    reviewRes.ok &&
+                    reviewData.success &&
+                    reviewData.reviewed
+                ) {
+                    ratedOrders.add(
+                        String(order.order_id)
+                    );
+                }
+
+            } catch (error) {
+
+                console.error(
+                    'Review status check failed:',
+                    order.order_id,
+                    error
+                );
+            }
+        })
+    );
+}
 
         if (data.success && data.orders) {
             let processedOrders = data.orders.map(o => {
@@ -8705,7 +8741,7 @@ serviceStr =
     servicesMap[order.service_name.toLowerCase().trim()] ||
     '';
 
-                    let isRated = ratedOrders.includes(String(order.order_id));
+                    let isRated = ratedOrders.has(String(order.order_id));
                     let ratingBtnHTML = '';
 
                     let actionButtonsHTML = '';

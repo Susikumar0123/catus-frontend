@@ -647,6 +647,37 @@ async function loadReviewOrder() {
 
         loadedOrder = data.order;
 
+        // ==========================================
+// CHECK IF REVIEW ALREADY SUBMITTED
+// ==========================================
+
+const reviewStatusResponse =
+    await fetch(
+        `${API_BASE_URL}/api/reviews/order-status/${encodeURIComponent(orderId)}`
+    );
+
+const reviewStatusData =
+    await reviewStatusResponse.json();
+
+if (
+    reviewStatusResponse.ok &&
+    reviewStatusData.success &&
+    reviewStatusData.reviewed
+) {
+
+    const existingReview =
+        reviewStatusData.review || {};
+
+    // Product details continue to load,
+    // but remember that this order is reviewed.
+    data.already_reviewed = true;
+    data.existing_review = existingReview;
+
+} else {
+
+    data.already_reviewed = false;
+}
+
 
         // ==========================================
         // SHOW ORDER / PRODUCT DETAILS FIRST
@@ -818,6 +849,75 @@ async function loadReviewOrder() {
 
             return;
         }
+
+        // ==========================================
+// REVIEW ALREADY SUBMITTED
+// ==========================================
+
+if (data.already_reviewed) {
+
+    document.getElementById(
+        'stars'
+    ).style.display = 'none';
+
+    document.getElementById(
+        'ratingText'
+    ).style.display = 'none';
+
+    document.getElementById(
+        'customerPhone'
+    ).style.display = 'none';
+
+    document.getElementById(
+        'reviewText'
+    ).style.display = 'none';
+
+    document.querySelectorAll(
+        '.field-label'
+    ).forEach(label => {
+
+        label.style.display = 'none';
+
+    });
+
+    submitButton.style.display =
+        'none';
+
+
+    const existingRating =
+        Number(
+            data.existing_review?.rating || 0
+        );
+
+    const existingText =
+        String(
+            data.existing_review?.review_text || ''
+        ).trim();
+
+
+    let message =
+        '✓ Review Already Submitted';
+
+    if (existingRating) {
+
+        message +=
+            ` — ${existingRating}/5 ★`;
+    }
+
+    if (existingText) {
+
+        message +=
+            ` — ${existingText}`;
+    }
+
+
+    showMessage(
+        message,
+        'success'
+    );
+
+    return;
+}
 
 
         // ==========================================
@@ -1056,7 +1156,7 @@ async function loadReviewOrder() {
 
                 const response =
                     await fetch(
-                        `${API_BASE_URL}/api/customer-reviews/submit`,
+                        `${API_BASE_URL}/api/reviews`,
                         {
                             method: 'POST',
 
@@ -1065,19 +1165,26 @@ async function loadReviewOrder() {
                                     'application/json'
                             },
 
+                            
                             body: JSON.stringify({
-                                order_id:
-                                    orderId,
 
-                                customer_phone:
-                                    customerPhone,
+    service_id:
+        String(
+            loadedOrder.product_id
+        ),
 
-                                rating:
-                                    selectedRating,
+    order_id:
+        orderId,
 
-                                review_text:
-                                    reviewText
-                            })
+    phone:
+        customerPhone,
+
+    rating:
+        selectedRating,
+
+    review_text:
+        reviewText
+})
                         }
                     );
 
