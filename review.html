@@ -648,7 +648,7 @@ async function loadReviewOrder() {
     try {
 
         orderNumber.textContent =
-            `#${orderId}`;
+            `${orderId}`;
 
         const response =
             await fetch(
@@ -731,7 +731,7 @@ if (
 
         // ORDER NUMBER
         orderNumber.textContent =
-            `#${loadedOrder.order_id}`;
+            `${loadedOrder.order_id}`;
 
 
         // PRODUCT / SERVICE NAME

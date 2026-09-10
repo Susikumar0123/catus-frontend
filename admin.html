@@ -3876,7 +3876,7 @@ function openWorkProofReview(proofId) {
         'workProofModalOrderId'
     ).textContent =
         proof.order_id
-            ? `#${proof.order_id}`
+            ? `${proof.order_id}`
             : '';
 
 
@@ -5364,7 +5364,7 @@ if (pageId === 'inactive-technicians') {
         : 'badge-pending';
 
                     html += `<tr>${checkboxHTML}
-                    <td><b>#${item.order_id}</b></td>
+                    <td><b>${item.order_id}</b></td>
                     <td><strong>${item.customer_name}</strong></td>
                     <td><span style="font-weight: 600; color:#0284c7;">${item.service_name || 'Smart TV Repair'}</span></td>
                     <td><a href="tel:${item.phone}" style="color:#475569; text-decoration:none;"><i class="fa-solid fa-phone"></i> ${item.phone}</a></td>
@@ -5462,7 +5462,7 @@ if (pageId === 'inactive-technicians') {
             let order = allBookings.find(o => String(o.order_id) === String(orderId));
             if(!order) return;
             
-            document.getElementById('modalOrderIdTitle').textContent = `(#${order.order_id})`;
+            document.getElementById('modalOrderIdTitle').textContent = `(${order.order_id})`;
             document.getElementById('manageOrderId').value = order.order_id;
             document.getElementById('detCustName').textContent = order.customer_name;
             document.getElementById('detCustPhone').textContent = order.phone;
