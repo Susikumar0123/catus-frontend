@@ -1102,27 +1102,24 @@ p, span, div, a, label, li, small {
         stroke: #111827 !important;
     }
 
-    /* COLOURED RING ACCENTS */
+    
 
-    .catus-checkout-nav .nav-home-ring {
-        border-top-color: #7047ff !important;
-    }
+    /* CEROOD SINGLE-BRAND NAV ACCENT */
 
-    .catus-checkout-nav .nav-services-ring {
-        border-top-color: #20cfe3 !important;
-    }
+.catus-checkout-nav .checkout-nav-ring {
+    border-top-color: var(--catus-primary) !important;
+    background: #ffffff !important;
+}
 
-    .catus-checkout-nav .nav-cart-ring {
-        border-top-color: #ff9800 !important;
-    }
+.catus-checkout-nav .bot-nav-item:hover .checkout-nav-ring,
+.catus-checkout-nav .bot-nav-item:active .checkout-nav-ring {
+    background: var(--catus-primary-soft) !important;
+}
 
-    .catus-checkout-nav .nav-bookings-ring {
-        border-top-color: #35c759 !important;
-    }
-
-    .catus-checkout-nav .nav-account-ring {
-        border-top-color: #ff3b8d !important;
-    }
+.catus-checkout-nav .bot-nav-item:hover svg,
+.catus-checkout-nav .bot-nav-item:active svg {
+    stroke: var(--catus-primary) !important;
+}
 
     /* LABEL */
 
@@ -1140,6 +1137,167 @@ p, span, div, a, label, li, small {
         padding-bottom: 62px !important;
     }
 }
+
+/* =====================================================
+   CEROOD CHECKOUT FOOTER — LEGAL / COMPANY POLISH
+===================================================== */
+
+.cerood-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+}
+
+.cerood-footer-bottom p {
+    margin: 0 !important;
+
+    font-size: 11px !important;
+    color: #71717a !important;
+}
+
+.cerood-footer-legal {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 11px;
+}
+
+.cerood-footer-legal a {
+    color: #71717a !important;
+    text-decoration: none !important;
+}
+
+.cerood-footer-legal a:hover {
+    color: var(--catus-primary) !important;
+}
+
+.cerood-footer-legal span {
+    color: #b0b0b8 !important;
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .cerood-footer-bottom {
+        flex-direction: column;
+
+        justify-content: center;
+
+        gap: 6px;
+
+        text-align: center;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT — MOBILE FORM FINAL POLISH
+===================================================== */
+
+@media (max-width: 540px) {
+
+    .checkout-container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .checkout-grid {
+        gap: 12px !important;
+    }
+
+    .checkout-grid > .card-box:first-child {
+        padding: 14px !important;
+        border-radius: 14px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-grid {
+        gap: 12px !important;
+        margin-top: 8px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-group {
+        gap: 6px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-group label {
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        color: #52525b !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-input {
+        min-height: 48px !important;
+        padding: 12px 13px !important;
+        font-size: 14px !important;
+        border-radius: 11px !important;
+        background: #ffffff !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-input:focus {
+        border-color: var(--catus-primary) !important;
+        box-shadow: 0 0 0 3px rgba(109,74,255,.07) !important;
+    }
+
+    .address-form-actions {
+        gap: 8px !important;
+        margin-top: 4px !important;
+    }
+
+    .cancel-addr-btn,
+    .address-form-actions .save-addr-action-btn {
+        min-height: 48px !important;
+        border-radius: 11px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT — DESKTOP SUMMARY CARD BALANCE
+===================================================== */
+
+@media (min-width: 901px) {
+
+    /* Right-side Bill Summary card */
+    .checkout-grid > .card-box:last-child {
+        min-height: 0 !important;
+        height: auto !important;
+        padding: 20px !important;
+        align-self: start !important;
+    }
+
+    .checkout-grid > .card-box:last-child .card-title {
+        margin-bottom: 12px !important;
+    }
+
+    .checkout-grid > .card-box:last-child .card-body-scroll {
+        overflow: visible !important;
+        max-height: none !important;
+        padding-right: 0 !important;
+    }
+
+    #summaryItemsContainer {
+        margin-bottom: 12px !important;
+    }
+
+    .bill-summary-box {
+        margin-top: 4px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .payment-method-card {
+        min-height: 48px !important;
+    }
+
+    .confirm-btn {
+        min-height: 48px !important;
+        margin-top: 12px !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -1148,7 +1306,10 @@ p, span, div, a, label, li, small {
     <div class="checkout-header">
         <img src="/cerood-logo.webp" alt="Cerood Logo"
          onclick="window.location.href='/'">
-        <div class="secure-badge"><i class="fa-solid fa-lock"></i> 100% Secure Checkout</div>
+        <div class="secure-badge">
+    <i class="fa-solid fa-lock"></i>
+    Secure Checkout
+</div>
     </div>
 
     <!-- MAIN CHECKOUT VIEW -->
@@ -1166,7 +1327,7 @@ p, span, div, a, label, li, small {
 
                 <div class="card-title">
                     <span><i class="fa-solid fa-location-dot" style="color: #0284c7;"></i> Service Address Details</span>
-                    <button type="button" class="add-new-btn" onclick="addNewAddress()"><i class="fa-solid fa-plus"></i> Add New Address</button>
+                    <button type="button" class="add-new-btn" onclick="addNewAddress()"><i class="fa-solid fa-plus"></i> Add Service Address</button>
                 </div>
                 
                 <div class="card-body-scroll">
@@ -1175,7 +1336,7 @@ p, span, div, a, label, li, small {
     <div class="saved-address-card">
         <div class="saved-address-content-row">
             <div class="saved-address-info">
-                <h4><i class="fa-solid fa-house" style="color:#059669; margin-right:6px;"></i> Default Delivery Address</h4>
+                <h4><i class="fa-solid fa-house" style="color:#059669; margin-right:6px;"></i> Default Service Address</h4>
                 <p id="savedAddressText">Loading address...</p>
             </div>
             <div class="action-btns-inline">
@@ -1214,7 +1375,7 @@ p, span, div, a, label, li, small {
                         </div>
                         <div class="form-group">
                             <label>Village / Locality *</label>
-                            <input type="text" id="fieldVillage" class="form-input" placeholder="Village" oninput="this.classList.remove('error')">
+                            <input type="text" id="fieldVillage" class="form-input" placeholder="Village / Locality" oninput="this.classList.remove('error')">
                         </div>
 
                         <div class="form-group">
@@ -1261,7 +1422,7 @@ p, span, div, a, label, li, small {
             type="button"
             class="save-addr-action-btn"
             onclick="saveAddressChanges()">
-            <i class="fa-solid fa-floppy-disk"></i> Save Address
+            <i class="fa-solid fa-floppy-disk"></i> Save Service Address
         </button>
     </div>
 </div>
@@ -1283,7 +1444,7 @@ p, span, div, a, label, li, small {
         <div class="bill-summary-box">
 
     <div class="bill-row">
-        <span>Service Charge</span>
+        <span>Service Amount</span>
         <span id="billItemTotal">₹0</span>
     </div>
 
@@ -1291,7 +1452,7 @@ p, span, div, a, label, li, small {
         <span>
             Convenience Fee
             <i class="fa-solid fa-circle-info fee-info-icon"
-               title="Online booking & platform convenience fee"></i>
+               title="Platform fee for online booking and service coordination"></i>
         </span>
         <span id="billConvenienceFee">₹0</span>
     </div>
@@ -1300,18 +1461,18 @@ p, span, div, a, label, li, small {
         <span>
             GST
             <i class="fa-solid fa-circle-info fee-info-icon"
-               title="Applicable GST"></i>
+               title="GST is shown only when applicable to this booking"></i>
         </span>
         <span id="billTaxes">₹0</span>
     </div>
 
     <div class="bill-row total-bill">
-        <span>Total Amount</span>
+        <span>Order Total</span>
         <span id="billTotalSum">₹0</span>
     </div>
 
     <div class="bill-row amount-to-pay">
-        <span>Amount to Pay</span>
+        <span>Payable Now</span>
         <span id="billAmountToPay">₹0</span>
     </div>
 
@@ -1324,24 +1485,35 @@ p, span, div, a, label, li, small {
             <div class="payment-method-card selected" onclick="selectPaymentMode('razorpay')" id="cardRazorpay">
                 <input type="radio" name="paymentMode" id="payRazorpay" checked>
                 <div>
-                    <strong style="font-size: 13px; display: block; color: #0f172a;">Online Secure Payment</strong>
-                    <span style="font-size: 11px; color: #64748b;">Pay securely via Razorpay</span>
+                    <strong style="font-size: 13px; display: block; color: #0f172a;">
+    Pay Online
+</strong>
+
+<span style="font-size: 11px; color: #64748b;">
+    Complete payment securely through Razorpay
+</span>
                 </div>
             </div>
 
             <div class="payment-method-card" onclick="selectPaymentMode('later')" id="cardLater">
                 <input type="radio" name="paymentMode" id="payLater">
                 <div>
-                    <strong style="font-size: 13px; display: block; color: #0f172a;">Pay Later (Cash / Service Pay)</strong>
-                    <span style="font-size: 11px; color: #64748b;">Pay directly to our technician after service</span>
+                    <strong style="font-size: 13px; display: block; color: #0f172a;">
+    Pay After Service
+</strong>
+
+<span style="font-size: 11px; color: #64748b;">
+    Pay after the service is completed
+</span>
                 </div>
             </div>
         </div>
     </div>
 
     <button class="confirm-btn" id="confirmOrderBtn" onclick="submitOrder()">
-        Confirm & Proceed to Pay <i class="fa-solid fa-arrow-right"></i>
-    </button>
+    Continue to Payment
+    <i class="fa-solid fa-arrow-right"></i>
+</button>
 </div>
         </div>
     </div>
@@ -1352,26 +1524,37 @@ p, span, div, a, label, li, small {
             <div class="checkmark-circle" id="circleAnim"><span class="checkmark draw" id="checkAnim"></span></div>
         </div>
         <h1 style="color: #0f172a; margin: 0 0 10px 0; font-size: 28px;">Booking Confirmed!</h1>
-        <p style="color: #64748b; font-size: 15px; margin-bottom: 30px;">Our expert technician will reach your location shortly.</p>
+        <p style="color: #64748b; font-size: 15px; margin-bottom: 30px;">
+    Your booking has been received successfully.
+    You can track technician assignment and service updates from your Cerood account.
+</p>
 
         <div class="receipt-box">
-            <div style="text-align: center; margin-bottom: 20px;"><h3 style="margin: 0; color: #0284c7; font-size: 20px;">Order Receipt</h3></div>
+            <div style="text-align: center; margin-bottom: 20px;"><h3 style="margin: 0; color: #0284c7; font-size: 20px;">
+    Booking Summary
+</h3></div>
             <div class="receipt-row"><span class="receipt-label">Order ID:</span><span class="receipt-value" id="dispOrderId">---</span></div>
             <div class="receipt-row"><span class="receipt-label">Customer ID:</span><span class="receipt-value" id="dispCustomerId">---</span></div>
-            <div class="receipt-row"><span class="receipt-label">Product ID:</span><span class="receipt-value" id="dispProductId">---</span></div>
-            <div class="receipt-row"><span class="receipt-label">Product Name:</span><span class="receipt-value" id="dispProductName">---</span></div>
+            <div class="receipt-row">
+    <span class="receipt-label">Service ID:</span>
+    <span class="receipt-value" id="dispProductId">---</span>
+</div>
+            <div class="receipt-row">
+    <span class="receipt-label">Service:</span>
+    <span class="receipt-value" id="dispProductName">---</span>
+</div>
             <div class="receipt-row"><span class="receipt-label">Booking Date:</span><span class="receipt-value" id="dispDate">---</span></div>
             <div class="receipt-row"><span class="receipt-label">Customer Name:</span><span class="receipt-value" id="dispCustomerName">---</span></div>
             <div class="receipt-row"><span class="receipt-label">Mobile No:</span><span class="receipt-value" id="dispMobile">---</span></div>
             <div class="receipt-row"><span class="receipt-label">Service Address:</span><span class="receipt-value" id="dispAddress" style="font-size: 12px; line-height: 1.4;">---</span></div>
             <div class="receipt-row" style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                <span class="receipt-label" style="color: #0f172a; font-weight: 700; font-size: 16px;">Total Amount Paid:</span>
+                <span class="receipt-label" style="color: #0f172a; font-weight: 700; font-size: 16px;">Booking Amount:</span>
                 <span class="receipt-value" id="dispTotal" style="color: #16a34a; font-size: 20px;">₹0</span>
             </div>
         </div>
 
-        <button onclick="window.location.href='/'" class="confirm-btn" style="max-width: 300px; margin: 30px auto; background: #0f172a;">
-            Go to Home Dashboard
+        <button onclick="window.location.href='/'" class="confirm-btn" style="max-width: 300px; margin: 30px auto;">
+            Back to Home
         </button>
     </div>
     
@@ -1386,7 +1569,7 @@ p, span, div, a, label, li, small {
                 <p style="margin: 0 0 10px 0; line-height: 1.6; color: #52525b;">Doorstep home appliance repair, installation, and maintenance services at your convenience.</p>
                 <div style="display: flex; gap: 12px; margin-top: 15px;">
                     <!-- WhatsApp Green Circle Icon -->
-<a href="https://wa.me/919578155827"
+<a href="https://wa.me/918946055856"
    class="footer-social-link"
    aria-label="WhatsApp">
 
@@ -1404,7 +1587,7 @@ p, span, div, a, label, li, small {
 </a>
 
 <!-- Call -->
-<a href="tel:+919578155827" class="footer-social-link" aria-label="Call">
+<a href="tel:+918946055856" class="footer-social-link" aria-label="Call">
     <svg class="footer-social-svg call-svg" viewBox="0 0 24 24">
         <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2z"/>
     </svg>
@@ -1415,15 +1598,44 @@ p, span, div, a, label, li, small {
                 </div>
             </div>
 
-            <!-- Column 2: Quick Links -->
-            <div>
-                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Links</h4>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
-                    <li><a href="/" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
-                    <li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">My Cart</a></li>
-                    <li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
-                </ul>
-            </div>
+            <!-- Column 2: Company -->
+<div>
+    <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+        Company
+    </h4>
+
+    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+
+        <li>
+            <a href="/"
+               style="color: #52525b; text-decoration: none; transition: 0.2s;">
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="/#ceroodAboutSection"
+               style="color: #52525b; text-decoration: none; transition: 0.2s;">
+                About Cerood
+            </a>
+        </li>
+
+        <li>
+            <a href="/terms.html"
+               style="color: #52525b; text-decoration: none; transition: 0.2s;">
+                Terms & Conditions
+            </a>
+        </li>
+
+        <li>
+            <a href="/privacy-policy.html"
+               style="color: #52525b; text-decoration: none; transition: 0.2s;">
+                Privacy Policy
+            </a>
+        </li>
+
+    </ul>
+</div>
 
             <!-- Column 3: Services -->
             <div>
@@ -1466,7 +1678,19 @@ p, span, div, a, label, li, small {
 
         <!-- Bottom Copyright Bar -->
         <div style="border-top: 1px solid #ddd6fe; padding-top: 20px; text-align: center; color: #71717a; font-size: 12px;">
-            <p style="margin: 0;">© 2026 Cerood Home Services. All Rights Reserved.</p>
+            <div class="cerood-footer-bottom">
+
+    <p>
+        © 2026 Cerood Home Services. All Rights Reserved.
+    </p>
+
+    <div class="cerood-footer-legal">
+        <a href="/terms.html">Terms</a>
+        <span>•</span>
+        <a href="/privacy-policy.html">Privacy</a>
+    </div>
+
+</div>
         </div>
     </footer>
 </div>
@@ -1672,7 +1896,7 @@ p, span, div, a, label, li, small {
             document.getElementById('savedAddressText').textContent = newAddressStr;
             document.getElementById('savedAddressContainer').style.display = 'block';
             document.getElementById('addressFormContainer').style.display = 'none';
-            alert("Address saved successfully!");
+            alert("Service address saved successfully!");
         }
 
         function parseAndFillAddressFields(fullAddr) {
@@ -1718,16 +1942,26 @@ p, span, div, a, label, li, small {
 
         function selectPaymentMode(mode) {
             selectedMode = mode;
+            const payableLabel =
+    document.querySelector('.bill-row.amount-to-pay span:first-child');
             if (mode === 'razorpay') {
+                if (payableLabel) {
+    payableLabel.textContent = 'Payable Now';
+}
                 document.getElementById('payRazorpay').checked = true;
                 document.getElementById('cardRazorpay').classList.add('selected');
                 document.getElementById('cardLater').classList.remove('selected');
-                document.getElementById('confirmOrderBtn').innerHTML = 'Confirm & Proceed to Pay <i class="fa-solid fa-arrow-right"></i>';
+                document.getElementById('confirmOrderBtn').innerHTML =
+    'Continue to Payment <i class="fa-solid fa-arrow-right"></i>';
             } else {
+                if (payableLabel) {
+    payableLabel.textContent = 'Pay After Service';
+}
                 document.getElementById('payLater').checked = true;
                 document.getElementById('cardLater').classList.add('selected');
                 document.getElementById('cardRazorpay').classList.remove('selected');
-                document.getElementById('confirmOrderBtn').innerHTML = 'Confirm & Book (Pay Later) <i class="fa-solid fa-arrow-right"></i>';
+                document.getElementById('confirmOrderBtn').innerHTML =
+    'Confirm Booking <i class="fa-solid fa-arrow-right"></i>';
             }
         }
 
