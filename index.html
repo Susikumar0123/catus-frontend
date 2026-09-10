@@ -1400,53 +1400,50 @@
     body { padding-bottom: 70px !important; }
     footer { margin-bottom: 60px; }
 }
-/* Professional Footer Container Layout */
-.footer-wrapper {
-    background: #0f172a;
-    color: #cbd5e1;
-    padding: 40px 20px 20px 20px;
-    margin-top: 50px;
-    font-size: 13px;
 
+/* =====================================================
+   CEROOD MAIN FOOTER
+===================================================== */
+
+.footer-wrapper {
     width: 100vw;
-    box-sizing: border-box;
+
+    margin-top: 70px;
+    margin-left: -50vw;
+    margin-right: -50vw;
 
     position: relative;
     left: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-}
-.footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-@media (max-width: 850px) {
-    .footer-wrapper {
-        margin-bottom: 60px; /* Bottom nav bar-kku space */
-    }
-}
-/* ---unga existing style-oda kadiasi line ithu maari irukkum--- */
-.footer-wrapper {
-    background: #f5f3ff;
-    color: #52525b;
-    padding: 40px 20px 20px 20px;
-    margin-top: 50px;
-    font-size: 13px;
 
-    width: 100vw;
     box-sizing: border-box;
 
-    position: relative;
-    left: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    padding: 42px 24px 22px;
+
+    background: #fafafa;
+    color: var(--catus-text-2);
+
+    border-top: 1px solid #ececef;
+
+    font-size: 13px;
 }
+
 .footer-inner {
+    width: 100%;
     max-width: 1200px;
+
     margin: 0 auto;
 }
+
 @media (max-width: 850px) {
+
     .footer-wrapper {
+        margin-top: 42px;
+
+        padding:
+            30px
+            16px
+            14px;
+
         margin-bottom: 60px;
     }
 }
@@ -6008,6 +6005,1731 @@ padding: 0 12px !important;
     }
 }
 
+/* =====================================================
+   CEROOD PREMIUM TRUST STRIP
+===================================================== */
+
+.cerood-trust-strip {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 14px;
+    margin: 8px 0 28px 0;
+    overflow: hidden;
+}
+
+.cerood-trust-item {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.cerood-trust-item:not(:last-child) {
+    border-right: 1px solid #eeeeee;
+}
+
+.cerood-trust-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f4f1ff;
+    color: #6c35f2;
+    font-size: 15px;
+}
+
+.cerood-trust-item strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 600;
+    color: #171717;
+    margin-bottom: 4px;
+}
+
+.cerood-trust-item span {
+    display: block;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #777777;
+}
+
+@media (max-width: 768px) {
+
+    .cerood-trust-strip {
+        grid-template-columns: repeat(2, 1fr);
+        margin: 10px 0 20px 0;
+        border-radius: 12px;
+    }
+
+    .cerood-trust-item {
+        min-height: 76px;
+        padding: 13px 10px;
+        gap: 9px;
+    }
+
+    .cerood-trust-item:nth-child(1),
+    .cerood-trust-item:nth-child(2) {
+        border-bottom: 1px solid #eeeeee;
+    }
+
+    .cerood-trust-item:nth-child(2) {
+        border-right: 0;
+    }
+
+    .cerood-trust-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .cerood-trust-item strong {
+        font-size: 11px;
+    }
+
+    .cerood-trust-item span {
+        font-size: 9.5px;
+    }
+}
+
+/* =====================================================
+   CEROOD HEADER — SINGLE BRAND ACCENT
+===================================================== */
+
+/* Search */
+.search-container {
+    background: #ffffff !important;
+    border: 1px solid #e4e4e7 !important;
+    box-shadow: 0 2px 10px rgba(24, 24, 27, 0.04) !important;
+}
+
+.search-container:focus-within {
+    border-color: var(--catus-primary) !important;
+    box-shadow: 0 0 0 3px rgba(109, 74, 255, 0.10) !important;
+}
+
+.suggestion-item:hover {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+}
+
+/* Header nav */
+.nav-item:hover {
+    color: var(--catus-primary) !important;
+}
+
+.nav-item:hover svg {
+    stroke: var(--catus-primary) !important;
+}
+
+/* Location */
+.header-location-widget {
+    background: #ffffff !important;
+    border: 1px solid #e4e4e7 !important;
+    color: var(--catus-text) !important;
+    box-shadow: none !important;
+}
+
+.header-location-widget:hover {
+    background: var(--catus-primary-soft) !important;
+    border-color: #d9d1ff !important;
+}
+
+.header-location-widget i {
+    color: var(--catus-primary) !important;
+}
+
+/* Login */
+.login-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--catus-primary) !important;
+    box-shadow: none !important;
+}
+
+.login-btn:hover {
+    background: var(--catus-primary-hover) !important;
+}
+
+.login-btn svg {
+    stroke: #ffffff !important;
+}
+
+/* Quick service active state */
+.service-chip.active span {
+    color: var(--catus-primary) !important;
+}
+
+.service-chip.active .chip-icon-bg {
+    border-color: var(--catus-primary) !important;
+}
+
+.service-chip.active .chip-icon-bg svg {
+    stroke: var(--catus-primary) !important;
+}
+
+.service-chip::after {
+    background: var(--catus-primary) !important;
+}
+
+/* =====================================================
+   CEROOD HOMEPAGE — PREMIUM TYPOGRAPHY & SPACING
+===================================================== */
+
+/* Main page width rhythm */
+@media (min-width: 993px) {
+    .master-app-container {
+        padding-left: 48px !important;
+        padding-right: 48px !important;
+    }
+}
+
+/* Main H1 */
+.section-title-container {
+    font-size: 30px !important;
+    line-height: 1.2 !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.5px !important;
+    color: var(--catus-text) !important;
+    margin: 26px 0 22px 0 !important;
+}
+
+/* Category section */
+.uc-category-box {
+    margin-bottom: 64px !important;
+}
+
+/* Category header */
+.uc-cat-header {
+    margin-bottom: 22px !important;
+    padding-bottom: 0 !important;
+}
+
+.uc-cat-header h3 {
+    font-size: 26px !important;
+    line-height: 1.25 !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.35px !important;
+    color: var(--catus-text) !important;
+    margin: 0 !important;
+}
+
+.uc-cat-header p {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    color: var(--catus-text-3) !important;
+    margin: 5px 0 0 0 !important;
+}
+
+/* Product title */
+.uc-body h4 {
+    font-size: 15px !important;
+    line-height: 1.45 !important;
+    font-weight: 500 !important;
+    color: var(--catus-text) !important;
+}
+
+/* Price */
+.uc-price {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    font-weight: 500 !important;
+    color: var(--catus-text) !important;
+}
+
+.uc-cut {
+    font-size: 12px !important;
+    color: var(--catus-text-3) !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .uc-category-box {
+        margin-bottom: 22px !important;
+    }
+
+    .uc-cat-header {
+        margin-bottom: 12px !important;
+    }
+
+    .uc-cat-header h3 {
+        font-size: 17px !important;
+        line-height: 1.3 !important;
+        letter-spacing: -0.15px !important;
+    }
+
+    .uc-cat-header p {
+        font-size: 11px !important;
+        margin-top: 3px !important;
+    }
+
+    .uc-body h4 {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+    }
+
+    .uc-price {
+        font-size: 12px !important;
+    }
+
+    .uc-cut {
+        font-size: 11px !important;
+    }
+}
+
+/* =====================================================
+   CEROOD ABOUT / COMPANY TRUST SECTION
+===================================================== */
+
+.cerood-about-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 80px auto 30px auto;
+    padding: 46px;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 70px;
+
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 18px;
+}
+
+.cerood-about-label {
+    display: inline-block;
+    margin-bottom: 14px;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+
+    color: var(--catus-primary);
+}
+
+.cerood-about-left h2 {
+    max-width: 520px;
+
+    margin: 0 0 20px 0;
+
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.6px;
+
+    color: var(--catus-text);
+}
+
+.cerood-about-left p {
+    max-width: 600px;
+
+    margin: 0 0 14px 0;
+
+    font-size: 14px;
+    line-height: 1.75;
+
+    color: var(--catus-text-2);
+}
+
+.cerood-about-link-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 26px;
+}
+
+.cerood-about-link-row a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 11px 16px;
+
+    border: 1px solid #dedede;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: var(--catus-text);
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition: 0.2s ease;
+}
+
+.cerood-about-link-row a:hover {
+    border-color: var(--catus-primary);
+    color: var(--catus-primary);
+}
+
+.cerood-about-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cerood-about-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    padding: 18px 0;
+}
+
+.cerood-about-point:not(:last-child) {
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.cerood-about-point-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--catus-primary-soft);
+    color: var(--catus-primary);
+
+    font-size: 14px;
+}
+
+.cerood-about-point strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: var(--catus-text);
+}
+
+.cerood-about-point span {
+    display: block;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: var(--catus-text-3);
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .cerood-about-section {
+        width: calc(100% - 24px);
+
+        margin: 35px 12px 20px 12px;
+        padding: 24px 18px;
+
+        grid-template-columns: 1fr;
+        gap: 24px;
+
+        border-radius: 14px;
+    }
+
+    .cerood-about-left h2 {
+        font-size: 23px;
+        line-height: 1.25;
+    }
+
+    .cerood-about-left p {
+        font-size: 12px;
+        line-height: 1.65;
+    }
+
+    .cerood-about-link-row {
+        flex-direction: column;
+    }
+
+    .cerood-about-link-row a {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .cerood-about-point {
+        padding: 14px 0;
+    }
+
+    .cerood-about-point strong {
+        font-size: 13px;
+    }
+
+    .cerood-about-point span {
+        font-size: 11px;
+    }
+}
+
+/* =====================================================
+   CEROOD GOOGLE TRUST SECTION
+===================================================== */
+
+.cerood-google-trust {
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 65px auto 0 auto;
+    padding: 30px 34px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    background: #ffffff;
+    border: 1px solid #ececec;
+    border-radius: 16px;
+}
+
+.cerood-google-trust-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.cerood-google-mark {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #f7f7f8;
+
+    font-size: 21px;
+    color: #4285f4;
+}
+
+.cerood-google-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+
+    color: var(--catus-primary);
+}
+
+.cerood-google-trust h2 {
+    margin: 0 0 8px 0;
+
+    font-size: 21px;
+    line-height: 1.3;
+    font-weight: 600;
+
+    color: var(--catus-text);
+}
+
+.cerood-google-trust p {
+    max-width: 620px;
+
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    color: var(--catus-text-2);
+}
+
+.cerood-google-trust-right {
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.cerood-google-review-btn {
+    min-height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    padding: 0 18px;
+
+    background: var(--catus-primary);
+    color: #ffffff !important;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.cerood-google-review-btn:hover {
+    background: var(--catus-primary-hover);
+    transform: translateY(-1px);
+}
+
+.cerood-google-trust-right span {
+    font-size: 10px;
+    color: var(--catus-text-3);
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .cerood-google-trust {
+        width: calc(100% - 24px);
+
+        margin: 35px 12px 0 12px;
+        padding: 22px 18px;
+
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 20px;
+
+        border-radius: 14px;
+    }
+
+    .cerood-google-mark {
+        width: 40px;
+        height: 40px;
+
+        font-size: 18px;
+    }
+
+    .cerood-google-trust h2 {
+        font-size: 18px;
+    }
+
+    .cerood-google-trust p {
+        font-size: 11.5px;
+    }
+
+    .cerood-google-trust-right {
+        width: 100%;
+    }
+
+    .cerood-google-review-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* =====================================================
+   CEROOD FOOTER — COMPANY / LEGAL LINKS
+===================================================== */
+
+.footer-column-title {
+    margin: 0 0 14px 0;
+
+    color: var(--catus-text);
+
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.55px;
+}
+
+.cerood-footer-links {
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.cerood-footer-links a {
+    color: var(--catus-text-2) !important;
+
+    font-size: 12.5px;
+    line-height: 1.5;
+    font-weight: 400;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+}
+
+.cerood-footer-links a:hover {
+    color: var(--catus-primary) !important;
+}
+
+/* =====================================================
+   CEROOD SERVICE COVERAGE
+===================================================== */
+
+.cerood-coverage-section {
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 65px auto 0 auto;
+    padding: 38px 42px;
+
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 65px;
+
+    background: var(--catus-primary-soft);
+
+    border: 1px solid #e6e0ff;
+    border-radius: 18px;
+}
+
+.cerood-coverage-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+
+    color: var(--catus-primary);
+}
+
+.cerood-coverage-content h2 {
+    max-width: 540px;
+
+    margin: 0 0 13px 0;
+
+    font-size: 27px;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+
+    color: var(--catus-text);
+}
+
+.cerood-coverage-content p {
+    max-width: 600px;
+
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.7;
+
+    color: var(--catus-text-2);
+}
+
+.cerood-coverage-btn {
+    margin-top: 23px;
+
+    min-height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 0 17px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: var(--catus-primary);
+    color: #ffffff;
+
+    font-size: 12.5px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.cerood-coverage-btn:hover {
+    background: var(--catus-primary-hover);
+    transform: translateY(-1px);
+}
+
+.cerood-coverage-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cerood-coverage-item {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 15px 0;
+}
+
+.cerood-coverage-item:not(:last-child) {
+    border-bottom: 1px solid #ded7fa;
+}
+
+.cerood-coverage-item > i {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    border-radius: 9px;
+
+    color: var(--catus-primary);
+
+    font-size: 13px;
+}
+
+.cerood-coverage-item strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: var(--catus-text);
+}
+
+.cerood-coverage-item span {
+    display: block;
+
+    font-size: 11px;
+    line-height: 1.45;
+
+    color: var(--catus-text-3);
+}
+
+
+@media (max-width: 768px) {
+
+    .cerood-coverage-section {
+        width: calc(100% - 24px);
+
+        margin: 35px 12px 0 12px;
+        padding: 24px 18px;
+
+        grid-template-columns: 1fr;
+        gap: 22px;
+
+        border-radius: 14px;
+    }
+
+    .cerood-coverage-content h2 {
+        font-size: 21px;
+    }
+
+    .cerood-coverage-content p {
+        font-size: 11.5px;
+    }
+
+    .cerood-coverage-btn {
+        width: 100%;
+    }
+
+    .cerood-coverage-item {
+        padding: 13px 0;
+    }
+}
+
+/* CEROOD FOOTER VISUAL POLISH */
+
+.footer-inner h3,
+.footer-inner h4 {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+.footer-inner p,
+.footer-inner li,
+.footer-inner span {
+    color: var(--catus-text-2);
+}
+
+.footer-inner a {
+    color: var(--catus-text-2) !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-inner a:hover {
+    color: var(--catus-primary) !important;
+}
+
+.footer-inner > div {
+    border-color: #e7e7eb !important;
+}
+
+/* =====================================================
+   CEROOD SEARCH — CONVERSION POLISH
+===================================================== */
+
+#searchInput {
+    font-weight: 400 !important;
+}
+
+#searchInput::placeholder {
+    color: #8b8b95 !important;
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+
+    #searchInput {
+        font-size: 12px !important;
+    }
+
+    #searchInput::placeholder {
+        font-size: 11.5px !important;
+    }
+}
+
+/* CEROOD BOOKING CTA — BRAND CONSISTENCY */
+
+.uc-btn-row .uc-btn:not(.uc-cart-btn),
+.uc-btn-row a.uc-btn,
+a.book-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    font-weight: 600 !important;
+
+    transition: 0.2s ease !important;
+}
+
+.uc-btn-row .uc-btn:not(.uc-cart-btn):hover,
+.uc-btn-row a.uc-btn:hover,
+a.book-btn:hover {
+    background: var(--catus-primary-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* =====================================================
+   CEROOD PRODUCT CARD — CTA HIERARCHY
+===================================================== */
+
+.uc-btn-row {
+    display: flex !important;
+    gap: 8px !important;
+    align-items: center !important;
+}
+
+/* SECONDARY ACTION — ADD TO CART */
+.uc-btn-row .uc-cart-btn,
+button.uc-cart-btn {
+    background: #ffffff !important;
+    color: var(--catus-primary) !important;
+
+    border: 1px solid #d9d2ff !important;
+
+    box-shadow: none !important;
+
+    font-weight: 500 !important;
+
+    transition: 0.2s ease !important;
+}
+
+.uc-btn-row .uc-cart-btn:hover,
+button.uc-cart-btn:hover {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+
+    border-color: var(--catus-primary) !important;
+
+    transform: none !important;
+}
+
+
+/* PRIMARY ACTION — BOOK NOW */
+.uc-btn-row .uc-btn:not(.uc-cart-btn),
+.uc-btn-row a.uc-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+
+    border: 1px solid var(--catus-primary) !important;
+
+    box-shadow: none !important;
+
+    font-weight: 600 !important;
+
+    transition: 0.2s ease !important;
+}
+
+.uc-btn-row .uc-btn:not(.uc-cart-btn):hover,
+.uc-btn-row a.uc-btn:hover {
+    background: var(--catus-primary-hover) !important;
+
+    border-color: var(--catus-primary-hover) !important;
+
+    transform: translateY(-1px) !important;
+}
+
+/* =====================================================
+   CEROOD SERVICE RATING — GENUINE REVIEW DISPLAY
+===================================================== */
+
+.uc-home-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    margin: 0 0 7px 0;
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.uc-home-rating i {
+    color: #f59e0b !important;
+    font-size: 11px !important;
+}
+
+.cerood-rating-score {
+    color: var(--catus-text) !important;
+    font-weight: 600;
+}
+
+.cerood-rating-count {
+    color: var(--catus-text-3) !important;
+    font-weight: 400;
+}
+
+@media (max-width: 768px) {
+
+    .uc-home-rating {
+        gap: 4px;
+        font-size: 10.5px;
+        margin-bottom: 5px;
+    }
+
+    .uc-home-rating i {
+        font-size: 9px !important;
+    }
+}
+
+/* =====================================================
+   CEROOD AUTH MODAL — PREMIUM FINAL DESIGN
+===================================================== */
+
+.auth-modal-wrapper {
+    background: rgba(15, 15, 20, 0.48) !important;
+
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+
+
+/* MAIN MODAL */
+.auth-modal-container {
+    width: 760px !important;
+    max-width: calc(100vw - 32px) !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #ececef !important;
+    border-radius: 18px !important;
+
+    box-shadow:
+        0 24px 70px rgba(24, 24, 27, 0.18) !important;
+}
+
+
+/* =====================================================
+   LEFT BRAND PANEL
+===================================================== */
+
+.auth-left-panel {
+    width: 38% !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f7f5ff 0%,
+            #efebff 100%
+        ) !important;
+
+    color: var(--catus-text) !important;
+
+    padding: 42px 32px !important;
+}
+
+.auth-left-panel h2 {
+    margin: 0 0 12px 0 !important;
+
+    font-size: 27px !important;
+    line-height: 1.25 !important;
+
+    font-weight: 600 !important;
+    letter-spacing: -0.45px !important;
+
+    color: var(--catus-text) !important;
+}
+
+.auth-left-panel p {
+    margin: 0 !important;
+
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+
+    color: var(--catus-text-2) !important;
+}
+
+
+/* =====================================================
+   RIGHT FORM PANEL
+===================================================== */
+
+.auth-right-panel {
+    width: 62% !important;
+
+    padding: 42px 38px !important;
+
+    background: #ffffff !important;
+
+    color: var(--catus-text) !important;
+}
+
+
+/* CLOSE BUTTON */
+.auth-close-btn {
+    width: 34px !important;
+    height: 34px !important;
+
+    top: 15px !important;
+    right: 16px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    background: #f7f7f8 !important;
+
+    border: 1px solid #ececef !important;
+    border-radius: 50% !important;
+
+    color: var(--catus-text-2) !important;
+
+    font-size: 17px !important;
+}
+
+.auth-close-btn:hover {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+}
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.auth-input-field {
+    width: 100% !important;
+
+    margin-top: 20px !important;
+    margin-bottom: 4px !important;
+
+    padding: 12px 0 !important;
+
+    background: transparent !important;
+
+    border: none !important;
+    border-bottom: 1px solid #d9d9df !important;
+
+    border-radius: 0 !important;
+
+    outline: none !important;
+
+    color: var(--catus-text) !important;
+
+    font-size: 14px !important;
+    font-family: inherit !important;
+
+    box-shadow: none !important;
+
+    transition: border-color 0.2s ease !important;
+}
+
+.auth-input-field::placeholder {
+    color: #96969f !important;
+}
+
+.auth-input-field:focus {
+    border-bottom-color: var(--catus-primary) !important;
+
+    box-shadow: none !important;
+}
+
+
+/* =====================================================
+   PRIMARY AUTH BUTTON
+===================================================== */
+
+.auth-primary-btn {
+    width: 100% !important;
+
+    min-height: 46px !important;
+
+    margin-top: 24px !important;
+    padding: 0 18px !important;
+
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+
+    border: 1px solid var(--catus-primary) !important;
+    border-radius: 9px !important;
+
+    font-family: inherit !important;
+
+    font-size: 13px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: 0 !important;
+
+    cursor: pointer !important;
+
+    box-shadow: none !important;
+
+    transition: 0.2s ease !important;
+}
+
+.auth-primary-btn:hover {
+    background: var(--catus-primary-hover) !important;
+    border-color: var(--catus-primary-hover) !important;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   TERMS / SECONDARY LINKS
+===================================================== */
+
+.auth-terms-text {
+    margin-top: 18px !important;
+
+    font-size: 10.5px !important;
+    line-height: 1.55 !important;
+
+    color: var(--catus-text-3) !important;
+}
+
+.auth-terms-text a {
+    color: var(--catus-primary) !important;
+    text-decoration: none !important;
+
+    font-weight: 500 !important;
+}
+
+.auth-terms-text a:hover {
+    text-decoration: underline !important;
+}
+
+.auth-bottom-link {
+    margin-top: auto !important;
+
+    padding-top: 20px !important;
+
+    text-align: center !important;
+
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+
+    color: var(--catus-primary) !important;
+
+    cursor: pointer !important;
+}
+
+.auth-bottom-link:hover {
+    text-decoration: underline !important;
+}
+
+
+/* =====================================================
+   MOBILE AUTH MODAL
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .auth-modal-wrapper {
+        align-items: flex-end !important;
+    }
+
+    .auth-modal-container {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        height: auto !important;
+        max-height: 92vh !important;
+
+        border-radius: 18px 18px 0 0 !important;
+
+        overflow-y: auto !important;
+    }
+
+    .auth-left-panel {
+        display: none !important;
+    }
+
+    .auth-right-panel {
+        width: 100% !important;
+        height: auto !important;
+
+        padding:
+            36px
+            20px
+            26px !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .auth-primary-btn {
+        min-height: 45px !important;
+    }
+
+    .auth-close-btn {
+        top: 12px !important;
+        right: 12px !important;
+    }
+}
+
+/* =====================================================
+   CEROOD CUSTOMER DASHBOARD — FINAL BRAND COLORS
+===================================================== */
+
+#premiumCustomerDashboard {
+    --dash-primary: var(--catus-primary);
+    --dash-primary-hover: var(--catus-primary-hover);
+    --dash-primary-soft: var(--catus-primary-soft);
+}
+
+
+/* SIDEBAR */
+#premiumCustomerDashboard .prem-menu-item {
+    color: var(--catus-text-2) !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item:hover {
+    background: #f7f7f8 !important;
+    color: var(--dash-primary) !important;
+
+    transform: none !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item.active {
+    background: var(--dash-primary-soft) !important;
+    color: var(--dash-primary) !important;
+
+    border-left-color: var(--dash-primary) !important;
+
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-menu-item.active i,
+#premiumCustomerDashboard .prem-menu-item:hover i {
+    color: var(--dash-primary) !important;
+}
+
+
+/* TOP HEADER */
+#premiumCustomerDashboard .prem-dash-header {
+    background: rgba(255, 255, 255, 0.97) !important;
+
+    color: var(--catus-text) !important;
+
+    border-bottom: 1px solid #ececef !important;
+
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-greeting-text {
+    color: var(--catus-text) !important;
+}
+
+#premiumCustomerDashboard .prem-cust-id-badge {
+    background: var(--dash-primary-soft) !important;
+    color: var(--dash-primary) !important;
+}
+
+
+/* HEADER ICON BUTTONS */
+#premiumCustomerDashboard .prem-icon-btn {
+    color: var(--catus-text-2) !important;
+    background: #f7f7f8 !important;
+
+    border: 1px solid #ececef !important;
+
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-icon-btn:hover {
+    color: var(--dash-primary) !important;
+    background: var(--dash-primary-soft) !important;
+
+    transform: none !important;
+}
+
+
+/* STAT CARDS */
+#premiumCustomerDashboard .prem-stat-card {
+    background: #ffffff !important;
+
+    border: 1px solid #ececef !important;
+
+    box-shadow: none !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card:hover {
+    border-color: #dcd6ff !important;
+
+    box-shadow: 0 6px 18px rgba(24,24,27,.05) !important;
+
+    transform: translateY(-1px) !important;
+}
+
+#premiumCustomerDashboard .prem-stat-card h3 {
+    color: var(--catus-text) !important;
+}
+
+
+/* LIVE STATUS */
+#premiumCustomerDashboard .prem-live-status-badge {
+    background: var(--dash-primary-soft) !important;
+    color: var(--dash-primary) !important;
+
+    border: 1px solid #ded7ff !important;
+}
+
+#premiumCustomerDashboard .prem-live-status-badge .pulse {
+    background: var(--dash-primary) !important;
+
+    box-shadow:
+        0 0 0 0 rgba(109, 74, 255, 0.30) !important;
+}
+
+
+/* TRACK BUTTON */
+#premiumCustomerDashboard .prem-btn-track-compact {
+    background: var(--dash-primary-soft) !important;
+    color: var(--dash-primary) !important;
+
+    border: 1px solid #ded7ff !important;
+}
+
+#premiumCustomerDashboard .prem-btn-track-compact:hover {
+    background: #ece8ff !important;
+}
+
+
+/* SMALL ACTION BUTTON */
+#premiumCustomerDashboard .prem-btn-small {
+    background: var(--dash-primary-soft) !important;
+    color: var(--dash-primary) !important;
+
+    border: 1px solid #ded7ff !important;
+}
+
+#premiumCustomerDashboard .prem-btn-small:hover {
+    background: #ece8ff !important;
+}
+
+
+/* MOBILE BOTTOM NAV */
+#premiumCustomerDashboard .prem-nav-btn {
+    color: var(--catus-text-3) !important;
+}
+
+#premiumCustomerDashboard .prem-nav-btn.active {
+    color: var(--dash-primary) !important;
+}
+
+
+/* PROFILE AVATAR */
+#premiumCustomerDashboard #premAvatarInitials {
+    color: #ffffff !important;
+}
+
+#premiumCustomerDashboard div:has(> #premAvatarInitials) {
+    background: var(--dash-primary) !important;
+}
+
+/* =====================================================
+   CEROOD CART DRAWER — PREMIUM FINAL POLISH
+===================================================== */
+
+#cartDrawer {
+    background: #ffffff !important;
+
+    border-left: 1px solid #ececef !important;
+
+    box-shadow:
+        -12px 0 40px rgba(24, 24, 27, 0.08) !important;
+}
+
+
+/* HEADER */
+#cartDrawer .cart-header {
+    padding: 18px 20px !important;
+
+    background: #ffffff !important;
+
+    border-bottom: 1px solid #ececef !important;
+}
+
+#cartDrawer .cart-header h3 {
+    color: var(--catus-text) !important;
+
+    font-size: 17px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* CLOSE BUTTON */
+#cartDrawer .close-cart {
+    width: 34px !important;
+    height: 34px !important;
+
+    background: #f7f7f8 !important;
+    color: var(--catus-text-2) !important;
+
+    border: 1px solid #ececef !important;
+
+    box-shadow: none !important;
+}
+
+#cartDrawer .close-cart:hover {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+
+    transform: none !important;
+}
+
+
+/* CART ITEMS AREA */
+#cartDrawer .cart-items-list {
+    padding: 10px 20px 20px !important;
+}
+
+
+/* EACH ITEM */
+#cartDrawer .cart-item-row {
+    gap: 12px !important;
+
+    padding: 15px 0 !important;
+
+    border-bottom: 1px solid #f0f0f2 !important;
+}
+
+
+/* PRODUCT IMAGE */
+#cartDrawer .cart-item-img {
+    width: 54px !important;
+    height: 54px !important;
+
+    border-radius: 9px !important;
+
+    border: 1px solid #eeeeef !important;
+
+    background: #f7f7f8 !important;
+}
+
+
+/* PRODUCT NAME */
+#cartDrawer .cart-item-info strong {
+    margin-bottom: 4px !important;
+
+    color: var(--catus-text) !important;
+
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+
+    font-weight: 500 !important;
+}
+
+
+/* SECONDARY TEXT */
+#cartDrawer .cart-item-info span {
+    color: var(--catus-text-3) !important;
+
+    font-size: 11.5px !important;
+}
+
+
+/* PRICE */
+#cartDrawer .cart-item-price {
+    color: var(--catus-text) !important;
+
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+
+
+/* REMOVE BUTTON */
+#cartDrawer .remove-item-btn {
+    width: 31px !important;
+    height: 31px !important;
+
+    background: #f7f7f8 !important;
+
+    color: var(--catus-text-3) !important;
+
+    border: 1px solid #ececef !important;
+
+    box-shadow: none !important;
+}
+
+#cartDrawer .remove-item-btn:hover {
+    background: #fef2f2 !important;
+
+    color: #dc2626 !important;
+
+    border-color: #fecaca !important;
+}
+
+
+/* =====================================================
+   CART FOOTER
+===================================================== */
+
+#cartDrawer .cart-footer {
+    padding: 18px 20px 20px !important;
+
+    background: #ffffff !important;
+
+    border-top: 1px solid #ececef !important;
+
+    gap: 14px !important;
+}
+
+
+/* TOTAL */
+#cartDrawer .cart-total {
+    color: var(--catus-text) !important;
+
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+#cartDrawer #cartTotalPrice {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+
+    color: var(--catus-text) !important;
+}
+
+
+/* CLEAR CART */
+#cartDrawer .clear-cart-text,
+#cartDrawer .cart-header span[onclick*="clearCart"] {
+    color: var(--catus-text-3) !important;
+
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+}
+
+#cartDrawer .clear-cart-text:hover,
+#cartDrawer .cart-header span[onclick*="clearCart"]:hover {
+    color: #dc2626 !important;
+}
+
+
+/* PRIMARY CHECKOUT BUTTON */
+#cartDrawer .checkout-btn {
+    width: 100% !important;
+    height: 48px !important;
+
+    padding: 0 18px !important;
+
+    background: var(--catus-primary) !important;
+
+    color: #ffffff !important;
+
+    border: 1px solid var(--catus-primary) !important;
+    border-radius: 9px !important;
+
+    font-size: 13px !important;
+    font-weight: 600 !important;
+
+    box-shadow: none !important;
+}
+
+#cartDrawer .checkout-btn:hover {
+    background: var(--catus-primary-hover) !important;
+
+    border-color: var(--catus-primary-hover) !important;
+
+    transform: translateY(-1px) !important;
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    #cartDrawer {
+        max-width: 100% !important;
+    }
+
+    #cartDrawer .cart-header {
+        padding: 15px 16px !important;
+    }
+
+    #cartDrawer .cart-items-list {
+        padding: 8px 16px 18px !important;
+    }
+
+    #cartDrawer .cart-footer {
+        padding: 14px 16px 16px !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -6041,7 +7763,7 @@ padding: 0 12px !important;
                   <circle cx="11" cy="11" r="8"></circle>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
-              <input type="text" id="searchInput" placeholder="Search for Fan, Laptop, TV, Painting, Sofa..." autocomplete="off">
+              <input type="text" id="searchInput" placeholder="What service do you need? Search TV repair, AC service, RO..." autocomplete="off">
               <!-- Dynamic Search Suggestions Box -->
 <div id="suggestionsBox"></div>
           </div>
@@ -6081,6 +7803,49 @@ padding: 0 12px !important;
         
       </div>
     </div>
+
+    <!-- CEROOD PREMIUM TRUST STRIP -->
+<section class="cerood-trust-strip">
+    <div class="cerood-trust-item">
+        <div class="cerood-trust-icon">
+            <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div>
+            <strong>Verified Professionals</strong>
+            <span>Trusted service experts</span>
+        </div>
+    </div>
+
+    <div class="cerood-trust-item">
+        <div class="cerood-trust-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+            <strong>30-Day Service Warranty</strong>
+            <span>Support after service</span>
+        </div>
+    </div>
+
+    <div class="cerood-trust-item">
+        <div class="cerood-trust-icon">
+            <i class="fa-solid fa-house"></i>
+        </div>
+        <div>
+            <strong>Doorstep Service</strong>
+            <span>Service at your location</span>
+        </div>
+    </div>
+
+    <div class="cerood-trust-item">
+        <div class="cerood-trust-icon">
+            <i class="fa-solid fa-lock"></i>
+        </div>
+        <div>
+            <strong>Secure Booking</strong>
+            <span>Simple & protected process</span>
+        </div>
+    </div>
+</section>
 
     <!-- 3. Title Container -->
     <h1 class="section-title-container">
@@ -6251,9 +8016,9 @@ padding: 0 12px !important;
 
                     <p class="auth-terms-text">
                         By continuing, you agree to Cerood's
-                        <a href="#">Terms of Use</a>
+                        <a href="/terms.html" target="_blank">Terms of Use</a>
                         and
-                        <a href="#">Privacy Policy</a>.
+                        <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>.
                     </p>
 
                 </div>
@@ -6855,9 +8620,7 @@ padding: 0 12px !important;
           <div class="prem-menu-item" onclick="switchDashTab('bookings', this)">
               <i class="fa-solid fa-clipboard-list"></i> My Bookings
           </div>
-          <div class="prem-menu-item" onclick="switchDashTab('wallet', this)">
-              <i class="fa-solid fa-wallet"></i> Wallet & Offers
-          </div>
+    
           <div class="prem-menu-item" onclick="switchDashTab('support', this)">
               <i class="fa-solid fa-headset"></i> Help & Support
           </div>
@@ -6945,7 +8708,7 @@ padding: 0 12px !important;
           </div>
 
           <!-- TAB 3: WALLET & OFFERS (UPDATED TO COMING SOON) -->
-          <div id="dashTabWallet" class="prem-tab-pane">
+          <div id="dashTabWallet" class="prem-tab-pane" style="display:none !important;">
               <div class="prem-section-title"><i class="fa-solid fa-wallet"></i> My Wallet & Offers</div>
               
               <div class="prem-card-box" style="text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;">
@@ -6962,8 +8725,11 @@ padding: 0 12px !important;
 
           <!-- TAB 4: HELP & SUPPORT -->
           <div id="dashTabSupport" class="prem-tab-pane">
-              <div class="prem-section-title"><i class="fa-solid fa-headset"></i> 24/7 Help & Support Center</div>
-              <p style="font-size: 13px; color:#64748b; margin-bottom: 20px;">Need assistance with your booking or have queries about our services? Reach out to us instantly.</p>
+              <div class="prem-section-title"><i class="fa-solid fa-headset"></i> Help & Support Center</div>
+              <p style="font-size: 13px; color:#64748b; margin-bottom: 20px;">
+    Need assistance with your booking or have questions about our services?
+    Contact Cerood support through the available support options below.
+</p>
               
               <div class="prem-grid-4" style="grid-template-columns: repeat(3, 1fr);">
                   <div class="prem-support-card" onclick="window.location.href='tel:+918946055856'">
@@ -11044,13 +12810,27 @@ if (currentHomeGroupId) {
     const count = Number(reviewData.review_count || 0);
 
     if (count > 0) {
-        ratingEl.innerHTML = `
-            <i class="fa-solid fa-star"></i>
-            ${avg} (${count})
-        `;
-    } else {
-        ratingEl.style.display = 'none';
-    }
+
+    ratingEl.style.display = 'flex';
+
+    ratingEl.innerHTML = `
+        <i class="fa-solid fa-star"></i>
+
+        <span class="cerood-rating-score">
+            ${avg}
+        </span>
+
+        <span class="cerood-rating-count">
+            ${count} ${count === 1 ? 'review' : 'reviews'}
+        </span>
+    `;
+
+} else {
+
+    ratingEl.innerHTML = '';
+    ratingEl.style.display = 'none';
+
+}
 }
     } catch (err) {
         console.error("Home rating load error:", s.service_id, err);
@@ -12342,7 +14122,244 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
 </div>
 
+<!-- =====================================================
+     CEROOD SERVICE COVERAGE SECTION
+===================================================== -->
+<section class="cerood-coverage-section">
 
+    <div class="cerood-coverage-content">
+
+        <span class="cerood-coverage-label">
+            Service Availability
+        </span>
+
+        <h2>
+            Check Cerood service availability in your area
+        </h2>
+
+        <p>
+            Cerood is expanding doorstep appliance services
+            across locations in Tamil Nadu. Service availability
+            can vary by location, appliance category and
+            technician availability.
+        </p>
+
+        <button
+            type="button"
+            class="cerood-coverage-btn"
+            onclick="openLocationModal()"
+        >
+            <i class="fa-solid fa-location-dot"></i>
+            Check Your Location
+        </button>
+
+    </div>
+
+
+    <div class="cerood-coverage-info">
+
+        <div class="cerood-coverage-item">
+
+            <i class="fa-solid fa-house"></i>
+
+            <div>
+                <strong>Doorstep Service</strong>
+                <span>
+                    Service at your selected address
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="cerood-coverage-item">
+
+            <i class="fa-solid fa-location-crosshairs"></i>
+
+            <div>
+                <strong>Location-Based Availability</strong>
+                <span>
+                    Availability depends on your service area
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="cerood-coverage-item">
+
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+            <div>
+                <strong>Multiple Appliance Services</strong>
+                <span>
+                    TV, AC, washing machine, refrigerator, RO and more
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     CEROOD GOOGLE TRUST SECTION
+===================================================== -->
+<section class="cerood-google-trust">
+
+    <div class="cerood-google-trust-left">
+
+        <div class="cerood-google-mark">
+            <i class="fa-brands fa-google"></i>
+        </div>
+
+        <div>
+            <span class="cerood-google-label">
+                Customer Feedback
+            </span>
+
+            <h2>
+                Had a good experience with Cerood?
+            </h2>
+
+            <p>
+                Your feedback helps other customers choose
+                Cerood with confidence and helps us improve
+                our service experience.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="cerood-google-trust-right">
+
+        <a
+            href="https://g.page/r/CfI4xdZRpLixEBM/review"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cerood-google-review-btn"
+        >
+            <i class="fa-brands fa-google"></i>
+            Review Cerood on Google
+        </a>
+
+        <span>
+            Genuine customer feedback only
+        </span>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     ABOUT CEROOD — COMPANY TRUST SECTION
+===================================================== -->
+<section class="cerood-about-section" id="ceroodAboutSection">
+
+    <div class="cerood-about-left">
+
+        <span class="cerood-about-label">
+            About Cerood
+        </span>
+
+        <h2>
+            Reliable home appliance service,
+            made simple.
+        </h2>
+
+        <p>
+            Cerood is a home service platform that helps customers
+            book appliance repair, installation and maintenance
+            services at their doorstep.
+        </p>
+
+        <p>
+            From TV and AC service to washing machine,
+            refrigerator and RO water purifier repair,
+            Cerood connects your booking with a service professional
+            and lets you manage your service journey in one place.
+        </p>
+
+        <div class="cerood-about-link-row">
+
+            <a href="tel:+918946055856">
+                <i class="fa-solid fa-phone"></i>
+                Contact Cerood
+            </a>
+
+            <a href="https://wa.me/918946055856"
+               target="_blank"
+               rel="noopener noreferrer">
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp Support
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="cerood-about-right">
+
+        <div class="cerood-about-point">
+            <div class="cerood-about-point-icon">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+
+            <div>
+                <strong>Easy Online Booking</strong>
+                <span>
+                    Choose your service and book from your phone.
+                </span>
+            </div>
+        </div>
+
+
+        <div class="cerood-about-point">
+            <div class="cerood-about-point-icon">
+                <i class="fa-solid fa-user-gear"></i>
+            </div>
+
+            <div>
+                <strong>Technician Assignment</strong>
+                <span>
+                    Your booking is assigned to a service professional.
+                </span>
+            </div>
+        </div>
+
+
+        <div class="cerood-about-point">
+            <div class="cerood-about-point-icon">
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+
+            <div>
+                <strong>Service Tracking</strong>
+                <span>
+                    Follow your booking status from your Cerood account.
+                </span>
+            </div>
+        </div>
+
+
+        <div class="cerood-about-point">
+            <div class="cerood-about-point-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <div>
+                <strong>30-Day Service Warranty</strong>
+                <span>
+                    Eligible repair services include post-service support.
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+</section>
 
 <!-- Professional Footer Section -->
 <div class="footer-wrapper">
@@ -12353,7 +14370,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
     <summary>Service Areas</summary>
 
     <div class="seo-service-areas-inner">
-        <p>Explore Cerood home appliance services across Tamil Nadu.</p>
+        <p>Explore Cerood service availability across locations in Tamil Nadu.</p>
         <div id="seoServiceAreasContainer"></div>
     </div>
 </details>
@@ -12398,14 +14415,43 @@ function togglePasswordVisibility(fieldId, iconElement) {
             </div>
 
             <!-- Column 2: Quick Links -->
-            <div>
-                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Links</h4>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
-                    <li><a href="/" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
-                    <li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">My Cart</a></li>
-                    <li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
-                </ul>
-            </div>
+<div>
+    <h4 class="footer-column-title">Company</h4>
+
+    <ul class="cerood-footer-links">
+
+        <li>
+            <a href="#ceroodAboutSection">
+                About Cerood
+            </a>
+        </li>
+
+        <li>
+            <a href="#" onclick="toggleCartModal(true); return false;">
+                My Cart
+            </a>
+        </li>
+
+        <li>
+            <a href="#" onclick="handleHeaderAuthClick(); return false;">
+                Customer Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="/terms.html">
+                Terms of Use
+            </a>
+        </li>
+
+        <li>
+            <a href="/privacy-policy.html">
+                Privacy Policy
+            </a>
+        </li>
+
+    </ul>
+</div>
 
             <!-- Column 3: Services -->
             <div>
