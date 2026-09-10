@@ -3861,234 +3861,881 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
 }
 
 /* =====================================================
-   CEROOD 2026 PRODUCT PAGE - LOCKED PREMIUM BASE
+   CEROOD PRODUCT PAGE - PREMIUM 3 COLUMN DESIGN
 ===================================================== */
 
 body {
     background:
-        radial-gradient(circle at 72% 8%, rgba(109,74,255,.025), transparent 25%),
+        radial-gradient(
+            circle at 78% 6%,
+            rgba(109, 74, 255, 0.025),
+            transparent 24%
+        ),
         #ffffff !important;
 }
 
-/* MAIN PRODUCT */
+
+/* ===============================
+   MAIN DESKTOP STRUCTURE
+================================ */
+
 #productGridMain {
     display: grid !important;
-    grid-template-columns: minmax(0, 1.08fr) minmax(390px, .92fr) !important;
-    gap: 40px !important;
+
+    grid-template-columns:
+        minmax(0, 1.12fr)
+        minmax(300px, 0.62fr)
+        minmax(350px, 0.72fr) !important;
+
+    gap: 34px !important;
+
     align-items: start !important;
+
+    width: 100% !important;
+
+    overflow: visible !important;
 }
 
-/* LEFT GALLERY */
+
+/* ===============================
+   LEFT IMAGE GALLERY
+================================ */
+
 #productGridMain .product-gallery {
-    position: static !important;
     width: 100% !important;
+
     min-width: 0 !important;
+
+    position: static !important;
+
     background: transparent !important;
 }
 
+
 #productGridMain .main-image-container {
     width: 100% !important;
-    height: clamp(390px, 35vw, 520px) !important;
+
+    height: 430px !important;
+
     margin: 0 !important;
+
     overflow: hidden !important;
 
-    border: 0 !important;
+    border: none !important;
+
     border-radius: 18px !important;
-    background: #f8f8f8 !important;
+
+    background: #f7f7f8 !important;
+
     box-shadow: none !important;
 }
 
+
 #productGridMain .main-image-container img {
     width: 100% !important;
+
     height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
+
     display: block !important;
+
+    object-fit: cover !important;
+
+    object-position: center !important;
 }
+
 
 /* THUMBNAILS */
+
 #productGridMain .thumbnail-row {
     display: flex !important;
-    gap: 14px !important;
-    margin-top: 14px !important;
+
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    margin-top: 12px !important;
+
+    padding-bottom: 2px !important;
+
     overflow-x: auto !important;
-    scrollbar-width: none;
+
+    scrollbar-width: none !important;
 }
 
+
 #productGridMain .thumbnail-row::-webkit-scrollbar {
-    display: none;
+    display: none !important;
 }
+
 
 #productGridMain .thumb-box {
     width: 82px !important;
+
     height: 68px !important;
+
     flex: 0 0 82px !important;
 
     border: 1px solid transparent !important;
+
     border-radius: 11px !important;
+
     overflow: hidden !important;
 
-    background: #f8f8f8 !important;
-    opacity: .72 !important;
+    background: #f7f7f8 !important;
+
+    opacity: 0.75 !important;
+
+    box-shadow: none !important;
 }
+
+
+#productGridMain .thumb-box img {
+    width: 100% !important;
+
+    height: 100% !important;
+
+    object-fit: cover !important;
+}
+
 
 #productGridMain .thumb-box.active {
     opacity: 1 !important;
+
     border-color: #6d4aff !important;
-    box-shadow: 0 0 0 1px #6d4aff !important;
+
+    box-shadow:
+        0 0 0 1px #6d4aff !important;
 }
 
-/* RIGHT PRODUCT DETAILS */
+
+/* ===============================
+   CENTER PRODUCT INFORMATION
+================================ */
+
 #productGridMain .product-info {
     width: 100% !important;
+
     min-width: 0 !important;
-    gap: 13px !important;
-    padding-top: 2px !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    gap: 15px !important;
+
+    padding-top: 7px !important;
 }
+
 
 #productGridMain .product-title {
     margin: 0 !important;
-    font-size: clamp(28px, 2.25vw, 38px) !important;
-    line-height: 1.12 !important;
-    letter-spacing: -.035em !important;
+
+    color: #111318 !important;
+
+    font-size: clamp(28px, 2.2vw, 36px) !important;
+
     font-weight: 650 !important;
-    color: #111318 !important;
+
+    line-height: 1.12 !important;
+
+    letter-spacing: -0.035em !important;
 }
 
-/* PRICE */
-#productGridMain .price-section {
+
+/* RATING */
+
+#productGridMain .rating-row {
     display: flex !important;
+
     align-items: center !important;
-    flex-wrap: wrap !important;
-    gap: 13px !important;
-    margin: 4px 0 8px !important;
+
+    gap: 9px !important;
+
+    margin: 0 !important;
 }
 
-#productGridMain .current-price {
-    font-size: 34px !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-    color: #111318 !important;
-}
 
-#productGridMain .original-price {
-    font-size: 16px !important;
-    color: #9298a6 !important;
-}
+#productGridMain .rating-badge {
+    background: #f1efff !important;
 
-#productGridMain .discount-pct {
-    padding: 7px 12px !important;
-    border-radius: 9px !important;
-    background: #eafaf1 !important;
-    color: #159447 !important;
-    font-size: 13px !important;
+    color: #6541f5 !important;
+
+    border: none !important;
+
+    border-radius: 7px !important;
+
+    padding: 5px 8px !important;
+
+    font-size: 12px !important;
+
     font-weight: 600 !important;
 }
 
-/* REMOVE VISUAL NOISE */
+
+#productGridMain .rating-text {
+    font-size: 13px !important;
+
+    color: #7b8190 !important;
+
+    font-weight: 400 !important;
+}
+
+
+/* PRICE */
+
+#productGridMain .price-section {
+    display: flex !important;
+
+    align-items: center !important;
+
+    flex-wrap: wrap !important;
+
+    gap: 12px !important;
+
+    margin: 5px 0 3px !important;
+}
+
+
+#productGridMain .current-price {
+    color: #111318 !important;
+
+    font-size: 34px !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+}
+
+
+#productGridMain .original-price {
+    color: #969baa !important;
+
+    font-size: 16px !important;
+
+    font-weight: 500 !important;
+}
+
+
+#productGridMain .discount-pct {
+    color: #159447 !important;
+
+    background: #eafaf1 !important;
+
+    padding: 7px 11px !important;
+
+    border-radius: 8px !important;
+
+    font-size: 12px !important;
+
+    font-weight: 600 !important;
+}
+
+
 #productGridMain .hot-deal {
     display: none !important;
 }
 
-/* TRUST BOX */
-#productGridMain .features-section {
-    margin-top: 8px !important;
-    padding: 18px !important;
-    border: 1px solid #eef0f4 !important;
-    border-radius: 16px !important;
-    background: rgba(255,255,255,.96) !important;
-    box-shadow: 0 10px 35px rgba(15,23,42,.035) !important;
-}
 
-/* CTA */
-#productGridMain .action-buttons {
+/* ===============================
+   TRUST ICON ROW
+================================ */
+
+.product-trust-row {
     display: grid !important;
-    grid-template-columns: 1fr 1.12fr !important;
-    gap: 12px !important;
-    margin-top: 10px !important;
+
+    grid-template-columns: repeat(3, 1fr) !important;
+
+    gap: 9px !important;
+
+    margin-top: 8px !important;
 }
 
-#productGridMain .action-buttons .btn {
+
+.product-trust-item {
+    min-height: 80px !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    gap: 8px !important;
+
+    text-align: center !important;
+
+    padding: 10px 5px !important;
+
+    border-radius: 13px !important;
+
+    background: #fafaff !important;
+
+    border: 1px solid #f0f0f5 !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.product-trust-item i {
+    font-size: 20px !important;
+
+    color: #6541f5 !important;
+}
+
+
+.product-trust-item span {
+    font-size: 11px !important;
+
+    line-height: 1.25 !important;
+
+    font-weight: 500 !important;
+
+    color: #424756 !important;
+}
+
+
+/* ===============================
+   VARIANT / SELECT OPTION
+================================ */
+
+#productVariantArea {
+    margin-top: 5px !important;
+}
+
+
+#productGridMain .variant-title {
+    margin-bottom: 9px !important;
+
+    font-size: 12px !important;
+
+    font-weight: 600 !important;
+
+    color: #555b68 !important;
+
+    text-transform: none !important;
+}
+
+
+#productGridMain .variant-group {
+    gap: 9px !important;
+}
+
+
+#productGridMain .variant-btn {
+    padding: 10px 14px !important;
+
+    border-radius: 9px !important;
+
+    border: 1px solid #e2e4eb !important;
+
+    background: #ffffff !important;
+
+    font-size: 12px !important;
+
+    color: #303440 !important;
+
+    box-shadow: none !important;
+}
+
+
+#productGridMain .variant-btn.active {
+    color: #6541f5 !important;
+
+    background: #f3f0ff !important;
+
+    border-color: #dcd5ff !important;
+
+    box-shadow: none !important;
+}
+
+
+/* OLD WHY CHOOSE SECTION
+   NEW DESIGN-LA VENDAAM */
+
+#productGridMain .features-section {
+    display: none !important;
+}
+
+
+/* ===============================
+   RIGHT BOOKING CARD
+================================ */
+
+.cerood-booking-panel {
     width: 100% !important;
-    min-height: 54px !important;
-    border-radius: 12px !important;
-    font-size: 15px !important;
+
+    padding: 22px !important;
+
+    border: 1px solid #eef0f4 !important;
+
+    border-radius: 18px !important;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.985
+    ) !important;
+
+    box-shadow:
+        0 15px 42px rgba(
+            15,
+            23,
+            42,
+            0.055
+        ) !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.cerood-booking-panel h2 {
+    margin: 0 0 22px !important;
+
+    color: #111318 !important;
+
+    font-size: 21px !important;
+
+    font-weight: 650 !important;
+
+    letter-spacing: -0.02em !important;
+}
+
+
+.cerood-booking-label {
+    margin: 18px 0 9px !important;
+
+    color: #252a35 !important;
+
+    font-size: 13px !important;
+
     font-weight: 600 !important;
 }
 
-#productGridMain .btn-cart {
-    background: #f2efff !important;
-    color: #5f3df4 !important;
-    border: 0 !important;
+
+/* DATE */
+
+.cerood-date-row {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(4, 1fr) !important;
+
+    gap: 8px !important;
 }
 
-#productGridMain .btn-buy {
-    background: linear-gradient(135deg, #6541f5, #5135f3) !important;
+
+.cerood-date-btn {
+    min-height: 60px !important;
+
+    padding: 8px 4px !important;
+
+    border: 1px solid #eaecf2 !important;
+
+    border-radius: 11px !important;
+
+    background: #fafbfe !important;
+
+    color: #343947 !important;
+
+    font-family: inherit !important;
+
+    font-size: 11px !important;
+
+    font-weight: 500 !important;
+
+    cursor: pointer !important;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        transform .18s ease !important;
+}
+
+
+.cerood-date-btn:hover {
+    transform: translateY(-1px) !important;
+
+    border-color: #ddd8ff !important;
+}
+
+
+.cerood-date-btn.active {
+    background: #121b2a !important;
+
     color: #ffffff !important;
-    border: 0 !important;
-    box-shadow: 0 10px 25px rgba(81,53,243,.16) !important;
+
+    border-color: #121b2a !important;
 }
 
 
-/* ================= MOBILE ================= */
+/* TIME */
+
+.cerood-time-row {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, 1fr) !important;
+
+    gap: 8px !important;
+}
+
+
+.cerood-time-btn {
+    min-height: 46px !important;
+
+    border: 1px solid #eaecf2 !important;
+
+    border-radius: 10px !important;
+
+    background: #ffffff !important;
+
+    color: #343947 !important;
+
+    font-family: inherit !important;
+
+    font-size: 12px !important;
+
+    font-weight: 500 !important;
+
+    cursor: pointer !important;
+}
+
+
+.cerood-time-btn.active {
+    background: #121b2a !important;
+
+    color: #ffffff !important;
+
+    border-color: #121b2a !important;
+}
+
+
+/* LOCATION */
+
+.cerood-location-mini {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 11px !important;
+
+    margin-top: 20px !important;
+
+    padding: 13px !important;
+
+    border-radius: 12px !important;
+
+    background: #f7f8ff !important;
+}
+
+
+.cerood-location-mini > i {
+    width: 35px !important;
+
+    height: 35px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    flex-shrink: 0 !important;
+
+    border-radius: 50% !important;
+
+    color: #6541f5 !important;
+
+    background: #ece8ff !important;
+
+    font-size: 14px !important;
+}
+
+
+.cerood-location-mini div {
+    min-width: 0 !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    gap: 3px !important;
+}
+
+
+.cerood-location-mini span {
+    font-size: 11px !important;
+
+    color: #818694 !important;
+}
+
+
+.cerood-location-mini strong {
+    font-size: 12px !important;
+
+    color: #242936 !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+}
+
+
+/* ===============================
+   CTA BUTTONS
+================================ */
+
+.cerood-booking-panel .action-buttons {
+    display: grid !important;
+
+    grid-template-columns: 1fr 1.12fr !important;
+
+    gap: 10px !important;
+
+    margin-top: 18px !important;
+}
+
+
+.cerood-booking-panel .btn {
+    width: 100% !important;
+
+    min-height: 51px !important;
+
+    padding: 11px 10px !important;
+
+    border: none !important;
+
+    border-radius: 11px !important;
+
+    font-family: inherit !important;
+
+    font-size: 13px !important;
+
+    font-weight: 600 !important;
+
+    box-shadow: none !important;
+}
+
+
+.cerood-booking-panel .btn-cart {
+    background: #f1efff !important;
+
+    color: #6040ed !important;
+}
+
+
+.cerood-booking-panel .btn-buy {
+    background:
+        linear-gradient(
+            135deg,
+            #6744f5,
+            #5136ed
+        ) !important;
+
+    color: #ffffff !important;
+
+    box-shadow:
+        0 9px 22px
+        rgba(81,54,237,.17) !important;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 1180px) {
+
+    #productGridMain {
+        grid-template-columns:
+            minmax(0, 1.05fr)
+            minmax(320px, .95fr)
+            !important;
+
+        gap: 26px !important;
+    }
+
+    #productGridMain .product-info {
+        grid-column: 2 !important;
+    }
+
+    .cerood-booking-panel {
+        grid-column: 1 / -1 !important;
+
+        display: grid !important;
+
+        grid-template-columns:
+            1fr 1fr !important;
+
+        column-gap: 20px !important;
+    }
+
+    .cerood-booking-panel h2,
+    .cerood-location-mini,
+    .cerood-booking-panel .action-buttons {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
 
 @media (max-width: 850px) {
 
     #productGridMain {
-        grid-template-columns: 1fr !important;
-        gap: 18px !important;
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        gap: 17px !important;
     }
 
-    #productGridMain .product-gallery {
-        position: static !important;
+
+    #productGridMain .product-gallery,
+    #productGridMain .product-info,
+    .cerood-booking-panel {
+        width: 100% !important;
     }
+
 
     #productGridMain .main-image-container {
         height: auto !important;
-        aspect-ratio: 1.28 / 1 !important;
+
+        aspect-ratio: 1.25 / 1 !important;
+
         border-radius: 14px !important;
     }
 
+
     #productGridMain .thumbnail-row {
-        gap: 9px !important;
+        gap: 8px !important;
+
         margin-top: 9px !important;
     }
 
+
     #productGridMain .thumb-box {
         width: 62px !important;
-        height: 54px !important;
+
+        height: 53px !important;
+
         flex-basis: 62px !important;
+
         border-radius: 8px !important;
     }
 
+
     #productGridMain .product-info {
         gap: 10px !important;
+
         padding-top: 0 !important;
     }
 
+
     #productGridMain .product-title {
         font-size: 23px !important;
-        line-height: 1.18 !important;
+
+        line-height: 1.17 !important;
     }
+
 
     #productGridMain .current-price {
-        font-size: 28px !important;
+        font-size: 29px !important;
     }
 
-    #productGridMain .features-section {
-        padding: 15px !important;
-        border-radius: 13px !important;
+
+    .product-trust-row {
+        grid-template-columns:
+            repeat(3, 1fr) !important;
+
+        gap: 6px !important;
     }
 
-    #productGridMain .action-buttons {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 9px !important;
-    }
 
-    #productGridMain .action-buttons .btn {
-        min-height: 50px !important;
-        font-size: 14px !important;
+    .product-trust-item {
+        min-height: 70px !important;
+
+        padding: 8px 3px !important;
+
         border-radius: 10px !important;
+    }
+
+
+    .product-trust-item i {
+        font-size: 17px !important;
+    }
+
+
+    .product-trust-item span {
+        font-size: 9px !important;
+    }
+
+
+    .cerood-booking-panel {
+        padding: 16px !important;
+
+        border-radius: 14px !important;
+
+        box-shadow:
+            0 8px 28px
+            rgba(15,23,42,.045) !important;
+    }
+
+
+    .cerood-booking-panel h2 {
+        font-size: 18px !important;
+
+        margin-bottom: 16px !important;
+    }
+
+
+    .cerood-date-row {
+        grid-template-columns:
+            repeat(4, minmax(68px, 1fr))
+            !important;
+
+        overflow-x: auto !important;
+
+        scrollbar-width: none !important;
+    }
+
+
+    .cerood-date-row::-webkit-scrollbar {
+        display: none !important;
+    }
+
+
+    .cerood-date-btn {
+        min-height: 55px !important;
+    }
+
+
+    .cerood-time-row {
+        grid-template-columns:
+            repeat(2, 1fr)
+            !important;
+    }
+
+
+    .cerood-booking-panel .action-buttons {
+        grid-template-columns:
+            1fr 1fr !important;
+
+        gap: 8px !important;
+    }
+
+
+    .cerood-booking-panel .btn {
+        min-height: 49px !important;
+
+        font-size: 13px !important;
     }
 }
 
@@ -4156,59 +4803,256 @@ body {
     </div>
 
     <!-- MAIN PRODUCT GRID -->
-    <div class="product-grid" id="productGridMain">
-        <div class="product-gallery">
-            <div class="main-image-container">
-                <img
-    id="mainProductImage"
-    src=""
-    alt="Product"
-    fetchpriority="high"
-    loading="eager"
->
-            </div>
-            <div class="thumbnail-row" id="thumbnailContainer"></div>
+<div class="product-grid" id="productGridMain">
+
+    <!-- LEFT : PRODUCT GALLERY -->
+    <div class="product-gallery">
+
+        <div class="main-image-container">
+            <img
+                id="mainProductImage"
+                src=""
+                alt="Product"
+                fetchpriority="high"
+                loading="eager"
+            >
         </div>
 
-        <div class="product-info">
-            <h1 class="product-title" id="prodTitle">Smart TV Repair & Service</h1>
-            
-            <div class="rating-row" style="cursor: pointer;" onclick="openReviewsPopup()">
-    <span class="rating-badge"><span id="prodRating">0.0</span> <i class="fa-solid fa-star" style="font-size:10px;"></i></span>
-    <span class="rating-text" id="prodReviewsCount">No ratings yet</span>
-</div>
+        <div
+            class="thumbnail-row"
+            id="thumbnailContainer"
+        ></div>
 
-            <div class="hot-deal">Hot Deal</div>
-
-            <div class="price-section">
-                <span class="current-price" id="displayPrice">₹349</span>
-                <span class="original-price" id="displayMrp">₹699</span>
-                <span class="discount-pct" id="displayDiscount">50% off</span>
-            </div>
-
-            <div id="productNoteContainer" style="font-size: 13px; color: #475569; line-height: 1.5; margin-top: 5px; white-space: pre-line; display: none;"></div>
-
-            <div style="margin-top: 5px;">
-                <div class="variant-title">Select Option</div>
-                <div class="variant-group" id="variantContainer">
-                    <button class="variant-btn active">Standard Service</button>
-                </div>
-            </div>
-
-            <div class="features-section">
-                <div class="features-title">Why Choose Our Service?</div>
-                <div id="featuresContainer">
-                    <div class="feature-item"><i class="fa-solid fa-circle-check"></i> <div><b>Verified Professionals:</b> Background-verified expert technicians.</div></div>
-                    <div class="feature-item"><i class="fa-solid fa-circle-check"></i> <div><b>30-Day Warranty:</b> Post-service warranty on all repairs.</div></div>
-                </div>
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn btn-cart" id="addToCartBtn" onclick="addToCartCurrentProduct()"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
-                <button class="btn btn-buy" onclick="proceedToCheckoutCurrentProduct()"></i> Book Now</button>
-            </div>
-        </div>
     </div>
+
+
+    <!-- CENTER : PRODUCT DETAILS -->
+    <div class="product-info">
+
+        <h1
+            class="product-title"
+            id="prodTitle"
+        >
+            Smart TV Repair & Service
+        </h1>
+
+        <div
+            class="rating-row"
+            onclick="openReviewsPopup()"
+            style="cursor:pointer;"
+        >
+            <span class="rating-badge">
+                <span id="prodRating">0.0</span>
+                <i
+                    class="fa-solid fa-star"
+                    style="font-size:10px;"
+                ></i>
+            </span>
+
+            <span
+                class="rating-text"
+                id="prodReviewsCount"
+            >
+                No ratings yet
+            </span>
+        </div>
+
+        <div class="price-section">
+
+            <span
+                class="current-price"
+                id="displayPrice"
+            >
+                ₹349
+            </span>
+
+            <span
+                class="original-price"
+                id="displayMrp"
+            >
+                ₹699
+            </span>
+
+            <span
+                class="discount-pct"
+                id="displayDiscount"
+            >
+                50% off
+            </span>
+
+        </div>
+
+        <div
+            id="productNoteContainer"
+            style="
+                font-size:13px;
+                color:#64748b;
+                line-height:1.5;
+                display:none;
+            "
+        ></div>
+
+        <div class="product-trust-row">
+
+            <div class="product-trust-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Verified Service</span>
+            </div>
+
+            <div class="product-trust-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Doorstep Service</span>
+            </div>
+
+            <div class="product-trust-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Trusted Support</span>
+            </div>
+
+        </div>
+
+        <!-- EXISTING OPTION SYSTEM -->
+        <div
+            id="productVariantArea"
+            style="margin-top:4px;"
+        >
+            <div class="variant-title">
+                Select Option
+            </div>
+
+            <div
+                class="variant-group"
+                id="variantContainer"
+            >
+                <button
+                    class="variant-btn active"
+                >
+                    Standard Service
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT : BOOKING PANEL -->
+    <div class="cerood-booking-panel">
+
+        <h2>
+            Book Your Service
+        </h2>
+
+        <div class="cerood-booking-label">
+            Select Date
+        </div>
+
+        <div
+            class="cerood-date-row"
+            id="ceroodDateOptions"
+        >
+            <button
+                type="button"
+                class="cerood-date-btn active"
+            >
+                Today
+            </button>
+
+            <button
+                type="button"
+                class="cerood-date-btn"
+            >
+                Tomorrow
+            </button>
+
+            <button
+                type="button"
+                class="cerood-date-btn"
+            >
+                +2 Days
+            </button>
+
+            <button
+                type="button"
+                class="cerood-date-btn"
+            >
+                +3 Days
+            </button>
+        </div>
+
+        <div class="cerood-booking-label">
+            Select Time
+        </div>
+
+        <div
+            class="cerood-time-row"
+            id="ceroodTimeOptions"
+        >
+            <button
+                type="button"
+                class="cerood-time-btn"
+            >
+                10:00 AM
+            </button>
+
+            <button
+                type="button"
+                class="cerood-time-btn active"
+            >
+                12:00 PM
+            </button>
+
+            <button
+                type="button"
+                class="cerood-time-btn"
+            >
+                2:00 PM
+            </button>
+
+            <button
+                type="button"
+                class="cerood-time-btn"
+            >
+                4:00 PM
+            </button>
+        </div>
+
+        <div class="cerood-location-mini">
+
+            <i class="fa-solid fa-location-dot"></i>
+
+            <div>
+                <span>Service at your home</span>
+
+                <strong id="productBookingLocation">
+                    Select Location
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="action-buttons">
+
+            <button
+                class="btn btn-cart"
+                id="addToCartBtn"
+                onclick="addToCartCurrentProduct()"
+            >
+                <i class="fa-solid fa-cart-shopping"></i>
+                Add to Cart
+            </button>
+
+            <button
+                class="btn btn-buy"
+                onclick="proceedToCheckoutCurrentProduct()"
+            >
+                Book Now
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
     <!-- WORK PROOF IMAGE POPUP -->
 <div
