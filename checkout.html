@@ -2155,6 +2155,13 @@ try {
         return;
     }
 
+    const serviceBooking =
+    JSON.parse(
+        localStorage.getItem(
+            'cerood_service_booking'
+        ) || '{}'
+    );
+
     const bulkPayload = {
         customer_id: permanentCustId,
         customer_name: custName,
@@ -2163,11 +2170,26 @@ try {
         whatsapp: mobile,
 
         address: addressStr,
-        district: district,
-        pincode: pincode,
+district: district,
+pincode: pincode,
 
-        order_date: currentDate,
-        status: orderStatus,
+service_date:
+    serviceBooking.service_date || null,
+
+service_time:
+    serviceBooking.service_time || null,
+
+service_address:
+    addressStr,
+
+service_district:
+    district,
+
+service_pincode:
+    pincode,
+
+order_date: currentDate,
+status: orderStatus,
 
         payment_verification: paymentVerification,
 

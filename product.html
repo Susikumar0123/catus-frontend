@@ -8738,29 +8738,256 @@ function getSmallProductImageUrl(imageUrl) {
     );
 }
 
-    function proceedToCheckoutCurrentProduct() {
-        if(!currentUser) {
-            alert("Please login first to book services!");
-            handleHeaderAuthClick();
-            return;
-        }
-        if(!currentProductData) return;
+// ==========================================
+// PRODUCT BOOKING - DATE & TIME SELECTION
+// ==========================================
 
-        let singleItem = [{
-            name: currentProductData.service_name,
-            price: currentProductData.price,
-            image: currentProductData.image_url,
-            product_id: currentProductData.service_id,
-            quantity: 1
-        }];
+let selectedServiceDate = '';
+let selectedServiceTime = '';
 
-        localStorage.setItem('catus_checkout_items', JSON.stringify(singleItem));
-        localStorage.setItem('catus_checkout_discount', 0);
-        localStorage.removeItem('catus_checkout_coupon');
-        localStorage.setItem('catus_checkout_mode', 'single');
-        window.location.href = '/checkout.html';
+function formatServiceDateLocal(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+function initializeProductBookingOptions() {
+
+    const dateButtons =
+        document.querySelectorAll(
+            '#ceroodDateOptions .cerood-date-btn'
+        );
+
+    const timeButtons =
+        document.querySelectorAll(
+            '#ceroodTimeOptions .cerood-time-btn'
+        );
+
+    const dateLabels = [
+        'Today',
+        'Tomorrow',
+        '+2 Days',
+        '+3 Days'
+    ];
+
+    dateButtons.forEach((button, index) => {
+
+        const date = new Date();
+        date.setDate(date.getDate() + index);
+
+        button.dataset.serviceDate =
+            formatServiceDateLocal(date);
+
+        button.innerHTML = `
+            <span style="
+                display:block;
+                font-size:10px;
+                opacity:.72;
+                margin-bottom:3px;
+            ">
+                ${dateLabels[index]}
+            </span>
+
+            <strong style="
+                display:block;
+                font-size:12px;
+                font-weight:600;
+            ">
+                ${date.toLocaleDateString(
+                    'en-IN',
+                    {
+                        day: '2-digit',
+                        month: 'short'
+                    }
+                )}
+            </strong>
+        `;
+
+        button.addEventListener('click', () => {
+
+            dateButtons.forEach(btn =>
+                btn.classList.remove('active')
+            );
+
+            button.classList.add('active');
+
+            selectedServiceDate =
+                button.dataset.serviceDate;
+        });
+    });
+
+
+    timeButtons.forEach(button => {
+
+        button.addEventListener('click', () => {
+
+            timeButtons.forEach(btn =>
+                btn.classList.remove('active')
+            );
+
+            button.classList.add('active');
+
+            selectedServiceTime =
+                button.textContent.trim();
+        });
+    });
+
+
+    const activeDate =
+        document.querySelector(
+            '#ceroodDateOptions .cerood-date-btn.active'
+        );
+
+    const activeTime =
+        document.querySelector(
+            '#ceroodTimeOptions .cerood-time-btn.active'
+        );
+
+
+    if (activeDate) {
+        selectedServiceDate =
+            activeDate.dataset.serviceDate;
     }
 
+    if (activeTime) {
+        selectedServiceTime =
+            activeTime.textContent.trim();
+    }
+}
+
+
+document.addEventListener(
+    'DOMContentLoaded',
+    initializeProductBookingOptions
+);
+
+    function proceedToCheckoutCurrentProduct() {
+
+    if (!currentUser) {
+        alert("Please login first to book services!");
+        handleHeaderAuthClick();
+        return;
+    }
+
+    if (!currentProductData) {
+        return;
+    }
+
+    if (!selectedServiceDate) {
+        alert("Please select service date.");
+        return;
+    }
+
+    if (!selectedServiceTime) {
+        alert("Please select service time.");
+        return;
+    }
+
+
+    const serviceLocation =
+        localStorage.getItem(
+            'catus_user_location'
+        ) || '';
+
+
+    const serviceDistrict =
+        localStorage.getItem(
+            'catus_district_name'
+        ) || '';
+
+
+    const servicePincode =
+        localStorage.getItem(
+            'catus_pincode'
+        ) || '';
+
+
+    if (!serviceLocation) {
+        alert("Please select service location.");
+        openLocationModal();
+        return;
+    }
+
+
+    const bookingSelection = {
+        service_date:
+            selectedServiceDate,
+
+        service_time:
+            selectedServiceTime,
+
+        service_address:
+            serviceLocation,
+
+        service_district:
+            serviceDistrict,
+
+        service_pincode:
+            servicePincode
+    };
+
+
+    localStorage.setItem(
+        'cerood_service_booking',
+        JSON.stringify(
+            bookingSelection
+        )
+    );
+
+
+    const locationDisplay =
+        document.getElementById(
+            'productBookingLocation'
+        );
+
+    if (locationDisplay) {
+        locationDisplay.textContent =
+            serviceLocation;
+    }
+
+
+    const singleItem = [{
+        name:
+            currentProductData.service_name,
+
+        price:
+            currentProductData.price,
+
+        image:
+            currentProductData.image_url,
+
+        product_id:
+            currentProductData.service_id,
+
+        quantity: 1
+    }];
+
+
+    localStorage.setItem(
+        'catus_checkout_items',
+        JSON.stringify(singleItem)
+    );
+
+    localStorage.setItem(
+        'catus_checkout_discount',
+        0
+    );
+
+    localStorage.removeItem(
+        'catus_checkout_coupon'
+    );
+
+    localStorage.setItem(
+        'catus_checkout_mode',
+        'single'
+    );
+
+
+    window.location.href =
+        '/checkout.html';
+}
     // --- CART & TOAST SYSTEM ---
     function showToast(message, isAlreadyAdded) {
         const toast = document.getElementById('toastNotification');
