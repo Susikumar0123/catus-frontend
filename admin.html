@@ -1943,10 +1943,38 @@
                                 <div style="display:flex; justify-content:space-between;"><b>Mobile:</b> <span id="viewTechPhone">-</span></div>
 
                                 <div style="display:flex; justify-content:space-between;"><b>ETA:</b> <span id="viewTechEta">-</span></div>
+                                <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:6px;
+">
+    <b>Response:</b>
+    <span id="viewTechResponse">Pending</span>
+</div>
 
                             </div>
 
                         </div>
+
+                        <div
+    id="techRejectNotice"
+    style="
+        display:none;
+        background:#fef2f2;
+        border:1px solid #fecaca;
+        color:#b91c1c;
+        padding:10px 12px;
+        border-radius:8px;
+        margin-bottom:15px;
+        font-size:12px;
+        font-weight:700;
+    "
+>
+    <i class="fa-solid fa-circle-exclamation"></i>
+    Technician Rejected:
+    <span id="techRejectReason">-</span>
+</div>
 
 
 
@@ -2549,14 +2577,26 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            renderTechniciansMasterTable();
-            loadTechniciansDropdown();
+    renderTechniciansMasterTable();
+    loadTechniciansDropdown();
+    fetchLiveBookings();
+    fetchLiveCustomers();
+    fetchAdminServices(); 
+    fetchDashboardStats();
+    loadCheckoutSettings();
+
+    setInterval(() => {
+        const bookingsPage =
+            document.getElementById('page-bookings');
+
+        if (
+            bookingsPage &&
+            bookingsPage.classList.contains('active')
+        ) {
             fetchLiveBookings();
-            fetchLiveCustomers();
-            fetchAdminServices(); 
-            fetchDashboardStats();
-            loadCheckoutSettings();
-        });
+        }
+    }, 10000);
+});
 
         async function renderTechniciansMasterTable() {
 
@@ -3018,6 +3058,7 @@ await loadTechniciansDropdown();
     }
 
     let selectedTechnicianId = '';
+    let technicianChanged = false;
 
 function selectTechnician(
     technicianId,
@@ -3026,6 +3067,7 @@ function selectTechnician(
 ) {
 
     selectedTechnicianId = technicianId;
+    technicianChanged = true;
 
     document.getElementById('techNameInput').value =
         technicianName;
@@ -3035,6 +3077,9 @@ function selectTechnician(
 
     document.getElementById('techSearchInput').value =
         `${technicianName} - ${technicianId}`;
+
+    document.getElementById('statusUpdateSelect').value =
+    'Assigned';
 
     document.getElementById('techSearchResults').style.display =
         'none';
@@ -5231,6 +5276,28 @@ if (pageId === 'inactive-technicians') {
                 if(data && data.success && data.orders) {
                     allBookings = data.orders.map(order => {
                         let cachedData = techCache[order.order_id];
+
+                        if (
+    order.technician_response === 'Rejected' &&
+    cachedData
+) {
+    cachedData.technician_id = null;
+    cachedData.name = null;
+    cachedData.phone = null;
+    cachedData.eta = null;
+
+    cachedData.status = order.status;
+    cachedData.technician_response = 'Rejected';
+    cachedData.technician_response_reason =
+        order.technician_response_reason || null;
+
+    techCache[order.order_id] = cachedData;
+
+    localStorage.setItem(
+        'catusAdminCache',
+        JSON.stringify(techCache)
+    );
+}
                         
                         let updatedAddress = (cachedData && cachedData.address) ? cachedData.address : order.address;
                         let updatedDistrict = (cachedData && cachedData.district) ? cachedData.district : order.district;
@@ -5249,16 +5316,37 @@ if (pageId === 'inactive-technicians') {
                         }
 
                         return {
-                            ...order,
-                            status: (cachedData && cachedData.status) ? cachedData.status : order.status,
-                            technician_name: (cachedData && cachedData.name) ? cachedData.name : order.technician_name,
-                            technician_phone: (cachedData && cachedData.phone) ? cachedData.phone : order.technician_phone,
-                            eta: (cachedData && cachedData.eta) ? cachedData.eta : order.eta,
-                            address: updatedAddress,
-                            district: updatedDistrict,
-                            pincode: updatedPincode,
-                            is_deleted: ((cachedData && cachedData.status === 'Trash') || order.status === 'Trash') ? 1 : 0
-                        };
+    ...order,
+
+    status: order.status,
+
+technician_id: order.technician_id,
+
+technician_name: order.technician_name,
+
+technician_phone: order.technician_phone,
+
+eta: order.eta,
+
+    technician_response:
+    order.technician_response ||
+    (cachedData && cachedData.technician_response) ||
+    'Pending',
+
+technician_response_reason:
+    order.technician_response_reason ||
+    null,
+
+    address: updatedAddress,
+    district: updatedDistrict,
+    pincode: updatedPincode,
+
+    is_deleted:
+        ((cachedData && cachedData.status === 'Trash') ||
+        order.status === 'Trash')
+            ? 1
+            : 0
+};
                     });
                     renderTable();
                 }
@@ -5345,6 +5433,61 @@ if (pageId === 'inactive-technicians') {
             } else {
                 filtered.forEach(item => {
                     let displayStatus = (item.status === 'Active' || item.status === 'Service') ? 'In Service' : item.status;
+                    let techResponse = item.technician_response || 'Pending';
+
+
+let techResponseHTML = '';
+let rejectReasonHTML = '';
+
+if (item.technician_id) {
+
+    if (techResponse === 'Accepted') {
+
+        techResponseHTML = `
+            <div style="
+                margin-top:5px;
+                font-size:10px;
+                font-weight:800;
+                color:#16a34a;
+            ">
+                <i class="fa-solid fa-circle-check"></i>
+                Technician Accepted
+            </div>
+        `;
+
+    } else {
+
+        techResponseHTML = `
+            <div style="
+                margin-top:5px;
+                font-size:10px;
+                font-weight:800;
+                color:#d97706;
+            ">
+                <i class="fa-solid fa-clock"></i>
+                Waiting for Technician
+            </div>
+        `;
+    }
+}
+
+if (
+    item.technician_response === 'Rejected' &&
+    item.technician_response_reason
+) {
+    rejectReasonHTML = `
+        <div style="
+            margin-top:4px;
+            font-size:10px;
+            font-weight:700;
+            color:#dc2626;
+        ">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            ${item.technician_response_reason}
+        </div>
+    `;
+}
+
                     let badgeClass = 'badge-pending';
                     if(displayStatus === 'Assigned' || displayStatus === 'On the way') badgeClass = 'badge-assigned';
                     if(displayStatus === 'In Service') badgeClass = 'badge-active';
@@ -5403,7 +5546,14 @@ if (pageId === 'inactive-technicians') {
             `
     }
 </td>
-                    <td><span class="badge ${badgeClass}">${displayStatus}</span></td>
+                    <td>
+    <span class="badge ${badgeClass}">
+        ${displayStatus}
+    </span>
+
+    ${techResponseHTML}
+${rejectReasonHTML}
+</td>
                     <td class="no-print"><button class="manage-btn" onclick="openOrderModal('${item.order_id}')"><i class="fa-solid fa-user-pen"></i> Manage</button></td>
                 </tr>`;
                 });
@@ -5459,6 +5609,7 @@ if (pageId === 'inactive-technicians') {
 }
         
         function openOrderModal(orderId) {
+            technicianChanged = false;
             let order = allBookings.find(o => String(o.order_id) === String(orderId));
             if(!order) return;
             
@@ -5518,12 +5669,56 @@ document.getElementById('detPincode').textContent =
         : '';
 
             let saveBtn = document.getElementById('saveOrderBtn');
+
+            const rejectNotice =
+    document.getElementById('techRejectNotice');
+
+const rejectReason =
+    document.getElementById('techRejectReason');
+
+if (
+    order.technician_response === 'Rejected' &&
+    order.technician_response_reason
+) {
+    rejectNotice.style.display = 'block';
+    rejectReason.textContent =
+        order.technician_response_reason;
+} else {
+    rejectNotice.style.display = 'none';
+    rejectReason.textContent = '-';
+}
+
             saveBtn.disabled = false; 
             
             if(tName.trim() !== '') {
                 document.getElementById('viewTechName').textContent = tName;
                 document.getElementById('viewTechPhone').textContent = tPhone;
                 document.getElementById('viewTechEta').textContent = tEta;
+                const techResponse =
+    order.technician_response ||
+    'Pending';
+
+const responseEl =
+    document.getElementById('viewTechResponse');
+
+responseEl.textContent =
+    techResponse;
+
+if (techResponse === 'Accepted') {
+
+    responseEl.style.color = '#16a34a';
+    responseEl.style.fontWeight = '800';
+
+} else if (techResponse === 'Rejected') {
+
+    responseEl.style.color = '#dc2626';
+    responseEl.style.fontWeight = '800';
+
+} else {
+
+    responseEl.style.color = '#d97706';
+    responseEl.style.fontWeight = '800';
+}
                 document.getElementById('techDetailsView').style.display = 'block';
                 document.getElementById('techDetailsEdit').style.display = 'none';
                 saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Status';
@@ -5536,102 +5731,369 @@ document.getElementById('detPincode').textContent =
         }
 
         function enableTechEdit() {
-            document.getElementById('techDetailsView').style.display = 'none';
-            document.getElementById('techDetailsEdit').style.display = 'block';
-            document.getElementById('saveOrderBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Tech Details & Status';
-            document.getElementById('techNameInput').focus();
-        }
+
+    const orderId =
+        document.getElementById('manageOrderId').value;
+
+    const order =
+        allBookings.find(
+            o => String(o.order_id) === String(orderId)
+        );
+
+    if (
+        order &&
+        order.technician_response === 'Accepted'
+    ) {
+        const confirmReassign = confirm(
+            'This technician has already accepted the job. Do you want to reassign this order to another technician?'
+        );
+
+        if (!confirmReassign) return;
+    }
+
+    document.getElementById('techDetailsView').style.display = 'none';
+    document.getElementById('techDetailsEdit').style.display = 'block';
+
+    document.getElementById('saveOrderBtn').innerHTML =
+        '<i class="fa-solid fa-floppy-disk"></i> Save Tech Details & Status';
+
+    document.getElementById('techNameInput').focus();
+}
         
         function closeOrderModal() { document.getElementById('orderDetailModal').style.display = 'none'; }
 
-        async function saveOrderDetails() {
-        let orderId = document.getElementById('manageOrderId').value;
-        let newStatus = document.getElementById('statusUpdateSelect').value;
-        let tName = document.getElementById('techNameInput').value.trim();
-        let tPhone = document.getElementById('techPhoneInput').value.trim();
-        let tEta = document.getElementById('techEtaInput').value.trim();
-        let tId = selectedTechnicianId;
-        let saveBtn = document.getElementById('saveOrderBtn');
+       async function saveOrderDetails() {
 
-        if(newStatus === 'Trash' && !confirm("Move to Trash?")) return;
-        
-        // Instant feedback - No waiting for slow server wakeup
-        saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
-        saveBtn.disabled = true;
+    let orderId =
+        document.getElementById('manageOrderId').value;
+
+    let newStatus =
+        document.getElementById('statusUpdateSelect').value;
+
+    let tName =
+        document.getElementById('techNameInput').value.trim();
+
+    let tPhone =
+        document.getElementById('techPhoneInput').value.trim();
+
+    let tEta =
+        document.getElementById('techEtaInput').value.trim();
+
+    let tId = selectedTechnicianId;
+
+    let saveBtn =
+        document.getElementById('saveOrderBtn');
+
+
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+
+    if (
+        newStatus === 'Assigned' &&
+        (!tId || !tName)
+    ) {
+        alert(
+            'Please select a technician before setting status to Assigned.'
+        );
+        return;
+    }
+
+
+    if (
+        newStatus === 'Trash' &&
+        !confirm('Move to Trash?')
+    ) {
+        return;
+    }
+
+
+    saveBtn.disabled = true;
+
+    saveBtn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
+
+
+    try {
+
+        // ==========================================
+        // 1. ASSIGN / REASSIGN TECHNICIAN
+        // ==========================================
+
+        if (
+            technicianChanged &&
+            document.getElementById('techDetailsEdit').style.display === 'block' &&
+            tName
+        ) {
+
+            const assignResponse = await fetch(
+                `${API_BASE_URL}/api/admin/assign-technician-manual`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        technician_id: tId,
+                        technician_name: tName,
+                        technician_phone: tPhone,
+                        eta: tEta
+                    })
+                }
+            );
+
+
+            const assignResult =
+                await assignResponse.json();
+
+
+            if (
+                !assignResponse.ok ||
+                !assignResult.success
+            ) {
+                throw new Error(
+                    assignResult.error ||
+                    'Technician assignment failed'
+                );
+            }
+        }
+
+
+        // ==========================================
+        // 2. UPDATE ORDER STATUS
+        // ==========================================
+
+        const statusResponse = await fetch(
+            `${API_BASE_URL}/api/admin/update-status`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    status: newStatus
+                })
+            }
+        );
+
+
+        const statusResult =
+            await statusResponse.json();
+
+
+        if (
+            !statusResponse.ok ||
+            !statusResult.success
+        ) {
+            throw new Error(
+                statusResult.error ||
+                'Status update failed'
+            );
+        }
+
+
+        // ==========================================
+        // 3. UPDATE LOCAL CACHE AFTER SERVER SUCCESS
+        // ==========================================
 
         const now = new Date();
-        const options = { timeZone: "Asia/Kolkata", year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-        const formatter = new Intl.DateTimeFormat('en-GB', options);
-        const parts = formatter.formatToParts(now);
+
+        const options = {
+            timeZone: 'Asia/Kolkata',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+
+
+        const formatter =
+            new Intl.DateTimeFormat(
+                'en-GB',
+                options
+            );
+
+
+        const parts =
+            formatter.formatToParts(now);
+
+
         const p = {};
-        parts.forEach(part => { p[part.type] = part.value; });
-        const formattedTimeStr = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}`;
 
-        // Update Local Cache instantly so customer & admin see it immediately
-        let existingCache = techCache[orderId] || {};
-        existingCache.status = newStatus;
-        
-        if (newStatus === 'Assigned') existingCache.assigned_time = formattedTimeStr;
-        if (newStatus === 'On the way') existingCache.ontheway_time = formattedTimeStr;
-        if (newStatus === 'In Service' || newStatus === 'Completed') existingCache.service_time = formattedTimeStr;
+        parts.forEach(part => {
+            p[part.type] = part.value;
+        });
 
-        if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
-            existingCache.name = tName;
-            existingCache.phone = tPhone;
-            existingCache.eta = tEta;
+
+        const formattedTimeStr =
+            `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}`;
+
+
+        let existingCache =
+            techCache[orderId] || {};
+
+
+        existingCache.status =
+            newStatus;
+
+
+        if (newStatus === 'Assigned') {
+            existingCache.assigned_time =
+                formattedTimeStr;
         }
 
-        techCache[orderId] = existingCache;
-        localStorage.setItem('catusAdminCache', JSON.stringify(techCache));
 
-        let idx = allBookings.findIndex(o => String(o.order_id) === String(orderId));
+        if (newStatus === 'On the way') {
+            existingCache.ontheway_time =
+                formattedTimeStr;
+        }
+
+
+        if (
+            newStatus === 'In Service' ||
+            newStatus === 'Completed'
+        ) {
+            existingCache.service_time =
+                formattedTimeStr;
+        }
+
+
+        if (
+            technicianChanged &&
+            tName
+        ) {
+
+            existingCache.technician_id =
+                tId;
+
+            existingCache.name =
+                tName;
+
+            existingCache.phone =
+                tPhone;
+
+            existingCache.eta =
+                tEta;
+
+            existingCache.technician_response =
+                'Pending';
+
+            existingCache.technician_response_reason =
+                null;
+        }
+
+
+        techCache[orderId] =
+            existingCache;
+
+
+        localStorage.setItem(
+            'catusAdminCache',
+            JSON.stringify(techCache)
+        );
+
+
+        // ==========================================
+        // 4. UPDATE CURRENT UI DATA
+        // ==========================================
+
+        let idx =
+            allBookings.findIndex(
+                o =>
+                    String(o.order_id) ===
+                    String(orderId)
+            );
+
+
         if (idx !== -1) {
-            allBookings[idx].status = newStatus;
-            if (document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
-                allBookings[idx].technician_name = tName;
-                allBookings[idx].technician_phone = tPhone;
-                allBookings[idx].eta = tEta;
+
+            allBookings[idx].status =
+                newStatus;
+
+
+            if (
+                technicianChanged &&
+                tName
+            ) {
+
+                allBookings[idx].technician_id =
+                    tId;
+
+                allBookings[idx].technician_name =
+                    tName;
+
+                allBookings[idx].technician_phone =
+                    tPhone;
+
+                allBookings[idx].eta =
+                    tEta;
+
+                allBookings[idx].technician_response =
+                    'Pending';
+
+                allBookings[idx].technician_response_reason =
+                    null;
             }
         }
-        
+
+
+        technicianChanged = false;
+
+
         renderTable();
 
-        // Success UI instant display
-        saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Updated Successfully!';
-        
+
+        // ==========================================
+        // SUCCESS
+        // ==========================================
+
+        saveBtn.innerHTML =
+            '<i class="fa-solid fa-check"></i> Updated Successfully!';
+
+
         setTimeout(() => {
+
             closeOrderModal();
+
             saveBtn.disabled = false;
-            saveBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status';
-            fetchLiveBookings(); // Background sync
-        }, 400);
 
-        // Background server sync without blocking UI
-        try {
-            fetch(`${API_BASE_URL}/api/admin/update-status`, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({order_id: orderId, status: newStatus}) 
-            }).catch(e => null);
+            saveBtn.innerHTML =
+                '<i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status';
 
-            if(document.getElementById('techDetailsEdit').style.display === 'block' && tName) {
-                fetch(`${API_BASE_URL}/api/admin/assign-technician-manual`, { 
-                    method: 'POST', 
-                    headers: {'Content-Type': 'application/json'}, 
-                    body: JSON.stringify({
-                    order_id: orderId,
-                    technician_id: tId,
-                    technician_name: tName,
-                    technician_phone: tPhone,
-                    eta: tEta
-             }) 
+            fetchLiveBookings();
 
-                }).catch(e => null);
-            }
-        } catch(e) {
-            console.log("Background sync error ignored.");
-        }
+        }, 500);
+
+
+    } catch (error) {
+
+        console.error(
+            'Order update failed:',
+            error
+        );
+
+
+        alert(
+            'Update failed: ' +
+            (error.message || 'Please try again.')
+        );
+
+
+        saveBtn.disabled = false;
+
+        saveBtn.innerHTML =
+            '<i class="fa-solid fa-user-plus"></i> Assign Tech & Update Status';
+
+
+        // Server data back sync
+        fetchLiveBookings();
     }
+}
 
         function filterTable() { 
             if(document.getElementById('page-bookings').classList.contains('active')) renderTable(); 
