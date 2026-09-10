@@ -485,23 +485,8 @@ const serviceTime =
     </span>
 
     <div class="value">
-        ${
-            serviceDate
-                ? escapeHtml(
-                    new Date(
-                        serviceDate + 'T00:00:00'
-                    ).toLocaleDateString(
-                        'en-IN',
-                        {
-                            day: '2-digit',
-                            month: 'short',
-                            year: 'numeric'
-                        }
-                    )
-                )
-                : '-'
-        }
-    </div>
+    ${escapeHtml(formatServiceDate(serviceDate))}
+</div>
 
 </div>
 
@@ -1382,6 +1367,52 @@ function escapeHtml(value) {
         .replace(/'/g, '&#039;');
 }
 
+function formatServiceDate(value) {
+
+    if (!value || value === '-') {
+        return '-';
+    }
+
+    const rawValue = String(value).trim();
+
+    const match =
+        rawValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+    if (match) {
+
+        const year = Number(match[1]);
+        const month = Number(match[2]) - 1;
+        const day = Number(match[3]);
+
+        return new Date(
+            year,
+            month,
+            day
+        ).toLocaleDateString(
+            'en-IN',
+            {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            }
+        );
+    }
+
+    const date = new Date(rawValue);
+
+    if (Number.isNaN(date.getTime())) {
+        return rawValue;
+    }
+
+    return date.toLocaleDateString(
+        'en-IN',
+        {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }
+    );
+}
 
 function formatDate(value) {
 
