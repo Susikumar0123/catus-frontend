@@ -3047,6 +3047,8 @@ function selectTechnician(
         const techCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
         let adminWorkProofs = [];
 
+
+
 function formatDate(value) {
 
 
@@ -5379,16 +5381,7 @@ if (pageId === 'inactive-technicians') {
                     font-size:12px;
                     margin-bottom:3px;
                 ">
-                    ${new Date(
-                        item.service_date + 'T00:00:00'
-                    ).toLocaleDateString(
-                        'en-IN',
-                        {
-                            day:'2-digit',
-                            month:'short',
-                            year:'numeric'
-                        }
-                    )}
+                    ${formatServiceDate(item.service_date)}
                 </div>
 
                 <div style="
@@ -5417,6 +5410,53 @@ if (pageId === 'inactive-technicians') {
             }
             tbody.innerHTML = html;
         }
+
+        function formatServiceDate(value) {
+
+    if (!value || value === '-') {
+        return '-';
+    }
+
+    const rawValue = String(value).trim();
+
+    const match =
+        rawValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+    if (match) {
+
+        const year = Number(match[1]);
+        const month = Number(match[2]) - 1;
+        const day = Number(match[3]);
+
+        return new Date(
+            year,
+            month,
+            day
+        ).toLocaleDateString(
+            'en-IN',
+            {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            }
+        );
+    }
+
+    const date = new Date(rawValue);
+
+    if (Number.isNaN(date.getTime())) {
+        return rawValue;
+    }
+
+    return date.toLocaleDateString(
+        'en-IN',
+        {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }
+    );
+}
         
         function openOrderModal(orderId) {
             let order = allBookings.find(o => String(o.order_id) === String(orderId));
@@ -5440,18 +5480,7 @@ if (pageId === 'inactive-technicians') {
     );
 
 document.getElementById('detServiceDate').textContent =
-    order.service_date
-        ? new Date(
-            order.service_date + 'T00:00:00'
-        ).toLocaleDateString(
-            'en-IN',
-            {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            }
-        )
-        : '-';
+    formatServiceDate(order.service_date);
 
 document.getElementById('detServiceTime').textContent =
     order.service_time || '-';
