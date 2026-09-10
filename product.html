@@ -3889,14 +3889,52 @@ body {
 
     gap: 34px !important;
 
-    align-items: start !important;
+    align-items: stretch !important;
 
     width: 100% !important;
 
     overflow: visible !important;
 }
 
+/* =========================================
+   ALIGN ALL 3 PRODUCT COLUMNS AT BOTTOM
+========================================= */
 
+@media (min-width: 1181px) {
+
+    #productGridMain {
+        align-items: stretch !important;
+    }
+
+    #productGridMain .product-gallery,
+    #productGridMain .product-info,
+    #productGridMain .cerood-booking-panel {
+        height: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* LEFT */
+    #productGridMain .product-gallery {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* CENTER */
+    #productGridMain .product-info {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Real Work-ai center column bottom-ku push pannum */
+    #ceroodWorkProofSection {
+        margin-top: auto !important;
+    }
+
+    /* RIGHT */
+    #productGridMain .cerood-booking-panel {
+        align-self: stretch !important;
+    }
+}
 /* ===============================
    LEFT IMAGE GALLERY
 ================================ */
