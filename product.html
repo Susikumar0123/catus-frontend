@@ -3860,6 +3860,238 @@ body:has(#editOrderAddressModal[style*="display: flex"]) .prem-bottom-nav {
     }
 }
 
+/* =====================================================
+   CEROOD 2026 PRODUCT PAGE - LOCKED PREMIUM BASE
+===================================================== */
+
+body {
+    background:
+        radial-gradient(circle at 72% 8%, rgba(109,74,255,.025), transparent 25%),
+        #ffffff !important;
+}
+
+/* MAIN PRODUCT */
+#productGridMain {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.08fr) minmax(390px, .92fr) !important;
+    gap: 40px !important;
+    align-items: start !important;
+}
+
+/* LEFT GALLERY */
+#productGridMain .product-gallery {
+    position: static !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    background: transparent !important;
+}
+
+#productGridMain .main-image-container {
+    width: 100% !important;
+    height: clamp(390px, 35vw, 520px) !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+
+    border: 0 !important;
+    border-radius: 18px !important;
+    background: #f8f8f8 !important;
+    box-shadow: none !important;
+}
+
+#productGridMain .main-image-container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+}
+
+/* THUMBNAILS */
+#productGridMain .thumbnail-row {
+    display: flex !important;
+    gap: 14px !important;
+    margin-top: 14px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+}
+
+#productGridMain .thumbnail-row::-webkit-scrollbar {
+    display: none;
+}
+
+#productGridMain .thumb-box {
+    width: 82px !important;
+    height: 68px !important;
+    flex: 0 0 82px !important;
+
+    border: 1px solid transparent !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+
+    background: #f8f8f8 !important;
+    opacity: .72 !important;
+}
+
+#productGridMain .thumb-box.active {
+    opacity: 1 !important;
+    border-color: #6d4aff !important;
+    box-shadow: 0 0 0 1px #6d4aff !important;
+}
+
+/* RIGHT PRODUCT DETAILS */
+#productGridMain .product-info {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 13px !important;
+    padding-top: 2px !important;
+}
+
+#productGridMain .product-title {
+    margin: 0 !important;
+    font-size: clamp(28px, 2.25vw, 38px) !important;
+    line-height: 1.12 !important;
+    letter-spacing: -.035em !important;
+    font-weight: 650 !important;
+    color: #111318 !important;
+}
+
+/* PRICE */
+#productGridMain .price-section {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 13px !important;
+    margin: 4px 0 8px !important;
+}
+
+#productGridMain .current-price {
+    font-size: 34px !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+    color: #111318 !important;
+}
+
+#productGridMain .original-price {
+    font-size: 16px !important;
+    color: #9298a6 !important;
+}
+
+#productGridMain .discount-pct {
+    padding: 7px 12px !important;
+    border-radius: 9px !important;
+    background: #eafaf1 !important;
+    color: #159447 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+
+/* REMOVE VISUAL NOISE */
+#productGridMain .hot-deal {
+    display: none !important;
+}
+
+/* TRUST BOX */
+#productGridMain .features-section {
+    margin-top: 8px !important;
+    padding: 18px !important;
+    border: 1px solid #eef0f4 !important;
+    border-radius: 16px !important;
+    background: rgba(255,255,255,.96) !important;
+    box-shadow: 0 10px 35px rgba(15,23,42,.035) !important;
+}
+
+/* CTA */
+#productGridMain .action-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr 1.12fr !important;
+    gap: 12px !important;
+    margin-top: 10px !important;
+}
+
+#productGridMain .action-buttons .btn {
+    width: 100% !important;
+    min-height: 54px !important;
+    border-radius: 12px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+
+#productGridMain .btn-cart {
+    background: #f2efff !important;
+    color: #5f3df4 !important;
+    border: 0 !important;
+}
+
+#productGridMain .btn-buy {
+    background: linear-gradient(135deg, #6541f5, #5135f3) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    box-shadow: 0 10px 25px rgba(81,53,243,.16) !important;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 850px) {
+
+    #productGridMain {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+
+    #productGridMain .product-gallery {
+        position: static !important;
+    }
+
+    #productGridMain .main-image-container {
+        height: auto !important;
+        aspect-ratio: 1.28 / 1 !important;
+        border-radius: 14px !important;
+    }
+
+    #productGridMain .thumbnail-row {
+        gap: 9px !important;
+        margin-top: 9px !important;
+    }
+
+    #productGridMain .thumb-box {
+        width: 62px !important;
+        height: 54px !important;
+        flex-basis: 62px !important;
+        border-radius: 8px !important;
+    }
+
+    #productGridMain .product-info {
+        gap: 10px !important;
+        padding-top: 0 !important;
+    }
+
+    #productGridMain .product-title {
+        font-size: 23px !important;
+        line-height: 1.18 !important;
+    }
+
+    #productGridMain .current-price {
+        font-size: 28px !important;
+    }
+
+    #productGridMain .features-section {
+        padding: 15px !important;
+        border-radius: 13px !important;
+    }
+
+    #productGridMain .action-buttons {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 9px !important;
+    }
+
+    #productGridMain .action-buttons .btn {
+        min-height: 50px !important;
+        font-size: 14px !important;
+        border-radius: 10px !important;
+    }
+}
+
 </style>
 </head>
 <body>
