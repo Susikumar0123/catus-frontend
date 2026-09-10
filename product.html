@@ -10755,7 +10755,7 @@ serviceStr =
                             <div>
                                 <h3 style="margin: 0 0 4px 0; font-size: 14px; color: #0f172a;">${currentOrder.service_name}</h3>
                                 <div style="font-size:10px; color:#64748b; display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:6px;">
-                                    <span><b>#${currentOrder.order_id}</b></span>
+                                    <span><b>${currentOrder.order_id}</b></span>
                                     <span>${displayProductId}</span>
                                     <span>${dateStringLive}</span>
                                 </div>
@@ -10868,8 +10868,8 @@ serviceStr =
                                     <div>
                                         <strong style="color:#0f172a; font-size:14px; display:block; margin-bottom:6px;">${order.service_name}</strong>
                                         <div style="font-size:11px; color:#64748b; display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
-                                            <span><b>Order ID:</b> #${order.order_id}</span> <span style="color:#cbd5e1;">|</span>
-                                            <span><b>Product ID:</b> #${displayProductId}</span> <span style="color:#cbd5e1;">|</span>
+                                            <span><b>Order ID:</b> ${order.order_id}</span> <span style="color:#cbd5e1;">|</span>
+                                            <span><b>Product ID:</b> ${displayProductId}</span> <span style="color:#cbd5e1;">|</span>
                                             <span><b>Date:</b> ${dateString}</span>
                                         </div>
                                     </div>
