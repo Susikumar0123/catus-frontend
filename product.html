@@ -10648,7 +10648,6 @@ if (data.success && Array.isArray(data.orders)) {
                         ...o,
                         status: cached.status || o.status,
                         technician_name: cached.name || o.technician_name,
-                        technician_phone: cached.phone || o.technician_phone,
                         eta: cached.eta || o.eta,
                         address: cached.address || o.address
                     };
@@ -10679,7 +10678,10 @@ if (data.success && Array.isArray(data.orders)) {
                     let stat = currentOrder.status.toLowerCase();
                     let otpCode = String(currentOrder.order_id).slice(-4) || "8421";
                     let techName = currentOrder.technician_name || "Awaiting Technician";
-                    let techPhoneText = currentOrder.technician_phone ? `+91 ${currentOrder.technician_phone}` : "Assigning soon...";
+                    let techContactText =
+    currentOrder.technician_name
+        ? "Verified Cerood Technician"
+        : "Assigning soon...";
                     let eta = currentOrder.eta || "-- Min";
                     
                     let orderDateObj = getCatusBookedDate(currentOrder);
@@ -10772,7 +10774,7 @@ serviceStr =
                                 <img src="${orderImgUrl}" alt="Service Image" class="prem-tech-img-compact">
                                 <div class="prem-tech-details-compact">
                                     <h4>${techName}</h4>
-                                    <p>${techPhoneText}</p>
+                                    <p>${techContactText}</p>
                                 </div>
                             </div>
                             <div class="prem-eta-compact">
