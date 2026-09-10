@@ -1298,6 +1298,147 @@ p, span, div, a, label, li, small {
     }
 }
 
+/* =====================================================
+   CEROOD CHECKOUT — PAYMENT TRUST NOTE
+===================================================== */
+
+.checkout-trust-note {
+    margin-top: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+
+    color: #71717a;
+    text-align: center;
+}
+
+.checkout-trust-note i {
+    font-size: 10px;
+    color: var(--catus-primary);
+}
+
+@media (max-width: 540px) {
+    .checkout-trust-note {
+        margin-top: 8px;
+        font-size: 10.5px;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT — SUCCESS PAGE FINAL POLISH
+===================================================== */
+
+#successPageView {
+    max-width: 620px !important;
+    margin: 0 auto !important;
+    padding: 42px 16px 28px !important;
+}
+
+#successPageView .success-animation-container {
+    margin-bottom: 18px !important;
+}
+
+#successPageView .checkmark-circle {
+    width: 72px !important;
+    height: 72px !important;
+}
+
+#successPageView > h1 {
+    font-size: 26px !important;
+    margin-bottom: 8px !important;
+}
+
+#successPageView > p {
+    max-width: 480px;
+    margin: 0 auto 24px !important;
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+}
+
+.receipt-box {
+    max-width: 500px !important;
+    padding: 22px !important;
+}
+
+.receipt-row {
+    padding: 9px 0 !important;
+    gap: 18px !important;
+}
+
+.receipt-label {
+    font-size: 12.5px !important;
+}
+
+.receipt-value {
+    font-size: 12.5px !important;
+    word-break: break-word;
+}
+
+#dispAddress {
+    max-width: 65% !important;
+}
+
+#dispTotal {
+    font-size: 18px !important;
+}
+
+@media (max-width: 540px) {
+
+    #successPageView {
+        padding: 28px 10px 20px !important;
+    }
+
+    #successPageView > h1 {
+        font-size: 22px !important;
+    }
+
+    #successPageView > p {
+        font-size: 12px !important;
+        padding: 0 6px;
+    }
+
+    .receipt-box {
+        padding: 16px !important;
+        border-radius: 14px !important;
+    }
+
+    .receipt-row {
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    .receipt-label {
+        flex: 0 0 38%;
+        font-size: 11.5px !important;
+    }
+
+    .receipt-value {
+        flex: 1;
+        max-width: 62% !important;
+        font-size: 11.5px !important;
+        text-align: right !important;
+    }
+
+    #dispAddress {
+        max-width: 62% !important;
+        line-height: 1.5 !important;
+    }
+
+    #dispTotal {
+        font-size: 17px !important;
+    }
+
+    #successPageView > .confirm-btn {
+        max-width: 100% !important;
+        margin: 20px auto 0 !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -1321,12 +1462,12 @@ p, span, div, a, label, li, small {
                 <!-- Back Button inside the white card -->
                 <div style="margin-bottom: 12px; display: flex; justify-content: flex-start;">
                     <button onclick="goBackToProduct()" style="background: transparent; border: none; color: #0f172a; padding: 0; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s;">
-                        <i class="fa-solid fa-arrow-left" style="color: #0284c7;"></i> Back
+                        <i class="fa-solid fa-arrow-left" style="color: var(--catus-primary);"></i> Back
                     </button>
                 </div>
 
                 <div class="card-title">
-                    <span><i class="fa-solid fa-location-dot" style="color: #0284c7;"></i> Service Address Details</span>
+                    <span><i class="fa-solid fa-location-dot" style="color: var(--catus-primary);"></i> Service Address Details</span>
                     <button type="button" class="add-new-btn" onclick="addNewAddress()"><i class="fa-solid fa-plus"></i> Add Service Address</button>
                 </div>
                 
@@ -1336,7 +1477,7 @@ p, span, div, a, label, li, small {
     <div class="saved-address-card">
         <div class="saved-address-content-row">
             <div class="saved-address-info">
-                <h4><i class="fa-solid fa-house" style="color:#059669; margin-right:6px;"></i> Default Service Address</h4>
+                <h4><i class="fa-solid fa-house" style="color:var(--catus-primary); margin-right:6px;"></i> Default Service Address</h4>
                 <p id="savedAddressText">Loading address...</p>
             </div>
             <div class="action-btns-inline">
@@ -1514,6 +1655,12 @@ p, span, div, a, label, li, small {
     Continue to Payment
     <i class="fa-solid fa-arrow-right"></i>
 </button>
+
+<div id="checkoutTrustNote" class="checkout-trust-note">
+    <i class="fa-solid fa-lock"></i>
+    <span>Online payments are processed through Razorpay.</span>
+</div>
+
 </div>
         </div>
     </div>
@@ -1530,20 +1677,23 @@ p, span, div, a, label, li, small {
 </p>
 
         <div class="receipt-box">
-            <div style="text-align: center; margin-bottom: 20px;"><h3 style="margin: 0; color: #0284c7; font-size: 20px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+    <h3 style="margin: 0; color: var(--catus-primary); font-size: 20px;">
     Booking Summary
 </h3></div>
+
             <div class="receipt-row"><span class="receipt-label">Order ID:</span><span class="receipt-value" id="dispOrderId">---</span></div>
-            <div class="receipt-row"><span class="receipt-label">Customer ID:</span><span class="receipt-value" id="dispCustomerId">---</span></div>
-            <div class="receipt-row">
-    <span class="receipt-label">Service ID:</span>
-    <span class="receipt-value" id="dispProductId">---</span>
-</div>
+            
+            
             <div class="receipt-row">
     <span class="receipt-label">Service:</span>
     <span class="receipt-value" id="dispProductName">---</span>
 </div>
             <div class="receipt-row"><span class="receipt-label">Booking Date:</span><span class="receipt-value" id="dispDate">---</span></div>
+            <div class="receipt-row">
+    <span class="receipt-label">Payment:</span>
+    <span class="receipt-value" id="dispPaymentMode">---</span>
+</div>
             <div class="receipt-row"><span class="receipt-label">Customer Name:</span><span class="receipt-value" id="dispCustomerName">---</span></div>
             <div class="receipt-row"><span class="receipt-label">Mobile No:</span><span class="receipt-value" id="dispMobile">---</span></div>
             <div class="receipt-row"><span class="receipt-label">Service Address:</span><span class="receipt-value" id="dispAddress" style="font-size: 12px; line-height: 1.4;">---</span></div>
@@ -1945,6 +2095,15 @@ p, span, div, a, label, li, small {
             const payableLabel =
     document.querySelector('.bill-row.amount-to-pay span:first-child');
             if (mode === 'razorpay') {
+
+                const trustNote = document.getElementById('checkoutTrustNote');
+
+if (trustNote) {
+    trustNote.innerHTML = `
+        <i class="fa-solid fa-lock"></i>
+        <span>Online payments are processed through Razorpay.</span>
+    `;
+}
                 if (payableLabel) {
     payableLabel.textContent = 'Payable Now';
 }
@@ -1954,6 +2113,15 @@ p, span, div, a, label, li, small {
                 document.getElementById('confirmOrderBtn').innerHTML =
     'Continue to Payment <i class="fa-solid fa-arrow-right"></i>';
             } else {
+
+                const trustNote = document.getElementById('checkoutTrustNote');
+
+if (trustNote) {
+    trustNote.innerHTML = `
+        <i class="fa-solid fa-circle-check"></i>
+        <span>No online payment is required at this stage.</span>
+    `;
+}
                 if (payableLabel) {
     payableLabel.textContent = 'Pay After Service';
 }
@@ -2508,9 +2676,7 @@ status: orderStatus,
         .map(order => '#' + order.order_id)
         .join(', ');
 
-    const productIds = createdOrders
-        .map(order => order.product_id)
-        .join(', ');
+    
 
     const productNames = createdOrders
         .map(order => order.service_name)
@@ -2518,11 +2684,7 @@ status: orderStatus,
 
     document.getElementById('dispOrderId').textContent = orderIds;
 
-    document.getElementById('dispCustomerId').textContent =
-        '#' + firstOrder.customer_id;
-
-    document.getElementById('dispProductId').textContent =
-        productIds;
+    
 
     document.getElementById('dispProductName').textContent =
         productNames;
@@ -2539,8 +2701,20 @@ status: orderStatus,
     document.getElementById('dispAddress').textContent =
         fullAddress;
 
-    document.getElementById('dispTotal').textContent =
-        "₹" + total + ` (${paymentModeText})`;
+    const displayPaymentMode =
+    paymentModeText === 'Pay Later (Cash / Service Pay)'
+        ? 'Pay After Service'
+        : 'Paid Online';
+
+const paymentModeEl =
+    document.getElementById('dispPaymentMode');
+
+if (paymentModeEl) {
+    paymentModeEl.textContent = displayPaymentMode;
+}
+
+document.getElementById('dispTotal').textContent =
+    "₹" + total;
 }
 
 
