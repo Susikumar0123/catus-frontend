@@ -4152,26 +4152,24 @@ body {
 
 
 .product-trust-item {
+    height: 80px !important;
     min-height: 80px !important;
 
-    display: flex !important;
-
-    flex-direction: column !important;
+    display: grid !important;
+    grid-template-rows: 28px 30px !important;
 
     align-items: center !important;
+    justify-items: center !important;
 
-    justify-content: center !important;
-
-    gap: 8px !important;
+    gap: 5px !important;
 
     text-align: center !important;
 
-    padding: 10px 5px !important;
+    padding: 9px 5px !important;
 
     border-radius: 13px !important;
 
     background: #fafaff !important;
-
     border: 1px solid #f0f0f5 !important;
 
     box-sizing: border-box !important;
@@ -4179,20 +4177,32 @@ body {
 
 
 .product-trust-item i {
-    font-size: 20px !important;
+    width: 28px !important;
+    height: 28px !important;
 
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    font-size: 20px !important;
     color: #6541f5 !important;
 }
 
 
 .product-trust-item span {
+    width: 100% !important;
+    height: 30px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
     font-size: 11px !important;
-
-    line-height: 1.25 !important;
-
+    line-height: 1.15 !important;
     font-weight: 500 !important;
 
     color: #424756 !important;
+    text-align: center !important;
 }
 
 /* ===============================
@@ -4239,8 +4249,14 @@ body {
 #ceroodWorkProofContainer > div > div:first-child img {
     width: 100% !important;
     height: 92px !important;
+
     border-radius: 9px !important;
     object-fit: cover !important;
+
+    filter: blur(6px) brightness(.72) !important;
+    transform: scale(1.06) !important;
+
+    pointer-events: none !important;
 }
 
 #ceroodWorkProofContainer > div > div:last-child {
@@ -4722,12 +4738,15 @@ body {
 
 
     .product-trust-item {
-        min-height: 70px !important;
+    height: 72px !important;
+    min-height: 72px !important;
 
-        padding: 8px 3px !important;
+    grid-template-rows: 24px 28px !important;
 
-        border-radius: 10px !important;
-    }
+    padding: 7px 3px !important;
+
+    border-radius: 10px !important;
+}
 
 
     .product-trust-item i {
@@ -7173,67 +7192,137 @@ let ceroodCurrentWorkProofs = [];
     padding:16px;
 ">
 
-                        <div style="position:relative;">
-                            <img
-    src="${proof.before_photo_url}"
-    onclick="openWorkProofImage('${proof.before_photo_url}')"
-                                alt="Before Cerood service"
-                                loading="lazy"
-                                style="
-                                    width:120px;
-                                    height:150px;
-                                    object-fit:cover;
-                                    display:block;
-                                    border-radius:10px;
-                                    cursor:pointer;
-                                "
-                            >
+                        <div style="
+    position:relative;
+    overflow:hidden;
+    border-radius:9px;
+">
+    <img
+        src="${proof.before_photo_url}"
+        alt="Before Cerood service"
+        loading="lazy"
+        style="
+            width:120px;
+            height:150px;
+            object-fit:cover;
+            display:block;
+            border-radius:10px;
+        "
+    >
 
-                            <span style="
-                                position:absolute;
-                                left:8px;
-                                bottom:8px;
-                                background:rgba(15,23,42,0.82);
-                                color:#ffffff;
-                                padding:5px 9px;
-                                border-radius:6px;
-                                font-size:11px;
-                                font-weight:700;
-                            ">
-                                BEFORE
-                            </span>
-                        </div>
+    <button
+        type="button"
+        onclick="openWorkProofImage('${proof.before_photo_url}')"
+        style="
+            position:absolute;
+            left:50%;
+            top:50%;
+            transform:translate(-50%,-50%);
+            z-index:3;
 
-                        <div style="position:relative;">
-                            <img
-    src="${proof.after_photo_url}"
-    onclick="openWorkProofImage('${proof.after_photo_url}')"
-                                alt="After Cerood service"
-                                loading="lazy"
-                                style="
-                                    width:120px;
-height:150px;
-object-fit:cover;
-display:block;
-border-radius:10px;
-cursor:pointer;
-                                "
-                            >
+            border:0;
+            border-radius:8px;
 
-                            <span style="
-                                position:absolute;
-                                left:8px;
-                                bottom:8px;
-                                background:rgba(15,23,42,0.82);
-                                color:#ffffff;
-                                padding:5px 9px;
-                                border-radius:6px;
-                                font-size:11px;
-                                font-weight:700;
-                            ">
-                                AFTER
-                            </span>
-                        </div>
+            background:rgba(17,24,39,.88);
+            color:#ffffff;
+
+            padding:7px 12px;
+
+            font-family:inherit;
+            font-size:11px;
+            font-weight:600;
+
+            cursor:pointer;
+        "
+    >
+        <i class="fa-regular fa-eye"></i>
+        View
+    </button>
+
+    <span style="
+        position:absolute;
+        left:7px;
+        bottom:7px;
+        z-index:3;
+
+        background:rgba(15,23,42,.82);
+        color:#ffffff;
+
+        padding:4px 7px;
+        border-radius:5px;
+
+        font-size:9px;
+        font-weight:700;
+    ">
+        BEFORE
+    </span>
+</div>
+
+                        <div style="
+    position:relative;
+    overflow:hidden;
+    border-radius:9px;
+">
+    <img
+        src="${proof.after_photo_url}"
+        alt="After Cerood service"
+        loading="lazy"
+        style="
+            width:120px;
+            height:150px;
+            object-fit:cover;
+            display:block;
+            border-radius:10px;
+        "
+    >
+
+    <button
+        type="button"
+        onclick="openWorkProofImage('${proof.after_photo_url}')"
+        style="
+            position:absolute;
+            left:50%;
+            top:50%;
+            transform:translate(-50%,-50%);
+            z-index:3;
+
+            border:0;
+            border-radius:8px;
+
+            background:rgba(17,24,39,.88);
+            color:#ffffff;
+
+            padding:7px 12px;
+
+            font-family:inherit;
+            font-size:11px;
+            font-weight:600;
+
+            cursor:pointer;
+        "
+    >
+        <i class="fa-regular fa-eye"></i>
+        View
+    </button>
+
+    <span style="
+        position:absolute;
+        left:7px;
+        bottom:7px;
+        z-index:3;
+
+        background:rgba(15,23,42,.82);
+        color:#ffffff;
+
+        padding:4px 7px;
+        border-radius:5px;
+
+        font-size:9px;
+        font-weight:700;
+    ">
+        AFTER
+    </span>
+</div>
 
                     </div>
 
