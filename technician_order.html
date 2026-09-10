@@ -385,15 +385,27 @@ function renderOrder(order) {
 
 
     const address =
-        order.address ||
-        order.customer_address ||
-        '-';
+    order.service_address ||
+    order.address ||
+    order.customer_address ||
+    '-';
 
+const district =
+    order.service_district ||
+    order.district ||
+    '-';
 
-    const pincode =
-        order.pincode ||
-        order.customer_pincode ||
-        '-';
+const pincode =
+    order.service_pincode ||
+    order.pincode ||
+    order.customer_pincode ||
+    '-';
+
+const serviceDate =
+    order.service_date || null;
+
+const serviceTime =
+    order.service_time || '-';
 
 
     const status =
@@ -466,6 +478,46 @@ function renderOrder(order) {
 
             </div>
 
+            <div class="detail-row">
+
+    <span class="label">
+        Service Date
+    </span>
+
+    <div class="value">
+        ${
+            serviceDate
+                ? escapeHtml(
+                    new Date(
+                        serviceDate + 'T00:00:00'
+                    ).toLocaleDateString(
+                        'en-IN',
+                        {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                        }
+                    )
+                )
+                : '-'
+        }
+    </div>
+
+</div>
+
+
+<div class="detail-row">
+
+    <span class="label">
+        Service Time
+    </span>
+
+    <div class="value">
+        ${escapeHtml(serviceTime)}
+    </div>
+
+</div>
+
 
             <div class="detail-row">
 
@@ -513,6 +565,18 @@ function renderOrder(order) {
                 </div>
 
             </div>
+
+            <div class="detail-row">
+
+    <span class="label">
+        District
+    </span>
+
+    <div class="value">
+        ${escapeHtml(district)}
+    </div>
+
+</div>
 
 
             <div class="detail-row">

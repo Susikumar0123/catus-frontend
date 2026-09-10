@@ -458,6 +458,7 @@
                                     <th>Location / Pincode</th>
                                     <th>Payment Mode</th>
                                     <th>Date & Time</th>
+                                    <th>Service Schedule</th>
                                     <th>Status</th>
                                     <th class="no-print">Action</th>
                                 </tr>
@@ -1859,6 +1860,15 @@
                         <div class="info-row"><span>Bill Amount:</span> <strong id="detAmount">-</strong></div>
 
                         <div class="info-row"><span>Booked On:</span> <strong id="detDate">-</strong></div>
+                        <div class="info-row">
+    <span>Service Date:</span>
+    <strong id="detServiceDate">-</strong>
+</div>
+
+<div class="info-row">
+    <span>Service Time:</span>
+    <strong id="detServiceTime">-</strong>
+</div>
 
                     </div>
 
@@ -5359,6 +5369,47 @@ if (pageId === 'inactive-technicians') {
                     <td>${item.district} - ${item.pincode}</td>
                     <td><span class="badge ${payModeBadgeClass}">${payModeText}</span></td>
                     <td><small style="color: #64748b; font-weight: 600;">${new Date(item.order_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true })}</small></td>
+                    <td>
+    ${
+        item.service_date
+            ? `
+                <div style="
+                    font-weight:700;
+                    color:#0f172a;
+                    font-size:12px;
+                    margin-bottom:3px;
+                ">
+                    ${new Date(
+                        item.service_date + 'T00:00:00'
+                    ).toLocaleDateString(
+                        'en-IN',
+                        {
+                            day:'2-digit',
+                            month:'short',
+                            year:'numeric'
+                        }
+                    )}
+                </div>
+
+                <div style="
+                    font-size:11px;
+                    color:#0284c7;
+                    font-weight:700;
+                ">
+                    <i class="fa-regular fa-clock"></i>
+                    ${item.service_time || '-'}
+                </div>
+            `
+            : `
+                <span style="
+                    font-size:11px;
+                    color:#94a3b8;
+                ">
+                    Not selected
+                </span>
+            `
+    }
+</td>
                     <td><span class="badge ${badgeClass}">${displayStatus}</span></td>
                     <td class="no-print"><button class="manage-btn" onclick="openOrderModal('${item.order_id}')"><i class="fa-solid fa-user-pen"></i> Manage</button></td>
                 </tr>`;
@@ -5379,10 +5430,46 @@ if (pageId === 'inactive-technicians') {
             document.getElementById('detServiceName').textContent = order.service_name || 'Smart TV Repair';
             document.getElementById('detProductId').textContent = order.product_id;
             document.getElementById('detAmount').textContent = '₹' + order.amount;
-            document.getElementById('detDate').textContent = new Date(order.order_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true });
-            document.getElementById('detAddress').textContent = order.address;
-            document.getElementById('detDistrict').textContent = order.district;
-            document.getElementById('detPincode').textContent = order.pincode;
+            document.getElementById('detDate').textContent =
+    new Date(order.order_date).toLocaleString(
+        "en-IN",
+        {
+            timeZone: "Asia/Kolkata",
+            hour12: true
+        }
+    );
+
+document.getElementById('detServiceDate').textContent =
+    order.service_date
+        ? new Date(
+            order.service_date + 'T00:00:00'
+        ).toLocaleDateString(
+            'en-IN',
+            {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            }
+        )
+        : '-';
+
+document.getElementById('detServiceTime').textContent =
+    order.service_time || '-';
+
+document.getElementById('detAddress').textContent =
+    order.service_address ||
+    order.address ||
+    '-';
+
+document.getElementById('detDistrict').textContent =
+    order.service_district ||
+    order.district ||
+    '-';
+
+document.getElementById('detPincode').textContent =
+    order.service_pincode ||
+    order.pincode ||
+    '-';
 
             let currentStatus = order.is_deleted == 1 ? 'Trash' : order.status;
             if(currentStatus === 'Active' || currentStatus === 'Service') currentStatus = 'In Service';

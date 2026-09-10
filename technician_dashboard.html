@@ -483,9 +483,26 @@ function renderOrders(orders) {
                 '-';
 
             const address =
-                order.address ||
-                order.customer_address ||
-                '-';
+    order.service_address ||
+    order.address ||
+    order.customer_address ||
+    '-';
+
+const serviceDistrict =
+    order.service_district ||
+    order.district ||
+    '-';
+
+const servicePincode =
+    order.service_pincode ||
+    order.pincode ||
+    '-';
+
+const serviceDate =
+    order.service_date || null;
+
+const serviceTime =
+    order.service_time || '-';
 
             const status =
                 order.status ||
@@ -534,6 +551,37 @@ function renderOrders(orders) {
                         <strong>Address:</strong>
                         ${escapeHtml(address)}
                     </div>
+
+                    <div class="detail">
+    <strong>Service Date:</strong>
+    ${
+        serviceDate
+            ? escapeHtml(
+                new Date(
+                    serviceDate + 'T00:00:00'
+                ).toLocaleDateString(
+                    'en-IN',
+                    {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    }
+                )
+            )
+            : '-'
+    }
+</div>
+
+<div class="detail">
+    <strong>Service Time:</strong>
+    ${escapeHtml(serviceTime)}
+</div>
+
+<div class="detail">
+    <strong>Location:</strong>
+    ${escapeHtml(serviceDistrict)}
+    ${servicePincode !== '-' ? ' - ' + escapeHtml(servicePincode) : ''}
+</div>
 
 
                     <div class="detail">
