@@ -32,7 +32,8 @@
     border: none; 
     box-shadow: none; 
     margin-bottom: 20px; 
-    height: 580px; /* Fixed height koduthu motha page scroll aaguratha thadukka */
+    height: auto;
+    min-height: 580px; /* Fixed height koduthu motha page scroll aaguratha thadukka */
     box-sizing: border-box; 
     display: flex; 
     flex-direction: column; 
@@ -839,28 +840,7 @@ p, span, div, a, label, li, small {
     stroke-linejoin: round !important;
 }
 
-/* CATUS CHECKOUT — SAME BLACK MOBILE NAV AS PRODUCT PAGE */
-@media (max-width: 850px) {
 
-    .mobile-bottom-nav {
-        background: #111111 !important;
-        border-top: 1px solid #292929 !important;
-        box-shadow: none !important;
-    }
-
-    .mobile-bottom-nav .bot-nav-item {
-        color: #ffffff !important;
-    }
-
-    .mobile-bottom-nav .bot-nav-item svg {
-        stroke: #ffffff !important;
-        fill: none !important;
-    }
-
-    .mobile-bottom-nav .bot-nav-item span {
-        color: #ffffff !important;
-    }
-}
 @media (max-width: 850px) {
 
     .mobile-bottom-nav {
@@ -1439,6 +1419,19 @@ p, span, div, a, label, li, small {
     }
 }
 
+.confirm-btn:disabled {
+    opacity: 0.72 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+.form-input:disabled {
+    background: #f7f7f8 !important;
+    color: var(--catus-text) !important;
+    opacity: 1 !important;
+    cursor: default !important;
+}
+
 </style>
 </head>
 <body>
@@ -1493,7 +1486,8 @@ p, span, div, a, label, li, small {
 </div>
 
                     <div id="errorAlert" style="background:#fef2f2; color:#991b1b; padding:10px 15px; border-radius:8px; font-size:13px; font-weight:600; margin-bottom:20px; display:none;">
-                        <i class="fa-solid fa-circle-exclamation"></i> Please fill in all required fields correctly.
+                        <i class="fa-solid fa-circle-exclamation"></i>
+Please check all required fields, mobile number, and pincode.
                     </div>
 
                     <!-- ADDRESS FORM -->
@@ -1574,7 +1568,7 @@ p, span, div, a, label, li, small {
             <!-- Right Column: Order Summary (40%) -->
 <div class="card-box">
     <div class="card-title" style="justify-content: flex-start;">
-        <span>Bill summary</span>
+        <span>Bill Summary</span>
     </div>
     
     <div class="card-body-scroll">
@@ -1621,7 +1615,7 @@ p, span, div, a, label, li, small {
 
         <!-- Payment Mode Selection -->
         <div style="margin-top: 12px;">
-            <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Select Payment Mode:</label>
+            <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Payment Method</label>
             
             <div class="payment-method-card selected" onclick="selectPaymentMode('razorpay')" id="cardRazorpay">
                 <input type="radio" name="paymentMode" id="payRazorpay" checked>
@@ -1698,8 +1692,8 @@ p, span, div, a, label, li, small {
             <div class="receipt-row"><span class="receipt-label">Mobile No:</span><span class="receipt-value" id="dispMobile">---</span></div>
             <div class="receipt-row"><span class="receipt-label">Service Address:</span><span class="receipt-value" id="dispAddress" style="font-size: 12px; line-height: 1.4;">---</span></div>
             <div class="receipt-row" style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                <span class="receipt-label" style="color: #0f172a; font-weight: 700; font-size: 16px;">Booking Amount:</span>
-                <span class="receipt-value" id="dispTotal" style="color: #16a34a; font-size: 20px;">₹0</span>
+                <span class="receipt-label" style="color: #0f172a; font-weight: 700; font-size: 16px;">Order Total:</span>
+                <span class="receipt-value" id="dispTotal" style="font-size: 20px;">₹0</span>
             </div>
         </div>
 
@@ -1872,6 +1866,7 @@ p, span, div, a, label, li, small {
 }
 
         let selectedMode = 'razorpay';
+        let isOrderSubmitting = false;
         const indiaData = {
             "Tamil Nadu": ["Tiruppur", "Coimbatore", "Chennai", "Madurai", "Salem", "Erode", "Tiruchirappalli", "Dharmapuri", "Vellore", "Thanjavur", "Dindigul", "Kanyakumari", "Karur", "Namakkal", "Theni", "Tirunelveli", "Villupuram", "Virudhunagar", "Chengalpattu", "Kancheepuram", "Ranipet", "Tirupattur", "Kallakurichi", "Tenkasi", "Mayiladuthurai", "Ariyalur", "Cuddalore", "Krishnagiri", "Nagapattinam", "Perambalur", "Pudukkottai", "Ramanathapuram", "Sivaganga", "Thoothukudi", "The Nilgiris", "Tiruvarur", "Tiruvallur", "Tiruvannamalai"],
             "Kerala": ["Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam", "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram", "Kozhikode", "Wayanad", "Kannur", "Kasaragod"],
@@ -2011,18 +2006,32 @@ p, span, div, a, label, li, small {
             let hasError = false;
 
             fields.forEach(id => {
-                let el = document.getElementById(id);
-                if (el && !el.value.trim()) { 
-                    el.classList.add('error'); 
-                    hasError = true; 
-                } else if (el) { 
-                    el.classList.remove('error'); 
-                }
-            });
+    const el = document.getElementById(id);
+
+    if (!el) return;
+
+    const value = el.value.trim();
+    let invalid = !value;
+
+    if (id === 'fieldMobile') {
+        invalid = !/^[6-9]\d{9}$/.test(value);
+    }
+
+    if (id === 'fieldPincode') {
+        invalid = !/^[1-9]\d{5}$/.test(value);
+    }
+
+    if (invalid) {
+        el.classList.add('error');
+        hasError = true;
+    } else {
+        el.classList.remove('error');
+    }
+});
 
             if (hasError) {
                 document.getElementById('errorAlert').style.display = 'block';
-                alert("Please fill in all required address fields.");
+                alert("Please check all required fields, mobile number, and pincode.");
                 return;
             }
 
@@ -2072,25 +2081,21 @@ p, span, div, a, label, li, small {
         }
 
         async function fetchAllCountries() {
-            const countrySel = document.getElementById('fieldCountry');
-            try {
-                const response = await fetch('https://restcountries.com/v3.1/independent?status=true');
-                const countries = await response.json();
-                countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
 
-                let html = '<option value="India" selected>India</option>';
-                countries.forEach(c => {
-                    if (c.name.common !== "India") {
-                        html += `<option value="${c.name.common}">${c.name.common}</option>`;
-                    }
-                });
-                countrySel.innerHTML = html;
-            } catch (e) {
-                console.log("Could not load full country list.");
-            }
-        }
+    const countrySel =
+        document.getElementById('fieldCountry');
 
+    if (!countrySel) return;
+
+    countrySel.innerHTML =
+        '<option value="India" selected>India</option>';
+
+    countrySel.disabled = true;
+
+    loadStates();
+}
         function selectPaymentMode(mode) {
+            if (isOrderSubmitting) return;
             selectedMode = mode;
             const payableLabel =
     document.querySelector('.bill-row.amount-to-pay span:first-child');
@@ -2134,20 +2139,22 @@ if (trustNote) {
         }
 
         function loadStates() {
-            const country = document.getElementById('fieldCountry').value;
-            const stateSel = document.getElementById('fieldState');
-            const distSel = document.getElementById('fieldDistrict');
-            stateSel.innerHTML = '<option value="">Select State</option>';
-            distSel.innerHTML = '<option value="">Select District</option>';
 
-            if (country === "India") {
-                Object.keys(indiaData).forEach(state => {
-                    stateSel.innerHTML += `<option value="${state}">${state}</option>`;
-                });
-            } else {
-                stateSel.innerHTML += `<option value="Other State / Province">Other State / Province</option>`;
-            }
-        }
+    const stateSel =
+        document.getElementById('fieldState');
+
+    const distSel =
+        document.getElementById('fieldDistrict');
+
+    if (!stateSel || !distSel) return;
+
+    stateSel.innerHTML =
+        '<option value="Tamil Nadu" selected>Tamil Nadu</option>';
+
+    stateSel.disabled = true;
+
+    loadDistricts();
+}
 
         function loadDistricts() {
             const country = document.getElementById('fieldCountry').value;
@@ -2315,19 +2322,81 @@ const gstEnabled =
     }
 }
 
+function resetOrderSubmitState() {
+
+    isOrderSubmitting = false;
+
+    const confirmBtn =
+        document.getElementById('confirmOrderBtn');
+
+    if (!confirmBtn) return;
+
+    confirmBtn.disabled = false;
+
+    if (selectedMode === 'later') {
+        confirmBtn.innerHTML =
+            'Confirm Booking <i class="fa-solid fa-arrow-right"></i>';
+    } else {
+        confirmBtn.innerHTML =
+            'Continue to Payment <i class="fa-solid fa-arrow-right"></i>';
+    }
+}
+
         async function submitOrder() {
-            const fields = ['fieldName', 'fieldMobile', 'fieldDoor', 'fieldVillage', 'fieldCountry', 'fieldState', 'fieldDistrict', 'fieldCity', 'fieldPincode'];
+
+    if (isOrderSubmitting) return;
+
+    if (!Array.isArray(orderItems) || orderItems.length === 0) {
+
+        alert(
+            'Your cart is empty. Please add a service before checkout.'
+        );
+
+        return;
+    }
+
+    const validOrderItems =
+        orderItems.filter(item =>
+            item &&
+            item.product_id &&
+            String(item.product_id).trim() !== ''
+        );
+
+    if (validOrderItems.length === 0) {
+
+        alert(
+            'No valid service was found in your cart. Please add the service again.'
+        );
+
+        return;
+    }
+
+    const fields = ['fieldName', 'fieldMobile', 'fieldDoor', 'fieldVillage', 'fieldCountry', 'fieldState', 'fieldDistrict', 'fieldCity', 'fieldPincode'];
             let hasError = false;
 
             fields.forEach(id => {
-                let el = document.getElementById(id);
-                if (el && !el.value.trim()) { 
-                    el.classList.add('error'); 
-                    hasError = true; 
-                } else if (el) { 
-                    el.classList.remove('error'); 
-                }
-            });
+    const el = document.getElementById(id);
+
+    if (!el) return;
+
+    const value = el.value.trim();
+    let invalid = !value;
+
+    if (id === 'fieldMobile') {
+        invalid = !/^[6-9]\d{9}$/.test(value);
+    }
+
+    if (id === 'fieldPincode') {
+        invalid = !/^[1-9]\d{5}$/.test(value);
+    }
+
+    if (invalid) {
+        el.classList.add('error');
+        hasError = true;
+    } else {
+        el.classList.remove('error');
+    }
+});
 
             if (hasError) {
                 document.getElementById('errorAlert').style.display = 'block';
@@ -2336,6 +2405,16 @@ const gstEnabled =
             }
 
             document.getElementById('errorAlert').style.display = 'none';
+            const confirmBtn =
+    document.getElementById('confirmOrderBtn');
+
+isOrderSubmitting = true;
+
+if (confirmBtn) {
+    confirmBtn.disabled = true;
+    confirmBtn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+}
 
             let subtotal = 0;
             orderItems.forEach(item => { subtotal += Math.round(parseFloat(item.price)) * (item.quantity || 1); });
@@ -2357,9 +2436,14 @@ const gstEnabled =
         const data = await response.json();
 
         if (!response.ok || !data.success) {
-            alert(data.message || 'Unable to calculate order total.');
-            return;
-        }
+    alert(
+        data.message ||
+        'Unable to calculate order total.'
+    );
+
+    resetOrderSubmitState();
+    return;
+}
 
         await saveOrderToDatabase(
             'PAY_LATER_' + Date.now(),
@@ -2373,6 +2457,7 @@ const gstEnabled =
     } catch (error) {
         console.error('Pay Later Pricing Error:', error);
         alert('Unable to confirm order amount. Please try again.');
+        resetOrderSubmitState();
         return;
     }
 }
@@ -2394,9 +2479,13 @@ const gstEnabled =
 
                 const data = await response.json();
                 if (!data.success) {
-                    alert("Unable to initialize payment gateway. Please try Pay Later.");
-                    return;
-                }
+    alert(
+        "Unable to initialize payment gateway. Please try Pay After Service."
+    );
+
+    resetOrderSubmitState();
+    return;
+}
 
                 const options = {
                     "key": data.key_id,
@@ -2407,40 +2496,73 @@ const gstEnabled =
                     "order_id": data.id,
                     "handler": async function (response) {
 
-    const verifyResponse = await fetch(`${API_BASE_URL}/api/verify-razorpay-payment`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature
-        })
-    });
+    try {
 
-    const verifyData = await verifyResponse.json();
+        const verifyResponse = await fetch(
+            `${API_BASE_URL}/api/verify-razorpay-payment`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature
+                })
+            }
+        );
 
-    if (!verifyData.success) {
-        showFailurePage('Payment verification failed. Booking was not created.');
-        return;
-    }
+        const verifyData = await verifyResponse.json();
 
-    await saveOrderToDatabase(
-    response.razorpay_payment_id,
-    data.amount / 100,
-    'Online Paid (Razorpay)',
-    'Paid',
-    {
-        razorpay_order_id: response.razorpay_order_id,
-        razorpay_payment_id: response.razorpay_payment_id,
-        razorpay_signature: response.razorpay_signature
-    }
+        if (!verifyResponse.ok || !verifyData.success) {
+
+            resetOrderSubmitState();
+
+            showFailurePage(
+    'Payment verification could not be completed. Please contact Cerood support if the amount was debited.',
+    true
 );
+
+            return;
+        }
+
+        await saveOrderToDatabase(
+            response.razorpay_payment_id,
+            data.amount / 100,
+            'Online Paid (Razorpay)',
+            'Paid',
+            {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Payment verification error:',
+            error
+        );
+
+        resetOrderSubmitState();
+
+        showFailurePage(
+    'We could not confirm your payment. If the amount was debited, please contact Cerood support before trying again.',
+    true
+);
+    }
 },
                     "modal": {
                         "escape": false,
                         "ondismiss": function() {
-                            showFailurePage("You cancelled the payment gateway. No booking was created.");
-                        }
+    resetOrderSubmitState();
+
+    showFailurePage(
+        "You cancelled the payment gateway. No booking was created."
+    );
+}
                     },
                     "prefill": { "name": custName, "contact": mobile },
                     "theme": { "color": "#6d4aff" }
@@ -2448,17 +2570,24 @@ const gstEnabled =
 
                 const rzp = new Razorpay(options);
                 
-                rzp.on('payment.failed', function (response){
-                    showFailurePage(response.error.description || "Transaction declined by bank or network error.");
-                });
+                rzp.on('payment.failed', function (response) {
+
+    resetOrderSubmitState();
+
+    showFailurePage(
+        response.error.description ||
+        "Transaction declined by bank or network error."
+    );
+});
 
                 rzp.open();
             } catch (err) {
-                alert('Payment gateway connection error.');
-            }
+    resetOrderSubmitState();
+    alert('Payment gateway connection error.');
+}
         }       
       
-               function showFailurePage(reasonText) {
+               function showFailurePage(reasonText, paymentUncertain = false) {
             document.getElementById('checkoutMainSection').style.display = 'none';
             let successView = document.getElementById('successPageView');
             successView.style.display = 'block';
@@ -2470,25 +2599,69 @@ const gstEnabled =
             
             circle.innerHTML = '<i class="fa-solid fa-xmark" style="color: white; font-size: 45px; line-height: 90px;"></i>';
 
-            successView.querySelector('h1').textContent = "Payment Failed / Cancelled!";
+            successView.querySelector('h1').textContent = "Payment Not Completed";
             successView.querySelector('h1').style.color = "#ef4444";
-            successView.querySelector('p').textContent = reasonText || "Your transaction could not be completed. No order was placed.";
+            successView.querySelector('p').textContent =
+    reasonText || "Your payment was not completed. No booking has been created.";
 
             const receiptBox = successView.querySelector('.receipt-box');
-            if(receiptBox) {
-                receiptBox.innerHTML = `
-                    <div style="text-align: center; padding: 20px; color: #64748b;">
-                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 32px; color: #f59e0b; margin-bottom: 10px;"></i>
-                        <p style="margin: 0; font-size: 14px; font-weight: 500;">Order ID was not generated as the payment was aborted or declined.</p>
-                    </div>
-                `;
-            }
+            if (receiptBox) {
+
+    if (paymentUncertain) {
+
+        receiptBox.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #64748b;">
+                <i class="fa-solid fa-triangle-exclamation"
+                   style="font-size: 32px; color: #f59e0b; margin-bottom: 10px;">
+                </i>
+
+                <p style="margin: 0; font-size: 14px; font-weight: 500; line-height: 1.6;">
+                    Your booking has not been confirmed.
+                    If any amount was debited, please do not make another payment.
+                    Contact Cerood support for verification.
+                </p>
+            </div>
+        `;
+
+    } else {
+
+        receiptBox.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #64748b;">
+                <i class="fa-solid fa-triangle-exclamation"
+                   style="font-size: 32px; color: #f59e0b; margin-bottom: 10px;">
+                </i>
+
+                <p style="margin: 0; font-size: 14px; font-weight: 500;">
+                    Your booking was not created.
+                    You can return to checkout and try again.
+                </p>
+            </div>
+        `;
+    }
+}
 
             let btn = successView.querySelector('button.confirm-btn');
-            if(btn) {
-                btn.textContent = "Back to Checkout / Cart";
-                btn.onclick = function() { window.location.href = 'checkout.html'; };
-            }
+
+if (btn) {
+
+    if (paymentUncertain) {
+
+        btn.textContent = "Contact Cerood Support";
+
+        btn.onclick = function() {
+            window.location.href =
+                'https://wa.me/918946055856';
+        };
+
+    } else {
+
+        btn.textContent = "Return to Checkout";
+
+        btn.onclick = function() {
+            window.location.href = 'checkout.html';
+        };
+    }
+}
         }   
 
             async function saveOrderToDatabase(
@@ -2654,9 +2827,26 @@ status: orderStatus,
         err
     );
 
+    // Online payment was already verified.
+    // Do not ask customer to pay again.
+    if (paymentVerification) {
+
+        resetOrderSubmitState();
+
+        showFailurePage(
+            'Your payment was confirmed, but we could not complete the booking. Please do not make another payment. Contact Cerood support for assistance.',
+            true
+        );
+
+        return;
+    }
+
+    // Pay After Service / unpaid booking failure.
     alert(
         'Order could not be created. Please try again.'
     );
+
+    resetOrderSubmitState();
 }
         }
 
