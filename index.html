@@ -6629,6 +6629,165 @@ flex-shrink: 0;
     
 }
 
+/* =====================================================
+   CEROOD FOOTER INFO LINKS + POPUPS
+===================================================== */
+
+.cerood-footer-info-links {
+    width: 100%;
+    border-top: 1px solid #e7e7eb;
+}
+
+.cerood-footer-info-row {
+    width: 100%;
+    min-height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0;
+
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #e7e7eb;
+
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.cerood-footer-info-row > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: var(--catus-text);
+}
+
+.cerood-footer-info-action {
+    padding: 7px 12px;
+
+    border: 1px solid #d7d7de;
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    color: var(--catus-text-2);
+}
+
+.cerood-footer-info-row:hover .cerood-footer-info-action {
+    border-color: var(--catus-primary);
+    color: var(--catus-primary);
+}
+
+
+/* POPUP */
+
+.cerood-info-modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    z-index: 9999999;
+}
+
+.cerood-info-modal.active {
+    display: flex;
+}
+
+.cerood-info-modal-card {
+    width: 100%;
+    max-width: 1100px;
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    position: relative;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.18);
+}
+
+.cerood-info-modal-close {
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #f4f4f5;
+    color: #18181b;
+
+    cursor: pointer;
+
+    z-index: 20;
+}
+
+.cerood-info-modal .cerood-about-section,
+.cerood-info-modal .cerood-coverage-section {
+    margin: 0 !important;
+    max-width: none !important;
+    border-bottom: 0 !important;
+}
+
+@media (max-width: 768px) {
+
+    .cerood-footer-info-row {
+        min-height: 52px;
+    }
+
+    .cerood-footer-info-row > span:first-child {
+        font-size: 12px;
+    }
+
+    .cerood-footer-info-action {
+        font-size: 10px;
+        padding: 6px 9px;
+    }
+
+    .cerood-info-modal {
+        padding: 12px;
+    }
+
+    .cerood-info-modal-card {
+        padding: 46px 14px 18px 14px;
+        max-height: 92vh;
+    }
+
+    .cerood-info-modal .cerood-about-section,
+    .cerood-info-modal .cerood-coverage-section {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+}
+
 /* CEROOD FOOTER VISUAL POLISH */
 
 .footer-inner h3,
@@ -7484,6 +7643,8 @@ button.uc-cart-btn:hover {
         padding: 14px 16px 16px !important;
     }
 }
+
+
 
 </style>
 </head>
@@ -13810,6 +13971,45 @@ function togglePasswordVisibility(fieldId, iconElement) {
     }
 }
 
+
+function openCeroodInfoModal(modalId) {
+
+    const modal = document.getElementById(modalId);
+
+    if (!modal) return;
+
+    modal.classList.add('active');
+
+    document.body.style.overflow = 'hidden';
+}
+
+
+function closeCeroodInfoModal(modalId) {
+
+    const modal = document.getElementById(modalId);
+
+    if (!modal) return;
+
+    modal.classList.remove('active');
+
+    document.body.style.overflow = '';
+}
+
+
+document.addEventListener('click', function (event) {
+
+    const modal = event.target.classList.contains('cerood-info-modal')
+        ? event.target
+        : null;
+
+    if (!modal) return;
+
+    modal.classList.remove('active');
+
+    document.body.style.overflow = '';
+});
+
+
   </script>
 <!-- ==========================================
      CERood GLOBAL MOBILE NAV
@@ -13880,6 +14080,18 @@ function togglePasswordVisibility(fieldId, iconElement) {
 <!-- Professional Footer Section -->
 <div class="footer-wrapper">
     <footer class="footer-inner">
+
+        <div class="cerood-info-modal" id="ceroodAboutModal">
+    <div class="cerood-info-modal-card">
+
+        <button
+            type="button"
+            class="cerood-info-modal-close"
+            onclick="closeCeroodInfoModal('ceroodAboutModal')"
+            aria-label="Close"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
 
 <!-- =====================================================
      CEROOD COMPACT ABOUT SECTION
@@ -13981,6 +14193,20 @@ function togglePasswordVisibility(fieldId, iconElement) {
     </div>
 
 </section>
+    </div>
+</div>
+
+<div class="cerood-info-modal" id="ceroodAvailabilityModal">
+    <div class="cerood-info-modal-card">
+
+        <button
+            type="button"
+            class="cerood-info-modal-close"
+            onclick="closeCeroodInfoModal('ceroodAvailabilityModal')"
+            aria-label="Close"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
 
 <section class="cerood-coverage-section">
 
@@ -14011,6 +14237,43 @@ function togglePasswordVisibility(fieldId, iconElement) {
     </button>
 
 </section>
+
+    </div>
+</div>
+
+<div class="cerood-footer-info-links">
+
+    <button
+        type="button"
+        class="cerood-footer-info-row"
+        onclick="openCeroodInfoModal('ceroodAboutModal')"
+    >
+        <span>
+            <i class="fa-solid fa-caret-right"></i>
+            About Cerood
+        </span>
+
+        <span class="cerood-footer-info-action">
+            View About
+        </span>
+    </button>
+
+    <button
+        type="button"
+        class="cerood-footer-info-row"
+        onclick="openCeroodInfoModal('ceroodAvailabilityModal')"
+    >
+        <span>
+            <i class="fa-solid fa-caret-right"></i>
+            Service Availability
+        </span>
+
+        <span class="cerood-footer-info-action">
+            Check Availability
+        </span>
+    </button>
+
+</div>
 
 
 
