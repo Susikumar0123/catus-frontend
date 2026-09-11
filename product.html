@@ -6737,7 +6737,7 @@ function getProductUrlParams() {
 
 
     // ==========================================
-    // PRETTY SEO URL
+    // NORMAL SEO URL
     // /tamil-nadu/dharmapuri/kadathur/tv-repair
     // ==========================================
 
@@ -6750,6 +6750,28 @@ function getProductUrlParams() {
         districtSlug = pathParts[1];
         locationSlug = pathParts[2];
         serviceId = pathParts[3];
+    }
+
+
+    // ==========================================
+    // CLEAN DISTRICT HQ SEO URL
+    // /tamil-nadu/chennai/tv-repair
+    //
+    // District = Location
+    // ==========================================
+
+    else if (
+        pathParts.length === 3
+    ) {
+
+        stateSlug = pathParts[0];
+        districtSlug = pathParts[1];
+
+        locationSlug =
+            pathParts[1];
+
+        serviceId =
+            pathParts[2];
     }
 
 
@@ -6779,7 +6801,8 @@ function getProductUrlParams() {
         location: locationSlug
     };
 }
-    // ==========================================
+
+// ==========================================
     // DYNAMIC PRODUCT DETAILS & REVIEWS LOADER
     // ==========================================
     async function loadProductDetailsAndReviews(serviceId) {
