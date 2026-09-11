@@ -6294,8 +6294,8 @@ padding: 0 12px !important;
 .cerood-about-section {
     width: 100%;
     max-width: 1200px;
-    margin: 80px auto 30px auto;
-    padding: 46px;
+    margin: 45px auto 24px auto;
+padding: 30px 36px;
     box-sizing: border-box;
 
     display: grid;
@@ -6322,9 +6322,8 @@ padding: 0 12px !important;
 .cerood-about-left h2 {
     max-width: 520px;
 
-    margin: 0 0 20px 0;
-
-    font-size: 32px;
+    margin: 0 0 12px 0;
+font-size: 28px;
     line-height: 1.2;
     font-weight: 600;
     letter-spacing: -0.6px;
@@ -6335,9 +6334,8 @@ padding: 0 12px !important;
 .cerood-about-left p {
     max-width: 600px;
 
-    margin: 0 0 14px 0;
-
-    font-size: 14px;
+    margin: 0 0 10px 0;
+font-size: 13px;
     line-height: 1.75;
 
     color: var(--catus-text-2);
@@ -6438,16 +6436,16 @@ padding: 0 12px !important;
 @media (max-width: 768px) {
 
     .cerood-about-section {
-        width: calc(100% - 24px);
+    width: calc(100% - 24px);
 
-        margin: 35px 12px 20px 12px;
-        padding: 24px 18px;
+    margin: 24px 12px 16px 12px;
+    padding: 20px 18px;
 
-        grid-template-columns: 1fr;
-        gap: 24px;
+    grid-template-columns: 1fr;
+    gap: 18px;
 
-        border-radius: 14px;
-    }
+    border-radius: 14px;
+}
 
     .cerood-about-left h2 {
         font-size: 23px;
@@ -6701,14 +6699,15 @@ padding: 0 12px !important;
     width: 100%;
     max-width: 1200px;
 
-    margin: 65px auto 0 auto;
-    padding: 38px 42px;
+    margin: 24px auto 20px auto;
+padding: 20px 28px;
 
     box-sizing: border-box;
 
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 65px;
+    display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 24px;
 
     background: var(--catus-primary-soft);
 
@@ -6754,7 +6753,8 @@ padding: 0 12px !important;
 }
 
 .cerood-coverage-btn {
-    margin-top: 23px;
+    margin-top: 0;
+flex-shrink: 0;
 
     min-height: 44px;
 
@@ -6846,16 +6846,17 @@ padding: 0 12px !important;
 @media (max-width: 768px) {
 
     .cerood-coverage-section {
-        width: calc(100% - 24px);
+    width: calc(100% - 24px);
 
-        margin: 35px 12px 0 12px;
-        padding: 24px 18px;
+    margin: 24px 12px 16px 12px;
+    padding: 20px 18px;
 
-        grid-template-columns: 1fr;
-        gap: 22px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
 
-        border-radius: 14px;
-    }
+    border-radius: 14px;
+}
 
     .cerood-coverage-content h2 {
         font-size: 21px;
@@ -14122,138 +14123,14 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
 </div>
 
-<!-- =====================================================
-     CEROOD SERVICE COVERAGE SECTION
-===================================================== -->
-<section class="cerood-coverage-section">
-
-    <div class="cerood-coverage-content">
-
-        <span class="cerood-coverage-label">
-            Service Availability
-        </span>
-
-        <h2>
-            Check Cerood service availability in your area
-        </h2>
-
-        <p>
-            Cerood is expanding doorstep appliance services
-            across locations in Tamil Nadu. Service availability
-            can vary by location, appliance category and
-            technician availability.
-        </p>
-
-        <button
-            type="button"
-            class="cerood-coverage-btn"
-            onclick="openLocationModal()"
-        >
-            <i class="fa-solid fa-location-dot"></i>
-            Check Your Location
-        </button>
-
-    </div>
 
 
-    <div class="cerood-coverage-info">
-
-        <div class="cerood-coverage-item">
-
-            <i class="fa-solid fa-house"></i>
-
-            <div>
-                <strong>Doorstep Service</strong>
-                <span>
-                    Service at your selected address
-                </span>
-            </div>
-
-        </div>
-
-
-        <div class="cerood-coverage-item">
-
-            <i class="fa-solid fa-location-crosshairs"></i>
-
-            <div>
-                <strong>Location-Based Availability</strong>
-                <span>
-                    Availability depends on your service area
-                </span>
-            </div>
-
-        </div>
-
-
-        <div class="cerood-coverage-item">
-
-            <i class="fa-solid fa-screwdriver-wrench"></i>
-
-            <div>
-                <strong>Multiple Appliance Services</strong>
-                <span>
-                    TV, AC, washing machine, refrigerator, RO and more
-                </span>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- =====================================================
-     CEROOD GOOGLE TRUST SECTION
-===================================================== -->
-<section class="cerood-google-trust">
-
-    <div class="cerood-google-trust-left">
-
-        <div class="cerood-google-mark">
-            <i class="fa-brands fa-google"></i>
-        </div>
-
-        <div>
-            <span class="cerood-google-label">
-                Customer Feedback
-            </span>
-
-            <h2>
-                Had a good experience with Cerood?
-            </h2>
-
-            <p>
-                Your feedback helps other customers choose
-                Cerood with confidence and helps us improve
-                our service experience.
-            </p>
-        </div>
-
-    </div>
-
-    <div class="cerood-google-trust-right">
-
-        <a
-            href="https://g.page/r/CfI4xdZRpLixEBM/review"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="cerood-google-review-btn"
-        >
-            <i class="fa-brands fa-google"></i>
-            Review Cerood on Google
-        </a>
-
-        <span>
-            Genuine customer feedback only
-        </span>
-
-    </div>
-
-</section>
 
 <!-- =====================================================
      ABOUT CEROOD — COMPANY TRUST SECTION
+===================================================== -->
+<!-- =====================================================
+     CEROOD COMPACT ABOUT SECTION
 ===================================================== -->
 <section class="cerood-about-section" id="ceroodAboutSection">
 
@@ -14264,35 +14141,27 @@ function togglePasswordVisibility(fieldId, iconElement) {
         </span>
 
         <h2>
-            Reliable home appliance service,
-            made simple.
+            Home appliance service, made simple.
         </h2>
 
         <p>
-            Cerood is a home service platform that helps customers
-            book appliance repair, installation and maintenance
-            services at their doorstep.
-        </p>
-
-        <p>
-            From TV and AC service to washing machine,
-            refrigerator and RO water purifier repair,
-            Cerood connects your booking with a service professional
-            and lets you manage your service journey in one place.
+            Cerood helps you book doorstep repair, installation and
+            maintenance services for TV, AC, washing machine,
+            refrigerator, RO water purifier and more.
         </p>
 
         <div class="cerood-about-link-row">
 
             <a href="tel:+918946055856">
                 <i class="fa-solid fa-phone"></i>
-                Contact Cerood
+                Contact Us
             </a>
 
             <a href="https://wa.me/918946055856"
                target="_blank"
                rel="noopener noreferrer">
                 <i class="fa-brands fa-whatsapp"></i>
-                WhatsApp Support
+                WhatsApp
             </a>
 
         </div>
@@ -14303,61 +14172,91 @@ function togglePasswordVisibility(fieldId, iconElement) {
     <div class="cerood-about-right">
 
         <div class="cerood-about-point">
+
             <div class="cerood-about-point-icon">
                 <i class="fa-solid fa-calendar-check"></i>
             </div>
 
             <div>
                 <strong>Easy Online Booking</strong>
-                <span>
-                    Choose your service and book from your phone.
-                </span>
+                <span>Book your required service online.</span>
             </div>
+
         </div>
 
 
         <div class="cerood-about-point">
+
             <div class="cerood-about-point-icon">
                 <i class="fa-solid fa-user-gear"></i>
             </div>
 
             <div>
                 <strong>Technician Assignment</strong>
-                <span>
-                    Your booking is assigned to a service professional.
-                </span>
+                <span>Service professional assigned to your booking.</span>
             </div>
+
         </div>
 
 
         <div class="cerood-about-point">
+
             <div class="cerood-about-point-icon">
                 <i class="fa-solid fa-location-dot"></i>
             </div>
 
             <div>
-                <strong>Service Tracking</strong>
-                <span>
-                    Follow your booking status from your Cerood account.
-                </span>
+                <strong>Booking Tracking</strong>
+                <span>Track your service from your Cerood account.</span>
             </div>
+
         </div>
 
 
         <div class="cerood-about-point">
+
             <div class="cerood-about-point-icon">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
 
             <div>
                 <strong>30-Day Service Warranty</strong>
-                <span>
-                    Eligible repair services include post-service support.
-                </span>
+                <span>Post-service support on eligible repairs.</span>
             </div>
+
         </div>
 
     </div>
+
+</section>
+
+<section class="cerood-coverage-section">
+
+    <div class="cerood-coverage-content">
+
+        <span class="cerood-coverage-label">
+            Service Availability
+        </span>
+
+        <h2>
+            Check service availability in your area
+        </h2>
+
+        <p>
+            Availability may vary by location, appliance category
+            and technician availability.
+        </p>
+
+    </div>
+
+    <button
+        type="button"
+        class="cerood-coverage-btn"
+        onclick="openLocationModal()"
+    >
+        <i class="fa-solid fa-location-dot"></i>
+        Check Your Location
+    </button>
 
 </section>
 
