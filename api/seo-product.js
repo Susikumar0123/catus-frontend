@@ -316,6 +316,39 @@ html = html.replace(
     `<h1$1id="prodTitle"$2>${escapeHtml(h1Text)}</h1>`
 );
 
+// ==========================================
+// SERVER-RENDER LOCAL SEO CONTENT
+// ==========================================
+
+const localSeoTitle =
+    `${page.service_name} in ${page.location_name}`;
+
+const localSeoDescription =
+    `Looking for ${page.service_name.toLowerCase()} in ` +
+    `${page.location_name}, ${page.district}? ` +
+    `Cerood helps you book doorstep appliance service with ` +
+    `easy online booking and local service support.`;
+
+html = html.replace(
+    /<h2([^>]*?)id=["']ceroodLocalSeoTitle["']([^>]*)>[\s\S]*?<\/h2>/i,
+    `<h2$1id="ceroodLocalSeoTitle"$2>${escapeHtml(localSeoTitle)}</h2>`
+);
+
+html = html.replace(
+    /<p([^>]*?)id=["']ceroodLocalSeoDescription["']([^>]*)>[\s\S]*?<\/p>/i,
+    `<p$1id="ceroodLocalSeoDescription"$2>${escapeHtml(localSeoDescription)}</p>`
+);
+
+html = html.replace(
+    /<strong([^>]*?)id=["']ceroodLocalSeoService["']([^>]*)>[\s\S]*?<\/strong>/i,
+    `<strong$1id="ceroodLocalSeoService"$2>${escapeHtml(page.service_name)}</strong>`
+);
+
+html = html.replace(
+    /<strong([^>]*?)id=["']ceroodLocalSeoLocation["']([^>]*)>[\s\S]*?<\/strong>/i,
+    `<strong$1id="ceroodLocalSeoLocation"$2>${escapeHtml(page.location_name)}, ${escapeHtml(page.district)}</strong>`
+);
+
         // ==========================================
 // SERVER-RENDER RELATED SERVICE LINKS
 // ==========================================
