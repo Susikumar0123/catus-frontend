@@ -7789,26 +7789,7 @@ const averageRating =
     }
 }
 
-    function openRelatedService(serviceId) {
-
-    const serviceValue =
-        String(serviceId || '').trim();
-
-    if (
-        currentStateSlug &&
-        currentDistrictSlug &&
-        serviceValue
-    ) {
-        window.location.href =
-            `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
-
-        return;
-    }
-
-    window.location.href =
-        `/product.html?id=${serviceValue}`;
-}
-
+    
     function loadRelevantServicesSection(allServices, currentCategory, currentId) {
         const relatedContainer = document.getElementById('relatedContainer');
         const relatedBox = document.getElementById('relatedServicesBox');
@@ -11473,86 +11454,7 @@ function trackProfileChange(field, oldVal, newVal) {
         });
         container.innerHTML = html;
     }
-    function loadRelatedServices(allServices, currentCategory, currentId) {
-
-    const relatedContainer =
-        document.getElementById('relatedContainer');
-
-    if (!relatedContainer) return;
-
-    let filtered =
-        allServices
-            .filter(
-                s =>
-                    s.category === currentCategory &&
-                    s.service_id !== currentId
-            )
-            .slice(0, 4);
-
-    if (filtered.length === 0) {
-        filtered =
-            allServices.slice(0, 4);
-    }
-
-    let html = '';
-
-    filtered.forEach(s => {
-
-        const serviceSlug =
-            s.slug || s.service_id;
-
-        const hasSeoSlug =
-            typeof s.slug === 'string' &&
-            s.slug.trim() !== '';
-
-       const serviceUrl =
-    currentStateSlug &&
-    currentDistrictSlug &&
-    hasSeoSlug
-        ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
-        : `/product.html?id=${serviceSlug}`;
-
-        html += `
-            <a
-                class="uc-card"
-                href="${serviceUrl}"
-                style="text-decoration:none;color:inherit;"
-            >
-                <div class="uc-card-img-wrapper">
-
-                    <img
-                        src="${getSmallProductImageUrl(s.image_url)}"
-                        alt="${s.service_name}"
-                        loading="lazy"
-                    >
-
-                    <div class="uc-overlay-rating">
-                        <i class="fa-solid fa-star"></i>
-                        ${s.rating || '0.0'}
-                    </div>
-
-                </div>
-
-                <div class="uc-body">
-                    <div>
-                        <h4>${s.service_name}</h4>
-
-                        <div class="uc-price">
-                            ₹${Math.round(parseFloat(s.price))}
-                            <span class="uc-cut">
-                                ₹${Math.round(parseFloat(s.mrp))}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        `;
-    });
-
-    relatedContainer.innerHTML =
-        html;
-}
-
+  
 function scrollToCategories() {
     const catSection = document.getElementById('relatedServicesBox');
     if (catSection) {
