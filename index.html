@@ -14360,10 +14360,40 @@ document.addEventListener('click', function (event) {
     <ul class="cerood-footer-links">
 
         <li>
-            <a href="#ceroodAboutSection">
+            <a
+    href="#"
+    onclick="openCeroodInfoModal('ceroodAboutModal'); return false;"
+>
                 About Cerood
             </a>
         </li>
+
+        <li>
+    <a
+        href="#"
+        onclick="openCeroodInfoModal('ceroodAvailabilityModal'); return false;"
+    >
+        Service Availability
+    </a>
+</li>
+
+<li>
+    <a
+        href="#"
+        onclick="event.preventDefault(); document.querySelector('.seo-service-areas-footer').open = true; document.querySelector('.seo-service-areas-footer').scrollIntoView({ behavior: 'smooth', block: 'center' });"
+    >
+        Service Areas
+    </a>
+</li>
+
+<li>
+    <a
+        href="#"
+        onclick="openCeroodLocalSeoPopup(); return false;"
+    >
+        Service Information
+    </a>
+</li>
 
         <li>
             <a href="#" onclick="toggleCartModal(true); return false;">
