@@ -303,6 +303,19 @@ try {
             );
         }
 
+
+        // ==========================================
+// SERVER-RENDER H1
+// ==========================================
+
+const h1Text =
+    `${page.service_name} in ${page.location_name}`;
+
+html = html.replace(
+    /<h1([^>]*?)id=["']prodTitle["']([^>]*)>[\s\S]*?<\/h1>/i,
+    `<h1$1id="prodTitle"$2>${escapeHtml(h1Text)}</h1>`
+);
+
         // ==========================================
 // SERVER-RENDER RELATED SERVICE LINKS
 // ==========================================
