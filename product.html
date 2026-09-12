@@ -4903,6 +4903,87 @@ body {
     }
 }
 
+/* =====================================================
+   CEROOD LOCAL SEO CONTENT
+===================================================== */
+
+.cerood-local-seo-section {
+    margin-top: 42px;
+    padding: 28px 30px;
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 16px;
+}
+
+.cerood-local-seo-section h2 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 600;
+    color: #111318;
+}
+
+.cerood-local-seo-section > p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #555b66;
+    max-width: 950px;
+}
+
+.cerood-local-seo-points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.cerood-local-seo-points > div {
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+}
+
+.cerood-local-seo-points strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111318;
+}
+
+.cerood-local-seo-points span {
+    display: block;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #666b75;
+}
+
+@media (max-width: 850px) {
+
+    .cerood-local-seo-section {
+        margin-top: 30px;
+        padding: 20px 16px;
+        border-radius: 12px;
+    }
+
+    .cerood-local-seo-section h2 {
+        font-size: 20px;
+    }
+
+    .cerood-local-seo-section > p {
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    .cerood-local-seo-points {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 18px;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -4962,7 +5043,7 @@ body {
     <!-- BREADCRUMB -->
     <div class="breadcrumb">
         <a href="/">Home</a> <span>|</span> 
-        <a href="#" id="bcCategory">Service Category</a> <span>|</span> 
+        <span id="bcCategory">Service Category</span> <span>|</span>
         <span class="active" id="bcTitle">Loading...</span>
     </div>
 
@@ -5403,6 +5484,42 @@ body {
         "
     >
 </div>
+
+<!-- =====================================================
+     CEROOD LOCAL SEO CONTENT
+===================================================== -->
+<section
+    id="ceroodLocalSeoSection"
+    class="cerood-local-seo-section"
+    style="display:none;"
+>
+    <h2 id="ceroodLocalSeoTitle"></h2>
+
+    <p id="ceroodLocalSeoDescription"></p>
+
+    <div class="cerood-local-seo-points">
+        <div>
+            <strong id="ceroodLocalSeoService"></strong>
+            <span>
+                Doorstep inspection, diagnosis and service support.
+            </span>
+        </div>
+
+        <div>
+            <strong id="ceroodLocalSeoLocation"></strong>
+            <span>
+                Service availability may vary by area and technician availability.
+            </span>
+        </div>
+
+        <div>
+            <strong>Book with Cerood</strong>
+            <span>
+                Choose your required service and book online through Cerood.
+            </span>
+        </div>
+    </div>
+</section>
    
 
     <div class="uc-category-box" id="relatedServicesBox">
@@ -6673,21 +6790,34 @@ function handleProductSearchSelect(serviceId) {
         box.style.display = 'none';
     }
 
-    // Current location irundha pretty URL use pannu
+    const serviceValue =
+        String(serviceId || '').trim();
+
+    const isNumericServiceId =
+        /^\d+$/.test(serviceValue);
+
     if (
         currentStateSlug &&
         currentDistrictSlug &&
         currentLocationSlug
     ) {
-        window.location.href =
-            `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceId}`;
+
+        if (
+            currentDistrictSlug === currentLocationSlug &&
+            !isNumericServiceId
+        ) {
+            window.location.href =
+                `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
+        } else {
+            window.location.href =
+                `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceValue}`;
+        }
 
         return;
     }
 
-    // Location illa na root product page
     window.location.href =
-        `/product.html?id=${encodeURIComponent(serviceId)}`;
+        `/product.html?id=${serviceValue}`;
 }
 
     let currentProductData = {
@@ -7601,23 +7731,34 @@ const averageRating =
 
     function openRelatedService(serviceId) {
 
+    const serviceValue =
+        String(serviceId || '').trim();
+
+    const isNumericServiceId =
+        /^\d+$/.test(serviceValue);
+
     if (
         currentStateSlug &&
         currentDistrictSlug &&
         currentLocationSlug
     ) {
 
-        window.location.href =
-            `/${currentStateSlug}/` +
-            `${currentDistrictSlug}/` +
-            `${currentLocationSlug}/` +
-            `${serviceId}`;
+        if (
+            currentDistrictSlug === currentLocationSlug &&
+            !isNumericServiceId
+        ) {
+            window.location.href =
+                `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
+        } else {
+            window.location.href =
+                `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceValue}`;
+        }
 
         return;
     }
 
     window.location.href =
-        `/product.html?id=${serviceId}`;
+        `/product.html?id=${serviceValue}`;
 }
 
     function loadRelevantServicesSection(allServices, currentCategory, currentId) {
@@ -7643,14 +7784,24 @@ const averageRating =
         let html = '';
         filtered.forEach(s => {
 
-    const serviceSlug = s.slug || s.service_id;
+   const serviceSlug =
+    s.slug || s.service_id;
 
-    const serviceUrl =
-        currentStateSlug &&
-        currentDistrictSlug &&
-        currentLocationSlug
-            ? `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceSlug}`
-            : `/product.html?id=${serviceSlug}`;
+const hasSeoSlug =
+    typeof s.slug === 'string' &&
+    s.slug.trim() !== '';
+
+const serviceUrl =
+    currentStateSlug &&
+    currentDistrictSlug &&
+    currentLocationSlug
+        ? (
+            hasSeoSlug &&
+            currentDistrictSlug === currentLocationSlug
+                ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
+                : `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceSlug}`
+          )
+        : `/product.html?id=${serviceSlug}`;
 
     html += `
     <a class="uc-card"
@@ -7928,7 +8079,9 @@ try {
             );
             
 productTitle.textContent =
-    page.service_name;
+    page.location_name
+        ? `${page.service_name} in ${page.location_name}`
+        : page.service_name;
         
 
     
@@ -8319,7 +8472,9 @@ await loadCeroodWorkProofs(
 
         if (breadcrumbTitle) {
     breadcrumbTitle.textContent =
-        page.service_name;
+        page.location_name
+            ? `${page.service_name} in ${page.location_name}`
+            : page.service_name;
 }
 
 
@@ -8327,7 +8482,108 @@ await loadCeroodWorkProofs(
         // RATING
         // ------------------------------------------
 
-        
+     // ------------------------------------------
+// LOCAL SEO VISIBLE CONTENT
+// ------------------------------------------
+
+const localSeoSection =
+    document.getElementById(
+        'ceroodLocalSeoSection'
+    );
+
+const localSeoTitle =
+    document.getElementById(
+        'ceroodLocalSeoTitle'
+    );
+
+const localSeoDescription =
+    document.getElementById(
+        'ceroodLocalSeoDescription'
+    );
+
+const localSeoService =
+    document.getElementById(
+        'ceroodLocalSeoService'
+    );
+
+const localSeoLocation =
+    document.getElementById(
+        'ceroodLocalSeoLocation'
+    );
+
+if (
+    localSeoSection &&
+    localSeoTitle &&
+    localSeoDescription &&
+    localSeoService &&
+    localSeoLocation
+) {
+
+    const serviceName =
+        page.service_name || 'Home Appliance Service';
+
+    const locationName =
+        page.location_name || page.district || '';
+
+    const districtName =
+        page.district || '';
+
+    localSeoTitle.textContent =
+        `${serviceName} in ${locationName}`;
+
+    const serviceLower =
+    serviceName.toLowerCase();
+
+let serviceHelpText =
+    'inspection, diagnosis and repair support';
+
+if (
+    serviceLower.includes('ac') ||
+    serviceLower.includes('air conditioner')
+) {
+    serviceHelpText =
+        'AC inspection, cooling issue diagnosis, cleaning, repair and maintenance support';
+}
+else if (
+    serviceLower.includes('washing machine')
+) {
+    serviceHelpText =
+        'washing machine inspection, drainage, spin, noise and general repair support';
+}
+else if (
+    serviceLower.includes('tv') ||
+    serviceLower.includes('television')
+) {
+    serviceHelpText =
+        'TV inspection and support for display, sound, power and other common TV problems';
+}
+else if (
+    serviceLower.includes('refrigerator') ||
+    serviceLower.includes('fridge')
+) {
+    serviceHelpText =
+        'refrigerator inspection and support for cooling, leakage, noise and other common issues';
+}
+else if (
+    serviceLower.includes('ro') ||
+    serviceLower.includes('water purifier')
+) {
+    serviceHelpText =
+        'water purifier inspection, installation, filter and common water-flow service support';
+}
+
+localSeoDescription.textContent =
+    `Looking for ${serviceLower} in ${locationName}? Cerood helps customers book doorstep ${serviceHelpText} in ${locationName}${districtName && districtName !== locationName ? `, ${districtName} district` : ''}. Service availability depends on the selected area and technician availability.`;
+
+    localSeoService.textContent =
+        serviceName;
+
+    localSeoLocation.textContent =
+        `Service in ${locationName}`;
+
+    localSeoSection.style.display =
+        'block';
+}   
 
 
         // ------------------------------------------
@@ -8336,7 +8592,7 @@ await loadCeroodWorkProofs(
 
         document.title =
     page.seo_title ||
-    `${page.service_name} Near You in ${page.location_name} | Cerood`;
+    `${page.service_name} in ${page.location_name} | Cerood`;
 
 
         // ------------------------------------------
@@ -8361,9 +8617,15 @@ await loadCeroodWorkProofs(
             );
         }
 
+        const seoPlaceName =
+    page.district &&
+    page.district !== page.location_name
+        ? `${page.location_name}, ${page.district}`
+        : page.location_name;
+
         metaDescription.content =
     page.seo_description ||
-    `Book ${page.service_name.toLowerCase()} near you in ${page.location_name}, ${page.district}. Trusted doorstep service with Cerood.`;
+    `Book ${page.service_name.toLowerCase()} near you in ${seoPlaceName}. Trusted doorstep service with Cerood.`;
 
 
         // ------------------------------------------
@@ -8402,11 +8664,11 @@ const currentSeoUrl =
 
 const seoTitle =
     page.seo_title ||
-    `${page.service_name} Near You in ${page.location_name} | Cerood`;
+    `${page.service_name} in ${page.location_name} | Cerood`;
 
 const seoDescription =
     page.seo_description ||
-    `Book ${page.service_name.toLowerCase()} near you in ${page.location_name}, ${page.district}. Trusted doorstep service with Cerood.`;
+    `Book ${page.service_name.toLowerCase()} near you in ${seoPlaceName}. Trusted doorstep service with Cerood.`;
 
 function setOgMeta(property, content) {
 
@@ -8553,11 +8815,11 @@ dynamicSchema.textContent =
                     "#service",
 
                 "name":
-                    `${page.service_name} in ${page.location_name}, ${page.district}`,
+    `${page.service_name} in ${seoPlaceName}`,
 
-                "description":
-                    page.seo_description ||
-                    `${page.service_name} doorstep service in ${page.location_name}, ${page.district}. Book trusted home appliance service with Cerood.`,
+               "description":
+    page.seo_description ||
+    `${page.service_name} doorstep service in ${seoPlaceName}. Book trusted home appliance service with Cerood.`,
 "url":
     'https://www.cerood.com' +
     window.location.pathname,
@@ -8572,10 +8834,10 @@ dynamicSchema.textContent =
                 },
 
                 "areaServed": {
-                    "@type": "Place",
-                    "name":
-                        `${page.location_name}, ${page.district}`
-                },
+    "@type": "Place",
+    "name":
+        seoPlaceName
+},
 
                 "serviceType":
                     page.service_name
@@ -8584,49 +8846,22 @@ dynamicSchema.textContent =
             {
                 "@type": "BreadcrumbList",
                 "itemListElement": [
-                    {
-                        "@type": "ListItem",
-                        "position": 1,
-                        "name": "Home",
-                        "item":
-                            'https://www.cerood.com' + "/"
-                    },
-                    {
-                        "@type": "ListItem",
-                        "position": 2,
-                        "name":
-                            page.district,
-                        "item":
-                            'https://www.cerood.com' +
-                            "/" +
-                            currentStateSlug +
-                            "/" +
-                            currentDistrictSlug
-                    },
-                    {
-                        "@type": "ListItem",
-                        "position": 3,
-                        "name":
-                            page.location_name,
-                        "item":
-                            'https://www.cerood.com' +
-                            "/" +
-                            currentStateSlug +
-                            "/" +
-                            currentDistrictSlug +
-                            "/" +
-                            currentLocationSlug
-                    },
-                    {
-                        "@type": "ListItem",
-                        "position": 4,
-                        "name":
-                            page.service_name,
-                        "item":
-                            'https://www.cerood.com' +
-                            window.location.pathname
-                    }
-                ]
+    {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.cerood.com/"
+    },
+    {
+        "@type": "ListItem",
+        "position": 2,
+        "name":
+            `${page.service_name} in ${page.location_name}`,
+        "item":
+            'https://www.cerood.com' +
+            window.location.pathname
+    }
+]
             }
         ]
     });
@@ -8735,39 +8970,7 @@ function getSmallProductImageUrl(imageUrl) {
     return imageUrl;
 }
 
-    function loadRelatedServices(allServices, currentCategory, currentId) {
-    const relatedContainer = document.getElementById('relatedContainer');
-    if(!relatedContainer) return;
-    let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
     
-    if (filtered.length === 0) {
-        filtered = allServices.slice(0, 4); 
-    }
-
-    let html = '';
-    filtered.forEach(s => {
-        html += `
-        <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
-            <div class="uc-card-img-wrapper">
-                <img
-    src="${getSmallProductImageUrl(s.image_url)}"
-    data-full-image="${s.image_url}"
-    alt="${s.service_name}"
-    loading="lazy"
->
-                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
-            </div>
-            <div class="uc-body">
-                <div>
-                    <h4>${s.service_name}</h4>
-                    <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
-                </div>
-            </div>
-        </div>`;
-    });
-    relatedContainer.innerHTML = html;
-}
-
     function addToCartCurrentProduct() {
     if (!currentProductData) return;
 
@@ -11170,36 +11373,90 @@ function trackProfileChange(field, oldVal, newVal) {
         container.innerHTML = html;
     }
     function loadRelatedServices(allServices, currentCategory, currentId) {
-    const relatedContainer = document.getElementById('relatedContainer');
-    if(!relatedContainer) return;
-    let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
-    
+
+    const relatedContainer =
+        document.getElementById('relatedContainer');
+
+    if (!relatedContainer) return;
+
+    let filtered =
+        allServices
+            .filter(
+                s =>
+                    s.category === currentCategory &&
+                    s.service_id !== currentId
+            )
+            .slice(0, 4);
+
     if (filtered.length === 0) {
-        filtered = allServices.slice(0, 4); 
+        filtered =
+            allServices.slice(0, 4);
     }
 
     let html = '';
+
     filtered.forEach(s => {
+
+        const serviceSlug =
+            s.slug || s.service_id;
+
+        const hasSeoSlug =
+            typeof s.slug === 'string' &&
+            s.slug.trim() !== '';
+
+        const serviceUrl =
+            currentStateSlug &&
+            currentDistrictSlug &&
+            currentLocationSlug
+                ? (
+                    hasSeoSlug &&
+                    currentDistrictSlug === currentLocationSlug
+                        ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
+                        : `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceSlug}`
+                  )
+                : `/product.html?id=${serviceSlug}`;
+
         html += `
-        <div class="uc-card" onclick="openRelatedService('${s.slug || s.service_id}')">
-            <div class="uc-card-img-wrapper">
-                <img
-    src="${getSmallProductImageUrl(s.image_url)}"
-    alt="${s.service_name}"
-    loading="lazy"
->
-                <div class="uc-overlay-rating"><i class="fa-solid fa-star"></i> ${s.rating || '0.0'}</div>
-            </div>
-            <div class="uc-body">
-                <div>
-                    <h4>${s.service_name}</h4>
-                    <div class="uc-price">₹${Math.round(parseFloat(s.price))} <span class="uc-cut">₹${Math.round(parseFloat(s.mrp))}</span></div>
+            <a
+                class="uc-card"
+                href="${serviceUrl}"
+                style="text-decoration:none;color:inherit;"
+            >
+                <div class="uc-card-img-wrapper">
+
+                    <img
+                        src="${getSmallProductImageUrl(s.image_url)}"
+                        alt="${s.service_name}"
+                        loading="lazy"
+                    >
+
+                    <div class="uc-overlay-rating">
+                        <i class="fa-solid fa-star"></i>
+                        ${s.rating || '0.0'}
+                    </div>
+
                 </div>
-            </div>
-        </div>`;
+
+                <div class="uc-body">
+                    <div>
+                        <h4>${s.service_name}</h4>
+
+                        <div class="uc-price">
+                            ₹${Math.round(parseFloat(s.price))}
+                            <span class="uc-cut">
+                                ₹${Math.round(parseFloat(s.mrp))}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        `;
     });
-    relatedContainer.innerHTML = html;
+
+    relatedContainer.innerHTML =
+        html;
 }
+
 function scrollToCategories() {
     const catSection = document.getElementById('relatedServicesBox');
     if (catSection) {
