@@ -5485,41 +5485,7 @@ body {
     >
 </div>
 
-<!-- =====================================================
-     CEROOD LOCAL SEO CONTENT
-===================================================== -->
-<section
-    id="ceroodLocalSeoSection"
-    class="cerood-local-seo-section"
-    style="display:none;"
->
-    <h2 id="ceroodLocalSeoTitle"></h2>
 
-    <p id="ceroodLocalSeoDescription"></p>
-
-    <div class="cerood-local-seo-points">
-        <div>
-            <strong id="ceroodLocalSeoService"></strong>
-            <span>
-                Doorstep inspection, diagnosis and service support.
-            </span>
-        </div>
-
-        <div>
-            <strong id="ceroodLocalSeoLocation"></strong>
-            <span>
-                Service availability may vary by area and technician availability.
-            </span>
-        </div>
-
-        <div>
-            <strong>Book with Cerood</strong>
-            <span>
-                Choose your required service and book online through Cerood.
-            </span>
-        </div>
-    </div>
-</section>
    
 
     <div class="uc-category-box" id="relatedServicesBox">
@@ -12506,6 +12472,69 @@ function togglePasswordVisibility(fieldId, iconElement) {
     </button>
 
 </div> 
+
+<!-- =====================================================
+     CEROOD LOCAL SERVICE INFORMATION POPUP
+===================================================== -->
+<div
+    id="ceroodLocalSeoPopup"
+    class="cerood-local-seo-popup"
+    style="display:none;"
+    onclick="closeCeroodLocalSeoPopup(event)"
+>
+    <div
+        class="cerood-local-seo-popup-card"
+        onclick="event.stopPropagation()"
+    >
+
+        <button
+            type="button"
+            class="cerood-local-seo-popup-close"
+            onclick="closeCeroodLocalSeoPopup()"
+            aria-label="Close service information"
+        >
+            ×
+        </button>
+
+
+        <!-- =====================================================
+     CEROOD LOCAL SEO CONTENT
+===================================================== -->
+<section
+    id="ceroodLocalSeoSection"
+    class="cerood-local-seo-section"
+    style="display:none;"
+>
+    <h2 id="ceroodLocalSeoTitle"></h2>
+
+    <p id="ceroodLocalSeoDescription"></p>
+
+    <div class="cerood-local-seo-points">
+        <div>
+            <strong id="ceroodLocalSeoService"></strong>
+            <span>
+                Doorstep inspection, diagnosis and service support.
+            </span>
+        </div>
+
+        <div>
+            <strong id="ceroodLocalSeoLocation"></strong>
+            <span>
+                Service availability may vary by area and technician availability.
+            </span>
+        </div>
+
+        <div>
+            <strong>Book with Cerood</strong>
+            <span>
+                Choose your required service and book online through Cerood.
+            </span>
+        </div>
+    </div>
+</section>
+
+    </div>
+</div>
     
 <!-- Professional Footer Section -->
 <div class="footer-wrapper">
