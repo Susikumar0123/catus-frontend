@@ -6865,13 +6865,31 @@ function handleProductSearchSelect(serviceId) {
     const serviceValue =
         String(serviceId || '').trim();
 
+    const savedLocationSlug =
+        localStorage.getItem('catus_location_slug') || '';
+
+    const savedDistrictSlug =
+        localStorage.getItem('catus_district_slug') || '';
+
+    const canUseSavedLocation =
+        savedLocationSlug &&
+        savedDistrictSlug === currentDistrictSlug;
+
+    const targetLocationSlug =
+        canUseSavedLocation
+            ? savedLocationSlug
+            : currentLocationSlug;
+
     if (
         currentStateSlug &&
         currentDistrictSlug &&
+        targetLocationSlug &&
         serviceValue
     ) {
         window.location.href =
-            `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
+            targetLocationSlug === currentDistrictSlug
+                ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`
+                : `/${currentStateSlug}/${currentDistrictSlug}/${targetLocationSlug}/${serviceValue}`;
 
         return;
     }
@@ -6879,6 +6897,7 @@ function handleProductSearchSelect(serviceId) {
     window.location.href =
         `/product.html?id=${serviceValue}`;
 }
+
 
     let currentProductData = {
         service_id: 'tv-repair',
@@ -6896,6 +6915,87 @@ function handleProductSearchSelect(serviceId) {
     let tempPhone = "";
 
     let activeServiceId = 'tv-repair';
+let ceroodSeoLocationKeys = null;
+let ceroodSeoLocationLoadPromise = null;
+
+function ceroodSeoSlugify(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+async function loadCeroodSeoLocationKeys() {
+
+    if (ceroodSeoLocationKeys) {
+        return ceroodSeoLocationKeys;
+    }
+
+    if (ceroodSeoLocationLoadPromise) {
+        return ceroodSeoLocationLoadPromise;
+    }
+
+    ceroodSeoLocationLoadPromise = (async () => {
+
+        const keys = new Set();
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/seo-locations`
+                );
+
+            const data =
+                await response.json();
+
+            if (
+                response.ok &&
+                data.success &&
+                Array.isArray(data.locations)
+            ) {
+
+                data.locations.forEach(location => {
+
+                    const stateSlug =
+                        ceroodSeoSlugify(location.state);
+
+                    const districtSlug =
+                        ceroodSeoSlugify(location.district);
+
+                    const locationSlug =
+                        ceroodSeoSlugify(
+                            location.location_slug
+                        );
+
+                    if (
+                        stateSlug &&
+                        districtSlug &&
+                        locationSlug
+                    ) {
+                        keys.add(
+                            `${stateSlug}|${districtSlug}|${locationSlug}`
+                        );
+                    }
+                });
+            }
+
+        } catch (error) {
+            console.error(
+                'SEO location check failed:',
+                error
+            );
+        }
+
+        ceroodSeoLocationKeys = keys;
+        return keys;
+
+    })();
+
+    return ceroodSeoLocationLoadPromise;
+}
+    
 let currentStateSlug = '';
 let currentLocationSlug = '';
 let currentDistrictSlug = '';
@@ -7820,11 +7920,31 @@ const hasSeoSlug =
     typeof s.slug === 'string' &&
     s.slug.trim() !== '';
 
+const savedLocationSlug =
+    localStorage.getItem('catus_location_slug') || '';
+
+const savedDistrictSlug =
+    localStorage.getItem('catus_district_slug') || '';
+
+const canUseSavedLocation =
+    savedLocationSlug &&
+    savedDistrictSlug === currentDistrictSlug;
+
+const relatedLocationSlug =
+    canUseSavedLocation
+        ? savedLocationSlug
+        : currentLocationSlug;
+
 const serviceUrl =
     currentStateSlug &&
     currentDistrictSlug &&
+    relatedLocationSlug &&
     hasSeoSlug
-        ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
+        ? (
+            relatedLocationSlug === currentDistrictSlug
+                ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
+                : `/${currentStateSlug}/${currentDistrictSlug}/${relatedLocationSlug}/${serviceSlug}`
+          )
         : `/product.html?id=${serviceSlug}`;
 
     html += `
@@ -11940,17 +12060,34 @@ function detectCurrentLocation() {
                 toggleLocationModal(false);
 
                 if (
-                    stateSlug &&
-                    districtSlug &&
-                    locationSlug &&
-                    serviceSlug
-                ) {
+    stateSlug &&
+    districtSlug &&
+    locationSlug &&
+    serviceSlug
+) {
 
-                    window.location.href =
-                        `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
+    await loadCeroodSeoLocationKeys();
 
-                    return;
-                }
+    const locationKey =
+        `${stateSlug}|${districtSlug}|${locationSlug}`;
+
+    const isSupportedSeoLocation =
+        ceroodSeoLocationKeys &&
+        ceroodSeoLocationKeys.has(locationKey);
+
+    if (
+        isSupportedSeoLocation &&
+        locationSlug !== districtSlug
+    ) {
+        window.location.href =
+            `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
+    } else {
+        window.location.href =
+            `/${stateSlug}/${districtSlug}/${serviceSlug}`;
+    }
+
+    return;
+}
 
                 showToast(
                     "Live location detected successfully!",
@@ -12260,8 +12397,25 @@ async function selectLocationSuggestionByIndex(index) {
 
     toggleLocationModal(false);
 
+    await loadCeroodSeoLocationKeys();
+
+const locationKey =
+    `${stateSlug}|${districtSlug}|${locationSlug}`;
+
+const isSupportedSeoLocation =
+    ceroodSeoLocationKeys &&
+    ceroodSeoLocationKeys.has(locationKey);
+
+if (
+    isSupportedSeoLocation &&
+    locationSlug !== districtSlug
+) {
     window.location.href =
         `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
+} else {
+    window.location.href =
+        `/${stateSlug}/${districtSlug}/${serviceSlug}`;
+}
 }
 
 function formatShortAddress(fullAddress) {
