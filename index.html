@@ -9038,12 +9038,7 @@ async function loadSeoServiceAreas() {
             'seoServiceAreasContainer'
         );
 
-    const section =
-        document.getElementById(
-            'seoServiceAreasSection'
-        );
-
-    if (!container || !section) return;
+    if (!container) return;
 
     try {
 
@@ -9061,7 +9056,7 @@ async function loadSeoServiceAreas() {
             !Array.isArray(data.locations) ||
             data.locations.length === 0
         ) {
-            section.style.display = 'none';
+            
             return;
         }
 
@@ -9196,7 +9191,7 @@ districtDetails.forEach(detail => {
             error
         );
 
-        section.style.display = 'none';
+    
     }
 }
 
@@ -14268,6 +14263,42 @@ document.addEventListener('click', function (event) {
     </div>
 </div>
 
+<div class="cerood-info-modal" id="ceroodServiceAreasModal">
+    <div class="cerood-info-modal-card">
+
+        <button
+            type="button"
+            class="cerood-info-modal-close"
+            onclick="closeCeroodInfoModal('ceroodServiceAreasModal')"
+            aria-label="Close service areas"
+        >
+            ×
+        </button>
+
+        <section class="cerood-coverage-section">
+
+            <div class="cerood-coverage-content">
+
+                <span class="cerood-coverage-label">
+                    Service Areas
+                </span>
+
+                <h2>
+                    Cerood service locations across Tamil Nadu
+                </h2>
+
+                <p>
+                    Explore Cerood service availability across locations in Tamil Nadu.
+                </p>
+
+                <div id="seoServiceAreasContainer"></div>
+
+            </div>
+
+        </section>
+
+    </div>
+</div>
 
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 24px;">
