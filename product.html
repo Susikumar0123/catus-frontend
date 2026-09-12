@@ -6871,9 +6871,14 @@ function handleProductSearchSelect(serviceId) {
     const savedDistrictSlug =
         localStorage.getItem('catus_district_slug') || '';
 
-    const canUseSavedLocation =
-        savedLocationSlug &&
-        savedDistrictSlug === currentDistrictSlug;
+    const savedLocationKey =
+    `${currentStateSlug}|${currentDistrictSlug}|${savedLocationSlug}`;
+
+const canUseSavedLocation =
+    savedLocationSlug &&
+    savedDistrictSlug === currentDistrictSlug &&
+    ceroodSeoLocationKeys &&
+    ceroodSeoLocationKeys.has(savedLocationKey);
 
     const targetLocationSlug =
         canUseSavedLocation
@@ -7926,9 +7931,14 @@ const savedLocationSlug =
 const savedDistrictSlug =
     localStorage.getItem('catus_district_slug') || '';
 
+const savedLocationKey =
+    `${currentStateSlug}|${currentDistrictSlug}|${savedLocationSlug}`;
+
 const canUseSavedLocation =
     savedLocationSlug &&
-    savedDistrictSlug === currentDistrictSlug;
+    savedDistrictSlug === currentDistrictSlug &&
+    ceroodSeoLocationKeys &&
+    ceroodSeoLocationKeys.has(savedLocationKey);
 
 const relatedLocationSlug =
     canUseSavedLocation
@@ -7975,6 +7985,8 @@ const serviceUrl =
 
     updateCartUI();
     updateHeaderLoginUI();
+
+    await loadCeroodSeoLocationKeys();
 
     const pageParams =
         getProductUrlParams();
