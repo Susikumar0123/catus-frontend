@@ -109,6 +109,61 @@ module.exports = async function handler(req, res) {
 
         const page = data.page;
 
+        // ==========================================
+// FETCH RELATED SERVICES FOR SERVER HTML
+// ==========================================
+
+let relatedServices = [];
+
+try {
+
+    const servicesResponse =
+        await fetch(
+            'https://catus-backend-d2js.onrender.com/api/services'
+        );
+
+    const servicesData =
+        await servicesResponse.json();
+
+    if (
+        servicesResponse.ok &&
+        servicesData.success &&
+        Array.isArray(servicesData.services)
+    ) {
+
+        relatedServices =
+            servicesData.services
+                .filter(item =>
+                    item &&
+                    item.slug &&
+                    String(item.service_id) !==
+                        String(page.service_id) &&
+                    item.category === page.category
+                )
+                .slice(0, 4);
+
+        if (relatedServices.length === 0) {
+
+            relatedServices =
+                servicesData.services
+                    .filter(item =>
+                        item &&
+                        item.slug &&
+                        String(item.service_id) !==
+                            String(page.service_id)
+                    )
+                    .slice(0, 4);
+        }
+    }
+
+} catch (relatedError) {
+
+    console.error(
+        'Server related services error:',
+        relatedError
+    );
+}
+
 
         // ==========================================
         // CANONICAL URL
@@ -247,6 +302,116 @@ module.exports = async function handler(req, res) {
                 `    ${ogUrlTag}\n</head>`
             );
         }
+
+        // ==========================================
+// SERVER-RENDER RELATED SERVICE LINKS
+// ==========================================
+
+if (relatedServices.length > 0) {
+
+    const relatedLinksHtml =
+        relatedServices
+            .map(item => {
+
+                const relatedSlug =
+                    String(item.slug || '').trim();
+
+                if (!relatedSlug) {
+                    return '';
+                }
+
+                const relatedUrl =
+                    district === location
+                        ? (
+                            `/${encodePathSegment(state)}/` +
+                            `${encodePathSegment(district)}/` +
+                            `${encodePathSegment(relatedSlug)}`
+                        )
+                        : (
+                            `/${encodePathSegment(state)}/` +
+                            `${encodePathSegment(district)}/` +
+                            `${encodePathSegment(location)}/` +
+                            `${encodePathSegment(relatedSlug)}`
+                        );
+
+                return `
+                    <a class="uc-card"
+                       href="${escapeHtml(relatedUrl)}"
+                       style="text-decoration:none;color:inherit;">
+                        <div class="uc-body">
+                            <h4>${escapeHtml(item.service_name)}</h4>
+                        </div>
+                    </a>
+                `;
+
+            })
+            .join('');
+
+    html = html.replace(
+        /<div([^>]*?)id=["']relatedContainer["']([^>]*)>[\s\S]*?<\/div>/i,
+        `<div$1id="relatedContainer"$2>${relatedLinksHtml}</div>`
+    );
+}
+
+// ==========================================
+// SERVER-RENDER SEO SCHEMA
+// ==========================================
+
+const seoPlaceName =
+    page.location_name ||
+    page.district ||
+    location;
+
+const serverSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Service",
+            "@id": `${canonical}#service`,
+            "name": `${page.service_name} in ${seoPlaceName}`,
+            "description": description,
+            "url": canonical,
+            "image": page.image_url || undefined,
+            "provider": {
+                "@type": "Organization",
+                "name": "Cerood Home Services",
+                "url": "https://www.cerood.com/"
+            },
+            "areaServed": {
+                "@type": "Place",
+                "name": seoPlaceName
+            },
+            "serviceType": page.service_name
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://www.cerood.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": `${page.service_name} in ${seoPlaceName}`,
+                    "item": canonical
+                }
+            ]
+        }
+    ]
+};
+
+const schemaTag =
+    `<script type="application/ld+json" id="ceroodServerSeoSchema">` +
+    `${JSON.stringify(serverSchema)}` +
+    `</script>`;
+
+html = html.replace(
+    '</head>',
+    `    ${schemaTag}\n</head>`
+);
 
 
         // ==========================================
