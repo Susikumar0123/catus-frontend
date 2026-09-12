@@ -9300,9 +9300,6 @@ function getLocationProductUrl(serviceId) {
     const districtSlug =
         localStorage.getItem('catus_district_slug');
 
-    const locationSlug =
-        localStorage.getItem('catus_location_slug');
-
     const safeServiceId =
         encodeURIComponent(
             String(serviceId || '').trim()
@@ -9311,10 +9308,9 @@ function getLocationProductUrl(serviceId) {
     if (
         stateSlug &&
         districtSlug &&
-        locationSlug &&
         safeServiceId
     ) {
-        return `/${stateSlug}/${districtSlug}/${locationSlug}/${safeServiceId}`;
+        return `/${stateSlug}/${districtSlug}/${safeServiceId}`;
     }
 
     return `/product.html?id=${safeServiceId}`;

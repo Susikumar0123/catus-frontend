@@ -6865,25 +6865,13 @@ function handleProductSearchSelect(serviceId) {
     const serviceValue =
         String(serviceId || '').trim();
 
-    const isNumericServiceId =
-        /^\d+$/.test(serviceValue);
-
     if (
         currentStateSlug &&
         currentDistrictSlug &&
-        currentLocationSlug
+        serviceValue
     ) {
-
-        if (
-            currentDistrictSlug === currentLocationSlug &&
-            !isNumericServiceId
-        ) {
-            window.location.href =
-                `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
-        } else {
-            window.location.href =
-                `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceValue}`;
-        }
+        window.location.href =
+            `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
 
         return;
     }
@@ -7806,25 +7794,13 @@ const averageRating =
     const serviceValue =
         String(serviceId || '').trim();
 
-    const isNumericServiceId =
-        /^\d+$/.test(serviceValue);
-
     if (
         currentStateSlug &&
         currentDistrictSlug &&
-        currentLocationSlug
+        serviceValue
     ) {
-
-        if (
-            currentDistrictSlug === currentLocationSlug &&
-            !isNumericServiceId
-        ) {
-            window.location.href =
-                `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
-        } else {
-            window.location.href =
-                `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceValue}`;
-        }
+        window.location.href =
+            `/${currentStateSlug}/${currentDistrictSlug}/${serviceValue}`;
 
         return;
     }
@@ -7866,13 +7842,8 @@ const hasSeoSlug =
 const serviceUrl =
     currentStateSlug &&
     currentDistrictSlug &&
-    currentLocationSlug
-        ? (
-            hasSeoSlug &&
-            currentDistrictSlug === currentLocationSlug
-                ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
-                : `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceSlug}`
-          )
+    hasSeoSlug
+        ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
         : `/product.html?id=${serviceSlug}`;
 
     html += `
@@ -7930,16 +7901,41 @@ if (currentLocationSlug) {
             .replace(/-/g, ' ')
             .replace(/\b\w/g, c => c.toUpperCase());
 
-    updateLocationDisplays(locationNameFromUrl);
+    const savedUserLocation =
+        localStorage.getItem(
+            'catus_user_location'
+        ) || '';
 
-    // IMPORTANT:
-    // URL location-ai immediately save pannuvom.
-    // Backend-la location row illanalum
-    // Home page same location-ai dhaan kaatum.
-    localStorage.setItem(
-        'catus_user_location',
-        locationNameFromUrl
+    const savedDistrictSlug =
+        localStorage.getItem(
+            'catus_district_slug'
+        ) || '';
+
+    const isDistrictSeoUrl =
+        currentLocationSlug ===
+        currentDistrictSlug;
+
+    const canKeepSelectedLocation =
+        isDistrictSeoUrl &&
+        savedUserLocation &&
+        savedDistrictSlug ===
+            currentDistrictSlug;
+
+    const displayLocation =
+        canKeepSelectedLocation
+            ? savedUserLocation
+            : locationNameFromUrl;
+
+    updateLocationDisplays(
+        displayLocation
     );
+
+    if (!canKeepSelectedLocation) {
+        localStorage.setItem(
+            'catus_user_location',
+            locationNameFromUrl
+        );
+    }
 
     localStorage.setItem(
         'catus_state_slug',
@@ -7951,10 +7947,12 @@ if (currentLocationSlug) {
         currentDistrictSlug
     );
 
-    localStorage.setItem(
-        'catus_location_slug',
-        currentLocationSlug
-    );
+    if (!canKeepSelectedLocation) {
+        localStorage.setItem(
+            'catus_location_slug',
+            currentLocationSlug
+        );
+    }
 }
 
     // ------------------------------------------
@@ -8066,18 +8064,45 @@ currentLocationName =
         currentDistrictName =
             page.district || '';
 
-// Save + instantly show current SEO location
+// Keep selected customer location,
+// but SEO page itself can stay district-based.
 const seoLocationText =
     page.location_name
         ? `${page.location_name}${page.pincode ? ' - ' + page.pincode : ''}`
         : currentLocationSlug;
 
-localStorage.setItem(
-    'catus_user_location',
-    seoLocationText
-);
+const savedUserLocation =
+    localStorage.getItem(
+        'catus_user_location'
+    ) || '';
 
-// Keep homepage location synced with current SEO URL
+const savedDistrictSlug =
+    localStorage.getItem(
+        'catus_district_slug'
+    ) || '';
+
+const isDistrictSeoUrl =
+    currentLocationSlug ===
+    currentDistrictSlug;
+
+const canKeepSelectedLocation =
+    isDistrictSeoUrl &&
+    savedUserLocation &&
+    savedDistrictSlug ===
+        currentDistrictSlug;
+
+const displayLocation =
+    canKeepSelectedLocation
+        ? savedUserLocation
+        : seoLocationText;
+
+if (!canKeepSelectedLocation) {
+    localStorage.setItem(
+        'catus_user_location',
+        seoLocationText
+    );
+}
+
 localStorage.setItem(
     'catus_state_slug',
     currentStateSlug
@@ -8088,12 +8113,16 @@ localStorage.setItem(
     currentDistrictSlug
 );
 
-localStorage.setItem(
-    'catus_location_slug',
-    currentLocationSlug
-);
+if (!canKeepSelectedLocation) {
+    localStorage.setItem(
+        'catus_location_slug',
+        currentLocationSlug
+    );
+}
 
-updateLocationDisplays(seoLocationText);
+updateLocationDisplays(
+    displayLocation
+);
 
         // ------------------------------------------
         // PRODUCT DATA
@@ -11476,17 +11505,12 @@ function trackProfileChange(field, oldVal, newVal) {
             typeof s.slug === 'string' &&
             s.slug.trim() !== '';
 
-        const serviceUrl =
-            currentStateSlug &&
-            currentDistrictSlug &&
-            currentLocationSlug
-                ? (
-                    hasSeoSlug &&
-                    currentDistrictSlug === currentLocationSlug
-                        ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
-                        : `/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}/${serviceSlug}`
-                  )
-                : `/product.html?id=${serviceSlug}`;
+       const serviceUrl =
+    currentStateSlug &&
+    currentDistrictSlug &&
+    hasSeoSlug
+        ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceSlug}`
+        : `/product.html?id=${serviceSlug}`;
 
         html += `
             <a
