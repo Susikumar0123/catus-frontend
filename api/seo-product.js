@@ -305,6 +305,28 @@ try {
 
 
         // ==========================================
+// UNIQUE LOCAL SEO TITLE
+// ==========================================
+
+const seoTitlePlace =
+    district === location
+        ? page.district
+        : page.location_name;
+
+const localSeoPageTitle =
+    `${page.service_name} in ${seoTitlePlace} | Cerood`;
+
+html = html.replace(
+    /<title>[\s\S]*?<\/title>/i,
+    `<title>${escapeHtml(localSeoPageTitle)}</title>`
+);
+
+html = html.replace(
+    /<meta\s+property=["']og:title["'][^>]*>/i,
+    `<meta property="og:title" content="${escapeHtml(localSeoPageTitle)}">`
+);
+
+        // ==========================================
 // SERVER-RENDER H1
 // ==========================================
 
