@@ -9292,6 +9292,82 @@ async function matchCatusLocationCandidates(
     return null;
 }
 
+let ceroodSeoLocationKeys = null;
+let ceroodSeoLocationLoadPromise = null;
+
+function ceroodSlugify(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+async function loadCeroodSeoLocationKeys() {
+
+    if (ceroodSeoLocationKeys) {
+        return ceroodSeoLocationKeys;
+    }
+
+    if (ceroodSeoLocationLoadPromise) {
+        return ceroodSeoLocationLoadPromise;
+    }
+
+    ceroodSeoLocationLoadPromise = (async () => {
+
+        const keys = new Set();
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/seo-locations`
+            );
+
+            const data = await response.json();
+
+            if (
+                response.ok &&
+                data.success &&
+                Array.isArray(data.locations)
+            ) {
+                data.locations.forEach(location => {
+
+                    const stateSlug =
+                        ceroodSlugify(location.state);
+
+                    const districtSlug =
+                        ceroodSlugify(location.district);
+
+                    const locationSlug =
+                        ceroodSlugify(
+                            location.location_slug
+                        );
+
+                    if (
+                        stateSlug &&
+                        districtSlug &&
+                        locationSlug
+                    ) {
+                        keys.add(
+                            `${stateSlug}|${districtSlug}|${locationSlug}`
+                        );
+                    }
+                });
+            }
+        } catch (error) {
+            console.error(
+                'SEO location check failed:',
+                error
+            );
+        }
+
+        ceroodSeoLocationKeys = keys;
+
+        return keys;
+    })();
+
+    return ceroodSeoLocationLoadPromise;
+}
+
 function getLocationProductUrl(serviceId) {
 
     const stateSlug =
@@ -9300,26 +9376,48 @@ function getLocationProductUrl(serviceId) {
     const districtSlug =
         localStorage.getItem('catus_district_slug');
 
+    const locationSlug =
+        localStorage.getItem('catus_location_slug');
+
     const safeServiceId =
         encodeURIComponent(
             String(serviceId || '').trim()
         );
 
     if (
-        stateSlug &&
-        districtSlug &&
-        safeServiceId
+        !stateSlug ||
+        !districtSlug ||
+        !safeServiceId
     ) {
-        return `/${stateSlug}/${districtSlug}/${safeServiceId}`;
+        return `/product.html?id=${safeServiceId}`;
     }
 
-    return `/product.html?id=${safeServiceId}`;
+    const locationKey =
+        `${stateSlug}|${districtSlug}|${locationSlug || ''}`;
+
+    const isSupportedSeoLocation =
+        locationSlug &&
+        ceroodSeoLocationKeys &&
+        ceroodSeoLocationKeys.has(locationKey);
+
+    if (
+        isSupportedSeoLocation &&
+        locationSlug !== districtSlug
+    ) {
+        return `/${stateSlug}/${districtSlug}/${locationSlug}/${safeServiceId}`;
+    }
+
+    return `/${stateSlug}/${districtSlug}/${safeServiceId}`;
 }
 
-function openServiceProduct(serviceId) {
+async function openServiceProduct(serviceId) {
+
+    await loadCeroodSeoLocationKeys();
+
     window.location.href =
         getLocationProductUrl(serviceId);
 }
+
   let orderPollingInterval = null; // Clean polling reference to prevent memory leaks
 
   async function submitEditOrderAddress() {
