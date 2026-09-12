@@ -14268,53 +14268,7 @@ document.addEventListener('click', function (event) {
     </div>
 </div>
 
-<div class="cerood-footer-info-links">
 
-    <button
-        type="button"
-        class="cerood-footer-info-row"
-        onclick="openCeroodInfoModal('ceroodAboutModal')"
-    >
-        <span>
-            <i class="fa-solid fa-caret-right"></i>
-            About Cerood
-        </span>
-
-        <span class="cerood-footer-info-action">
-            View About
-        </span>
-    </button>
-
-    <button
-        type="button"
-        class="cerood-footer-info-row"
-        onclick="openCeroodInfoModal('ceroodAvailabilityModal')"
-    >
-        <span>
-            <i class="fa-solid fa-caret-right"></i>
-            Service Availability
-        </span>
-
-        <span class="cerood-footer-info-action">
-            Check Availability
-        </span>
-    </button>
-
-</div>
-
-
-
-        <!-- SEO SERVICE AREAS -->
-<details class="seo-service-areas-footer">
-    <summary>Service Areas</summary>
-
-    <div class="seo-service-areas-inner">
-        <p>Explore Cerood service availability across locations in Tamil Nadu.</p>
-        <div id="seoServiceAreasContainer"></div>
-    </div>
-</details>
-
-<div id="seoServiceAreasSection"></div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 24px;">
             
@@ -14380,7 +14334,7 @@ document.addEventListener('click', function (event) {
 <li>
     <a
         href="#"
-        onclick="event.preventDefault(); document.querySelector('.seo-service-areas-footer').open = true; document.querySelector('.seo-service-areas-footer').scrollIntoView({ behavior: 'smooth', block: 'center' });"
+        onclick="openCeroodInfoModal('ceroodServiceAreasModal'); return false;"
     >
         Service Areas
     </a>
