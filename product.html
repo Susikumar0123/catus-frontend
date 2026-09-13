@@ -9082,8 +9082,52 @@ localSeoDescription.textContent =
     localSeoUniqueText.textContent =
     `${serviceName} service in ${locationName} is provided at your doorstep through Cerood. Customers in ${locationName}${districtName && districtName !== locationName ? ` and nearby areas of ${districtName} district` : ' and nearby areas'} can book inspection and service support based on technician availability.`;
 
-localSeoNearbyText.textContent =
-    `Common service requests in ${locationName} include diagnosis, repair support, installation, maintenance and related appliance service needs. Cerood connects customers with available service professionals for convenient home service booking.`;
+try {
+    const nearbyResponse =
+        await fetch(`${API_BASE_URL}/api/seo-locations`);
+
+    const nearbyData =
+        await nearbyResponse.json();
+
+    const nearbyLocations =
+        Array.isArray(nearbyData.locations)
+            ? nearbyData.locations
+                .filter(item =>
+                    ceroodSeoSlugify(item.district) === currentDistrictSlug &&
+                    ceroodSeoSlugify(item.location_name) !== currentLocationSlug
+                )
+                .slice(0, 5)
+            : [];
+
+    const nearbyLinks =
+        nearbyLocations.map(item => {
+
+            const nearbySlug =
+                ceroodSeoSlugify(item.location_name);
+
+            const nearbyUrl =
+                nearbySlug === currentDistrictSlug
+                    ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceId}`
+                    : `/${currentStateSlug}/${currentDistrictSlug}/${nearbySlug}/${serviceId}`;
+
+            return `<a href="${nearbyUrl}">${item.location_name}</a>`;
+
+        }).join(', ');
+
+    localSeoNearbyText.innerHTML =
+        `Common service requests in ${locationName} include diagnosis, repair support, installation, maintenance and related appliance service needs.` +
+        (
+            nearbyLinks
+                ? ` Nearby service locations: ${nearbyLinks}.`
+                : ''
+        );
+
+} catch (error) {
+
+    localSeoNearbyText.textContent =
+        `Common service requests in ${locationName} include diagnosis, repair support, installation, maintenance and related appliance service needs.`;
+
+}
     renderCeroodFaq(
     serviceName,
     locationName,
