@@ -12445,7 +12445,7 @@ html += `
 // =========================================
 
 const middleCategory =
-    Math.ceil(totalCategories / 2);
+    Math.max(2, Math.ceil(totalCategories / 2) - 1);
 
 if (categoryIndex === middleCategory) {
 
