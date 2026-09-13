@@ -12830,26 +12830,60 @@ if (currentHomeGroupId) {
 
 function showAllCategoryServices(categoryName) {
 
-    const categoryBox = [...document.querySelectorAll('.uc-category-box')]
+    const promos =
+        [...document.querySelectorAll('.catus-promo-banner')];
+
+    alert(
+        'BEFORE SEE ALL\n' +
+        'Promo count: ' + promos.length + '\n' +
+        promos.map((promo, index) =>
+            'Promo ' + (index + 1) +
+            ' | display=' + getComputedStyle(promo).display +
+            ' | inline=' + promo.style.display +
+            ' | height=' + Math.round(promo.getBoundingClientRect().height)
+        ).join('\n') +
+        '\n\ncurrentHomeGroupId=' + currentHomeGroupId
+    );
+
+    const categoryBox =
+        [...document.querySelectorAll('.uc-category-box')]
         .find(box =>
-            box.querySelector('.uc-cat-header h3')?.textContent.trim()
+            box.querySelector('.uc-cat-header h3')
+                ?.textContent.trim()
             === categoryName.trim()
         );
 
     if (!categoryBox) return;
 
-    const track = categoryBox.querySelector('.uc-grid');
+    const track =
+        categoryBox.querySelector('.uc-grid');
 
     if (!track) return;
 
-    // Promo cards / page layout-ai touch panna koodadhu.
-    // Product row mattum horizontal-ah right side scroll aagum.
     track.scrollBy({
         left: track.clientWidth,
         behavior: 'smooth'
     });
-}
 
+    setTimeout(() => {
+
+        const promosAfter =
+            [...document.querySelectorAll('.catus-promo-banner')];
+
+        alert(
+            'AFTER SEE ALL\n' +
+            'Promo count: ' + promosAfter.length + '\n' +
+            promosAfter.map((promo, index) =>
+                'Promo ' + (index + 1) +
+                ' | display=' + getComputedStyle(promo).display +
+                ' | inline=' + promo.style.display +
+                ' | height=' + Math.round(promo.getBoundingClientRect().height)
+            ).join('\n') +
+            '\n\ncurrentHomeGroupId=' + currentHomeGroupId
+        );
+
+    }, 700);
+}
 
     async function loadHeroBanners() {
     try {
