@@ -12994,12 +12994,19 @@ if (categoryIndex === middleCategory) {
             class="cerood-offer-banner"
             onclick="openServiceProduct('tv-repair')"
         >
-            <img
-                src="https://your-supabase-url/banner1.webp"
-                alt="Cerood Special Service Offer"
-                loading="lazy"
-                decoding="async"
-            >
+            <picture>
+    <source
+        media="(max-width: 768px)"
+        srcset="/banner1-mobile.webp"
+    >
+
+    <img
+        src="/banner1-desktop.webp"
+        alt="Cerood Special Service Offer"
+        loading="lazy"
+        decoding="async"
+    >
+</picture>
         </div>
     `;
 }
@@ -13015,12 +13022,19 @@ html += `
         class="cerood-offer-banner"
         onclick="openServiceProduct('ac-service')"
     >
-        <img
-            src="https://your-supabase-url/banner2.webp"
-            alt="Cerood Home Appliance Service Offer"
-            loading="lazy"
-            decoding="async"
-        >
+        <picture>
+    <source
+        media="(max-width: 768px)"
+        srcset="/banner2-mobile.webp"
+    >
+
+    <img
+        src="/banner2-desktop.webp"
+        alt="Cerood Home Appliance Service Offer"
+        loading="lazy"
+        decoding="async"
+    >
+</picture>
     </div>
 `;
 
