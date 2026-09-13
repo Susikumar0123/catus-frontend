@@ -12471,6 +12471,14 @@ function showCachedHomeServices() {
     async function loadLiveServicesForFrontend() {
   try {
 
+    const existingPromoElements =
+    [...document.querySelectorAll('.catus-promo-banner')];
+
+const existingPromoHTML = {
+    1: existingPromoElements[0]?.outerHTML || '',
+    2: existingPromoElements[1]?.outerHTML || ''
+};
+
       const [servicesResponse, promoResponse] = await Promise.all([
           fetch(`${API_BASE_URL}/api/home-services`),
           fetch(`${API_BASE_URL}/api/promo-banners`)
@@ -12676,8 +12684,10 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
 
     if (promo && promo.image_url) {
 
-        html += `
-            <div class="catus-promo-banner">
+    html += `
+        <div
+            class="catus-promo-banner"
+            data-promo-slot="${promoSlot}">
 
                 <img
     src="${promo.image_url}"
@@ -12719,9 +12729,12 @@ if (renderedSectionCount === 2 || renderedSectionCount === 4) {
                 </div>
             </div>
         `;
+        } else if (existingPromoHTML[promoSlot]) {
+
+        html += existingPromoHTML[promoSlot];
+
     }
 }
-
             
               }
               container.innerHTML = html;
