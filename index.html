@@ -12479,13 +12479,30 @@ function showCachedHomeServices() {
       const data = await servicesResponse.json();
       const promoData = await promoResponse.json();
 
-      const promoBanners =
-          promoData.success && Array.isArray(promoData.banners)
-              ? promoData.banners
-              : [];
-          
-          let container = document.getElementById('productGridContainer');
-          if(!container) return;
+     let container = document.getElementById('productGridContainer');
+
+if (!container) return;
+
+const promoBanners =
+    promoData.success &&
+    Array.isArray(promoData.banners)
+        ? promoData.banners
+        : [];
+
+// IMPORTANT:
+// Cached homepage-la promo cards already visible-a irundhu,
+// promo API empty / temporary failure aana,
+// existing homepage-ai overwrite panna koodadhu.
+if (
+    promoBanners.length === 0 &&
+    container.querySelector('.catus-promo-banner')
+) {
+    console.warn(
+        'Promo banners empty - keeping existing cached homepage'
+    );
+
+    return;
+}
 
           if(data.success && data.services && data.services.length > 0) {
               let categoriesMap = {};
