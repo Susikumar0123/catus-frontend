@@ -152,15 +152,17 @@
                 .replace(/^-+|-+$/g, '');
         }
 
-        const params =
-            new URLSearchParams(window.location.search);
+        const pathParts =
+    window.location.pathname
+        .split('/')
+        .filter(Boolean);
 
-        const stateSlug =
-            params.get('state') || '';
+const stateSlug =
+    pathParts[0] || '';
 
-        const districtSlug =
-            params.get('district') || '';
-
+const districtSlug =
+    pathParts[1] || '';
+    
         const districtName =
             districtSlug
                 .replace(/-/g, ' ')
