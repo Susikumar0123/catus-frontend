@@ -7727,20 +7727,26 @@ button.uc-cart-btn:hover {
 }
 
 /* FOOTER COMPANY LINKS ALIGNMENT FIX */
-.footer-column ul {
+.cerood-footer-links {
     list-style: none !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.footer-column ul li {
+.cerood-footer-links li {
+    list-style: none !important;
     margin: 0 0 4px 0 !important;
     padding: 0 !important;
 }
 
-.footer-column ul li a {
-    display: inline-block;
-    text-decoration: none;
+.cerood-footer-links li::marker {
+    content: "" !important;
+}
+
+.cerood-footer-links li a {
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 </style>
