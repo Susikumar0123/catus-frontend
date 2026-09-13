@@ -10,6 +10,11 @@
   "destination": "/contact.html"
 },
 
+{
+  "source": "/services",
+  "destination": "/services.html"
+},
+
     {
       "source": "/sitemap.xml",
       "destination": "https://catus-backend-d2js.onrender.com/api/sitemap.xml"

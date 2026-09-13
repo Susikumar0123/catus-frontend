@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Home Appliance Repair Services in Tamil Nadu | Cerood</title>
+
+    <meta
+        name="description"
+        content="Explore Cerood home appliance repair and service options across Tamil Nadu including TV repair, AC service, washing machine repair, refrigerator repair and RO water purifier service."
+    >
+
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="canonical" href="https://www.cerood.com/services">
+
+    <link rel="icon" type="image/png" href="/fevicon.png">
+    <link rel="apple-touch-icon" href="/fevicon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Home Appliance Repair Services in Tamil Nadu | Cerood">
+    <meta
+        property="og:description"
+        content="Explore TV, AC, washing machine, refrigerator and RO water purifier services available through Cerood."
+    >
+    <meta property="og:url" content="https://www.cerood.com/services">
+    <meta property="og:site_name" content="Cerood">
+    <meta property="og:image" content="https://www.cerood.com/cerood-logo.webp">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #ffffff;
+            color: #18181b;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .page-container {
+            width: min(1120px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+
+        .services-header {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .brand-link {
+            font-size: 26px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #18181b;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-links a {
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #52525b;
+        }
+
+        .header-links a:hover {
+            color: #6d4aff;
+        }
+
+        /* HERO */
+
+        .services-hero {
+            padding: 76px 0 60px;
+            text-align: center;
+        }
+
+        .services-label {
+            display: inline-block;
+            margin-bottom: 14px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #6d4aff;
+        }
+
+        .services-hero h1 {
+            max-width: 780px;
+            margin: 0 auto 18px;
+            font-size: 44px;
+            line-height: 1.18;
+            letter-spacing: -1px;
+            font-weight: 650;
+        }
+
+        .services-hero p {
+            max-width: 720px;
+            margin: 0 auto;
+            color: #71717a;
+            font-size: 16px;
+            line-height: 1.75;
+        }
+
+        /* GRID */
+
+        .services-section {
+            padding: 10px 0 65px;
+        }
+
+        .section-heading {
+            margin-bottom: 28px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 7px;
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #71717a;
+            font-size: 14px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .service-card {
+            position: relative;
+            min-height: 245px;
+            padding: 26px;
+            border: 1px solid #e7e7eb;
+            border-radius: 16px;
+            background: #ffffff;
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            border-color: #d9d2ff;
+            box-shadow: 0 10px 30px rgba(0,0,0,.06);
+        }
+
+        .service-icon {
+            width: 46px;
+            height: 46px;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 13px;
+            background: #f4f1ff;
+            color: #6d4aff;
+            font-size: 23px;
+        }
+
+        .service-card h3 {
+            margin: 0 0 9px;
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            margin: 0 0 20px;
+            font-size: 13px;
+            line-height: 1.65;
+            color: #71717a;
+        }
+
+        .service-link-text {
+            position: absolute;
+            left: 26px;
+            bottom: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6d4aff;
+        }
+
+        /* HOW IT WORKS */
+
+        .how-section {
+            margin: 10px 0 65px;
+            padding: 38px;
+            border-radius: 18px;
+            background: #faf9ff;
+        }
+
+        .how-section h2 {
+            margin: 0 0 26px;
+            font-size: 28px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            margin-bottom: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #6d4aff;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .step h3 {
+            margin: 0 0 5px;
+            font-size: 15px;
+        }
+
+        .step p {
+            margin: 0;
+            color: #71717a;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* CTA */
+
+        .services-cta {
+            margin-bottom: 65px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid #e7e7eb;
+            border-radius: 18px;
+        }
+
+        .services-cta h2 {
+            margin: 0 0 10px;
+            font-size: 27px;
+        }
+
+        .services-cta p {
+            max-width: 620px;
+            margin: 0 auto 22px;
+            color: #71717a;
+            font-size: 14px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            min-height: 44px;
+            padding: 0 19px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .primary-btn {
+            background: #6d4aff;
+            color: #ffffff;
+        }
+
+        .secondary-btn {
+            border: 1px solid #d7d7de;
+            background: #ffffff;
+            color: #27272a;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 28px 0 35px;
+            border-top: 1px solid #eeeeee;
+            color: #71717a;
+            font-size: 12px;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #52525b;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+
+            .services-hero {
+                padding: 52px 0 42px;
+            }
+
+            .services-hero h1 {
+                font-size: 34px;
+            }
+
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .page-container {
+                width: calc(100% - 28px);
+            }
+
+            .services-header {
+                min-height: 62px;
+            }
+
+            .brand-link {
+                font-size: 22px;
+            }
+
+            .header-links {
+                gap: 12px;
+            }
+
+            .header-links a {
+                font-size: 12px;
+            }
+
+            .services-hero h1 {
+                font-size: 29px;
+            }
+
+            .services-hero p {
+                font-size: 14px;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-card {
+                min-height: 220px;
+            }
+
+            .how-section {
+                padding: 26px 20px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- SEO STRUCTURED DATA -->
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": "https://www.cerood.com/services#webpage",
+          "url": "https://www.cerood.com/services",
+          "name": "Cerood Home Appliance Services",
+          "description": "Explore home appliance repair and maintenance services available through Cerood across Tamil Nadu.",
+          "isPartOf": {
+            "@id": "https://www.cerood.com/#website"
+          },
+          "about": {
+            "@id": "https://www.cerood.com/#organization"
+          }
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://www.cerood.com/services#service-list",
+          "name": "Cerood Home Appliance Services",
+          "numberOfItems": 5,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "TV Repair",
+              "url": "https://www.cerood.com/tamil-nadu/dharmapuri/tv-repair"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "AC Service",
+              "url": "https://www.cerood.com/tamil-nadu/dharmapuri/ac-service"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Washing Machine Repair",
+              "url": "https://www.cerood.com/tamil-nadu/dharmapuri/washing-machine-repair"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Refrigerator Repair",
+              "url": "https://www.cerood.com/tamil-nadu/dharmapuri/refrigerator-repair"
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "name": "RO Water Purifier Service",
+              "url": "https://www.cerood.com/tamil-nadu/dharmapuri/ro-water-purifier-service"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body>
+
+<header>
+    <div class="page-container services-header">
+
+        <a href="/" class="brand-link">
+            Cerood
+        </a>
+
+        <nav class="header-links" aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+    <section class="services-hero">
+        <div class="page-container">
+
+            <span class="services-label">
+                Cerood Home Services
+            </span>
+
+            <h1>
+                Home Appliance Repair & Service Across Tamil Nadu
+            </h1>
+
+            <p>
+                Explore Cerood services for common home appliances.
+                Choose the service you need and check service availability
+                for your location before booking.
+            </p>
+
+        </div>
+    </section>
+
+
+    <section class="services-section">
+        <div class="page-container">
+
+            <div class="section-heading">
+                <h2>Our main services</h2>
+
+                <p>
+                    Repair, maintenance and selected installation services
+                    for commonly used home appliances.
+                </p>
+            </div>
+
+
+            <div class="service-grid">
+
+                <!-- TV -->
+
+                <a
+                    class="service-card"
+                    href="/tamil-nadu/dharmapuri/tv-repair"
+                >
+
+                    <div class="service-icon">📺</div>
+
+                    <h3>TV Repair</h3>
+
+                    <p>
+                        Service support for Smart TV, LED TV and common
+                        television problems including display, sound,
+                        power and installation-related requirements.
+                    </p>
+
+                    <span class="service-link-text">
+                        Explore TV Repair →
+                    </span>
+
+                </a>
+
+
+                <!-- AC -->
+
+                <a
+                    class="service-card"
+                    href="/tamil-nadu/dharmapuri/ac-service"
+                >
+
+                    <div class="service-icon">❄️</div>
+
+                    <h3>AC Service</h3>
+
+                    <p>
+                        AC general service, maintenance, cleaning and
+                        selected repair or installation-related service
+                        support.
+                    </p>
+
+                    <span class="service-link-text">
+                        Explore AC Service →
+                    </span>
+
+                </a>
+
+
+                <!-- Washing Machine -->
+
+                <a
+                    class="service-card"
+                    href="/tamil-nadu/dharmapuri/washing-machine-repair"
+                >
+
+                    <div class="service-icon">🧺</div>
+
+                    <h3>Washing Machine Repair</h3>
+
+                    <p>
+                        Service assistance for common washing machine
+                        problems, maintenance and selected installation
+                        requirements.
+                    </p>
+
+                    <span class="service-link-text">
+                        Explore Washing Machine Repair →
+                    </span>
+
+                </a>
+
+
+                <!-- Refrigerator -->
+
+                <a
+                    class="service-card"
+                    href="/tamil-nadu/dharmapuri/refrigerator-repair"
+                >
+
+                    <div class="service-icon">🧊</div>
+
+                    <h3>Refrigerator Repair</h3>
+
+                    <p>
+                        Service support for cooling problems and other
+                        common refrigerator repair and maintenance
+                        requirements.
+                    </p>
+
+                    <span class="service-link-text">
+                        Explore Refrigerator Repair →
+                    </span>
+
+                </a>
+
+
+                <!-- RO -->
+
+                <a
+                    class="service-card"
+                    href="/tamil-nadu/dharmapuri/ro-water-purifier-service"
+                >
+
+                    <div class="service-icon">💧</div>
+
+                    <h3>RO Water Purifier Service</h3>
+
+                    <p>
+                        RO water purifier service including selected
+                        maintenance, installation and repair-related
+                        requirements.
+                    </p>
+
+                    <span class="service-link-text">
+                        Explore RO Service →
+                    </span>
+
+                </a>
+
+
+                <!-- Other Services -->
+
+                <a class="service-card" href="/">
+
+                    <div class="service-icon">🔧</div>
+
+                    <h3>Other Home Services</h3>
+
+                    <p>
+                        Cerood also supports selected additional home
+                        appliance and household service categories based
+                        on location and service availability.
+                    </p>
+
+                    <span class="service-link-text">
+                        View All Services →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section>
+        <div class="page-container">
+
+            <div class="how-section">
+
+                <h2>How Cerood works</h2>
+
+                <div class="steps-grid">
+
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Choose a service</h3>
+                        <p>
+                            Select the appliance service you need.
+                        </p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Enter your location</h3>
+                        <p>
+                            Check availability for your area in Tamil Nadu.
+                        </p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Book online</h3>
+                        <p>
+                            Submit your service booking through Cerood.
+                        </p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Track your booking</h3>
+                        <p>
+                            Follow technician assignment and booking status.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section>
+        <div class="page-container">
+
+            <div class="services-cta">
+
+                <h2>Need home appliance service?</h2>
+
+                <p>
+                    Visit Cerood, select your location and choose the
+                    appliance service that matches your requirement.
+                </p>
+
+                <div class="cta-buttons">
+
+                    <a href="/" class="primary-btn">
+                        Book a Service
+                    </a>
+
+                    <a href="/contact" class="secondary-btn">
+                        Contact Cerood
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div class="page-container footer-inner">
+
+        <div>
+            © 2026 Cerood Home Services. All Rights Reserved.
+        </div>
+
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/about">About Cerood</a>
+            <a href="/services">Services</a>
+            <a href="/contact">Contact Us</a>
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+</html>
