@@ -5090,6 +5090,57 @@ body {
     }
 }
 
+.cerood-faq-section {
+    margin-top: 28px;
+    padding: 0;
+}
+
+.cerood-faq-section h2 {
+    font-size: 22px;
+    margin: 0 0 16px;
+    color: #0f172a;
+}
+
+.cerood-faq-item {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.cerood-faq-question {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+}
+
+.cerood-faq-answer {
+    display: none;
+    padding: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+}
+
+.cerood-faq-item.open .cerood-faq-answer {
+    display: block;
+}
+
+.cerood-faq-arrow {
+    font-size: 18px;
+    transition: transform .2s ease;
+}
+
+.cerood-faq-item.open .cerood-faq-arrow {
+    transform: rotate(180deg);
+}
+
 </style>
 </head>
 <body>
@@ -8118,6 +8169,245 @@ if (currentLocationSlug) {
             );
     }
 });
+
+function updateCeroodSeoSchemas(page) {
+
+    if (!page) return;
+
+    const serviceName =
+        page.service_name || 'Home Appliance Service';
+
+    const locationName =
+        page.location_name || page.district || '';
+
+    const districtName =
+        page.district || '';
+
+    const currentUrl =
+        'https://www.cerood.com' +
+        window.location.pathname;
+
+    // Remove old schemas
+    [
+        'ceroodServiceSchema',
+        'ceroodBreadcrumbSchema'
+    ].forEach(id => {
+        const old = document.getElementById(id);
+        if (old) old.remove();
+    });
+
+
+    // ==========================================
+    // SERVICE SCHEMA
+    // ==========================================
+
+    const serviceSchema =
+        document.createElement('script');
+
+    serviceSchema.type =
+        'application/ld+json';
+
+    serviceSchema.id =
+        'ceroodServiceSchema';
+
+    serviceSchema.textContent =
+        JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": `${serviceName} in ${locationName}`,
+            "serviceType": serviceName,
+            "url": currentUrl,
+            "provider": {
+                "@type": "Organization",
+                "name": "Cerood",
+                "url": "https://www.cerood.com"
+            },
+            "areaServed": {
+                "@type": "Place",
+                "name":
+                    districtName &&
+                    districtName !== locationName
+                        ? `${locationName}, ${districtName}, Tamil Nadu`
+                        : `${locationName}, Tamil Nadu`
+            },
+            "description":
+                page.seo_description ||
+                `Book ${serviceName.toLowerCase()} in ${locationName} with Cerood. Doorstep service subject to technician availability.`
+        });
+
+    document.head.appendChild(
+        serviceSchema
+    );
+
+
+    // ==========================================
+    // BREADCRUMB SCHEMA
+    // ==========================================
+
+    const breadcrumbItems = [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.cerood.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": districtName || locationName,
+            "item":
+                `https://www.cerood.com/${currentStateSlug}/${currentDistrictSlug}`
+        }
+    ];
+
+    if (
+        locationName &&
+        districtName &&
+        locationName !== districtName
+    ) {
+        breadcrumbItems.push({
+            "@type": "ListItem",
+            "position": 3,
+            "name": locationName,
+            "item":
+                `https://www.cerood.com/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}`
+        });
+    }
+
+    breadcrumbItems.push({
+        "@type": "ListItem",
+        "position":
+            breadcrumbItems.length + 1,
+        "name": serviceName,
+        "item": currentUrl
+    });
+
+    const breadcrumbSchema =
+        document.createElement('script');
+
+    breadcrumbSchema.type =
+        'application/ld+json';
+
+    breadcrumbSchema.id =
+        'ceroodBreadcrumbSchema';
+
+    breadcrumbSchema.textContent =
+        JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement":
+                breadcrumbItems
+        });
+
+    document.head.appendChild(
+        breadcrumbSchema
+    );
+}
+
+function renderCeroodFaq(serviceName, locationName, districtName) {
+
+    const faqSection =
+        document.getElementById('ceroodFaqSection');
+
+    const faqList =
+        document.getElementById('ceroodFaqList');
+
+    if (!faqSection || !faqList) return;
+
+    const place =
+        districtName && districtName !== locationName
+            ? `${locationName}, ${districtName}`
+            : locationName;
+
+    const faqs = [
+        {
+            q: `How much does ${serviceName} cost in ${locationName}?`,
+            a: `The cost of ${serviceName.toLowerCase()} in ${place} depends on the issue, service type and any spare parts required. The final amount is confirmed based on inspection and service requirements.`
+        },
+        {
+            q: `Is doorstep ${serviceName} available in ${locationName}?`,
+            a: `Yes, Cerood helps customers book doorstep ${serviceName.toLowerCase()} in ${locationName}, subject to technician availability in the selected area.`
+        },
+        {
+            q: `How long does ${serviceName} take?`,
+            a: `Service time depends on the problem and repair requirement. Minor issues may be completed during the visit, while repairs requiring parts or additional work may take longer.`
+        },
+        {
+            q: `Can I book ${serviceName} online in ${locationName}?`,
+            a: `Yes. You can select your service, location, preferred date and available time slot on Cerood to place a booking request.`
+        },
+        {
+            q: `Does Cerood provide service support in ${locationName}?`,
+            a: `Cerood provides booking and doorstep service support in ${locationName} based on service coverage and technician availability.`
+        }
+    ];
+
+    faqList.innerHTML =
+        faqs.map((faq, index) => `
+            <div class="cerood-faq-item">
+                <button
+                    type="button"
+                    class="cerood-faq-question"
+                    onclick="toggleCeroodFaq(this)"
+                >
+                    <span>${faq.q}</span>
+                    <span class="cerood-faq-arrow">⌄</span>
+                </button>
+
+                <div class="cerood-faq-answer">
+                    ${faq.a}
+                </div>
+            </div>
+        `).join('');
+
+    // ==========================================
+// FAQ STRUCTURED DATA FOR GOOGLE
+// ==========================================
+
+const oldFaqSchema =
+    document.getElementById('ceroodFaqSchema');
+
+if (oldFaqSchema) {
+    oldFaqSchema.remove();
+}
+
+const faqSchema =
+    document.createElement('script');
+
+faqSchema.type =
+    'application/ld+json';
+
+faqSchema.id =
+    'ceroodFaqSchema';
+
+faqSchema.textContent =
+    JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.a
+            }
+        }))
+    });
+
+document.head.appendChild(
+    faqSchema
+);
+
+    faqSection.style.display = 'block';
+}
+
+function toggleCeroodFaq(button) {
+    const item = button.closest('.cerood-faq-item');
+    if (item) {
+        item.classList.toggle('open');
+    }
+}
+
 async function loadLocationAwareProduct(
     serviceId,
     locationSlug
@@ -8162,6 +8452,8 @@ async function loadLocationAwareProduct(
 
         const page =
             data.page;
+            
+        updateCeroodSeoSchemas(page);
 
         locationServiceData =
     page;
@@ -8715,6 +9007,16 @@ const localSeoDescription =
         'ceroodLocalSeoDescription'
     );
 
+const localSeoUniqueText =
+    document.getElementById(
+        'ceroodLocalSeoUniqueText'
+    );
+
+const localSeoNearbyText =
+    document.getElementById(
+        'ceroodLocalSeoNearbyText'
+    );
+
 const localSeoService =
     document.getElementById(
         'ceroodLocalSeoService'
@@ -8729,6 +9031,8 @@ if (
     localSeoSection &&
     localSeoTitle &&
     localSeoDescription &&
+    localSeoUniqueText &&
+    localSeoNearbyText &&
     localSeoService &&
     localSeoLocation
 ) {
@@ -8797,6 +9101,17 @@ localSeoDescription.textContent =
 
     localSeoSection.style.display =
         'block';
+
+    localSeoUniqueText.textContent =
+    `${serviceName} service in ${locationName} is provided at your doorstep through Cerood. Customers in ${locationName}${districtName && districtName !== locationName ? ` and nearby areas of ${districtName} district` : ' and nearby areas'} can book inspection and service support based on technician availability.`;
+
+localSeoNearbyText.textContent =
+    `Common service requests in ${locationName} include diagnosis, repair support, installation, maintenance and related appliance service needs. Cerood connects customers with available service professionals for convenient home service booking.`;
+    renderCeroodFaq(
+    serviceName,
+    locationName,
+    districtName
+);
 }   
 
 
@@ -12669,6 +12984,9 @@ function closeCeroodLocalSeoPopup(event) {
     <h2 id="ceroodLocalSeoTitle"></h2>
 
     <p id="ceroodLocalSeoDescription"></p>
+    <p id="ceroodLocalSeoUniqueText"></p>
+
+<p id="ceroodLocalSeoNearbyText"></p>
 
     <div class="cerood-local-seo-points">
         <div>
@@ -12692,6 +13010,11 @@ function closeCeroodLocalSeoPopup(event) {
             </span>
         </div>
     </div>
+</section>
+
+<section id="ceroodFaqSection" class="cerood-faq-section" style="display:none;">
+    <h2 id="ceroodFaqHeading">Frequently Asked Questions</h2>
+    <div id="ceroodFaqList"></div>
 </section>
 
     </div>
