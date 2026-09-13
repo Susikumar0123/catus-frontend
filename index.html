@@ -12798,21 +12798,21 @@ if (currentHomeGroupId) {
 
 function showAllCategoryServices(categoryName) {
 
-    // Normal homepage-la See All click panna
-    // promo banner kandippa visible-a irukkanum.
-    const searchInput = document.getElementById('searchInput');
+    // SEE ALL always works from normal homepage state
+    currentHomeGroupId = '';
 
-    const hasSearch =
-        searchInput &&
-        searchInput.value.trim().length > 0;
+    document
+        .querySelectorAll('.service-chip')
+        .forEach(chip => chip.classList.remove('active'));
 
-    if (!currentHomeGroupId && !hasSearch) {
-        document
-            .querySelectorAll('.catus-promo-banner')
-            .forEach(promo => {
-                promo.style.display = '';
-            });
-    }
+    // Restore all homepage products + promo banners
+    filterProductsByGroup('');
+
+    document
+        .querySelectorAll('.catus-promo-banner')
+        .forEach(promo => {
+            promo.style.display = '';
+        });
 
     const categoryBox = [...document.querySelectorAll('.uc-category-box')]
         .find(box =>
@@ -12830,15 +12830,6 @@ function showAllCategoryServices(categoryName) {
         left: track.scrollWidth,
         behavior: 'smooth'
     });
-
-    // Scroll mudinja apramum promo state correct-a maintain pannu
-    if (!currentHomeGroupId && !hasSearch) {
-        document
-            .querySelectorAll('.catus-promo-banner')
-            .forEach(promo => {
-                promo.style.display = '';
-            });
-    }
 }
 
     async function loadHeroBanners() {
