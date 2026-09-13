@@ -12253,94 +12253,131 @@ function handleIndexSearchSelect(serviceId, serviceName) {
     openServiceProduct(serviceId);
 }
 
-    /* ===== CATUS CONTINUOUS HERO FLOW ===== */
+/* ===== CEROOD 5 SECOND HERO SLIDER ===== */
 
-let catusBannerAnimationStarted = false;
+let catusBannerSliderStarted = false;
 
 function startCatusBannerFlow() {
 
-    if (catusBannerAnimationStarted) return;
+    if (catusBannerSliderStarted) return;
 
-    const container = document.getElementById('cardsContainer');
+    const container =
+        document.getElementById('cardsContainer');
+
     if (!container) return;
 
-    const cards = container.querySelectorAll('.card-link');
+    const cards =
+        Array.from(
+            container.querySelectorAll('.card-link')
+        );
+
     if (cards.length <= 1) return;
 
-    catusBannerAnimationStarted = true;
+    catusBannerSliderStarted = true;
 
-    let paused = false;
-let position = container.scrollLeft;
+    let currentIndex = 0;
+    let sliderTimer = null;
 
-let direction = 1;
-const speed = 0.65;
+    function goToSlide(index) {
 
-    function animate() {
+        const maxScroll =
+            container.scrollWidth - container.clientWidth;
 
-        if (!paused) {
+        const progress =
+            cards.length > 1
+                ? index / (cards.length - 1)
+                : 0;
 
-            const maxScroll =
-    container.scrollWidth - container.clientWidth;
+        container.scrollTo({
+            left: maxScroll * progress,
+            behavior: 'smooth'
+        });
+    }
 
-position += speed * direction;
+    function startTimer() {
 
-if (position >= maxScroll) {
-    position = maxScroll;
-    direction = -1;
-}
-
-if (position <= 0) {
-    position = 0;
-    direction = 1;
-}
-
-container.scrollLeft = position;
+        if (sliderTimer) {
+            clearInterval(sliderTimer);
         }
 
-        requestAnimationFrame(animate);
+        sliderTimer = setInterval(() => {
+
+            currentIndex++;
+
+            if (currentIndex >= cards.length) {
+                currentIndex = 0;
+            }
+
+            goToSlide(currentIndex);
+
+        }, 5000);
     }
 
-    let resumeTimer = null;
+    container.addEventListener(
+        'touchstart',
+        () => {
+            if (sliderTimer) {
+                clearInterval(sliderTimer);
+            }
+        },
+        { passive: true }
+    );
 
-container.addEventListener('touchstart', () => {
-    paused = true;
+    container.addEventListener(
+        'touchend',
+        () => {
 
-    if (resumeTimer) {
-        clearTimeout(resumeTimer);
-    }
-}, { passive: true });
+            const maxScroll =
+                container.scrollWidth - container.clientWidth;
 
-container.addEventListener('touchmove', () => {
-    paused = true;
-    position = container.scrollLeft;
-}, { passive: true });
+            const progress =
+                maxScroll > 0
+                    ? container.scrollLeft / maxScroll
+                    : 0;
 
-container.addEventListener('touchend', () => {
+            currentIndex =
+                Math.round(
+                    progress * (cards.length - 1)
+                );
 
-    position = container.scrollLeft;
+            startTimer();
+        },
+        { passive: true }
+    );
 
-    if (resumeTimer) {
-        clearTimeout(resumeTimer);
-    }
+    container.addEventListener(
+        'mouseenter',
+        () => {
+            if (sliderTimer) {
+                clearInterval(sliderTimer);
+            }
+        }
+    );
 
-    resumeTimer = setTimeout(() => {
-        position = container.scrollLeft;
-        paused = false;
-    }, 700);
+    container.addEventListener(
+        'mouseleave',
+        () => {
 
-}, { passive: true });
+            const maxScroll =
+                container.scrollWidth - container.clientWidth;
 
-    container.addEventListener('mouseenter', () => {
-        paused = true;
-    });
+            const progress =
+                maxScroll > 0
+                    ? container.scrollLeft / maxScroll
+                    : 0;
 
-    container.addEventListener('mouseleave', () => {
-        position = container.scrollLeft;
-        paused = false;
-    });
+            currentIndex =
+                Math.round(
+                    progress * (cards.length - 1)
+                );
 
-    animate();
+            startTimer();
+        }
+    );
+
+    startTimer();
 }
+
 
     function toggleProfileAddressEdit() {
         const displayEl = document.getElementById('premProfileAddressDisplay');
