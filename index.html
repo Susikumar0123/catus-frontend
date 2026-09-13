@@ -12931,7 +12931,7 @@ const priceHTML = (!isNameOnlySection && price > 0)
         <div
             class="uc-card"
             data-group-id="${s.group_id || ''}"
-            onclick="openServiceProduct('${s.service_id}')">
+            onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')">
 
             <div class="uc-card-img-wrapper">
                 ${trendingBadgeHTML}
