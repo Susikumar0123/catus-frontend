@@ -9405,7 +9405,11 @@ html += `
 
         <div class="seo-location-service-links">
             ${mainServices.map(service => `
-                <a href="/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}">
+                <a href="${
+    locationSlug === districtSlug
+        ? `/${stateSlug}/${districtSlug}/${service.slug}`
+        : `/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`
+}">
                     ${service.name}
                 </a>
             `).join('')}
