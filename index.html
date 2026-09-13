@@ -12970,6 +12970,21 @@ function ceroodMobileNavigate(tab, button) {
         document.body.classList.remove('cerood-dashboard-open');
         document.body.style.overflow = 'auto';
 
+        // Reset homepage filters
+currentHomeGroupId = '';
+
+document
+    .querySelectorAll('.service-chip')
+    .forEach(c => c.classList.remove('active'));
+
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.value = '';
+}
+
+filterProductsByGroup('');
+keepPromoState();
+
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
