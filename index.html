@@ -12830,21 +12830,6 @@ if (currentHomeGroupId) {
 
 function showAllCategoryServices(categoryName) {
 
-    const promos =
-        [...document.querySelectorAll('.catus-promo-banner')];
-
-    alert(
-        'BEFORE SEE ALL\n' +
-        'Promo count: ' + promos.length + '\n' +
-        promos.map((promo, index) =>
-            'Promo ' + (index + 1) +
-            ' | display=' + getComputedStyle(promo).display +
-            ' | inline=' + promo.style.display +
-            ' | height=' + Math.round(promo.getBoundingClientRect().height)
-        ).join('\n') +
-        '\n\ncurrentHomeGroupId=' + currentHomeGroupId
-    );
-
     const categoryBox =
         [...document.querySelectorAll('.uc-category-box')]
         .find(box =>
@@ -12864,25 +12849,6 @@ function showAllCategoryServices(categoryName) {
         left: track.clientWidth,
         behavior: 'smooth'
     });
-
-    setTimeout(() => {
-
-        const promosAfter =
-            [...document.querySelectorAll('.catus-promo-banner')];
-
-        alert(
-            'AFTER SEE ALL\n' +
-            'Promo count: ' + promosAfter.length + '\n' +
-            promosAfter.map((promo, index) =>
-                'Promo ' + (index + 1) +
-                ' | display=' + getComputedStyle(promo).display +
-                ' | inline=' + promo.style.display +
-                ' | height=' + Math.round(promo.getBoundingClientRect().height)
-            ).join('\n') +
-            '\n\ncurrentHomeGroupId=' + currentHomeGroupId
-        );
-
-    }, 700);
 }
 
     async function loadHeroBanners() {
