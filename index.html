@@ -12995,11 +12995,7 @@ function showAllCategoryServices(categoryName) {
         </div>
     `).join('');
 
-    document
-    .querySelectorAll('.catus-promo-banner')
-    .forEach(promo => {
-        promo.style.display = 'none';
-    });
+    
 
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -13018,6 +13014,7 @@ function closeCatusSeeAll(event) {
     }
 
     document.body.style.overflow = '';
+    keepPromoState();
 
     
 }
