@@ -12510,7 +12510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     html += `
         <div
             class="suggestion-item"
-            onmousedown="handleIndexSearchSelect('${s.service_id}', '${safeName}')"
+            onmousedown="handleIndexSearchSelect('${s.slug || s.service_id}', '${safeName}')"
         >
 
             <img
