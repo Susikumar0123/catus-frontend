@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title id="districtPageTitle">
+        Cerood Service Locations
+    </title>
+
+    <meta id="districtMetaDescription"
+          name="description"
+          content="Explore Cerood home appliance repair and service locations.">
+
+    <meta name="robots"
+          content="index, follow, max-image-preview:large">
+
+    <link id="districtCanonical"
+          rel="canonical"
+          href="https://www.cerood.com/">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #ffffff;
+            color: #18181b;
+        }
+
+        .district-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb a {
+            color: #6d4aff;
+            text-decoration: none;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .intro {
+            color: #52525b;
+            line-height: 1.7;
+            max-width: 850px;
+        }
+
+        .section {
+            margin-top: 40px;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .link-card {
+            display: block;
+            padding: 16px;
+            border: 1px solid #e4e4e7;
+            border-radius: 10px;
+            color: #18181b;
+            text-decoration: none;
+            background: #ffffff;
+        }
+
+        .link-card:hover {
+            border-color: #6d4aff;
+        }
+
+        @media (max-width: 768px) {
+            .district-page {
+                padding: 28px 16px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="district-page">
+
+        <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span> › </span>
+            <span id="breadcrumbDistrict"></span>
+        </div>
+
+        <h1 id="districtHeading">
+            Cerood Services
+        </h1>
+
+        <p id="districtIntro"
+           class="intro">
+        </p>
+
+        <section class="section">
+            <h2 id="serviceHeading">
+                Popular Services
+            </h2>
+
+            <div id="districtServices"
+                 class="link-grid">
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 id="locationHeading">
+                Service Locations
+            </h2>
+
+            <div id="districtLocations"
+                 class="link-grid">
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const API_BASE_URL =
+            window.location.hostname === 'localhost'
+                ? 'http://localhost:3000'
+                : 'https://catus-backend-d2js.onrender.com';
+
+        function slugify(value) {
+            return String(value || '')
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        const params =
+            new URLSearchParams(window.location.search);
+
+        const stateSlug =
+            params.get('state') || '';
+
+        const districtSlug =
+            params.get('district') || '';
+
+        const districtName =
+            districtSlug
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+
+        const canonical =
+            `https://www.cerood.com/${stateSlug}/${districtSlug}`;
+
+        document.getElementById(
+            'districtCanonical'
+        ).href = canonical;
+
+        document.getElementById(
+            'districtPageTitle'
+        ).textContent =
+            `Home Appliance Services in ${districtName} | Cerood`;
+
+        document.getElementById(
+            'districtMetaDescription'
+        ).content =
+            `Book doorstep home appliance repair, installation and maintenance services across ${districtName} with Cerood.`;
+
+        document.getElementById(
+            'breadcrumbDistrict'
+        ).textContent =
+            districtName;
+
+        document.getElementById(
+            'districtHeading'
+        ).textContent =
+            `Home Appliance Services in ${districtName}`;
+
+        document.getElementById(
+            'districtIntro'
+        ).textContent =
+            `Cerood provides doorstep home appliance repair, installation and maintenance services across ${districtName}. Explore available services and nearby service locations to book support conveniently.`;
+
+        const mainServices = [
+            {
+                name: 'Smart TV Repair',
+                slug: 'tv-repair'
+            },
+            {
+                name: 'AC Service',
+                slug: 'ac-service'
+            },
+            {
+                name: 'Washing Machine Repair',
+                slug: 'washing-machine-repair'
+            },
+            {
+                name: 'Refrigerator Repair',
+                slug: 'refrigerator-repair'
+            },
+            {
+                name: 'RO Water Purifier Service',
+                slug: 'ro-water-purifier-service'
+            }
+        ];
+
+        const serviceContainer =
+            document.getElementById(
+                'districtServices'
+            );
+
+        serviceContainer.innerHTML =
+            mainServices.map(service => `
+                <a class="link-card"
+                   href="/${stateSlug}/${districtSlug}/${service.slug}">
+                    ${service.name} in ${districtName}
+                </a>
+            `).join('');
+
+        async function loadDistrictLocations() {
+
+            const locationContainer =
+                document.getElementById(
+                    'districtLocations'
+                );
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/api/seo-locations`
+                    );
+
+                const data =
+                    await response.json();
+
+                const locations =
+                    Array.isArray(data.locations)
+                        ? data.locations.filter(item =>
+                            slugify(item.district) === districtSlug
+                        )
+                        : [];
+
+                if (!locations.length) {
+
+                    locationContainer.innerHTML =
+                        '<p>No service locations found.</p>';
+
+                    return;
+                }
+
+                locationContainer.innerHTML =
+                    locations.map(item => {
+
+                        const locationSlug =
+                            slugify(item.location_name);
+
+                        const url =
+                            locationSlug === districtSlug
+                                ? `/${stateSlug}/${districtSlug}/ac-service`
+                                : `/${stateSlug}/${districtSlug}/${locationSlug}/ac-service`;
+
+                        return `
+                            <a class="link-card"
+                               href="${url}">
+                                ${item.location_name}
+                            </a>
+                        `;
+
+                    }).join('');
+
+            } catch (error) {
+
+                locationContainer.innerHTML =
+                    '<p>Unable to load service locations.</p>';
+
+            }
+        }
+
+        loadDistrictLocations();
+    </script>
+
+</body>
+</html>
