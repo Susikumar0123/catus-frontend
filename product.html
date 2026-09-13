@@ -8244,43 +8244,20 @@ function updateCeroodSeoSchemas(page) {
     // BREADCRUMB SCHEMA
     // ==========================================
 
-    const breadcrumbItems = [
-        {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://www.cerood.com/"
-        },
-        {
-            "@type": "ListItem",
-            "position": 2,
-            "name": districtName || locationName,
-            "item":
-                `https://www.cerood.com/${currentStateSlug}/${currentDistrictSlug}`
-        }
-    ];
-
-    if (
-        locationName &&
-        districtName &&
-        locationName !== districtName
-    ) {
-        breadcrumbItems.push({
-            "@type": "ListItem",
-            "position": 3,
-            "name": locationName,
-            "item":
-                `https://www.cerood.com/${currentStateSlug}/${currentDistrictSlug}/${currentLocationSlug}`
-        });
-    }
-
-    breadcrumbItems.push({
+   const breadcrumbItems = [
+    {
         "@type": "ListItem",
-        "position":
-            breadcrumbItems.length + 1,
-        "name": serviceName,
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.cerood.com/"
+    },
+    {
+        "@type": "ListItem",
+        "position": 2,
+        "name": `${serviceName} in ${locationName}`,
         "item": currentUrl
-    });
+    }
+];
 
     const breadcrumbSchema =
         document.createElement('script');
@@ -8452,7 +8429,7 @@ async function loadLocationAwareProduct(
 
         const page =
             data.page;
-            
+
         updateCeroodSeoSchemas(page);
 
         locationServiceData =
