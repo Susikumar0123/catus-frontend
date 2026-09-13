@@ -5401,135 +5401,6 @@ scroll-snap-align: start !important;
         background: #6d4aff !important;
     }
 }
-/* ==============================
-   CATUS SEE ALL BOTTOM SHEET
-============================== */
-
-.catus-seeall-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.58);
-    z-index: 2147483500;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.catus-seeall-overlay.active {
-    display: flex;
-}
-
-.catus-seeall-sheet {
-    width: 100%;
-    max-width: 760px;
-    max-height: 82vh;
-    background: #ffffff;
-    border-radius: 24px 24px 0 0;
-    padding: 22px 18px 30px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    animation: catusSheetUp .28s ease;
-}
-
-@keyframes catusSheetUp {
-    from {
-        transform: translateY(100%);
-    }
-    to {
-        transform: translateY(0);
-    }
-}
-
-.catus-seeall-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 22px;
-}
-
-.catus-seeall-header h2 {
-    margin: 0;
-    font-size: 23px;
-    font-weight: 600;
-    color: #111111;
-}
-
-.catus-seeall-close {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 1px solid #e5e5e5;
-    background: #ffffff;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.catus-seeall-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 22px 14px;
-}
-
-.catus-seeall-item {
-    cursor: pointer;
-    text-align: center;
-}
-
-.catus-seeall-item img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 10px;
-    background: #f5f5f5;
-    display: block;
-}
-
-.catus-seeall-item span {
-    display: block;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 17px;
-    color: #111111;
-}
-
-@media (max-width: 768px) {
-
-    .catus-seeall-sheet {
-        max-height: 80vh;
-        padding: 16px 14px 24px;
-    }
-
-    .catus-seeall-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px 8px;
-    }
-
-    .catus-seeall-item img {
-        width: 82%;
-        margin: 0 auto;
-        border-radius: 9px;
-    }
-
-    .catus-seeall-item span {
-        margin-top: 6px;
-        font-size: 10px;
-        line-height: 13px;
-    }
-
-    .catus-seeall-header {
-        margin-bottom: 16px;
-    }
-
-    .catus-seeall-header h2 {
-        font-size: 21px;
-    }
-
-    .catus-seeall-close {
-        width: 38px;
-        height: 38px;
-        font-size: 17px;
-    }
-}
 
 /* =====================================================
    CEROOD SINGLE GLOBAL MOBILE NAV
@@ -7859,23 +7730,6 @@ button.uc-cart-btn:hover {
     <!-- 5. Product Categories & Grids (இதைக் கட்டாயம் சேர்க்கவும்) -->
     <div id="productGridContainer"></div>
 
-
-    <!-- CATUS SEE ALL BOTTOM SHEET -->
-<div id="catusSeeAllOverlay" class="catus-seeall-overlay" onclick="closeCatusSeeAll(event)">
-    <div class="catus-seeall-sheet" onclick="event.stopPropagation()">
-
-        <div class="catus-seeall-header">
-            <h2 id="catusSeeAllTitle">Services</h2>
-
-            <button onclick="closeCatusSeeAll()" class="catus-seeall-close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <div id="catusSeeAllGrid" class="catus-seeall-grid"></div>
-
-    </div>
-</div>
 
   <!-- Toast Notification Pop-up -->
   <div id="toastNotification">
@@ -12944,80 +12798,24 @@ if (currentHomeGroupId) {
 
 function showAllCategoryServices(categoryName) {
 
-    
+    const categoryBox = [...document.querySelectorAll('.uc-category-box')]
+        .find(box =>
+            box.querySelector('.uc-cat-header h3')?.textContent.trim()
+            === categoryName.trim()
+        );
 
-    if (window.innerWidth >= 993) {
+    if (!categoryBox) return;
 
-        const categoryBox = [...document.querySelectorAll('.uc-category-box')]
-            .find(box =>
-                box.querySelector('.uc-cat-header h3')?.textContent.trim()
-                === categoryName.trim()
-            );
+    const track = categoryBox.querySelector('.uc-grid');
 
-        const track = categoryBox?.querySelector('.uc-grid');
+    if (!track) return;
 
-        if (track) {
-            track.scrollTo({
-                left: track.scrollWidth,
-                behavior: 'smooth'
-            });
-        }
-
-        return;
-    }
-
-    // கீழே இருக்கிற mobile code அப்படியே இருக்கட்டும்
-
-    const allServices = window.catusAllServices || [];
-
-    const categoryServices = allServices.filter(service =>
-        String(service.category || 'Other Services').trim() === categoryName.trim()
-    );
-
-    const overlay = document.getElementById('catusSeeAllOverlay');
-    const title = document.getElementById('catusSeeAllTitle');
-    const grid = document.getElementById('catusSeeAllGrid');
-
-    if (!overlay || !title || !grid) return;
-
-    title.textContent = categoryName;
-
-    grid.innerHTML = categoryServices.map(service => `
-        <div
-            class="catus-seeall-item"
-            onclick="openServiceProduct('${service.service_id}')">
-
-            <img
-                src="${service.image_url || 'cerood-logo.webp'}"
-                alt="${service.service_name || 'Service'}">
-
-            <span>${service.service_name || 'Service'}</span>
-        </div>
-    `).join('');
-
-    
-
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    track.scrollTo({
+        left: track.scrollWidth,
+        behavior: 'smooth'
+    });
 }
 
-function closeCatusSeeAll(event) {
-
-    if (event && event.target.id !== 'catusSeeAllOverlay') {
-        return;
-    }
-
-    const overlay = document.getElementById('catusSeeAllOverlay');
-
-    if (overlay) {
-        overlay.classList.remove('active');
-    }
-
-    document.body.style.overflow = '';
-    keepPromoState();
-
-    
-}
 
     async function loadHeroBanners() {
     try {
