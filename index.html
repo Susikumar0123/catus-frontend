@@ -3945,9 +3945,6 @@ max-height: calc(100dvh - 56px) !important;
 
 @media (max-width: 768px) {
 
-    .uc-grid .uc-card:nth-child(n+5) {
-    display: none !important;
-}
 
     /* CATEGORY SECTION */
     .uc-category-box {
@@ -5160,25 +5157,38 @@ padding: 0 12px !important;
     /* ---------- MOBILE PRODUCTS : IMAGE + NAME ONLY ---------- */
 
 .uc-grid {
-    display: grid !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
 
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-
-    gap: 18px 10px !important;
+    gap: 10px !important;
 
     width: 100% !important;
 
-    padding: 0 10px 4px 10px !important;
+    padding: 0 10px 6px 10px !important;
 
     box-sizing: border-box !important;
 
-    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    -webkit-overflow-scrolling: touch !important;
+
+    scroll-behavior: smooth !important;
+    scroll-snap-type: x proximity !important;
+
+    scrollbar-width: none !important;
+}
+
+.uc-grid::-webkit-scrollbar {
+    display: none !important;
 }
 
 .uc-card {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
+    width: calc((100vw - 50px) / 4) !important;
+min-width: calc((100vw - 50px) / 4) !important;
+max-width: calc((100vw - 50px) / 4) !important;
+flex: 0 0 calc((100vw - 50px) / 4) !important;
+scroll-snap-align: start !important;
 
     margin: 0 !important;
 
