@@ -7630,24 +7630,7 @@ button.uc-cart-btn:hover {
     padding: 0 !important;
 }
 
-/* SEE ALL - INLINE CATEGORY EXPAND */
-@media (max-width: 768px) {
 
-    .uc-category-box.catus-category-expanded .uc-grid {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        overflow-x: visible !important;
-        overflow-y: visible !important;
-        height: auto !important;
-    }
-
-    .uc-category-box.catus-category-expanded .uc-card {
-        width: calc((100% - 30px) / 4) !important;
-        min-width: calc((100% - 30px) / 4) !important;
-        max-width: calc((100% - 30px) / 4) !important;
-        flex: 0 0 calc((100% - 30px) / 4) !important;
-    }
-}
 
 </style>
 </head>
@@ -12826,31 +12809,15 @@ function showAllCategoryServices(categoryName) {
     if (!categoryBox) return;
 
     const track = categoryBox.querySelector('.uc-grid');
-    const seeAllBtn = categoryBox.querySelector('.uc-see-all-btn');
 
     if (!track) return;
 
-    const isExpanded =
-        categoryBox.classList.contains('catus-category-expanded');
-
-    if (isExpanded) {
-
-        categoryBox.classList.remove('catus-category-expanded');
-
-        if (seeAllBtn) {
-            seeAllBtn.textContent = 'See all';
-        }
-
-        track.scrollLeft = 0;
-
-    } else {
-
-        categoryBox.classList.add('catus-category-expanded');
-
-        if (seeAllBtn) {
-            seeAllBtn.textContent = 'Show less';
-        }
-    }
+    // Promo cards / page layout-ai touch panna koodadhu.
+    // Product row mattum horizontal-ah right side scroll aagum.
+    track.scrollBy({
+        left: track.clientWidth,
+        behavior: 'smooth'
+    });
 }
 
 
