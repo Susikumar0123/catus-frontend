@@ -6749,19 +6749,31 @@ flex-shrink: 0;
 }
 
 .cerood-info-modal-close {
-    top: 10px !important;
-    right: 10px !important;
+    position: absolute !important;
+
+    top: 12px !important;
+    right: 12px !important;
 
     width: 34px !important;
     height: 34px !important;
 
-    background: #f4f4f5 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: none !important;
     border-radius: 50% !important;
 
-    position: sticky !important;
-    float: right !important;
+    background: #f4f4f5 !important;
+    color: #18181b !important;
 
-    z-index: 30 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+
+    z-index: 999 !important;
 }
 
 /* Hide ugly scrollbar but keep scrolling */
@@ -14302,19 +14314,6 @@ function closeCeroodInfoModal(modalId) {
     document.body.style.overflow = '';
 }
 
-
-document.addEventListener('click', function (event) {
-
-    const modal = event.target.classList.contains('cerood-info-modal')
-        ? event.target
-        : null;
-
-    if (!modal) return;
-
-    modal.classList.remove('active');
-
-    document.body.style.overflow = '';
-});
 
 
   </script>
