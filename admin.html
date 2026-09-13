@@ -574,11 +574,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Image</th>
-                                    <th>Title & Subtitle</th>
-                                    <th>Product Link ID</th>
-                                    <th>Background</th>
-                                    <th style="text-align: right;">Action</th>
+                                    <th>Banner Image</th>
+<th>Product / Service Slug</th>
+<th style="text-align: right;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="adminBannersTableBody">
@@ -2427,24 +2425,33 @@
 
             <input type="hidden" id="bannerEditId">
 
-            <div style="display: flex; flex-direction: column; gap: 12px; max-height: 65vh; overflow-y: auto; padding-right: 4px;">
-                <div class="form-group"><label>Card Title *</label><input type="text" id="newBannerTitle" class="form-input" placeholder="e.g. Expert TV Repair"></div>
-                <div class="form-group"><label>Subtitle *</label><input type="text" id="newBannerSubtitle" class="form-input" placeholder="e.g. Fast doorstep service"></div>
-                <div class="form-group">
-        <label>Banner Image URL *</label>
+           <div style="display:flex; flex-direction:column; gap:14px;">
+
+    <input type="hidden" id="newBannerTitle" value="Banner">
+    <input type="hidden" id="newBannerSubtitle" value="">
+    <input type="hidden" id="newBannerBg" value="#ffffff">
+    <input type="hidden" id="newBannerTextColor" value="#111111">
+    <input type="hidden" id="newBannerBtnText" value="">
+
+    <div class="form-group">
+        <label>Banner Image *</label>
 
         <div style="display:flex; gap:8px; align-items:center;">
+
             <input
                 type="text"
                 id="newBannerImg"
                 class="form-input"
                 style="flex-grow:1;"
-                placeholder="https://...">
+                placeholder="Image URL will appear here"
+                readonly
+            >
 
             <label
                 for="hiddenBannerImageFile"
-                style="background:#0284c7; color:white; padding:10px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;">
-                <i class="fa-solid fa-upload"></i> Upload
+                style="background:#0284c7; color:white; padding:10px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;"
+            >
+                <i class="fa-solid fa-upload"></i> Upload Image
             </label>
 
             <input
@@ -2452,14 +2459,24 @@
                 id="hiddenBannerImageFile"
                 accept="image/*"
                 style="display:none;"
-                onchange="uploadAdminImage(this, 'newBannerImg')">
+                onchange="uploadAdminImage(this, 'newBannerImg')"
+            >
+
         </div>
     </div>
-                <div class="form-group"><label>Product / Service ID (for link)</label><input type="text" id="newBannerProdId" class="form-input" placeholder="e.g. tv-repair"></div>
-                <div class="form-group"><label>Background Color (Hex code)</label><input type="text" id="newBannerBg" class="form-input" value="#f4f3f1"></div>
-                <div class="form-group"><label>Text Color (Hex code)</label><input type="text" id="newBannerTextColor" class="form-input" value="#111"></div>
-                <div class="form-group"><label>Button Text</label><input type="text" id="newBannerBtnText" class="form-input" value="Get Service"></div>
-            </div>
+
+    <div class="form-group">
+        <label>Product / Service Slug *</label>
+
+        <input
+            type="text"
+            id="newBannerProdId"
+            class="form-input"
+            placeholder="e.g. split-ac-uninstallation"
+        >
+    </div>
+
+</div>
 
             <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
                 <button style="flex:1; padding:10px; border:1px solid #cbd5e1; background:white; border-radius:6px; cursor:pointer;" onclick="closeAddBannerModal()">Cancel</button>
@@ -6299,15 +6316,43 @@ if (techResponse === 'Accepted') {
                     } else {
                         allAdminBanners.forEach(b => {
                             html += `<tr>
-                                <td><img src="${b.image_url}" style="width: 50px; height: 35px; object-fit: cover; border-radius: 4px;"></td>
-                                <td><b>${b.title}</b><br><small style="color:#64748b;">${b.subtitle || ''}</small></td>
-                                <td><code>${b.product_id || 'N/A'}</code></td>
-                                <td><span style="background:${b.bg_color}; padding: 2px 8px; border-radius: 4px; border:1px solid #cbd5e1;">${b.bg_color}</span></td>
-                                <td style="text-align: right;">
-                                    <button class="manage-btn" style="background:#0284c7; margin-right:4px;" onclick="openEditBannerModal(${b.id})"><i class="fa-solid fa-pen"></i> Edit</button>
-                                    <button class="manage-btn btn-danger" onclick="deleteBanner(${b.id})"><i class="fa-solid fa-trash"></i> Delete</button>
-                                </td>
-                            </tr>`;
+
+    <td>
+        <img
+            src="${b.image_url}"
+            alt="Banner"
+            style="
+                width:90px;
+                height:50px;
+                object-fit:cover;
+                border-radius:6px;
+                display:block;
+            "
+        >
+    </td>
+
+    <td>
+        <code>${b.product_id || 'N/A'}</code>
+    </td>
+
+    <td style="text-align:right;">
+        <button
+            class="manage-btn"
+            style="background:#0284c7; margin-right:4px;"
+            onclick="openEditBannerModal(${b.id})"
+        >
+            <i class="fa-solid fa-pen"></i> Edit
+        </button>
+
+        <button
+            class="manage-btn btn-danger"
+            onclick="deleteBanner(${b.id})"
+        >
+            <i class="fa-solid fa-trash"></i> Delete
+        </button>
+    </td>
+
+</tr>`;
                         });
                     }
                     tbody.innerHTML = html;
@@ -6315,35 +6360,55 @@ if (techResponse === 'Accepted') {
             }).catch(err => console.error("Banner fetch error:", err));
         }
 
-        function openAddBannerModal() { 
-            document.getElementById('bannerModalTitle').textContent = "Add New Home Banner";
-            document.getElementById('bannerEditId').value = "";
-            document.getElementById('newBannerTitle').value = "";
-            document.getElementById('newBannerSubtitle').value = "";
-            document.getElementById('newBannerImg').value = "";
-            document.getElementById('newBannerProdId').value = "";
-            document.getElementById('newBannerBg').value = "#f4f3f1";
-            document.getElementById('newBannerTextColor').value = "#111";
-            document.getElementById('newBannerBtnText').value = "Get Service";
-            document.getElementById('bannerActionModal').style.display = 'flex'; 
-        }
+        function openAddBannerModal() {
 
-        function openEditBannerModal(id) {
-            let b = allAdminBanners.find(item => Number(item.id) === Number(id));
-            if(!b) return;
+    document.getElementById('bannerModalTitle').textContent =
+        "Add New Home Banner";
 
-            document.getElementById('bannerModalTitle').textContent = "Edit Banner Card (#" + b.id + ")";
-            document.getElementById('bannerEditId').value = b.id;
-            document.getElementById('newBannerTitle').value = b.title || '';
-            document.getElementById('newBannerSubtitle').value = b.subtitle || '';
-            document.getElementById('newBannerImg').value = b.image_url || '';
-            document.getElementById('newBannerProdId').value = b.product_id || '';
-            document.getElementById('newBannerBg').value = b.bg_color || '#f4f3f1';
-            document.getElementById('newBannerTextColor').value = b.text_color || '#111';
-            document.getElementById('newBannerBtnText').value = b.button_text || 'Get Service';
-            
-            document.getElementById('bannerActionModal').style.display = 'flex';
-        }
+    document.getElementById('bannerEditId').value = "";
+
+    document.getElementById('newBannerTitle').value = "Banner";
+    document.getElementById('newBannerSubtitle').value = "";
+
+    document.getElementById('newBannerImg').value = "";
+    document.getElementById('newBannerProdId').value = "";
+
+    document.getElementById('newBannerBg').value = "#ffffff";
+    document.getElementById('newBannerTextColor').value = "#111111";
+    document.getElementById('newBannerBtnText').value = "";
+
+    document.getElementById('bannerActionModal').style.display = 'flex';
+}
+        
+function openEditBannerModal(id) {
+
+    const b = allAdminBanners.find(
+        item => Number(item.id) === Number(id)
+    );
+
+    if (!b) return;
+
+    document.getElementById('bannerModalTitle').textContent =
+        "Edit Banner Card (#" + b.id + ")";
+
+    document.getElementById('bannerEditId').value = b.id;
+
+    document.getElementById('newBannerTitle').value = "Banner";
+    document.getElementById('newBannerSubtitle').value = "";
+
+    document.getElementById('newBannerImg').value =
+        b.image_url || "";
+
+    document.getElementById('newBannerProdId').value =
+        b.product_id || "";
+
+    document.getElementById('newBannerBg').value = "#ffffff";
+    document.getElementById('newBannerTextColor').value = "#111111";
+    document.getElementById('newBannerBtnText').value = "";
+
+    document.getElementById('bannerActionModal').style.display = 'flex';
+}
+
 
         function closeAddBannerModal() { 
             document.getElementById('bannerActionModal').style.display = 'none'; 
@@ -6359,10 +6424,10 @@ if (techResponse === 'Accepted') {
             let text_color = document.getElementById('newBannerTextColor').value.trim();
             let button_text = document.getElementById('newBannerBtnText').value.trim();
 
-            if(!title || !image_url) { 
-                alert("Please fill Title and Image URL!"); 
-                return; 
-            }
+            if (!image_url || !product_id) {
+    alert("Please upload Banner Image and enter Product / Service ID!");
+    return;
+}
 
             let endpoint = id ? `${API_BASE_URL}/api/admin/edit-banner` : `${API_BASE_URL}/api/admin/add-banner`;
             let payload = id ? { id, title, subtitle, image_url, product_id, bg_color, text_color, button_text } : { title, subtitle, image_url, product_id, bg_color, text_color, button_text };

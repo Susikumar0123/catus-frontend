@@ -650,15 +650,21 @@
     }
 
     .cards-container .card {
-        height: 190px !important;
-        border-radius: 18px !important;
-        padding: 20px 22px !important;
-    }
+    height: auto !important;
+    aspect-ratio: 16 / 6 !important;
+    border-radius: 16px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: transparent !important;
+}
 
-    .cards-container .card img {
-        height: 155px !important;
-        border-radius: 14px !important;
-    }
+.cards-container .card img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    display: block !important;
+}
 }
 
 /* =========================================
@@ -678,36 +684,23 @@
     }
 
     .cards-container .card {
-        height: 145px !important;
-        padding: 14px 15px !important;
-        border-radius: 15px !important;
-    }
+    height: auto !important;
+    aspect-ratio: 16 / 7 !important;
+    padding: 0 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    background: transparent !important;
+}
 
-    .cards-container .card img {
-        width: 43% !important;
-        height: 112px !important;
-        border-radius: 10px !important;
-    }
+.cards-container .card img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    display: block !important;
+}
 
-    .cards-container .card-content {
-        max-width: 54% !important;
-    }
-
-    .cards-container .card-content h3 {
-        font-size: 14px !important;
-        line-height: 1.2 !important;
-        margin-bottom: 5px !important;
-    }
-
-    .cards-container .card-content p {
-        font-size: 10px !important;
-        margin-bottom: 8px !important;
-    }
-
-    .cards-container .book-btn {
-        padding: 4px 8px !important;
-        font-size: 9px !important;
-    }
+    
 }
 
         /* 5. Product Categories Container */
@@ -13168,34 +13161,45 @@ function showAllCategoryServices(categoryName) {
 
         if (data.success && data.banners.length > 0) {
             let dynamicHTML = '';
-            data.banners.forEach((b, index) => {
-                let btnTextColor = (b.text_color === '#111' || b.text_color === '#000') ? '#fff' : (b.text_color || '#fff');
-                let btnBgColor = (b.text_color === '#111' || b.text_color === '#000') ? '#111' : (b.text_color || '#111');
+           data.banners.forEach((b, index) => {
 
-                // Ingu product_id hardcoded-ah irukkirathuku bathila actual string/numeric ID-ah pass panrom
-                let targetId = b.product_id ? b.product_id.trim() : 'tv-repair';
+    const targetId =
+        b.product_id
+            ? String(b.product_id).trim()
+            : 'tv-repair';
 
-                dynamicHTML += `
-                <a href="javascript:void(0)"
-   class="card-link"
-   onclick="openServiceProduct('${targetId}'); return false;">
-                    <div class="card" style="background-color: ${b.bg_color || '#f4f3f1'}; color: ${b.text_color || '#111'};">
-                        <div class="card-content">
-                            <h3>${b.title}</h3>
-                            <p>${b.subtitle || ''}</p>
-                            <span class="book-btn" style="background-color: ${btnBgColor}; color: ${btnTextColor};">
-                                ${b.button_data || b.button_text || 'Get Service'}
-                            </span>
-                        </div>
-                        <img
-    src="${b.image_url}"
-    alt="${b.title || 'Cerood Home Appliance Service'}"
-    loading="${index === 0 ? 'eager' : 'lazy'}"
-    fetchpriority="${index === 0 ? 'high' : 'auto'}"
-    decoding="async">
-                    </div>
-                </a>`;
-            });
+    dynamicHTML += `
+        <a
+            href="javascript:void(0)"
+            class="card-link"
+            onclick="openServiceProduct('${targetId}'); return false;"
+        >
+            <div
+                class="card"
+                style="
+                    padding:0 !important;
+                    overflow:hidden;
+                    background:#ffffff;
+                "
+            >
+                <img
+                    src="${b.image_url}"
+                    alt="Cerood Home Service Banner"
+                    loading="${index === 0 ? 'eager' : 'lazy'}"
+                    fetchpriority="${index === 0 ? 'high' : 'auto'}"
+                    decoding="async"
+                    style="
+                        width:100% !important;
+                        height:100% !important;
+                        object-fit:cover !important;
+                        border-radius:0 !important;
+                        display:block !important;
+                    "
+                >
+            </div>
+        </a>
+    `;
+});
 
             container.innerHTML = dynamicHTML;
             setupMobileBannerDots();
