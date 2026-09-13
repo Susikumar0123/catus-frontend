@@ -789,77 +789,6 @@
     }
 }
 
-    /* =========================================
-   CATUS LARGE PROMO BANNERS - DESKTOP
-========================================= */
-@media (min-width: 993px) {
-
-    .catus-promo-banner {
-        width: 100%;
-        height: 410px;
-        margin: 15px 0 90px 0;
-        border-radius: 0;
-        overflow: hidden;
-        position: relative;
-        cursor: pointer;
-        background: #f5f5f5;
-    }
-
-    .catus-promo-banner img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .catus-promo-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        padding: 45px;
-        box-sizing: border-box;
-        pointer-events: none;
-    }
-
-    .catus-promo-content {
-        max-width: 480px;
-        color: #ffffff;
-    }
-
-    .catus-promo-tag {
-        display: inline-block;
-        font-size: 14px;
-        font-weight: 500;
-        padding: 7px 12px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        background: #a50050;
-        color: #ffffff;
-    }
-
-    .catus-promo-title {
-        margin: 0 0 24px 0;
-        font-size: 36px;
-        line-height: 1.35;
-        font-weight: 600;
-        letter-spacing: -0.5px;
-    }
-
-    .catus-promo-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 130px;
-        height: 54px;
-        padding: 0 24px;
-        background: #ffffff;
-        color: #111111;
-        border-radius: 12px;
-        font-size: 17px;
-        font-weight: 600;
-    }
-}
 
         @media (max-width: 850px) {
     #cartModal {
@@ -4502,162 +4431,10 @@ padding: 0 12px !important;
     }
 }
 
-/* =====================================================
-   CATUS MOBILE HOMEPAGE V3
-   Promo Banner + Section Spacing
-===================================================== */
+
 
 @media (max-width: 768px) {
 
-    /* LARGE PROMO BANNER */
-    .catus-promo-banner {
-        width: calc(100% - 32px) !important;
-
-        height: auto !important;
-        aspect-ratio: 1 / 1 !important;
-
-        margin: 28px 16px 38px 16px !important;
-
-        border-radius: 14px !important;
-
-        overflow: hidden !important;
-
-        position: relative !important;
-
-        background: #f5f5f5 !important;
-
-        cursor: pointer !important;
-    }
-
-    .catus-promo-banner img {
-        width: 100% !important;
-        height: 100% !important;
-
-        object-fit: cover !important;
-
-        display: block !important;
-    }
-
-    /* DARK OVERLAY FOR TEXT READABILITY */
-    .catus-promo-banner::after {
-        content: "" !important;
-
-        position: absolute !important;
-        inset: 0 !important;
-
-        background:
-            linear-gradient(
-                to right,
-                rgba(0,0,0,0.56) 0%,
-                rgba(0,0,0,0.30) 42%,
-                rgba(0,0,0,0.05) 72%,
-                rgba(0,0,0,0) 100%
-            ) !important;
-
-        pointer-events: none !important;
-
-        z-index: 1 !important;
-    }
-
-    .catus-promo-overlay {
-        position: absolute !important;
-
-        inset: 0 !important;
-
-        display: flex !important;
-
-        align-items: flex-start !important;
-        justify-content: flex-start !important;
-
-        padding: 24px 22px !important;
-
-        box-sizing: border-box !important;
-
-        z-index: 2 !important;
-
-        pointer-events: none !important;
-    }
-
-    .catus-promo-content {
-        width: 72% !important;
-        max-width: none !important;
-
-        color: #ffffff !important;
-    }
-
-    /* PROMO TAG */
-    .catus-promo-tag {
-        display: inline-block !important;
-
-        margin: 0 0 18px 0 !important;
-
-        padding: 6px 11px !important;
-
-        border-radius: 6px !important;
-
-        background: #8b0050 !important;
-
-        color: #ffffff !important;
-
-        font-size: 12px !important;
-        line-height: 1 !important;
-        font-weight: 600 !important;
-    }
-
-    /* PROMO TITLE */
-    .catus-promo-title {
-        margin: 0 0 18px 0 !important;
-
-        font-size: 28px !important;
-        line-height: 1.28 !important;
-
-        font-weight: 650 !important;
-
-        letter-spacing: -0.4px !important;
-
-        color: #ffffff !important;
-
-        text-shadow: 0 1px 4px rgba(0,0,0,0.18) !important;
-    }
-
-    /* PROMO BUTTON */
-    .catus-promo-btn {
-        position: absolute !important;
-
-        left: 22px !important;
-        bottom: 22px !important;
-
-        display: inline-flex !important;
-
-        align-items: center !important;
-        justify-content: center !important;
-
-        min-width: 100px !important;
-        height: 44px !important;
-
-        padding: 0 18px !important;
-
-        border-radius: 9px !important;
-
-        background: #ffffff !important;
-
-        color: #111111 !important;
-
-        font-size: 14px !important;
-        font-weight: 600 !important;
-
-        box-shadow: none !important;
-    }
-
-    /* CATEGORY SECTION GAP */
-    .uc-category-box + .uc-category-box {
-        margin-top: 0 !important;
-    }
-
-    /* Promo-ku next category close-a ottama */
-    .catus-promo-banner + .uc-category-box {
-        padding-top: 30px !important;
-    }
 
     /* Main product container */
     #productGridContainer {
@@ -11923,29 +11700,8 @@ serviceStr =
 
     
 
-    function keepPromoState() {
-
-    const promoBanners =
-        document.querySelectorAll('.catus-promo-banner');
-
-    const searchInput =
-        document.getElementById('searchInput');
-
-    const hasSearch =
-        searchInput &&
-        searchInput.value.trim().length > 0;
-
-    const shouldHidePromo =
-        !!currentHomeGroupId ||
-        hasSearch;
-
-    promoBanners.forEach(promo => {
-        promo.style.display =
-            shouldHidePromo ? 'none' : '';
-    });
-}
-
     
+
     async function loadHomeServiceGroups() {
 
     const track = document.getElementById('servicesTrack');
@@ -12058,8 +11814,7 @@ function filterProductsByGroup(groupId) {
     const titleContainer =
         document.querySelector('.section-title-container');
 
-    const promoBanners =
-        document.querySelectorAll('.catus-promo-banner');
+    
 
     if (groupId) {
 
@@ -12069,9 +11824,7 @@ function filterProductsByGroup(groupId) {
         if (titleContainer)
             titleContainer.style.display = 'none';
 
-        promoBanners.forEach(promo => {
-            promo.style.display = 'none';
-        });
+        
 
     } else {
 
@@ -12081,7 +11834,7 @@ function filterProductsByGroup(groupId) {
         if (titleContainer)
             titleContainer.style.display = '';
 
-        keepPromoState();
+    
     }
 
     document
@@ -12135,7 +11888,7 @@ function getSmallProductImageUrl(imageUrl) {
         const bannerContainer = document.querySelector('.scroll-wrapper');
         const titleContainer = document.querySelector('.section-title-container');
 
-        keepPromoState();
+        
 
         if (query.length > 0) {
             if (bannerContainer) bannerContainer.style.display = 'none';
@@ -12179,7 +11932,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (query.length === 0) {
     suggestionsBox.style.display = 'none';
     suggestionsBox.innerHTML = '';
-    keepPromoState();
+    
     return;
 }
 
@@ -12251,7 +12004,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Search error:", err);
             }
 
-            keepPromoState();
+            
         });
 
         searchInput.addEventListener('focus', () => {
@@ -12439,7 +12192,7 @@ container.addEventListener('touchend', () => {
         showToast("Delivery Address updated successfully!", false);
     }
 
-    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v2';
+    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v3';
 
     localStorage.removeItem('catus_home_html_cache');
 
@@ -12471,46 +12224,18 @@ function showCachedHomeServices() {
     async function loadLiveServicesForFrontend() {
   try {
 
-    const existingPromoElements =
-    [...document.querySelectorAll('.catus-promo-banner')];
+   
 
-const existingPromoHTML = {
-    1: existingPromoElements[0]?.outerHTML || '',
-    2: existingPromoElements[1]?.outerHTML || ''
-};
+      const servicesResponse =
+    await fetch(`${API_BASE_URL}/api/home-services`);
 
-      const [servicesResponse, promoResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/home-services`),
-          fetch(`${API_BASE_URL}/api/promo-banners`)
-      ]);
-
-      const data = await servicesResponse.json();
-      const promoData = await promoResponse.json();
+const data =
+    await servicesResponse.json();
 
      let container = document.getElementById('productGridContainer');
 
 if (!container) return;
 
-const promoBanners =
-    promoData.success &&
-    Array.isArray(promoData.banners)
-        ? promoData.banners
-        : [];
-
-// IMPORTANT:
-// Cached homepage-la promo cards already visible-a irundhu,
-// promo API empty / temporary failure aana,
-// existing homepage-ai overwrite panna koodadhu.
-if (
-    promoBanners.length === 0 &&
-    container.querySelector('.catus-promo-banner')
-) {
-    console.warn(
-        'Promo banners empty - keeping existing cached homepage'
-    );
-
-    return;
-}
 
           if(data.success && data.services && data.services.length > 0) {
               let categoriesMap = {};
@@ -12557,7 +12282,7 @@ Object.keys(categoriesMap).forEach(categoryName => {
     
        
 
-let renderedSectionCount = 0;
+
            
               let html = '';
               for(let catName in categoriesMap) {
@@ -12671,70 +12396,6 @@ html += `
     </div>
 </div>`;
 
-          renderedSectionCount++;
-
-if (renderedSectionCount === 2 || renderedSectionCount === 4) {
-
-    const promoSlot =
-        renderedSectionCount === 2 ? 1 : 2;
-
-    const promo = promoBanners.find(
-        item => Number(item.slot_no) === promoSlot
-    );
-
-    if (promo && promo.image_url) {
-
-    html += `
-        <div
-            class="catus-promo-banner"
-            data-promo-slot="${promoSlot}">
-
-                <img
-    src="${promo.image_url}"
-    alt="${promo.title || 'Cerood Home Appliance Service'}"
-    loading="lazy"
-    decoding="async">
-
-                <div class="catus-promo-overlay">
-                    <div class="catus-promo-content">
-
-                        ${promo.tag ? `
-                            <span class="catus-promo-tag">
-                                ${promo.tag}
-                            </span>
-                        ` : ''}
-
-                        ${promo.title ? `
-                            <h2 class="catus-promo-title">
-                                ${promo.title}
-                            </h2>
-                        ` : ''}
-
-                        ${promo.button_text ? `
-    <span
-        class="catus-promo-btn"
-        onclick="
-            event.preventDefault();
-            event.stopPropagation();
-            ${promo.service_id
-                ? `openServiceProduct('${promo.service_id}');`
-                : ''}
-            return false;
-        ">
-        ${promo.button_text}
-    </span>
-` : ''}
-
-                    </div>
-                </div>
-            </div>
-        `;
-        } else if (existingPromoHTML[promoSlot]) {
-
-        html += existingPromoHTML[promoSlot];
-
-    }
-}
             
               }
               container.innerHTML = html;
@@ -12753,9 +12414,7 @@ if (window.lucide) {
     lucide.createIcons();
 }
 
-// A service group already selected-na,
-// async render mudinja apram filter-ai thirumba apply pannu.
-// Ithu promo banners category view-la appear aaguradhai stop pannum.
+
 if (currentHomeGroupId) {
     filterProductsByGroup(currentHomeGroupId);
 }
@@ -13017,7 +12676,7 @@ if (searchInput) {
 }
 
 filterProductsByGroup('');
-keepPromoState();
+
 
         window.scrollTo({
             top: 0,
