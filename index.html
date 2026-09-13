@@ -6800,30 +6800,30 @@ flex-shrink: 0;
     }
 
     /* Main footer columns */
-    .footer-inner > div:first-child {
+    .footer-inner > .footer-main-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 28px 20px !important;
     }
 
     /* Brand section full width */
-    .footer-inner > div:first-child > div:first-child {
+    .footer-inner > .footer-main-grid > div:first-child {
         grid-column: 1 / -1 !important;
     }
 
     /* Contact section full width */
-    .footer-inner > div:first-child > div:last-child {
+    .footer-inner > .footer-main-grid > div:last-child {
         grid-column: 1 / -1 !important;
     }
 
     /* Brand title */
-    .footer-inner > div:first-child > div:first-child h3 {
+    .footer-inner > .footer-main-grid > div:first-child h3 {
         font-size: 17px !important;
         margin-bottom: 10px !important;
     }
 
     /* Brand description */
-    .footer-inner > div:first-child > div:first-child p {
+    .footer-inner > .footer-main-grid > div:first-child p {
         max-width: 100% !important;
         font-size: 12px !important;
         line-height: 1.65 !important;
@@ -7896,7 +7896,7 @@ button.uc-cart-btn:hover {
    CEROOD FOOTER BRAND COLUMN POLISH
 ===================================================== */
 
-.footer-inner > div:first-child > div:first-child h3 {
+.footer-inner > .footer-main-grid > div:first-child h3 {
     font-size: 18px !important;
     font-weight: 700 !important;
     letter-spacing: -0.2px !important;
@@ -14628,7 +14628,7 @@ function closeCeroodInfoModal(modalId) {
 </div>
 
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 24px;">
+        <div class="footer-main-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 24px;"></div>
             
             <!-- Column 1: Brand Info -->
             <div>
