@@ -6667,33 +6667,84 @@ flex-shrink: 0;
     }
 }
 
-/* CEROOD FOOTER VISUAL POLISH */
+/* =====================================================
+   CEROOD MOBILE PREMIUM FOOTER
+===================================================== */
 
-.footer-inner h3,
-.footer-inner h4 {
-    color: var(--catus-text) !important;
-    font-weight: 600 !important;
+@media (max-width: 768px) {
+
+    .footer-wrapper {
+        padding: 30px 18px 16px !important;
+        margin-top: 45px !important;
+    }
+
+    /* Main footer columns */
+    .footer-inner > div:first-child {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 28px 20px !important;
+    }
+
+    /* Brand section full width */
+    .footer-inner > div:first-child > div:first-child {
+        grid-column: 1 / -1 !important;
+    }
+
+    /* Contact section full width */
+    .footer-inner > div:first-child > div:last-child {
+        grid-column: 1 / -1 !important;
+    }
+
+    /* Brand title */
+    .footer-inner > div:first-child > div:first-child h3 {
+        font-size: 17px !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Brand description */
+    .footer-inner > div:first-child > div:first-child p {
+        max-width: 100% !important;
+        font-size: 12px !important;
+        line-height: 1.65 !important;
+    }
+
+    /* Column titles */
+    .footer-inner h4,
+    .footer-column-title {
+        font-size: 12px !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Footer links */
+    .footer-inner a,
+    .footer-inner li {
+        font-size: 11.5px !important;
+    }
+
+    .cerood-footer-links li {
+        margin-bottom: 6px !important;
+    }
+
+    /* Contact */
+    .footer-contact-row {
+        font-size: 11.5px !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Social icons */
+    .footer-social-link {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    /* Copyright */
+    .footer-inner > div:last-child {
+        margin-top: 24px !important;
+        padding-top: 16px !important;
+        font-size: 10.5px !important;
+    }
 }
 
-.footer-inner p,
-.footer-inner li,
-.footer-inner span {
-    color: var(--catus-text-2);
-}
-
-.footer-inner a {
-    color: var(--catus-text-2) !important;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-inner a:hover {
-    color: var(--catus-primary) !important;
-}
-
-.footer-inner > div {
-    border-color: #e7e7eb !important;
-}
 
 /* =====================================================
    CEROOD SEARCH — CONVERSION POLISH
@@ -7584,6 +7635,173 @@ button.uc-cart-btn:hover {
     }
 }
 
+/* =====================================================
+   CEROOD PREMIUM CORPORATE FOOTER
+===================================================== */
+
+.footer-wrapper {
+    background: #0f172a !important;
+    color: #cbd5e1 !important;
+    border-top: 1px solid #1e293b !important;
+}
+
+/* Cerood / Company / Top Services / Contact Us */
+.footer-inner h3,
+.footer-inner h4,
+.footer-column-title {
+    color: #ffffff !important;
+}
+
+/* Normal footer text */
+.footer-inner p,
+.footer-inner li,
+.footer-inner span {
+    color: #cbd5e1 !important;
+}
+
+/* All footer links */
+.footer-inner a,
+.cerood-footer-links li a {
+    color: #cbd5e1 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+}
+
+/* Premium purple accent on hover */
+.footer-inner a:hover,
+.cerood-footer-links li a:hover {
+    color: #a78bfa !important;
+}
+
+/* Footer divider lines */
+.footer-inner > div {
+    border-color: #334155 !important;
+}
+
+/* Contact icons */
+.footer-contact-icon {
+    stroke: #a78bfa !important;
+}
+
+/* Copyright */
+.footer-inner > div:last-child,
+.footer-inner > div:last-child p,
+.footer-inner > div:last-child span {
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+/* =====================================================
+   CEROOD FOOTER SPACING + ICON POLISH
+===================================================== */
+
+.footer-inner {
+    padding-top: 4px;
+}
+
+/* Main 4 columns spacing */
+.footer-inner > div:first-child {
+    gap: 44px !important;
+}
+
+/* Column headings */
+.footer-inner h3,
+.footer-inner h4,
+.footer-column-title {
+    margin-bottom: 14px !important;
+    letter-spacing: 0.2px !important;
+}
+
+/* Company links */
+.cerood-footer-links li {
+    margin-bottom: 7px !important;
+}
+
+/* Top services links */
+.footer-inner ul li {
+    line-height: 1.6 !important;
+}
+
+/* Contact rows */
+.footer-contact-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 0 12px 0 !important;
+}
+
+/* Contact icons premium size */
+.footer-contact-icon {
+    width: 17px !important;
+    height: 17px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Social icons area */
+.footer-social-link {
+    width: 34px !important;
+    height: 34px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    background: #1e293b !important;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease !important;
+}
+
+.footer-social-link:hover {
+    background: #334155 !important;
+    transform: translateY(-2px);
+}
+
+.footer-social-svg {
+    width: 17px !important;
+    height: 17px !important;
+}
+
+/* Copyright spacing */
+.footer-inner > div:last-child {
+    margin-top: 28px !important;
+    padding-top: 18px !important;
+}
+
+/* =====================================================
+   CEROOD FOOTER BRAND COLUMN POLISH
+===================================================== */
+
+.footer-inner > div:first-child > div:first-child h3 {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.2px !important;
+    margin-bottom: 12px !important;
+}
+
+.footer-inner > div:first-child > div:first-child p {
+    max-width: 270px !important;
+    font-size: 13px !important;
+    line-height: 1.7 !important;
+    color: #94a3b8 !important;
+}
+
+.call-svg {
+    fill: none !important;
+    stroke: #c4b5fd !important;
+    stroke-width: 1.8 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+}
+
+.whatsapp-circle-svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
 /* FOOTER COMPANY LINKS ALIGNMENT FIX */
 .cerood-footer-links {
     list-style: none !important;
@@ -7593,7 +7811,7 @@ button.uc-cart-btn:hover {
 
 .cerood-footer-links li {
     list-style: none !important;
-    margin: 0 0 4px 0 !important;
+    margin: 0 0 7px 0 !important;
     padding: 0 !important;
 }
 
