@@ -7630,6 +7630,25 @@ button.uc-cart-btn:hover {
     padding: 0 !important;
 }
 
+/* SEE ALL - INLINE CATEGORY EXPAND */
+@media (max-width: 768px) {
+
+    .uc-category-box.catus-category-expanded .uc-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        height: auto !important;
+    }
+
+    .uc-category-box.catus-category-expanded .uc-card {
+        width: calc((100% - 30px) / 4) !important;
+        min-width: calc((100% - 30px) / 4) !important;
+        max-width: calc((100% - 30px) / 4) !important;
+        flex: 0 0 calc((100% - 30px) / 4) !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -12798,22 +12817,6 @@ if (currentHomeGroupId) {
 
 function showAllCategoryServices(categoryName) {
 
-    // SEE ALL always works from normal homepage state
-    currentHomeGroupId = '';
-
-    document
-        .querySelectorAll('.service-chip')
-        .forEach(chip => chip.classList.remove('active'));
-
-    // Restore all homepage products + promo banners
-    filterProductsByGroup('');
-
-    document
-        .querySelectorAll('.catus-promo-banner')
-        .forEach(promo => {
-            promo.style.display = '';
-        });
-
     const categoryBox = [...document.querySelectorAll('.uc-category-box')]
         .find(box =>
             box.querySelector('.uc-cat-header h3')?.textContent.trim()
@@ -12823,14 +12826,33 @@ function showAllCategoryServices(categoryName) {
     if (!categoryBox) return;
 
     const track = categoryBox.querySelector('.uc-grid');
+    const seeAllBtn = categoryBox.querySelector('.uc-see-all-btn');
 
     if (!track) return;
 
-    track.scrollTo({
-        left: track.scrollWidth,
-        behavior: 'smooth'
-    });
+    const isExpanded =
+        categoryBox.classList.contains('catus-category-expanded');
+
+    if (isExpanded) {
+
+        categoryBox.classList.remove('catus-category-expanded');
+
+        if (seeAllBtn) {
+            seeAllBtn.textContent = 'See all';
+        }
+
+        track.scrollLeft = 0;
+
+    } else {
+
+        categoryBox.classList.add('catus-category-expanded');
+
+        if (seeAllBtn) {
+            seeAllBtn.textContent = 'Show less';
+        }
+    }
 }
+
 
     async function loadHeroBanners() {
     try {
