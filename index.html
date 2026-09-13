@@ -12798,6 +12798,22 @@ if (currentHomeGroupId) {
 
 function showAllCategoryServices(categoryName) {
 
+    // Normal homepage-la See All click panna
+    // promo banner kandippa visible-a irukkanum.
+    const searchInput = document.getElementById('searchInput');
+
+    const hasSearch =
+        searchInput &&
+        searchInput.value.trim().length > 0;
+
+    if (!currentHomeGroupId && !hasSearch) {
+        document
+            .querySelectorAll('.catus-promo-banner')
+            .forEach(promo => {
+                promo.style.display = '';
+            });
+    }
+
     const categoryBox = [...document.querySelectorAll('.uc-category-box')]
         .find(box =>
             box.querySelector('.uc-cat-header h3')?.textContent.trim()
@@ -12814,8 +12830,16 @@ function showAllCategoryServices(categoryName) {
         left: track.scrollWidth,
         behavior: 'smooth'
     });
-}
 
+    // Scroll mudinja apramum promo state correct-a maintain pannu
+    if (!currentHomeGroupId && !hasSearch) {
+        document
+            .querySelectorAll('.catus-promo-banner')
+            .forEach(promo => {
+                promo.style.display = '';
+            });
+    }
+}
 
     async function loadHeroBanners() {
     try {
