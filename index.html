@@ -515,6 +515,42 @@
         #toastNotification { position: fixed; bottom: 25px; right: 25px; background: #10b981; color: #ffffff; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); z-index: 999999; display: flex; align-items: center; gap: 10px; transform: translateY(100px); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease; }
         #toastNotification.show { transform: translateY(0); opacity: 1; }
 
+        /* =========================================
+   CEROOD FULL WIDTH OFFER BANNERS
+========================================= */
+
+.cerood-offer-banner {
+    width: 100%;
+    margin: 38px 0 70px 0;
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #f5f5f5;
+}
+
+.cerood-offer-banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 4;
+    object-fit: cover;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .cerood-offer-banner {
+        width: calc(100% - 24px);
+        margin: 20px 12px 30px 12px;
+        border-radius: 12px;
+    }
+
+    .cerood-offer-banner img {
+        aspect-ratio: 16 / 5;
+        object-fit: cover;
+    }
+}
+
         /* 5. Product Categories Container */
         .uc-card { position: relative; } 
         
@@ -12281,11 +12317,19 @@ Object.keys(categoriesMap).forEach(categoryName => {
 });
     
        
+let html = '';
+
+const categoryNames = Object.keys(categoriesMap);
+const totalCategories = categoryNames.length;
+
+let categoryIndex = 0;
+
+for(let catName in categoriesMap) {
+
+    categoryIndex++;
 
 
-           
-              let html = '';
-              for(let catName in categoriesMap) {
+
                   let catData = categoriesMap[catName];
                   html += `
 <div class="uc-category-box">
@@ -12396,9 +12440,51 @@ html += `
     </div>
 </div>`;
 
-            
-              }
-              container.innerHTML = html;
+// =========================================
+// OFFER BANNER 1 - MIDDLE OF HOMEPAGE
+// =========================================
+
+const middleCategory =
+    Math.ceil(totalCategories / 2);
+
+if (categoryIndex === middleCategory) {
+
+    html += `
+        <div
+            class="cerood-offer-banner"
+            onclick="openServiceProduct('tv-repair')"
+        >
+            <img
+                src="https://your-supabase-url/banner1.webp"
+                alt="Cerood Special Service Offer"
+                loading="lazy"
+                decoding="async"
+            >
+        </div>
+    `;
+}
+
+    }
+
+// =========================================
+// OFFER BANNER 2 - END OF HOMEPAGE
+// =========================================
+
+html += `
+    <div
+        class="cerood-offer-banner"
+        onclick="openServiceProduct('ac-service')"
+    >
+        <img
+            src="https://your-supabase-url/banner2.webp"
+            alt="Cerood Home Appliance Service Offer"
+            loading="lazy"
+            decoding="async"
+        >
+    </div>
+`;
+
+container.innerHTML = html;
 
 // Full homepage normal state cache
 try {
