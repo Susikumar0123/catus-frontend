@@ -246,6 +246,78 @@
             }
         ];
 
+        // ==========================================
+// LOCATION PAGE BREADCRUMB SCHEMA
+// ==========================================
+
+const locationBreadcrumbSchema =
+    document.createElement('script');
+
+locationBreadcrumbSchema.type =
+    'application/ld+json';
+
+locationBreadcrumbSchema.textContent =
+    JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.cerood.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": districtName,
+                "item":
+                    `https://www.cerood.com/${stateSlug}/${districtSlug}`
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": locationName,
+                "item": canonical
+            }
+        ]
+    });
+
+document.head.appendChild(
+    locationBreadcrumbSchema
+);
+
+// ==========================================
+// LOCATION SERVICES ITEMLIST SCHEMA
+// ==========================================
+
+const locationServiceListSchema =
+    document.createElement('script');
+
+locationServiceListSchema.type =
+    'application/ld+json';
+
+locationServiceListSchema.textContent =
+    JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name":
+            `Home Appliance Services in ${locationName}`,
+        "itemListElement":
+            services.map((service, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "name":
+                    `${service.name} in ${locationName}`,
+                "url":
+                    `https://www.cerood.com/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`
+            }))
+    });
+
+document.head.appendChild(
+    locationServiceListSchema
+);
+
         const serviceContainer =
             document.getElementById(
                 'locationServices'
@@ -265,7 +337,7 @@
                 `;
 
             }).join('');
-            
+
     </script>
 
 </body>
