@@ -73,6 +73,75 @@
             font-size: 21px;
         }
     }
+
+    .faq-site-header {
+    width: 100%;
+    min-height: 72px;
+    padding: 12px 24px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #ffffff;
+    border-bottom: 1px solid #eeeeee;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.faq-logo-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.faq-logo {
+    height: 42px;
+    width: auto;
+    display: block;
+}
+
+.faq-services-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 16px;
+    border-radius: 999px;
+
+    background: #f5f3ff;
+    color: #6d4aff;
+
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.faq-services-link:hover {
+    background: #ece7ff;
+}
+
+@media (max-width: 600px) {
+    .faq-site-header {
+        min-height: 58px;
+        padding: 8px 14px;
+    }
+
+    .faq-logo {
+        height: 30px;
+    }
+
+    .faq-services-link {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
 </style>
 
 <script type="application/ld+json">
@@ -99,6 +168,21 @@
 </head>
 
 <body>
+
+    <header class="faq-site-header">
+    <a href="/" class="faq-logo-link" aria-label="Cerood Home">
+        <img
+            src="/cerood-logo.webp"
+            alt="Cerood"
+            class="faq-logo"
+        >
+    </a>
+
+    <a href="/services" class="faq-services-link">
+        Explore Services
+    </a>
+</header>
+
     <main>
 
         <nav aria-label="Breadcrumb" style="margin-bottom: 20px; font-size: 14px;">
