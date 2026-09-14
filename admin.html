@@ -5170,7 +5170,10 @@ if (
                     <td><a href="tel:${item.phone}" style="color:#475569; text-decoration:none;"><i class="fa-solid fa-phone"></i> ${item.phone}</a></td>
                     <td>${item.district} - ${item.pincode}</td>
                     <td><span class="badge ${payModeBadgeClass}">${payModeText}</span></td>
-                    <td><small style="color: #64748b; font-weight: 600;">${new Date(item.order_date).toLocaleString("en-IN", { hour12: true })}</small></td>
+                    <td><small style="color: #64748b; font-weight: 600;">${new Date(item.booked_at || item.order_date).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour12: true
+})}</small></td>
                     <td>
     ${
         item.service_date
@@ -5278,10 +5281,11 @@ ${rejectReasonHTML}
             document.getElementById('detServiceName').textContent = order.service_name || 'Smart TV Repair';
             document.getElementById('detProductId').textContent = order.product_id;
             document.getElementById('detAmount').textContent = '₹' + order.amount;
-            document.getElementById('detDate').textContent =
-    new Date(order.order_date).toLocaleString(
+           document.getElementById('detDate').textContent =
+    new Date(order.booked_at || order.order_date).toLocaleString(
         "en-IN",
         {
+            timeZone: "Asia/Kolkata",
             hour12: true
         }
     );
