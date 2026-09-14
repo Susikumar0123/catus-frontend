@@ -374,13 +374,24 @@ async function loadNearbyLocations() {
             await response.json();
 
         const nearbyLocations =
-            (data.locations || [])
-                .filter(item =>
-                    item.state_slug === stateSlug &&
-                    item.district_slug === districtSlug &&
-                    item.location_slug !== locationSlug
-                )
-                .slice(0, 6);
+    (data.locations || [])
+        .map(item => ({
+            ...item,
+            state_slug:
+                item.state_slug || slugify(item.state),
+            district_slug:
+                item.district_slug || slugify(item.district),
+            location_slug:
+                item.location_slug ||
+                item.slug ||
+                slugify(item.location_name)
+        }))
+        .filter(item =>
+            item.state_slug === stateSlug &&
+            item.district_slug === districtSlug &&
+            item.location_slug !== locationSlug
+        )
+        .slice(0, 6);
 
         if (!nearbyLocations.length) {
             nearbyContainer
