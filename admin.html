@@ -5170,7 +5170,7 @@ if (
                     <td><a href="tel:${item.phone}" style="color:#475569; text-decoration:none;"><i class="fa-solid fa-phone"></i> ${item.phone}</a></td>
                     <td>${item.district} - ${item.pincode}</td>
                     <td><span class="badge ${payModeBadgeClass}">${payModeText}</span></td>
-                    <td><small style="color: #64748b; font-weight: 600;">${new Date(item.order_date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true })}</small></td>
+                    <td><small style="color: #64748b; font-weight: 600;">${new Date(item.order_date).toLocaleString("en-IN", { hour12: true })}</small></td>
                     <td>
     ${
         item.service_date
@@ -5282,7 +5282,6 @@ ${rejectReasonHTML}
     new Date(order.order_date).toLocaleString(
         "en-IN",
         {
-            timeZone: "Asia/Kolkata",
             hour12: true
         }
     );
