@@ -34,7 +34,7 @@
 },
 
 {
-  "source": "/:state/:district/:location",
+  "source": "/:state/:district/location/:location",
   "destination": "/location.html?state=:state&district=:district&location=:location"
 },
 
