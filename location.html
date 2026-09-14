@@ -1,27 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title id="locationPageTitle">
         Cerood Service Location
     </title>
 
-    <meta id="locationMetaDescription"
-          name="description"
-          content="Explore Cerood doorstep home appliance services in your location.">
+    <meta
+        id="locationMetaDescription"
+        name="description"
+        content="Explore Cerood doorstep home appliance services in your location."
+    >
 
-    <meta name="robots"
-          content="index, follow, max-image-preview:large">
+    <meta
+        name="robots"
+        content="index, follow, max-image-preview:large"
+    >
 
-    <link id="locationCanonical"
-          rel="canonical"
-          href="https://www.cerood.com/">
+    <link
+        id="locationCanonical"
+        rel="canonical"
+        href="https://www.cerood.com/"
+    >
+
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -45,9 +59,14 @@
             text-decoration: none;
         }
 
+        .breadcrumb span {
+            color: #71717a;
+        }
+
         h1 {
             font-size: 32px;
-            margin-bottom: 12px;
+            margin: 0 0 12px;
+            line-height: 1.25;
         }
 
         .intro {
@@ -63,66 +82,140 @@
         .section h2 {
             font-size: 24px;
             margin-bottom: 18px;
+            line-height: 1.3;
         }
 
         .link-grid {
             display: grid;
+
             grid-template-columns:
-                repeat(auto-fit, minmax(220px, 1fr));
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
             gap: 14px;
         }
 
         .link-card {
             display: block;
+
             padding: 16px;
-            border: 1px solid #e4e4e7;
+
+            border:
+                1px solid #e4e4e7;
+
             border-radius: 10px;
+
             color: #18181b;
+
             text-decoration: none;
+
             background: #ffffff;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
         }
 
         .link-card:hover {
             border-color: #6d4aff;
+
+            box-shadow:
+                0 4px 14px
+                rgba(109, 74, 255, 0.08);
+
+            transform:
+                translateY(-1px);
         }
 
+
         @media (max-width: 768px) {
+
             .location-page {
-                padding: 28px 16px;
+                padding:
+                    28px 16px;
             }
 
             h1 {
                 font-size: 26px;
             }
+
+            .section h2 {
+                font-size: 21px;
+            }
+
+            .link-grid {
+                grid-template-columns:
+                    1fr;
+            }
         }
     </style>
+
 </head>
+
 
 <body>
 
     <main class="location-page">
 
-        <div class="breadcrumb">
-            <a href="/">Home</a>
-            <span> › </span>
 
-            <a id="districtBreadcrumbLink"
-               href="#">
+        <!-- =========================
+             BREADCRUMB
+        ========================== -->
+
+        <nav
+            class="breadcrumb"
+            aria-label="Breadcrumb"
+        >
+
+            <a href="/">
+                Home
+            </a>
+
+            <span>
+                ›
+            </span>
+
+            <a
+                id="districtBreadcrumbLink"
+                href="#"
+            >
                 District
             </a>
 
-            <span> › </span>
+            <span>
+                ›
+            </span>
 
-            <span id="breadcrumbLocation"></span>
-        </div>
+            <span id="breadcrumbLocation">
+            </span>
+
+        </nav>
+
+
+
+        <!-- =========================
+             MAIN LOCATION CONTENT
+        ========================== -->
 
         <h1 id="locationHeading">
             Cerood Services
         </h1>
 
-        <p id="locationIntro"
-           class="intro">
+
+        <p
+            id="locationIntro"
+            class="intro"
+        >
         </p>
+
+
+
+        <!-- =========================
+             SERVICES
+        ========================== -->
 
         <section class="section">
 
@@ -130,340 +223,807 @@
                 Services Available
             </h2>
 
-            <div id="locationServices"
-                 class="link-grid">
+            <div
+                id="locationServices"
+                class="link-grid"
+            >
             </div>
 
         </section>
 
-        <section class="section" id="localServiceInfo">
-    <h2 id="localServiceInfoTitle">
-        Home Services in Your Area
-    </h2>
 
-    <p id="localServiceInfoText"
-       class="intro">
-    </p>
-</section>
 
-        <section class="section">
-    <h2>
-        Nearby Service Locations
-    </h2>
+        <!-- =========================
+             LOCAL SEO CONTENT
+        ========================== -->
 
-    <div id="nearbyLocations"
-         class="link-grid">
-    </div>
-</section>
+        <section
+            class="section"
+            id="localServiceInfo"
+        >
+
+            <h2 id="localServiceInfoTitle">
+                Home Services in Your Area
+            </h2>
+
+            <p
+                id="localServiceInfoText"
+                class="intro"
+            >
+            </p>
+
+        </section>
+
+
+
+        <!-- =========================
+             NEARBY LOCATIONS
+        ========================== -->
+
+        <section
+            class="section"
+            id="nearbyLocationsSection"
+        >
+
+            <h2>
+                Nearby Service Locations
+            </h2>
+
+            <div
+                id="nearbyLocations"
+                class="link-grid"
+            >
+            </div>
+
+        </section>
+
 
     </main>
 
+
+
     <script>
+
+        // ==========================================
+        // API
+        // ==========================================
+
         const API_BASE_URL =
             window.location.hostname === 'localhost'
                 ? 'http://localhost:3000'
                 : 'https://catus-backend-d2js.onrender.com';
 
+
+
+        // ==========================================
+        // HELPERS
+        // ==========================================
+
         function slugify(value) {
+
             return String(value || '')
                 .toLowerCase()
                 .trim()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '');
+                .replace(
+                    /[^a-z0-9]+/g,
+                    '-'
+                )
+                .replace(
+                    /^-+|-+$/g,
+                    ''
+                );
         }
+
+
+        function titleCase(value) {
+
+            return String(value || '')
+                .replace(
+                    /-/g,
+                    ' '
+                )
+                .replace(
+                    /\b\w/g,
+                    character =>
+                        character.toUpperCase()
+                );
+        }
+
+
+        function getStableVariantIndex(
+            value,
+            variantCount
+        ) {
+
+            if (!variantCount) {
+                return 0;
+            }
+
+            return Array
+                .from(
+                    String(value || '')
+                )
+                .reduce(
+                    (
+                        total,
+                        character
+                    ) =>
+                        total +
+                        character.charCodeAt(0),
+                    0
+                ) % variantCount;
+        }
+
+
+
+        // ==========================================
+        // URL DATA
+        // Expected:
+        // /tamil-nadu/ariyalur/location/andimadam
+        // ==========================================
 
         const pathParts =
             window.location.pathname
                 .split('/')
                 .filter(Boolean);
 
+
         const stateSlug =
             pathParts[0] || '';
+
 
         const districtSlug =
             pathParts[1] || '';
 
+
         const locationSlug =
             pathParts[3] || '';
 
-        function titleCase(value) {
-            return String(value || '')
-                .replace(/-/g, ' ')
-                .replace(/\b\w/g, c =>
-                    c.toUpperCase()
-                );
-        }
 
         const districtName =
-            titleCase(districtSlug);
+            titleCase(
+                districtSlug
+            );
+
 
         const locationName =
-            titleCase(locationSlug);
+            titleCase(
+                locationSlug
+            );
+
+
+
+        // ==========================================
+        // CANONICAL
+        // ==========================================
 
         const canonical =
             `https://www.cerood.com/${stateSlug}/${districtSlug}/location/${locationSlug}`;
 
-        document.getElementById(
-            'locationCanonical'
-        ).href = canonical;
 
-        document.getElementById(
-            'locationPageTitle'
-        ).textContent =
-            `Home Appliance Services in ${locationName} | Cerood`;
+        const canonicalElement =
+            document.getElementById(
+                'locationCanonical'
+            );
 
-        document.getElementById(
-            'locationMetaDescription'
-        ).content =
-            `Book doorstep home appliance repair, installation and maintenance services in ${locationName}, ${districtName} with Cerood.`;
 
-        document.getElementById(
-            'breadcrumbLocation'
-        ).textContent =
-            locationName;
+        if (canonicalElement) {
+
+            canonicalElement.href =
+                canonical;
+        }
+
+
+
+        // ==========================================
+        // PAGE TITLE
+        // ==========================================
+
+        const locationPageTitle =
+            document.getElementById(
+                'locationPageTitle'
+            );
+
+
+        if (locationPageTitle) {
+
+            locationPageTitle.textContent =
+                `Home Appliance Repair & Services in ${locationName}, ${districtName} | Cerood`;
+        }
+
+
+
+        // ==========================================
+        // META DESCRIPTION
+        // ==========================================
+
+        const metaDescriptionVariants = [
+
+            `Book doorstep home appliance repair, installation and maintenance services in ${locationName}, ${districtName}. Explore Cerood service options for your area.`,
+
+            `Find Cerood doorstep appliance repair and maintenance services in ${locationName}, ${districtName}. Check available Smart TV, AC, washing machine, refrigerator and RO services.`,
+
+            `Explore home appliance service options in ${locationName}, ${districtName} with Cerood. Book doorstep repair, installation and maintenance support based on local availability.`
+
+        ];
+
+
+        const metaIndex =
+            getStableVariantIndex(
+                locationSlug,
+                metaDescriptionVariants.length
+            );
+
+
+        const metaDescriptionElement =
+            document.getElementById(
+                'locationMetaDescription'
+            );
+
+
+        if (metaDescriptionElement) {
+
+            metaDescriptionElement.content =
+                metaDescriptionVariants[
+                    metaIndex
+                ];
+        }
+
+
+
+        // ==========================================
+        // VISIBLE BREADCRUMB
+        // ==========================================
+
+        const breadcrumbLocation =
+            document.getElementById(
+                'breadcrumbLocation'
+            );
+
+
+        if (breadcrumbLocation) {
+
+            breadcrumbLocation.textContent =
+                locationName;
+        }
+
 
         const districtBreadcrumbLink =
             document.getElementById(
                 'districtBreadcrumbLink'
             );
 
-        districtBreadcrumbLink.textContent =
-            districtName;
 
-        districtBreadcrumbLink.href =
-            `/${stateSlug}/${districtSlug}`;
+        if (districtBreadcrumbLink) {
 
-        document.getElementById(
-            'locationHeading'
-        ).textContent =
-            `Home Appliance Services in ${locationName}`;
+            districtBreadcrumbLink.textContent =
+                districtName;
 
-        document.getElementById(
-            'locationIntro'
-        ).textContent =
-            `Cerood provides doorstep home appliance repair, installation and maintenance services in ${locationName}, ${districtName}. Explore available services below and book support conveniently.`;
 
-        const services = [
-            {
-                name: 'Smart TV Repair',
-                slug: 'tv-repair'
-            },
-            {
-                name: 'AC Service',
-                slug: 'ac-service'
-            },
-            {
-                name: 'Washing Machine Repair',
-                slug: 'washing-machine-repair'
-            },
-            {
-                name: 'Refrigerator Repair',
-                slug: 'refrigerator-repair'
-            },
-            {
-                name: 'RO Water Purifier Service',
-                slug: 'ro-water-purifier-service'
-            }
-        ];
+            districtBreadcrumbLink.href =
+                `/${stateSlug}/${districtSlug}`;
+        }
+
+
 
         // ==========================================
-// LOCATION PAGE BREADCRUMB SCHEMA
-// ==========================================
+        // H1
+        // ==========================================
 
-const locationBreadcrumbSchema =
-    document.createElement('script');
+        const locationHeading =
+            document.getElementById(
+                'locationHeading'
+            );
 
-locationBreadcrumbSchema.type =
-    'application/ld+json';
 
-locationBreadcrumbSchema.textContent =
-    JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
+        if (locationHeading) {
+
+            locationHeading.textContent =
+                `Home Appliance Services in ${locationName}`;
+        }
+
+
+
+        // ==========================================
+        // INTRO CONTENT
+        // ==========================================
+
+        const locationIntroVariants = [
+
+            `Book doorstep home appliance repair, installation and maintenance services in ${locationName}, ${districtName}. Explore available Cerood services for your area below.`,
+
+            `Need appliance service in ${locationName}? Explore Cerood doorstep repair, installation and maintenance options available across ${locationName}, ${districtName}.`,
+
+            `Find doorstep home appliance service options in ${locationName}, ${districtName} through Cerood. Choose from available repair, installation and maintenance services below.`
+
+        ];
+
+
+        const introIndex =
+            getStableVariantIndex(
+                `${locationSlug}-intro`,
+                locationIntroVariants.length
+            );
+
+
+        const locationIntro =
+            document.getElementById(
+                'locationIntro'
+            );
+
+
+        if (locationIntro) {
+
+            locationIntro.textContent =
+                locationIntroVariants[
+                    introIndex
+                ];
+        }
+
+
+
+        // ==========================================
+        // SERVICES
+        // ==========================================
+
+        const services = [
+
             {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": "https://www.cerood.com/"
+                name:
+                    'Smart TV Repair',
+
+                slug:
+                    'tv-repair'
             },
+
             {
-                "@type": "ListItem",
-                "position": 2,
-                "name": districtName,
-                "item":
-                    `https://www.cerood.com/${stateSlug}/${districtSlug}`
+                name:
+                    'AC Service',
+
+                slug:
+                    'ac-service'
             },
+
             {
-                "@type": "ListItem",
-                "position": 3,
-                "name": locationName,
-                "item": canonical
+                name:
+                    'Washing Machine Repair',
+
+                slug:
+                    'washing-machine-repair'
+            },
+
+            {
+                name:
+                    'Refrigerator Repair',
+
+                slug:
+                    'refrigerator-repair'
+            },
+
+            {
+                name:
+                    'RO Water Purifier Service',
+
+                slug:
+                    'ro-water-purifier-service'
             }
-        ]
-    });
 
-document.head.appendChild(
-    locationBreadcrumbSchema
-);
+        ];
 
-// ==========================================
-// LOCATION SERVICES ITEMLIST SCHEMA
-// ==========================================
 
-const locationServiceListSchema =
-    document.createElement('script');
 
-locationServiceListSchema.type =
-    'application/ld+json';
+        // ==========================================
+        // BREADCRUMB STRUCTURED DATA
+        // ==========================================
 
-locationServiceListSchema.textContent =
-    JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "name":
-            `Home Appliance Services in ${locationName}`,
-        "itemListElement":
-            services.map((service, index) => ({
-                "@type": "ListItem",
-                "position": index + 1,
+        const locationBreadcrumbSchema =
+            document.createElement(
+                'script'
+            );
+
+
+        locationBreadcrumbSchema.type =
+            'application/ld+json';
+
+
+        locationBreadcrumbSchema.textContent =
+            JSON.stringify({
+
+                "@context":
+                    "https://schema.org",
+
+                "@type":
+                    "BreadcrumbList",
+
+                "itemListElement": [
+
+                    {
+                        "@type":
+                            "ListItem",
+
+                        "position":
+                            1,
+
+                        "name":
+                            "Home",
+
+                        "item":
+                            "https://www.cerood.com/"
+                    },
+
+                    {
+                        "@type":
+                            "ListItem",
+
+                        "position":
+                            2,
+
+                        "name":
+                            districtName,
+
+                        "item":
+                            `https://www.cerood.com/${stateSlug}/${districtSlug}`
+                    },
+
+                    {
+                        "@type":
+                            "ListItem",
+
+                        "position":
+                            3,
+
+                        "name":
+                            locationName,
+
+                        "item":
+                            canonical
+                    }
+
+                ]
+
+            });
+
+
+        document.head.appendChild(
+            locationBreadcrumbSchema
+        );
+
+
+
+        // ==========================================
+        // SERVICE ITEMLIST STRUCTURED DATA
+        // ==========================================
+
+        const locationServiceListSchema =
+            document.createElement(
+                'script'
+            );
+
+
+        locationServiceListSchema.type =
+            'application/ld+json';
+
+
+        locationServiceListSchema.textContent =
+            JSON.stringify({
+
+                "@context":
+                    "https://schema.org",
+
+                "@type":
+                    "ItemList",
+
                 "name":
-                    `${service.name} in ${locationName}`,
-                "url":
-                    `https://www.cerood.com/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`
-            }))
-    });
+                    `Home Appliance Services in ${locationName}`,
 
-document.head.appendChild(
-    locationServiceListSchema
-);
+                "itemListElement":
+
+                    services.map(
+                        (
+                            service,
+                            index
+                        ) => ({
+
+                            "@type":
+                                "ListItem",
+
+                            "position":
+                                index + 1,
+
+                            "name":
+                                `${service.name} in ${locationName}`,
+
+                            "url":
+                                `https://www.cerood.com/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`
+
+                        })
+                    )
+
+            });
+
+
+        document.head.appendChild(
+            locationServiceListSchema
+        );
+
+
+
+        // ==========================================
+        // SERVICE CARDS
+        // ==========================================
 
         const serviceContainer =
             document.getElementById(
                 'locationServices'
             );
 
-        serviceContainer.innerHTML =
-            services.map(service => {
 
-                const serviceUrl =
-                    `/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`;
+        if (serviceContainer) {
 
-                return `
-                    <a class="link-card"
-                       href="${serviceUrl}">
-                        ${service.name} in ${locationName}
-                    </a>
-                `;
+            serviceContainer.innerHTML =
+                services
+                    .map(service => {
 
-            }).join('');
+                        const serviceUrl =
+                            `/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`;
 
-            // ==========================================
-// NEARBY LOCATION INTERNAL LINKS
-// ==========================================
 
-async function loadNearbyLocations() {
+                        return `
+                            <a
+                                class="link-card"
+                                href="${serviceUrl}"
+                            >
+                                ${service.name} in ${locationName}
+                            </a>
+                        `;
 
-    const nearbyContainer =
-        document.getElementById(
-            'nearbyLocations'
-        );
-
-    if (!nearbyContainer) {
-        return;
-    }
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_BASE_URL}/api/seo-locations`
-            );
-
-        const data =
-            await response.json();
-
-        const nearbyLocations =
-    (data.locations || [])
-        .map(item => ({
-            ...item,
-            state_slug:
-                item.state_slug || slugify(item.state),
-            district_slug:
-                item.district_slug || slugify(item.district),
-            location_slug:
-                item.location_slug ||
-                item.slug ||
-                slugify(item.location_name)
-        }))
-        .filter(item =>
-            item.state_slug === stateSlug &&
-            item.district_slug === districtSlug &&
-            item.location_slug !== locationSlug
-        )
-        .slice(0, 6);
-
-        if (!nearbyLocations.length) {
-            nearbyContainer
-                .closest('.section')
-                .style.display = 'none';
-
-            return;
+                    })
+                    .join('');
         }
 
-        nearbyContainer.innerHTML =
-            nearbyLocations.map(item => {
 
-                const nearbyUrl =
-                    item.location_slug === districtSlug
-                        ? `/${stateSlug}/${districtSlug}`
-                        : `/${stateSlug}/${districtSlug}/location/${item.location_slug}`;
 
-                return `
-                    <a class="link-card"
-                       href="${nearbyUrl}">
-                        Home Appliance Services in ${item.location_name}
-                    </a>
-                `;
+        // ==========================================
+        // UNIQUE LOCAL SERVICE CONTENT
+        // ==========================================
 
-            }).join('');
+        const localServiceInfoTitle =
+            document.getElementById(
+                'localServiceInfoTitle'
+            );
 
-    } catch (error) {
 
-        nearbyContainer
-            .closest('.section')
-            .style.display = 'none';
-    }
-}
+        const localServiceInfoText =
+            document.getElementById(
+                'localServiceInfoText'
+            );
 
-// ==========================================
-// UNIQUE LOCAL SERVICE CONTENT
-// ==========================================
 
-const localServiceInfoTitle =
-    document.getElementById(
-        'localServiceInfoTitle'
-    );
+        const localContentVariants = [
 
-const localServiceInfoText =
-    document.getElementById(
-        'localServiceInfoText'
-    );
+            `Looking for home appliance service in ${locationName}? Cerood helps customers in ${locationName}, ${districtName} find doorstep support for Smart TVs, air conditioners, washing machines, refrigerators and RO water purifiers. You can explore available repair, installation and maintenance services for your area. Technician availability may vary depending on the selected service and local coverage.`,
 
-if (
-    localServiceInfoTitle &&
-    localServiceInfoText
-) {
-    localServiceInfoTitle.textContent =
-        `Doorstep Appliance Service in ${locationName}`;
+            `Cerood connects customers in ${locationName}, ${districtName} with doorstep appliance service options for everyday household needs. Available categories include Smart TV repair, AC service, washing machine repair, refrigerator service and RO water purifier support. Select the required service to view booking options available for ${locationName}.`,
 
-    localServiceInfoText.textContent =
-        `Customers in ${locationName}, ${districtName} can explore doorstep repair, installation and maintenance support for common home appliances through Cerood. Available service categories include Smart TV, AC, washing machine, refrigerator and RO water purifier support. Service availability may vary based on technician coverage in ${locationName} and nearby areas.`;
-}
+            `Home appliance repair and maintenance services are available through Cerood for customers in ${locationName}, ${districtName}. Explore doorstep support for ACs, Smart TVs, washing machines, refrigerators and RO water purifiers. Service availability in ${locationName} depends on the appliance service selected and technician coverage in the area.`
 
-loadNearbyLocations();
+        ];
+
+
+        const contentIndex =
+            getStableVariantIndex(
+                `${locationSlug}-local`,
+                localContentVariants.length
+            );
+
+
+        if (
+            localServiceInfoTitle &&
+            localServiceInfoText
+        ) {
+
+            localServiceInfoTitle.textContent =
+                `Doorstep Appliance Service in ${locationName}`;
+
+
+            localServiceInfoText.textContent =
+                localContentVariants[
+                    contentIndex
+                ];
+        }
+
+
+
+        // ==========================================
+        // NEARBY LOCATION INTERNAL LINKS
+        // ==========================================
+
+        async function loadNearbyLocations() {
+
+            const nearbyContainer =
+                document.getElementById(
+                    'nearbyLocations'
+                );
+
+
+            const nearbySection =
+                document.getElementById(
+                    'nearbyLocationsSection'
+                );
+
+
+            if (!nearbyContainer) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/api/seo-locations`
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Unable to load locations'
+                    );
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                const nearbyLocations =
+                    (
+                        data.locations || []
+                    )
+                        .map(item => ({
+
+                            ...item,
+
+                            state_slug:
+                                item.state_slug ||
+                                slugify(
+                                    item.state
+                                ),
+
+                            district_slug:
+                                item.district_slug ||
+                                slugify(
+                                    item.district
+                                ),
+
+                            location_slug:
+                                item.location_slug ||
+                                item.slug ||
+                                slugify(
+                                    item.location_name
+                                )
+
+                        }))
+                        .filter(item =>
+
+                            item.state_slug ===
+                                stateSlug &&
+
+                            item.district_slug ===
+                                districtSlug &&
+
+                            item.location_slug !==
+                                locationSlug
+
+                        )
+                        .slice(
+                            0,
+                            6
+                        );
+
+
+                if (
+                    !nearbyLocations.length
+                ) {
+
+                    if (nearbySection) {
+
+                        nearbySection.style.display =
+                            'none';
+                    }
+
+                    return;
+                }
+
+
+
+                // ------------------------------------------
+                // Nearby names inside local SEO paragraph
+                // ------------------------------------------
+
+                const nearbyNames =
+                    nearbyLocations
+                        .slice(
+                            0,
+                            3
+                        )
+                        .map(
+                            item =>
+                                item.location_name
+                        )
+                        .filter(Boolean);
+
+
+                if (
+                    nearbyNames.length &&
+                    localServiceInfoText
+                ) {
+
+                    localServiceInfoText.textContent +=
+                        ` Nearby service areas include ${nearbyNames.join(', ')}.`;
+                }
+
+
+
+                // ------------------------------------------
+                // Nearby location links
+                // ------------------------------------------
+
+                nearbyContainer.innerHTML =
+                    nearbyLocations
+                        .map(item => {
+
+                            const nearbyUrl =
+                                item.location_slug ===
+                                    districtSlug
+
+                                    ? `/${stateSlug}/${districtSlug}`
+
+                                    : `/${stateSlug}/${districtSlug}/location/${item.location_slug}`;
+
+
+                            return `
+                                <a
+                                    class="link-card"
+                                    href="${nearbyUrl}"
+                                >
+                                    Home Appliance Services in ${item.location_name}
+                                </a>
+                            `;
+
+                        })
+                        .join('');
+
+
+            } catch (error) {
+
+                console.error(
+                    'Nearby location load error:',
+                    error
+                );
+
+
+                if (nearbySection) {
+
+                    nearbySection.style.display =
+                        'none';
+                }
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // LOAD PAGE DATA
+        // ==========================================
+
+        loadNearbyLocations();
 
     </script>
 
 </body>
+
 </html>
