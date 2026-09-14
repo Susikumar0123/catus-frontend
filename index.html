@@ -8394,25 +8394,21 @@ button.uc-cart-btn:hover {
     }
 
     .cerood-noteworthy-grid {
-        display: grid !important;
+    display: grid !important;
 
-        grid-template-rows: repeat(2, auto) !important;
-        grid-auto-flow: column !important;
+    grid-template-rows: repeat(2, auto) !important;
+    grid-auto-flow: column !important;
 
-        /*
-           Reference style:
-           smaller items + more visible columns
-        */
-        grid-auto-columns: 82px !important;
+    grid-auto-columns: 86px !important;
 
-        column-gap: 20px !important;
-        row-gap: 28px !important;
+    column-gap: 16px !important;
+    row-gap: 24px !important;
 
-        width: max-content !important;
-    }
+    width: max-content !important;
+}
 
     .cerood-noteworthy-item {
-        width: 82px !important;
+        width: 86px !important;
 
         cursor: pointer !important;
 
@@ -8420,8 +8416,8 @@ button.uc-cart-btn:hover {
     }
 
     .cerood-noteworthy-image {
-        width: 82px !important;
-        height: 82px !important;
+        width: 86px !important;
+height: 86px !important;
 
         margin: 0 0 9px 0 !important;
 
@@ -8442,22 +8438,23 @@ button.uc-cart-btn:hover {
     }
 
     .cerood-noteworthy-name {
-        width: 88px !important;
+    width: 86px !important;
 
-        font-size: 13px !important;
-        line-height: 17px !important;
-        font-weight: 400 !important;
+    font-size: 11px !important;
+    line-height: 14px !important;
+    font-weight: 400 !important;
 
-        color: #222222 !important;
+    color: #222222 !important;
 
-        white-space: normal !important;
+    white-space: normal !important;
 
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2 !important;
-        -webkit-box-orient: vertical !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
 
-        overflow: hidden !important;
-    }
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
 }
 
 @media (max-width: 768px) {
