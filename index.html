@@ -13314,6 +13314,82 @@ allServices.forEach(service => {
     }
 });
 
+/* =========================================
+   MOBILE ONLY - MIX SERVICES LIKE AMAZON
+========================================= */
+
+let displayCategoriesMap = categoriesMap;
+
+if (window.innerWidth <= 768) {
+
+    const categoryQueues = Object.values(categoriesMap)
+        .map(category => [...category.items])
+        .filter(items => items.length > 0);
+
+    const mixedServices = [];
+
+    let keepMixing = true;
+
+    while (keepMixing) {
+
+        keepMixing = false;
+
+        categoryQueues.forEach(queue => {
+
+            if (queue.length > 0) {
+
+                mixedServices.push(queue.shift());
+
+                keepMixing = true;
+            }
+
+        });
+    }
+
+    const mobileSectionNames = [
+        'Popular Services',
+        'Recommended For You',
+        'Quick Home Services',
+        'More Services'
+    ];
+
+    const mobileMixedMap = {};
+
+    let sectionNumber = 0;
+
+    /*
+       8 services per section.
+       Current mobile design first 4-ah 2x2-la kaattum.
+       Arrow/See all use pannina remaining services open aagum.
+    */
+    for (let i = 0; i < mixedServices.length; i += 8) {
+
+        const sectionItems =
+            mixedServices.slice(i, i + 8);
+
+        let sectionName;
+
+        if (sectionNumber < mobileSectionNames.length) {
+
+            sectionName =
+                mobileSectionNames[sectionNumber];
+
+        } else {
+
+            sectionName =
+                `Explore More ${sectionNumber - 3}`;
+        }
+
+        mobileMixedMap[sectionName] = {
+            items: sectionItems
+        };
+
+        sectionNumber++;
+    }
+
+    displayCategoriesMap = mobileMixedMap;
+}
+
 /* Empty category sections remove */
 Object.keys(categoriesMap).forEach(categoryName => {
 
@@ -13326,18 +13402,18 @@ Object.keys(categoriesMap).forEach(categoryName => {
        
 let html = '';
 
-const categoryNames = Object.keys(categoriesMap);
+const categoryNames = Object.keys(displayCategoriesMap);
 const totalCategories = categoryNames.length;
 
 let categoryIndex = 0;
 
-for(let catName in categoriesMap) {
+for(let catName in displayCategoriesMap) {
 
     categoryIndex++;
 
 
 
-                  let catData = categoriesMap[catName];
+                  let catData = displayCategoriesMap[catName];
                   html += `
 <div class="uc-category-box">
 
