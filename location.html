@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title id="locationPageTitle">
+        Cerood Service Location
+    </title>
+
+    <meta id="locationMetaDescription"
+          name="description"
+          content="Explore Cerood doorstep home appliance services in your location.">
+
+    <meta name="robots"
+          content="index, follow, max-image-preview:large">
+
+    <link id="locationCanonical"
+          rel="canonical"
+          href="https://www.cerood.com/">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #ffffff;
+            color: #18181b;
+        }
+
+        .location-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb a {
+            color: #6d4aff;
+            text-decoration: none;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .intro {
+            max-width: 850px;
+            color: #52525b;
+            line-height: 1.7;
+        }
+
+        .section {
+            margin-top: 40px;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .link-card {
+            display: block;
+            padding: 16px;
+            border: 1px solid #e4e4e7;
+            border-radius: 10px;
+            color: #18181b;
+            text-decoration: none;
+            background: #ffffff;
+        }
+
+        .link-card:hover {
+            border-color: #6d4aff;
+        }
+
+        @media (max-width: 768px) {
+            .location-page {
+                padding: 28px 16px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="location-page">
+
+        <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span> › </span>
+
+            <a id="districtBreadcrumbLink"
+               href="#">
+                District
+            </a>
+
+            <span> › </span>
+
+            <span id="breadcrumbLocation"></span>
+        </div>
+
+        <h1 id="locationHeading">
+            Cerood Services
+        </h1>
+
+        <p id="locationIntro"
+           class="intro">
+        </p>
+
+        <section class="section">
+
+            <h2 id="serviceHeading">
+                Services Available
+            </h2>
+
+            <div id="locationServices"
+                 class="link-grid">
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        const API_BASE_URL =
+            window.location.hostname === 'localhost'
+                ? 'http://localhost:3000'
+                : 'https://catus-backend-d2js.onrender.com';
+
+        function slugify(value) {
+            return String(value || '')
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        const pathParts =
+            window.location.pathname
+                .split('/')
+                .filter(Boolean);
+
+        const stateSlug =
+            pathParts[0] || '';
+
+        const districtSlug =
+            pathParts[1] || '';
+
+        const locationSlug =
+            pathParts[3] || '';
+
+        function titleCase(value) {
+            return String(value || '')
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c =>
+                    c.toUpperCase()
+                );
+        }
+
+        const districtName =
+            titleCase(districtSlug);
+
+        const locationName =
+            titleCase(locationSlug);
+
+        const canonical =
+            `https://www.cerood.com/${stateSlug}/${districtSlug}/location/${locationSlug}`;
+
+        document.getElementById(
+            'locationCanonical'
+        ).href = canonical;
+
+        document.getElementById(
+            'locationPageTitle'
+        ).textContent =
+            `Home Appliance Services in ${locationName} | Cerood`;
+
+        document.getElementById(
+            'locationMetaDescription'
+        ).content =
+            `Book doorstep home appliance repair, installation and maintenance services in ${locationName}, ${districtName} with Cerood.`;
+
+        document.getElementById(
+            'breadcrumbLocation'
+        ).textContent =
+            locationName;
+
+        const districtBreadcrumbLink =
+            document.getElementById(
+                'districtBreadcrumbLink'
+            );
+
+        districtBreadcrumbLink.textContent =
+            districtName;
+
+        districtBreadcrumbLink.href =
+            `/${stateSlug}/${districtSlug}`;
+
+        document.getElementById(
+            'locationHeading'
+        ).textContent =
+            `Home Appliance Services in ${locationName}`;
+
+        document.getElementById(
+            'locationIntro'
+        ).textContent =
+            `Cerood provides doorstep home appliance repair, installation and maintenance services in ${locationName}, ${districtName}. Explore available services below and book support conveniently.`;
+
+        const services = [
+            {
+                name: 'Smart TV Repair',
+                slug: 'tv-repair'
+            },
+            {
+                name: 'AC Service',
+                slug: 'ac-service'
+            },
+            {
+                name: 'Washing Machine Repair',
+                slug: 'washing-machine-repair'
+            },
+            {
+                name: 'Refrigerator Repair',
+                slug: 'refrigerator-repair'
+            },
+            {
+                name: 'RO Water Purifier Service',
+                slug: 'ro-water-purifier-service'
+            }
+        ];
+
+        const serviceContainer =
+            document.getElementById(
+                'locationServices'
+            );
+
+        serviceContainer.innerHTML =
+            services.map(service => {
+
+                const serviceUrl =
+                    `/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`;
+
+                return `
+                    <a class="link-card"
+                       href="${serviceUrl}">
+                        ${service.name} in ${locationName}
+                    </a>
+                `;
+
+            }).join('');
+    </script>
+
+</body>
+</html>

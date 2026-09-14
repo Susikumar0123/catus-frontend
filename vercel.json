@@ -33,6 +33,11 @@
   "destination": "/district.html?state=:state&district=:district"
 },
 
+{
+  "source": "/:state/:district/:location",
+  "destination": "/location.html?state=:state&district=:district&location=:location"
+},
+
     {
       "source": "/:state/:district/:service",
       "destination": "/api/seo-product?state=:state&district=:district&location=:district&service=:service&clean=1"
