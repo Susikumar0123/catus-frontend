@@ -136,6 +136,16 @@
 
         </section>
 
+        <section class="section">
+    <h2>
+        Nearby Service Locations
+    </h2>
+
+    <div id="nearbyLocations"
+         class="link-grid">
+    </div>
+</section>
+
     </main>
 
     <script>
@@ -337,6 +347,75 @@ document.head.appendChild(
                 `;
 
             }).join('');
+
+            // ==========================================
+// NEARBY LOCATION INTERNAL LINKS
+// ==========================================
+
+async function loadNearbyLocations() {
+
+    const nearbyContainer =
+        document.getElementById(
+            'nearbyLocations'
+        );
+
+    if (!nearbyContainer) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/seo-locations`
+            );
+
+        const data =
+            await response.json();
+
+        const nearbyLocations =
+            (data.locations || [])
+                .filter(item =>
+                    item.state_slug === stateSlug &&
+                    item.district_slug === districtSlug &&
+                    item.location_slug !== locationSlug
+                )
+                .slice(0, 6);
+
+        if (!nearbyLocations.length) {
+            nearbyContainer
+                .closest('.section')
+                .style.display = 'none';
+
+            return;
+        }
+
+        nearbyContainer.innerHTML =
+            nearbyLocations.map(item => {
+
+                const nearbyUrl =
+                    item.location_slug === districtSlug
+                        ? `/${stateSlug}/${districtSlug}`
+                        : `/${stateSlug}/${districtSlug}/location/${item.location_slug}`;
+
+                return `
+                    <a class="link-card"
+                       href="${nearbyUrl}">
+                        Home Appliance Services in ${item.location_name}
+                    </a>
+                `;
+
+            }).join('');
+
+    } catch (error) {
+
+        nearbyContainer
+            .closest('.section')
+            .style.display = 'none';
+    }
+}
+
+loadNearbyLocations();
 
     </script>
 
