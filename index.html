@@ -8343,6 +8343,111 @@ button.uc-cart-btn:hover {
     }
 }
 
+/* =========================================
+   MOBILE EXPLORE MORE SERVICES GRID
+========================================= */
+@media (max-width: 768px) {
+
+    .mobile-more-services-section {
+        width: 100%;
+        padding: 22px 14px 30px;
+        box-sizing: border-box;
+        background: #ffffff;
+    }
+
+    .mobile-more-services-header {
+        margin-bottom: 14px;
+    }
+
+    .mobile-more-services-header h3 {
+        margin: 0;
+        font-size: 19px;
+        line-height: 24px;
+        font-weight: 700;
+        color: #191919;
+    }
+
+    .mobile-more-services-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 18px 10px !important;
+        width: 100%;
+    }
+
+    .mobile-more-services-grid .mobile-more-service-card {
+        display: flex !important;
+        flex-direction: column !important;
+
+        width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .mobile-more-services-grid .uc-card-img-wrapper {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
+
+        margin-bottom: 7px !important;
+
+        border-radius: 7px !important;
+        overflow: hidden !important;
+
+        background: #f5f5f5 !important;
+    }
+
+    .mobile-more-services-grid .uc-card-img-wrapper img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+    }
+
+    .mobile-more-services-grid .uc-body {
+        padding: 0 !important;
+    }
+
+    .mobile-more-services-grid .uc-body h4 {
+        margin: 0 0 4px !important;
+
+        font-size: 13px !important;
+        line-height: 17px !important;
+        font-weight: 500 !important;
+
+        color: #222222 !important;
+
+        white-space: normal !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+
+        overflow: hidden !important;
+    }
+
+    .mobile-more-services-grid .uc-price {
+        margin: 0 !important;
+
+        font-size: 13px !important;
+        line-height: 18px !important;
+        font-weight: 600 !important;
+
+        color: #111111 !important;
+    }
+
+    .mobile-more-services-grid .uc-cut {
+        margin-left: 4px !important;
+        font-size: 11px !important;
+        color: #888888 !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -13347,47 +13452,46 @@ if (window.innerWidth <= 768) {
     }
 
     const mobileSectionNames = [
-        'Popular Services',
-        'Recommended For You',
-        'Quick Home Services',
-        'More Services'
-    ];
+    'Popular Services',
+    'Recommended For You',
+    'Quick Home Services'
+];
 
-    const mobileMixedMap = {};
+const mobileMixedMap = {};
 
-    let sectionNumber = 0;
+/*
+   MOBILE:
+   3 slider cards only
+   4 products per card
+   Total = 12 products
+*/
 
-    /*
-       8 services per section.
-       Current mobile design first 4-ah 2x2-la kaattum.
-       Arrow/See all use pannina remaining services open aagum.
-    */
-    for (let i = 0; i < mixedServices.length; i += 8) {
+const sliderServices =
+    mixedServices.slice(0, 12);
 
-        const sectionItems =
-            mixedServices.slice(i, i + 8);
+window.ceroodMobileRemainingServices =
+    mixedServices.slice(12);
 
-        let sectionName;
+mobileSectionNames.forEach((sectionName, index) => {
 
-        if (sectionNumber < mobileSectionNames.length) {
+    const startIndex = index * 4;
 
-            sectionName =
-                mobileSectionNames[sectionNumber];
+    const sectionItems =
+        sliderServices.slice(
+            startIndex,
+            startIndex + 4
+        );
 
-        } else {
-
-            sectionName =
-                `Explore More ${sectionNumber - 3}`;
-        }
+    if (sectionItems.length > 0) {
 
         mobileMixedMap[sectionName] = {
             items: sectionItems
         };
-
-        sectionNumber++;
     }
 
-    displayCategoriesMap = mobileMixedMap;
+});
+
+displayCategoriesMap = mobileMixedMap;
 }
 
 /* Empty category sections remove */
@@ -13555,6 +13659,85 @@ if (categoryIndex === middleCategory) {
 }
 
     }
+
+    // =========================================
+// MOBILE - EXPLORE MORE SERVICES GRID
+// =========================================
+
+if (
+    window.innerWidth <= 768 &&
+    Array.isArray(window.ceroodMobileRemainingServices) &&
+    window.ceroodMobileRemainingServices.length > 0
+) {
+
+    html += `
+        <section class="mobile-more-services-section">
+
+            <div class="mobile-more-services-header">
+                <h3>Explore More Services</h3>
+            </div>
+
+            <div class="mobile-more-services-grid">
+    `;
+
+    window.ceroodMobileRemainingServices.forEach((s) => {
+
+        const price = Number(s.price || 0);
+        const mrp = Number(s.mrp || 0);
+
+        const priceHTML = price > 0
+            ? `
+                <div class="uc-price">
+                    ₹${Math.round(price)}
+                    ${mrp > price
+                        ? `<span class="uc-cut">₹${Math.round(mrp)}</span>`
+                        : ''}
+                </div>
+              `
+            : '';
+
+        const hotDealHTML =
+            s.is_hot_deal == 1
+                ? `<div class="trending-badge">Hot Deal</div>`
+                : '';
+
+        html += `
+            <div
+                class="uc-card mobile-more-service-card"
+                data-group-id="${s.group_id || ''}"
+                onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')"
+            >
+
+                <div class="uc-card-img-wrapper">
+
+                    ${hotDealHTML}
+
+                    <img
+                        src="${getSmallProductImageUrl(s.image_url)}"
+                        alt="${s.service_name}"
+                        loading="lazy"
+                        decoding="async"
+                    >
+
+                </div>
+
+                <div class="uc-body">
+
+                    <h4>${s.service_name}</h4>
+
+                    ${priceHTML}
+
+                </div>
+
+            </div>
+        `;
+    });
+
+    html += `
+            </div>
+        </section>
+    `;
+}
 
 // =========================================
 // OFFER BANNER 2 - END OF HOMEPAGE
