@@ -5199,10 +5199,26 @@ body {
 
     <!-- BREADCRUMB -->
     <div class="breadcrumb">
-        <a href="/">Home</a> <span>|</span> 
-        <span id="bcCategory">Service Category</span> <span>|</span>
-        <span class="active" id="bcTitle">Loading...</span>
-    </div>
+    <a href="/">Home</a>
+
+    <span>›</span>
+
+    <a id="bcDistrict" href="#">
+        District
+    </a>
+
+    <span id="bcLocationSeparator">›</span>
+
+    <a id="bcLocation" href="#">
+        Location
+    </a>
+
+    <span>›</span>
+
+    <span class="active" id="bcTitle">
+        Loading...
+    </span>
+</div>
 
     <!-- MAIN PRODUCT GRID -->
 <div class="product-grid" id="productGridMain">
@@ -7172,8 +7188,29 @@ function getProductUrlParams() {
     s.image_url,
     s.service_name || 'Cerood service'
 );
-                    document.getElementById('bcCategory').innerText = s.category || 'Service';
+                    
                     document.getElementById('bcTitle').innerText = s.service_name;
+
+                    const normalBcDistrict =
+    document.getElementById('bcDistrict');
+
+const normalBcLocation =
+    document.getElementById('bcLocation');
+
+const normalBcLocationSeparator =
+    document.getElementById('bcLocationSeparator');
+
+if (normalBcDistrict) {
+    normalBcDistrict.style.display = 'none';
+}
+
+if (normalBcLocation) {
+    normalBcLocation.style.display = 'none';
+}
+
+if (normalBcLocationSeparator) {
+    normalBcLocationSeparator.style.display = 'none';
+}
                     
 
                     // 1. Discount Percentage Text (e.g. 50% off)
@@ -8244,7 +8281,7 @@ function updateCeroodSeoSchemas(page) {
     // BREADCRUMB SCHEMA
     // ==========================================
 
-   const breadcrumbItems = [
+  const breadcrumbItems = [
     {
         "@type": "ListItem",
         "position": 1,
@@ -8254,10 +8291,33 @@ function updateCeroodSeoSchemas(page) {
     {
         "@type": "ListItem",
         "position": 2,
-        "name": `${serviceName} in ${locationName}`,
-        "item": currentUrl
+        "name": districtName || locationName,
+        "item":
+            `https://www.cerood.com/${currentStateSlug}/${currentDistrictSlug}`
     }
 ];
+
+if (
+    locationName &&
+    districtName &&
+    locationName !== districtName
+) {
+    breadcrumbItems.push({
+        "@type": "ListItem",
+        "position": 3,
+        "name": locationName,
+        "item":
+            `https://www.cerood.com/${currentStateSlug}/${currentDistrictSlug}/location/${currentLocationSlug}`
+    });
+}
+
+breadcrumbItems.push({
+    "@type": "ListItem",
+    "position":
+        breadcrumbItems.length + 1,
+    "name": serviceName,
+    "item": currentUrl
+});
 
     const breadcrumbSchema =
         document.createElement('script');
@@ -8948,16 +9008,52 @@ await loadCeroodWorkProofs(
         // BREADCRUMB
         // ------------------------------------------
 
-        const breadcrumbTitle =
-            document.getElementById(
-                'bcTitle'
-            );
+        const breadcrumbDistrict =
+    document.getElementById('bcDistrict');
 
-        if (breadcrumbTitle) {
+const breadcrumbLocation =
+    document.getElementById('bcLocation');
+
+const breadcrumbLocationSeparator =
+    document.getElementById('bcLocationSeparator');
+
+const breadcrumbTitle =
+    document.getElementById('bcTitle');
+
+if (breadcrumbDistrict) {
+    breadcrumbDistrict.textContent =
+        page.district || currentDistrictName || 'District';
+
+    breadcrumbDistrict.href =
+        `/${currentStateSlug}/${currentDistrictSlug}`;
+}
+
+if (
+    breadcrumbLocation &&
+    page.location_name &&
+    page.location_name !== page.district
+) {
+    breadcrumbLocation.textContent =
+        page.location_name;
+
+    breadcrumbLocation.href =
+        `/${currentStateSlug}/${currentDistrictSlug}/location/${currentLocationSlug}`;
+
+    breadcrumbLocation.style.display = '';
+    breadcrumbLocationSeparator.style.display = '';
+} else {
+    if (breadcrumbLocation) {
+        breadcrumbLocation.style.display = 'none';
+    }
+
+    if (breadcrumbLocationSeparator) {
+        breadcrumbLocationSeparator.style.display = 'none';
+    }
+}
+
+if (breadcrumbTitle) {
     breadcrumbTitle.textContent =
-        page.location_name
-            ? `${page.service_name} in ${page.location_name}`
-            : page.service_name;
+        page.service_name;
 }
 
 
