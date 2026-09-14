@@ -8343,6 +8343,120 @@ button.uc-cart-btn:hover {
     }
 }
 
+/* =========================================
+   MOBILE - NEW AND NOTEWORTHY
+   UC STYLE 2 ROW HORIZONTAL SCROLL
+========================================= */
+@media (max-width: 768px) {
+
+    .cerood-noteworthy-section {
+        width: 100% !important;
+
+        margin: 18px 0 24px !important;
+        padding: 22px 0 20px !important;
+
+        background: #ffffff !important;
+
+        box-sizing: border-box !important;
+
+        border-top: 8px solid #f5f5f5;
+        border-bottom: 8px solid #f5f5f5;
+    }
+
+    .cerood-noteworthy-section h3 {
+        margin: 0 14px 18px !important;
+
+        font-size: 20px !important;
+        line-height: 25px !important;
+        font-weight: 700 !important;
+
+        color: #111111 !important;
+    }
+
+    .cerood-noteworthy-scroll {
+        width: 100% !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        padding: 0 14px 6px !important;
+
+        box-sizing: border-box !important;
+
+        scrollbar-width: none !important;
+        -webkit-overflow-scrolling: touch !important;
+
+        scroll-behavior: smooth !important;
+    }
+
+    .cerood-noteworthy-scroll::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /*
+       2 rows.
+       Products horizontal-a columns-aa continue aagum.
+    */
+    .cerood-noteworthy-grid {
+        display: grid !important;
+
+        grid-template-rows: repeat(2, auto) !important;
+        grid-auto-flow: column !important;
+
+        grid-auto-columns: 105px !important;
+
+        column-gap: 14px !important;
+        row-gap: 20px !important;
+
+        width: max-content !important;
+    }
+
+    .cerood-noteworthy-item {
+        width: 105px !important;
+
+        cursor: pointer !important;
+
+        overflow: hidden !important;
+    }
+
+    .cerood-noteworthy-image {
+        width: 105px !important;
+        height: 105px !important;
+
+        margin: 0 0 8px 0 !important;
+
+        border-radius: 8px !important;
+
+        overflow: hidden !important;
+
+        background: #f4f4f4 !important;
+    }
+
+    .cerood-noteworthy-image img {
+        display: block !important;
+
+        width: 100% !important;
+        height: 100% !important;
+
+        object-fit: cover !important;
+    }
+
+    .cerood-noteworthy-name {
+        width: 100% !important;
+
+        font-size: 13px !important;
+        line-height: 17px !important;
+        font-weight: 400 !important;
+
+        color: #222222 !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+
+        overflow: hidden !important;
+    }
+}
 
 
 </style>
@@ -13360,6 +13474,26 @@ if (window.innerWidth <= 768) {
 
    const mobileMixedMap = {};
 
+   /*
+   FIRST 12 = 3 Amazon-style big cards
+   NEXT 10  = New and noteworthy section
+   BALANCE  = normal big cards continue
+*/
+
+const firstBigCardServices =
+    mixedServices.slice(0, 12);
+
+window.ceroodNewNoteworthyServices =
+    mixedServices.slice(12, 22);
+
+const remainingBigCardServices =
+    mixedServices.slice(22);
+
+const bigCardServices = [
+    ...firstBigCardServices,
+    ...remainingBigCardServices
+];
+
 const preferredSectionNames = [
     'Popular Services',
     'Recommended For You',
@@ -13380,12 +13514,12 @@ const preferredSectionNames = [
 */
 for (
     let i = 0, sectionIndex = 0;
-    i < mixedServices.length;
+    i < bigCardServices.length;
     i += 4, sectionIndex++
 ) {
 
     const sectionItems =
-        mixedServices.slice(i, i + 4);
+        bigCardServices.slice(i, i + 4);
 
     let sectionName =
         preferredSectionNames[sectionIndex];
@@ -13535,6 +13669,64 @@ html += `
 
     </div>
 </div>`;
+
+// =========================================
+// MOBILE - NEW AND NOTEWORTHY STYLE SECTION
+// FIRST 3 BIG CARDS-KU APRAM
+// =========================================
+
+if (
+    window.innerWidth <= 768 &&
+    categoryIndex === 3 &&
+    Array.isArray(window.ceroodNewNoteworthyServices) &&
+    window.ceroodNewNoteworthyServices.length > 0
+) {
+
+    html += `
+        <section class="cerood-noteworthy-section">
+
+            <h3>New and noteworthy</h3>
+
+            <div class="cerood-noteworthy-scroll">
+
+                <div class="cerood-noteworthy-grid">
+    `;
+
+    window.ceroodNewNoteworthyServices.forEach((s) => {
+
+        html += `
+            <div
+                class="cerood-noteworthy-item"
+                onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')"
+            >
+
+                <div class="cerood-noteworthy-image">
+
+                    <img
+                        src="${getSmallProductImageUrl(s.image_url)}"
+                        alt="${s.service_name}"
+                        loading="lazy"
+                        decoding="async"
+                    >
+
+                </div>
+
+                <div class="cerood-noteworthy-name">
+                    ${s.service_name}
+                </div>
+
+            </div>
+        `;
+    });
+
+    html += `
+                </div>
+
+            </div>
+
+        </section>
+    `;
+}
 
 // =========================================
 // OFFER BANNER 1 - MIDDLE OF HOMEPAGE
