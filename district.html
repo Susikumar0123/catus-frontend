@@ -390,6 +390,48 @@ if (
 
                     }).join('');
 
+                    // ==========================================
+// DISTRICT LOCATION ITEMLIST SCHEMA
+// ==========================================
+
+const districtLocationListSchema =
+    document.createElement('script');
+
+districtLocationListSchema.type =
+    'application/ld+json';
+
+districtLocationListSchema.textContent =
+    JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name":
+            `Service Locations in ${districtName}`,
+        "itemListElement":
+            locations.map((item, index) => {
+
+                const locationSlug =
+                    slugify(item.location_name);
+
+                const locationUrl =
+                    locationSlug === districtSlug
+                        ? `https://www.cerood.com/${stateSlug}/${districtSlug}`
+                        : `https://www.cerood.com/${stateSlug}/${districtSlug}/location/${locationSlug}`;
+
+                return {
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "name":
+                        `Home Appliance Services in ${item.location_name}`,
+                    "url":
+                        locationUrl
+                };
+            })
+    });
+
+document.head.appendChild(
+    districtLocationListSchema
+);
+
             } catch (error) {
 
                 locationContainer.innerHTML =
