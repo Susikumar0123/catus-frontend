@@ -5141,6 +5141,66 @@ body {
     transform: rotate(180deg);
 }
 
+/* ==========================================
+   CEROOD SEO FAQ SECTION
+========================================== */
+
+.cerood-faq-section {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.cerood-faq-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 20px 0;
+}
+
+#ceroodFaqList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#ceroodFaqList details {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0 18px;
+}
+
+#ceroodFaqList summary {
+    padding: 16px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+    cursor: pointer;
+}
+
+#ceroodFaqList details p {
+    margin: 0;
+    padding: 0 0 16px 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #475569;
+}
+
+@media (max-width: 850px) {
+    .cerood-faq-section {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .cerood-faq-section h2 {
+        font-size: 20px;
+    }
+
+    #ceroodFaqList details {
+        padding: 0 14px;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -13092,10 +13152,7 @@ function closeCeroodLocalSeoPopup(event) {
     </div>
 </div>
 
-<section id="ceroodFaqSection" class="cerood-faq-section" style="display:none;">
-    <h2 id="ceroodFaqHeading">Frequently Asked Questions</h2>
-    <div id="ceroodFaqList"></div>
-</section>
+
 
  <!-- =====================================================
      CEROOD LOCAL SEO CONTENT
@@ -13134,6 +13191,11 @@ function closeCeroodLocalSeoPopup(event) {
             </span>
         </div>
     </div>
+</section>
+
+<section id="ceroodFaqSection" class="cerood-faq-section" style="display:none;">
+    <h2 id="ceroodFaqHeading">Frequently Asked Questions</h2>
+    <div id="ceroodFaqList"></div>
 </section>
     
 <!-- Professional Footer Section -->
