@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Help & FAQs | Cerood</title>
 
@@ -13,295 +18,752 @@
 
     <meta name="robots" content="index, follow">
 
-    <link rel="canonical" href="https://www.cerood.com/faq">
+    <link
+        rel="canonical"
+        href="https://www.cerood.com/faq"
+    >
 
     <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f8fafc;
-        color: #18181b;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    main {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 48px 20px 70px;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8fafc;
+            color: #18181b;
+        }
 
-    h1 {
-        font-size: 36px;
-        margin-bottom: 12px;
-    }
+        /* =========================
+           HEADER
+        ========================= */
 
-    main > p {
-        color: #52525b;
-        line-height: 1.7;
-        margin-bottom: 36px;
-    }
+        .faq-site-header {
+            width: 100%;
+            min-height: 72px;
+            padding: 12px 24px;
 
-    h2 {
-        margin-top: 38px;
-        margin-bottom: 18px;
-        font-size: 24px;
-    }
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
-    h3 {
-        margin-top: 24px;
-        margin-bottom: 8px;
-        font-size: 17px;
-    }
+            background: #ffffff;
+            border-bottom: 1px solid #eeeeee;
 
-    h3 + p {
-        margin-top: 0;
-        color: #52525b;
-        line-height: 1.7;
-        padding-bottom: 18px;
-        border-bottom: 1px solid #e4e4e7;
-    }
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    @media (max-width: 600px) {
+        .faq-logo-link {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .faq-logo {
+            height: 42px;
+            width: auto;
+            display: block;
+        }
+
+        .faq-services-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px 16px;
+            border-radius: 999px;
+
+            background: #f5f3ff;
+            color: #6d4aff;
+
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+
+            transition: 0.2s ease;
+        }
+
+        .faq-services-link:hover {
+            background: #ece7ff;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
         main {
-            padding: 32px 16px 50px;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 20px 70px;
+        }
+
+        .faq-breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .faq-breadcrumb a {
+            color: #52525b;
+            text-decoration: none;
+        }
+
+        .faq-breadcrumb-separator {
+            margin: 0 8px;
+            color: #a1a1aa;
+        }
+
+        .faq-breadcrumb-current {
+            color: #18181b;
         }
 
         h1 {
-            font-size: 28px;
+            margin: 0 0 12px;
+            font-size: 36px;
+            line-height: 1.2;
         }
 
-        h2 {
-            font-size: 21px;
+        .faq-intro {
+            margin: 0 0 36px;
+            color: #52525b;
+            line-height: 1.7;
         }
-    }
 
-    .faq-site-header {
-    width: 100%;
-    min-height: 72px;
-    padding: 12px 24px;
-    box-sizing: border-box;
+        .faq-category {
+            margin-top: 38px;
+            margin-bottom: 18px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+            font-size: 24px;
+            line-height: 1.3;
+        }
 
-    background: #ffffff;
-    border-bottom: 1px solid #eeeeee;
+        /* =========================
+           FAQ ACCORDION
+        ========================= */
 
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+        .faq-item {
+            margin-bottom: 12px;
 
-.faq-logo-link {
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-}
+            background: #ffffff;
+            border: 1px solid #e4e4e7;
+            border-radius: 12px;
 
-.faq-logo {
-    height: 42px;
-    width: auto;
-    display: block;
-}
+            overflow: hidden;
 
-.faq-services-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
 
-    padding: 10px 16px;
-    border-radius: 999px;
+        .faq-item:hover {
+            border-color: #d4d4d8;
+        }
 
-    background: #f5f3ff;
-    color: #6d4aff;
+        .faq-item.open {
+            border-color: #ddd6fe;
+            box-shadow: 0 4px 16px rgba(109, 74, 255, 0.06);
+        }
 
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
+        .faq-question {
+            width: 100%;
+            padding: 18px 20px;
 
-    transition: 0.2s ease;
-}
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
 
-.faq-services-link:hover {
-    background: #ece7ff;
-}
+            background: transparent;
+            border: none;
 
-@media (max-width: 600px) {
-    .faq-site-header {
-        min-height: 58px;
-        padding: 8px 14px;
-    }
+            cursor: pointer;
 
-    .faq-logo {
-        height: 30px;
-    }
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
 
-    .faq-services-link {
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-}
+            color: #18181b;
+            text-align: left;
+        }
 
-</style>
+        .faq-icon {
+            flex-shrink: 0;
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
+            color: #6d4aff;
+
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 1;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 20px 18px;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .faq-answer p {
+            margin: 0;
+
+            color: #52525b;
+
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .faq-footer {
+            padding: 28px 20px;
+
+            background: #ffffff;
+            border-top: 1px solid #e4e4e7;
+
+            text-align: center;
+
+            color: #71717a;
+            font-size: 14px;
+        }
+
+        .faq-footer-links {
+            margin-bottom: 10px;
+        }
+
+        .faq-footer a {
+            margin: 0 10px;
+
+            color: #52525b;
+            text-decoration: none;
+        }
+
+        .faq-footer a:hover {
+            color: #6d4aff;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .faq-site-header {
+                min-height: 58px;
+                padding: 8px 14px;
+            }
+
+            .faq-logo {
+                height: 30px;
+            }
+
+            .faq-services-link {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            main {
+                padding: 32px 16px 50px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .faq-category {
+                margin-top: 32px;
+                font-size: 21px;
+            }
+
+            .faq-question {
+                padding: 16px;
+                font-size: 15px;
+            }
+
+            .faq-answer {
+                padding: 0 16px 16px;
+            }
+
+            .faq-answer p {
+                font-size: 14px;
+            }
+        }
+    </style>
+
+
+    <!-- Breadcrumb Structured Data -->
+
+    <script type="application/ld+json">
     {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://www.cerood.com/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Help & FAQs",
-      "item": "https://www.cerood.com/faq"
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.cerood.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Help & FAQs",
+                "item": "https://www.cerood.com/faq"
+            }
+        ]
     }
-  ]
-}
-</script>
+    </script>
 
 </head>
 
+
 <body>
 
-    <header class="faq-site-header">
-    <a href="/" class="faq-logo-link" aria-label="Cerood Home">
-        <img
-            src="/cerood-logo.webp"
-            alt="Cerood"
-            class="faq-logo"
-        >
-    </a>
+    <!-- =========================
+         HEADER
+    ========================== -->
 
-    <a href="/services" class="faq-services-link">
-        Explore Services
-    </a>
-</header>
+    <header class="faq-site-header">
+
+        <a
+            href="/"
+            class="faq-logo-link"
+            aria-label="Cerood Home"
+        >
+            <img
+                src="/cerood-logo.webp"
+                alt="Cerood"
+                class="faq-logo"
+            >
+        </a>
+
+        <a
+            href="/services"
+            class="faq-services-link"
+        >
+            Explore Services
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
 
     <main>
 
-        <nav aria-label="Breadcrumb" style="margin-bottom: 20px; font-size: 14px;">
-    <a
-        href="/"
-        style="color: #52525b; text-decoration: none;"
-    >
-        Home
-    </a>
+        <nav
+            class="faq-breadcrumb"
+            aria-label="Breadcrumb"
+        >
+            <a href="/">Home</a>
 
-    <span style="margin: 0 8px; color: #a1a1aa;">›</span>
+            <span class="faq-breadcrumb-separator">
+                ›
+            </span>
 
-    <span style="color: #18181b;">
-        Help & FAQs
-    </span>
-</nav>
+            <span class="faq-breadcrumb-current">
+                Help & FAQs
+            </span>
+        </nav>
 
-    <h1>Help & Frequently Asked Questions</h1>
 
-<p>
-    Find answers to common questions about Cerood doorstep
-    appliance repair and home services.
-</p>
+        <h1>
+            Help & Frequently Asked Questions
+        </h1>
 
-<h2>Booking & Service</h2>
+        <p class="faq-intro">
+            Find answers to common questions about Cerood doorstep
+            appliance repair and home services.
+        </p>
 
-<h3>How can I book a service with Cerood?</h3>
-<p>
-    Choose the service you need, enter your location and complete
-    the booking. Cerood will process your service request based on
-    technician availability in your area.
-</p>
 
-<h3>Which home appliances does Cerood service?</h3>
-<p>
-    Cerood provides services for appliances such as Smart TVs,
-    air conditioners, washing machines, refrigerators and
-    RO water purifiers.
-</p>
+        <!-- =====================
+             BOOKING & SERVICE
+        ====================== -->
 
-<h3>Does Cerood provide doorstep service?</h3>
-<p>
-    Yes. Available services are provided at the customer's location,
-    subject to technician availability in the selected service area.
-</p>
+        <h2 class="faq-category">
+            Booking & Service
+        </h2>
 
-<h2>Service Areas</h2>
 
-<h3>Where is Cerood service available?</h3>
-<p>
-    Cerood service availability depends on the selected district,
-    city, town or local service area. You can check available
-    services through the Service Areas section.
-</p>
+        <div class="faq-item">
 
-<h3>What if service is not available in my location?</h3>
-<p>
-    Service availability may vary by location and technician
-    availability. You can check Cerood again as coverage expands.
-</p>
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    How can I book a service with Cerood?
+                </span>
 
-<h2>Pricing & Repairs</h2>
+                <span class="faq-icon">+</span>
+            </button>
 
-<h3>Is the displayed price the final repair cost?</h3>
-<p>
-    The final cost may depend on the appliance condition, required
-    repair work and spare parts. Any additional repair requirements
-    can be confirmed after inspection.
-</p>
+            <div class="faq-answer">
 
-<h3>Are spare parts included in the service price?</h3>
-<p>
-    Spare-part charges may be separate depending on the repair
-    required. Applicable charges should be confirmed before the
-    additional work is carried out.
-</p>
+                <p>
+                    Choose the service you need, enter your location
+                    and complete the booking. Cerood will process your
+                    service request based on technician availability
+                    in your area.
+                </p>
 
-<h2>Technicians</h2>
+            </div>
 
-<h3>How is a technician assigned to my booking?</h3>
-<p>
-    Cerood assigns service requests based on technician availability
-    and service coverage for the selected location.
-</p>
+        </div>
 
-<h3>Can technician availability vary by location?</h3>
-<p>
-    Yes. Technician availability can vary depending on the service,
-    location and requested booking time.
-</p>
 
-</main>
+        <div class="faq-item">
 
-<footer style="
-    border-top: 1px solid #e4e4e7;
-    background: #ffffff;
-    padding: 28px 20px;
-    text-align: center;
-    color: #71717a;
-    font-size: 14px;
-">
-    <div style="margin-bottom: 10px;">
-        <a href="/" style="color: #52525b; text-decoration: none; margin: 0 10px;">
-            Home
-        </a>
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    Which home appliances does Cerood service?
+                </span>
 
-        <a href="/services" style="color: #52525b; text-decoration: none; margin: 0 10px;">
-            Services
-        </a>
+                <span class="faq-icon">+</span>
+            </button>
 
-        <a href="/contact" style="color: #52525b; text-decoration: none; margin: 0 10px;">
-            Contact
-        </a>
-    </div>
+            <div class="faq-answer">
 
-    <div>
-        © 2026 Cerood. All rights reserved.
-    </div>
-</footer>
+                <p>
+                    Cerood provides services for appliances such as
+                    Smart TVs, air conditioners, washing machines,
+                    refrigerators and RO water purifiers.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    Does Cerood provide doorstep service?
+                </span>
+
+                <span class="faq-icon">+</span>
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Yes. Available services are provided at the
+                    customer's location, subject to technician
+                    availability in the selected service area.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================
+             SERVICE AREAS
+        ====================== -->
+
+        <h2 class="faq-category">
+            Service Areas
+        </h2>
+
+
+        <div class="faq-item">
+
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    Where is Cerood service available?
+                </span>
+
+                <span class="faq-icon">+</span>
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Cerood service availability depends on the selected
+                    district, city, town or local service area. You can
+                    check available services through the Service Areas
+                    section.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    What if service is not available in my location?
+                </span>
+
+                <span class="faq-icon">+</span>
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Service availability may vary by location and
+                    technician availability. You can check Cerood
+                    again as coverage expands.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================
+             PRICING & REPAIRS
+        ====================== -->
+
+        <h2 class="faq-category">
+            Pricing & Repairs
+        </h2>
+
+
+        <div class="faq-item">
+
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    Is the displayed price the final repair cost?
+                </span>
+
+                <span class="faq-icon">+</span>
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    The final cost may depend on the appliance condition,
+                    required repair work and spare parts. Any additional
+                    repair requirements can be confirmed after inspection.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    Are spare parts included in the service price?
+                </span>
+
+                <span class="faq-icon">+</span>
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Spare-part charges may be separate depending on the
+                    repair required. Applicable charges should be confirmed
+                    before the additional work is carried out.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================
+             TECHNICIANS
+        ====================== -->
+
+        <h2 class="faq-category">
+            Technicians
+        </h2>
+
+
+        <div class="faq-item">
+
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    How is a technician assigned to my booking?
+                </span>
+
+                <span class="faq-icon">+</span>
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Cerood assigns service requests based on technician
+                    availability and service coverage for the selected
+                    location.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item">
+
+            <button
+                class="faq-question"
+                type="button"
+                aria-expanded="false"
+            >
+                <span>
+                    Can technician availability vary by location?
+                </span>
+
+                <span class="faq-icon">+</span>
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Yes. Technician availability can vary depending
+                    on the service, location and requested booking time.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="faq-footer">
+
+        <div class="faq-footer-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/services">
+                Services
+            </a>
+
+            <a href="/contact">
+                Contact
+            </a>
+
+        </div>
+
+        <div>
+            © 2026 Cerood. All rights reserved.
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         FAQ ACCORDION
+    ========================== -->
+
+    <script>
+        document
+            .querySelectorAll('.faq-question')
+            .forEach(button => {
+
+                button.addEventListener('click', () => {
+
+                    const currentItem =
+                        button.closest('.faq-item');
+
+                    const isOpen =
+                        currentItem.classList.contains('open');
+
+
+                    document
+                        .querySelectorAll('.faq-item')
+                        .forEach(item => {
+
+                            item.classList.remove('open');
+
+                            const itemButton =
+                                item.querySelector('.faq-question');
+
+                            const itemIcon =
+                                item.querySelector('.faq-icon');
+
+                            if (itemButton) {
+                                itemButton.setAttribute(
+                                    'aria-expanded',
+                                    'false'
+                                );
+                            }
+
+                            if (itemIcon) {
+                                itemIcon.textContent = '+';
+                            }
+
+                        });
+
+
+                    if (!isOpen) {
+
+                        currentItem.classList.add('open');
+
+                        button.setAttribute(
+                            'aria-expanded',
+                            'true'
+                        );
+
+                        const currentIcon =
+                            button.querySelector('.faq-icon');
+
+                        if (currentIcon) {
+                            currentIcon.textContent = '−';
+                        }
+
+                    }
+
+                });
+
+            });
+    </script>
 
 </body>
+
 </html>
