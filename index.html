@@ -8343,110 +8343,7 @@ button.uc-cart-btn:hover {
     }
 }
 
-/* =========================================
-   MOBILE EXPLORE MORE SERVICES GRID
-========================================= */
-@media (max-width: 768px) {
 
-    .mobile-more-services-section {
-        width: 100%;
-        padding: 22px 14px 30px;
-        box-sizing: border-box;
-        background: #ffffff;
-    }
-
-    .mobile-more-services-header {
-        margin-bottom: 14px;
-    }
-
-    .mobile-more-services-header h3 {
-        margin: 0;
-        font-size: 19px;
-        line-height: 24px;
-        font-weight: 700;
-        color: #191919;
-    }
-
-    .mobile-more-services-grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 18px 10px !important;
-        width: 100%;
-    }
-
-    .mobile-more-services-grid .mobile-more-service-card {
-        display: flex !important;
-        flex-direction: column !important;
-
-        width: 100% !important;
-        min-width: 0 !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        border: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-    }
-
-    .mobile-more-services-grid .uc-card-img-wrapper {
-        width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 1 / 1 !important;
-
-        margin-bottom: 7px !important;
-
-        border-radius: 7px !important;
-        overflow: hidden !important;
-
-        background: #f5f5f5 !important;
-    }
-
-    .mobile-more-services-grid .uc-card-img-wrapper img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        display: block !important;
-    }
-
-    .mobile-more-services-grid .uc-body {
-        padding: 0 !important;
-    }
-
-    .mobile-more-services-grid .uc-body h4 {
-        margin: 0 0 4px !important;
-
-        font-size: 13px !important;
-        line-height: 17px !important;
-        font-weight: 500 !important;
-
-        color: #222222 !important;
-
-        white-space: normal !important;
-
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2 !important;
-        -webkit-box-orient: vertical !important;
-
-        overflow: hidden !important;
-    }
-
-    .mobile-more-services-grid .uc-price {
-        margin: 0 !important;
-
-        font-size: 13px !important;
-        line-height: 18px !important;
-        font-weight: 600 !important;
-
-        color: #111111 !important;
-    }
-
-    .mobile-more-services-grid .uc-cut {
-        margin-left: 4px !important;
-        font-size: 11px !important;
-        color: #888888 !important;
-    }
-}
 
 </style>
 </head>
@@ -13301,7 +13198,6 @@ function startCatusBannerFlow() {
     if (!container) return;
     if (window.innerWidth > 768) return;
 
-    /* Already created-na duplicate panna vendaam */
     if (container.querySelector('.mobile-category-track')) {
         return;
     }
@@ -13309,14 +13205,20 @@ function startCatusBannerFlow() {
     const children = [...container.children];
 
     let currentTrack = null;
+    let cardsInCurrentTrack = 0;
 
     children.forEach(child => {
 
         if (child.classList.contains('uc-category-box')) {
 
-            if (!currentTrack) {
+            /*
+               Oru horizontal row-la
+               maximum 3 big cards mattum
+            */
+            if (!currentTrack || cardsInCurrentTrack >= 3) {
 
-                currentTrack = document.createElement('div');
+                currentTrack =
+                    document.createElement('div');
 
                 currentTrack.className =
                     'mobile-category-track';
@@ -13325,22 +13227,27 @@ function startCatusBannerFlow() {
                     currentTrack,
                     child
                 );
+
+                cardsInCurrentTrack = 0;
             }
 
             currentTrack.appendChild(child);
 
+            cardsInCurrentTrack++;
+
         } else {
 
             /*
-              Offer banner / vera section vandha
-              current category track mudinjidum.
-              Adutha categories-ku new track create aagum.
+               Banner vandha track close.
+               Banner-ku apram fresh row.
             */
             currentTrack = null;
+            cardsInCurrentTrack = 0;
         }
 
     });
 }
+
 
 function showCachedHomeServices() {
 
@@ -13451,45 +13358,47 @@ if (window.innerWidth <= 768) {
         });
     }
 
-    const mobileSectionNames = [
+   const mobileMixedMap = {};
+
+const preferredSectionNames = [
     'Popular Services',
     'Recommended For You',
-    'Quick Home Services'
+    'Quick Home Services',
+    'More Home Services',
+    'Repair & Care',
+    'Installation Services',
+    'Services For You',
+    'Home Appliance Care',
+    'Explore Services'
 ];
 
-const mobileMixedMap = {};
-
 /*
-   MOBILE:
-   3 slider cards only
-   4 products per card
-   Total = 12 products
+   Ovvoru big card = 4 mixed services.
+   Ella services-um card-a convert aagum.
+   setupMobileCategorySlider()
+   3 cards per horizontal row handle pannum.
 */
-
-const sliderServices =
-    mixedServices.slice(0, 12);
-
-window.ceroodMobileRemainingServices =
-    mixedServices.slice(12);
-
-mobileSectionNames.forEach((sectionName, index) => {
-
-    const startIndex = index * 4;
+for (
+    let i = 0, sectionIndex = 0;
+    i < mixedServices.length;
+    i += 4, sectionIndex++
+) {
 
     const sectionItems =
-        sliderServices.slice(
-            startIndex,
-            startIndex + 4
-        );
+        mixedServices.slice(i, i + 4);
 
-    if (sectionItems.length > 0) {
+    let sectionName =
+        preferredSectionNames[sectionIndex];
 
-        mobileMixedMap[sectionName] = {
-            items: sectionItems
-        };
+    if (!sectionName) {
+        sectionName =
+            `More Services ${sectionIndex - preferredSectionNames.length + 1}`;
     }
 
-});
+    mobileMixedMap[sectionName] = {
+        items: sectionItems
+    };
+}
 
 displayCategoriesMap = mobileMixedMap;
 }
@@ -13660,84 +13569,7 @@ if (categoryIndex === middleCategory) {
 
     }
 
-    // =========================================
-// MOBILE - EXPLORE MORE SERVICES GRID
-// =========================================
-
-if (
-    window.innerWidth <= 768 &&
-    Array.isArray(window.ceroodMobileRemainingServices) &&
-    window.ceroodMobileRemainingServices.length > 0
-) {
-
-    html += `
-        <section class="mobile-more-services-section">
-
-            <div class="mobile-more-services-header">
-                <h3>Explore More Services</h3>
-            </div>
-
-            <div class="mobile-more-services-grid">
-    `;
-
-    window.ceroodMobileRemainingServices.forEach((s) => {
-
-        const price = Number(s.price || 0);
-        const mrp = Number(s.mrp || 0);
-
-        const priceHTML = price > 0
-            ? `
-                <div class="uc-price">
-                    ₹${Math.round(price)}
-                    ${mrp > price
-                        ? `<span class="uc-cut">₹${Math.round(mrp)}</span>`
-                        : ''}
-                </div>
-              `
-            : '';
-
-        const hotDealHTML =
-            s.is_hot_deal == 1
-                ? `<div class="trending-badge">Hot Deal</div>`
-                : '';
-
-        html += `
-            <div
-                class="uc-card mobile-more-service-card"
-                data-group-id="${s.group_id || ''}"
-                onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')"
-            >
-
-                <div class="uc-card-img-wrapper">
-
-                    ${hotDealHTML}
-
-                    <img
-                        src="${getSmallProductImageUrl(s.image_url)}"
-                        alt="${s.service_name}"
-                        loading="lazy"
-                        decoding="async"
-                    >
-
-                </div>
-
-                <div class="uc-body">
-
-                    <h4>${s.service_name}</h4>
-
-                    ${priceHTML}
-
-                </div>
-
-            </div>
-        `;
-    });
-
-    html += `
-            </div>
-        </section>
-    `;
-}
+  
 
 // =========================================
 // OFFER BANNER 2 - END OF HOMEPAGE
