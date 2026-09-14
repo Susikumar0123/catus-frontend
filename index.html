@@ -8345,29 +8345,29 @@ button.uc-cart-btn:hover {
 
 /* =========================================
    MOBILE - NEW AND NOTEWORTHY
-   UC STYLE 2 ROW HORIZONTAL SCROLL
+   MATCH REFERENCE STYLE
 ========================================= */
 @media (max-width: 768px) {
 
     .cerood-noteworthy-section {
         width: 100% !important;
 
-        margin: 18px 0 24px !important;
-        padding: 22px 0 20px !important;
+        margin: 20px 0 26px !important;
+        padding: 28px 0 30px !important;
 
         background: #ffffff !important;
 
         box-sizing: border-box !important;
 
-        border-top: 8px solid #f5f5f5;
-        border-bottom: 8px solid #f5f5f5;
+        border-top: 8px solid #f6f6f6 !important;
+        border-bottom: 8px solid #f6f6f6 !important;
     }
 
     .cerood-noteworthy-section h3 {
-        margin: 0 14px 18px !important;
+        margin: 0 24px 24px !important;
 
-        font-size: 20px !important;
-        line-height: 25px !important;
+        font-size: 21px !important;
+        line-height: 27px !important;
         font-weight: 700 !important;
 
         color: #111111 !important;
@@ -8379,7 +8379,7 @@ button.uc-cart-btn:hover {
         overflow-x: auto !important;
         overflow-y: hidden !important;
 
-        padding: 0 14px 6px !important;
+        padding: 0 24px 8px !important;
 
         box-sizing: border-box !important;
 
@@ -8393,43 +8393,43 @@ button.uc-cart-btn:hover {
         display: none !important;
     }
 
-    /*
-       2 rows.
-       Products horizontal-a columns-aa continue aagum.
-    */
     .cerood-noteworthy-grid {
         display: grid !important;
 
         grid-template-rows: repeat(2, auto) !important;
         grid-auto-flow: column !important;
 
-        grid-auto-columns: 105px !important;
+        /*
+           Reference style:
+           smaller items + more visible columns
+        */
+        grid-auto-columns: 82px !important;
 
-        column-gap: 14px !important;
-        row-gap: 20px !important;
+        column-gap: 20px !important;
+        row-gap: 28px !important;
 
         width: max-content !important;
     }
 
     .cerood-noteworthy-item {
-        width: 105px !important;
+        width: 82px !important;
 
         cursor: pointer !important;
 
-        overflow: hidden !important;
+        overflow: visible !important;
     }
 
     .cerood-noteworthy-image {
-        width: 105px !important;
-        height: 105px !important;
+        width: 82px !important;
+        height: 82px !important;
 
-        margin: 0 0 8px 0 !important;
+        margin: 0 0 9px 0 !important;
 
         border-radius: 8px !important;
 
         overflow: hidden !important;
 
-        background: #f4f4f4 !important;
+        background: #f5f5f5 !important;
     }
 
     .cerood-noteworthy-image img {
@@ -8442,13 +8442,15 @@ button.uc-cart-btn:hover {
     }
 
     .cerood-noteworthy-name {
-        width: 100% !important;
+        width: 88px !important;
 
         font-size: 13px !important;
         line-height: 17px !important;
         font-weight: 400 !important;
 
         color: #222222 !important;
+
+        white-space: normal !important;
 
         display: -webkit-box !important;
         -webkit-line-clamp: 2 !important;
