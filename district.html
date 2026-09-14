@@ -162,7 +162,7 @@ const stateSlug =
 
 const districtSlug =
     pathParts[1] || '';
-    
+
         const districtName =
             districtSlug
                 .replace(/-/g, ' ')
@@ -275,9 +275,9 @@ const districtSlug =
                             slugify(item.location_name);
 
                         const url =
-                            locationSlug === districtSlug
-                                ? `/${stateSlug}/${districtSlug}/ac-service`
-                                : `/${stateSlug}/${districtSlug}/${locationSlug}/ac-service`;
+    locationSlug === districtSlug
+        ? `/${stateSlug}/${districtSlug}`
+        : `/${stateSlug}/${districtSlug}/location/${locationSlug}`;
 
                         return `
                             <a class="link-card"
