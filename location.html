@@ -136,6 +136,16 @@
 
         </section>
 
+        <section class="section" id="localServiceInfo">
+    <h2 id="localServiceInfoTitle">
+        Home Services in Your Area
+    </h2>
+
+    <p id="localServiceInfoText"
+       class="intro">
+    </p>
+</section>
+
         <section class="section">
     <h2>
         Nearby Service Locations
@@ -424,6 +434,31 @@ async function loadNearbyLocations() {
             .closest('.section')
             .style.display = 'none';
     }
+}
+
+// ==========================================
+// UNIQUE LOCAL SERVICE CONTENT
+// ==========================================
+
+const localServiceInfoTitle =
+    document.getElementById(
+        'localServiceInfoTitle'
+    );
+
+const localServiceInfoText =
+    document.getElementById(
+        'localServiceInfoText'
+    );
+
+if (
+    localServiceInfoTitle &&
+    localServiceInfoText
+) {
+    localServiceInfoTitle.textContent =
+        `Doorstep Appliance Service in ${locationName}`;
+
+    localServiceInfoText.textContent =
+        `Customers in ${locationName}, ${districtName} can explore doorstep repair, installation and maintenance support for common home appliances through Cerood. Available service categories include Smart TV, AC, washing machine, refrigerator and RO water purifier support. Service availability may vary based on technician coverage in ${locationName} and nearby areas.`;
 }
 
 loadNearbyLocations();
