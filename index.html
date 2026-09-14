@@ -9361,11 +9361,27 @@ async function loadSeoServiceAreas() {
                 const locations =
                     districtMap[district];
 
-                html += `
-                    <details class="seo-district-group">
-                        <summary>
-                            ${district}
-                        </summary>
+                const firstLocation =
+    locations[0];
+
+const districtStateSlug =
+    slugify(
+        firstLocation?.state || ''
+    );
+
+const districtSlug =
+    slugify(district);
+
+html += `
+    <details class="seo-district-group">
+        <summary>
+            <a
+                href="/${districtStateSlug}/${districtSlug}"
+                onclick="event.stopPropagation();"
+            >
+                ${district}
+            </a>
+        </summary>
 
                         <div class="seo-location-links">
                 `;
