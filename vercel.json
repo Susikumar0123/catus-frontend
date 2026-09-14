@@ -15,6 +15,12 @@
   "destination": "/services.html"
 },
 
+{
+  "source": "/faq",
+  "destination": "/faq.html"
+},
+
+
     {
       "source": "/sitemap.xml",
       "destination": "https://catus-backend-d2js.onrender.com/api/sitemap.xml"

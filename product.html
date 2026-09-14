@@ -4903,62 +4903,7 @@ body {
     }
 }
 
-/* =====================================================
-   CEROOD LOCAL SEO CONTENT
-===================================================== */
 
-.cerood-local-seo-section {
-    margin-top: 42px;
-    padding: 28px 30px;
-    background: #fafafa;
-    border: 1px solid #eeeeee;
-    border-radius: 16px;
-}
-
-.cerood-local-seo-section h2 {
-    margin: 0 0 12px 0;
-    font-size: 24px;
-    line-height: 1.35;
-    font-weight: 600;
-    color: #111318;
-}
-
-.cerood-local-seo-section > p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.75;
-    color: #555b66;
-    max-width: 950px;
-}
-
-.cerood-local-seo-points {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 22px;
-}
-
-.cerood-local-seo-points > div {
-    padding: 16px;
-    background: #ffffff;
-    border: 1px solid #eeeeee;
-    border-radius: 12px;
-}
-
-.cerood-local-seo-points strong {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #111318;
-}
-
-.cerood-local-seo-points span {
-    display: block;
-    font-size: 13px;
-    line-height: 1.55;
-    color: #666b75;
-}
 
 @media (max-width: 850px) {
 
@@ -4984,69 +4929,7 @@ body {
     }
 }
 
-/* =====================================================
-   CEROOD LOCAL SERVICE INFORMATION POPUP
-===================================================== */
 
-.cerood-local-seo-popup {
-    position: fixed;
-    inset: 0;
-    z-index: 99999999;
-
-    background: rgba(15, 23, 42, 0.48);
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
-    padding: 24px;
-    box-sizing: border-box;
-}
-
-.cerood-local-seo-popup-card {
-    width: 100%;
-    max-width: 1050px;
-    max-height: 88vh;
-
-    position: relative;
-
-    background: #ffffff;
-    border-radius: 18px;
-
-    padding: 28px;
-    box-sizing: border-box;
-
-    overflow-y: auto;
-
-    box-shadow:
-        0 24px 70px rgba(15, 23, 42, 0.22);
-}
-
-.cerood-local-seo-popup-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-
-    width: 38px;
-    height: 38px;
-
-    border: 0;
-    border-radius: 50%;
-
-    background: #f4f1ff;
-    color: #6541f5;
-
-    font-size: 23px;
-    line-height: 1;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-
-    z-index: 5;
-}
 
 .cerood-local-seo-popup-close:hover {
     background: #ebe7ff;
@@ -5090,116 +4973,9 @@ body {
     }
 }
 
-.cerood-faq-section {
-    margin-top: 28px;
-    padding: 0;
-}
 
-.cerood-faq-section h2 {
-    font-size: 22px;
-    margin: 0 0 16px;
-    color: #0f172a;
-}
 
-.cerood-faq-item {
-    border-bottom: 1px solid #e5e7eb;
-}
 
-.cerood-faq-question {
-    width: 100%;
-    background: transparent;
-    border: none;
-    padding: 16px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-    font-size: 15px;
-    font-weight: 600;
-    color: #111827;
-    cursor: pointer;
-}
-
-.cerood-faq-answer {
-    display: none;
-    padding: 0 0 16px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #475569;
-}
-
-.cerood-faq-item.open .cerood-faq-answer {
-    display: block;
-}
-
-.cerood-faq-arrow {
-    font-size: 18px;
-    transition: transform .2s ease;
-}
-
-.cerood-faq-item.open .cerood-faq-arrow {
-    transform: rotate(180deg);
-}
-
-/* ==========================================
-   CEROOD SEO FAQ SECTION
-========================================== */
-
-.cerood-faq-section {
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
-
-.cerood-faq-section h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 20px 0;
-}
-
-#ceroodFaqList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#ceroodFaqList details {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 0 18px;
-}
-
-#ceroodFaqList summary {
-    padding: 16px 0;
-    font-size: 15px;
-    font-weight: 600;
-    color: #0f172a;
-    cursor: pointer;
-}
-
-#ceroodFaqList details p {
-    margin: 0;
-    padding: 0 0 16px 0;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #475569;
-}
-
-@media (max-width: 850px) {
-    .cerood-faq-section {
-        margin-top: 30px;
-        margin-bottom: 30px;
-    }
-
-    .cerood-faq-section h2 {
-        font-size: 20px;
-    }
-
-    #ceroodFaqList details {
-        padding: 0 14px;
-    }
-}
 
 </style>
 </head>
@@ -8401,109 +8177,8 @@ breadcrumbItems.push({
     );
 }
 
-function renderCeroodFaq(serviceName, locationName, districtName) {
 
-    const faqSection =
-        document.getElementById('ceroodFaqSection');
 
-    const faqList =
-        document.getElementById('ceroodFaqList');
-
-    if (!faqSection || !faqList) return;
-
-    const place =
-        districtName && districtName !== locationName
-            ? `${locationName}, ${districtName}`
-            : locationName;
-
-    const faqs = [
-        {
-            q: `How much does ${serviceName} cost in ${locationName}?`,
-            a: `The cost of ${serviceName.toLowerCase()} in ${place} depends on the issue, service type and any spare parts required. The final amount is confirmed based on inspection and service requirements.`
-        },
-        {
-            q: `Is doorstep ${serviceName} available in ${locationName}?`,
-            a: `Yes, Cerood helps customers book doorstep ${serviceName.toLowerCase()} in ${locationName}, subject to technician availability in the selected area.`
-        },
-        {
-            q: `How long does ${serviceName} take?`,
-            a: `Service time depends on the problem and repair requirement. Minor issues may be completed during the visit, while repairs requiring parts or additional work may take longer.`
-        },
-        {
-            q: `Can I book ${serviceName} online in ${locationName}?`,
-            a: `Yes. You can select your service, location, preferred date and available time slot on Cerood to place a booking request.`
-        },
-        {
-            q: `Does Cerood provide service support in ${locationName}?`,
-            a: `Cerood provides booking and doorstep service support in ${locationName} based on service coverage and technician availability.`
-        }
-    ];
-
-    faqList.innerHTML =
-        faqs.map((faq, index) => `
-            <div class="cerood-faq-item">
-                <button
-                    type="button"
-                    class="cerood-faq-question"
-                    onclick="toggleCeroodFaq(this)"
-                >
-                    <span>${faq.q}</span>
-                    <span class="cerood-faq-arrow">⌄</span>
-                </button>
-
-                <div class="cerood-faq-answer">
-                    ${faq.a}
-                </div>
-            </div>
-        `).join('');
-
-    // ==========================================
-// FAQ STRUCTURED DATA FOR GOOGLE
-// ==========================================
-
-const oldFaqSchema =
-    document.getElementById('ceroodFaqSchema');
-
-if (oldFaqSchema) {
-    oldFaqSchema.remove();
-}
-
-const faqSchema =
-    document.createElement('script');
-
-faqSchema.type =
-    'application/ld+json';
-
-faqSchema.id =
-    'ceroodFaqSchema';
-
-faqSchema.textContent =
-    JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": faqs.map(faq => ({
-            "@type": "Question",
-            "name": faq.q,
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": faq.a
-            }
-        }))
-    });
-
-document.head.appendChild(
-    faqSchema
-);
-
-    faqSection.style.display = 'block';
-}
-
-function toggleCeroodFaq(button) {
-    const item = button.closest('.cerood-faq-item');
-    if (item) {
-        item.classList.toggle('open');
-    }
-}
 
 async function loadLocationAwareProduct(
     serviceId,
@@ -9087,7 +8762,13 @@ if (breadcrumbDistrict) {
     breadcrumbDistrict.href =
         `/${currentStateSlug}/${currentDistrictSlug}`;
 }
+const footerAreaLink =
+    document.getElementById('ceroodFooterAreaLink');
 
+if (footerAreaLink && currentStateSlug && currentDistrictSlug) {
+    footerAreaLink.href =
+        `/${currentStateSlug}/${currentDistrictSlug}`;
+}
 if (
     breadcrumbLocation &&
     page.location_name &&
@@ -9116,180 +8797,6 @@ if (breadcrumbTitle) {
         page.service_name;
 }
 
-
-        // ------------------------------------------
-        // RATING
-        // ------------------------------------------
-
-     // ------------------------------------------
-// LOCAL SEO VISIBLE CONTENT
-// ------------------------------------------
-
-const localSeoSection =
-    document.getElementById(
-        'ceroodLocalSeoSection'
-    );
-
-const localSeoTitle =
-    document.getElementById(
-        'ceroodLocalSeoTitle'
-    );
-
-const localSeoDescription =
-    document.getElementById(
-        'ceroodLocalSeoDescription'
-    );
-
-const localSeoUniqueText =
-    document.getElementById(
-        'ceroodLocalSeoUniqueText'
-    );
-
-const localSeoNearbyText =
-    document.getElementById(
-        'ceroodLocalSeoNearbyText'
-    );
-
-const localSeoService =
-    document.getElementById(
-        'ceroodLocalSeoService'
-    );
-
-const localSeoLocation =
-    document.getElementById(
-        'ceroodLocalSeoLocation'
-    );
-
-if (
-    localSeoSection &&
-    localSeoTitle &&
-    localSeoDescription &&
-    localSeoUniqueText &&
-    localSeoNearbyText &&
-    localSeoService &&
-    localSeoLocation
-) {
-
-    const serviceName =
-        page.service_name || 'Home Appliance Service';
-
-    const locationName =
-        page.location_name || page.district || '';
-
-    const districtName =
-        page.district || '';
-
-    localSeoTitle.textContent =
-        `${serviceName} in ${locationName}`;
-
-    const serviceLower =
-    serviceName.toLowerCase();
-
-let serviceHelpText =
-    'inspection, diagnosis and repair support';
-
-if (
-    serviceLower.includes('ac') ||
-    serviceLower.includes('air conditioner')
-) {
-    serviceHelpText =
-        'AC inspection, cooling issue diagnosis, cleaning, repair and maintenance support';
-}
-else if (
-    serviceLower.includes('washing machine')
-) {
-    serviceHelpText =
-        'washing machine inspection, drainage, spin, noise and general repair support';
-}
-else if (
-    serviceLower.includes('tv') ||
-    serviceLower.includes('television')
-) {
-    serviceHelpText =
-        'TV inspection and support for display, sound, power and other common TV problems';
-}
-else if (
-    serviceLower.includes('refrigerator') ||
-    serviceLower.includes('fridge')
-) {
-    serviceHelpText =
-        'refrigerator inspection and support for cooling, leakage, noise and other common issues';
-}
-else if (
-    serviceLower.includes('ro') ||
-    serviceLower.includes('water purifier')
-) {
-    serviceHelpText =
-        'water purifier inspection, installation, filter and common water-flow service support';
-}
-
-localSeoDescription.textContent =
-    `Looking for ${serviceLower} in ${locationName}? Cerood helps customers book doorstep ${serviceHelpText} in ${locationName}${districtName && districtName !== locationName ? `, ${districtName} district` : ''}. Service availability depends on the selected area and technician availability.`;
-
-    localSeoService.textContent =
-        serviceName;
-
-    localSeoLocation.textContent =
-        `Service in ${locationName}`;
-
-    localSeoSection.style.display =
-        'block';
-
-    localSeoUniqueText.textContent =
-    `${serviceName} service in ${locationName} is provided at your doorstep through Cerood. Customers in ${locationName}${districtName && districtName !== locationName ? ` and nearby areas of ${districtName} district` : ' and nearby areas'} can book inspection and service support based on technician availability.`;
-
-try {
-    const nearbyResponse =
-        await fetch(`${API_BASE_URL}/api/seo-locations`);
-
-    const nearbyData =
-        await nearbyResponse.json();
-
-    const nearbyLocations =
-        Array.isArray(nearbyData.locations)
-            ? nearbyData.locations
-                .filter(item =>
-                    ceroodSeoSlugify(item.district) === currentDistrictSlug &&
-                    ceroodSeoSlugify(item.location_name) !== currentLocationSlug
-                )
-                .slice(0, 5)
-            : [];
-
-    const nearbyLinks =
-        nearbyLocations.map(item => {
-
-            const nearbySlug =
-                ceroodSeoSlugify(item.location_name);
-
-            const nearbyUrl =
-                nearbySlug === currentDistrictSlug
-                    ? `/${currentStateSlug}/${currentDistrictSlug}/${serviceId}`
-                    : `/${currentStateSlug}/${currentDistrictSlug}/${nearbySlug}/${serviceId}`;
-
-            return `<a href="${nearbyUrl}">${item.location_name}</a>`;
-
-        }).join(', ');
-
-    localSeoNearbyText.innerHTML =
-        `Common service requests in ${locationName} include diagnosis, repair support, installation, maintenance and related appliance service needs.` +
-        (
-            nearbyLinks
-                ? ` Nearby service locations: ${nearbyLinks}.`
-                : ''
-        );
-
-} catch (error) {
-
-    localSeoNearbyText.textContent =
-        `Common service requests in ${locationName} include diagnosis, repair support, installation, maintenance and related appliance service needs.`;
-
-}
-    renderCeroodFaq(
-    serviceName,
-    locationName,
-    districtName
-);
-}   
 
 
         // ------------------------------------------
@@ -12984,51 +12491,6 @@ function togglePasswordVisibility(fieldId, iconElement) {
     }
 }
 
-// =====================================================
-// CEROOD LOCAL SERVICE INFORMATION POPUP
-// =====================================================
-
-function openCeroodLocalSeoPopup() {
-
-    const popup =
-        document.getElementById(
-            'ceroodLocalSeoPopup'
-        );
-
-    if (!popup) return;
-
-    popup.style.display =
-        'flex';
-
-    document.body.style.overflow =
-        'hidden';
-}
-
-
-function closeCeroodLocalSeoPopup(event) {
-
-    if (
-        event &&
-        event.target &&
-        event.target.id !==
-            'ceroodLocalSeoPopup'
-    ) {
-        return;
-    }
-
-    const popup =
-        document.getElementById(
-            'ceroodLocalSeoPopup'
-        );
-
-    if (!popup) return;
-
-    popup.style.display =
-        'none';
-
-    document.body.style.overflow =
-        '';
-}
 
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
@@ -13126,77 +12588,7 @@ function closeCeroodLocalSeoPopup(event) {
 
 </div> 
 
-<!-- =====================================================
-     CEROOD LOCAL SERVICE INFORMATION POPUP
-===================================================== -->
-<div
-    id="ceroodLocalSeoPopup"
-    class="cerood-local-seo-popup"
-    style="display:none;"
-    onclick="closeCeroodLocalSeoPopup(event)"
->
-    <div
-        class="cerood-local-seo-popup-card"
-        onclick="event.stopPropagation()"
-    >
 
-        <button
-            type="button"
-            class="cerood-local-seo-popup-close"
-            onclick="closeCeroodLocalSeoPopup()"
-            aria-label="Close service information"
-        >
-            ×
-        </button>
-
-    </div>
-</div>
-
-
-
- <!-- =====================================================
-     CEROOD LOCAL SEO CONTENT
-===================================================== -->
-<section
-    id="ceroodLocalSeoSection"
-    class="cerood-local-seo-section"
-    style="display:none;"
->
-    <h2 id="ceroodLocalSeoTitle"></h2>
-
-    <p id="ceroodLocalSeoDescription"></p>
-    <p id="ceroodLocalSeoUniqueText"></p>
-
-<p id="ceroodLocalSeoNearbyText"></p>
-
-    <div class="cerood-local-seo-points">
-        <div>
-            <strong id="ceroodLocalSeoService"></strong>
-            <span>
-                Doorstep inspection, diagnosis and service support.
-            </span>
-        </div>
-
-        <div>
-            <strong id="ceroodLocalSeoLocation"></strong>
-            <span>
-                Service availability may vary by area and technician availability.
-            </span>
-        </div>
-
-        <div>
-            <strong>Book with Cerood</strong>
-            <span>
-                Choose your required service and book online through Cerood.
-            </span>
-        </div>
-    </div>
-</section>
-
-<section id="ceroodFaqSection" class="cerood-faq-section" style="display:none;">
-    <h2 id="ceroodFaqHeading">Frequently Asked Questions</h2>
-    <div id="ceroodFaqList"></div>
-</section>
     
 <!-- Professional Footer Section -->
 <div class="footer-wrapper">
@@ -13245,16 +12637,33 @@ function closeCeroodLocalSeoPopup(event) {
                     <li><a href="/" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
                     <li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">My Cart</a></li>
                     <li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
-
                     <li>
     <a
-        href="#"
-        onclick="openCeroodLocalSeoPopup(); return false;"
+        id="ceroodFooterAreaLink"
+        href="/"
         style="color: #52525b; text-decoration: none; transition: 0.2s;"
     >
-        Service Information
+        Service Areas
     </a>
 </li>
+<li>
+    <a
+        href="/services"
+        style="color: #52525b; text-decoration: none; transition: 0.2s;"
+    >
+        All Services
+    </a>
+</li>
+
+<li>
+    <a
+        href="/faq"
+        style="color: #52525b; text-decoration: none; transition: 0.2s;"
+    >
+        Help & FAQs
+    </a>
+</li>
+                    
 
                 </ul>
             </div>
