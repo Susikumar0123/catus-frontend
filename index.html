@@ -8460,6 +8460,127 @@ button.uc-cart-btn:hover {
     }
 }
 
+@media (max-width: 768px) {
+
+    /* QUICK HOME SERVICES ONLY */
+    .quick-home-mobile-row {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        margin: 18px 0 26px !important;
+        padding: 0 !important;
+
+        border: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+
+    .quick-home-mobile-row .uc-cat-header {
+        padding: 0 14px !important;
+        margin-bottom: 14px !important;
+        align-items: center !important;
+    }
+
+    .quick-home-mobile-row .uc-cat-header h3 {
+        font-size: 18px !important;
+        line-height: 22px !important;
+        font-weight: 700 !important;
+        max-width: none !important;
+    }
+
+    .quick-home-mobile-row .uc-see-all-btn {
+        width: auto !important;
+        min-width: auto !important;
+        height: auto !important;
+
+        font-size: 12px !important;
+        color: #6c35f2 !important;
+
+        padding: 0 !important;
+    }
+
+    .quick-home-mobile-row .uc-see-all-btn::after {
+        display: none !important;
+    }
+
+    .quick-home-mobile-row .uc-carousel-wrapper {
+        width: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .quick-home-mobile-row .uc-grid {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+
+        gap: 10px !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        padding: 0 14px 8px !important;
+
+        scroll-snap-type: x proximity !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+    }
+
+    .quick-home-mobile-row .uc-grid::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .quick-home-mobile-row .uc-card {
+        display: flex !important;
+
+        flex: 0 0 31% !important;
+
+        width: 31% !important;
+        min-width: 31% !important;
+        max-width: 31% !important;
+
+        scroll-snap-align: start !important;
+    }
+
+    /* Quick Home-la 4+ products hide panna koodadhu */
+    .quick-home-mobile-row .uc-grid .uc-card:nth-child(n+5) {
+        display: flex !important;
+    }
+
+    .quick-home-mobile-row .uc-card-img-wrapper {
+        width: 100% !important;
+        aspect-ratio: 1 / 1 !important;
+
+        margin-bottom: 6px !important;
+
+        border-radius: 7px !important;
+    }
+
+    .quick-home-mobile-row .uc-body h4 {
+        margin: 0 0 4px !important;
+
+        font-size: 11px !important;
+        line-height: 14px !important;
+        font-weight: 500 !important;
+
+        white-space: normal !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+
+        overflow: hidden !important;
+    }
+
+    .quick-home-mobile-row .uc-price {
+        font-size: 10px !important;
+        line-height: 14px !important;
+    }
+
+    .quick-home-mobile-row .uc-cut {
+        font-size: 9px !important;
+        margin-left: 2px !important;
+    }
+}
 
 </style>
 </head>
@@ -13325,7 +13446,18 @@ function startCatusBannerFlow() {
 
     children.forEach(child => {
 
-        if (child.classList.contains('uc-category-box')) {
+        if (child.classList.contains('quick-home-mobile-row')) {
+
+    currentTrack = null;
+    cardsInCurrentTrack = 0;
+
+    return;
+}
+
+        if (
+    child.classList.contains('uc-category-box') &&
+    !child.classList.contains('quick-home-mobile-row')
+) {
 
             /*
                Oru horizontal row-la
@@ -13564,7 +13696,7 @@ for(let catName in displayCategoriesMap) {
 
                   let catData = displayCategoriesMap[catName];
                   html += `
-<div class="uc-category-box">
+<div class="uc-category-box ${catName === 'Quick Home Services' ? 'quick-home-mobile-row' : ''}">
 
     <div class="uc-cat-header">
         <h3>${catName}</h3>
