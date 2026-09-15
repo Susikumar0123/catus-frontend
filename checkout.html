@@ -1583,6 +1583,15 @@ Please check all required fields, mobile number, and pincode.
         <span id="billItemTotal">₹0</span>
     </div>
 
+    <div class="bill-row" id="servicePayFeeRow" style="display:none;">
+    <span>
+        Service Pay Fee
+        <i class="fa-solid fa-circle-info fee-info-icon"
+           title="₹50 additional fee applies when you choose Pay After Service"></i>
+    </span>
+    <span id="billServicePayFee">₹50</span>
+</div>
+
     <div class="bill-row" id="convenienceFeeRow">
         <span>
             Convenience Fee
@@ -2094,9 +2103,24 @@ Please check all required fields, mobile number, and pincode.
 
     loadStates();
 }
+async function updatePaymentModeTotal() {
+
+    await loadBackendBillSummary();
+}
+
         function selectPaymentMode(mode) {
             if (isOrderSubmitting) return;
             selectedMode = mode;
+            const servicePayFeeRow = document.getElementById('servicePayFeeRow');
+const billServicePayFee = document.getElementById('billServicePayFee');
+
+if (mode === 'later') {
+    if (servicePayFeeRow) servicePayFeeRow.style.display = 'flex';
+    if (billServicePayFee) billServicePayFee.textContent = '₹50';
+} else {
+    if (servicePayFeeRow) servicePayFeeRow.style.display = 'none';
+    if (billServicePayFee) billServicePayFee.textContent = '₹0';
+}
             const payableLabel =
     document.querySelector('.bill-row.amount-to-pay span:first-child');
             if (mode === 'razorpay') {
@@ -2136,6 +2160,9 @@ if (trustNote) {
                 document.getElementById('confirmOrderBtn').innerHTML =
     'Confirm Booking <i class="fa-solid fa-arrow-right"></i>';
             }
+
+            updatePaymentModeTotal();
+            
         }
 
         function loadStates() {
@@ -2234,11 +2261,12 @@ async function loadBackendBillSummary() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    items: orderItems.map(item => ({
-                        product_id: item.product_id,
-                        quantity: item.quantity || 1
-                    }))
-                })
+    items: orderItems.map(item => ({
+        product_id: item.product_id,
+        quantity: item.quantity || 1
+    })),
+    paymentMode: selectedMode
+})
             }
         );
 
@@ -2269,8 +2297,35 @@ const gstEnabled =
         const taxes =
             Number(data.taxes) || 0;
 
+        const servicePayFee =
+    Number(data.servicePayFee) || 0;
+
         const finalAmount =
             Number(data.finalAmount) || 0;
+
+        const servicePayFeeRow =
+    document.getElementById('servicePayFeeRow');
+
+const billServicePayFee =
+    document.getElementById('billServicePayFee');
+
+if (servicePayFee > 0) {
+
+    if (servicePayFeeRow)
+        servicePayFeeRow.style.display = 'flex';
+
+    if (billServicePayFee)
+        billServicePayFee.textContent =
+            '₹' + servicePayFee;
+
+} else {
+
+    if (servicePayFeeRow)
+        servicePayFeeRow.style.display = 'none';
+
+    if (billServicePayFee)
+        billServicePayFee.textContent = '₹0';
+}
 
         document.getElementById(
             'billItemTotal'
