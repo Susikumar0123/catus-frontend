@@ -1505,13 +1505,13 @@ Please check all required fields, mobile number, and pincode.
                             <input type="text" id="fieldDoor" class="form-input" placeholder="e.g. #45/2" oninput="this.classList.remove('error')">
                         </div>
                         <div class="form-group">
-                            <label>Street / Area (Optional)</label>
+                            <label>Street / Area</label>
                             <input type="text" id="fieldStreet" class="form-input"
        placeholder="Street / Area"
        oninput="this.classList.remove('error')">
                         </div>
                         <div class="form-group">
-                            <label>Village / Locality (Optional)</label>
+                            <label>Village / Locality</label>
                             <input type="text" id="fieldVillage" class="form-input" placeholder="Village / Locality" oninput="this.classList.remove('error')">
                         </div>
 
@@ -1902,7 +1902,61 @@ Please check all required fields, mobile number, and pincode.
             "Nagaland": ["Chumoukedima", "Dimapur", "Kiphire", "Kohima", "Longleng", "Mokokchung", "Mon", "Noklak", "Peren", "Phek", "Shamator", "Tseminyu", "Mon", "Tuensang", "Wokha", "Zunheboto"],
             "Mizoram": ["Aizawl", "Champhai", "Hnahthial", "Khawzawl", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saitual", "Serchhip", "Siaha"],
             "Sikkim": ["Gangtok", "Mangan", "Namchi", "Pakyong", "Soreng", "Gyalshing"],
-            "Arunachal Pradesh": ["Anjaw", "Changlang", "East Kameng", "East Siang", "Kamle", "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Pakke Kessang", "Papum Pare", "Shi Yomi", "Siang", "Tawang", "Tirap", "Upper Dibang Valley", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"]
+            "Arunachal Pradesh": ["Anjaw", "Changlang", "East Kameng", "East Siang", "Kamle", "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Pakke Kessang", "Papum Pare", "Shi Yomi", "Siang", "Tawang", "Tirap", "Upper Dibang Valley", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"],
+            "Jammu and Kashmir": [
+    "Anantnag",
+    "Bandipora",
+    "Baramulla",
+    "Budgam",
+    "Doda",
+    "Ganderbal",
+    "Jammu",
+    "Kathua",
+    "Kishtwar",
+    "Kulgam",
+    "Kupwara",
+    "Poonch",
+    "Pulwama",
+    "Rajouri",
+    "Ramban",
+    "Reasi",
+    "Samba",
+    "Shopian",
+    "Srinagar",
+    "Udhampur"
+],
+
+"Ladakh": [
+    "Kargil",
+    "Leh"
+],
+
+"Puducherry": [
+    "Karaikal",
+    "Mahe",
+    "Puducherry",
+    "Yanam"
+],
+
+"Chandigarh": [
+    "Chandigarh"
+],
+
+"Andaman and Nicobar Islands": [
+    "Nicobar",
+    "North and Middle Andaman",
+    "South Andaman"
+],
+
+"Dadra and Nagar Haveli and Daman and Diu": [
+    "Dadra and Nagar Haveli",
+    "Daman",
+    "Diu"
+],
+
+"Lakshadweep": [
+    "Lakshadweep"
+]
         };
 
         let orderItems = [];
@@ -2276,20 +2330,23 @@ try {
     }
 }
 
-        async function fetchAllCountries() {
+       async function fetchAllCountries() {
 
     const countrySel =
         document.getElementById('fieldCountry');
 
     if (!countrySel) return;
 
-    countrySel.innerHTML =
-        '<option value="India" selected>India</option>';
+    countrySel.innerHTML = `
+        <option value="India" selected>India</option>
+    `;
 
+    countrySel.value = 'India';
+
+    // Cerood currently serves India only
     countrySel.disabled = true;
-
-    loadStates();
 }
+
 async function updatePaymentModeTotal() {
 
     await loadBackendBillSummary();
@@ -2411,19 +2468,42 @@ if (trustNote) {
 }
 
         function loadDistricts() {
-            const country = document.getElementById('fieldCountry').value;
-            const state = document.getElementById('fieldState').value;
-            const distSel = document.getElementById('fieldDistrict');
-            distSel.innerHTML = '<option value="">Select District</option>';
 
-            if (country === "India" && indiaData[state]) {
-                indiaData[state].forEach(district => {
-                    distSel.innerHTML += `<option value="${district}">${district}</option>`;
-                });
-            } else {
-                distSel.innerHTML += `<option value="Other District">Other District</option>`;
-            }
-        }
+    const stateSelect =
+        document.getElementById('fieldState');
+
+    const districtSelect =
+        document.getElementById('fieldDistrict');
+
+    if (!stateSelect || !districtSelect) return;
+
+    const selectedState = stateSelect.value;
+
+    districtSelect.innerHTML =
+        '<option value="">Select District</option>';
+
+    if (!selectedState) return;
+
+    const districts = indiaData[selectedState];
+
+    if (!Array.isArray(districts) || districts.length === 0) {
+        console.warn(
+            `District data not found for: ${selectedState}`
+        );
+        return;
+    }
+
+    districts.forEach(district => {
+
+        const option =
+            document.createElement('option');
+
+        option.value = district;
+        option.textContent = district;
+
+        districtSelect.appendChild(option);
+    });
+}
 
         function onCountryChange() { loadStates(); }
         function onStateChange() { loadDistricts(); }
