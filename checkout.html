@@ -1505,8 +1505,10 @@ Please check all required fields, mobile number, and pincode.
                             <input type="text" id="fieldDoor" class="form-input" placeholder="e.g. #45/2" oninput="this.classList.remove('error')">
                         </div>
                         <div class="form-group">
-                            <label>Street Name (Optional)</label>
-                            <input type="text" id="fieldStreet" class="form-input" placeholder="Street / Area">
+                            <label>Street / Area *</label>
+                            <input type="text" id="fieldStreet" class="form-input"
+       placeholder="Street / Area"
+       oninput="this.classList.remove('error')">
                         </div>
                         <div class="form-group">
                             <label>Village / Locality *</label>
@@ -1535,9 +1537,22 @@ Please check all required fields, mobile number, and pincode.
                         </div>
 
                         <div class="form-group">
-                            <label>City / Taluk *</label>
-                            <input type="text" id="fieldCity" class="form-input" placeholder="City or Taluk" oninput="this.classList.remove('error')">
-                        </div>
+    <label>City / Town *</label>
+    <input type="text"
+           id="fieldCity"
+           class="form-input"
+           placeholder="City / Town"
+           oninput="this.classList.remove('error')">
+</div>
+
+<div class="form-group">
+    <label>Taluk *</label>
+    <input type="text"
+           id="fieldTaluk"
+           class="form-input"
+           placeholder="Taluk"
+           oninput="this.classList.remove('error')">
+</div>
 
                         <div class="form-group">
                             <label>Pincode *</label>
@@ -1976,7 +1991,13 @@ Please check all required fields, mobile number, and pincode.
             document.getElementById('fieldStreet').value = '';
             document.getElementById('fieldVillage').value = '';
             document.getElementById('fieldCity').value = '';
-            document.getElementById('fieldPincode').value = '';
+
+const talukEl = document.getElementById('fieldTaluk');
+if (talukEl) {
+    talukEl.value = '';
+}
+
+document.getElementById('fieldPincode').value = '';
         }
 
         function removeSavedAddress() {
@@ -1992,7 +2013,13 @@ Please check all required fields, mobile number, and pincode.
                 document.getElementById('fieldStreet').value = '';
                 document.getElementById('fieldVillage').value = '';
                 document.getElementById('fieldCity').value = '';
-                document.getElementById('fieldPincode').value = '';
+
+const talukEl = document.getElementById('fieldTaluk');
+if (talukEl) {
+    talukEl.value = '';
+}
+
+document.getElementById('fieldPincode').value = '';
             }
         }
 
@@ -2011,7 +2038,19 @@ Please check all required fields, mobile number, and pincode.
 }
 
         function saveAddressChanges() {
-            const fields = ['fieldName', 'fieldMobile', 'fieldDoor', 'fieldVillage', 'fieldCountry', 'fieldState', 'fieldDistrict', 'fieldCity', 'fieldPincode'];
+            const fields = [
+    'fieldName',
+    'fieldMobile',
+    'fieldDoor',
+    'fieldStreet',
+    'fieldVillage',
+    'fieldCity',
+    'fieldTaluk',
+    'fieldDistrict',
+    'fieldState',
+    'fieldPincode',
+    'fieldCountry'
+];
             let hasError = false;
 
             fields.forEach(id => {
@@ -2047,15 +2086,17 @@ Please check all required fields, mobile number, and pincode.
             document.getElementById('errorAlert').style.display = 'none';
 
             const door = document.getElementById('fieldDoor').value.trim();
-            const streetEl = document.getElementById('fieldStreet');
-            const streetName = (streetEl && streetEl.value.trim()) ? streetEl.value.trim() + ", " : "";
-            const village = document.getElementById('fieldVillage').value.trim();
-            const country = document.getElementById('fieldCountry').value;
-            const state = document.getElementById('fieldState').value;
-            const city = document.getElementById('fieldCity').value.trim();
-            const pincode = document.getElementById('fieldPincode').value.trim();
+            const street = document.getElementById('fieldStreet').value.trim();
+const village = document.getElementById('fieldVillage').value.trim();
+const city = document.getElementById('fieldCity').value.trim();
+const taluk = document.getElementById('fieldTaluk').value.trim();
+const district = document.getElementById('fieldDistrict').value;
+const state = document.getElementById('fieldState').value;
+const pincode = document.getElementById('fieldPincode').value.trim();
+const country = document.getElementById('fieldCountry').value;
 
-            const newAddressStr = `${door}, ${streetName}${village}, ${city}, ${state}, ${country} - ${pincode}`;
+const newAddressStr =
+    `${door}, ${street}, ${village}, ${city}, ${taluk}, ${district}, ${state} - ${pincode}, ${country}`;
             
             const currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || {};
             currentUser.address = newAddressStr;
@@ -2067,28 +2108,66 @@ Please check all required fields, mobile number, and pincode.
             alert("Service address saved successfully!");
         }
 
-        function parseAndFillAddressFields(fullAddr) {
-            let parts = fullAddr.split(',').map(s => s.trim());
-            if (parts.length > 0) {
-                if (parts[0]) document.getElementById('fieldDoor').value = parts[0];
-                if (parts[1] && !parts[1].includes('-')) document.getElementById('fieldStreet').value = parts[1];
-                if (parts[2]) document.getElementById('fieldVillage').value = parts[2];
-                
-                for (let part of parts) {
-                    let stateSelect = document.getElementById('fieldState');
-                    for (let option of stateSelect.options) {
-                        if (option.value.toLowerCase() === part.toLowerCase()) {
-                            stateSelect.value = option.value;
-                            loadDistricts();
-                            break;
-                        }
-                    }
-                }
-                let pinMatch = fullAddr.match(/\d{6}/);
-                if (pinMatch) document.getElementById('fieldPincode').value = pinMatch[0];
-            }
-        }
+       function parseAndFillAddressFields(fullAddr) {
 
+    const parts = fullAddr
+        .split(',')
+        .map(s => s.trim());
+
+    if (parts.length < 3) return;
+
+    // New format:
+    // Door, Street, Village, City, Taluk, District, State - Pincode, Country
+
+    const door = parts[0] || '';
+    const street = parts[1] || '';
+    const village = parts[2] || '';
+    const city = parts[3] || '';
+    const taluk = parts[4] || '';
+    const district = parts[5] || '';
+
+    let state = '';
+    let pincode = '';
+
+    if (parts[6]) {
+        const statePinParts = parts[6].split('-');
+
+        state = (statePinParts[0] || '').trim();
+        pincode = (statePinParts[1] || '').trim();
+    }
+
+    document.getElementById('fieldDoor').value = door;
+    document.getElementById('fieldStreet').value = street;
+    document.getElementById('fieldVillage').value = village;
+    document.getElementById('fieldCity').value = city;
+
+    const talukEl = document.getElementById('fieldTaluk');
+    if (talukEl) {
+        talukEl.value = taluk;
+    }
+
+    const pincodeEl = document.getElementById('fieldPincode');
+    if (pincodeEl) {
+        pincodeEl.value = pincode;
+    }
+
+    const stateSelect = document.getElementById('fieldState');
+
+    if (stateSelect && state) {
+
+        stateSelect.value = state;
+
+        // State select pannina apram district options load aaganum
+        loadDistricts();
+
+        const districtSelect =
+            document.getElementById('fieldDistrict');
+
+        if (districtSelect && district) {
+            districtSelect.value = district;
+        }
+    }
+}
         async function fetchAllCountries() {
 
     const countrySel =
@@ -2426,7 +2505,19 @@ function resetOrderSubmitState() {
         return;
     }
 
-    const fields = ['fieldName', 'fieldMobile', 'fieldDoor', 'fieldVillage', 'fieldCountry', 'fieldState', 'fieldDistrict', 'fieldCity', 'fieldPincode'];
+    const fields = [
+    'fieldName',
+    'fieldMobile',
+    'fieldDoor',
+    'fieldStreet',
+    'fieldVillage',
+    'fieldCity',
+    'fieldTaluk',
+    'fieldDistrict',
+    'fieldState',
+    'fieldPincode',
+    'fieldCountry'
+];
             let hasError = false;
 
             fields.forEach(id => {
@@ -2732,15 +2823,19 @@ if (btn) {
             const streetName = (streetEl && streetEl.value.trim()) ? streetEl.value.trim() + ", " : "";
             
             const door = document.getElementById('fieldDoor').value.trim();
-            const village = document.getElementById('fieldVillage').value.trim();
-            const country = document.getElementById('fieldCountry').value;
-            const state = document.getElementById('fieldState').value;
-            const district = document.getElementById('fieldDistrict').value;
-            const city = document.getElementById('fieldCity').value.trim();
-            const pincode = document.getElementById('fieldPincode').value.trim();
+const street = document.getElementById('fieldStreet').value.trim();
+const village = document.getElementById('fieldVillage').value.trim();
+const city = document.getElementById('fieldCity').value.trim();
+const taluk = document.getElementById('fieldTaluk').value.trim();
+const district = document.getElementById('fieldDistrict').value;
+const state = document.getElementById('fieldState').value;
+const pincode = document.getElementById('fieldPincode').value.trim();
+const country = document.getElementById('fieldCountry').value;
 
-            const addressStr = `${door}, ${streetName}${village}, ${city}, ${state}, ${country} - ${pincode}`;
-            const districtPincode = `${district} - ${pincode}`;
+const addressStr =
+    `${door}, ${street}, ${village}, ${city}, ${taluk}, ${district}, ${state} - ${pincode}, ${country}`;
+
+const districtPincode = `${district} - ${pincode}`;
             const now = new Date();
 const options = { 
     timeZone: "Asia/Kolkata", 
