@@ -2325,8 +2325,20 @@ try {
     const districtSelect =
     document.getElementById('fieldDistrict');
 
-if (districtSelect) {
-    districtSelect.value = '';
+if (districtSelect && district) {
+
+    const matchedOption = Array.from(
+        districtSelect.options
+    ).find(option =>
+        option.value.trim().toLowerCase() ===
+        district.trim().toLowerCase()
+    );
+
+    if (matchedOption) {
+        districtSelect.value = matchedOption.value;
+    } else {
+        districtSelect.value = '';
+    }
 }
 }
 
