@@ -1505,13 +1505,13 @@ Please check all required fields, mobile number, and pincode.
                             <input type="text" id="fieldDoor" class="form-input" placeholder="e.g. #45/2" oninput="this.classList.remove('error')">
                         </div>
                         <div class="form-group">
-                            <label>Street / Area *</label>
+                            <label>Street / Area (Optional)</label>
                             <input type="text" id="fieldStreet" class="form-input"
        placeholder="Street / Area"
        oninput="this.classList.remove('error')">
                         </div>
                         <div class="form-group">
-                            <label>Village / Locality *</label>
+                            <label>Village / Locality (Optional)</label>
                             <input type="text" id="fieldVillage" class="form-input" placeholder="Village / Locality" oninput="this.classList.remove('error')">
                         </div>
 
@@ -1535,24 +1535,6 @@ Please check all required fields, mobile number, and pincode.
                                 <option value="">Select District</option>
                             </select>
                         </div>
-
-                        <div class="form-group">
-    <label>City / Town *</label>
-    <input type="text"
-           id="fieldCity"
-           class="form-input"
-           placeholder="City / Town"
-           oninput="this.classList.remove('error')">
-</div>
-
-<div class="form-group">
-    <label>Taluk *</label>
-    <input type="text"
-           id="fieldTaluk"
-           class="form-input"
-           placeholder="Taluk"
-           oninput="this.classList.remove('error')">
-</div>
 
                         <div class="form-group">
                             <label>Pincode *</label>
@@ -1988,40 +1970,105 @@ Please check all required fields, mobile number, and pincode.
             document.getElementById('savedAddressContainer').style.display = 'none';
             document.getElementById('addressFormContainer').style.display = 'grid';
             document.getElementById('fieldDoor').value = '';
-            document.getElementById('fieldStreet').value = '';
-            document.getElementById('fieldVillage').value = '';
-            document.getElementById('fieldCity').value = '';
-
-const talukEl = document.getElementById('fieldTaluk');
-if (talukEl) {
-    talukEl.value = '';
-}
-
+document.getElementById('fieldStreet').value = '';
+document.getElementById('fieldVillage').value = '';
 document.getElementById('fieldPincode').value = '';
+
+document.getElementById('fieldState').value = '';
+document.getElementById('fieldDistrict').innerHTML =
+    '<option value="">Select District</option>';
+
         }
 
-        function removeSavedAddress() {
-            if (confirm("Are you sure you want to remove this saved address?")) {
-                const currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || {};
-                currentUser.address = "No address saved";
-                localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+       async function removeSavedAddress() {
 
-                document.getElementById('savedAddressContainer').style.display = 'none';
-                document.getElementById('addressFormContainer').style.display = 'grid';
-                
-                document.getElementById('fieldDoor').value = '';
-                document.getElementById('fieldStreet').value = '';
-                document.getElementById('fieldVillage').value = '';
-                document.getElementById('fieldCity').value = '';
+    const confirmed = confirm(
+        "Are you sure you want to remove this saved address?"
+    );
 
-const talukEl = document.getElementById('fieldTaluk');
-if (talukEl) {
-    talukEl.value = '';
-}
+    if (!confirmed) return;
 
-document.getElementById('fieldPincode').value = '';
+    const currentUser =
+        JSON.parse(localStorage.getItem('catus_logged_user')) || {};
+
+    if (!currentUser.phone) {
+        alert("Please login again.");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/users/remove-address`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: currentUser.phone
+                })
             }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message || 'Unable to remove address.'
+            );
         }
+
+        // Update local user with latest DB data
+        const updatedUser = {
+            ...currentUser,
+            ...data.user
+        };
+
+        localStorage.setItem(
+            'catus_logged_user',
+            JSON.stringify(updatedUser)
+        );
+
+        // Hide saved address
+        document.getElementById(
+            'savedAddressContainer'
+        ).style.display = 'none';
+
+        // Show empty address form
+        document.getElementById(
+            'addressFormContainer'
+        ).style.display = 'grid';
+
+        // Clear address fields
+        document.getElementById('fieldDoor').value = '';
+        document.getElementById('fieldStreet').value = '';
+        document.getElementById('fieldVillage').value = '';
+        document.getElementById('fieldPincode').value = '';
+
+        document.getElementById('fieldState').value = '';
+
+        document.getElementById(
+            'fieldDistrict'
+        ).innerHTML =
+            '<option value="">Select District</option>';
+
+        alert("Service address removed successfully!");
+
+    } catch (error) {
+
+        console.error(
+            'Remove Address Error:',
+            error
+        );
+
+        alert(
+            error.message ||
+            'Unable to remove service address. Please try again.'
+        );
+    }
+}
+
 
         function cancelAddressEdit() {
     document.getElementById('addressFormContainer').style.display = 'none';
@@ -2037,19 +2084,15 @@ document.getElementById('fieldPincode').value = '';
     }
 }
 
-        function saveAddressChanges() {
+        async function saveAddressChanges() {
             const fields = [
     'fieldName',
     'fieldMobile',
     'fieldDoor',
-    'fieldStreet',
-    'fieldVillage',
-    'fieldCity',
-    'fieldTaluk',
-    'fieldDistrict',
+    'fieldCountry',
     'fieldState',
-    'fieldPincode',
-    'fieldCountry'
+    'fieldDistrict',
+    'fieldPincode'
 ];
             let hasError = false;
 
@@ -2086,88 +2129,153 @@ document.getElementById('fieldPincode').value = '';
             document.getElementById('errorAlert').style.display = 'none';
 
             const door = document.getElementById('fieldDoor').value.trim();
-            const street = document.getElementById('fieldStreet').value.trim();
+const street = document.getElementById('fieldStreet').value.trim();
 const village = document.getElementById('fieldVillage').value.trim();
-const city = document.getElementById('fieldCity').value.trim();
-const taluk = document.getElementById('fieldTaluk').value.trim();
 const district = document.getElementById('fieldDistrict').value;
 const state = document.getElementById('fieldState').value;
 const pincode = document.getElementById('fieldPincode').value.trim();
 const country = document.getElementById('fieldCountry').value;
 
-const newAddressStr =
-    `${door}, ${street}, ${village}, ${city}, ${taluk}, ${district}, ${state} - ${pincode}, ${country}`;
-            
-            const currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || {};
-            currentUser.address = newAddressStr;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+const addressParts = [
+    door,
+    street,
+    village,
+    district,
+    state
+].filter(Boolean);
 
-            document.getElementById('savedAddressText').textContent = newAddressStr;
-            document.getElementById('savedAddressContainer').style.display = 'block';
-            document.getElementById('addressFormContainer').style.display = 'none';
-            alert("Service address saved successfully!");
+const newAddressStr =
+    `${addressParts.join(', ')} - ${pincode}, ${country}`;
+            
+            const currentUser =
+    JSON.parse(localStorage.getItem('catus_logged_user')) || {};
+
+try {
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/users/update-address`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                phone: currentUser.phone,
+                address: newAddressStr,
+                pincode: pincode
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+        throw new Error(
+            data.message || 'Unable to save address.'
+        );
+    }
+
+    // Backend returned latest database user
+    const updatedUser = {
+        ...currentUser,
+        ...data.user
+    };
+
+    localStorage.setItem(
+        'catus_logged_user',
+        JSON.stringify(updatedUser)
+    );
+
+    document.getElementById('savedAddressText').textContent =
+        updatedUser.address;
+
+    document.getElementById('savedAddressContainer').style.display =
+        'block';
+
+    document.getElementById('addressFormContainer').style.display =
+        'none';
+
+    alert("Service address saved successfully!");
+
+} catch (error) {
+
+    console.error(
+        'Save Address Error:',
+        error
+    );
+
+    alert(
+        error.message ||
+        'Unable to save service address. Please try again.'
+    );
+
+    return;
+}
         }
 
        function parseAndFillAddressFields(fullAddr) {
 
+    if (!fullAddr) return;
+
+    // Format:
+    // Door, Street(optional), Village(optional), District, State - Pincode, Country
+
     const parts = fullAddr
         .split(',')
-        .map(s => s.trim());
+        .map(part => part.trim())
+        .filter(Boolean);
 
     if (parts.length < 3) return;
 
-    // New format:
-    // Door, Street, Village, City, Taluk, District, State - Pincode, Country
+    const country = parts[parts.length - 1] || 'India';
 
-    const door = parts[0] || '';
-    const street = parts[1] || '';
-    const village = parts[2] || '';
-    const city = parts[3] || '';
-    const taluk = parts[4] || '';
-    const district = parts[5] || '';
+    const statePinPart = parts[parts.length - 2] || '';
+    const statePinParts = statePinPart.split(' - ');
 
-    let state = '';
-    let pincode = '';
+    const state = (statePinParts[0] || '').trim();
+    const pincode = (statePinParts[1] || '').trim();
 
-    if (parts[6]) {
-        const statePinParts = parts[6].split('-');
+    const district = parts[parts.length - 3] || '';
 
-        state = (statePinParts[0] || '').trim();
-        pincode = (statePinParts[1] || '').trim();
-    }
+    const remainingParts = parts.slice(0, -3);
+
+    const door = remainingParts[0] || '';
+    const street = remainingParts[1] || '';
+    const village = remainingParts[2] || '';
 
     document.getElementById('fieldDoor').value = door;
     document.getElementById('fieldStreet').value = street;
     document.getElementById('fieldVillage').value = village;
-    document.getElementById('fieldCity').value = city;
+    document.getElementById('fieldPincode').value = pincode;
 
-    const talukEl = document.getElementById('fieldTaluk');
-    if (talukEl) {
-        talukEl.value = taluk;
+    const countrySelect =
+        document.getElementById('fieldCountry');
+
+    if (countrySelect) {
+        countrySelect.value = country;
     }
 
-    const pincodeEl = document.getElementById('fieldPincode');
-    if (pincodeEl) {
-        pincodeEl.value = pincode;
-    }
+    // Load all Indian states first
+    loadStates();
 
-    const stateSelect = document.getElementById('fieldState');
+    const stateSelect =
+        document.getElementById('fieldState');
 
     if (stateSelect && state) {
-
         stateSelect.value = state;
+    }
 
-        // State select pannina apram district options load aaganum
-        loadDistricts();
+    // Load districts for selected state
+    loadDistricts();
 
-        const districtSelect =
-            document.getElementById('fieldDistrict');
+    const districtSelect =
+        document.getElementById('fieldDistrict');
 
-        if (districtSelect && district) {
-            districtSelect.value = district;
-        }
+    if (districtSelect && district) {
+        districtSelect.value = district;
     }
 }
+
         async function fetchAllCountries() {
 
     const countrySel =
@@ -2244,22 +2352,62 @@ if (trustNote) {
             
         }
 
-        function loadStates() {
+     function loadStates() {
 
-    const stateSel =
-        document.getElementById('fieldState');
-
-    const distSel =
-        document.getElementById('fieldDistrict');
+    const stateSel = document.getElementById('fieldState');
+    const distSel = document.getElementById('fieldDistrict');
 
     if (!stateSel || !distSel) return;
 
+    const indianStates = [
+        'Andhra Pradesh',
+        'Arunachal Pradesh',
+        'Assam',
+        'Bihar',
+        'Chhattisgarh',
+        'Goa',
+        'Gujarat',
+        'Haryana',
+        'Himachal Pradesh',
+        'Jharkhand',
+        'Karnataka',
+        'Kerala',
+        'Madhya Pradesh',
+        'Maharashtra',
+        'Manipur',
+        'Meghalaya',
+        'Mizoram',
+        'Nagaland',
+        'Odisha',
+        'Punjab',
+        'Rajasthan',
+        'Sikkim',
+        'Tamil Nadu',
+        'Telangana',
+        'Tripura',
+        'Uttar Pradesh',
+        'Uttarakhand',
+        'West Bengal',
+        'Andaman and Nicobar Islands',
+        'Chandigarh',
+        'Dadra and Nagar Haveli and Daman and Diu',
+        'Delhi',
+        'Jammu and Kashmir',
+        'Ladakh',
+        'Lakshadweep',
+        'Puducherry'
+    ];
+
+    stateSel.disabled = false;
+
     stateSel.innerHTML =
-        '<option value="Tamil Nadu" selected>Tamil Nadu</option>';
+        '<option value="">Select State</option>' +
+        indianStates.map(state =>
+            `<option value="${state}">${state}</option>`
+        ).join('');
 
-    stateSel.disabled = true;
-
-    loadDistricts();
+    distSel.innerHTML =
+        '<option value="">Select District</option>';
 }
 
         function loadDistricts() {
@@ -2509,14 +2657,10 @@ function resetOrderSubmitState() {
     'fieldName',
     'fieldMobile',
     'fieldDoor',
-    'fieldStreet',
-    'fieldVillage',
-    'fieldCity',
-    'fieldTaluk',
-    'fieldDistrict',
+    'fieldCountry',
     'fieldState',
-    'fieldPincode',
-    'fieldCountry'
+    'fieldDistrict',
+    'fieldPincode'
 ];
             let hasError = false;
 
@@ -2825,15 +2969,21 @@ if (btn) {
             const door = document.getElementById('fieldDoor').value.trim();
 const street = document.getElementById('fieldStreet').value.trim();
 const village = document.getElementById('fieldVillage').value.trim();
-const city = document.getElementById('fieldCity').value.trim();
-const taluk = document.getElementById('fieldTaluk').value.trim();
 const district = document.getElementById('fieldDistrict').value;
 const state = document.getElementById('fieldState').value;
 const pincode = document.getElementById('fieldPincode').value.trim();
 const country = document.getElementById('fieldCountry').value;
 
+const addressParts = [
+    door,
+    street,
+    village,
+    district,
+    state
+].filter(Boolean);
+
 const addressStr =
-    `${door}, ${street}, ${village}, ${city}, ${taluk}, ${district}, ${state} - ${pincode}, ${country}`;
+    `${addressParts.join(', ')} - ${pincode}, ${country}`;
 
 const districtPincode = `${district} - ${pincode}`;
             const now = new Date();
