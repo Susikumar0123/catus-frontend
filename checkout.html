@@ -2305,9 +2305,9 @@ try {
     const countrySelect =
         document.getElementById('fieldCountry');
 
-    if (countrySelect) {
-        countrySelect.value = country;
-    }
+   if (countrySelect) {
+    countrySelect.value = 'India';
+}
 
     // Load all Indian states first
     loadStates();
@@ -2323,11 +2323,11 @@ try {
     loadDistricts();
 
     const districtSelect =
-        document.getElementById('fieldDistrict');
+    document.getElementById('fieldDistrict');
 
-    if (districtSelect && district) {
-        districtSelect.value = district;
-    }
+if (districtSelect) {
+    districtSelect.value = '';
+}
 }
 
        async function fetchAllCountries() {
