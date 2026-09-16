@@ -8691,21 +8691,38 @@ height: 86px !important;
 
 #ceroodInstallBanner {
     display: none;
+
     position: fixed;
+    top: 12px;
     left: 50%;
-    bottom: 20px;
-    transform: translateX(-50%);
-    width: calc(100% - 24px);
-    max-width: 420px;
+
+    width: calc(100% - 32px);
+    max-width: 440px;
+
     z-index: 9999999;
 
     background: #ffffff;
     border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.16);
+    border-radius: 12px;
+
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
 
     padding: 9px 10px;
     box-sizing: border-box;
+
+    /* Start above screen */
+    transform: translate(-50%, -140%);
+    opacity: 0;
+
+    transition:
+        transform 0.45s ease,
+        opacity 0.35s ease;
+}
+
+/* Slide down */
+#ceroodInstallBanner.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
 }
 
 .cerood-install-content {
@@ -8768,7 +8785,9 @@ height: 86px !important;
 
 @media (max-width: 768px) {
     #ceroodInstallBanner {
-        bottom: calc(72px + env(safe-area-inset-bottom));
+        top: max(8px, env(safe-area-inset-top));
+        bottom: auto;
+        width: calc(100% - 20px);
         max-width: none;
     }
 }
@@ -16198,8 +16217,16 @@ window.addEventListener('beforeinstallprompt', function (event) {
         document.getElementById('ceroodInstallBanner');
 
     if (banner) {
-        banner.style.display = 'block';
-    }
+
+    banner.style.display = 'block';
+
+    // Every page load-la notification maari slide down
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            banner.classList.add('show');
+        });
+    });
+}
 });
 
 
@@ -16244,39 +16271,19 @@ if (ceroodInstallBtn) {
 function closeCeroodInstallBanner() {
 
     const banner =
-        document.getElementById(
-            'ceroodInstallBanner'
-        );
+        document.getElementById('ceroodInstallBanner');
 
-    if (banner) {
+    if (!banner) return;
+
+    // Notification slide-up
+    banner.classList.remove('show');
+
+    setTimeout(() => {
         banner.style.display = 'none';
-    }
-
-    // Same session-la thirumba disturb panna vendaam
-    sessionStorage.setItem(
-        'cerood_install_banner_closed',
-        '1'
-    );
+    }, 450);
 }
 
 
-window.addEventListener('beforeinstallprompt', function () {
-
-    if (
-        sessionStorage.getItem(
-            'cerood_install_banner_closed'
-        ) === '1'
-    ) {
-        const banner =
-            document.getElementById(
-                'ceroodInstallBanner'
-            );
-
-        if (banner) {
-            banner.style.display = 'none';
-        }
-    }
-});
 
 
 window.addEventListener('appinstalled', function () {
