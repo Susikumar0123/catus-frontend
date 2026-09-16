@@ -8685,9 +8685,130 @@ height: 86px !important;
     }
 }
 
+/* =========================================
+   CEROOD PWA INSTALL BANNER
+========================================= */
+
+#ceroodInstallBanner {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    #ceroodInstallBanner {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+
+        bottom: calc(
+            72px + env(safe-area-inset-bottom)
+        );
+
+        z-index: 999999;
+
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+
+        box-shadow:
+            0 6px 25px rgba(0, 0, 0, 0.16);
+
+        padding: 10px 12px;
+        box-sizing: border-box;
+    }
+
+    .cerood-install-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .cerood-install-content img {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .cerood-install-text {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .cerood-install-text strong {
+        font-size: 13px;
+        font-weight: 600;
+        color: #111111;
+        line-height: 18px;
+    }
+
+    .cerood-install-text span {
+        font-size: 10px;
+        color: #6b7280;
+        line-height: 15px;
+    }
+
+    #ceroodInstallBtn {
+        border: none;
+        background: #111111;
+        color: #ffffff;
+
+        padding: 8px 13px;
+        border-radius: 8px;
+
+        font-size: 11px;
+        font-weight: 600;
+
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .cerood-install-close {
+        border: none;
+        background: transparent;
+        color: #6b7280;
+
+        font-size: 20px;
+        line-height: 20px;
+
+        padding: 2px;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+}
+
 </style>
 </head>
 <body>
+
+    <!-- CEROOD PWA INSTALL BANNER -->
+<div id="ceroodInstallBanner" style="display:none;">
+    <div class="cerood-install-content">
+        <img src="/icon-192.png" alt="Cerood">
+
+        <div class="cerood-install-text">
+            <strong>Get the Cerood App</strong>
+            <span>Faster booking & easy access</span>
+        </div>
+
+        <button id="ceroodInstallBtn">
+            Install
+        </button>
+
+        <button
+            class="cerood-install-close"
+            onclick="closeCeroodInstallBanner()"
+            aria-label="Close"
+        >
+            ×
+        </button>
+    </div>
+</div>
+
 
   <!-- Master Single Container -->
   <div class="master-app-container">
@@ -16067,6 +16188,119 @@ function closeCeroodInfoModal(modalId) {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     lucide.createIcons();
+});
+</script>
+
+<script>
+let ceroodDeferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', function (event) {
+
+    // Browser automatic mini prompt-ai prevent pannuvom
+    event.preventDefault();
+
+    // Later Install button click-ku save pannuvom
+    ceroodDeferredInstallPrompt = event;
+
+    const banner =
+        document.getElementById('ceroodInstallBanner');
+
+    if (banner) {
+        banner.style.display = 'block';
+    }
+});
+
+
+const ceroodInstallBtn =
+    document.getElementById('ceroodInstallBtn');
+
+if (ceroodInstallBtn) {
+
+    ceroodInstallBtn.addEventListener(
+        'click',
+        async function () {
+
+            if (!ceroodDeferredInstallPrompt) {
+                return;
+            }
+
+            ceroodDeferredInstallPrompt.prompt();
+
+            const choice =
+                await ceroodDeferredInstallPrompt.userChoice;
+
+            console.log(
+                'Cerood install choice:',
+                choice.outcome
+            );
+
+            ceroodDeferredInstallPrompt = null;
+
+            const banner =
+                document.getElementById(
+                    'ceroodInstallBanner'
+                );
+
+            if (banner) {
+                banner.style.display = 'none';
+            }
+        }
+    );
+}
+
+
+function closeCeroodInstallBanner() {
+
+    const banner =
+        document.getElementById(
+            'ceroodInstallBanner'
+        );
+
+    if (banner) {
+        banner.style.display = 'none';
+    }
+
+    // Same session-la thirumba disturb panna vendaam
+    sessionStorage.setItem(
+        'cerood_install_banner_closed',
+        '1'
+    );
+}
+
+
+window.addEventListener('beforeinstallprompt', function () {
+
+    if (
+        sessionStorage.getItem(
+            'cerood_install_banner_closed'
+        ) === '1'
+    ) {
+        const banner =
+            document.getElementById(
+                'ceroodInstallBanner'
+            );
+
+        if (banner) {
+            banner.style.display = 'none';
+        }
+    }
+});
+
+
+window.addEventListener('appinstalled', function () {
+
+    ceroodDeferredInstallPrompt = null;
+
+    const banner =
+        document.getElementById(
+            'ceroodInstallBanner'
+        );
+
+    if (banner) {
+        banner.style.display = 'none';
+    }
+
+    console.log('Cerood PWA installed successfully');
 });
 </script>
 
