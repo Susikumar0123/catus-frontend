@@ -16205,7 +16205,18 @@ document.addEventListener('DOMContentLoaded', function () {
 <script>
 let ceroodDeferredInstallPrompt = null;
 
+function isCeroodRunningAsApp() {
+    return (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true
+    );
+}
+
 window.addEventListener('beforeinstallprompt', function (event) {
+
+    if (isCeroodRunningAsApp()) {
+    return;
+}
 
     // Browser automatic mini prompt-ai prevent pannuvom
     event.preventDefault();
