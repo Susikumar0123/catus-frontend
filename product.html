@@ -4133,7 +4133,20 @@ body {
 
     margin: 5px 0 3px !important;
 }
+#productGridMain .starting-price-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
 
+#productGridMain .starts-from-label {
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 500;
+    color: #7b8190;
+    letter-spacing: 0.01em;
+}
 
 #productGridMain .current-price {
     color: #111318 !important;
@@ -5114,28 +5127,32 @@ body {
 
         <div class="price-section">
 
-            <span
-                class="current-price"
-                id="displayPrice"
-            >
-                ₹349
-            </span>
+    <div class="starting-price-wrap">
+        <span class="starts-from-label">Starts from</span>
 
-            <span
-                class="original-price"
-                id="displayMrp"
-            >
-                ₹699
-            </span>
+        <span
+            class="current-price"
+            id="displayPrice"
+        >
+            ₹349
+        </span>
+    </div>
 
-            <span
-                class="discount-pct"
-                id="displayDiscount"
-            >
-                50% off
-            </span>
+    <span
+        class="original-price"
+        id="displayMrp"
+    >
+        ₹699
+    </span>
 
-        </div>
+    <span
+        class="discount-pct"
+        id="displayDiscount"
+    >
+        50% off
+    </span>
+
+</div>
 
         <div
             id="productNoteContainer"
