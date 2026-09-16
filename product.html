@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title id="pageTitle">Product Details - Cerood</title>
 
     <meta name="description"
@@ -4988,7 +4988,37 @@ body {
 }
 
 
+/* =========================================
+   CEROOD PRODUCT MOBILE SAFE AREA - NOTCH FIX
+========================================= */
+@media (max-width: 850px) {
 
+    .uc-homepage-wrapper {
+        padding-top: max(
+            5px,
+            env(safe-area-inset-top)
+        ) !important;
+    }
+
+    .header-main-container {
+        padding-left: max(
+            12px,
+            env(safe-area-inset-left)
+        ) !important;
+
+        padding-right: max(
+            12px,
+            env(safe-area-inset-right)
+        ) !important;
+    }
+
+    .mobile-bottom-nav {
+        padding-bottom: max(
+            4px,
+            env(safe-area-inset-bottom)
+        ) !important;
+    }
+}
 
 
 </style>
@@ -7074,6 +7104,25 @@ function getProductUrlParams() {
     // DYNAMIC PRODUCT DETAILS & REVIEWS LOADER
     // ==========================================
     async function loadProductDetailsAndReviews(serviceId) {
+
+    // Safety: product page should never stay hidden
+const productLoadSafetyTimer = setTimeout(() => {
+    const grid = document.getElementById('productGridMain');
+
+    if (grid) {
+        grid.style.opacity = '1';
+    }
+
+    const breadcrumbTitle =
+        document.getElementById('bcTitle');
+
+    if (
+        breadcrumbTitle &&
+        breadcrumbTitle.textContent.trim() === 'Loading...'
+    ) {
+        breadcrumbTitle.textContent = 'Service Details';
+    }
+}, 5000);
         // லோட் ஆகும் முன் பழைய டிசைன் கண்ணில் படாமல் இருக்க ஒப்பாசிட்டி 0
         const mainGrid = document.getElementById('productGridMain');
         if (mainGrid) mainGrid.style.opacity = '0';
@@ -8067,11 +8116,24 @@ if (currentLocationSlug) {
     // ------------------------------------------
     if (!currentLocationSlug) {
 
-        await loadProductDetailsAndReviews(
-            activeServiceId
-        );
+    // Normal product page-la customer previously
+    // selected location-ai header-la retain pannu.
+    const savedUserLocation =
+        localStorage.getItem(
+            'catus_user_location'
+        ) || '';
 
+    if (savedUserLocation) {
+        updateLocationDisplays(
+            savedUserLocation
+        );
     }
+
+    await loadProductDetailsAndReviews(
+        activeServiceId
+    );
+
+}
 
     // ------------------------------------------
     // LOCATION + SERVICE PAGE
@@ -12414,16 +12476,23 @@ const isSupportedSeoLocation =
     ceroodSeoLocationKeys &&
     ceroodSeoLocationKeys.has(locationKey);
 
-if (
-    isSupportedSeoLocation &&
-    locationSlug !== districtSlug
-) {
+if (isSupportedSeoLocation) {
+
+    // SEO location available → use clean SEO URL
     window.location.href =
-        `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
+        locationSlug === districtSlug
+            ? `/${stateSlug}/${districtSlug}/${serviceSlug}`
+            : `/${stateSlug}/${districtSlug}/${locationSlug}/${serviceSlug}`;
+
 } else {
+
+    // Location sitemap-la illa.
+    // Customer selected address-ai keep pannitu
+    // normal product page open pannu.
     window.location.href =
-        `/${stateSlug}/${districtSlug}/${serviceSlug}`;
+        `/product.html?id=${encodeURIComponent(serviceSlug)}`;
 }
+
 }
 
 function formatShortAddress(fullAddress) {

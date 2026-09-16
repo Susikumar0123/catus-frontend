@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <title>Home Appliance Repair & Service Near You | Cerood</title>
     <link rel="icon" type="image/png" href="/fevicon.png">
@@ -8643,6 +8643,38 @@ height: 86px !important;
     .quick-home-mobile-row .uc-cut {
         font-size: 9px !important;
         margin-left: 2px !important;
+    }
+}
+
+/* =========================================
+   CEROOD MOBILE SAFE AREA - NOTCH FIX
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-homepage-wrapper {
+        padding-top: max(
+            5px,
+            env(safe-area-inset-top)
+        ) !important;
+    }
+
+    .header-main-container {
+        padding-left: max(
+            12px,
+            env(safe-area-inset-left)
+        ) !important;
+
+        padding-right: max(
+            12px,
+            env(safe-area-inset-right)
+        ) !important;
+    }
+
+    .mobile-bottom-nav {
+        padding-bottom: max(
+            4px,
+            env(safe-area-inset-bottom)
+        ) !important;
     }
 }
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Secure Checkout - Cerood</title>
     
     <!-- Google Fonts & Icons -->
@@ -1430,6 +1430,38 @@ p, span, div, a, label, li, small {
     color: var(--catus-text) !important;
     opacity: 1 !important;
     cursor: default !important;
+}
+
+/* =========================================
+   CEROOD PRODUCT MOBILE SAFE AREA - NOTCH FIX
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-homepage-wrapper {
+        padding-top: max(
+            5px,
+            env(safe-area-inset-top)
+        ) !important;
+    }
+
+    .header-main-container {
+        padding-left: max(
+            12px,
+            env(safe-area-inset-left)
+        ) !important;
+
+        padding-right: max(
+            12px,
+            env(safe-area-inset-right)
+        ) !important;
+    }
+
+    .mobile-bottom-nav {
+        padding-bottom: max(
+            4px,
+            env(safe-area-inset-bottom)
+        ) !important;
+    }
 }
 
 </style>
