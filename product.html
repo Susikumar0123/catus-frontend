@@ -7132,7 +7132,11 @@ const productLoadSafetyTimer = setTimeout(() => {
             const data = await response.json();
             
             if (data.success && data.services) {
-                const s = data.services.find(item => String(item.service_id) === String(serviceId));
+                const s = data.services.find(item =>
+    String(item.service_id) === String(serviceId) ||
+    String(item.slug || '').trim().toLowerCase() ===
+    String(serviceId || '').trim().toLowerCase()
+);
                 if (s) {
                     currentProductData = s;
                     document.getElementById('prodTitle').innerText = s.service_name;
