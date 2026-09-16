@@ -8,6 +8,13 @@
     <link rel="icon" type="image/png" href="/fevicon.png">
 <link rel="apple-touch-icon" href="/fevicon.png">
 
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cerood">
+
 <meta name="description"
       content="Book trusted home appliance repair and service near you with Cerood. TV, AC, washing machine, refrigerator, RO water purifier and other home services across Tamil Nadu."
 
@@ -16062,5 +16069,27 @@ document.addEventListener('DOMContentLoaded', function () {
     lucide.createIcons();
 });
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker
+            .register('/service-worker.js')
+            .then(function (registration) {
+                console.log(
+                    'Cerood Service Worker registered:',
+                    registration.scope
+                );
+            })
+            .catch(function (error) {
+                console.error(
+                    'Cerood Service Worker registration failed:',
+                    error
+                );
+            });
+    });
+}
+</script>
+
 </body>
 </html>
