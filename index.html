@@ -9180,11 +9180,71 @@ height: 86px !important;
 
             </div>
 
-
             <!-- =================================================
-                 STEP 4 : OTP VERIFICATION
-                 COMMON FOR REGISTER + FORGOT PASSWORD
-            ================================================== -->
+     STEP 4 : SECURITY VERIFICATION
+================================================== -->
+<div
+    id="authStepCaptcha"
+    style="
+        display: none;
+        flex-direction: column;
+        height: 100%;
+    "
+>
+
+    <div style="margin-top: 10px;">
+
+        <h3
+            style="
+                margin: 0 0 8px 0;
+                font-size: 20px;
+                font-weight: 600;
+                color: #111111;
+            "
+        >
+            Security Verification
+        </h3>
+
+        <p
+            id="captchaInfo"
+            style="
+                font-size: 13px;
+                color: #64748b;
+                margin: 0 0 22px 0;
+                line-height: 1.5;
+            "
+        >
+            Complete the security check below to receive your OTP.
+        </p>
+
+        <div
+            id="msg91Captcha"
+            style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 80px;
+                margin: 15px 0 20px 0;
+            "
+        ></div>
+
+    </div>
+
+    <div
+        class="auth-bottom-link"
+        onclick="backToPhoneStep()"
+    >
+        ← Change Mobile Number
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     STEP 5 : OTP VERIFICATION
+     COMMON FOR REGISTER + FORGOT PASSWORD
+================================================== -->
+
             <div
                 id="authStepOTP"
                 style="
@@ -9221,14 +9281,7 @@ height: 86px !important;
                         Please enter the OTP sent to your mobile.
                     </p>
 
-                    <div
-    id="msg91Captcha"
-    style="
-        display: flex;
-        justify-content: center;
-        margin-bottom: 12px;
-    "
-></div>
+                   
 
 
                     <!-- OTP -->
@@ -11415,13 +11468,14 @@ async function checkUserAndProceed() {
 }
 function showAuthStep(step) {
 
-    const steps = [
-        'authStepPhone',
-        'authStepPassword',
-        'authStepRegister',
-        'authStepOTP',
-        'authStepNewPassword'
-    ];
+const steps = [
+    'authStepPhone',
+    'authStepPassword',
+    'authStepRegister',
+    'authStepCaptcha',
+    'authStepOTP',
+    'authStepNewPassword'
+];
 
     steps.forEach(id => {
         const el = document.getElementById(id);
@@ -11431,12 +11485,13 @@ function showAuthStep(step) {
     });
 
     const activeId = {
-        phone: 'authStepPhone',
-        password: 'authStepPassword',
-        register: 'authStepRegister',
-        otp: 'authStepOTP',
-        newpassword: 'authStepNewPassword'
-    }[step];
+    phone: 'authStepPhone',
+    password: 'authStepPassword',
+    register: 'authStepRegister',
+    captcha: 'authStepCaptcha',
+    otp: 'authStepOTP',
+    newpassword: 'authStepNewPassword'
+}[step];
 
     if (activeId) {
         const activeEl = document.getElementById(activeId);
@@ -11469,6 +11524,12 @@ function showAuthStep(step) {
             descEl.textContent =
                 'Create your Cerood account';
             break;
+
+        case 'captcha':
+    titleEl.textContent = 'Security Verification';
+    descEl.textContent =
+        'Complete the security check to receive your OTP';
+    break;
 
         case 'otp':
 
@@ -11757,16 +11818,13 @@ async function proceedToOtpFromRegister() {
     // SEND REGISTRATION OTP
     // ==========================================
 
-    // Show OTP step first so MSG91 captcha is visible
-showAuthStep('otp');
+    // Show separate security verification step first
+showAuthStep('captcha');
 
 const infoEl =
     document.getElementById('setPasswordInfo');
 
-if (infoEl) {
-    infoEl.textContent =
-        `Complete the security check to send OTP to +91 ${phone}.`;
-}
+
 
     try {
 
@@ -11813,12 +11871,14 @@ if (!msg91ReqId) {
 msg91AccessToken = '';
 otpVerified = false;
 
-            
+// OTP successfully sent.
+// Now open the separate OTP verification page.
+showAuthStep('otp');
 
-            if (infoEl) {
-                infoEl.textContent =
-                    `Registration OTP sent to +91 ${phone}. Please enter it below.`;
-            }
+if (infoEl) {
+    infoEl.textContent =
+        `Registration OTP sent to +91 ${phone}. Please enter it below.`;
+}
 
             const otpInput =
                 document.getElementById(
@@ -11987,13 +12047,15 @@ if (resendBtnEl) {
 
     authFlowMode = 'forgot';
 
-    showAuthStep('otp');
+// First show separate CAPTCHA / Security Verification page
+showAuthStep('captcha');
 
-const infoEl = document.getElementById('setPasswordInfo');
+const captchaInfoEl =
+    document.getElementById('captchaInfo');
 
-if (infoEl) {
-    infoEl.textContent =
-        `Sending password reset OTP to +91 ${tempPhone}...`;
+if (captchaInfoEl) {
+    captchaInfoEl.textContent =
+        `Complete the security check to send a password reset OTP to +91 ${tempPhone}.`;
 }
 
     showToast(
