@@ -9190,48 +9190,67 @@ height: 86px !important;
 }
 
 /* =========================================
-   MOBILE PRODUCT CARD - FINAL COMPACT SIZE
+   MOBILE PRODUCT GRID - LARGE PREMIUM IMAGE
 ========================================= */
 
 @media (max-width: 768px) {
 
-    /* CARD */
+    /* 2 PRODUCTS PER ROW */
+    .uc-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+        column-gap: 10px !important;
+        row-gap: 18px !important;
+
+        width: 100% !important;
+        padding: 0 !important;
+
+        overflow: visible !important;
+        box-sizing: border-box !important;
+    }
+
+    /* PRODUCT CARD USE FULL COLUMN WIDTH */
     .uc-card {
-        width: 92px !important;
-        min-width: 92px !important;
-        max-width: 92px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
 
+        margin: 0 !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
     }
 
-    /* IMAGE - PERFECT 1:1 */
+    /* LARGE 1:1 PRODUCT IMAGE */
     .uc-card-img-wrapper {
-        width: 72px !important;
-        height: 72px !important;
+        width: 100% !important;
+        height: auto !important;
 
-        min-width: 72px !important;
-        min-height: 72px !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
 
-        max-width: 72px !important;
-        max-height: 72px !important;
+        max-width: 100% !important;
+        max-height: none !important;
 
-        flex: 0 0 72px !important;
         aspect-ratio: 1 / 1 !important;
+        flex: none !important;
 
-        margin: 0 auto 7px auto !important;
+        margin: 0 0 8px 0 !important;
 
-        border-radius: 9px !important;
+        border-radius: 8px !important;
         overflow: hidden !important;
+
+        background: #f6f6f6 !important;
         box-sizing: border-box !important;
     }
 
-    .uc-card-img-wrapper > img {
+    .uc-card-img-wrapper > img,
+    .uc-card img {
         width: 100% !important;
         height: 100% !important;
 
-        min-width: 100% !important;
-        min-height: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
 
         max-width: 100% !important;
         max-height: 100% !important;
@@ -9242,13 +9261,11 @@ height: 86px !important;
         display: block !important;
     }
 
-    /* TEXT MUST STAY INSIDE CARD */
+    /* TEXT STAYS INSIDE PRODUCT WIDTH */
     .uc-body {
         width: 100% !important;
         max-width: 100% !important;
-
-        padding: 0 !important;
-        margin: 0 !important;
+        padding: 0 2px !important;
 
         overflow: hidden !important;
         box-sizing: border-box !important;
@@ -9258,7 +9275,10 @@ height: 86px !important;
         width: 100% !important;
         max-width: 100% !important;
 
-        margin: 0 0 4px 0 !important;
+        margin: 0 0 5px 0 !important;
+
+        font-size: 11px !important;
+        line-height: 15px !important;
 
         white-space: normal !important;
         overflow: hidden !important;
@@ -9266,20 +9286,13 @@ height: 86px !important;
         display: -webkit-box !important;
         -webkit-box-orient: vertical !important;
         -webkit-line-clamp: 2 !important;
-
-        overflow-wrap: break-word !important;
-        word-break: normal !important;
-
-        box-sizing: border-box !important;
     }
 
     .uc-price {
         width: 100% !important;
         max-width: 100% !important;
-
         overflow: hidden !important;
         white-space: nowrap !important;
-        box-sizing: border-box !important;
     }
 }
 
@@ -9351,6 +9364,30 @@ height: 86px !important;
 
         box-shadow:
             0 3px 9px rgba(31, 20, 70, 0.07) !important;
+    }
+}
+
+/* =========================================
+   CEROOD MOBILE CATEGORY BACKGROUND - FINAL
+========================================= */
+
+@media (max-width: 768px) {
+
+    body .master-app-container .uc-category-box {
+        background: linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #f8f5ff 45%,
+            #eee8ff 100%
+        ) !important;
+
+        border: 1px solid #ded3ff !important;
+        border-radius: 16px !important;
+
+        box-shadow:
+            0 5px 16px rgba(83, 55, 150, 0.08) !important;
+
+        overflow: hidden !important;
     }
 }
 
