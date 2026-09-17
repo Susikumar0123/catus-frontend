@@ -8970,6 +8970,60 @@ height: 86px !important;
     }
 }
 
+/* =========================================
+   MOBILE PAGE HORIZONTAL MOVEMENT LOCK
+   Product rows can scroll; whole page cannot
+========================================= */
+
+@media (max-width: 850px) {
+
+    html,
+    body {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        overflow-x: hidden !important;
+        overscroll-behavior-x: none !important;
+    }
+
+    .master-app-container {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Product horizontal swipe remains enabled */
+    .uc-carousel-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    .uc-grid {
+        max-width: 100% !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        overscroll-behavior-x: contain !important;
+        touch-action: pan-x pan-y !important;
+
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Other intentional horizontal sliders */
+    .cards-container,
+    .cerood-noteworthy-scroll {
+        max-width: 100% !important;
+
+        overscroll-behavior-x: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
 
 </style>
 </head>
