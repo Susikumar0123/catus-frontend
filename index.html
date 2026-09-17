@@ -10011,42 +10011,184 @@ height: 86px !important;
 }
 
 /* =========================================
-   DASHBOARD MOBILE NAV - REMOVE COLOR RINGS
+   LIVE TRACKING TIMELINE - STATUS GREEN
 ========================================= */
 
-#premiumCustomerDashboard .dash-home-ring,
-#premiumCustomerDashboard .dash-services-ring,
-#premiumCustomerDashboard .dash-cart-ring,
-#premiumCustomerDashboard .dash-bookings-ring,
-#premiumCustomerDashboard .dash-account-ring {
-    border-color: #E5E5E5 !important;
-    border-top-color: #111111 !important;
+/* Completed progress line */
+#premiumCustomerDashboard .prem-timeline-progress {
+    background: #10B981 !important;
 }
 
-/* Nav icons */
-#premiumCustomerDashboard .dash-nav-ring svg,
-#premiumCustomerDashboard .dash-nav-ring svg * {
-    stroke: #111111 !important;
-    color: #111111 !important;
+/* Future steps */
+#premiumCustomerDashboard .prem-step-icon-compact {
+    background: #F1F5F9 !important;
+    color: #94A3B8 !important;
+    border-color: #E2E8F0 !important;
 }
 
-/* Normal labels */
-#premiumCustomerDashboard .catus-modern-dash-nav .prem-nav-btn > span:last-child {
-    color: #777777 !important;
+/* Completed steps */
+#premiumCustomerDashboard
+.prem-step-compact.done
+.prem-step-icon-compact {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
 }
 
-/* Active label */
-#premiumCustomerDashboard .catus-modern-dash-nav .prem-nav-btn.active > span:last-child {
-    color: #111111 !important;
+/* Current active step */
+#premiumCustomerDashboard
+.prem-step-compact.active
+.prem-step-icon-compact {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
+}
+
+/* Done + active labels */
+#premiumCustomerDashboard .prem-step-compact.done > span,
+#premiumCustomerDashboard .prem-step-compact.active > span {
+    color: #059669 !important;
     font-weight: 600 !important;
 }
 
-/* DASHBOARD ACTIVE NAV DOT - BLACK */
+/* Future labels */
+#premiumCustomerDashboard .prem-step-compact:not(.done):not(.active) > span {
+    color: #94A3B8 !important;
+}
+
+/* =========================================
+   LIVE BOOKING ACTION BUTTONS
+========================================= */
+
+/* Edit Address - neutral */
+#premiumCustomerDashboard .prem-btn-track-compact {
+    background: #F8FAFC !important;
+    color: #334155 !important;
+    border: 1px solid #DDE3EA !important;
+}
+
+#premiumCustomerDashboard .prem-btn-track-compact i {
+    color: #334155 !important;
+}
+
+/* Cancel Booking - danger */
+#premiumCustomerDashboard .prem-btn-cancel-compact {
+    background: #FFF5F5 !important;
+    color: #DC2626 !important;
+    border: 1px solid #FECACA !important;
+}
+
+#premiumCustomerDashboard .prem-btn-cancel-compact i {
+    color: #DC2626 !important;
+}
+
+/* =========================================
+   BOOKING HISTORY - RATE BUTTON STATES
+========================================= */
+
+/* Disabled Rate Service - Pending / not completed */
 #premiumCustomerDashboard
-.catus-modern-dash-nav
-.prem-nav-btn.active
-.dash-nav-ring::after {
-    background: #111111 !important;
+#premOrdersListContainer
+.prem-btn-small:disabled {
+    background: #F1F5F9 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #E2E8F0 !important;
+    cursor: not-allowed !important;
+}
+
+#premiumCustomerDashboard
+#premOrdersListContainer
+.prem-btn-small:disabled i {
+    color: #94A3B8 !important;
+}
+
+/* =========================================
+   COMPLETED BOOKING ACTIONS
+========================================= */
+
+/* Active Rate Service button */
+#premiumCustomerDashboard
+#premOrdersListContainer
+.prem-btn-small:not(:disabled)
+.fa-star {
+    color: #F59E0B !important;
+}
+
+/* Already Rated */
+#premiumCustomerDashboard
+#premOrdersListContainer
+.prem-btn-small .fa-check-circle {
+    color: #10B981 !important;
+}
+
+/* =========================================
+   BOOKING HISTORY - MOBILE CARD POLISH
+========================================= */
+
+@media (max-width: 768px) {
+
+    #premiumCustomerDashboard #premOrdersListContainer .prem-card-box {
+        padding: 14px !important;
+        margin-bottom: 12px !important;
+        border-radius: 12px !important;
+        border: 1px solid #EEEEF0 !important;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.035) !important;
+    }
+
+    #premiumCustomerDashboard #premOrdersListContainer {
+        padding-bottom: 12px !important;
+    }
+
+    #premiumCustomerDashboard #premOrdersListContainer .prem-btn-small {
+        min-height: 36px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+    }
+}
+
+/* =========================================
+   DASHBOARD SUMMARY - SEMANTIC STATUS COLORS
+========================================= */
+
+/* Total Bookings */
+#premiumCustomerDashboard #sumTotal {
+    color: #111111 !important;
+}
+
+/* Completed */
+#premiumCustomerDashboard #sumCompleted {
+    color: #16A34A !important;
+}
+
+/* In Progress */
+#premiumCustomerDashboard #sumProgress {
+    color: #F59E0B !important;
+}
+
+/* Rejected */
+#premiumCustomerDashboard #sumRejected {
+    color: #EF4444 !important;
+}
+
+/* Remove old purple hover border */
+#premiumCustomerDashboard .prem-stat-card:hover {
+    border-color: #E5E5E5 !important;
+}
+
+/* DASHBOARD FINAL STATUS CLEANUP */
+
+#premiumCustomerDashboard .prem-live-status-badge {
+    background: #FFF7ED !important;
+    color: #D97706 !important;
+    border: 1px solid #FED7AA !important;
+}
+
+#premiumCustomerDashboard .prem-live-status-badge .prem-status-dot {
+    background: #F59E0B !important;
+}
+
+#premiumCustomerDashboard .prem-eta-compact strong {
+    color: #111111 !important;
 }
 
 </style>
@@ -14320,8 +14462,26 @@ serviceStr =
             if (processedOrders.length > 0) {
                 ordersList.innerHTML = ''; 
                 processedOrders.forEach(order => {
-                    let statusColor = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#ef4444' : '#16a34a';
-                    let statusBg = (order.status.toLowerCase() === 'cancelled' || order.status.toLowerCase() === 'rejected') ? '#fef2f2' : '#f0fdf4';
+                    const bookingStatus = (order.status || '').toLowerCase();
+
+let statusColor = '#64748b';
+let statusBg = '#f1f5f9';
+
+if (bookingStatus === 'pending') {
+    statusColor = '#d97706';
+    statusBg = '#fff7ed';
+}
+else if (
+    bookingStatus === 'cancelled' ||
+    bookingStatus === 'rejected'
+) {
+    statusColor = '#dc2626';
+    statusBg = '#fef2f2';
+}
+else if (bookingStatus === 'completed') {
+    statusColor = '#16a34a';
+    statusBg = '#f0fdf4';
+}
                     
                     let dateString = formatIndiaInlineTime(getCatusBookedDate(order));
                     
