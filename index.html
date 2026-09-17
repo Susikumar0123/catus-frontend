@@ -9283,6 +9283,77 @@ height: 86px !important;
     }
 }
 
+/* =========================================
+   MOBILE SERVICE GRID - PREMIUM CARD
+========================================= */
+
+@media (max-width: 768px) {
+
+    .uc-category-box {
+        background:
+            linear-gradient(
+                145deg,
+                #ffffff 0%,
+                #faf9ff 48%,
+                #f5f2ff 100%
+            ) !important;
+
+        border: 1px solid #e5ddff !important;
+        border-radius: 16px !important;
+
+        box-shadow:
+            0 4px 14px rgba(74, 45, 140, 0.06),
+            inset 0 1px 0 rgba(255,255,255,0.9) !important;
+
+        padding: 12px !important;
+        overflow: hidden !important;
+    }
+
+    /* SECTION TITLE */
+    .uc-cat-header {
+        position: relative !important;
+        margin-bottom: 14px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .uc-cat-header h3 {
+        color: #18151f !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.25px !important;
+    }
+
+    /* PREMIUM SMALL ACCENT UNDER TITLE */
+    .uc-cat-header::after {
+        content: "" !important;
+
+        position: absolute !important;
+        left: 0 !important;
+        bottom: 0 !important;
+
+        width: 30px !important;
+        height: 3px !important;
+
+        border-radius: 20px !important;
+
+        background:
+            linear-gradient(
+                90deg,
+                #6d4aff,
+                #a78bfa
+            ) !important;
+    }
+
+    /* PRODUCT IMAGE - SOFT PREMIUM FRAME */
+    .uc-card-img-wrapper {
+        background: #ffffff !important;
+
+        border: 1px solid rgba(109, 74, 255, 0.10) !important;
+
+        box-shadow:
+            0 3px 9px rgba(31, 20, 70, 0.07) !important;
+    }
+}
+
 </style>
 </head>
 <body>
