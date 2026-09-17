@@ -9061,7 +9061,44 @@ height: 86px !important;
     }
 }
 
+/* =========================================
+   MOBILE - REMOVE TAP / TOUCH HIGHLIGHT
+========================================= */
 
+@media (max-width: 850px) {
+
+    .uc-card,
+    .uc-card *,
+    .uc-card-img-wrapper,
+    .uc-card-img-wrapper *,
+    .cerood-noteworthy-item,
+    .cerood-noteworthy-item *,
+    .service-chip,
+    .service-chip *,
+    .card-link,
+    .card-link * {
+        -webkit-tap-highlight-color: transparent !important;
+    }
+
+    .uc-card:active,
+    .uc-card-img-wrapper:active,
+    .uc-card img:active,
+    .cerood-noteworthy-item:active {
+        background: transparent !important;
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .uc-card:focus,
+    .uc-card:focus-visible,
+    .card-link:focus,
+    .card-link:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}
 
 </style>
 </head>
