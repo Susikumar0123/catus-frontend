@@ -9080,16 +9080,27 @@ height: 86px !important;
         -webkit-tap-highlight-color: transparent !important;
     }
 
-    .uc-card:active,
-    .uc-card-img-wrapper:active,
-    .uc-card img:active,
-    .cerood-noteworthy-item:active {
-        background: transparent !important;
-        opacity: 1 !important;
-        filter: none !important;
-        transform: none !important;
-        box-shadow: none !important;
-    }
+    /* MODERN TOUCH PRESS EFFECT */
+
+.uc-card,
+.cerood-noteworthy-item {
+    transition: transform 0.12s ease !important;
+}
+
+.uc-card-img-wrapper,
+.cerood-noteworthy-image {
+    transition: filter 0.12s ease !important;
+}
+
+.uc-card:active,
+.cerood-noteworthy-item:active {
+    transform: scale(0.97) !important;
+}
+
+.uc-card:active .uc-card-img-wrapper,
+.cerood-noteworthy-item:active .cerood-noteworthy-image {
+    filter: brightness(0.92) !important;
+}
 
     .uc-card:focus,
     .uc-card:focus-visible,
