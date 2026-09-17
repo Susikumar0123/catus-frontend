@@ -9820,6 +9820,140 @@ height: 86px !important;
     }
 }
 
+/* =========================================
+   CEROOD TRUST STRIP - MODERN PREMIUM UI
+========================================= */
+
+@media (max-width: 768px) {
+
+    .cerood-trust-strip {
+        margin: 18px 14px 24px !important;
+        padding: 10px !important;
+
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+
+        background: #f8f9fb !important;
+
+        border: 1px solid #eeeeee !important;
+        border-radius: 18px !important;
+
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.04) !important;
+
+        overflow: visible !important;
+    }
+
+
+    /* EACH TRUST CARD */
+    .cerood-trust-item {
+        min-height: 74px !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        gap: 10px !important;
+
+        padding: 11px 9px !important;
+
+        background: #ffffff !important;
+
+        border: 1px solid #eeeeee !important;
+        border-radius: 14px !important;
+
+        box-sizing: border-box !important;
+
+        position: relative !important;
+
+        box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.025) !important;
+    }
+
+
+    /* REMOVE OLD TABLE DIVIDERS */
+    .cerood-trust-item::before,
+    .cerood-trust-item::after {
+        display: none !important;
+        content: none !important;
+    }
+
+
+    /* ICON CONTAINER */
+    .cerood-trust-icon {
+        width: 38px !important;
+        height: 38px !important;
+
+        min-width: 38px !important;
+
+        border-radius: 12px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        box-shadow:
+            inset 0 0 0 1px rgba(255,255,255,.7) !important;
+    }
+
+
+    .cerood-trust-icon svg,
+    .cerood-trust-icon i {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 17px !important;
+    }
+
+
+    /* TEXT AREA */
+    .cerood-trust-text {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+
+    .cerood-trust-title {
+        margin: 0 0 3px !important;
+
+        font-size: 11px !important;
+        line-height: 14px !important;
+
+        font-weight: 650 !important;
+
+        color: #18181b !important;
+
+        letter-spacing: -0.1px !important;
+    }
+
+
+    .cerood-trust-subtitle {
+        margin: 0 !important;
+
+        font-size: 9px !important;
+        line-height: 12px !important;
+
+        font-weight: 400 !important;
+
+        color: #8a8a93 !important;
+    }
+
+
+    /* MODERN TOUCH FEEDBACK */
+    .cerood-trust-item {
+        transition:
+            transform .15s ease,
+            box-shadow .15s ease !important;
+    }
+
+    .cerood-trust-item:active {
+        transform: scale(.97) !important;
+
+        box-shadow:
+            0 1px 4px rgba(0,0,0,.04) !important;
+    }
+
+}
+
 </style>
 </head>
 <body>
