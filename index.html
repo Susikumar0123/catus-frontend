@@ -15286,19 +15286,27 @@ html += `
         class="cerood-offer-banner"
         onclick="openServiceProduct('ac-service')"
     >
-        <picture>
-    <source
-        media="(max-width: 768px)"
-        srcset="/banner2-mobile.mp4"
-    >
 
-    <img
-        src="/banner2-desktop.webp"
-        alt="Cerood Home Appliance Service Offer"
-        loading="lazy"
-        decoding="async"
-    >
-</picture>
+        <picture class="cerood-offer-desktop">
+            <img
+                src="/banner2-desktop.webp"
+                alt="Cerood Home Appliance Service Offer"
+                loading="lazy"
+                decoding="async"
+            >
+        </picture>
+
+        <video
+            class="cerood-offer-mobile-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+        >
+            <source src="/banner2-mobile.mp4" type="video/mp4">
+        </video>
+
     </div>
 `;
 
