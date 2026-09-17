@@ -9190,7 +9190,7 @@ height: 86px !important;
 }
 
 /* =========================================
-   MOBILE PRODUCT IMAGE - FINAL SMALL SIZE
+   MOBILE PRODUCT IMAGE - SMALL PERFECT 1:1
 ========================================= */
 
 @media (max-width: 768px) {
@@ -9198,27 +9198,41 @@ height: 86px !important;
     .uc-card-img-wrapper {
         width: 64px !important;
         height: 64px !important;
+
         min-width: 64px !important;
+        min-height: 64px !important;
+
         max-width: 64px !important;
+        max-height: 64px !important;
 
         aspect-ratio: 1 / 1 !important;
+
+        flex: 0 0 64px !important;
 
         margin: 0 auto 7px auto !important;
 
         border-radius: 9px !important;
         overflow: hidden !important;
+
+        box-sizing: border-box !important;
     }
 
-    .uc-card-img-wrapper img,
-    .uc-card img {
-        width: 64px !important;
-        height: 64px !important;
+    .uc-card-img-wrapper > img {
+        width: 100% !important;
+        height: 100% !important;
 
-        min-width: 64px !important;
-        max-width: 64px !important;
+        min-width: 100% !important;
+        min-height: 100% !important;
+
+        max-width: 100% !important;
+        max-height: 100% !important;
+
+        aspect-ratio: 1 / 1 !important;
 
         object-fit: cover !important;
+
         display: block !important;
+        margin: 0 !important;
     }
 }
 
