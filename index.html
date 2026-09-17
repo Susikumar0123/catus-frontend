@@ -9062,52 +9062,130 @@ height: 86px !important;
 }
 
 /* =========================================
-   MOBILE - REMOVE TAP / TOUCH HIGHLIGHT
+   CEROOD MOBILE - GLOBAL TOUCH FEEDBACK
+   No grey tap sheet + modern press effect
 ========================================= */
 
 @media (max-width: 850px) {
 
+    /* REMOVE DEFAULT MOBILE GREY TAP HIGHLIGHT */
+    a,
+    button,
+    [onclick],
+    [role="button"],
     .uc-card,
-    .uc-card *,
-    .uc-card-img-wrapper,
-    .uc-card-img-wrapper *,
     .cerood-noteworthy-item,
-    .cerood-noteworthy-item *,
     .service-chip,
-    .service-chip *,
     .card-link,
-    .card-link * {
+    .cerood-offer-banner,
+    .uc-see-all-btn,
+    .brand-logo,
+    .mobile-location-widget,
+    .header-location-widget,
+    .suggestion-item,
+    .cerood-global-nav-btn {
         -webkit-tap-highlight-color: transparent !important;
     }
 
-    /* MODERN TOUCH PRESS EFFECT */
 
-.uc-card,
-.cerood-noteworthy-item {
-    transition: transform 0.12s ease !important;
-}
+    /* =====================================
+       NORMAL CLICKABLE ELEMENT PRESS
+    ===================================== */
 
-.uc-card-img-wrapper,
-.cerood-noteworthy-image {
-    transition: filter 0.12s ease !important;
-}
+    .uc-card,
+    .cerood-noteworthy-item,
+    .service-chip,
+    .card-link,
+    .cerood-offer-banner,
+    .uc-see-all-btn,
+    .brand-logo,
+    .mobile-location-widget,
+    .header-location-widget,
+    .suggestion-item,
+    button {
+        transition:
+            transform 0.12s ease,
+            filter 0.12s ease,
+            opacity 0.12s ease !important;
+    }
 
-.uc-card:active,
-.cerood-noteworthy-item:active {
-    transform: scale(0.97) !important;
-}
 
-.uc-card:active .uc-card-img-wrapper,
-.cerood-noteworthy-item:active .cerood-noteworthy-image {
-    filter: brightness(0.92) !important;
-}
+    /* TOUCH = SMALL PHYSICAL PRESS */
+    .uc-card:active,
+    .cerood-noteworthy-item:active,
+    .service-chip:active,
+    .card-link:active,
+    .cerood-offer-banner:active,
+    .uc-see-all-btn:active,
+    .brand-logo:active,
+    .mobile-location-widget:active,
+    .header-location-widget:active,
+    .suggestion-item:active {
+        transform: scale(0.97) !important;
+        filter: brightness(0.94) !important;
+    }
 
-    .uc-card:focus,
-    .uc-card:focus-visible,
-    .card-link:focus,
-    .card-link:focus-visible {
-        outline: none !important;
-        box-shadow: none !important;
+
+    /* PRODUCT IMAGE FEEDBACK */
+    .uc-card-img-wrapper,
+    .cerood-noteworthy-image {
+        transition:
+            filter 0.12s ease,
+            transform 0.12s ease !important;
+    }
+
+    .uc-card:active .uc-card-img-wrapper,
+    .cerood-noteworthy-item:active .cerood-noteworthy-image {
+        filter: brightness(0.90) !important;
+    }
+
+
+    /* =====================================
+       MOBILE BOTTOM NAV PRESS
+       Don't move whole nav layout
+    ===================================== */
+
+    .cerood-global-nav-btn {
+        transition:
+            transform 0.12s ease,
+            opacity 0.12s ease !important;
+
+        transform-origin: center center !important;
+    }
+
+    .cerood-global-nav-btn:active {
+        transform: scale(0.92) !important;
+        opacity: 0.78 !important;
+    }
+
+    .cerood-global-nav-btn .cerood-global-nav-ring,
+    .cerood-global-nav-btn svg {
+        transition:
+            transform 0.12s ease,
+            filter 0.12s ease !important;
+    }
+
+    .cerood-global-nav-btn:active .cerood-global-nav-ring {
+        transform: scale(0.90) !important;
+        filter: brightness(1.18) !important;
+    }
+
+
+    /* =====================================
+       BUTTON PRESS
+    ===================================== */
+
+    button:not(.cerood-global-nav-btn):active {
+        transform: scale(0.97);
+        filter: brightness(0.94);
+    }
+
+
+    /* NO UGLY FOCUS FLASH AFTER TOUCH */
+    a:focus,
+    button:focus,
+    [onclick]:focus {
+        -webkit-tap-highlight-color: transparent !important;
     }
 }
 
