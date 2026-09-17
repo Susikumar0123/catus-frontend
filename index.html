@@ -10191,6 +10191,109 @@ height: 86px !important;
     color: #111111 !important;
 }
 
+/* =========================================
+   CUSTOMER DASHBOARD MOBILE HEADER - FINAL
+========================================= */
+@media (max-width: 768px) {
+
+    #premiumCustomerDashboard .prem-dash-header {
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        grid-template-areas:
+            "left profile"
+            "customer profile" !important;
+
+        align-items: center !important;
+
+        padding: 10px 12px !important;
+        column-gap: 10px !important;
+        row-gap: 3px !important;
+
+        min-height: 64px !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* Back button + Welcome */
+    #premiumCustomerDashboard .header-left-group {
+        grid-area: left !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        gap: 10px !important;
+
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+
+    /* Welcome name */
+    #premiumCustomerDashboard .prem-greeting {
+        min-width: 0 !important;
+        flex: 1 !important;
+    }
+
+    #premiumCustomerDashboard .prem-greeting-text {
+        font-size: 12px !important;
+        line-height: 16px !important;
+
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+
+    /* Customer ID - welcome கீழே */
+    #premiumCustomerDashboard .header-center-group {
+        grid-area: customer !important;
+
+        display: flex !important;
+        justify-content: flex-start !important;
+
+        margin-left: 46px !important;
+
+        width: auto !important;
+        position: static !important;
+        transform: none !important;
+    }
+
+    #premiumCustomerDashboard .prem-cust-id-badge {
+        font-size: 9px !important;
+        line-height: 12px !important;
+
+        padding: 3px 8px !important;
+        border-radius: 10px !important;
+
+        white-space: nowrap !important;
+    }
+
+
+    /* Profile settings */
+    #premiumCustomerDashboard .header-right-group {
+        grid-area: profile !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        position: static !important;
+        transform: none !important;
+
+        margin: 0 !important;
+    }
+
+
+    #premiumCustomerDashboard #dashboardProfileBtn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+
+        margin: 0 !important;
+        flex-shrink: 0 !important;
+    }
+}
+
 </style>
 </head>
 <body>
