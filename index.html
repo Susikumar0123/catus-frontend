@@ -9858,6 +9858,52 @@ height: 86px !important;
     }
 }
 
+/* =========================================
+   CENTER OFFER BANNER - MOBILE VIDEO FINAL
+========================================= */
+
+/* Desktop default */
+.cerood-offer-mobile-video {
+    display: none;
+}
+
+.cerood-offer-desktop {
+    display: block;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .cerood-offer-banner {
+        width: calc(100% - 32px) !important;
+        margin: 18px 16px 28px 16px !important;
+
+        aspect-ratio: auto !important;
+
+        border-radius: 10px !important;
+        overflow: hidden !important;
+        background: #000 !important;
+    }
+
+    .cerood-offer-desktop {
+        display: none !important;
+    }
+
+    .cerood-offer-mobile-video {
+        display: block !important;
+
+        width: 100% !important;
+        height: auto !important;
+
+        aspect-ratio: 16 / 9 !important;
+        object-fit: contain !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -15241,12 +15287,7 @@ if (categoryIndex === middleCategory) {
             class="cerood-offer-banner"
             onclick="openServiceProduct('tv-repair')"
         >
-            <picture>
-    <source
-        media="(max-width: 768px)"
-        srcset="/banner1-mobile.webp"
-    >
-
+            <picture class="cerood-offer-desktop">
     <img
         src="/banner1-desktop.webp"
         alt="Cerood Special Service Offer"
@@ -15254,6 +15295,17 @@ if (categoryIndex === middleCategory) {
         decoding="async"
     >
 </picture>
+
+<video
+    class="cerood-offer-mobile-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+>
+    <source src="/banner1-mobile.mp4" type="video/mp4">
+</video>
         </div>
     `;
 }
