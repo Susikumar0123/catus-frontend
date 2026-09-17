@@ -8922,34 +8922,51 @@ height: 86px !important;
 }
 
 /* =========================================
-   CEROOD MOBILE BOTTOM NAV - PURE BLACK
+   CEROOD MOBILE BOTTOM NAV - FINAL BLACK
 ========================================= */
 @media (max-width: 850px) {
 
     .mobile-bottom-nav {
         background: #000000 !important;
-        border-top: 1px solid #000000 !important;
+        background-color: #000000 !important;
+        border-top: none !important;
         box-shadow: none !important;
     }
 
     .mobile-bottom-nav .bot-nav-item,
     .mobile-bottom-nav .bot-nav-item.active {
-        background: transparent !important;
+        background: #000000 !important;
+        background-color: #000000 !important;
+        border: none !important;
+        box-shadow: none !important;
         color: #ffffff !important;
     }
 
-    .mobile-bottom-nav .bot-nav-item span,
-    .mobile-bottom-nav .bot-nav-item.active span {
-        color: #ffffff !important;
+    /* ICON-ODA CIRCLE / WRAPPER-UM BLACK */
+    .mobile-bottom-nav .bot-nav-item > div,
+    .mobile-bottom-nav .bot-nav-item > span:first-child,
+    .mobile-bottom-nav .bot-nav-item .icon-wrapper,
+    .mobile-bottom-nav .bot-nav-item .nav-icon {
+        background: #000000 !important;
+        background-color: #000000 !important;
+        border-color: #000000 !important;
+        box-shadow: none !important;
     }
 
+    /* ALL ICONS PURE WHITE */
     .mobile-bottom-nav .catus-bottom-icon,
     .mobile-bottom-nav .catus-bottom-icon *,
     .mobile-bottom-nav .bot-nav-item svg,
     .mobile-bottom-nav .bot-nav-item svg * {
         stroke: #ffffff !important;
-        fill: none !important;
+        color: #ffffff !important;
         opacity: 1 !important;
+    }
+
+    /* NAV TEXT PURE WHITE */
+    .mobile-bottom-nav .bot-nav-item span,
+    .mobile-bottom-nav .bot-nav-item.active span {
+        color: #ffffff !important;
     }
 }
 
