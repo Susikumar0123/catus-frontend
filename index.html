@@ -9190,28 +9190,35 @@ height: 86px !important;
 }
 
 /* =========================================
-   MOBILE PRODUCT IMAGE - PREMIUM SMALL SIZE
+   MOBILE PRODUCT IMAGE - FINAL SMALL SIZE
 ========================================= */
 
-@media (max-width: 850px) {
+@media (max-width: 768px) {
 
     .uc-card-img-wrapper {
-        width:10% !important;
+        width: 64px !important;
+        height: 64px !important;
+        min-width: 64px !important;
+        max-width: 64px !important;
+
         aspect-ratio: 1 / 1 !important;
 
-        margin:
-            0 auto
-            9px auto !important;
+        margin: 0 auto 7px auto !important;
 
-        border-radius: 10px !important;
+        border-radius: 9px !important;
+        overflow: hidden !important;
     }
 
     .uc-card-img-wrapper img,
     .uc-card img {
-        width: 100% !important;
-        height: 100% !important;
+        width: 64px !important;
+        height: 64px !important;
+
+        min-width: 64px !important;
+        max-width: 64px !important;
 
         object-fit: cover !important;
+        display: block !important;
     }
 }
 
