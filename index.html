@@ -10444,12 +10444,7 @@ max-width: 82% !important;
     .uc-category-box:not(.quick-home-fresh) {
 
         /* SAME BLUE AS QUICK HOME SERVICES */
-        background: linear-gradient(
-            135deg,
-            #0867b2 0%,
-            #0078c8 55%,
-            #0067ad 100%
-        ) !important;
+        background: #021A3E !important;
 
         /* KEEP PREMIUM GLASS LOOK */
         border: 1px solid rgba(255,255,255,0.32) !important;
@@ -10468,34 +10463,34 @@ max-width: 82% !important;
     }
 
 
-    /* STRONG GLASS SHINE */
-    .mobile-category-track >
-    .uc-category-box:not(.quick-home-fresh)::before {
+    /* STRONG PREMIUM GLASS SHINE */
+.mobile-category-track >
+.uc-category-box:not(.quick-home-fresh)::before {
 
-        content: "" !important;
+    content: "" !important;
+    position: absolute !important;
 
-        position: absolute !important;
-        top: -42% !important;
-        left: -15% !important;
+    top: -35% !important;
+    left: -20% !important;
 
-        width: 130% !important;
-        height: 82% !important;
+    width: 140% !important;
+    height: 78% !important;
 
-        border-radius: 50% !important;
+    border-radius: 50% !important;
 
-        background: radial-gradient(
-            ellipse at center,
-            rgba(255,255,255,0.42) 0%,
-            rgba(255,255,255,0.24) 22%,
-            rgba(255,255,255,0.10) 42%,
-            transparent 70%
-        ) !important;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(90, 180, 255, 0.38) 0%,
+        rgba(65, 155, 240, 0.22) 25%,
+        rgba(255,255,255,0.09) 45%,
+        transparent 72%
+    ) !important;
 
-        filter: blur(15px) !important;
+    filter: blur(18px) !important;
 
-        pointer-events: none !important;
-        z-index: 0 !important;
-    }
+    pointer-events: none !important;
+    z-index: 0 !important;
+}
 
 
     /* TOP SHINING REFLECTION */
@@ -10558,17 +10553,24 @@ max-width: 82% !important;
 }
 
 /* =========================================
-   QUICK HOME SERVICES - MATCH HERO WIDTH
+   QUICK HOME SERVICES - FINAL WIDTH FIX
    MOBILE ONLY
 ========================================= */
 @media (max-width: 768px) {
 
+    .mobile-category-track >
     .uc-category-box.quick-home-fresh {
-        width: calc(100% - 24px) !important;
-        max-width: calc(100% - 24px) !important;
-        margin-left: 12px !important;
-        margin-right: 12px !important;
+
+        flex: 0 0 calc(100vw - 24px) !important;
+
+        width: calc(100vw - 24px) !important;
+        min-width: calc(100vw - 24px) !important;
+        max-width: calc(100vw - 24px) !important;
+
+        margin: 0 !important;
+
         box-sizing: border-box !important;
+        scroll-snap-align: start !important;
     }
 }
 
