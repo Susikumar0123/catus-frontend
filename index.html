@@ -10141,9 +10141,17 @@ justify-content: flex-start !important;
 @media (max-width: 768px) {
 
     .quick-home-fresh {
-        padding: 12px 10px 14px !important;
-        overflow: hidden !important;
-    }
+    width: calc(100% - 12px) !important;
+    max-width: none !important;
+
+    margin-left: 6px !important;
+    margin-right: 6px !important;
+
+    padding: 12px 10px 14px !important;
+
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
 
     .quick-home-fresh .uc-cat-header {
         margin: 0 0 10px 0 !important;
