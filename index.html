@@ -967,6 +967,18 @@ color: #171717 !important;
             transition: transform 0.2s ease; 
             cursor: pointer;
         }
+
+        @media (max-width: 768px) {
+    .uc-card {
+        background: #ffffff !important;
+        border: 1px solid rgba(0,0,0,0.06) !important;
+        border-radius: 11px !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08) !important;
+        overflow: hidden !important;
+        padding: 6px 6px 8px 6px !important;
+    }
+}
+
         .uc-card:hover { 
             transform: translateY(-4px); 
             box-shadow: none !important; 
@@ -8303,7 +8315,7 @@ button.uc-cart-btn:hover {
         line-height: 20px !important;
         font-weight: 700 !important;
 
-        color: #191919 !important;
+        color: #ffffff !important;
 
         max-width: calc(100% - 30px) !important;
     }
@@ -8351,7 +8363,7 @@ button.uc-cart-btn:hover {
         line-height: 24px !important;
         font-weight: 400 !important;
 
-        color: #111111 !important;
+        color: #ffffff !important;
     }
 
 
@@ -8411,15 +8423,14 @@ button.uc-cart-btn:hover {
         margin: 0 !important;
         padding: 0 !important;
 
-        background: transparent !important;
+background: #ffffff !important;
 
-        border: none !important;
-        border-radius: 0 !important;
+border: 1px solid rgba(0, 0, 0, 0.06) !important;
+border-radius: 11px !important;
 
-        box-shadow: none !important;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08) !important;
 
-        overflow: visible !important;
-
+overflow: hidden !important;
         transform: none !important;
     }
 
@@ -9631,30 +9642,44 @@ height: 86px !important;
 @media (max-width: 768px) {
 
     .uc-category-box .uc-card {
-        width: 92px !important;
-        min-width: 92px !important;
-        max-width: 92px !important;
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-    }
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    border-radius: 11px !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08) !important;
+
+    padding: 6px 6px 8px 6px !important;
+}
 
     .uc-category-box .uc-card-img-wrapper {
-        width: 92px !important;
-        min-width: 92px !important;
-        max-width: 92px !important;
-        height: 92px !important;
-        box-sizing: border-box !important;
-    }
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+
+    box-sizing: border-box !important;
+    border-radius: 7px !important;
+    overflow: hidden !important;
+}
 
     .uc-category-box .uc-body {
-        width: 92px !important;
-        min-width: 0 !important;
-        max-width: 92px !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-    }
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    padding: 2px 2px 0 2px !important;
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
 
     .uc-category-box .uc-body h4 {
         width: 100% !important;
