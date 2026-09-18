@@ -438,6 +438,233 @@ row-gap: 22px !important;
     display: none !important;
 }
 
+/* =========================================
+   CEROOD MOBILE SERVICE GRID - CLEAN COMMERCE UI
+========================================= */
+
+.uc-category-box {
+    background: #ffffff !important;
+
+    border: 1px solid #e4e4e4 !important;
+    border-radius: 12px !important;
+
+    padding: 12px 10px 12px !important;
+margin: 0 6px 12px 6px !important;
+
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+
+
+/* SECTION TITLE */
+
+.uc-cat-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    margin: 0 0 10px 0 !important;
+    padding: 0 !important;
+
+    min-height: 24px !important;
+}
+
+.uc-cat-header h3 {
+    margin: 0 !important;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', sans-serif !important;
+
+    font-size: 17px !important;
+line-height: 22px !important;
+font-weight: 600 !important;
+
+    letter-spacing: -0.25px !important;
+
+    color: #242424 !important;
+}
+
+/* SEE ALL ARROW - FINAL */
+
+.uc-see-all-btn {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: none !important;
+    background: transparent !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    cursor: pointer !important;
+}
+
+.uc-see-all-btn::after {
+    content: "›" !important;
+
+    font-family: Arial, sans-serif !important;
+    font-size: 23px !important;
+    line-height: 1 !important;
+    font-weight: 400 !important;
+
+    color: #333333 !important;
+}
+
+.uc-see-all-btn.expanded::after {
+    content: "⌃" !important;
+    font-size: 19px !important;
+}
+
+/* PRODUCT GRID */
+
+.uc-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+    column-gap: 12px !important;
+    row-gap: 18px !important;
+
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    justify-content: stretch !important;
+    align-items: start !important;
+}
+
+.uc-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    box-sizing: border-box !important;
+}
+
+
+/* IMAGE */
+
+.uc-card-img-wrapper {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+
+    border: 1px solid #e1e4e8 !important;
+    border-radius: 7px !important;
+
+    background: #fafafa !important;
+
+    margin-bottom: 5px !important;
+
+    overflow: hidden !important;
+}
+
+
+.uc-card-img-wrapper img {
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover !important;
+    object-position: center !important;
+
+    display: block !important;
+
+    border-radius: 0 !important;
+
+    transform: none !important;
+}
+
+/* SERVICE NAME */
+
+.uc-body h4 {
+    margin: 0 0 3px 0 !important;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', sans-serif !important;
+
+    font-size: 12px !important;
+    line-height: 15px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: -0.15px !important;
+    color: #202020 !important;
+
+    min-height: 30px !important;
+
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+
+    overflow: hidden !important;
+    text-align: left !important;
+}
+
+/* CURRENT PRICE */
+
+.uc-price {
+    margin: 0 !important;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', sans-serif !important;
+
+    font-size: 13px !important;
+    line-height: 15px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: -0.1px !important;
+    color: #111111 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* OLD CUT PRICE */
+
+.uc-cut {
+    display: inline-block !important;
+    margin-left: 4px !important;
+
+    font-size: 9px !important;
+    line-height: 15px !important;
+    font-weight: 400 !important;
+
+    color: #777777 !important;
+
+    text-decoration: line-through !important;
+    text-decoration-thickness: 1px !important;
+
+    vertical-align: baseline !important;
+}
+/* MOBILE SERVICE GRID - FINAL SAFETY */
+
+.uc-category-box,
+.uc-grid,
+.uc-card,
+.uc-card-img-wrapper,
+.uc-body {
+    box-sizing: border-box !important;
+}
+
+.uc-carousel-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+}
+
+.uc-body {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+}
+
 }
 
         /* --- PREMIUM Catus STYLE AUTH MODAL CSS --- */
