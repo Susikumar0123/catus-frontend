@@ -8727,19 +8727,21 @@ height: 86px !important;
     }
 
     .quick-home-mobile-row .uc-card {
-        display: flex !important;
+    display: flex !important;
 
-        flex: 0 0 27% !important;
+    flex: 0 0 27% !important;
+    width: 27% !important;
+    min-width: 27% !important;
+    max-width: 27% !important;
 
-width: 27% !important;
-min-width: 27% !important;
-max-width: 27% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    align-self: flex-start !important;
 
-height: 130px !important;
-padding: 5px 5px 4px 5px !important;
+    padding: 5px 5px 4px 5px !important;
 
-        scroll-snap-align: start !important;
-    }
+    scroll-snap-align: start !important;
+}
 
     /* Quick Home-la 4+ products hide panna koodadhu */
     .quick-home-mobile-row .uc-grid .uc-card:nth-child(n+5) {
@@ -10346,14 +10348,29 @@ line-height: 11px !important;
     }
 
     .uc-card .service-view-more {
-    display: none;
+    display: none !important;
+
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
     font-size: 10px !important;
     line-height: 15px !important;
     font-weight: 600 !important;
     color: #087ac1 !important;
-    margin-left: 3px !important;
+
+    padding-left: 15px !important;
+    margin: 0 !important;
     white-space: nowrap !important;
-    vertical-align: baseline !important;
+
+    background: linear-gradient(
+        to right,
+        rgba(255,255,255,0) 0%,
+        #ffffff 28%,
+        #ffffff 100%
+    ) !important;
+
+    z-index: 2 !important;
 }
 }
 
@@ -15825,8 +15842,9 @@ html += `
 
 container.innerHTML = html;
 
-/* SHOW "VIEW" ONLY FOR TRUNCATED SERVICE NAMES */
+/* SHOW "VIEW" ONLY FOR LONG MOBILE SERVICE NAMES */
 if (window.innerWidth <= 768) {
+
     container.querySelectorAll('.service-name-text').forEach(title => {
 
         const name = title.querySelector('span');
@@ -15834,19 +15852,35 @@ if (window.innerWidth <= 768) {
 
         if (!name || !view) return;
 
-        // First hide View and check actual service-name overflow
         view.style.display = 'none';
 
-        const isOverflowing =
-    name.scrollHeight > title.clientHeight;
+        const style = window.getComputedStyle(title);
+        const lineHeight = parseFloat(style.lineHeight) || 15;
 
-        view.style.display = isOverflowing
-            ? 'inline'
-            : 'none';
+        /* Temporarily allow full text to measure real height */
+        const oldMaxHeight = title.style.maxHeight;
+        const oldHeight = title.style.height;
+        const oldOverflow = title.style.overflow;
+
+        title.style.setProperty('max-height', 'none', 'important');
+        title.style.setProperty('height', 'auto', 'important');
+        title.style.setProperty('overflow', 'visible', 'important');
+
+        const fullHeight = title.scrollHeight;
+
+        title.style.maxHeight = oldMaxHeight;
+        title.style.height = oldHeight;
+        title.style.overflow = oldOverflow;
+
+        /* More than 2 lines */
+        if (fullHeight > (lineHeight * 2) + 1) {
+            view.style.setProperty('display', 'inline', 'important');
+        }
     });
 }
 
 setupMobileCategorySlider();
+
 
 
 
