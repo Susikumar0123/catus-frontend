@@ -574,7 +574,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Banner Image</th>
+                                    <th>Banner Image / Video</th>
 <th>Product / Service Slug</th>
 <th style="text-align: right;">Action</th>
                                 </tr>
@@ -2433,37 +2433,37 @@
     <input type="hidden" id="newBannerTextColor" value="#111111">
     <input type="hidden" id="newBannerBtnText" value="">
 
-    <div class="form-group">
-        <label>Banner Image *</label>
+   <div class="form-group">
+    <label>Banner Image / Video *</label>
 
-        <div style="display:flex; gap:8px; align-items:center;">
+    <div style="display:flex; gap:8px; align-items:center;">
 
-            <input
-                type="text"
-                id="newBannerImg"
-                class="form-input"
-                style="flex-grow:1;"
-                placeholder="Image URL will appear here"
-                readonly
-            >
+        <input
+            type="text"
+            id="newBannerImg"
+            class="form-input"
+            style="flex-grow:1;"
+            placeholder="Image / Video URL will appear here"
+            readonly
+        >
 
-            <label
-                for="hiddenBannerImageFile"
-                style="background:#0284c7; color:white; padding:10px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;"
-            >
-                <i class="fa-solid fa-upload"></i> Upload Image
-            </label>
+        <label
+            for="hiddenBannerImageFile"
+            style="background:#0284c7; color:white; padding:10px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;"
+        >
+            <i class="fa-solid fa-upload"></i> Upload Image / Video
+        </label>
 
-            <input
-                type="file"
-                id="hiddenBannerImageFile"
-                accept="image/*"
-                style="display:none;"
-                onchange="uploadAdminImage(this, 'newBannerImg')"
-            >
+        <input
+            type="file"
+            id="hiddenBannerImageFile"
+            accept="image/*,video/mp4,video/webm"
+            style="display:none;"
+            onchange="uploadAdminImage(this, 'newBannerImg')"
+        >
 
-        </div>
     </div>
+</div>
 
     <div class="form-group">
         <label>Product / Service Slug *</label>
@@ -6305,63 +6305,153 @@ if (techResponse === 'Accepted') {
 }
         let allAdminBanners = [];
 
-        function fetchAdminBanners() {
-            fetch(`${API_BASE_URL}/api/hero-banners`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.success) {
-                    allAdminBanners = data.banners;
-                    let tbody = document.getElementById('adminBannersTableBody');
-                    if(!tbody) return;
-                    let html = '';
-                    if(allAdminBanners.length === 0) {
-                        html = `<tr><td colspan="5" style="text-align:center; padding:20px; color:#64748b;">No custom banners added yet.</td></tr>`;
-                    } else {
-                        allAdminBanners.forEach(b => {
-                            html += `<tr>
+       function fetchAdminBanners() {
 
-    <td>
-        <img
-            src="${b.image_url}"
-            alt="Banner"
-            style="
-                width:90px;
-                height:50px;
-                object-fit:cover;
-                border-radius:6px;
-                display:block;
-            "
-        >
-    </td>
+    fetch(`${API_BASE_URL}/api/hero-banners`)
+        .then(res => res.json())
+        .then(data => {
 
-    <td>
-        <code>${b.product_id || 'N/A'}</code>
-    </td>
+            if (data.success) {
 
-    <td style="text-align:right;">
-        <button
-            class="manage-btn"
-            style="background:#0284c7; margin-right:4px;"
-            onclick="openEditBannerModal(${b.id})"
-        >
-            <i class="fa-solid fa-pen"></i> Edit
-        </button>
+                allAdminBanners = data.banners || [];
 
-        <button
-            class="manage-btn btn-danger"
-            onclick="deleteBanner(${b.id})"
-        >
-            <i class="fa-solid fa-trash"></i> Delete
-        </button>
-    </td>
+                const tbody =
+                    document.getElementById('adminBannersTableBody');
 
-</tr>`;
-                        });
-                    }
-                    tbody.innerHTML = html;
+                if (!tbody) return;
+
+                let html = '';
+
+                if (allAdminBanners.length === 0) {
+
+                    html = `
+                        <tr>
+                            <td
+                                colspan="3"
+                                style="
+                                    text-align:center;
+                                    padding:20px;
+                                    color:#64748b;
+                                "
+                            >
+                                No custom banners added yet.
+                            </td>
+                        </tr>
+                    `;
+
+                } else {
+
+                    allAdminBanners.forEach(b => {
+
+                        const mediaUrl =
+                            String(b.image_url || '').trim();
+
+                        const cleanMediaUrl =
+                            mediaUrl
+                                .split('?')[0]
+                                .toLowerCase();
+
+                        const isVideo =
+                            cleanMediaUrl.endsWith('.mp4') ||
+                            cleanMediaUrl.endsWith('.webm');
+
+
+                        // ==========================================
+                        // IMAGE / VIDEO PREVIEW
+                        // ==========================================
+
+                        let mediaPreview = '';
+
+                        if (isVideo) {
+
+                            mediaPreview = `
+                                <video
+                                    src="${mediaUrl}"
+                                    muted
+                                    playsinline
+                                    preload="metadata"
+                                    style="
+                                        width:90px;
+                                        height:50px;
+                                        object-fit:cover;
+                                        border-radius:6px;
+                                        display:block;
+                                        background:#000;
+                                    "
+                                ></video>
+                            `;
+
+                        } else {
+
+                            mediaPreview = `
+                                <img
+                                    src="${mediaUrl}"
+                                    alt="Banner"
+                                    loading="lazy"
+                                    style="
+                                        width:90px;
+                                        height:50px;
+                                        object-fit:cover;
+                                        border-radius:6px;
+                                        display:block;
+                                    "
+                                >
+                            `;
+                        }
+
+
+                        html += `
+                            <tr>
+
+                                <td>
+                                    ${mediaPreview}
+                                </td>
+
+                                <td>
+                                    <code>
+                                        ${b.product_id || 'N/A'}
+                                    </code>
+                                </td>
+
+                                <td style="text-align:right;">
+
+                                    <button
+                                        class="manage-btn"
+                                        style="
+                                            background:#0284c7;
+                                            margin-right:4px;
+                                        "
+                                        onclick="openEditBannerModal(${b.id})"
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        class="manage-btn btn-danger"
+                                        onclick="deleteBanner(${b.id})"
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                        Delete
+                                    </button>
+
+                                </td>
+
+                            </tr>
+                        `;
+                    });
                 }
-            }).catch(err => console.error("Banner fetch error:", err));
-        }
+
+                tbody.innerHTML = html;
+            }
+        })
+        .catch(err => {
+            console.error(
+                "Banner fetch error:",
+                err
+            );
+        });
+}
 
         function openAddBannerModal() {
 
@@ -6428,7 +6518,7 @@ function openEditBannerModal(id) {
             let button_text = document.getElementById('newBannerBtnText').value.trim();
 
             if (!image_url || !product_id) {
-    alert("Please upload Banner Image and enter Product / Service ID!");
+    alert("Please upload Banner Image / Video and enter Product / Service ID!");
     return;
 }
 
@@ -6487,70 +6577,160 @@ function openEditBannerModal(id) {
         document.addEventListener("DOMContentLoaded", () => {
             fetchAdminBanners();
         });
-        async function uploadAdminImage(fileInput, targetInputId) {
-        const file = fileInput.files[0];
-        if (!file) return;
+async function uploadAdminImage(fileInput, targetInputId) {
 
-        const formData = new FormData();
-formData.append('image', file);
+    const file = fileInput.files[0];
+    if (!file) return;
 
-let folderName = 'home-icons';
+    // ==========================================
+    // IMAGE / VIDEO TYPE CHECK
+    // ==========================================
 
-let categoryInput = null;
+    const isBannerUpload = targetInputId === 'newBannerImg';
+    const isImage = file.type.startsWith('image/');
+    const isVideo = file.type === 'video/mp4' ||
+                    file.type === 'video/webm';
 
-if (targetInputId.startsWith('modalImg')) {
-    categoryInput =
-        document.getElementById('modalServiceCategory');
-} else if (targetInputId.startsWith('newImg')) {
-    categoryInput =
-        document.getElementById('addServiceCategory');
-}
+    // Banner மட்டும் Image + Video allow
+    if (isBannerUpload) {
 
-if (categoryInput && categoryInput.value.trim()) {
-    folderName =
-        categoryInput.value
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-|-$/g, '');
-}
-
-formData.append('folder', folderName);
-
-const isProductImage =
-    targetInputId.startsWith('newImg') ||
-    targetInputId.startsWith('modalImg');
-
-if (isProductImage) {
-    formData.append('generateResponsive', 'true');
-}
-
-        const uploadLabel = fileInput.previousElementSibling;
-        let originalText = uploadLabel.innerHTML;
-        uploadLabel.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/upload-image`, {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                document.getElementById(targetInputId).value = data.imageUrl;
-                alert("Image uploaded and link generated successfully!");
-            } else {
-                alert("Image upload failed.");
-            }
-        } catch (err) {
-            console.error("Upload error:", err);
-            alert("Server connection error during upload.");
-        } finally {
-            uploadLabel.innerHTML = originalText;
+        if (!isImage && !isVideo) {
+            alert('Please select an image, MP4 or WebM video.');
             fileInput.value = '';
+            return;
+        }
+
+    } else {
+
+        // Other admin uploads இன்னும் image மட்டும்
+        if (!isImage) {
+            alert('Please select an image file.');
+            fileInput.value = '';
+            return;
         }
     }
 
+
+    const formData = new FormData();
+
+    // Backend field same-ah வைத்திருக்கிறோம்
+    formData.append('image', file);
+
+
+    // ==========================================
+    // FOLDER
+    // ==========================================
+
+    let folderName = 'home-icons';
+
+    if (isBannerUpload) {
+
+        folderName = 'home-banners';
+
+    } else {
+
+        let categoryInput = null;
+
+        if (targetInputId.startsWith('modalImg')) {
+
+            categoryInput =
+                document.getElementById('modalServiceCategory');
+
+        } else if (targetInputId.startsWith('newImg')) {
+
+            categoryInput =
+                document.getElementById('addServiceCategory');
+        }
+
+        if (categoryInput && categoryInput.value.trim()) {
+
+            folderName =
+                categoryInput.value
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-|-$/g, '');
+        }
+    }
+
+    formData.append('folder', folderName);
+
+
+    // ==========================================
+    // RESPONSIVE IMAGE GENERATION
+    // Product images மட்டும்
+    // Video / Banner-ku வேண்டாம்
+    // ==========================================
+
+    const isProductImage =
+        !isBannerUpload &&
+        (
+            targetInputId.startsWith('newImg') ||
+            targetInputId.startsWith('modalImg')
+        );
+
+    if (isProductImage) {
+        formData.append('generateResponsive', 'true');
+    }
+
+
+    // ==========================================
+    // UPLOAD BUTTON STATE
+    // ==========================================
+
+    const uploadLabel = fileInput.previousElementSibling;
+    const originalText = uploadLabel.innerHTML;
+
+    uploadLabel.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/upload-image`,
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        const data = await response.json();
+
+
+        if (data.success) {
+
+            document.getElementById(targetInputId).value =
+                data.imageUrl;
+
+            if (isVideo) {
+                alert('Video uploaded successfully!');
+            } else {
+                alert('Image uploaded successfully!');
+            }
+
+        } else {
+
+            alert(
+                data.message ||
+                'Image / Video upload failed.'
+            );
+        }
+
+    } catch (err) {
+
+        console.error('Upload error:', err);
+
+        alert(
+            'Server connection error during upload.'
+        );
+
+    } finally {
+
+        uploadLabel.innerHTML = originalText;
+        fileInput.value = '';
+    }
+}
     // ==========================================
     // UPLOAD HOME ICON IMAGE TO SUPABASE
     // ==========================================

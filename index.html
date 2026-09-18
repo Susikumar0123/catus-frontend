@@ -934,13 +934,15 @@ row-gap: 22px !important;
     background: transparent !important;
 }
 
-.cards-container .card img {
+.cards-container .card img,
+.cards-container .card video {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
     border-radius: 0 !important;
     display: block !important;
 }
+
 }
 
 /* =========================================
@@ -968,13 +970,14 @@ row-gap: 22px !important;
         background: transparent !important;
     }
 
-    .cards-container .card img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        border-radius: 0 !important;
-        display: block !important;
-    }
+   .cards-container .card img,
+.cards-container .card video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    display: block !important;
+}
 }
 
         /* 5. Product Categories Container */
@@ -9499,13 +9502,14 @@ height: 86px !important;
 .cards-container .card {
     width: 100% !important;
     height: auto !important;
-    aspect-ratio: 2 / 1 !important;
+    aspect-ratio: 16 / 6 !important;
 
     padding: 0 !important;
     overflow: hidden !important;
 }
 
-.cards-container .card img {
+.cards-container .card img,
+.cards-container .card video {
     width: 100% !important;
     height: 100% !important;
 
@@ -9526,7 +9530,7 @@ height: 86px !important;
 
     .cards-container .card {
         height: auto !important;
-        aspect-ratio: 2 / 1 !important;
+        aspect-ratio: 16 / 6 !important;
         padding: 0 !important;
     }
 }
@@ -15898,6 +15902,74 @@ function showAllCategoryServices(categoryName) {
             ? String(b.product_id).trim()
             : 'tv-repair';
 
+    const mediaUrl =
+        String(b.image_url || '').trim();
+
+    // URL extension based media detection
+    const cleanMediaUrl =
+        mediaUrl.split('?')[0].toLowerCase();
+
+    const isVideo =
+        cleanMediaUrl.endsWith('.mp4') ||
+        cleanMediaUrl.endsWith('.webm');
+
+
+    // ==========================================
+    // IMAGE OR VIDEO
+    // ==========================================
+
+    let mediaHTML = '';
+
+    if (isVideo) {
+
+        mediaHTML = `
+            <video
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="${index === 0 ? 'auto' : 'metadata'}"
+                aria-label="Cerood Home Service Video Banner"
+                style="
+                    width:100% !important;
+                    height:100% !important;
+                    object-fit:cover !important;
+                    border-radius:0 !important;
+                    display:block !important;
+                "
+            >
+                <source
+                    src="${mediaUrl}"
+                    type="${
+                        cleanMediaUrl.endsWith('.webm')
+                            ? 'video/webm'
+                            : 'video/mp4'
+                    }"
+                >
+            </video>
+        `;
+
+    } else {
+
+        mediaHTML = `
+            <img
+                src="${mediaUrl}"
+                alt="Cerood Home Service Banner"
+                loading="${index === 0 ? 'eager' : 'lazy'}"
+                fetchpriority="${index === 0 ? 'high' : 'auto'}"
+                decoding="async"
+                style="
+                    width:100% !important;
+                    height:100% !important;
+                    object-fit:cover !important;
+                    border-radius:0 !important;
+                    display:block !important;
+                "
+            >
+        `;
+    }
+
+
     dynamicHTML += `
         <a
             href="javascript:void(0)"
@@ -15912,25 +15984,11 @@ function showAllCategoryServices(categoryName) {
                     background:#ffffff;
                 "
             >
-                <img
-                    src="${b.image_url}"
-                    alt="Cerood Home Service Banner"
-                    loading="${index === 0 ? 'eager' : 'lazy'}"
-                    fetchpriority="${index === 0 ? 'high' : 'auto'}"
-                    decoding="async"
-                    style="
-                        width:100% !important;
-                        height:100% !important;
-                        object-fit:cover !important;
-                        border-radius:0 !important;
-                        display:block !important;
-                    "
-                >
+                ${mediaHTML}
             </div>
         </a>
     `;
 });
-
             container.innerHTML = dynamicHTML;
             setupMobileBannerDots();
             startCatusBannerFlow();
