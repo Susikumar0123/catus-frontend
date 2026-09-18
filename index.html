@@ -10462,53 +10462,90 @@ max-width: 82% !important;
 
 }
 /* =========================================
-   MOBILE CATEGORY SOLID PREMIUM COLORS
-   QUICK HOME SERVICES = NO CHANGE
+   MOBILE LUXURY GLASS CATEGORY COLORS
+   QUICK HOME SERVICES = UNTOUCHED
 ========================================= */
 @media (max-width: 768px) {
 
-    /* 1st position
-       Quick Home Services vandhaal NO CHANGE
-       Other category vandhaal Blue Grey */
+    /* Other grids common glass finish */
     .mobile-category-track >
-    .uc-category-box:not(.quick-home-fresh):nth-child(1) {
-        background: #8695A1 !important;
+    .uc-category-box:not(.quick-home-fresh) {
+
+        position: relative !important;
+        isolation: isolate !important;
+
+        border: 1px solid rgba(255,255,255,0.22) !important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.20),
+            inset 0 -1px 0 rgba(0,0,0,0.12),
+            0 8px 20px rgba(0,0,0,0.12) !important;
+
+        backdrop-filter: blur(12px) saturate(125%) !important;
+        -webkit-backdrop-filter: blur(12px) saturate(125%) !important;
     }
 
-    /* 2 - Soft Premium Cream */
+
+    /* 1 - LUXURY GLASS NAVY */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh):nth-child(1) {
+
+        background:
+            radial-gradient(
+                circle at 28% 20%,
+                rgba(80,145,210,0.28) 0%,
+                rgba(80,145,210,0.08) 27%,
+                transparent 48%
+            ),
+            #061a35 !important;
+    }
+
+
+    /* 2 - LUXURY GLASS BURGUNDY */
     .mobile-category-track >
     .uc-category-box:not(.quick-home-fresh):nth-child(2) {
-        background: #FEDA9D !important;
+
+        background:
+            radial-gradient(
+                circle at 28% 20%,
+                rgba(220,105,135,0.24) 0%,
+                rgba(220,105,135,0.07) 27%,
+                transparent 48%
+            ),
+            #35101c !important;
     }
 
-    /* 3 - Soft Peach */
+
+    /* 3 - LUXURY GLASS EMERALD */
     .mobile-category-track >
     .uc-category-box:not(.quick-home-fresh):nth-child(3) {
-        background: #EFD4C3 !important;
+
+        background:
+            radial-gradient(
+                circle at 28% 20%,
+                rgba(75,205,165,0.22) 0%,
+                rgba(75,205,165,0.06) 27%,
+                transparent 48%
+            ),
+            #08271f !important;
     }
 
 
-    /* Next slider rows - colour rotation */
-    .mobile-category-track:nth-of-type(4n + 2) >
-    .uc-category-box:not(.quick-home-fresh):nth-child(1) {
-        background: #EDD9EC !important;
-    }
-
-    .mobile-category-track:nth-of-type(4n + 3) >
-    .uc-category-box:not(.quick-home-fresh):nth-child(1) {
-        background: #F5F5F5 !important;
-    }
-
-
-    /* Light backgrounds-ku title dark-a irukkanum */
+    /* Other grid headings */
     .mobile-category-track >
     .uc-category-box:not(.quick-home-fresh) .uc-cat-header h3 {
-        color: #171717 !important;
+
+        color: #ffffff !important;
+
+        text-shadow:
+            0 1px 2px rgba(0,0,0,0.30),
+            0 0 12px rgba(255,255,255,0.10) !important;
     }
+
 
     .mobile-category-track >
     .uc-category-box:not(.quick-home-fresh) .uc-see-all-btn::after {
-        color: #171717 !important;
+        color: #ffffff !important;
     }
 
 }
