@@ -10825,6 +10825,196 @@ max-width: 82% !important;
 
 }
 
+/* =========================================================
+   CEROOD MOBILE - FINAL BLUE PREMIUM GLASS
+   BASE COLOR = #0077C7
+   ALL SERVICE GRIDS = SAME COLOR
+   QUICK HOME SERVICES = UNTOUCHED
+   DESKTOP = UNTOUCHED
+========================================================= */
+
+@media (max-width: 768px) {
+
+    /* =====================================================
+       NORMAL SERVICE CATEGORY BOXES ONLY
+       QUICK HOME SERVICES EXCLUDED
+    ===================================================== */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh) {
+
+        /* EXACT REFERENCE BLUE */
+        background: #0077C7 !important;
+
+        position: relative !important;
+        isolation: isolate !important;
+        overflow: hidden !important;
+
+        border-radius: 14px !important;
+
+        /* PREMIUM GLASS EDGE */
+        border: 1px solid rgba(255, 255, 255, 0.38) !important;
+
+        /* STRONG GLASS DEPTH + REFLECTION */
+        box-shadow:
+            inset 0 2px 0 rgba(255,255,255,0.42),
+            inset 0 -2px 5px rgba(0,45,90,0.18),
+            inset 2px 0 5px rgba(255,255,255,0.12),
+            inset -2px 0 5px rgba(0,55,100,0.10),
+            0 5px 14px rgba(0,90,155,0.18) !important;
+
+        backdrop-filter: blur(14px) saturate(140%) !important;
+        -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+    }
+
+
+    /* =====================================================
+       LARGE GLASS REFLECTION
+       BASE BLUE CHANGE AAGADHU
+    ===================================================== */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)::before {
+
+        content: "" !important;
+
+        position: absolute !important;
+        top: -48% !important;
+        left: -12% !important;
+
+        width: 125% !important;
+        height: 85% !important;
+
+        border-radius: 50% !important;
+
+        background: radial-gradient(
+            ellipse at center,
+            rgba(255,255,255,0.38) 0%,
+            rgba(255,255,255,0.22) 20%,
+            rgba(255,255,255,0.10) 40%,
+            rgba(255,255,255,0.03) 55%,
+            transparent 72%
+        ) !important;
+
+        filter: blur(14px) !important;
+
+        pointer-events: none !important;
+        z-index: 0 !important;
+    }
+
+
+    /* =====================================================
+       TOP HIGH-GLOSS REFLECTION LINE
+    ===================================================== */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)::after {
+
+        content: "" !important;
+
+        position: absolute !important;
+        top: 1px !important;
+        left: 8% !important;
+
+        width: 84% !important;
+        height: 2px !important;
+
+        border-radius: 100% !important;
+
+        background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255,255,255,0.25) 12%,
+            rgba(255,255,255,0.90) 50%,
+            rgba(255,255,255,0.25) 88%,
+            transparent 100%
+        ) !important;
+
+        box-shadow:
+            0 1px 4px rgba(255,255,255,0.60),
+            0 3px 12px rgba(255,255,255,0.25) !important;
+
+        pointer-events: none !important;
+        z-index: 3 !important;
+    }
+
+
+    /* =====================================================
+       CONTENT ABOVE GLASS
+    ===================================================== */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh) >
+    * {
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+
+    /* =====================================================
+       HEADING
+    ===================================================== */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-cat-header h3 {
+
+        color: #ffffff !important;
+
+        text-shadow:
+            0 1px 2px rgba(0,50,90,0.30),
+            0 0 8px rgba(255,255,255,0.12) !important;
+    }
+
+
+    /* SEE ALL ARROW */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-see-all-btn::after {
+
+        color: #ffffff !important;
+    }
+
+
+    /* =====================================================
+       PRODUCT CARDS
+    ===================================================== */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-card {
+
+        background: #ffffff !important;
+
+        border: 1px solid rgba(255,255,255,0.85) !important;
+
+        border-radius: 11px !important;
+
+        box-shadow:
+            0 3px 9px rgba(0,55,100,0.16),
+            inset 0 1px 0 rgba(255,255,255,1) !important;
+    }
+
+
+    /* PRODUCT NAME */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-body h4 {
+        color: #171717 !important;
+    }
+
+
+    /* PRICE */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-price {
+        color: #171717 !important;
+    }
+
+
+    /* CUT PRICE */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-cut {
+        color: #8a8a8a !important;
+    }
+
+}
+
 </style>
 </head>
 <body>
