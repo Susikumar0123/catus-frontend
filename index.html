@@ -9767,7 +9767,6 @@ max-height: 20px !important;
     .quick-home-mobile-row .uc-price {
     width: 100% !important;
     margin-top: 3px !important;
-    margin-top: auto !important;
     padding: 0 !important;
 
     font-size: 9px !important;
@@ -10325,6 +10324,37 @@ line-height: 11px !important;
         margin: 0 !important;
         flex-shrink: 0 !important;
     }
+}
+
+/* =========================================
+   MOBILE SERVICE NAME + VIEW
+========================================= */
+@media (max-width: 768px) {
+
+    .uc-card .service-name-text {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        min-height: 30px !important;
+        max-height: 30px !important;
+
+        font-size: 12px !important;
+        line-height: 15px !important;
+
+        overflow: hidden !important;
+        margin: 0 0 3px 0 !important;
+    }
+
+    .uc-card .service-view-more {
+    display: none;
+    font-size: 10px !important;
+    line-height: 15px !important;
+    font-weight: 600 !important;
+    color: #087ac1 !important;
+    margin-left: 3px !important;
+    white-space: nowrap !important;
+    vertical-align: baseline !important;
+}
 }
 
 </style>
@@ -15621,7 +15651,10 @@ decoding="async">
 
             <div class="uc-body">
 
-                <h4>${s.service_name}</h4>
+                <h4 class="service-name-text">
+    <span>${s.service_name}</span>
+    <b class="service-view-more">View</b>
+</h4>
 
                 
 
@@ -15788,9 +15821,34 @@ html += `
     </div>
 `;
 
+
+
 container.innerHTML = html;
 
+/* SHOW "VIEW" ONLY FOR TRUNCATED SERVICE NAMES */
+if (window.innerWidth <= 768) {
+    container.querySelectorAll('.service-name-text').forEach(title => {
+
+        const name = title.querySelector('span');
+        const view = title.querySelector('.service-view-more');
+
+        if (!name || !view) return;
+
+        // First hide View and check actual service-name overflow
+        view.style.display = 'none';
+
+        const isOverflowing =
+    name.scrollHeight > title.clientHeight;
+
+        view.style.display = isOverflowing
+            ? 'inline'
+            : 'none';
+    });
+}
+
 setupMobileCategorySlider();
+
+
 
 // Full homepage normal state cache
 try {
