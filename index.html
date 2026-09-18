@@ -10135,6 +10135,148 @@ justify-content: flex-start !important;
     }
 }
 
+/* =========================================
+   QUICK HOME SERVICES - FRESH MOBILE DESIGN
+========================================= */
+@media (max-width: 768px) {
+
+    /* Quick Home outer box */
+    .quick-home-fresh {
+        padding: 14px 0 14px 12px !important;
+        overflow: hidden !important;
+    }
+
+    .quick-home-fresh .uc-cat-header {
+        margin: 0 12px 10px 0 !important;
+    }
+
+    /* Horizontal single row */
+    .quick-home-fresh .uc-carousel-wrapper {
+        width: 100% !important;
+        overflow: visible !important;
+    }
+
+    .quick-home-fresh .uc-grid {
+        display: flex !important;
+        grid-template-columns: none !important;
+
+        gap: 8px !important;
+
+        width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        padding: 0 12px 2px 0 !important;
+        margin: 0 !important;
+
+        scrollbar-width: none !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x proximity !important;
+    }
+
+    .quick-home-fresh .uc-grid::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /* All services available in swipe */
+    .quick-home-fresh .uc-grid .uc-card:nth-child(n+5) {
+        display: flex !important;
+    }
+
+    /* Small cards - around 4 visible */
+    .quick-home-fresh .uc-card {
+        flex: 0 0 76px !important;
+        width: 76px !important;
+        min-width: 76px !important;
+        max-width: 76px !important;
+
+        padding: 5px 5px 7px !important;
+        margin: 0 !important;
+
+        border-radius: 10px !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        scroll-snap-align: start !important;
+    }
+
+    /* Image */
+    .quick-home-fresh .uc-card-img-wrapper {
+        width: 100% !important;
+        height: 64px !important;
+        aspect-ratio: auto !important;
+
+        margin: 0 0 5px 0 !important;
+        border-radius: 7px !important;
+    }
+
+    .quick-home-fresh .uc-card-img-wrapper img,
+    .quick-home-fresh .uc-card img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* Text area */
+    .quick-home-fresh .uc-body {
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        flex-grow: 0 !important;
+    }
+
+    /* Service name */
+    .quick-home-fresh .uc-body h4 {
+        width: 100% !important;
+
+        margin: 0 0 4px 0 !important;
+        padding: 0 !important;
+
+        font-size: 8px !important;
+        line-height: 10px !important;
+        font-weight: 500 !important;
+
+        min-height: 20px !important;
+        height: 20px !important;
+        max-height: 20px !important;
+
+        white-space: normal !important;
+        overflow: hidden !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+    }
+
+    /* Quick Home-la View text vendaam */
+    .quick-home-fresh .service-view-more {
+        display: none !important;
+    }
+
+    /* Price immediately below name */
+    .quick-home-fresh .uc-price {
+        margin: 0 !important;
+        padding: 0 !important;
+
+        font-size: 10px !important;
+        line-height: 12px !important;
+        font-weight: 600 !important;
+
+        white-space: nowrap !important;
+    }
+
+    .quick-home-fresh .uc-cut {
+        margin-left: 2px !important;
+
+        font-size: 8px !important;
+        line-height: 12px !important;
+    }
+}
 
 </style>
 </head>
@@ -15356,6 +15498,9 @@ for(let catName in displayCategoriesMap) {
                   let catData = displayCategoriesMap[catName];
                   html += `
 <div class="uc-category-box
+
+
+    ${catName === 'Quick Home Services' ? 'quick-home-fresh' : ''}
     
     ${catName === 'Popular Services' ? 'popular-services-mobile-card' : ''}">
 
