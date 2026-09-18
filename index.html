@@ -8235,6 +8235,8 @@ button.uc-cart-btn:hover {
     .mobile-category-track {
         display: flex !important;
         flex-wrap: nowrap !important;
+        justify-content: center !important;
+
 
         gap: 12px !important;
 
@@ -8270,11 +8272,11 @@ button.uc-cart-btn:hover {
            ~320px card on larger mobile,
            but never more than ~82% screen.
         */
-        flex: 0 0 min(82vw, 320px) !important;
+        flex: 0 0 82% !important;
 
-        width: min(82vw, 320px) !important;
-        min-width: min(82vw, 320px) !important;
-        max-width: min(82vw, 320px) !important;
+width: 82% !important;
+min-width: 82% !important;
+max-width: 82% !important;
 
         margin: 0 !important;
 
@@ -10290,6 +10292,19 @@ max-width: 82% !important;
     .quick-home-fresh .service-view-more {
         display: none !important;
     }
+}
+
+@media (max-width: 768px) {
+
+    .mobile-category-track {
+        justify-content: center !important;
+    }
+
+    .mobile-category-track > .uc-category-box {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
 }
 
 </style>
