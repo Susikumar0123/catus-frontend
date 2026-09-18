@@ -365,8 +365,48 @@
         .breadcrumb a { color: #a86c6d; text-decoration: none; }
         .breadcrumb span { margin: 0 8px; color: #cbd5e1; }
         .breadcrumb .active { color: #212121; }
+
+        /* =========================================
+   PRODUCT PAGE - CEROOD POLISH BASE
+========================================= */
+
+.product-grid {
+    background: #F5F5F7 !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+}
+
+.product-gallery {
+    background: transparent !important;
+}
+
+.product-info {
+    background: #ffffff !important;
+    border-radius: 14px !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+
+    .product-grid {
+        padding: 12px !important;
+        border-radius: 14px !important;
+        gap: 12px !important;
+    }
+
+    .product-info {
+        padding: 14px !important;
+        border-radius: 12px !important;
+    }
+}
         
         /* Main Image Container matching Index Card Wrapper Style */
+
+        
         .main-image-container { width: 100%; border-radius: 12px; overflow: hidden; background: #ffffff; border: none; margin-bottom: 12px; position: relative; }
         .main-image-container img { width: 100%; height: 350px; display: block; object-fit: cover; }
         .product-gallery {background: #ffffff;}
@@ -377,87 +417,190 @@
         .thumb-box.active { opacity: 1; border-color: #d7a7a8; }
 
         .product-info { width: 100%; display: flex; flex-direction: column; gap: 16px; }
-        .product-title { font-size: 28px; font-weight: 700; margin: 0; line-height: 1.3; color: #0f172a; }
-        .rating-row { display: flex; align-items: center; gap: 12px; }
+        .product-title {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 26px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.4px !important;
+    color: #171717 !important;
+    margin: 0 !important;
+}
+        .rating-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+.rating-badge {
+    background: #f0fdf4 !important;
+    color: #15803d !important;
+    border: none !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.rating-text {
+    font-size: 12px !important;
+    color: #737373 !important;
+    font-weight: 400 !important;
+}
+
+.hot-deal {
+    font-size: 12px !important;
+    color: #16a34a !important;
+    font-weight: 600 !important;
+}
         
-        /* Rating Badge Styled Cleanly */
-        .rating-badge { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
-        .rating-text { font-size: 14px; color: #64748b; font-weight: 500; cursor: pointer; }
-        .hot-deal { color: #16a34a; font-size: 14px; font-weight: 600; }
-        
+       
         .price-section { display: flex; align-items: baseline; gap: 15px; margin-top: 5px; }
-        .current-price { font-size: 36px; font-weight: 700; color: #0f172a; }
-        .original-price { font-size: 20px; color: #94a3b8; text-decoration: line-through; font-weight: 500; }
-        .discount-pct { font-size: 18px; color: #16a34a; font-weight: 600; }
+        .current-price {
+    font-size: 30px !important;
+    font-weight: 600 !important;
+    color: #171717 !important;
+}
+
+.original-price {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    color: #8a8a8a !important;
+    text-decoration: line-through !important;
+}
+
+.discount-pct {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #16a34a !important;
+}
 
         .variant-title { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 10px; text-transform: uppercase; }
         .variant-group { display: flex; flex-wrap: wrap; gap: 12px; }
         .variant-btn { background: #fff; border: 1px solid #cbd5e1; padding: 12px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; transition: 0.2s; color: #1e293b; }
-        .variant-btn.active { 
-    background: #d7a7a8 !important; /* லாகின் மற்றும் டெலிவரி பாக்ஸ் போன்ற அதே ரோஸ்/பிங்க் கலர் */
-    border-color: #d7a7a8 !important; 
-    color: #111111 !important;     /* டெக்ஸ்ட் கலர் கருப்பு */
-    box-shadow: 0 0 0 1px #d7a7a8 !important; 
+        
+        @media (max-width: 768px) {
+
+            #productGridMain .variant-title {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #737373 !important;
+    margin-bottom: 8px !important;
+    letter-spacing: 0.2px !important;
 }
+
+    #productGridMain .variant-group {
+        gap: 8px !important;
+    }
+
+    #productGridMain .variant-btn {
+        padding: 9px 13px !important;
+        min-height: 38px !important;
+        border-radius: 8px !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+    }
+
+}
+       .variant-btn.active {
+    background: #171717 !important;
+    border-color: #171717 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+
 .variant-btn.active:hover {
-    background: #c29394 !important; /* ஹோவர் செய்யும்போது வரும் சிறிய டார்க் ஷேட் */
+    background: #2b2b2b !important;
 }
 
-        .features-section { margin-top: 15px; background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .features-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #0f172a; }
-        .feature-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; margin-bottom: 10px; line-height: 1.5; color: #475569; }
-        .feature-item i { color: #16a34a; margin-top: 3px; font-size: 16px; }
-
-        /* --- Product Page Action Buttons (Add to Cart & Book Now Styling Fix) --- */
-.action-buttons { 
-    display: flex; 
-    gap: 15px; 
-    margin-top: 20px; 
+        .features-section {
+    margin-top: 12px !important;
+    background: #F5F5F7 !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    border: none !important;
 }
 
-.btn { 
-    flex: 1; 
-    padding: 16px 20px; 
-    border: none; 
-    border-radius: 8px; /* 2-வது படத்தில் உள்ள வட்டமான கார்னர் ஸ்டைல் */
-    font-size: 15px; 
-    font-weight: 600; 
-    cursor: pointer; 
-    color: #fff !important; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    gap: 8px; 
-    transition: all 0.2s ease; 
-    text-decoration: none; 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* சாஃப்ட் ஷேடோ */
+.features-title {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    margin-bottom: 12px !important;
+    color: #171717 !important;
 }
 
-/* 1. Add to Cart Button (Matching Emerald Green) */
-.btn-cart { 
-    background: #10b981 !important; /* அழகான மற்றும் பிரகாசமான பச்சை நிறம் */
-} 
-.btn-cart:hover { 
-    background: #059669 !important; 
-    transform: translateY(-2px); 
+.feature-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 9px !important;
+    font-size: 13px !important;
+    margin-bottom: 9px !important;
+    line-height: 1.45 !important;
+    color: #555555 !important;
 }
 
-/* 2. Book Now Button (Matching 2nd Image Purple Color) */
-.btn-buy { 
-    background: #642cc5 !important; /* 2-வது படத்தில் உள்ள ஊதா நிறம் */
-} 
-.btn-buy:hover { 
-    background: #642cc5 !important; 
-    transform: translateY(-2px); 
+.feature-item i {
+    color: #16a34a !important;
+    margin-top: 2px !important;
+    font-size: 14px !important;
 }
 
+@media (max-width: 768px) {
+
+    #productGridMain .features-section {
+        margin-top: 8px !important;
+        padding: 12px !important;
+        border-radius: 10px !important;
+    }
+
+    #productGridMain .features-title {
+        font-size: 13px !important;
+        margin-bottom: 9px !important;
+    }
+
+    #productGridMain .feature-item {
+        font-size: 12px !important;
+        gap: 8px !important;
+        margin-bottom: 7px !important;
+        line-height: 1.4 !important;
+    }
+
+    #productGridMain .feature-item i {
+        font-size: 12px !important;
+    }
+
+}
+        
 
 
         /* Related Services (Borderless Modern Cards matching Index) */
-        .uc-category-box { background: transparent; padding: 0; margin-top: 50px; border-top: 1px solid #e2e8f0; padding-top: 40px; }
-        .uc-cat-header { margin-bottom: 25px; }
-        .uc-cat-header h3 { font-size: 22px; font-weight: 700; margin: 0 0 8px 0; color: #0f172a; }
-        .uc-cat-header p { font-size: 15px; color: #64748b; margin: 0; }
+        .uc-category-box {
+    background: #F5F5F7 !important;
+    padding: 18px !important;
+    margin-top: 24px !important;
+    border-top: none !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+}
+
+.uc-cat-header {
+    margin-bottom: 14px !important;
+}
+
+.uc-cat-header h3 {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #171717 !important;
+    margin: 0 0 5px 0 !important;
+}
+
+.uc-cat-header p {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    color: #737373 !important;
+    margin: 0 !important;
+}
         .uc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         
         /* MODERN BORDERLESS PRODUCT CARD STYLES */
@@ -539,8 +682,27 @@
         .uc-cut { font-size: 13px; font-weight: 400; color: #878787; text-decoration: line-through; margin-left: 6px; }
         .uc-btn-row { display: flex; gap: 8px; width: 100%; }
         .uc-btn { border: none; padding: 8px 0; font-size: 12px; font-weight: 500; border-radius: 6px; cursor: pointer; flex: 1; color: white; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-        .uc-cart-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); } 
-        .uc-book-btn { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25); } 
+        .uc-cart-btn {
+    background: #ffffff !important;
+    color: #171717 !important;
+    border: 1px solid #dcdcdc !important;
+    box-shadow: none !important;
+}
+
+.uc-book-btn {
+    background: #171717 !important;
+    color: #ffffff !important;
+    border: 1px solid #171717 !important;
+    box-shadow: none !important;
+}
+
+.uc-cart-btn:hover {
+    background: #f5f5f5 !important;
+}
+
+.uc-book-btn:hover {
+    background: #2b2b2b !important;
+}
 
         @media (max-width: 900px) { .product-grid { grid-template-columns: 1fr; gap: 30px; } .product-gallery, .product-info { width: 100%; } .uc-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 540px) { .uc-grid { grid-template-columns: 1fr; } }
@@ -1862,27 +2024,34 @@ button,
 
 /* FEATURES */
 .features-section {
-    background: #fafafa !important;
-    border: 0 !important;
-    border-radius: 14px !important;
-    padding: 14px 15px !important;
-    margin-top: 8px !important;
+    margin-top: 12px !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
 }
 
 .features-title {
-    color: var(--catus-text) !important;
-    font-size: 14px !important;
+    font-size: 15px !important;
     font-weight: 600 !important;
+    color: #171717 !important;
+    margin-bottom: 10px !important;
 }
 
 .feature-item {
-    color: var(--catus-text-2) !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
     font-size: 13px !important;
-    font-weight: 400 !important;
+    line-height: 1.45 !important;
+    color: #555555 !important;
+    margin-bottom: 8px !important;
 }
 
 .feature-item i {
-    color: var(--catus-primary) !important;
+    color: #16a34a !important;
+    margin-top: 2px !important;
+    font-size: 14px !important;
 }
 
 /* CTA BUTTONS — one color system */
@@ -1956,8 +2125,11 @@ button,
 }
 
 .uc-card-img-wrapper {
-    background: #f6f6f7 !important;
-    border-radius: 12px !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06) !important;
 }
 
 .uc-overlay-rating {
@@ -4051,10 +4223,10 @@ body {
 #productGridMain .thumb-box.active {
     opacity: 1 !important;
 
-    border-color: #6d4aff !important;
+    border-color: #171717 !important;
 
     box-shadow:
-        0 0 0 1px #6d4aff !important;
+    0 0 0 1px #171717 !important;
 }
 
 
@@ -4232,8 +4404,8 @@ body {
 
     border-radius: 13px !important;
 
-    background: #fafaff !important;
-    border: 1px solid #f0f0f5 !important;
+    background: #F5F5F7 !important;
+border: 1px solid rgba(0,0,0,0.05) !important;
 
     box-sizing: border-box !important;
 }
@@ -4248,7 +4420,7 @@ body {
     justify-content: center !important;
 
     font-size: 20px !important;
-    color: #6541f5 !important;
+    color: #171717 !important;
 }
 
 
@@ -4664,25 +4836,17 @@ body {
 
 
 .cerood-booking-panel .btn-cart {
-    background: #f1efff !important;
-
-    color: #6040ed !important;
+    background: #ffffff !important;
+    color: #171717 !important;
+    border: 1px solid #dcdcdc !important;
+    box-shadow: none !important;
 }
 
 
 .cerood-booking-panel .btn-buy {
-    background:
-        linear-gradient(
-            135deg,
-            #6744f5,
-            #5136ed
-        ) !important;
-
+    background: #171717 !important;
     color: #ffffff !important;
-
-    box-shadow:
-        0 9px 22px
-        rgba(81,54,237,.17) !important;
+    box-shadow: none !important;
 }
 
 
@@ -4781,16 +4945,30 @@ body {
 
 
     #productGridMain .product-title {
-        font-size: 23px !important;
-
-        line-height: 1.17 !important;
-    }
+    font-size: 21px !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.3px !important;
+}
 
 
     #productGridMain .current-price {
-        font-size: 29px !important;
-    }
+    font-size: 26px !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+}
 
+#productGridMain .original-price {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    color: #969baa !important;
+}
+
+#productGridMain .discount-pct {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 5px 8px !important;
+    border-radius: 6px !important;
+}
 
     .product-trust-row {
         grid-template-columns:
@@ -4818,8 +4996,11 @@ body {
 
 
     .product-trust-item span {
-        font-size: 9px !important;
-    }
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    font-weight: 500 !important;
+    color: #555555 !important;
+}
 
 
     .cerood-booking-panel {
@@ -4827,9 +5008,8 @@ body {
     grid-template-columns: none !important;
 
     width: 100% !important;
-    padding: 16px !important;
-
-    border-radius: 14px !important;
+   padding: 14px !important;
+border-radius: 12px !important;
 
     box-shadow:
         0 8px 28px
@@ -4837,11 +5017,12 @@ body {
 }
 
 
-    .cerood-booking-panel h2 {
-        font-size: 18px !important;
-
-        margin-bottom: 16px !important;
-    }
+   .cerood-booking-panel h2 {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #171717 !important;
+    margin-bottom: 12px !important;
+}
 
 
     .cerood-date-row {
@@ -5139,6 +5320,1358 @@ body {
 
         width: calc(100% - 20px);
         max-width: none;
+    }
+}
+
+/* =========================================
+   CEROOD PRODUCT MOBILE - FINAL POLISH
+========================================= */
+@media (max-width: 850px) {
+
+    /* DATE BUTTONS */
+    .cerood-date-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 48px !important;
+        padding: 7px 4px !important;
+
+        background: #ffffff !important;
+        color: #555555 !important;
+
+        border: 1px solid #e2e2e2 !important;
+        border-radius: 8px !important;
+
+        font-size: 11px !important;
+        font-weight: 500 !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-date-btn.active {
+        background: #171717 !important;
+        color: #ffffff !important;
+        border-color: #171717 !important;
+        box-shadow: none !important;
+    }
+
+
+    /* TIME BUTTONS */
+    .cerood-time-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 40px !important;
+        padding: 8px 10px !important;
+
+        background: #ffffff !important;
+        color: #555555 !important;
+
+        border: 1px solid #e2e2e2 !important;
+        border-radius: 8px !important;
+
+        font-size: 12px !important;
+        font-weight: 500 !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-time-btn.active {
+        background: #171717 !important;
+        color: #ffffff !important;
+        border-color: #171717 !important;
+        box-shadow: none !important;
+    }
+}
+
+/* =========================================
+   MOBILE PRODUCT TRUST CARDS - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .product-trust-row {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 6px !important;
+        margin-top: 6px !important;
+    }
+
+    .product-trust-item {
+        height: 68px !important;
+        min-height: 68px !important;
+
+        grid-template-rows: 22px 26px !important;
+        gap: 4px !important;
+
+        padding: 7px 3px !important;
+
+        background: #F5F5F7 !important;
+        border: none !important;
+        border-radius: 10px !important;
+
+        box-shadow: none !important;
+    }
+
+    .product-trust-item i {
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 16px !important;
+        color: #171717 !important;
+    }
+
+    .product-trust-item span {
+        height: 26px !important;
+        font-size: 9.5px !important;
+        line-height: 1.15 !important;
+        font-weight: 500 !important;
+        color: #555555 !important;
+    }
+}
+
+/* =========================================
+   MOBILE BOOKING FORM SPACING - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .cerood-booking-panel {
+        gap: 12px !important;
+    }
+
+    .cerood-booking-panel .form-group {
+        margin-bottom: 12px !important;
+    }
+
+    .cerood-booking-panel label {
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+        font-weight: 600 !important;
+        color: #555555 !important;
+        margin-bottom: 7px !important;
+    }
+
+    .cerood-booking-panel input,
+    .cerood-booking-panel select,
+    .cerood-booking-panel textarea {
+        min-height: 42px !important;
+        padding: 10px 12px !important;
+        border: 1px solid #e2e2e2 !important;
+        border-radius: 8px !important;
+        background: #ffffff !important;
+        color: #171717 !important;
+        font-size: 12px !important;
+        box-shadow: none !important;
+    }
+
+    .cerood-booking-panel input:focus,
+    .cerood-booking-panel select:focus,
+    .cerood-booking-panel textarea:focus {
+        border-color: #171717 !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}
+
+/* =========================================
+   MOBILE CTA BUTTONS - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .cerood-booking-panel .action-buttons {
+        display: grid !important;
+        grid-template-columns: 1fr 1.12fr !important;
+        gap: 8px !important;
+        margin-top: 12px !important;
+    }
+
+    .cerood-booking-panel .btn {
+        width: 100% !important;
+        min-height: 46px !important;
+        padding: 10px 8px !important;
+
+        border-radius: 9px !important;
+
+        font-size: 12px !important;
+        font-weight: 600 !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-booking-panel .btn-cart {
+        background: #ffffff !important;
+        color: #171717 !important;
+        border: 1px solid #dcdcdc !important;
+    }
+
+    .cerood-booking-panel .btn-buy {
+        background: #171717 !important;
+        color: #ffffff !important;
+        border: 1px solid #171717 !important;
+    }
+
+    .cerood-booking-panel .btn-cart:active {
+        background: #F5F5F7 !important;
+    }
+
+    .cerood-booking-panel .btn-buy:active {
+        background: #2b2b2b !important;
+    }
+}
+
+/* =========================================
+   MOBILE LOCATION BOX - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .cerood-location-mini {
+        background: #F5F5F7 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 10px 12px !important;
+        gap: 10px !important;
+        box-shadow: none !important;
+    }
+
+    .cerood-location-mini i {
+        width: 32px !important;
+        height: 32px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        flex-shrink: 0 !important;
+
+        border-radius: 50% !important;
+
+        color: #171717 !important;
+        background: #ffffff !important;
+
+        font-size: 13px !important;
+    }
+
+    .cerood-location-mini span {
+        font-size: 10px !important;
+        color: #737373 !important;
+    }
+
+    .cerood-location-mini strong {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: #171717 !important;
+    }
+}
+
+/* =========================================
+   MOBILE BOOKING LABELS - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .cerood-booking-label {
+        margin: 13px 0 7px !important;
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+        font-weight: 600 !important;
+        color: #171717 !important;
+    }
+
+    .cerood-date-row {
+        gap: 6px !important;
+    }
+
+    .cerood-time-row {
+        gap: 6px !important;
+    }
+
+    .cerood-booking-panel h2 {
+        font-size: 16px !important;
+        line-height: 1.3 !important;
+        font-weight: 600 !important;
+        color: #171717 !important;
+        margin: 0 0 12px !important;
+    }
+}
+
+/* =========================================
+   MOBILE RELATED SERVICES - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-category-box {
+        margin-top: 18px !important;
+        padding: 12px !important;
+        border-radius: 12px !important;
+        background: #F5F5F7 !important;
+    }
+
+    .uc-cat-header {
+        margin-bottom: 12px !important;
+    }
+
+    .uc-cat-header h3 {
+        font-size: 16px !important;
+        line-height: 1.3 !important;
+        font-weight: 600 !important;
+        color: #171717 !important;
+        margin: 0 0 4px !important;
+    }
+
+    .uc-cat-header p {
+        font-size: 11px !important;
+        line-height: 1.4 !important;
+        color: #737373 !important;
+        margin: 0 !important;
+    }
+
+    .uc-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .uc-card {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+}
+
+/* =========================================
+   MOBILE RELATED SERVICE CARDS - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-card-img-wrapper {
+        width: 100% !important;
+        height: 105px !important;
+
+        background: #ffffff !important;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+        border-radius: 9px !important;
+
+        overflow: hidden !important;
+        box-shadow: none !important;
+    }
+
+    .uc-card-img-wrapper img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        display: block !important;
+    }
+
+    .uc-body {
+        padding: 8px 2px 4px !important;
+    }
+
+    .uc-body h4 {
+        font-size: 11.5px !important;
+        line-height: 1.35 !important;
+        font-weight: 600 !important;
+        color: #171717 !important;
+
+        margin: 0 0 5px !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    .uc-price {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: #171717 !important;
+    }
+}
+
+/* =========================================
+   MOBILE RELATED SERVICE BUTTONS - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-actions {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+        margin-top: 8px !important;
+    }
+
+    .uc-cart-btn,
+    .uc-book-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 38px !important;
+
+        padding: 7px 4px !important;
+        border-radius: 8px !important;
+
+        font-size: 10.5px !important;
+        line-height: 1.2 !important;
+        font-weight: 600 !important;
+
+        box-shadow: none !important;
+        white-space: nowrap !important;
+    }
+
+    .uc-cart-btn {
+        background: #ffffff !important;
+        color: #171717 !important;
+        border: 1px solid #dcdcdc !important;
+    }
+
+    .uc-book-btn {
+        background: #171717 !important;
+        color: #ffffff !important;
+        border: 1px solid #171717 !important;
+    }
+
+    .uc-cart-btn:active {
+        background: #F5F5F7 !important;
+    }
+
+    .uc-book-btn:active {
+        background: #2b2b2b !important;
+    }
+}
+
+/* =========================================
+   MOBILE RELATED CARD CONTAINER - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-card {
+        background: #ffffff !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 7px !important;
+        overflow: hidden !important;
+        box-shadow: none !important;
+    }
+
+    .uc-body {
+        padding: 7px 1px 2px !important;
+    }
+
+    .uc-card + .uc-card {
+        margin-top: 0 !important;
+    }
+
+    .uc-card-img-wrapper {
+        margin: 0 !important;
+    }
+
+    .uc-price {
+        margin-top: 3px !important;
+        line-height: 1.2 !important;
+    }
+
+    .uc-actions {
+        margin-top: 7px !important;
+        padding: 0 !important;
+    }
+}
+
+/* =========================================
+   MOBILE RELATED SECTION ALIGNMENT - FINAL
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-category-box {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        margin-bottom: 18px !important;
+    }
+
+    .uc-grid {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        align-items: stretch !important;
+    }
+
+    .uc-card {
+        height: 100% !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .uc-body {
+        flex: 1 1 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .uc-actions {
+        margin-top: auto !important;
+        padding-top: 7px !important;
+    }
+}
+
+/* =========================================================
+   CEROOD PRODUCT PAGE
+   MOBILE FINAL MASTER POLISH
+   KEEP THIS AT VERY BOTTOM OF MAIN <style>
+========================================================= */
+
+@media (max-width: 850px) {
+
+    /* -----------------------------------------
+       1. MAIN PRODUCT AREA
+    ----------------------------------------- */
+
+    #productGridMain {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        gap: 14px !important;
+    }
+
+    #productGridMain .product-gallery,
+    #productGridMain .product-info,
+    #productGridMain .cerood-booking-panel {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* -----------------------------------------
+       2. MAIN IMAGE
+    ----------------------------------------- */
+
+    #productGridMain .main-image-container {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1.25 / 1 !important;
+
+        margin: 0 !important;
+
+        border: none !important;
+        border-radius: 12px !important;
+
+        background: #F5F5F7 !important;
+
+        overflow: hidden !important;
+        box-shadow: none !important;
+    }
+
+    #productGridMain .main-image-container img {
+        width: 100% !important;
+        height: 100% !important;
+
+        object-fit: cover !important;
+        object-position: center !important;
+
+        display: block !important;
+    }
+
+
+    /* -----------------------------------------
+       3. THUMBNAILS
+    ----------------------------------------- */
+
+    #productGridMain .thumbnail-row {
+        display: flex !important;
+        gap: 7px !important;
+
+        margin-top: 8px !important;
+        padding: 0 0 2px !important;
+
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+    }
+
+    #productGridMain .thumbnail-row::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    #productGridMain .thumb-box {
+        width: 58px !important;
+        height: 50px !important;
+        flex: 0 0 58px !important;
+
+        border: 1px solid transparent !important;
+        border-radius: 8px !important;
+
+        background: #F5F5F7 !important;
+
+        opacity: .7 !important;
+        box-shadow: none !important;
+    }
+
+    #productGridMain .thumb-box.active {
+        opacity: 1 !important;
+
+        border-color: #171717 !important;
+
+        box-shadow:
+            0 0 0 1px #171717 !important;
+    }
+
+
+    /* -----------------------------------------
+       4. PRODUCT INFO CARD
+    ----------------------------------------- */
+
+    #productGridMain .product-info {
+        padding: 13px !important;
+
+        background: #ffffff !important;
+
+        border: none !important;
+        border-radius: 12px !important;
+
+        gap: 10px !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* -----------------------------------------
+       5. TITLE
+    ----------------------------------------- */
+
+    #productGridMain .product-title {
+        margin: 0 !important;
+
+        font-size: 21px !important;
+        line-height: 1.22 !important;
+
+        font-weight: 600 !important;
+        letter-spacing: -.25px !important;
+
+        color: #171717 !important;
+    }
+
+
+    /* -----------------------------------------
+       6. RATING
+    ----------------------------------------- */
+
+    #productGridMain .rating-row {
+        gap: 6px !important;
+        margin: 0 !important;
+    }
+
+    #productGridMain .rating-badge {
+        padding: 3px 7px !important;
+
+        border-radius: 6px !important;
+
+        background: #f0fdf4 !important;
+        color: #15803d !important;
+
+        font-size: 11px !important;
+        font-weight: 600 !important;
+    }
+
+    #productGridMain .rating-text {
+        font-size: 11px !important;
+        color: #737373 !important;
+    }
+
+
+    /* -----------------------------------------
+       7. PRICE
+    ----------------------------------------- */
+
+    #productGridMain .price-section {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+
+        gap: 8px !important;
+        margin: 2px 0 0 !important;
+    }
+
+    #productGridMain .current-price {
+        font-size: 26px !important;
+        line-height: 1 !important;
+
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+    }
+
+    #productGridMain .original-price {
+        font-size: 13px !important;
+        font-weight: 400 !important;
+
+        color: #8a8a8a !important;
+    }
+
+    #productGridMain .discount-pct {
+        padding: 4px 7px !important;
+
+        border-radius: 6px !important;
+
+        background: #ecfdf3 !important;
+        color: #15803d !important;
+
+        font-size: 10.5px !important;
+        font-weight: 600 !important;
+    }
+
+    #productGridMain .hot-deal {
+        display: none !important;
+    }
+
+
+    /* -----------------------------------------
+       8. VARIANTS
+    ----------------------------------------- */
+
+    #productGridMain .variant-title {
+        margin-bottom: 7px !important;
+
+        font-size: 11px !important;
+        font-weight: 600 !important;
+
+        text-transform: none !important;
+
+        color: #737373 !important;
+    }
+
+    #productGridMain .variant-group {
+        gap: 7px !important;
+    }
+
+    #productGridMain .variant-btn {
+        min-height: 36px !important;
+
+        padding: 8px 12px !important;
+
+        border: 1px solid #dedede !important;
+        border-radius: 8px !important;
+
+        background: #ffffff !important;
+        color: #444444 !important;
+
+        font-size: 11px !important;
+        font-weight: 500 !important;
+
+        box-shadow: none !important;
+    }
+
+    #productGridMain .variant-btn.active {
+        background: #171717 !important;
+        color: #ffffff !important;
+
+        border-color: #171717 !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* -----------------------------------------
+       9. FEATURES
+    ----------------------------------------- */
+
+    #productGridMain .features-section {
+        margin-top: 6px !important;
+        padding: 11px !important;
+
+        background: #F5F5F7 !important;
+
+        border: none !important;
+        border-radius: 10px !important;
+
+        box-shadow: none !important;
+    }
+
+    #productGridMain .features-title {
+        margin-bottom: 8px !important;
+
+        font-size: 13px !important;
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+    }
+
+    #productGridMain .feature-item {
+        margin-bottom: 6px !important;
+
+        gap: 7px !important;
+
+        font-size: 11.5px !important;
+        line-height: 1.4 !important;
+
+        color: #555555 !important;
+    }
+
+    #productGridMain .feature-item:last-child {
+        margin-bottom: 0 !important;
+    }
+
+
+    /* -----------------------------------------
+       10. TRUST CARDS
+    ----------------------------------------- */
+
+    .product-trust-row {
+        display: grid !important;
+
+        grid-template-columns: repeat(3, 1fr) !important;
+
+        gap: 6px !important;
+        margin-top: 6px !important;
+    }
+
+    .product-trust-item {
+        height: 68px !important;
+        min-height: 68px !important;
+
+        padding: 7px 3px !important;
+
+        grid-template-rows: 22px 26px !important;
+        gap: 4px !important;
+
+        background: #F5F5F7 !important;
+
+        border: none !important;
+        border-radius: 10px !important;
+
+        box-shadow: none !important;
+    }
+
+    .product-trust-item i {
+        width: 22px !important;
+        height: 22px !important;
+
+        font-size: 16px !important;
+
+        color: #171717 !important;
+    }
+
+    .product-trust-item span {
+        height: 26px !important;
+
+        font-size: 9.5px !important;
+        line-height: 1.15 !important;
+
+        font-weight: 500 !important;
+
+        color: #555555 !important;
+    }
+
+
+    /* -----------------------------------------
+       11. REAL WORK PROOF
+    ----------------------------------------- */
+
+    #ceroodWorkProofSection {
+        margin-top: 8px !important;
+        padding-top: 0 !important;
+
+        border: none !important;
+    }
+
+    #ceroodWorkProofContainer {
+        width: 100% !important;
+    }
+
+    #ceroodWorkProofContainer > div {
+        width: 100% !important;
+
+        background: #ffffff !important;
+
+        border: 1px solid #eeeeee !important;
+        border-radius: 10px !important;
+
+        box-shadow: none !important;
+
+        overflow: hidden !important;
+    }
+
+    #ceroodWorkProofContainer > div > div:first-child {
+        gap: 6px !important;
+        padding: 7px !important;
+    }
+
+    #ceroodWorkProofContainer > div > div:first-child img {
+        height: 105px !important;
+
+        border-radius: 8px !important;
+
+        object-fit: cover !important;
+    }
+
+    #ceroodWorkProofContainer > div > div:last-child {
+        padding: 3px 9px 9px !important;
+    }
+
+
+    /* -----------------------------------------
+       12. BOOKING PANEL
+    ----------------------------------------- */
+
+    .cerood-booking-panel {
+        display: block !important;
+
+        width: 100% !important;
+
+        padding: 13px !important;
+
+        background: #ffffff !important;
+
+        border: 1px solid #eeeeee !important;
+        border-radius: 12px !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-booking-panel h2 {
+        margin: 0 0 11px !important;
+
+        font-size: 16px !important;
+        line-height: 1.3 !important;
+
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+    }
+
+    .cerood-booking-label {
+        margin: 12px 0 7px !important;
+
+        font-size: 11.5px !important;
+        line-height: 1.3 !important;
+
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+    }
+
+
+    /* -----------------------------------------
+       13. DATE
+    ----------------------------------------- */
+
+    .cerood-date-row {
+        display: grid !important;
+
+        grid-template-columns: repeat(4, 1fr) !important;
+
+        gap: 6px !important;
+
+        width: 100% !important;
+    }
+
+    .cerood-date-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 47px !important;
+
+        padding: 6px 3px !important;
+
+        background: #ffffff !important;
+        color: #555555 !important;
+
+        border: 1px solid #e2e2e2 !important;
+        border-radius: 8px !important;
+
+        font-size: 10.5px !important;
+        font-weight: 500 !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-date-btn.active {
+        background: #171717 !important;
+        color: #ffffff !important;
+
+        border-color: #171717 !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* -----------------------------------------
+       14. TIME
+    ----------------------------------------- */
+
+    .cerood-time-row {
+        gap: 6px !important;
+    }
+
+    .cerood-time-btn {
+        min-height: 39px !important;
+
+        padding: 7px 8px !important;
+
+        background: #ffffff !important;
+        color: #555555 !important;
+
+        border: 1px solid #e2e2e2 !important;
+        border-radius: 8px !important;
+
+        font-size: 11px !important;
+        font-weight: 500 !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-time-btn.active {
+        background: #171717 !important;
+        color: #ffffff !important;
+
+        border-color: #171717 !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* -----------------------------------------
+       15. LOCATION
+    ----------------------------------------- */
+
+    .cerood-location-mini {
+        padding: 9px 10px !important;
+
+        gap: 9px !important;
+
+        background: #F5F5F7 !important;
+
+        border: none !important;
+        border-radius: 9px !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-location-mini i {
+        width: 31px !important;
+        height: 31px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        flex-shrink: 0 !important;
+
+        border-radius: 50% !important;
+
+        background: #ffffff !important;
+        color: #171717 !important;
+
+        font-size: 13px !important;
+    }
+
+    .cerood-location-mini span {
+        font-size: 10px !important;
+
+        color: #737373 !important;
+    }
+
+    .cerood-location-mini strong {
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+    }
+
+
+    /* -----------------------------------------
+       16. BOOKING INPUTS
+    ----------------------------------------- */
+
+    .cerood-booking-panel input,
+    .cerood-booking-panel select,
+    .cerood-booking-panel textarea {
+        min-height: 40px !important;
+
+        padding: 9px 11px !important;
+
+        background: #ffffff !important;
+        color: #171717 !important;
+
+        border: 1px solid #e2e2e2 !important;
+        border-radius: 8px !important;
+
+        font-size: 11.5px !important;
+
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .cerood-booking-panel input:focus,
+    .cerood-booking-panel select:focus,
+    .cerood-booking-panel textarea:focus {
+        border-color: #171717 !important;
+
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+
+    /* -----------------------------------------
+       17. MAIN CTA BUTTONS
+    ----------------------------------------- */
+
+    .cerood-booking-panel .action-buttons {
+        display: grid !important;
+
+        grid-template-columns: 1fr 1.12fr !important;
+
+        gap: 7px !important;
+
+        margin-top: 11px !important;
+    }
+
+    .cerood-booking-panel .btn {
+        width: 100% !important;
+
+        min-height: 45px !important;
+
+        padding: 9px 7px !important;
+
+        border-radius: 8px !important;
+
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+
+        box-shadow: none !important;
+    }
+
+    .cerood-booking-panel .btn-cart {
+        background: #ffffff !important;
+        color: #171717 !important;
+
+        border: 1px solid #dcdcdc !important;
+    }
+
+    .cerood-booking-panel .btn-buy {
+        background: #171717 !important;
+        color: #ffffff !important;
+
+        border: 1px solid #171717 !important;
+    }
+
+
+    /* -----------------------------------------
+       18. RELATED SERVICES
+    ----------------------------------------- */
+
+    .uc-category-box {
+        width: 100% !important;
+
+        margin-top: 18px !important;
+        margin-bottom: 18px !important;
+
+        padding: 11px !important;
+
+        background: #F5F5F7 !important;
+
+        border: none !important;
+        border-radius: 12px !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .uc-cat-header {
+        margin-bottom: 11px !important;
+    }
+
+    .uc-cat-header h3 {
+        margin: 0 0 3px !important;
+
+        font-size: 16px !important;
+        line-height: 1.3 !important;
+
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+    }
+
+    .uc-cat-header p {
+        margin: 0 !important;
+
+        font-size: 10.5px !important;
+        line-height: 1.4 !important;
+
+        color: #737373 !important;
+    }
+
+    .uc-grid {
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 9px !important;
+
+        width: 100% !important;
+    }
+
+    .uc-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 100% !important;
+
+        padding: 7px !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        background: #ffffff !important;
+
+        border: none !important;
+        border-radius: 10px !important;
+
+        box-shadow: none !important;
+
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .uc-card:hover {
+        transform: none !important;
+    }
+
+    .uc-card-img-wrapper {
+        width: 100% !important;
+        height: 103px !important;
+
+        margin: 0 !important;
+
+        background: #ffffff !important;
+
+        border: 1px solid rgba(0,0,0,.05) !important;
+        border-radius: 8px !important;
+
+        overflow: hidden !important;
+
+        box-shadow: none !important;
+    }
+
+    .uc-card-img-wrapper img,
+    .uc-card img {
+        width: 100% !important;
+        height: 100% !important;
+
+        object-fit: cover !important;
+        object-position: center !important;
+
+        transform: none !important;
+    }
+
+    .uc-body {
+        flex: 1 1 auto !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        padding: 7px 1px 1px !important;
+    }
+
+    .uc-body h4 {
+        margin: 0 0 5px !important;
+
+        font-size: 11px !important;
+        line-height: 1.35 !important;
+
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+
+        white-space: normal !important;
+
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+
+        overflow: hidden !important;
+    }
+
+    .uc-price {
+        margin: 2px 0 0 !important;
+
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+
+        font-weight: 600 !important;
+
+        color: #171717 !important;
+    }
+
+    .uc-cut {
+        font-size: 10px !important;
+        color: #8a8a8a !important;
+    }
+
+
+    /* -----------------------------------------
+       19. RELATED BUTTONS
+    ----------------------------------------- */
+
+    .uc-btn-row,
+    .uc-actions {
+        display: grid !important;
+
+        grid-template-columns: 1fr 1fr !important;
+
+        gap: 5px !important;
+
+        width: 100% !important;
+
+        margin-top: auto !important;
+        padding-top: 7px !important;
+    }
+
+    .uc-cart-btn,
+    .uc-book-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+
+        min-height: 36px !important;
+
+        padding: 6px 3px !important;
+
+        border-radius: 7px !important;
+
+        font-size: 10px !important;
+        line-height: 1.15 !important;
+
+        font-weight: 600 !important;
+
+        white-space: nowrap !important;
+
+        box-shadow: none !important;
+    }
+
+    .uc-cart-btn {
+        background: #ffffff !important;
+        color: #171717 !important;
+
+        border: 1px solid #dcdcdc !important;
+    }
+
+    .uc-book-btn {
+        background: #171717 !important;
+        color: #ffffff !important;
+
+        border: 1px solid #171717 !important;
+    }
+
+
+    /* -----------------------------------------
+       20. BREADCRUMB MOBILE CLEANUP
+    ----------------------------------------- */
+
+    .breadcrumb {
+        margin-bottom: 12px !important;
+
+        padding-top: 8px !important;
+
+        border-top: none !important;
+
+        font-size: 10.5px !important;
+        line-height: 1.4 !important;
+
+        color: #737373 !important;
+    }
+
+    .breadcrumb a {
+        color: #555555 !important;
+    }
+
+    .breadcrumb .active {
+        color: #171717 !important;
     }
 }
 
