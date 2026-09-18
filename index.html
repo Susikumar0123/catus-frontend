@@ -10466,6 +10466,56 @@ max-width: 82% !important;
     }
 }
 
+/* =========================================
+   MOBILE NORMAL SERVICE GRIDS - FINAL COLOR
+   QUICK HOME SERVICES UNTOUCHED
+========================================= */
+@media (max-width: 768px) {
+
+    /* Quick Home தவிர மற்ற எல்லா service grids */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh) {
+
+        background: #F5F5F7 !important;
+
+        background-image: none !important;
+        background-color: #F5F5F7 !important;
+
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* பழைய blue / glass overlay முழுவதும் remove */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)::before,
+
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)::after {
+        content: none !important;
+        display: none !important;
+        background: none !important;
+    }
+
+    /* Title + arrow dark color */
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-cat-header h3 {
+
+        color: #171717 !important;
+        text-shadow: none !important;
+    }
+
+    .mobile-category-track >
+    .uc-category-box:not(.quick-home-fresh)
+    .uc-see-all-btn::after {
+
+        color: #171717 !important;
+        text-shadow: none !important;
+    }
+}
+
 </style>
 </head>
 <body>
