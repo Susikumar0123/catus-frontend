@@ -7208,6 +7208,53 @@ border-radius: 12px !important;
     }
 }
 
+/* =========================================
+   PRODUCT MOBILE - SMOOTH TOUCH FIX
+========================================= */
+
+@media (max-width: 850px) {
+
+    /* Remove browser's gray tap flash */
+    a,
+    button,
+    [onclick],
+    .uc-card,
+    .uc-card-img-wrapper,
+    .variant-btn,
+    .thumb-box,
+    .cerood-global-mobile-nav,
+    .cerood-global-nav-btn {
+        -webkit-tap-highlight-color: transparent !important;
+        tap-highlight-color: transparent !important;
+    }
+
+    /* Smooth service card touch */
+    .uc-card,
+    .uc-card-img-wrapper {
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+    }
+
+    /* Remove desktop hover movement on mobile */
+    .uc-card:hover {
+        transform: none !important;
+    }
+
+    .uc-card:hover img {
+        transform: none !important;
+    }
+
+    /* Keep buttons responsive */
+    .uc-card,
+    .uc-btn,
+    .variant-btn,
+    .thumb-box,
+    .cerood-global-nav-btn {
+        cursor: pointer;
+    }
+}
+
 </style>
 </head>
 <body>
