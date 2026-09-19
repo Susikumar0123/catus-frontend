@@ -1884,6 +1884,55 @@ p, span, div, a, label, li, small {
 }
 @media (max-width: 900px) { .cerood-checkout-intro { display: none !important; } }
 
+
+/* CEROOD PREMIUM CHECKOUT — MOBILE / TABLET (same visual language as desktop) */
+@media (max-width: 900px) {
+  body { background: #f5f6f9 !important; }
+  .checkout-container { max-width: 700px !important; padding: 18px 12px 28px !important; }
+  .cerood-checkout-intro { display: flex !important; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 3px 3px 17px; }
+  .cerood-checkout-intro h1 { margin: 0 0 5px !important; font-size: clamp(20px, 5vw, 25px) !important; line-height: 1.24 !important; font-weight: 700 !important; color: #202435 !important; }
+  .cerood-checkout-intro p { margin: 0 !important; color: #778094 !important; font-size: 11.5px !important; line-height: 1.55; }
+  .cerood-checkout-intro .cerood-intro-chip { display: inline-flex !important; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; background: #f0f8f4; border: 1px solid #dfe8e4; color: #27825d; padding: 7px 9px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+  .checkout-grid { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; gap: 13px !important; margin-top: 0 !important; }
+  .checkout-grid > .card-box { position: relative; overflow: hidden; min-width: 0; min-height: 0 !important; height: auto !important; padding: 17px !important; margin-bottom: 0 !important; background: #fff !important; border: 1px solid #e9ebf1 !important; border-radius: 17px !important; box-shadow: 0 6px 23px rgba(28,40,67,.045),0 1px 3px rgba(28,40,67,.025) !important; }
+  .checkout-grid > .card-box::before { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 3px; background: linear-gradient(90deg,#6e8aa5,#a8b9cd 62%,#e8edf4); }
+  .checkout-grid .card-title { font-size: 15px !important; font-weight: 700 !important; gap: 8px !important; margin-bottom: 15px !important; }
+  .checkout-grid .card-title i, .checkout-grid .card-box button[onclick="goBackToProduct()"] i { color: #647e9b !important; }
+  .checkout-grid .card-body-scroll { overflow: visible !important; max-height: none !important; }
+  .checkout-grid .form-grid { gap: 12px !important; }
+  .checkout-grid .form-group { gap: 7px !important; }
+  .checkout-grid .form-group label { font-size: 12px !important; font-weight: 600 !important; color: #4b5568 !important; }
+  .checkout-grid .form-input { width: 100% !important; min-height: 48px !important; padding: 12px 13px !important; border-radius: 11px !important; border: 1px solid #e5e9f0 !important; background: #f9fafc !important; font-size: 14px !important; }
+  .checkout-grid .form-input:focus { border-color: #6b89a7 !important; background: #fff !important; box-shadow: 0 0 0 4px rgba(102,132,165,.12) !important; }
+  .checkout-grid .form-input::placeholder { color: #9ba3b1 !important; }
+  .checkout-grid .saved-address-card { background: #f5f8fc !important; border: 1px solid #e6edf5 !important; border-radius: 13px !important; padding: 14px !important; }
+  .checkout-grid .add-new-btn { background: #f4f7fb !important; color: #496783 !important; border: 1px solid #e0e7f0 !important; border-radius: 9px !important; padding: 8px 9px !important; }
+  .checkout-grid .cancel-addr-btn { background: #fff !important; border: 1px solid #e1e6ef !important; border-radius: 11px !important; }
+  .checkout-grid .save-addr-action-btn { background: #26223c !important; color: #fff !important; border-radius: 11px !important; min-height: 48px !important; box-shadow: 0 5px 12px rgba(38,34,60,.10) !important; }
+  #summaryItemsContainer > div { padding: 10px 0 !important; gap: 10px !important; }
+  #summaryItemsContainer img { width: 48px !important; height: 48px !important; object-fit: cover !important; border-radius: 10px !important; border: 1px solid #edf0f4 !important; }
+  .checkout-grid .bill-summary-box { background: #f6f8fb !important; border: 1px solid #e9edf3 !important; border-radius: 14px !important; padding: 15px !important; margin: 13px 0 !important; }
+  .checkout-grid .bill-row { font-size: 12.5px !important; margin-bottom: 11px !important; }
+  .checkout-grid .bill-row.total-bill { font-size: 14px !important; font-weight: 700 !important; }
+  .checkout-grid .bill-row.amount-to-pay { color: #253b53 !important; font-size: 16px !important; font-weight: 700 !important; margin-bottom: 0 !important; }
+  .checkout-grid .payment-method-card { min-height: 64px !important; background: #fff !important; border: 1px solid #e6e9f0 !important; border-radius: 12px !important; padding: 12px !important; margin-bottom: 9px !important; }
+  .checkout-grid .payment-method-card.selected { background: #f4f7fc !important; border-color: #8ba2bf !important; box-shadow: 0 0 0 2px rgba(107,137,167,.10) !important; }
+  .checkout-grid .payment-method-card input { accent-color: #536f8c !important; }
+  .checkout-grid .confirm-btn { min-height: 51px !important; border-radius: 12px !important; background: #26223c !important; color: #fff !important; font-size: 14px !important; font-weight: 700 !important; box-shadow: 0 8px 19px rgba(38,34,60,.13) !important; }
+  .checkout-grid .checkout-trust-note { color: #7b8494 !important; font-size: 11px !important; }
+  .checkout-grid .checkout-trust-note i { color: #56836c !important; }
+}
+@media (max-width: 540px) {
+  .checkout-container { padding: 15px 10px 28px !important; }
+  .checkout-grid > .card-box, .checkout-grid > .card-box:first-child { padding: 15px !important; border-radius: 15px !important; }
+  .cerood-checkout-intro .cerood-intro-chip { padding: 7px 8px; }
+  .checkout-grid .card-title { font-size: 14px !important; }
+  .checkout-grid .card-title > span { white-space: normal !important; }
+  .checkout-grid .add-new-btn { font-size: 10px !important; }
+  .checkout-grid .form-grid { grid-template-columns: 1fr !important; }
+  .checkout-grid .form-group.full { grid-column: span 1 !important; }
+}
+
 </style>
 </head>
 <body>
