@@ -7105,6 +7105,74 @@ border-radius: 12px !important;
     }
 }
 
+/* =========================================
+   PRODUCT MOBILE HEADER - INDEX WIDTH FIX
+========================================= */
+
+@media (max-width: 850px) {
+
+    /* Remove product page outer white gap */
+    .master-app-container {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Wrapper should not carry gradient */
+    .uc-homepage-wrapper {
+        width: 100% !important;
+        margin: 0 0 10px !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+    }
+
+    /* Exact index-style full width gradient */
+    .uc-homepage-wrapper .header-main-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+
+        padding: 8px 12px 12px !important;
+
+        background:
+            radial-gradient(
+                circle at 15% 5%,
+                rgba(255,255,255,0.38) 0%,
+                rgba(255,255,255,0.10) 24%,
+                transparent 48%
+            ),
+            radial-gradient(
+                circle at 88% 20%,
+                rgba(93,145,190,0.28) 0%,
+                transparent 45%
+            ),
+            linear-gradient(
+                135deg,
+                #8fa8bd 0%,
+                #718da7 48%,
+                #536f8c 100%
+            ) !important;
+
+        border-radius: 0 0 14px 14px !important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.45),
+            0 5px 16px rgba(38,67,94,0.10) !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /* Same white search bar as index */
+    .uc-homepage-wrapper .search-container {
+        background: rgba(255,255,255,0.94) !important;
+        border: 1px solid rgba(255,255,255,0.75) !important;
+
+        box-shadow:
+            0 3px 10px rgba(31,55,78,0.10),
+            inset 0 1px 0 rgba(255,255,255,0.95) !important;
+    }
+}
+
 </style>
 </head>
 <body>
