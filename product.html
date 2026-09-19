@@ -8120,6 +8120,89 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
 /* END CEROOD AUTH DESKTOP */
 
 </style>
+<style>
+
+/* ===== CEROOD PRODUCT PAGE: DESKTOP ONLY INDEX-STYLE HEADER + MOBILE-STYLE CARDS ===== */
+@media (min-width: 851px) {
+  html, body {max-width:100% !important; overflow-x:clip !important;}
+  .master-app-container {width:100% !important;max-width:100% !important;box-sizing:border-box !important;}
+  .uc-homepage-wrapper {width:100% !important;max-width:100% !important;box-sizing:border-box !important;}
+  .uc-homepage-wrapper .header-main-container {
+    display:flex !important;align-items:center !important;justify-content:space-between !important;
+    flex-wrap:nowrap !important;gap:13px !important;width:100% !important;max-width:100% !important;
+    min-width:0 !important;box-sizing:border-box !important;margin:0 !important;
+    padding:15px 22px !important;border-radius:14px !important;
+    background:radial-gradient(circle at 15% 5%,rgba(255,255,255,.38),rgba(255,255,255,.10) 24%,transparent 48%),
+      radial-gradient(circle at 88% 20%,rgba(93,145,190,.28),transparent 45%),
+      linear-gradient(135deg,#8fa8bd 0%,#718da7 48%,#536f8c 100%) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 5px 16px rgba(38,67,94,.10) !important;
+  }
+  .uc-homepage-wrapper .brand-logo {flex:0 0 auto !important;margin-right:0 !important;order:1 !important;}
+  .uc-homepage-wrapper .brand-logo img {height:58px !important;width:auto !important;max-width:75px !important;object-fit:contain !important;}
+  .uc-homepage-wrapper .mobile-location-widget {display:none !important;}
+  .uc-homepage-wrapper .search-container {
+    order:2 !important;flex:1 1 auto !important;min-width:0 !important;max-width:none !important;
+    background:rgba(255,255,255,.96) !important;border:1px solid rgba(255,255,255,.75) !important;
+    border-radius:16px !important;box-shadow:0 3px 10px rgba(31,55,78,.10) !important;
+  }
+  .uc-homepage-wrapper .header-nav-right {order:3 !important;display:flex !important;flex:0 0 auto !important;gap:12px !important;min-width:0 !important;}
+  .uc-homepage-wrapper .header-location-widget {
+    flex:0 0 auto !important;max-width:190px !important;min-width:155px !important;
+    background:#fff !important;border:1px solid rgba(255,255,255,.95) !important;
+    border-radius:50px !important;box-sizing:border-box !important;
+  }
+  .uc-homepage-wrapper .header-location-widget #headerLocationDisplay {
+    display:block !important;max-width:125px !important;overflow:hidden !important;text-overflow:ellipsis !important;
+    white-space:nowrap !important;color:#171717 !important;
+  }
+  .uc-homepage-wrapper .header-nav-right .cart-item {
+    background:rgba(255,255,255,.96) !important;border:1px solid rgba(255,255,255,.95) !important;
+    color:#171717 !important;border-radius:50px !important;padding:9px 15px !important;
+    min-height:38px !important;box-sizing:border-box !important;
+  }
+  .uc-homepage-wrapper .header-nav-right .cart-item svg,
+  .uc-homepage-wrapper .header-nav-right .cart-item svg * {stroke:#171717 !important;fill:none !important;}
+  .uc-homepage-wrapper .header-nav-right .cart-item .cart-badge {color:#fff !important;}
+  .uc-homepage-wrapper .header-nav-right .login-btn {
+    background:#fff !important;border:1px solid rgba(255,255,255,.95) !important;
+    color:#171717 !important;border-radius:50px !important;min-height:38px !important;
+  }
+  .uc-homepage-wrapper .header-nav-right .login-btn svg,
+  .uc-homepage-wrapper .header-nav-right .login-btn svg * {stroke:#171717 !important;fill:none !important;}
+  .uc-homepage-wrapper .header-nav-right .login-btn .nav-text {color:#171717 !important;}
+
+  /* Product detail remains its existing two-column layout; only related service cards adopt mobile's 2x2 design. */
+  #relatedServicesBox {width:100% !important;max-width:100% !important;box-sizing:border-box !important;overflow:hidden !important;}
+  #relatedServicesBox #relatedContainer {
+    display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:16px !important;width:100% !important;max-width:100% !important;
+  }
+  #relatedServicesBox #relatedContainer > .uc-card {
+    width:100% !important;min-width:0 !important;max-width:none !important;height:100% !important;
+    padding:10px !important;display:flex !important;flex-direction:column !important;
+    background:#fff !important;border:0 !important;border-radius:12px !important;
+    box-shadow:0 1px 2px rgba(0,0,0,.04),0 3px 8px rgba(0,0,0,.05) !important;
+    overflow:hidden !important;box-sizing:border-box !important;
+  }
+  #relatedServicesBox #relatedContainer .uc-card-img-wrapper {
+    width:100% !important;height:auto !important;aspect-ratio:16/9 !important;
+    border:0 !important;border-radius:8px !important;overflow:hidden !important;background:#fff !important;
+  }
+  #relatedServicesBox #relatedContainer .uc-card-img-wrapper img {width:100% !important;height:100% !important;object-fit:cover !important;}
+  #relatedServicesBox #relatedContainer .uc-body h4 {
+    white-space:normal !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;
+    -webkit-box-orient:vertical !important;overflow:hidden !important;
+    font-size:13px !important;line-height:1.4 !important;min-height:36px !important;
+  }
+  #relatedServicesBox #relatedContainer .uc-price {font-size:14px !important;}
+}
+@media (min-width:851px) and (max-width:1120px) {
+  .uc-homepage-wrapper .header-main-container {padding:12px 14px !important;gap:9px !important;}
+  .uc-homepage-wrapper .header-nav-right {gap:8px !important;}
+  .uc-homepage-wrapper .header-location-widget {min-width:135px !important;max-width:155px !important;}
+}
+/* ===== END PRODUCT DESKTOP ONLY PATCH ===== */
+</style>
 </head>
 <body>
 
