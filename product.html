@@ -13572,13 +13572,26 @@ if (infoEl) {
     }
 
     function showSummaryDetail(type) {
-        const box = document.getElementById('summaryDetailBox');
-        const title = document.getElementById('summaryDetailTitle');
-        const textContainer = document.getElementById('summaryDetailText');
-        if(!box) return;
-        box.style.display = 'block';
-        let orders = window.currentOrders || [];
-        let html = '';
+    const box = document.getElementById('summaryDetailBox');
+    const title = document.getElementById('summaryDetailTitle');
+    const textContainer = document.getElementById('summaryDetailText');
+
+    // Same card clicked again -> collapse
+    if (
+        box.style.display === 'block' &&
+        box.dataset.activeType === type
+    ) {
+        box.style.display = 'none';
+        box.dataset.activeType = '';
+        return;
+    }
+
+    // New card clicked -> show its details
+    box.dataset.activeType = type;
+    box.style.display = 'block';
+
+    let orders = window.currentOrders || [];
+    let html = '';
         if(type === 'bookings') {
             title.innerHTML = "<i class='fa-solid fa-list'></i> Total Bookings (" + orders.length + ")";
             orders.forEach(o => { html += `<div style='border-bottom:1px solid #e2e8f0; padding:6px 0; font-size:12px; display:flex; justify-content:space-between;'><span>${o.service_name}</span><b>${o.status}</b></div>`; });

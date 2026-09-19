@@ -13272,13 +13272,26 @@ setTimeout(() => {
     
 
     function showSummaryDetail(type) {
-        const box = document.getElementById('summaryDetailBox');
-        const title = document.getElementById('summaryDetailTitle');
-        const textContainer = document.getElementById('summaryDetailText');
-        
-        box.style.display = 'block';
-        let orders = window.currentOrders || [];
-        let html = '';
+    const box = document.getElementById('summaryDetailBox');
+    const title = document.getElementById('summaryDetailTitle');
+    const textContainer = document.getElementById('summaryDetailText');
+
+    // Same card clicked again -> collapse
+    if (
+        box.style.display === 'block' &&
+        box.dataset.activeType === type
+    ) {
+        box.style.display = 'none';
+        box.dataset.activeType = '';
+        return;
+    }
+
+    // New card clicked -> show its details
+    box.dataset.activeType = type;
+    box.style.display = 'block';
+
+    let orders = window.currentOrders || [];
+    let html = '';
         
         if(type === 'bookings') {
             title.innerHTML = "<i class='fa-solid fa-list'></i> Total Bookings (" + orders.length + ")";
