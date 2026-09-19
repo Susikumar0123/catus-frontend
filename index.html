@@ -10756,6 +10756,43 @@ max-width: 82% !important;
     }
 }
 
+
+/* ===== CEROOD AUTH V2 / PHASE 1: scoped only to #authModal ===== */
+#authModal.auth-modal-wrapper { background:rgba(10,17,31,.62)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important; }
+#authModal .auth-modal-container {width:810px!important;max-width:calc(100vw - 36px)!important;height:min(570px,calc(100dvh - 42px))!important;max-height:calc(100dvh - 42px)!important;border:1px solid rgba(255,255,255,.7)!important;border-radius:26px!important;background:#fff!important;box-shadow:0 30px 100px rgba(15,23,42,.27)!important;}
+#authModal .auth-left-panel {width:37%!important;box-sizing:border-box!important;background:linear-gradient(155deg,#191c35 0%,#3b3267 65%,#755d96 100%)!important;color:#fff!important;padding:44px 33px!important;}
+#authModal .auth-left-panel:before {content:'CEROOD  /  ACCOUNT';position:absolute;top:34px;left:33px;font-size:10px;font-weight:800;letter-spacing:2px;color:#d9d4fa;}
+#authModal .auth-left-panel:after {content:'✦';position:absolute;bottom:22px;right:30px;color:#c8b9ff;font-size:66px;opacity:.4;}
+#authModal .auth-left-panel h2 {font-size:32px!important;font-weight:750!important;letter-spacing:-1.2px!important;line-height:1.17!important;color:#fff!important;}
+#authModal .auth-left-panel p {font-size:14px!important;line-height:1.7!important;color:#e7e2ff!important;}
+#authModal .auth-right-panel {width:63%!important;box-sizing:border-box!important;padding:52px 43px 32px!important;background:#fff!important;overflow-y:auto!important;}
+#authModal .auth-close-btn {top:16px!important;right:18px!important;display:grid!important;place-items:center!important;width:36px!important;height:36px!important;border-radius:50%!important;background:#f3f4f6!important;color:#334155!important;z-index:5!important;}
+#authModal .auth-right-panel h3 {font-size:26px!important;letter-spacing:-.8px!important;font-weight:750!important;line-height:1.25!important;color:#161b2b!important;}
+#authModal .auth-right-panel p {line-height:1.65!important;}
+#authModal .auth-input-field:not(#inputRegOTP) {min-height:54px!important;padding:14px 16px!important;margin-top:17px!important;background:#f8f9fc!important;border:1.5px solid #e5e7ef!important;border-radius:13px!important;font-size:15px!important;letter-spacing:normal!important;}
+#authModal .auth-input-field:not(#inputRegOTP):focus {background:#fff!important;border-color:#7154bb!important;box-shadow:0 0 0 4px rgba(113,84,187,.12)!important;}
+#authModal .auth-primary-btn {min-height:52px!important;margin-top:22px!important;padding:13px 18px!important;background:#24203c!important;color:#fff!important;border-radius:13px!important;font-weight:700!important;font-size:14px!important;letter-spacing:.2px!important;box-shadow:0 8px 18px rgba(36,32,60,.15)!important;transition:background .18s,transform .18s!important;}
+#authModal .auth-primary-btn:hover {background:#47366e!important;transform:translateY(-1px)!important;}
+#authModal .auth-primary-btn:disabled {opacity:.65!important;transform:none!important;cursor:wait!important;}
+#authModal .auth-bottom-link {font-size:12px!important;font-weight:650!important;color:#6750a4!important;}
+#authModal .auth-terms-text {font-size:11px!important;color:#64748b!important;}
+#authModal .auth-terms-text a {color:#6045a0!important;}
+#authModal .cerood-auth-progress {display:flex;align-items:center;gap:7px;margin:0 34px 26px 0;flex-wrap:wrap;}
+#authModal .cerood-auth-progress .auth-progress-label {font-size:10px;font-weight:750;letter-spacing:.7px;color:#8c90a1;text-transform:uppercase;}
+#authModal .cerood-auth-progress .auth-progress-label.is-current {color:#5d469a;}
+#authModal .cerood-auth-progress .auth-progress-label.is-done {color:#2b946c;}
+#authModal .cerood-auth-progress .auth-progress-arrow {font-size:11px;color:#bec0cc;}
+#authModal .cerood-auth-progress .auth-progress-caption {flex-basis:100%;margin-top:5px;color:#6b7280;font-size:11px;line-height:1.4;}
+@media(max-width:768px) {
+ #authModal.auth-modal-wrapper {align-items:flex-end!important;}
+ #authModal .auth-modal-container {width:100%!important;max-width:100%!important;height:auto!important;max-height:94dvh!important;border-radius:24px 24px 0 0!important;overflow:hidden!important;}
+ #authModal .auth-left-panel {display:none!important;}
+ #authModal .auth-right-panel {width:100%!important;height:auto!important;max-height:94dvh!important;padding:44px 24px max(24px,env(safe-area-inset-bottom))!important;overflow-y:auto!important;}
+ #authModal .auth-right-panel h3 {font-size:25px!important;}
+ #authModal .cerood-auth-progress {margin-bottom:23px;}
+ #authModal .auth-close-btn {top:12px!important;right:15px!important;}
+}
+/* ===== END CEROOD AUTH V2 PHASE 1 ===== */
 </style>
 </head>
 <body>
@@ -10964,6 +11001,16 @@ max-width: 82% !important;
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
+
+            <!-- AUTH V2: visual progress only; existing authentication logic unchanged -->
+            <div class="cerood-auth-progress" id="ceroodAuthProgress" aria-label="Account verification progress">
+                <span class="auth-progress-label is-current" data-auth-progress="phone">Mobile</span>
+                <span class="auth-progress-arrow">›</span>
+                <span class="auth-progress-label" data-auth-progress="captcha">Security</span>
+                <span class="auth-progress-arrow">›</span>
+                <span class="auth-progress-label" data-auth-progress="otp">OTP</span>
+                <span class="auth-progress-caption" id="ceroodAuthNext">Next: Security check → OTP verification → Account setup</span>
+            </div>
 
             <!-- =================================================
                  STEP 1 : MOBILE NUMBER
@@ -13614,7 +13661,41 @@ async function checkUserAndProceed() {
         alert('Server connection error.');
     }
 }
+function updateCeroodAuthProgress(step) {
+    const bar = document.getElementById('ceroodAuthProgress');
+    if (!bar) return;
+    const passwordFlow = step === 'password';
+    const stages = passwordFlow ? ['phone','password'] : ['phone','captcha','otp'];
+    const labels = passwordFlow ? ['Mobile','Password'] : ['Mobile','Security','OTP'];
+    const current = passwordFlow ? 1 : (step === 'captcha' ? 1 : step === 'otp' || step === 'newpassword' ? 2 : 0);
+    bar.replaceChildren();
+    stages.forEach((stage, index) => {
+        if (index) {
+            const arrow = document.createElement('span');
+            arrow.className = 'auth-progress-arrow';
+            arrow.textContent = '›';
+            bar.appendChild(arrow);
+        }
+        const label = document.createElement('span');
+        label.className = 'auth-progress-label' + (index === current ? ' is-current' : index < current ? ' is-done' : '');
+        label.textContent = labels[index];
+        bar.appendChild(label);
+    });
+    const caption = document.createElement('span');
+    caption.className = 'auth-progress-caption';
+    caption.textContent = ({
+        phone:'Next: Security check → OTP verification → Account setup',
+        register:'Next: Security check → Receive SMS OTP',
+        password:'Next: Sign in securely',
+        captcha:'Next: Complete CAPTCHA → Receive SMS OTP',
+        otp:'Next: Enter your code → Verify & continue',
+        newpassword:'Next: Save new password → Sign in'
+    })[step] || '';
+    bar.appendChild(caption);
+}
+
 function showAuthStep(step) {
+    updateCeroodAuthProgress(step);
 
 const steps = [
     'authStepPhone',
