@@ -1933,6 +1933,66 @@ p, span, div, a, label, li, small {
   .checkout-grid .form-group.full { grid-column: span 1 !important; }
 }
 
+
+/* CEROOD BOOKING RESULT — PREMIUM SUCCESS + FAILURE, ALL SCREENS */
+#successPageView {
+  --result-ink:#202435; --result-muted:#717b8e;
+  display:none; width:min(100%,720px); max-width:720px !important;
+  margin:26px auto 48px !important; padding:28px 22px 30px !important;
+  box-sizing:border-box; text-align:center;
+  background:linear-gradient(180deg,#fff 0%,#fbfcff 100%);
+  border:1px solid #e8ebf2; border-radius:26px;
+  box-shadow:0 16px 48px rgba(35,48,72,.07),0 2px 8px rgba(35,48,72,.025);
+}
+#successPageView .success-animation-container {margin:0 auto 15px !important;}
+#successPageView .checkmark-circle {
+  width:76px !important;height:76px !important;
+  background:linear-gradient(135deg,#2db98b,#16876a) !important;
+  box-shadow:0 0 0 9px #eaf9f3,0 12px 24px rgba(24,135,106,.18);
+  display:flex;align-items:center;justify-content:center;
+}
+#successPageView .checkmark.draw::after {top:17px !important;left:24px !important;}
+#successPageView > h1 {font-size:clamp(23px,3vw,30px) !important;color:var(--result-ink) !important;font-weight:750 !important;letter-spacing:-.035em !important;line-height:1.2;margin:0 0 10px !important;}
+#successPageView > p {max-width:480px !important;font-size:13.5px !important;line-height:1.65 !important;color:var(--result-muted) !important;margin:0 auto 24px !important;}
+#successPageView .receipt-box {
+  max-width:none !important;margin:0 !important;padding:22px 24px !important;
+  border:1px solid #e9edf4 !important;border-top:3px solid #7190ad !important;
+  border-radius:17px !important;box-shadow:none !important;
+  background:#fff !important;text-align:left;
+}
+#successPageView .receipt-box h3 {font-size:16px !important;color:#27354b !important;font-weight:700 !important;}
+#successPageView .receipt-row {display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:11px 0 !important;border-bottom:1px solid #f0f2f6 !important;}
+#successPageView .receipt-row:last-child {border-bottom:0 !important;}
+#successPageView .receipt-label {flex:0 0 35%;max-width:35%;font-size:12.5px !important;color:#788295 !important;font-weight:500 !important;}
+#successPageView .receipt-value {flex:1;min-width:0;max-width:65% !important;font-size:12.5px !important;color:#283247 !important;font-weight:650 !important;text-align:right;overflow-wrap:anywhere;line-height:1.5;}
+#successPageView .receipt-row:last-child {background:#f3f6fa !important;border-radius:12px !important;padding:15px !important;margin-top:12px !important;}
+#successPageView #dispTotal {font-size:19px !important;color:#27354b !important;}
+#successPageView > button.confirm-btn {width:min(100%,340px) !important;max-width:340px !important;min-height:50px !important;margin:23px auto 0 !important;background:#26223c !important;color:white !important;border-radius:12px !important;font-size:13.5px !important;font-weight:700 !important;box-shadow:0 7px 18px rgba(38,34,60,.12) !important;}
+#successPageView > button.confirm-btn:hover {background:#393251 !important;}
+/* Failure is a distinct status; never style it as a confirmed booking. */
+#successPageView.cerood-result-failed .checkmark-circle {background:linear-gradient(135deg,#f46d70,#d94b58) !important;box-shadow:0 0 0 9px #fff0f1,0 12px 24px rgba(217,75,88,.15) !important;}
+#successPageView.cerood-result-failed .checkmark-circle i {font-size:32px !important;line-height:1 !important;}
+#successPageView.cerood-result-failed > h1 {color:#9d3341 !important;}
+#successPageView.cerood-result-failed .receipt-box {border:1px solid #f3dce0 !important;border-top:3px solid #e17b84 !important;background:#fffafa !important;}
+#successPageView.cerood-result-failed .cerood-result-message {display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px 10px;color:#78535c;text-align:center;}
+#successPageView.cerood-result-failed .cerood-result-message i {display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:#fff0f1;color:#cf5b67;font-size:20px;}
+#successPageView.cerood-result-failed .cerood-result-message p {margin:0;font-size:13px;line-height:1.7;color:#78535c;}
+#successPageView.cerood-result-uncertain .receipt-box {border-color:#f0e4c9 !important;border-top-color:#dba64d !important;background:#fffcf5 !important;}
+#successPageView.cerood-result-uncertain .cerood-result-message i {background:#fff4da;color:#b88429;}
+@media(max-width:540px) {
+ #successPageView {width:calc(100% - 20px);margin:14px auto 26px !important;padding:27px 14px 20px !important;border-radius:19px;}
+ #successPageView .checkmark-circle {width:66px !important;height:66px !important;}
+ #successPageView .checkmark.draw::after {top:12px !important;left:20px !important;}
+ #successPageView > h1 {font-size:23px !important;}
+ #successPageView > p {font-size:12px !important;padding:0 4px !important;margin-bottom:19px !important;}
+ #successPageView .receipt-box {padding:17px 14px !important;border-radius:14px !important;}
+ #successPageView .receipt-row {gap:10px !important;padding:10px 0 !important;}
+ #successPageView .receipt-label {flex-basis:37%;max-width:37%;font-size:11px !important;}
+ #successPageView .receipt-value {max-width:63% !important;font-size:11.5px !important;}
+ #successPageView #dispAddress {max-width:63% !important;}
+ #successPageView > button.confirm-btn {max-width:100% !important;margin-top:18px !important;}
+}
+
 </style>
 </head>
 <body>
@@ -3529,13 +3589,15 @@ if (confirmBtn) {
             document.getElementById('checkoutMainSection').style.display = 'none';
             let successView = document.getElementById('successPageView');
             successView.style.display = 'block';
+            successView.classList.add('cerood-result-failed');
+            successView.classList.toggle('cerood-result-uncertain', paymentUncertain);
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             let circle = document.getElementById('circleAnim');
             circle.style.background = '#ef4444'; 
             circle.classList.add('animate');
             
-            circle.innerHTML = '<i class="fa-solid fa-xmark" style="color: white; font-size: 45px; line-height: 90px;"></i>';
+            circle.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true" style="color: white;"></i>';
 
             successView.querySelector('h1').textContent = "Payment Not Completed";
             successView.querySelector('h1').style.color = "#ef4444";
@@ -3548,9 +3610,9 @@ if (confirmBtn) {
     if (paymentUncertain) {
 
         receiptBox.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: #64748b;">
+            <div class="cerood-result-message">
                 <i class="fa-solid fa-triangle-exclamation"
-                   style="font-size: 32px; color: #f59e0b; margin-bottom: 10px;">
+                   aria-hidden="true">
                 </i>
 
                 <p style="margin: 0; font-size: 14px; font-weight: 500; line-height: 1.6;">
@@ -3564,9 +3626,9 @@ if (confirmBtn) {
     } else {
 
         receiptBox.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: #64748b;">
+            <div class="cerood-result-message">
                 <i class="fa-solid fa-triangle-exclamation"
-                   style="font-size: 32px; color: #f59e0b; margin-bottom: 10px;">
+                   aria-hidden="true">
                 </i>
 
                 <p style="margin: 0; font-size: 14px; font-weight: 500;">
@@ -3802,6 +3864,7 @@ status: orderStatus,
 
     document.getElementById('checkoutMainSection').style.display = 'none';
     document.getElementById('successPageView').style.display = 'block';
+    document.getElementById('successPageView').classList.remove('cerood-result-failed', 'cerood-result-uncertain');
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
