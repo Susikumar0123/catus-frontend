@@ -1464,6 +1464,156 @@ p, span, div, a, label, li, small {
     }
 }
 
+/* ==========================================
+   CEROOD CHECKOUT — MATCH INDEX + PRODUCT
+   MOBILE ONLY
+========================================== */
+
+@media (max-width: 850px) {
+
+    /* 1. PAGE BACKGROUND */
+
+    body {
+        background: #f5f5f7 !important;
+    }
+
+    /* 2. HEADER — SAME BLUE-GREY GRADIENT */
+
+    .checkout-header {
+        width: 100% !important;
+        box-sizing: border-box !important;
+
+        padding: 12px 14px !important;
+
+        background:
+            radial-gradient(
+                circle at 15% 5%,
+                rgba(255,255,255,.38) 0%,
+                rgba(255,255,255,.10) 24%,
+                transparent 48%
+            ),
+            radial-gradient(
+                circle at 88% 20%,
+                rgba(93,145,190,.28) 0%,
+                transparent 45%
+            ),
+            linear-gradient(
+                135deg,
+                #8fa8bd 0%,
+                #718da7 48%,
+                #536f8c 100%
+            ) !important;
+
+        border: 0 !important;
+        border-radius: 0 0 14px 14px !important;
+
+        box-shadow:
+            0 5px 16px rgba(38,67,94,.10) !important;
+    }
+
+    .checkout-header img {
+        height: 36px !important;
+        width: auto !important;
+        object-fit: contain !important;
+    }
+
+    .checkout-header .secure-badge {
+        color: #ffffff !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+    }
+
+    .checkout-header .secure-badge i {
+        color: #ffffff !important;
+    }
+
+    /* 3. MOBILE BOTTOM NAV — BLACK */
+
+    .mobile-bottom-nav.catus-checkout-nav {
+        background: #000000 !important;
+        border-top: none !important;
+        box-shadow: none !important;
+    }
+
+    .catus-checkout-nav .bot-nav-item {
+        background: transparent !important;
+        color: #ffffff !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring {
+        background: #000000 !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring svg,
+    .catus-checkout-nav .checkout-nav-ring svg * {
+        stroke: #ffffff !important;
+    }
+
+    .catus-checkout-nav .bot-nav-item > span:last-child {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }
+
+    /* 4. CHECKOUT BUTTONS — BLACK + WHITE */
+
+    .confirm-btn,
+    .save-addr-action-btn,
+    .address-form-actions .save-addr-action-btn {
+        background: #171717 !important;
+        color: #ffffff !important;
+        border: none !important;
+    }
+
+    .confirm-btn:hover,
+    .confirm-btn:active,
+    .save-addr-action-btn:hover,
+    .save-addr-action-btn:active {
+        background: #333333 !important;
+    }
+
+    /* 5. SECONDARY BUTTONS */
+
+    .add-new-btn {
+        background: #f1f1f3 !important;
+        color: #171717 !important;
+    }
+
+    .cancel-addr-btn {
+        background: #ffffff !important;
+        color: #171717 !important;
+        border: 1px solid #e5e5e8 !important;
+    }
+
+    .edit-text-btn {
+        color: #171717 !important;
+    }
+
+    /* 6. INPUT FOCUS */
+
+    .form-input:focus {
+        border-color: #171717 !important;
+        box-shadow: 0 0 0 3px rgba(23,23,23,.07) !important;
+    }
+
+    /* 7. CARD TITLE ICONS */
+
+    .card-title i,
+    .card-box button[onclick="goBackToProduct()"] i {
+        color: #171717 !important;
+    }
+
+    /* 8. PAYMENT SELECTION */
+
+    .payment-method-card input {
+        accent-color: #171717 !important;
+    }
+
+    .payment-method-card.selected {
+        background: #f1f1f3 !important;
+    }
+
+}
+
 </style>
 </head>
 <body>
