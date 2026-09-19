@@ -6675,6 +6675,297 @@ border-radius: 12px !important;
     }
 }
 
+
+
+/* ========================================================
+   SYNCED FROM INDEX: CUSTOMER DASHBOARD / BOOKINGS / TRACKING
+   ======================================================== */
+/* =========================================
+   CUSTOMER DASHBOARD - BLACK ACCENT FINAL
+========================================= */
+
+#premiumCustomerDashboard {
+    --catus-primary: #111111 !important;
+    --catus-primary-soft: #F3F4F6 !important;
+}
+
+/* =========================================
+   CUSTOMER DASHBOARD - REMOVE BLUE ACCENTS
+========================================= */
+
+/* All normal action buttons */
+#premiumCustomerDashboard .prem-btn-compact,
+#premiumCustomerDashboard .prem-btn-small {
+    background: #F5F5F5 !important;
+    color: #111111 !important;
+    border: 1px solid #DDDDDD !important;
+    box-shadow: none !important;
+}
+
+/* Icons inside action buttons */
+#premiumCustomerDashboard .prem-btn-compact i,
+#premiumCustomerDashboard .prem-btn-small i {
+    color: #111111 !important;
+}
+
+/* Active bottom navigation */
+#premiumCustomerDashboard .prem-nav-btn.active,
+#premiumCustomerDashboard .prem-nav-btn.active i {
+    color: #111111 !important;
+}
+
+/* Dashboard links */
+#premiumCustomerDashboard a {
+    color: #111111 !important;
+}
+
+/* =========================================
+   CUSTOMER DASHBOARD HEADER - BLACK PREMIUM
+========================================= */
+
+#premiumCustomerDashboard .prem-dash-header {
+    background: #FFFFFF !important;
+    border-bottom: 1px solid #EEEEEE !important;
+    box-shadow: none !important;
+}
+
+/* Back + Profile icon buttons */
+#premiumCustomerDashboard .prem-dash-header .prem-icon-btn {
+    background: #F5F5F5 !important;
+    color: #111111 !important;
+    border: 1px solid #E5E5E5 !important;
+    box-shadow: none !important;
+}
+
+/* Icons */
+#premiumCustomerDashboard .prem-dash-header .prem-icon-btn i {
+    color: #111111 !important;
+}
+
+/* Welcome text */
+#premiumCustomerDashboard .prem-greeting-text {
+    color: #18181B !important;
+    font-weight: 600 !important;
+}
+
+/* Customer ID */
+#premiumCustomerDashboard .prem-cust-id-badge {
+    background: #F5F5F5 !important;
+    color: #111111 !important;
+    border: 1px solid #E5E5E5 !important;
+    box-shadow: none !important;
+}
+
+/* =========================================
+   CUSTOMER DASHBOARD - BOTTOM NAV PREMIUM
+========================================= */
+
+#premiumCustomerDashboard .prem-bottom-nav {
+    background: #FFFFFF !important;
+    border-top: 1px solid #E8E8E8 !important;
+    box-shadow: 0 -3px 14px rgba(0,0,0,0.04) !important;
+}
+
+/* Normal navigation */
+#premiumCustomerDashboard .prem-nav-btn,
+#premiumCustomerDashboard .prem-nav-btn i {
+    color: #8A8A8A !important;
+}
+
+/* Active navigation */
+#premiumCustomerDashboard .prem-nav-btn.active,
+#premiumCustomerDashboard .prem-nav-btn.active i {
+    color: #111111 !important;
+    font-weight: 600 !important;
+}
+
+/* Remove blue/purple active backgrounds if any */
+#premiumCustomerDashboard .prem-nav-btn.active {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* =========================================
+   LIVE TRACKING TIMELINE - STATUS GREEN
+========================================= */
+
+/* Completed progress line */
+#premiumCustomerDashboard .prem-timeline-progress {
+    background: #10B981 !important;
+}
+
+/* Future steps */
+#premiumCustomerDashboard .prem-step-icon-compact {
+    background: #F1F5F9 !important;
+    color: #94A3B8 !important;
+    border-color: #E2E8F0 !important;
+}
+
+/* Completed steps */
+#premiumCustomerDashboard
+.prem-step-compact.done
+.prem-step-icon-compact {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
+}
+
+/* Current active step */
+#premiumCustomerDashboard
+.prem-step-compact.active
+.prem-step-icon-compact {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
+}
+
+/* Done + active labels */
+#premiumCustomerDashboard .prem-step-compact.done > span,
+#premiumCustomerDashboard .prem-step-compact.active > span {
+    color: #059669 !important;
+    font-weight: 600 !important;
+}
+
+/* Future labels */
+#premiumCustomerDashboard .prem-step-compact:not(.done):not(.active) > span {
+    color: #94A3B8 !important;
+}
+
+/* =========================================
+   LIVE BOOKING ACTION BUTTONS
+========================================= */
+
+/* Edit Address - neutral */
+#premiumCustomerDashboard .prem-btn-track-compact {
+    background: #F8FAFC !important;
+    color: #334155 !important;
+    border: 1px solid #DDE3EA !important;
+}
+
+#premiumCustomerDashboard .prem-btn-track-compact i {
+    color: #334155 !important;
+}
+
+/* Cancel Booking - danger */
+#premiumCustomerDashboard .prem-btn-cancel-compact {
+    background: #FFF5F5 !important;
+    color: #DC2626 !important;
+    border: 1px solid #FECACA !important;
+}
+
+#premiumCustomerDashboard .prem-btn-cancel-compact i {
+    color: #DC2626 !important;
+}
+
+/* =========================================
+   BOOKING HISTORY - RATE BUTTON STATES
+========================================= */
+
+/* Disabled Rate Service - Pending / not completed */
+#premiumCustomerDashboard
+#premOrdersListContainer
+.prem-btn-small:disabled {
+    background: #F1F5F9 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #E2E8F0 !important;
+    cursor: not-allowed !important;
+}
+
+#premiumCustomerDashboard
+#premOrdersListContainer
+.prem-btn-small:disabled i {
+    color: #94A3B8 !important;
+}
+
+/* =========================================
+   COMPLETED BOOKING ACTIONS
+========================================= */
+
+/* Active Rate Service button */
+#premiumCustomerDashboard
+#premOrdersListContainer
+.prem-btn-small:not(:disabled)
+.fa-star {
+    color: #F59E0B !important;
+}
+
+/* Already Rated */
+#premiumCustomerDashboard
+#premOrdersListContainer
+.prem-btn-small .fa-check-circle {
+    color: #10B981 !important;
+}
+
+/* =========================================
+   BOOKING HISTORY - MOBILE CARD POLISH
+========================================= */
+
+@media (max-width: 768px) {
+
+    #premiumCustomerDashboard #premOrdersListContainer .prem-card-box {
+        padding: 14px !important;
+        margin-bottom: 12px !important;
+        border-radius: 12px !important;
+        border: 1px solid #EEEEF0 !important;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.035) !important;
+    }
+
+    #premiumCustomerDashboard #premOrdersListContainer {
+        padding-bottom: 12px !important;
+    }
+
+    #premiumCustomerDashboard #premOrdersListContainer .prem-btn-small {
+        min-height: 36px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+    }
+}
+
+/* =========================================
+   DASHBOARD SUMMARY - SEMANTIC STATUS COLORS
+========================================= */
+
+/* Total Bookings */
+#premiumCustomerDashboard #sumTotal {
+    color: #111111 !important;
+}
+
+/* Completed */
+#premiumCustomerDashboard #sumCompleted {
+    color: #16A34A !important;
+}
+
+/* In Progress */
+#premiumCustomerDashboard #sumProgress {
+    color: #F59E0B !important;
+}
+
+/* Rejected */
+#premiumCustomerDashboard #sumRejected {
+    color: #EF4444 !important;
+}
+
+/* Remove old purple hover border */
+#premiumCustomerDashboard .prem-stat-card:hover {
+    border-color: #E5E5E5 !important;
+}
+
+/* DASHBOARD FINAL STATUS CLEANUP */
+
+#premiumCustomerDashboard .prem-live-status-badge {
+    background: #FFF7ED !important;
+    color: #D97706 !important;
+    border: 1px solid #FED7AA !important;
+}
+
+#premiumCustomerDashboard .prem-live-status-badge .prem-status-dot {
+    background: #F59E0B !important;
+}
+
+#premiumCustomerDashboard .prem-eta-compact strong {
+    color: #111111 !important;
+}
+
 </style>
 </head>
 <body>
