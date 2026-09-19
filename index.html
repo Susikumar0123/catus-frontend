@@ -11151,6 +11151,17 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
   #productGridContainer .cerood-category-slide-btn {display:none !important;}
 }
 /* ===== END DESKTOP CATEGORY SLIDER ===== */
+
+/* CEROOD RENEWED ENTRY — isolated from existing service UI */
+.cr-renewed-entry{max-width:1220px;margin:20px auto 25px;padding:0 18px;box-sizing:border-box}
+.cr-renewed-entry a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:23px 28px;border-radius:22px;background:linear-gradient(115deg,#e9edf6 0%,#f7f5ff 57%,#e4eaf6 100%);border:1px solid #e3e4f0;color:#22213a;text-decoration:none;box-shadow:0 12px 28px rgba(37,35,78,.06);transition:transform .2s,box-shadow .2s}
+.cr-renewed-entry a:hover{transform:translateY(-2px);box-shadow:0 17px 34px rgba(37,35,78,.12)}
+.cr-renewed-entry .cr-eyebrow{font-size:10px;font-weight:800;letter-spacing:.13em;color:#6445cb}
+.cr-renewed-entry h2{font-size:clamp(19px,2.4vw,29px);line-height:1.18;margin:9px 0;color:#25213b}
+.cr-renewed-entry p{font-size:13px;line-height:1.6;color:#5e6577;margin:0 0 15px}
+.cr-renewed-entry .cr-cta{display:inline-flex;align-items:center;gap:9px;background:#29233e;color:#fff;border-radius:11px;padding:12px 16px;font-size:12px;font-weight:750}
+.cr-renewed-entry .cr-art{width:94px;height:94px;border-radius:22px;background:#fff;display:grid;place-items:center;font-size:42px;box-shadow:0 8px 24px rgba(50,39,88,.1)}
+@media(max-width:768px){.cr-renewed-entry{margin:15px auto 22px;padding:0 12px}.cr-renewed-entry a{padding:17px 16px;gap:9px;border-radius:17px}.cr-renewed-entry h2{font-size:19px}.cr-renewed-entry p{font-size:11px}.cr-renewed-entry .cr-art{width:55px;height:55px;font-size:26px;border-radius:14px}.cr-renewed-entry .cr-cta{padding:10px 12px;font-size:11px}}
 </style>
 </head>
 <body>
@@ -11272,6 +11283,14 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
 </div>
 
 
+
+<!-- CEROOD RENEWED — separate shopping destination; existing service grid untouched -->
+<section class="cr-renewed-entry" aria-label="Shop pre-owned and refurbished appliances">
+  <a href="/renewed.html">
+    <div><span class="cr-eyebrow">INTRODUCING CEROOD RENEWED</span><h2>Great appliances. Second chances.</h2><p>Explore pre-owned and refurbished TVs, fridges, washing machines and more. View each item's condition before you buy.</p><span class="cr-cta">Explore Renewed Store <span aria-hidden="true">→</span></span></div>
+    <span class="cr-art" aria-hidden="true">♻️</span>
+  </a>
+</section>
 
     <!-- 5. Product Categories & Grids (இதைக் கட்டாயம் சேர்க்கவும்) -->
     <div id="productGridContainer"></div>
