@@ -7998,17 +7998,57 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
 }
 /* END CEROOD AUTH V2.1 */
 
-/* PRODUCT AUTH / GLOBAL NAV VISIBILITY - INDEX MATCH */
-@media (max-width: 850px) {
-  body.cerood-auth-open #ceroodGlobalMobileNav { display: none !important; }
-}
+/* PRODUCT AUTH / GLOBAL NAV - MATCH INDEX MOBILE POPUP */
 @media (max-width: 768px) {
-  #authModal.auth-modal-wrapper {
-    inset: 0 !important; top: 0 !important; bottom: 0 !important;
-    width: 100% !important; height: 100dvh !important;
-    z-index: 2147483646 !important;
+  /* Keep the same bottom nav visible ABOVE the authentication sheet. */
+  body.cerood-auth-open #ceroodGlobalMobileNav,
+  body.cerood-auth-open .cerood-global-mobile-nav {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    z-index: 2147483647 !important;
   }
-  #authModal .auth-modal-container { max-height: 100dvh !important; }
+  /* Reserve the bottom 56px for the nav, rather than covering it. */
+  #authModal.auth-modal-wrapper {
+    inset: 0 0 56px 0 !important;
+    top: 0 !important;
+    bottom: 56px !important;
+    width: 100% !important;
+    height: calc(100dvh - 56px) !important;
+    z-index: 2147483000 !important;
+    align-items: stretch !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  #authModal .auth-modal-container {
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+  #authModal .auth-right-panel {
+    height: 100% !important;
+    max-height: 100% !important;
+    padding: 24px 24px 24px !important;
+    box-sizing: border-box !important;
+  }
+  /* Index-style close icon: inside top-right of the white panel. */
+  #authModal .auth-close-btn,
+  #authModal .desktop-header-close.auth-close-btn {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid #ececef !important;
+    border-radius: 50% !important;
+    background: #f3f4f6 !important;
+    color: #334155 !important;
+    z-index: 10 !important;
+  }
 }
 </style>
 </head>
@@ -16370,4 +16410,5 @@ if ('serviceWorker' in navigator) {
 </script>
 
 </body>
+
 </html>
