@@ -7143,7 +7143,12 @@ async function uploadAdminImage(fileInput, targetInputId) {
      actions.className='renewed-draft-actions';
      const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.onclick=()=>{for(const [k,v] of Object.entries(fieldMap))$(k).value=p[v]??'';$('DraftId').value=p.id;$('FormHeading').textContent='Edit renewed product';document.getElementById('renewedDraftForm').scrollIntoView({behavior:'smooth',block:'start'})};
      const del=document.createElement('button');del.type='button';del.className='renewed-delete';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Permanently delete this product?'))return;try{await request('/api/admin/renewed/products/'+encodeURIComponent(p.id),'DELETE');message('Product deleted.');await renewedRenderDrafts()}catch(e){message(e.message,true)}};
-     actions.append(edit,del);info.append(title,sub,actions);card.append(pic,info);root.append(card);
+     const preview=document.createElement('button');preview.type='button';preview.textContent='Test preview';
+     preview.title='Admin-only stock and price check. Does not collect payment.';
+     preview.onclick=async()=>{preview.disabled=true;try{const d=await request('/api/admin/renewed/test-preview/'+encodeURIComponent(p.id));
+       const product=d.product;message('ADMIN TEST · '+product.name+' · ₹'+Number(product.price).toLocaleString('en-IN')+' · stock '+product.stock+' · '+product.status+' · NO PAYMENT CREATED');
+     }catch(e){message(e.message,true)}finally{preview.disabled=false}};
+     actions.append(edit,preview,del);info.append(title,sub,actions);card.append(pic,info);root.append(card);
    }
  }
  document.getElementById('renewedDraftForm').addEventListener('submit',async e=>{
