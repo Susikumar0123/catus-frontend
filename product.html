@@ -7255,6 +7255,117 @@ border-radius: 12px !important;
     }
 }
 
+/* =========================================
+   CEROOD PRODUCT PAGE
+   SAME MOBILE TOUCH FEEDBACK AS INDEX
+========================================= */
+
+@media (max-width: 850px) {
+
+    /* REMOVE BROWSER GRAY FLASH */
+
+    a,
+    button,
+    [onclick],
+    .uc-card,
+    .cerood-global-nav-btn {
+        -webkit-tap-highlight-color: transparent !important;
+    }
+
+
+    /* NORMAL CLICKABLE ELEMENTS */
+
+    .uc-card,
+    .variant-btn,
+    .thumb-box,
+    .uc-btn,
+    .cerood-date-btn,
+    .cerood-time-btn,
+    .cerood-booking-panel .btn,
+    .brand-logo,
+    .mobile-location-widget,
+    .suggestion-item {
+        transition:
+            transform 0.12s ease,
+            filter 0.12s ease,
+            opacity 0.12s ease !important;
+
+        transform-origin: center center !important;
+    }
+
+
+    /* TOUCH = PHYSICAL PRESS */
+
+    .uc-card:active,
+    .variant-btn:active,
+    .thumb-box:active,
+    .uc-btn:active,
+    .cerood-date-btn:active,
+    .cerood-time-btn:active,
+    .cerood-booking-panel .btn:active,
+    .brand-logo:active,
+    .mobile-location-widget:active,
+    .suggestion-item:active {
+
+        transform: scale(0.97) !important;
+
+        filter: brightness(0.94) !important;
+    }
+
+
+    /* SERVICE IMAGE TOUCH FEEDBACK */
+
+    .uc-card-img-wrapper {
+        transition:
+            filter 0.12s ease,
+            transform 0.12s ease !important;
+    }
+
+    .uc-card:active .uc-card-img-wrapper {
+        filter: brightness(0.90) !important;
+    }
+
+
+    /* BOTTOM NAV TOUCH FEEDBACK */
+
+    #ceroodGlobalMobileNav .cerood-global-nav-btn {
+        transition:
+            transform 0.12s ease,
+            opacity 0.12s ease !important;
+
+        transform-origin: center center !important;
+    }
+
+    #ceroodGlobalMobileNav .cerood-global-nav-btn:active {
+        transform: scale(0.92) !important;
+        opacity: 0.78 !important;
+    }
+
+    #ceroodGlobalMobileNav .cerood-global-nav-ring,
+    #ceroodGlobalMobileNav .cerood-global-nav-btn svg {
+        transition:
+            transform 0.12s ease,
+            filter 0.12s ease !important;
+    }
+
+    #ceroodGlobalMobileNav
+    .cerood-global-nav-btn:active
+    .cerood-global-nav-ring {
+
+        transform: scale(0.90) !important;
+
+        filter: brightness(1.18) !important;
+    }
+
+
+    /* OTHER BUTTONS */
+
+    button:not(.cerood-global-nav-btn):active {
+        transform: scale(0.97);
+        filter: brightness(0.94);
+    }
+}
+
 </style>
 </head>
 <body>
