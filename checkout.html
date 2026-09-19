@@ -1757,6 +1757,46 @@ p, span, div, a, label, li, small {
     }
 }
 
+/* PAY LATER +50 BADGE */
+
+.payment-option-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.payment-option-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 3px;
+}
+
+.payment-option-title strong {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #171717 !important;
+}
+
+.payment-method-card .pay-later-fee {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #fff1df !important;
+    color: #a65300 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+}
+
+.payment-option-description {
+    display: block;
+    font-size: 11px !important;
+    color: #737373 !important;
+}
+
 </style>
 </head>
 <body>
@@ -1962,17 +2002,21 @@ Please check all required fields, mobile number, and pincode.
             </div>
 
             <div class="payment-method-card" onclick="selectPaymentMode('later')" id="cardLater">
-                <input type="radio" name="paymentMode" id="payLater">
-                <div>
-                    <strong style="font-size: 13px; display: block; color: #0f172a;">
-    Pay After Service
-</strong>
+    <input type="radio" name="paymentMode" id="payLater">
 
-<span style="font-size: 11px; color: #64748b;">
-    Pay after the service is completed
-</span>
-                </div>
-            </div>
+    <div class="payment-option-content">
+
+        <div class="payment-option-title">
+            <strong>Pay Later</strong>
+            <span class="pay-later-fee">+₹50</span>
+        </div>
+
+        <span class="payment-option-description">
+            Pay after the service is completed
+        </span>
+
+    </div>
+</div>
         </div>
     </div>
 
