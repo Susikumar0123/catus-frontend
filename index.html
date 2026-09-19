@@ -10961,6 +10961,121 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
 }
 /* ===== END DESKTOP MOBILE DESIGN MATCH ===== */
 
+/* ===== CEROOD DESKTOP SCREENSHOT CORRECTIONS — MOBILE UNCHANGED ===== */
+@media (min-width: 851px) {
+  html, body {max-width:100% !important; overflow-x:clip !important;}
+  .master-app-container {width:100% !important;max-width:100% !important;box-sizing:border-box !important;}
+  .uc-homepage-wrapper {width:100% !important;max-width:100% !important;box-sizing:border-box !important;}
+  .header-main-container {
+    width:100% !important;max-width:100% !important;box-sizing:border-box !important;
+    margin:0 !important; min-width:0 !important; flex-wrap:nowrap !important;
+    border-radius:14px !important;
+  }
+  .header-main-container .brand-logo {flex:0 0 auto !important;margin-right:0 !important;}
+  .header-main-container .search-container {min-width:0 !important;flex:1 1 auto !important;max-width:none !important;}
+  .header-main-container .header-nav-right {flex:0 0 auto !important;gap:12px !important;}
+  .header-main-container .login-btn {border:1px solid rgba(255,255,255,.9) !important;color:#171717 !important;}
+  .header-main-container .login-btn svg,
+  .header-main-container .login-btn svg * {stroke:#171717 !important;fill:none !important;}
+  .header-main-container .cart-item {
+    background:rgba(255,255,255,.95) !important;color:#171717 !important;
+    border:1px solid rgba(255,255,255,.95) !important;
+    border-radius:50px !important;padding:9px 15px !important;
+    box-sizing:border-box !important;min-height:38px !important;
+  }
+  .header-main-container .cart-item svg,
+  .header-main-container .cart-item svg * {stroke:#171717 !important;fill:none !important;}
+  .header-main-container .cart-item .cart-badge {color:#fff !important;}
+  /* Both MP4s fit the original wide promotional card instead of expanding to 16:9. */
+  #productGridContainer > .cerood-offer-banner {
+    width:100% !important;max-width:100% !important;
+    height:clamp(155px,19vw,260px) !important;
+    aspect-ratio:auto !important;margin:24px 0 36px !important;
+    border-radius:14px !important;overflow:hidden !important;background:#000 !important;
+  }
+  #productGridContainer > .cerood-offer-banner .cerood-offer-mobile-video {
+    display:block !important;width:100% !important;height:100% !important;
+    max-height:100% !important;aspect-ratio:auto !important;
+    object-fit:cover !important;object-position:center !important;
+  }
+  #productGridContainer > .cerood-offer-banner .cerood-offer-desktop {display:none !important;}
+  /* Reuse mobile's 2-column service grid, but size each category for desktop. */
+  #productGridContainer .mobile-category-track {
+    display:flex !important;flex-wrap:nowrap !important;gap:16px !important;
+    width:100% !important;max-width:100% !important;
+    overflow-x:auto !important;overflow-y:hidden !important;
+    scroll-snap-type:x proximity !important;scroll-behavior:smooth !important;
+    padding:3px 2px 14px !important;margin:0 0 24px !important;
+    box-sizing:border-box !important;scrollbar-width:none !important;
+  }
+  #productGridContainer .mobile-category-track::-webkit-scrollbar {display:none !important;}
+  #productGridContainer .mobile-category-track > .uc-category-box {
+    flex:0 0 calc((100% - 32px)/3) !important;
+    width:calc((100% - 32px)/3) !important;
+    min-width:0 !important;max-width:none !important;
+    margin:0 !important;padding:15px 13px 17px !important;
+    scroll-snap-align:start !important;
+    background:#F5F5F7 !important;border:0 !important;border-radius:12px !important;
+    box-shadow:none !important;overflow:hidden !important;box-sizing:border-box !important;
+  }
+  #productGridContainer .mobile-category-track .uc-cat-header {margin:0 0 14px !important;min-height:24px !important;}
+  #productGridContainer .mobile-category-track .uc-cat-header h3 {
+    font-size:17px !important;line-height:22px !important;font-weight:600 !important;
+    color:#171717 !important;letter-spacing:-.25px !important;
+  }
+  #productGridContainer .mobile-category-track .uc-see-all-btn {
+    width:26px !important;height:26px !important;min-width:26px !important;
+    padding:0 !important;background:transparent !important;border:0 !important;
+    font-size:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;
+  }
+  #productGridContainer .mobile-category-track .uc-see-all-btn::after {
+    content:'›' !important;font-size:24px !important;color:#171717 !important;
+  }
+  #productGridContainer .mobile-category-track .uc-see-all-btn.expanded::after {content:'⌃' !important;font-size:19px !important;}
+  #productGridContainer .mobile-category-track .uc-carousel-wrapper {width:100% !important;overflow:visible !important;}
+  #productGridContainer .mobile-category-track .uc-grid {
+    display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:20px 14px !important;width:100% !important;
+    overflow:visible !important;scroll-snap-type:none !important;
+    padding:0 !important;margin:0 !important;
+  }
+  #productGridContainer .mobile-category-track .uc-grid .uc-card {
+    display:flex !important;flex-direction:column !important;
+    width:100% !important;min-width:0 !important;max-width:none !important;
+    flex:none !important;padding:6px 6px 8px !important;margin:0 !important;
+    background:#fff !important;border:0 !important;border-radius:10px !important;
+    box-shadow:0 1px 2px rgba(0,0,0,.04),0 3px 8px rgba(0,0,0,.05) !important;
+    overflow:hidden !important;box-sizing:border-box !important;
+  }
+  #productGridContainer .mobile-category-track .uc-grid .uc-card:nth-child(n+5) {display:none !important;}
+  #productGridContainer .mobile-category-track .uc-grid.show-all-mobile .uc-card:nth-child(n+5) {display:flex !important;}
+  #productGridContainer .mobile-category-track .uc-card-img-wrapper {
+    width:100% !important;height:auto !important;aspect-ratio:1/1 !important;
+    margin:0 0 7px !important;border:0 !important;border-radius:7px !important;background:#fff !important;
+  }
+  #productGridContainer .mobile-category-track .uc-body h4 {
+    font-size:12px !important;line-height:15px !important;min-height:30px !important;
+    margin:0 0 3px !important;font-weight:500 !important;
+  }
+  #productGridContainer .mobile-category-track .uc-price {font-size:13px !important;line-height:15px !important;font-weight:600 !important;}
+  #productGridContainer .mobile-category-track .uc-cut {font-size:9px !important;}
+  #productGridContainer .mobile-category-track .uc-carousel-arrow {display:none !important;}
+}
+@media (min-width:851px) and (max-width:1120px) {
+  #productGridContainer .mobile-category-track > .uc-category-box {
+    flex-basis:calc((100% - 16px)/2) !important;width:calc((100% - 16px)/2) !important;
+  }
+  .header-main-container {gap:10px !important;padding:12px 15px !important;}
+  .header-main-container .header-location-widget {width:160px !important;}
+}
+@media (min-width:769px) and (max-width:850px) {
+  /* Desktop/tablet bridge; preserve all phone styles at 768px and below. */
+  #productGridContainer > .cerood-offer-banner {height:170px !important;aspect-ratio:auto !important;overflow:hidden !important;}
+  #productGridContainer > .cerood-offer-banner video {height:100% !important;aspect-ratio:auto !important;object-fit:cover !important;}
+}
+/* ===== END CEROOD DESKTOP SCREENSHOT CORRECTIONS ===== */
+
+
 </style>
 </head>
 <body>
@@ -15966,7 +16081,9 @@ function startCatusBannerFlow() {
         document.getElementById('productGridContainer');
 
     if (!container) return;
-    if (window.innerWidth > 768) return;
+    // Category cards use the same slider structure on desktop and mobile.
+    // Desktop-only CSS below controls its responsive width and grid.
+    // Do not change the existing mobile layout.
 
     if (container.querySelector('.mobile-category-track')) {
         return;
