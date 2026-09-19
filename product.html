@@ -1074,14 +1074,20 @@
     display: none;
 }
 
+
 @media (max-width: 850px) {
 
     body {
-        padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important;
+        padding-bottom:
+            calc(64px + env(safe-area-inset-bottom))
+            !important;
     }
 
+
     .cerood-global-mobile-nav {
+
         display: flex !important;
+
         position: fixed !important;
 
         left: 0 !important;
@@ -1089,16 +1095,25 @@
         bottom: 0 !important;
 
         width: 100% !important;
-        height: calc(62px + env(safe-area-inset-bottom)) !important;
 
-        padding: 3px 0 env(safe-area-inset-bottom) !important;
+        height:
+            calc(62px + env(safe-area-inset-bottom))
+            !important;
+
+        padding:
+            3px 0 env(safe-area-inset-bottom)
+            !important;
 
         box-sizing: border-box !important;
 
-        background: #ffffff !important;
-        border-top: 1px solid #eeeeee !important;
+        background: #000000 !important;
 
-        box-shadow: 0 -3px 14px rgba(0,0,0,.04) !important;
+        border-top:
+            1px solid #eeeeee !important;
+
+        box-shadow:
+            0 -3px 14px rgba(0,0,0,.04)
+            !important;
 
         align-items: center !important;
         justify-content: space-around !important;
@@ -1106,17 +1121,22 @@
         z-index: 2147483647 !important;
     }
 
+
     .cerood-global-nav-btn {
+
         flex: 1 1 20% !important;
+
         height: 100% !important;
 
         margin: 0 !important;
         padding: 2px 0 !important;
 
         border: 0 !important;
+
         background: transparent !important;
 
         display: flex !important;
+
         flex-direction: column !important;
 
         align-items: center !important;
@@ -1125,41 +1145,49 @@
         gap: 3px !important;
 
         font-family: inherit !important;
+
         color: #666666 !important;
 
         cursor: pointer !important;
+
         position: relative !important;
     }
 
+
     .cerood-global-nav-ring {
-        width: 35px !important;
-        height: 35px !important;
 
         position: relative !important;
 
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        width: 35px !important;
+        height: 35px !important;
 
         border-radius: 50% !important;
 
-        background: #ffffff !important;
-        border: 2px solid #e3e6ea !important;
+        display: flex !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        background: #000000 !important;
+
+        border: 2px solid #ffffff !important;
 
         box-sizing: border-box !important;
     }
 
+
     .cerood-global-nav-ring svg {
+
         width: 18px !important;
         height: 18px !important;
 
-        fill: none !important;
-        stroke: #111827 !important;
+        stroke: #ffffff !important;
 
         stroke-width: 1.8 !important;
-        stroke-linecap: round !important;
-        stroke-linejoin: round !important;
     }
+
+
+    /* individual accent */
 
     .ring-home {
         border-top-color: #6d4aff !important;
@@ -1181,17 +1209,31 @@
         border-top-color: #f43f86 !important;
     }
 
+
+    /* LABEL */
+
     .cerood-global-nav-btn > span:last-child {
+
         font-size: 9px !important;
+
         line-height: 11px !important;
+
         font-weight: 400 !important;
-        color: #666666 !important;
+
+        color: #ffffff !important;
     }
 
-    .cerood-global-nav-btn.active > span:last-child {
-        color: #6d4aff !important;
+
+    /* ACTIVE */
+
+    .cerood-global-nav-btn.active
+    > span:last-child {
+
+        color: #ffffff !important;
+
         font-weight: 500 !important;
     }
+
 
     .cerood-global-nav-btn.active
     .cerood-global-nav-ring::after {
@@ -1209,9 +1251,326 @@
         height: 5px;
 
         border-radius: 50%;
+
         background: #6d4aff;
     }
+
+
+    /* dashboard content bottom spacing */
+
+    #premiumCustomerDashboard
+    .prem-dash-content {
+
+        padding-bottom: 64px !important;
+
+        box-sizing: border-box !important;
+    }
 }
+
+/* ==========================================
+   SEO SERVICE AREAS
+========================================== */
+
+.seo-service-areas {
+    max-width: 1200px;
+    margin: 45px auto 10px;
+    padding: 0 10px;
+}
+
+.seo-service-areas h2 {
+    font-size: 22px;
+    margin: 0 0 6px;
+    color: #18181b;
+}
+
+.seo-service-areas > p {
+    margin: 0 0 20px;
+    color: #71717a;
+    font-size: 14px;
+}
+
+.seo-district-group {
+    border-bottom: 1px solid #eeeeee;
+    padding: 12px 0;
+}
+
+.seo-district-group summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #27272a;
+    font-size: 14px;
+}
+
+.seo-location-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 12px;
+}
+
+.seo-location-links a {
+    font-size: 13px;
+    color: #52525b;
+    text-decoration: none;
+}
+
+.seo-location-links a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .seo-service-areas {
+        margin-top: 30px;
+        padding: 0 4px;
+    }
+
+    .seo-location-links {
+        gap: 8px 12px;
+    }
+
+}
+
+/* COMPACT FOOTER SERVICE AREAS */
+
+.seo-service-areas {
+    display: none !important;
+}
+
+.seo-service-areas-footer {
+    width: 100%;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #dedbea;
+    padding-bottom: 15px;
+}
+
+.seo-service-areas-footer > summary {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #18181b;
+    list-style-position: inside;
+    padding: 8px 0;
+}
+
+.seo-service-areas-footer > summary::after {
+    content: "Close";
+    float: right;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #374151;
+}
+
+.seo-service-areas-footer:not([open]) > summary::after {
+    content: "View Service Areas";
+}
+
+.seo-service-areas-inner {
+    padding: 10px 0 5px;
+}
+
+.seo-service-areas-inner > p {
+    font-size: 12px;
+    color: #71717a;
+    margin: 0 0 12px;
+}
+
+.seo-service-areas-inner #seoServiceAreasContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    padding-top: 4px;
+}
+
+.seo-service-areas-footer .seo-district-group {
+    display: inline-block;
+    padding: 4px 0;
+    margin: 0;
+    border-bottom: none;
+}
+
+.seo-service-areas-footer .seo-district-group summary {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    white-space: nowrap;
+    color: #27272a;
+}
+
+.seo-service-areas-footer .seo-district-group summary::-webkit-details-marker {
+    display: none;
+}
+
+.seo-service-areas-footer .seo-district-group:not(:last-child) summary::after {
+    content: "|";
+    color: #b8b8c3;
+    font-weight: 400;
+    margin: 0 10px;
+}
+
+.seo-service-areas-footer .seo-location-links a {
+    font-size: 11px;
+}
+
+.seo-location-service-group {
+    margin: 8px 0 12px;
+}
+
+.seo-location-service-group strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.seo-location-service-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0px;
+}
+
+.seo-location-service-links a {
+    font-size: 11px;
+    text-decoration: none;
+    color: #475569;
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid #cbd5e1;
+}
+
+.seo-location-service-links a:last-child {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+}
+
+/* =========================================
+   CEROOD SERVICE AREA - CLEAN ACCORDION UI
+========================================= */
+
+.seo-service-areas-inner #seoServiceAreasContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0;
+}
+
+/* District button row */
+.seo-service-areas-footer .seo-district-group {
+    display: contents;
+}
+
+.seo-service-areas-footer .seo-district-group > summary {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #27272a;
+    cursor: pointer;
+    white-space: nowrap;
+    list-style: none;
+}
+
+.seo-service-areas-footer .seo-district-group > summary::-webkit-details-marker {
+    display: none;
+}
+
+.seo-service-areas-footer .seo-district-group:not(:last-child) > summary::after {
+    content: "|";
+    margin: 0 10px;
+    color: #c7c9d1;
+    font-weight: 400;
+}
+
+/* Selected district */
+.seo-service-areas-footer .seo-district-group[open] > summary {
+    color: #6d4aff;
+}
+
+/* Open district content becomes full width */
+.seo-service-areas-footer .seo-district-group[open] > .seo-location-links {
+    order: 999;
+    flex-basis: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 24px;
+    margin: 14px 0 18px;
+    padding: 16px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid #e3e3ec;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* Location block */
+.seo-location-service-group {
+    margin: 0;
+    min-width: 0;
+}
+
+.seo-location-service-group strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 7px;
+}
+
+/* Services under each location */
+.seo-location-service-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+}
+
+.seo-location-service-links a {
+    font-size: 11px;
+    color: #475569;
+    text-decoration: none;
+    padding-right: 9px;
+    margin-right: 9px;
+    border-right: 1px solid #cbd5e1;
+    line-height: 1.6;
+}
+
+.seo-location-service-links a:last-child {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+}
+
+.seo-location-service-links a:hover {
+    color: #6d4aff;
+    text-decoration: underline;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .seo-service-areas-footer .seo-district-group[open] > .seo-location-links {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .seo-service-areas-footer .seo-district-group > summary {
+        font-size: 11px;
+        padding: 5px 0;
+    }
+
+    .seo-service-areas-footer .seo-district-group:not(:last-child) > summary::after {
+        margin: 0 7px;
+    }
+}
+
 
 /* =====================================================
    PRODUCT PAGE - MATCH INDEX MOBILE HEADER
@@ -7638,6 +7997,19 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
  #authModal .cerood-auth-progress {margin-bottom:24px!important;}
 }
 /* END CEROOD AUTH V2.1 */
+
+/* PRODUCT AUTH / GLOBAL NAV VISIBILITY - INDEX MATCH */
+@media (max-width: 850px) {
+  body.cerood-auth-open #ceroodGlobalMobileNav { display: none !important; }
+}
+@media (max-width: 768px) {
+  #authModal.auth-modal-wrapper {
+    inset: 0 !important; top: 0 !important; bottom: 0 !important;
+    width: 100% !important; height: 100dvh !important;
+    z-index: 2147483646 !important;
+  }
+  #authModal .auth-modal-container { max-height: 100dvh !important; }
+}
 </style>
 </head>
 <body>
@@ -15352,21 +15724,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
       </div>
   </div>
  <div class="cerood-global-mobile-nav"
-     id="ceroodGlobalMobileNav"
-     style="
-        position:fixed;
-        left:0;
-        right:0;
-        bottom:0;
-        width:100%;
-        height:62px;
-        background:#ffffff;
-        z-index:2147483647;
-        align-items:center;
-        justify-content:space-around;
-        border-top:1px solid #eeeeee;
-        box-shadow:0 -3px 14px rgba(0,0,0,.04);
-     ">
+     id="ceroodGlobalMobileNav">
 
     <button class="cerood-global-nav-btn active"
             data-nav="home"
@@ -16012,5 +16370,4 @@ if ('serviceWorker' in navigator) {
 </script>
 
 </body>
-
 </html>
