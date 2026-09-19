@@ -2824,7 +2824,7 @@ if (trustNote) {
     `;
 }
                 if (payableLabel) {
-    payableLabel.textContent = 'Pay After Service';
+    payableLabel.textContent = 'Pay Later';
 }
                 document.getElementById('payLater').checked = true;
                 document.getElementById('cardLater').classList.add('selected');
@@ -3701,7 +3701,7 @@ status: orderStatus,
 
     const displayPaymentMode =
     paymentModeText === 'Pay Later (Cash / Service Pay)'
-        ? 'Pay After Service'
+        ? 'Pay Later'
         : 'Paid Online';
 
 const paymentModeEl =
