@@ -8206,6 +8206,44 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
   #relatedServicesBox #relatedContainer .uc-card-img-wrapper {height:140px !important;}
 }
 /* ===== END PRODUCT DESKTOP ONLY PATCH ===== */
+
+/* CEROOD TRUST UPGRADE PHASE 1 - responsive product information */
+#productGridMain .cerood-service-clarity{grid-column:1 / -1;min-width:0;background:#f5f5f7;border-radius:18px;padding:22px;margin:2px 0 0;font-family:Inter,system-ui,sans-serif;color:#171717;box-sizing:border-box}
+#productGridMain .cerood-clarity-heading{margin:0 0 18px}
+#productGridMain .cerood-clarity-eyebrow{display:inline-flex;align-items:center;gap:7px;color:#6846dc;font-size:10px;font-weight:800;letter-spacing:.11em}
+#productGridMain .cerood-clarity-heading h2{font-size:clamp(19px,2vw,25px);letter-spacing:-.5px;line-height:1.3;margin:9px 0 6px;font-weight:750}
+#productGridMain .cerood-clarity-heading p{margin:0;color:#64748b;font-size:13px;line-height:1.6}
+#productGridMain .cerood-clarity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+#productGridMain .cerood-clarity-card{min-width:0;background:#fff;border:1px solid #e9eaf1;border-radius:15px;padding:19px;box-shadow:0 3px 12px rgba(29,30,53,.035);box-sizing:border-box}
+#productGridMain .cerood-clarity-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+#productGridMain .cerood-clarity-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#f1edff;color:#6846dc;font-size:16px}
+#productGridMain .cerood-clarity-tag{color:#766a9a;background:#f8f6ff;border-radius:30px;padding:6px 9px;font-size:9px;font-weight:800;letter-spacing:.08em;white-space:nowrap}
+#productGridMain .cerood-clarity-card h3{font-size:16px;line-height:1.35;margin:0 0 8px;font-weight:750;letter-spacing:-.2px}
+#productGridMain .cerood-clarity-muted{font-size:12px;color:#64748b;line-height:1.7;margin:0 0 14px}
+#productGridMain .cerood-clarity-highlight{display:flex;gap:9px;align-items:flex-start;padding:12px;border-radius:11px;background:#f3efff;color:#4c388b;font-size:12px;line-height:1.55;margin:13px 0}
+#productGridMain .cerood-clarity-highlight i{margin-top:2px}
+#productGridMain .cerood-clarity-list{padding:0;margin:0;list-style:none;display:grid;gap:11px}
+#productGridMain .cerood-clarity-list li{display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:#344054}
+#productGridMain .cerood-clarity-list i{color:#16a34a;margin-top:3px}
+#productGridMain .cerood-clarity-scope{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-top:1px solid #eef0f4}
+#productGridMain .cerood-clarity-scope>i{color:#16a34a;margin-top:2px}
+#productGridMain .cerood-clarity-scope:nth-of-type(3)>i{color:#bd7b16}
+#productGridMain .cerood-clarity-scope strong,#productGridMain .cerood-clarity-scope span{display:block;font-size:12px;line-height:1.5}
+#productGridMain .cerood-clarity-scope span{color:#64748b;margin-top:3px}
+#productGridMain .cerood-clarity-footnote{font-size:11px;line-height:1.55;color:#64748b;margin:8px 0 0}
+#productGridMain .cerood-clarity-warranty-badge{background:#effaf3;border:1px solid #d4f2df;border-radius:12px;padding:13px;margin:10px 0 14px}
+#productGridMain .cerood-clarity-warranty-badge strong{display:block;font-size:23px;color:#15803d;line-height:1.3}
+#productGridMain .cerood-clarity-warranty-badge span{font-size:11px;color:#37654b;line-height:1.5}
+#productGridMain .cerood-clarity-details{border-top:1px solid #edf0f5;padding-top:13px}
+#productGridMain .cerood-clarity-details summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;color:#6846dc;font-weight:700;font-size:12px;gap:8px}
+#productGridMain .cerood-clarity-details summary::-webkit-details-marker{display:none}
+#productGridMain .cerood-clarity-details[open] summary i{transform:rotate(180deg)}
+#productGridMain .cerood-clarity-details p{color:#64748b;font-size:12px;line-height:1.65;margin:12px 0 0}
+#productGridMain .cerood-clarity-bottom{display:flex;gap:9px;align-items:center;color:#475569;font-size:12px;line-height:1.5;margin-top:15px}
+#productGridMain .cerood-clarity-bottom i{color:#6846dc}
+@media(max-width:1100px){#productGridMain .cerood-clarity-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#productGridMain .cerood-clarity-warranty{grid-column:1/-1}}
+@media(max-width:700px){#productGridMain .cerood-service-clarity{padding:13px;border-radius:13px;margin-top:0}#productGridMain .cerood-clarity-grid{grid-template-columns:1fr;gap:10px}#productGridMain .cerood-clarity-warranty{grid-column:auto}#productGridMain .cerood-clarity-card{padding:15px;border-radius:12px}#productGridMain .cerood-clarity-heading h2{font-size:19px}#productGridMain .cerood-clarity-bottom{align-items:flex-start}}
+
 </style>
 </head>
 <body>
@@ -8502,6 +8540,44 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
 
     </div>
 
+
+    <!-- CEROOD TRUST UPGRADE PHASE 1: SERVICE PRICING & WARRANTY -->
+    <section class="cerood-service-clarity" aria-labelledby="ceroodClarityTitle">
+      <div class="cerood-clarity-heading">
+        <span class="cerood-clarity-eyebrow"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> BOOK WITH CLARITY</span>
+        <h2 id="ceroodClarityTitle">Know your service before you book</h2>
+        <p>Clear pricing, repair approval and warranty information in one place.</p>
+      </div>
+      <div class="cerood-clarity-grid">
+        <article class="cerood-clarity-card cerood-clarity-price">
+          <div class="cerood-clarity-card-head"><span class="cerood-clarity-icon"><i class="fa-solid fa-indian-rupee-sign" aria-hidden="true"></i></span><span class="cerood-clarity-tag">PRICING</span></div>
+          <h3>Transparent service pricing</h3>
+          <p class="cerood-clarity-muted">The starting price for your selected service is shown above. Any additional work should be explained before it begins.</p>
+          <div class="cerood-clarity-highlight"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Final charges may depend on inspection, parts and the work you approve.</span></div>
+          <ul class="cerood-clarity-list">
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Review the displayed service price before checkout</span></li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Ask for a breakdown of any additional labour or parts</span></li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Approve additional work before it starts</span></li>
+          </ul>
+        </article>
+        <article class="cerood-clarity-card">
+          <div class="cerood-clarity-card-head"><span class="cerood-clarity-icon"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i></span><span class="cerood-clarity-tag">SERVICE SCOPE</span></div>
+          <h3>What is included?</h3>
+          <p class="cerood-clarity-muted">Your selected service and any options shown above define the booked work. Exact tasks can vary by appliance and service.</p>
+          <div class="cerood-clarity-scope"><i class="fa-solid fa-circle-check" aria-hidden="true"></i><div><strong>Booked service</strong><span>The service and option you select on this page.</span></div></div>
+          <div class="cerood-clarity-scope"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><div><strong>May cost extra</strong><span>Replacement parts or additional repairs not covered by the selected service.</span></div></div>
+          <p class="cerood-clarity-footnote">Please confirm the final scope and quotation with Cerood before additional work is carried out.</p>
+        </article>
+        <article class="cerood-clarity-card cerood-clarity-warranty">
+          <div class="cerood-clarity-card-head"><span class="cerood-clarity-icon"><i class="fa-solid fa-shield-heart" aria-hidden="true"></i></span><span class="cerood-clarity-tag">AFTER-SERVICE SUPPORT</span></div>
+          <h3>Service warranty</h3>
+          <div class="cerood-clarity-warranty-badge"><strong>30 days</strong><span>for eligible repairs, subject to applicable terms</span></div>
+          <p class="cerood-clarity-muted">If the same serviced issue returns, contact Cerood support with your booking details to request a warranty review.</p>
+          <details class="cerood-clarity-details"><summary>See warranty information <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary><div><p>Eligibility depends on the repair performed and applicable warranty terms. New or unrelated faults, accidental damage and misuse may not be covered.</p><p>Keep your order ID and service details for support. Coverage and any revisit are confirmed after review.</p></div></details>
+        </article>
+      </div>
+      <div class="cerood-clarity-bottom"><i class="fa-solid fa-headset" aria-hidden="true"></i><span>Questions about price, scope or warranty? Contact Cerood support before booking.</span></div>
+    </section>
 
     <!-- RIGHT : BOOKING PANEL -->
     <div class="cerood-booking-panel">
