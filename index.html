@@ -10811,6 +10811,75 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
 }
 /* END CEROOD AUTH V2.1 */
 
+
+/* CEROOD AUTH DESKTOP: match the mobile visual language, not mobile bottom nav. */
+@media (min-width: 769px) {
+  #authModal.auth-modal-wrapper {
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    padding: 24px !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(15, 23, 42, .58) !important;
+    backdrop-filter: blur(7px) !important;
+    -webkit-backdrop-filter: blur(7px) !important;
+  }
+  #authModal .auth-modal-container {
+    display: flex !important;
+    flex-direction: column !important;
+    width: min(100%, 470px) !important;
+    max-width: 470px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 48px) !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 20px !important;
+    background: #fff !important;
+    box-shadow: 0 24px 75px rgba(15, 23, 42, .22) !important;
+    overflow: hidden !important;
+  }
+  #authModal .auth-left-panel { display: none !important; }
+  #authModal .auth-right-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 48px) !important;
+    padding: 28px 25px 30px !important;
+    box-sizing: border-box !important;
+    overflow-y: auto !important;
+    background: #fff !important;
+    scrollbar-width: none;
+  }
+  #authModal .auth-right-panel::-webkit-scrollbar { display: none; }
+  #authModal .cerood-auth-progress {
+    margin: 0 45px 29px 0 !important;
+  }
+  #authModal .auth-close-btn,
+  #authModal .desktop-header-close.auth-close-btn {
+    position: absolute !important;
+    top: 18px !important;
+    right: 17px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid #e9eaf0 !important;
+    border-radius: 50% !important;
+    background: #f3f4f6 !important;
+    color: #334155 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+  }
+  #authModal .auth-right-panel h3 { font-size: 25px !important; }
+  #authModal .auth-input-field:not(#inputRegOTP) { min-height: 54px !important; }
+  #authModal .auth-primary-btn { min-height: 52px !important; }
+}
+/* END CEROOD AUTH DESKTOP */
+
 </style>
 </head>
 <body>
