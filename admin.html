@@ -314,6 +314,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 }
 @media(max-width:380px){.summary-cards{grid-template-columns:1fr}.topbar h2{font-size:15px}.content-area{padding:9px}}
 @media(prefers-reduced-motion:reduce){.sidebar,.nav-item{transition:none!important}}
+
 </style>
 
     </head>
@@ -476,7 +477,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
         <!-- Topbar -->
 
         <div class="topbar">
-            <button type="button" class="cerood-menu-btn" id="ceroodMenuBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="ceroodSidebar"><i class="fa-solid fa-bars"></i></button>
+<button type="button" class="cerood-menu-btn" id="ceroodMenuBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="ceroodSidebar"><i class="fa-solid fa-bars"></i></button>
 
             <h2 id="topbarTitle">Booking Management</h2>
 
@@ -6005,22 +6006,7 @@ if (techResponse === 'Accepted') {
                 <body>
                     <h2>Cerood Admin - Bookings Report</h2>
                     ${tableHtml}
-                <script>
-/* Cerood responsive navigation — does not alter existing API or tab handlers. */
-(function(){
- const button=document.getElementById('ceroodMenuBtn');
- const shade=document.getElementById('ceroodSidebarShade');
- const sidebar=document.getElementById('ceroodSidebar');
- if(!button||!shade||!sidebar)return;
- function setOpen(open){document.body.classList.toggle('cerood-nav-open',open);button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close navigation':'Open navigation');button.innerHTML=open?'<i class="fa-solid fa-xmark"></i>':'<i class="fa-solid fa-bars"></i>';}
- button.addEventListener('click',()=>setOpen(!document.body.classList.contains('cerood-nav-open')));
- shade.addEventListener('click',()=>setOpen(false));
- sidebar.querySelectorAll('.nav-item').forEach(item=>item.addEventListener('click',()=>setOpen(false)));
- document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
- window.addEventListener('resize',()=>{if(window.innerWidth>760)setOpen(false)});
-})();
-</script>
-</body>
+                </body>
                 </html>
             `);
             printWin.document.close();
@@ -7237,6 +7223,26 @@ async function uploadAdminImage(fileInput, targetInputId) {
 })();
 </script>
 
+<script>
+/* Cerood responsive navigation: isolated from booking and payment logic. */
+(function(){
+ const button=document.getElementById('ceroodMenuBtn');
+ const shade=document.getElementById('ceroodSidebarShade');
+ const sidebar=document.getElementById('ceroodSidebar');
+ if(!button||!shade||!sidebar)return;
+ function setOpen(open){
+  document.body.classList.toggle('cerood-nav-open',open);
+  button.setAttribute('aria-expanded',String(open));
+  button.setAttribute('aria-label',open?'Close navigation':'Open navigation');
+  button.innerHTML=open?'<i class="fa-solid fa-xmark"></i>':'<i class="fa-solid fa-bars"></i>';
+ }
+ button.addEventListener('click',()=>setOpen(!document.body.classList.contains('cerood-nav-open')));
+ shade.addEventListener('click',()=>setOpen(false));
+ sidebar.querySelectorAll('.nav-item').forEach(item=>item.addEventListener('click',()=>setOpen(false)));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
+ window.addEventListener('resize',()=>{if(window.innerWidth>760)setOpen(false)});
+})();
+</script>
 </body>
 
     </html>
