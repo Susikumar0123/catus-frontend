@@ -16,26 +16,48 @@
         .login-btn { background: #0284c7; color: #fff; border: none; width: 100%; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 10px; }
         .login-btn:hover { background: #0369a1; }
         .error-msg { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 15px; text-align: center; font-weight: 600; display: none; }
-    </style>
+    
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{font-family:Inter,Arial,sans-serif;color:#211a36}*{box-sizing:border-box}
+body{font-family:Inter,Arial,sans-serif;min-height:100dvh;height:auto;margin:0;padding:28px 16px;background:radial-gradient(circle at 12% 12%,#d9cbff 0,transparent 33%),radial-gradient(circle at 90% 85%,#e9dfff 0,transparent 35%),#f7f5fd;display:grid;place-items:center}
+.login-card{position:relative;isolation:isolate;width:min(100%,440px);max-width:440px;padding:35px;border:1px solid rgba(105,69,216,.13);border-radius:25px;background:rgba(255,255,255,.96);box-shadow:0 28px 90px rgba(56,30,121,.12),0 3px 14px rgba(56,30,121,.04)}
+.login-card:before{content:'';position:absolute;inset:0 0 auto;height:6px;border-radius:25px 25px 0 0;background:linear-gradient(90deg,#4124a2,#8d6cf5,#c4afff)}
+.cerood-login-brand{display:flex;align-items:center;gap:12px;margin-bottom:29px}.cerood-login-brand img{width:116px;height:53px;object-fit:contain}.cerood-login-brand span{border-left:1px solid #e8e0f8;padding-left:12px;color:#6945d8;font-size:10px;font-weight:800;letter-spacing:.15em}
+.cerood-login-kicker{color:#6945d8;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
+h2{display:block;text-align:left;color:#211a36;font-size:29px;line-height:1.15;letter-spacing:-.06em;margin:0 0 10px;font-weight:800}h2 i{display:none}
+.cerood-login-desc{color:#81778f;font-size:13px;line-height:1.65;margin:0 0 27px}
+.form-group{margin-bottom:18px}label{font-size:12px;color:#493d62;margin-bottom:8px}input{height:50px;padding:13px 15px;border:1px solid #e7e0f3;border-radius:12px;background:#fbfaff;color:#211a36;font:500 14px Inter,Arial,sans-serif}input:focus{border-color:#6945d8;box-shadow:0 0 0 4px rgba(105,69,216,.12)}
+.cerood-password-wrap{position:relative}.cerood-password-wrap input{padding-right:56px}.cerood-password-toggle{position:absolute;right:8px;top:6px;width:40px;height:38px;border:0;border-radius:9px;background:transparent;color:#6945d8;cursor:pointer}
+.login-btn{background:linear-gradient(110deg,#6945d8,#4e2eb7);border-radius:13px;min-height:52px;font:700 14px Inter,Arial,sans-serif;box-shadow:0 10px 24px rgba(105,69,216,.2)}.login-btn:hover{background:linear-gradient(110deg,#5834c5,#3d1d9f)}.login-btn:disabled{opacity:.7;cursor:wait}
+.error-msg{border-radius:11px;text-align:left;font-weight:600;line-height:1.5}.cerood-login-footer{text-align:center;color:#91899f;font-size:11px;margin:23px 0 0}
+@media(max-width:480px){body{padding:16px;background:#f7f5fd}.login-card{padding:26px 21px;border-radius:21px}h2{font-size:26px}.cerood-login-brand{margin-bottom:25px}}
+</style>
 </head>
 <body>
 
 <div class="login-card">
+    <div class="cerood-login-brand"><img src="/cerood-logo.webp" alt="Cerood" onerror="this.style.display='none'"><span>CONTROL CENTER</span></div>
+    <p class="cerood-login-kicker">Private workspace</p>
     <h2><i class="fa-solid fa-lock" style="color: #0284c7;"></i> Cerood Admin Login</h2>
+    <p class="cerood-login-desc">Sign in to manage bookings, technicians, products and your Cerood operations.</p>
     <div id="errorMsg" class="error-msg">Invalid Login ID or Password!</div>
     
     <div class="form-group">
         <label>Login ID / Username</label>
-        <input type="text" id="username" placeholder="Enter username">
+        <input type="text" id="username" placeholder="Enter username" autocomplete="username">
     </div>
     <div class="form-group">
         <label>Password</label>
-        <input type="password" id="password" placeholder="Enter password">
+        <div class="cerood-password-wrap"><input type="password" id="password" placeholder="Enter password" autocomplete="current-password"><button type="button" class="cerood-password-toggle" id="ceroodPasswordToggle" aria-label="Show password" aria-pressed="false"><i class="fa-solid fa-eye"></i></button></div>
     </div>
     <button type="button" class="login-btn" onclick="validateLogin()">Secure Login</button>
 </div>
 
 <script>
+
+    document.getElementById("ceroodPasswordToggle").addEventListener("click", function(){const input=document.getElementById("password");const show=input.type==="password";input.type=show?"text":"password";this.setAttribute("aria-pressed",String(show));this.setAttribute("aria-label",show?"Hide password":"Show password");this.innerHTML=show?'<i class="fa-solid fa-eye-slash"></i>':'<i class="fa-solid fa-eye"></i>';});
+    document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")validateLogin()});
+    document.getElementById("username").addEventListener("keydown",e=>{if(e.key==="Enter")validateLogin()});
 
     const API_BASE_URL =
         window.location.hostname === 'localhost'

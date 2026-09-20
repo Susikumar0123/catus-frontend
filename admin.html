@@ -257,6 +257,63 @@
 /* Cerood Renewed admin: isolated classes, existing service styling unchanged */
 .renewed-admin{padding:3px 2px 35px;color:#17243b}.renewed-admin *{box-sizing:border-box}.renewed-admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:17px}.renewed-kicker{color:#6550bb;font-size:10px;font-weight:800;letter-spacing:.14em}.renewed-admin-head h2{font-size:22px;margin:7px 0}.renewed-admin-head p{font-size:12px;color:#64748b;margin:0;line-height:1.6}.renewed-link{background:#28253d;color:white;text-decoration:none;border-radius:9px;padding:12px 15px;font-size:12px;font-weight:700}.renewed-warning{background:#fff7e9;border:1px solid #f6dfb7;border-radius:10px;padding:13px 16px;color:#78501d;font-size:12px;line-height:1.6;margin-bottom:15px}.renewed-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:17px}.renewed-stats>div{background:white;border:1px solid #e5eaf1;border-radius:12px;padding:17px}.renewed-stats small{display:block;color:#64748b;font-size:11px}.renewed-stats strong{display:block;font-size:22px;margin-top:8px}.renewed-stats>div:last-child strong{font-size:13px;color:#a16207}.renewed-columns{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);gap:15px;align-items:start}.renewed-panel{background:white;border:1px solid #e5eaf1;border-radius:13px;padding:20px;min-width:0}.renewed-panel-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:17px}.renewed-panel-title h3{font-size:16px;margin:0}.renewed-panel-title span{font-size:11px;color:#64748b}.renewed-light{border:1px solid #d9deea;background:#f8fafc;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:11px}.renewed-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.renewed-fields label{display:flex;flex-direction:column;gap:6px;color:#42526a;font-size:11px;font-weight:700;min-width:0}.renewed-fields .renewed-wide{grid-column:1/-1}.renewed-fields input,.renewed-fields select,.renewed-fields textarea,#renewedDraftSearch{width:100%;min-width:0;background:#fbfcff;border:1px solid #dce2eb;border-radius:8px;padding:11px 12px;font:400 12px Arial,sans-serif;color:#17243b}.renewed-fields textarea{resize:vertical}.renewed-fields :focus,#renewedDraftSearch:focus{outline:2px solid #b9a9f7;outline-offset:1px}.renewed-form-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}.renewed-primary{background:#2c263e;color:white;border:0;border-radius:9px;padding:13px 16px;font-weight:700;cursor:pointer;font-size:12px}.renewed-form-actions span{font-size:12px;color:#167a4d}.renewed-draft-list{display:grid;gap:11px;margin-top:15px}.renewed-draft{border:1px solid #e5eaf1;border-radius:11px;padding:12px;display:grid;grid-template-columns:65px minmax(0,1fr);gap:12px}.renewed-draft-image{width:65px;height:65px;border-radius:8px;background:#eef1f7;object-fit:cover}.renewed-draft h4{font-size:12px;margin:0 0 6px;overflow-wrap:anywhere}.renewed-draft p{font-size:11px;color:#64748b;margin:0 0 7px}.renewed-draft .renewed-draft-actions{display:flex;gap:7px;flex-wrap:wrap}.renewed-draft-actions button{font-size:11px;border:1px solid #dce2eb;background:white;border-radius:7px;padding:7px 10px;cursor:pointer}.renewed-draft-actions .renewed-delete{color:#b91c1c}.renewed-draft-list>p{font-size:12px;color:#64748b;line-height:1.6}@media(max-width:1050px){.renewed-columns{grid-template-columns:1fr}.renewed-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.renewed-panel{padding:14px}.renewed-fields{grid-template-columns:1fr}.renewed-fields .renewed-wide{grid-column:auto}.renewed-admin-head h2{font-size:19px}}
 
+
+/* Cerood Control Center 2026 — visual-only responsive enhancement */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--cerood:#6945d8;--cerood-deep:#4124a2;--cerood-soft:#f2eeff;--cerood-ink:#211a36;--cerood-line:#eae5f5}
+*,*::before,*::after{box-sizing:border-box}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7fc;color:var(--cerood-ink)}
+.sidebar{background:#fff;border-right:1px solid var(--cerood-line);box-shadow:8px 0 40px rgba(52,32,107,.035)}
+.sidebar-header{min-height:82px;border-color:var(--cerood-line);padding:18px 19px}
+.sidebar-header img{height:42px;max-width:116px}.sidebar-header span{color:var(--cerood-ink);font-family:Inter,sans-serif;font-size:12px}
+.nav-links{padding:15px 10px}.nav-item{border:0;border-radius:12px;margin:3px 0;padding:13px 12px;color:#6b637e;font-size:12.5px;transition:background .18s,color .18s,transform .18s}
+.nav-item i{font-size:16px;color:#8172a4}.nav-item:hover{transform:translateX(2px)}
+.nav-item:hover,.nav-item.active{background:var(--cerood-soft);color:var(--cerood-deep);border:0}
+.nav-item.active i,.nav-item:hover i{color:var(--cerood)}
+.sidebar-footer{border-color:var(--cerood-line)}.logout-btn{border-radius:11px}
+.main-content{background:#f8f7fc;min-width:0}.topbar{min-height:76px;box-shadow:none;border-bottom:1px solid var(--cerood-line);padding:16px 24px}
+.topbar h2{font-size:20px;color:var(--cerood-ink);font-weight:800;letter-spacing:-.045em}
+.search-box{border:1px solid var(--cerood-line);background:#faf9ff;border-radius:13px;padding:12px 15px;max-width:100%;font-family:inherit}
+.search-box:focus,.form-input:focus{border-color:var(--cerood);box-shadow:0 0 0 4px rgba(105,69,216,.1)}
+.content-area{padding:23px;min-width:0}.main-tab-pane{height:auto;min-height:100%}
+.panel-card,.summary-card,.renewed-panel{border:1px solid var(--cerood-line);border-radius:18px;box-shadow:0 8px 32px rgba(43,27,90,.035);height:auto;min-width:0}
+.panel-header{border-color:var(--cerood-line);border-radius:18px 18px 0 0}
+.summary-card{padding:22px}.summary-icon{border-radius:14px}.summary-info h2{font-weight:800;letter-spacing:-.05em}
+.tabs-group{gap:7px}.tab-btn{border:1px solid var(--cerood-line);border-radius:999px;background:#f7f5fc;color:#655b79;padding:10px 14px}
+.tab-btn.active,.tab-btn:hover{background:var(--cerood);border-color:var(--cerood);color:white}
+.tab-btn.trash-tab.active{background:#dc2626;border-color:#dc2626}
+.export-btn,.manage-btn,.action-btn,.renewed-primary,.renewed-link{border-radius:11px;min-height:38px}
+.manage-btn,.renewed-primary,.renewed-link{background:var(--cerood)}.manage-btn:hover{background:var(--cerood-deep);color:white}
+.action-btn:not(.btn-danger){background:var(--cerood)}.action-btn:not(.btn-danger):hover{background:var(--cerood-deep)}
+.form-input,.renewed-fields input,.renewed-fields select,.renewed-fields textarea,#renewedDraftSearch{border-radius:11px;min-height:43px;font-family:inherit}
+.table-responsive{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:0 0 17px 17px}
+.table-responsive table{min-width:730px}th{background:#faf9ff;color:#716686;border-color:var(--cerood-line)}td{border-color:#f0edf7}tr:hover{background:#faf8ff}
+.modal-overlay{padding:12px}.modal-box{max-width:min(900px,100%);border-radius:20px}.modal-header{border-color:var(--cerood-line)}
+.info-card,.fact,.renewed-stats>div{border-radius:14px;border-color:var(--cerood-line)}
+.renewed-admin-head h2{color:var(--cerood-ink)}.renewed-kicker{color:var(--cerood)}
+.renewed-stats>div{box-shadow:0 5px 20px rgba(43,27,90,.03)}
+.cerood-menu-btn{display:none;align-items:center;justify-content:center;gap:8px;min-width:43px;height:43px;padding:0 12px;border:1px solid var(--cerood-line);border-radius:12px;background:var(--cerood-soft);color:var(--cerood-deep);font-weight:800}
+.cerood-sidebar-shade{display:none}
+@media(max-width:1050px){.sidebar{width:224px}.main-content{width:calc(100% - 224px)}.content-area{padding:17px}.topbar{padding:13px 17px}.search-box{width:220px}.renewed-columns{grid-template-columns:1fr}}
+@media(max-width:760px){
+ body{height:100dvh;overflow:hidden}.sidebar{position:fixed;top:0;bottom:0;left:0;width:min(300px,84vw);z-index:10002;transform:translateX(-105%);transition:transform .24s ease;box-shadow:20px 0 65px rgba(24,15,53,.14)}
+ body.cerood-nav-open .sidebar{transform:translateX(0)}body.cerood-nav-open .cerood-sidebar-shade{display:block;position:fixed;inset:0;background:rgba(28,18,52,.48);z-index:10001;backdrop-filter:blur(3px)}
+ .cerood-menu-btn{display:inline-flex}.main-content{width:100%;height:100dvh;min-width:0}.topbar{gap:9px;min-height:67px;padding:11px 13px;flex-wrap:wrap}.topbar h2{font-size:16px;flex:1;min-width:0;line-height:1.3}.topbar-actions{width:100%}.search-box{width:100%;font-size:13px}
+ .content-area{padding:12px;overflow-y:auto;overflow-x:hidden}.main-tab-pane{min-height:0;height:auto}.panel-card{border-radius:15px;overflow:hidden}
+ .panel-header,.panel-header[style]{padding:14px!important;flex-wrap:wrap!important;align-items:stretch!important;gap:12px!important;min-width:0}
+ .tabs-group,.tabs-group[style]{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;max-width:100%;width:100%;gap:7px!important;padding-bottom:5px;scrollbar-width:thin}
+ .tab-btn{flex:0 0 auto;white-space:nowrap;font-size:11px;padding:10px 13px}
+ .export-group,.export-group[style]{display:flex!important;flex-wrap:wrap!important;flex-shrink:1!important;width:100%;gap:8px!important}
+ .export-btn{flex:1;justify-content:center;min-height:42px}.summary-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .summary-card{padding:13px;gap:10px;min-width:0}.summary-icon{width:37px;height:37px;flex-shrink:0}.summary-info{min-width:0}.summary-info h4{font-size:10px;overflow-wrap:anywhere}.summary-info h2{font-size:18px;overflow-wrap:anywhere}
+ .table-responsive{max-width:100%;overflow-x:auto!important}.table-responsive table{min-width:730px}.modal-box{width:100%;max-height:calc(100dvh - 24px);border-radius:16px}.modal-body{padding:14px;grid-template-columns:1fr;gap:13px}.modal-header{padding:14px}
+ .info-row{gap:8px}.info-row strong{max-width:65%}.renewed-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.renewed-panel{padding:14px}.renewed-admin-head{align-items:stretch}.renewed-link{text-align:center}
+ .renewed-fields{grid-template-columns:1fr}.renewed-fields .renewed-wide{grid-column:auto}
+ .wallet-add-flex{flex-wrap:wrap}.wallet-add-flex input{min-width:0}.form-group input,.form-group select,.form-group textarea{max-width:100%}
+ .content-area [style*="minmax(320px"]{grid-template-columns:1fr!important}
+}
+@media(max-width:380px){.summary-cards{grid-template-columns:1fr}.topbar h2{font-size:15px}.content-area{padding:9px}}
+@media(prefers-reduced-motion:reduce){.sidebar,.nav-item{transition:none!important}}
 </style>
 
     </head>
@@ -278,7 +335,8 @@
 
     <!-- 1. SIDEBAR NAVIGATION -->
 
-    <div class="sidebar">
+    <div class="cerood-sidebar-shade" id="ceroodSidebarShade" aria-hidden="true"></div>
+    <div class="sidebar" id="ceroodSidebar">
 
         <div class="sidebar-header">
 
@@ -418,6 +476,7 @@
         <!-- Topbar -->
 
         <div class="topbar">
+            <button type="button" class="cerood-menu-btn" id="ceroodMenuBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="ceroodSidebar"><i class="fa-solid fa-bars"></i></button>
 
             <h2 id="topbarTitle">Booking Management</h2>
 
@@ -5946,7 +6005,22 @@ if (techResponse === 'Accepted') {
                 <body>
                     <h2>Cerood Admin - Bookings Report</h2>
                     ${tableHtml}
-                </body>
+                <script>
+/* Cerood responsive navigation — does not alter existing API or tab handlers. */
+(function(){
+ const button=document.getElementById('ceroodMenuBtn');
+ const shade=document.getElementById('ceroodSidebarShade');
+ const sidebar=document.getElementById('ceroodSidebar');
+ if(!button||!shade||!sidebar)return;
+ function setOpen(open){document.body.classList.toggle('cerood-nav-open',open);button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close navigation':'Open navigation');button.innerHTML=open?'<i class="fa-solid fa-xmark"></i>':'<i class="fa-solid fa-bars"></i>';}
+ button.addEventListener('click',()=>setOpen(!document.body.classList.contains('cerood-nav-open')));
+ shade.addEventListener('click',()=>setOpen(false));
+ sidebar.querySelectorAll('.nav-item').forEach(item=>item.addEventListener('click',()=>setOpen(false)));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
+ window.addEventListener('resize',()=>{if(window.innerWidth>760)setOpen(false)});
+})();
+</script>
+</body>
                 </html>
             `);
             printWin.document.close();
