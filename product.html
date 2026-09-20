@@ -10160,6 +10160,12 @@ filtered.forEach(s => {
 });
 
 function handleProductSearchSelect(serviceId) {
+    if (localStorage.getItem('cerood_manual_service_address_details') ||
+        localStorage.getItem('cerood_manual_service_address_fields') ||
+        localStorage.getItem('cerood_manual_service_address')) {
+        window.location.href = `/product.html?id=${encodeURIComponent(String(serviceId || '').trim())}`;
+        return;
+    }
 
     const box =
         document.getElementById('suggestionsBox');
@@ -11306,6 +11312,9 @@ const relatedLocationSlug =
         : currentLocationSlug;
 
 const serviceUrl =
+    !(localStorage.getItem('cerood_manual_service_address_details') ||
+      localStorage.getItem('cerood_manual_service_address_fields') ||
+      localStorage.getItem('cerood_manual_service_address')) &&
     currentStateSlug &&
     currentDistrictSlug &&
     relatedLocationSlug &&
@@ -15941,7 +15950,10 @@ const isSupportedSeoLocation =
     ceroodSeoLocationKeys &&
     ceroodSeoLocationKeys.has(locationKey);
 
-if (isSupportedSeoLocation) {
+if (isSupportedSeoLocation &&
+    !localStorage.getItem('cerood_manual_service_address_details') &&
+    !localStorage.getItem('cerood_manual_service_address_fields') &&
+    !localStorage.getItem('cerood_manual_service_address')) {
 
     // SEO location available → use clean SEO URL
     window.location.href =

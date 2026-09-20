@@ -13272,6 +13272,13 @@ async function loadCeroodSeoLocationKeys() {
 }
 
 function getLocationProductUrl(serviceId) {
+    // A manually entered address is for booking, not a published SEO page.
+    // Never build a location URL from unverified customer input.
+    if (localStorage.getItem('cerood_manual_service_address_details') ||
+        localStorage.getItem('cerood_manual_service_address')) {
+        return `/product.html?id=${encodeURIComponent(String(serviceId || '').trim())}`;
+    }
+
 
     const stateSlug =
         localStorage.getItem('catus_state_slug');
@@ -13299,6 +13306,8 @@ function getLocationProductUrl(serviceId) {
         `${stateSlug}|${districtSlug}|${locationSlug || ''}`;
 
     const isSupportedSeoLocation =
+        !localStorage.getItem('cerood_manual_service_address_details') &&
+        !localStorage.getItem('cerood_manual_service_address') &&
         locationSlug &&
         ceroodSeoLocationKeys &&
         ceroodSeoLocationKeys.has(locationKey);
