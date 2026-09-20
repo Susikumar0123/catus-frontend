@@ -8119,6 +8119,75 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
 }
 /* END CEROOD AUTH DESKTOP */
 
+
+/* CEROOD PRODUCT PAGE: MORE RELEVANT SERVICES HORIZONTAL CAROUSEL */
+#relatedServicesBox .cerood-related-slider-wrap {
+    position: relative;
+    min-width: 0;
+}
+#relatedServicesBox #relatedContainer {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    grid-template-columns: none !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 3px 0 9px !important;
+    box-sizing: border-box !important;
+}
+#relatedServicesBox #relatedContainer::-webkit-scrollbar { display: none; }
+#relatedServicesBox #relatedContainer > .uc-card {
+    flex: 0 0 calc((100% - 42px) / 4) !important;
+    width: calc((100% - 42px) / 4) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    scroll-snap-align: start;
+}
+#relatedServicesBox .cerood-related-arrow {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    background: #fff;
+    color: #171717;
+    box-shadow: 0 2px 10px rgba(0,0,0,.12);
+    cursor: pointer;
+    font-size: 20px;
+}
+#relatedServicesBox .cerood-related-prev { left: -12px; }
+#relatedServicesBox .cerood-related-next { right: -12px; }
+@media (min-width: 851px) and (max-width: 1120px) {
+    #relatedServicesBox #relatedContainer > .uc-card {
+        flex-basis: calc((100% - 28px) / 3) !important;
+        width: calc((100% - 28px) / 3) !important;
+    }
+}
+@media (max-width: 850px) {
+    #relatedServicesBox #relatedContainer {
+        gap: 10px !important;
+    }
+    #relatedServicesBox #relatedContainer > .uc-card {
+        flex: 0 0 calc((100% - 10px) / 2) !important;
+        width: calc((100% - 10px) / 2) !important;
+    }
+    #relatedServicesBox .cerood-related-arrow { display: none; }
+}
+
 </style>
 <style>
 
@@ -8761,7 +8830,11 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
             <h3>More Relevant Services</h3>
             
         </div>
-        <div class="uc-grid" id="relatedContainer"></div>
+        <div class="cerood-related-slider-wrap">
+            <button class="cerood-related-arrow cerood-related-prev" type="button" aria-label="Previous related services" onclick="scrollCeroodRelated(-1)">&#10094;</button>
+            <div class="uc-grid" id="relatedContainer" tabindex="0" aria-label="Related services, scroll horizontally"></div>
+            <button class="cerood-related-arrow cerood-related-next" type="button" aria-label="Next related services" onclick="scrollCeroodRelated(1)">&#10095;</button>
+        </div>
     </div>
 
   </div>
@@ -11160,6 +11233,16 @@ const averageRating =
 }
 
     
+    // Scroll exactly one related-service card; supports arrows, touch and trackpad.
+    function scrollCeroodRelated(direction) {
+        const track = document.getElementById('relatedContainer');
+        if (!track) return;
+        const card = track.querySelector('.uc-card');
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 14;
+        const distance = card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.75;
+        track.scrollBy({ left: direction * distance, behavior: 'smooth' });
+    }
+
     function loadRelevantServicesSection(allServices, currentCategory, currentId) {
         const relatedContainer = document.getElementById('relatedContainer');
         const relatedBox = document.getElementById('relatedServicesBox');
@@ -11175,9 +11258,9 @@ const averageRating =
             }
         }
 
-        let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 4);
+        let filtered = allServices.filter(s => s.category === currentCategory && s.service_id !== currentId).slice(0, 20);
         if (filtered.length === 0) {
-            filtered = allServices.slice(0, 4); 
+            filtered = allServices.filter(s => s.service_id !== currentId).slice(0, 20);
         }
 
         let html = '';
