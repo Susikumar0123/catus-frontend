@@ -11421,6 +11421,50 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
 
 }
 
+
+/* ===== CEROOD DESKTOP FULL-WIDTH SERVICE CATEGORIES (MOBILE UNCHANGED) ===== */
+@media (min-width: 769px) {
+  #productGridContainer > .uc-category-box {
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    margin:0 0 32px !important;
+    padding:20px 22px 24px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+  #productGridContainer > .uc-category-box > .uc-carousel-wrapper {
+    width:100% !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+  #productGridContainer > .uc-category-box .uc-grid {
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    grid-template-columns:none !important;
+    gap:16px !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x proximity !important;
+    scrollbar-width:none !important;
+    padding:3px 2px 12px !important;
+    box-sizing:border-box !important;
+  }
+  #productGridContainer > .uc-category-box .uc-grid::-webkit-scrollbar {display:none !important;}
+  #productGridContainer > .uc-category-box .uc-grid > .uc-card {
+    flex:0 0 calc((100% - (var(--cerood-visible-count, 5) - 1) * 16px) / var(--cerood-visible-count, 5)) !important;
+    width:calc((100% - (var(--cerood-visible-count, 5) - 1) * 16px) / var(--cerood-visible-count, 5)) !important;
+    min-width:0 !important;
+    max-width:none !important;
+    scroll-snap-align:start !important;
+    box-sizing:border-box !important;
+  }
+}
+/* ===== END CEROOD DESKTOP FULL-WIDTH SERVICE CATEGORIES ===== */
 </style>
 </head>
 <body>
@@ -16450,10 +16494,9 @@ function startCatusBannerFlow() {
 
     const desktop = window.innerWidth >= 769;
     const desiredMode = desktop ? 'desktop' : 'mobile';
-    if (container.dataset.ceroodCategoryLayout === desiredMode &&
-        container.querySelector('.mobile-category-track')) return;
 
-    // Undo old cached slider wrappers before rebuilding the appropriate layout.
+    // Remove previous category-row wrappers without changing the order of
+    // categories or the two offer-video positions.
     container.querySelectorAll('.cerood-category-slider-shell').forEach(shell => {
         const track = shell.querySelector('.mobile-category-track');
         if (track) shell.replaceWith(track);
@@ -16463,16 +16506,27 @@ function startCatusBannerFlow() {
         track.remove();
     });
 
+    if (desktop) {
+        // Each category is a full-width row. Existing 1–5 cards fill the row;
+        // additional cards scroll inside their own category, not as tiny boxes.
+        container.querySelectorAll('.uc-category-box .uc-grid').forEach(grid => {
+            const count = grid.querySelectorAll(':scope > .uc-card').length;
+            grid.style.setProperty('--cerood-visible-count', String(Math.max(1, Math.min(5, count))));
+        });
+        container.dataset.ceroodCategoryLayout = desiredMode;
+        return;
+    }
+
+    // Preserve the original mobile layout: groups of three category boxes.
     let track = null;
     let count = 0;
     [...container.children].forEach(child => {
         if (!child.classList.contains('uc-category-box')) {
             track = null;
             count = 0;
-            return; // Keep offer banners and other sections in their existing order.
+            return;
         }
-        // Phone: existing groups of 3. Desktop: one continuous row until a banner.
-        if (!track || (!desktop && count >= 3)) {
+        if (!track || count >= 3) {
             track = document.createElement('div');
             track.className = 'mobile-category-track';
             container.insertBefore(track, child);
@@ -16481,61 +16535,6 @@ function startCatusBannerFlow() {
         track.appendChild(child);
         count++;
     });
-
-    if (desktop) {
-        container.querySelectorAll('.mobile-category-track').forEach(track => {
-            const shell = document.createElement('div');
-            shell.className = 'cerood-category-slider-shell';
-            track.parentNode.insertBefore(shell, track);
-            shell.appendChild(track);
-            // Desktop: grab and drag the entire category row, no arrow controls.
-            // Native touch/trackpad scrolling remains available.
-            let pointerDown = false;
-            let dragging = false;
-            let startX = 0;
-            let startScroll = 0;
-            let suppressClick = false;
-            track.addEventListener('pointerdown', event => {
-                if (event.pointerType !== 'mouse' || event.button !== 0) return;
-                pointerDown = true;
-                dragging = false;
-                startX = event.clientX;
-                startScroll = track.scrollLeft;
-            });
-            track.addEventListener('pointermove', event => {
-                if (!pointerDown) return;
-                const delta = event.clientX - startX;
-                if (!dragging && Math.abs(delta) < 6) return;
-                if (!dragging) {
-                    dragging = true;
-                    track.classList.add('cerood-is-dragging');
-                    track.setPointerCapture(event.pointerId);
-                }
-                track.scrollLeft = startScroll - delta;
-                event.preventDefault();
-            });
-            const finishDrag = () => {
-                if (dragging) {
-                    suppressClick = true;
-                    // A click generated by releasing a drag must not open a service.
-                    setTimeout(() => { suppressClick = false; }, 100);
-                }
-                pointerDown = false;
-                dragging = false;
-                track.classList.remove('cerood-is-dragging');
-            };
-            track.addEventListener('pointerup', finishDrag);
-            track.addEventListener('pointercancel', finishDrag);
-            track.addEventListener('lostpointercapture', finishDrag);
-            track.addEventListener('dragstart', event => event.preventDefault());
-            track.addEventListener('click', event => {
-                if (!suppressClick) return;
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                suppressClick = false;
-            }, true);
-        });
-    }
     container.dataset.ceroodCategoryLayout = desiredMode;
 }
 
