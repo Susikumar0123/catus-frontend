@@ -891,6 +891,38 @@ color: #171717 !important;
 }
 
 }
+/* DESKTOP: TWO VIDEO BANNERS SIDE BY SIDE */
+
+@media (min-width: 993px) {
+
+    .cards-container {
+        gap: 18px !important;
+        scroll-snap-type: x mandatory !important;
+        scroll-behavior: smooth !important;
+    }
+
+    .cards-container .card-link,
+    .cards-container .card-link:nth-child(3n + 2) {
+        flex: 0 0 calc((100% - 18px) / 2) !important;
+        width: calc((100% - 18px) / 2) !important;
+        scroll-snap-align: start !important;
+    }
+
+    .cards-container .card {
+        width: 100% !important;
+        aspect-ratio: 16 / 7 !important;
+        height: auto !important;
+        border-radius: 14px !important;
+        overflow: hidden !important;
+    }
+
+    .cards-container .card video,
+    .cards-container .card img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}
 
 /* =========================================
    MOBILE HERO BANNER LAYOUT
