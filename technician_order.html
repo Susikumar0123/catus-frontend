@@ -47,7 +47,7 @@
         }
 
         .brand span {
-            color: #0284c7;
+            color: #6d4aff;
         }
 
         .container {
@@ -86,8 +86,8 @@
 
         .status {
             display: inline-block;
-            background: #e0f2fe;
-            color: #0369a1;
+            background: #f4f1ff;
+            color: #5937df;
             padding: 5px 10px;
             border-radius: 999px;
             font-size: 11px;
@@ -132,7 +132,7 @@
         }
 
         .phone-link {
-            color: #0284c7;
+            color: #6d4aff;
             text-decoration: none;
         }
 
@@ -155,7 +155,7 @@
         .dashboard-btn {
             width: 100%;
             border: 0;
-            background: #0284c7;
+            background: #6d4aff;
             color: #ffffff;
             padding: 13px;
             border-radius: 9px;
@@ -177,7 +177,21 @@
                 font-size: 20px;
             }
         }
-    </style>
+    
+    /* Cerood partner portal visual polish (existing application logic unchanged) */
+    :root { --cerood-purple:#6d4aff; --cerood-soft:#f4f1ff; }
+    body { background:linear-gradient(155deg,#f7f5ff 0%,#f8fafc 44%,#ffffff 100%); -webkit-font-smoothing:antialiased; }
+    .brand { letter-spacing:-.8px; }
+    .brand span { color:var(--cerood-purple); }
+    .login-card,.card,.profile-card,.order-card { box-shadow:0 10px 36px rgba(47,30,110,.055); }
+    button,input,select,textarea { font-family:inherit; }
+    button { transition:background-color .18s ease,transform .18s ease,box-shadow .18s ease; }
+    button:active:not(:disabled) { transform:translateY(1px); }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid rgba(109,74,255,.32);outline-offset:2px; }
+    .header,.top { box-shadow:0 3px 18px rgba(47,30,110,.035); }
+    @media(max-width:480px) { .login-card,.card { max-width:100%; } }
+
+  </style>
 </head>
 
 <body>
