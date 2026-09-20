@@ -11276,7 +11276,150 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
         border-radius: 11px !important;
     }
 }
+/* =========================================
+   CEROOD OFFER MP4 SLIDER - FINAL
+   NOT THE TOP HERO BANNER
+========================================= */
 
+/* DESKTOP */
+
+@media (min-width: 993px) {
+
+    .cerood-offer-slider {
+
+        display: flex !important;
+
+        gap: 18px !important;
+
+        width: 100% !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        scroll-snap-type: x mandatory !important;
+        scroll-behavior: smooth !important;
+
+        scrollbar-width: none !important;
+
+        margin: 28px 0 40px !important;
+
+        padding: 0 0 8px !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .cerood-offer-slider::-webkit-scrollbar {
+
+        display: none !important;
+    }
+
+    /* TWO MEDIUM RECTANGLE CARDS */
+
+    .cerood-offer-slider > .cerood-offer-banner {
+
+        flex: 0 0 calc((100% - 18px) / 2) !important;
+
+        width: calc((100% - 18px) / 2) !important;
+
+        max-width: none !important;
+
+        height: auto !important;
+
+        aspect-ratio: 16 / 7 !important;
+
+        margin: 0 !important;
+
+        border-radius: 14px !important;
+
+        overflow: hidden !important;
+
+        background: #000 !important;
+
+        scroll-snap-align: start !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /* VIDEO FIT */
+
+    .cerood-offer-slider > .cerood-offer-banner video {
+
+        display: block !important;
+
+        width: 100% !important;
+        height: 100% !important;
+
+        aspect-ratio: auto !important;
+
+        object-fit: cover !important;
+
+        object-position: center !important;
+
+        border-radius: 0 !important;
+    }
+
+    /* HIDE OLD END BANNER ON DESKTOP */
+
+    .mobile-end-offer {
+
+        display: none !important;
+    }
+
+}
+
+
+/* MOBILE - KEEP ORIGINAL TWO POSITIONS */
+
+@media (max-width: 992px) {
+
+    .cerood-offer-slider {
+
+        display: block !important;
+
+        width: 100% !important;
+
+        overflow: visible !important;
+
+        margin: 0 !important;
+
+        padding: 0 !important;
+    }
+
+    .cerood-offer-slider > .desktop-offer-only {
+
+        display: none !important;
+    }
+
+    .cerood-offer-slider > .cerood-offer-banner {
+
+        width: calc(100% - 24px) !important;
+
+        max-width: none !important;
+
+        height: auto !important;
+
+        aspect-ratio: auto !important;
+
+        margin: 20px 12px 30px !important;
+
+        border-radius: 12px !important;
+    }
+
+    .cerood-offer-slider video,
+    .mobile-end-offer video {
+
+        display: block !important;
+
+        width: 100% !important;
+
+        height: auto !important;
+
+        aspect-ratio: auto !important;
+
+        object-fit: contain !important;
+    }
+
+}
 
 </style>
 </head>
@@ -15861,7 +16004,9 @@ else if (bookingStatus === 'completed') {
 function filterProductsByGroup(groupId) {
 // Show offer banners only on the full homepage.
 // Hide MP4/image offers when a category is selected.
-document.querySelectorAll('.cerood-offer-banner')
+document.querySelectorAll(
+    '.cerood-offer-banner, .cerood-offer-slider'
+)
     .forEach(banner => {
         banner.style.display = groupId ? 'none' : '';
     });
@@ -15944,7 +16089,9 @@ function getSmallProductImageUrl(imageUrl) {
         const query = keyword.toLowerCase().trim();
 
         // Hide offer banners while searching.
-document.querySelectorAll('.cerood-offer-banner')
+document.querySelectorAll(
+    '.cerood-offer-banner, .cerood-offer-slider'
+)
     .forEach(banner => {
         banner.style.display = query ? 'none' : '';
     });
@@ -16771,7 +16918,9 @@ if (
 }
 
 // =========================================
-// OFFER BANNER 1 - MIDDLE OF HOMEPAGE
+// OFFER BANNERS - MIDDLE OF HOMEPAGE
+// Desktop: horizontal slider
+// Mobile: Banner 1 only
 // =========================================
 
 const middleCategory =
@@ -16780,71 +16929,96 @@ const middleCategory =
 if (categoryIndex === middleCategory) {
 
     html += `
-        <div
-            class="cerood-offer-banner"
-            onclick="openServiceProduct('tv-repair')"
-        >
-            <picture class="cerood-offer-desktop">
-    <img
-        src="/banner1-desktop.webp"
-        alt="Cerood Special Service Offer"
-        loading="lazy"
-        decoding="async"
-    >
-</picture>
+        <div class="cerood-offer-slider">
 
-<video
-    class="cerood-offer-mobile-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="metadata"
+            <!-- BANNER 1 -->
+            <div
+                class="cerood-offer-banner"
+                onclick="openServiceProduct('tv-repair')"
+            >
+                <video
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                >
+                    <source
+                        src="/banner1-mobile.mp4"
+                        type="video/mp4"
+                    >
+                </video>
+            </div>
+
+            <!-- BANNER 2 - DESKTOP SLIDER -->
+            <div
+                class="cerood-offer-banner desktop-offer-only"
+                onclick="openServiceProduct('ac-service')"
+            >
+                <video
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                >
+                    <source
+                        src="/banner2-mobile.mp4"
+                        type="video/mp4"
+                    >
+                </video>
+            </div>
+
+            <!-- BANNER 3 -->
+<div
+    class="cerood-offer-banner desktop-offer-only"
+    onclick="openServiceProduct('washing-machine-repair')"
 >
-    <source src="/banner1-mobile.mp4" type="video/mp4">
-</video>
+    <video
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+    >
+        <source
+            src="/banner3-mobile.mp4"
+            type="video/mp4"
+        >
+    </video>
+</div>
+
         </div>
     `;
 }
 
-    }
+}
 
   
 
 // =========================================
-// OFFER BANNER 2 - END OF HOMEPAGE
+// OFFER BANNER 2 - MOBILE END OF HOMEPAGE
 // =========================================
 
 html += `
     <div
-        class="cerood-offer-banner"
+        class="cerood-offer-banner mobile-end-offer"
         onclick="openServiceProduct('ac-service')"
     >
-
-        <picture class="cerood-offer-desktop">
-            <img
-                src="/banner2-desktop.webp"
-                alt="Cerood Home Appliance Service Offer"
-                loading="lazy"
-                decoding="async"
-            >
-        </picture>
-
         <video
-            class="cerood-offer-mobile-video"
             autoplay
             muted
             loop
             playsinline
             preload="metadata"
         >
-            <source src="/banner2-mobile.mp4" type="video/mp4">
+            <source
+                src="/banner2-mobile.mp4"
+                type="video/mp4"
+            >
         </video>
-
     </div>
 `;
-
-
 
 container.innerHTML = html;
 
