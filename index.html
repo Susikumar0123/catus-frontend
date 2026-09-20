@@ -11445,6 +11445,26 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
     stroke: #2563eb !important;
 }
 
+/* CEROOD RENEWED PREMIUM BANNER — isolated desktop/mobile layout */
+.cr-renewed-premium{max-width:1220px;margin:20px auto 28px;padding:0 18px;box-sizing:border-box}
+.cr-renewed-premium-link{display:block;overflow:hidden;border-radius:23px;text-decoration:none;color:#25213b;background:#f7f6ff;border:1px solid #eae7f4;box-shadow:0 12px 28px rgba(37,35,78,.065);transition:transform .2s ease,box-shadow .2s ease}
+.cr-renewed-premium-link:hover{transform:translateY(-2px);box-shadow:0 18px 38px rgba(37,35,78,.12)}
+.cr-renewed-desktop-art{display:block;width:100%}
+.cr-renewed-desktop-art img{display:block;width:100%;height:auto;aspect-ratio:3/1;object-fit:cover}
+.cr-renewed-mobile-content{display:none}
+@media(max-width:768px){
+ .cr-renewed-premium{padding:0 12px;margin:13px auto 23px}
+ .cr-renewed-premium-link{border-radius:18px}
+ .cr-renewed-desktop-art{display:none}
+ .cr-renewed-mobile-content{display:flex;flex-direction:column;align-items:flex-start;padding:22px 20px 20px;background:linear-gradient(135deg,#f3f4ff 0%,#fff8f5 100%)}
+ .cr-renewed-mobile-kicker{font-size:10px;letter-spacing:.19em;font-weight:800;color:#594ad4}
+ .cr-renewed-mobile-content h2{font-size:clamp(25px,7vw,36px);line-height:1.1;letter-spacing:-.045em;font-weight:800;color:#272340;margin:12px 0 10px}
+ .cr-renewed-mobile-content h2 span{background:linear-gradient(95deg,#4259e8,#ba37c3,#fa7554);-webkit-background-clip:text;background-clip:text;color:transparent}
+ .cr-renewed-mobile-content p{font-size:12px;line-height:1.55;color:#626578;margin:0 0 8px;max-width:330px}
+ .cr-renewed-mobile-content img{display:block;width:100%;height:auto;aspect-ratio:1050/545;object-fit:contain;margin:4px auto 12px;align-self:center}
+ .cr-renewed-mobile-cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;background:#29233e;color:#fff;padding:13px 17px;border-radius:11px;font-size:12px;font-weight:750;min-height:42px;box-sizing:border-box}
+}
+
 </style>
 </head>
 <body>
@@ -11567,11 +11587,19 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
 
 
 
-<!-- CEROOD RENEWED — separate shopping destination; existing service grid untouched -->
-<section class="cr-renewed-entry" aria-label="Shop pre-owned and refurbished appliances">
-  <a href="/renewed.html">
-    <div><span class="cr-eyebrow">INTRODUCING CEROOD RENEWED</span><h2>Great appliances. Second chances.</h2><p>Explore pre-owned and refurbished TVs, fridges, washing machines and more. View each item's condition before you buy.</p><span class="cr-cta">Explore Renewed Store <span aria-hidden="true">→</span></span></div>
-    <span class="cr-art" aria-hidden="true">♻️</span>
+<!-- CEROOD RENEWED — responsive premium shopping banner; links to existing store -->
+<section class="cr-renewed-premium" aria-label="Shop pre-owned and refurbished appliances">
+  <a class="cr-renewed-premium-link" href="/renewed.html" aria-label="Explore Cerood Renewed Store: pre-owned and refurbished appliances">
+    <picture class="cr-renewed-desktop-art">
+      <img src="/cerood-renewed-banner-desktop.webp" alt="Cerood Renewed: Great appliances. Second chances. Shop TVs, refrigerators, washing machines, microwaves and water purifiers." width="2172" height="724" loading="lazy" decoding="async">
+    </picture>
+    <div class="cr-renewed-mobile-content">
+      <span class="cr-renewed-mobile-kicker">CEROOD RENEWED</span>
+      <h2>Great appliances.<br><span>Second chances.</span></h2>
+      <p>Explore quality pre-owned and refurbished appliances for a new home.</p>
+      <img src="/cerood-renewed-banner-mobile.webp" alt="Refurbished TV, fridge, washing machine, microwave and water purifier" width="1050" height="545" loading="lazy" decoding="async">
+      <span class="cr-renewed-mobile-cta">Explore Renewed Store <span aria-hidden="true">→</span></span>
+    </div>
   </a>
 </section>
 
