@@ -11466,6 +11466,12 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
 }
 /* ===== END CEROOD DESKTOP FULL-WIDTH SERVICE CATEGORIES ===== */
 </style>
+<style>
+#ceroodManualAddressForm label {display:block;margin:10px 0 5px;font-size:12px;font-weight:600;color:#334155;}
+#ceroodManualAddressForm input {width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:9px;padding:11px 12px;font:inherit;font-size:13px;outline:none;background:#fff;color:#1e293b;}
+#ceroodManualAddressForm input:focus {border-color:#7c3aed;box-shadow:0 0 0 2px rgba(124,58,237,.12);}
+#locModalCard {max-height:calc(100dvh - 32px);overflow-y:auto;}
+</style>
 </head>
 <body>
 
@@ -17510,21 +17516,108 @@ filterProductsByGroup('');
 }
 }
 
-    function openLocationModal() {
-    const modal = document.getElementById('locationPopupModal');
-
-    if (modal) {
-        modal.style.display = 'flex';
-    }
-
+// Manual service address: separate editor, persistent saved card.
+const CEROOD_MANUAL_ADDRESS_KEY = 'cerood_manual_service_address_details';
+function getCeroodSavedAddress() {
+    try {
+        const obj = JSON.parse(localStorage.getItem(CEROOD_MANUAL_ADDRESS_KEY) || 'null');
+        if (obj && typeof obj === 'object' && obj.house && obj.village && obj.district && obj.state && /^\d{6}$/.test(obj.pincode)) return obj;
+    } catch (_) {}
+    return null;
+}
+function ceroodAddressText(a) {
+    return [a.house, a.village, a.district, a.state, a.pincode, a.landmark].filter(Boolean).join(', ');
+}
+function renderCeroodSavedAddress() {
+    const box = document.getElementById('ceroodSavedAddressCard');
+    const text = document.getElementById('ceroodSavedAddressText');
+    if (!box || !text) return;
+    const a = getCeroodSavedAddress();
+    box.style.display = a ? 'block' : 'none';
+    text.textContent = a ? ceroodAddressText(a) : '';
+}
+function toggleCeroodManualAddress() { openCeroodManualAddress(false); }
+function openCeroodManualAddress(edit = false) {
+    const a = edit ? getCeroodSavedAddress() : null;
+    ['House','Village','District','State','Pincode','Landmark'].forEach(field => {
+        const el = document.getElementById('ceroodManual' + field);
+        if (el) el.value = a ? (a[field.toLowerCase()] || '') : '';
+    });
+    const heading = document.getElementById('ceroodManualModalHeading');
+    if (heading) heading.textContent = edit ? 'Edit service address' : 'Enter address manually';
+    toggleLocationModal(false);
+    const modal = document.getElementById('ceroodManualAddressModal');
+    if (modal) modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    document.getElementById('ceroodManualHouse')?.focus();
+}
+function closeCeroodManualAddress(back = true) {
+    const modal = document.getElementById('ceroodManualAddressModal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    if (back) openLocationModal();
+}
+function saveCeroodManualAddress(event) {
+    event.preventDefault();
+    const read = id => document.getElementById(id)?.value.trim() || '';
+    const a = {
+        house: read('ceroodManualHouse'),
+        village: read('ceroodManualVillage'),
+        district: read('ceroodManualDistrict'),
+        state: read('ceroodManualState'),
+        pincode: read('ceroodManualPincode'),
+        landmark: read('ceroodManualLandmark')
+    };
+    if (![a.house, a.village, a.district, a.state].every(Boolean) || !/^\d{6}$/.test(a.pincode)) {
+        showToast('Fill all required address fields and a valid 6-digit PIN.', true);
+        return;
+    }
+    const fullAddress = ceroodAddressText(a);
+    const shortAddress = `${a.village}, ${a.district} - ${a.pincode}`;
+    localStorage.setItem(CEROOD_MANUAL_ADDRESS_KEY, JSON.stringify(a));
+    localStorage.setItem('catus_user_location', fullAddress);
+    localStorage.setItem('catus_location_name', a.village);
+    localStorage.setItem('catus_district_name', a.district);
+    localStorage.setItem('catus_state_name', a.state);
+    localStorage.setItem('catus_pincode', a.pincode);
+    localStorage.setItem('catus_location_slug', slugifyLocation(a.village));
+    localStorage.setItem('catus_district_slug', slugifyLocation(a.district));
+    localStorage.setItem('catus_state_slug', slugifyLocation(a.state));
+    localStorage.removeItem('catus_location_id'); // Unverified manual address.
+    localStorage.setItem('cerood_manual_service_address', fullAddress); // Existing booking integration.
+    updateLocationDisplays(shortAddress);
+    closeCeroodManualAddress(false);
+    renderCeroodSavedAddress();
+    showToast('Service address saved. Availability will be confirmed after booking.', false);
+    // Stay on the homepage after saving. The address is shared with product and checkout.
+}
+function deleteCeroodManualAddress() {
+    const a = getCeroodSavedAddress();
+    if (!a || !window.confirm('Delete your saved service address?')) return;
+    const oldFull = ceroodAddressText(a);
+    localStorage.removeItem(CEROOD_MANUAL_ADDRESS_KEY);
+    localStorage.removeItem('cerood_manual_service_address');
+    if (localStorage.getItem('catus_user_location') === oldFull) {
+        ['catus_user_location','catus_location_name','catus_district_name','catus_state_name',
+         'catus_pincode','catus_location_slug','catus_district_slug','catus_state_slug',
+         'catus_location_id'].forEach(k => localStorage.removeItem(k));
+        updateLocationDisplays('Select Location');
+    }
+    renderCeroodSavedAddress();
+    showToast('Saved service address deleted.', false);
+}
 
-    
+function openLocationModal() {
+    const modal = document.getElementById('locationPopupModal');
+    if (modal) modal.style.display = 'flex';
+    renderCeroodSavedAddress();
+    document.body.style.overflow = 'hidden';
 }
 
 function toggleLocationModal(open) {
     const modal = document.getElementById('locationPopupModal');
     if (modal) modal.style.display = open ? 'flex' : 'none';
+    if (open) renderCeroodSavedAddress();
     if (!open) document.body.style.overflow = 'auto';
 }
 
@@ -17534,6 +17627,7 @@ function checkCloseLocationModal(event) {
         toggleLocationModal(false);
     }
 }
+
 
 function detectCurrentLocation() {
 
@@ -18186,7 +18280,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (!savedLoc) return;
 
-    updateLocationDisplays(savedLoc);
+    const manual = getCeroodSavedAddress();
+    updateLocationDisplays(manual ? `${manual.village}, ${manual.district} - ${manual.pincode}` : savedLoc);
 
 });
 
@@ -18865,6 +18960,33 @@ function closeCeroodInfoModal(modalId) {
     </footer>
 </div>
 
+<!-- Independent manual-address popup: no search or current-location controls. -->
+<div class="cart-modal-overlay" id="ceroodManualAddressModal" onclick="if(event.target===this)closeCeroodManualAddress(true)" style="display:none;justify-content:center;align-items:center;position:fixed;inset:0;width:100vw;height:100dvh;background:rgba(0,0,0,.6);z-index:100001;">
+    <div id="ceroodManualAddressCard" style="background:white;width:90%;max-width:460px;max-height:calc(100dvh - 32px);overflow-y:auto;border-radius:16px;padding:24px;box-sizing:border-box;box-shadow:0 10px 30px rgba(0,0,0,.2);">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;">
+            <h3 id="ceroodManualModalHeading" style="margin:0;font-size:18px;color:#0f172a;">Enter address manually</h3>
+            <button type="button" class="close-cart" onclick="closeCeroodManualAddress(true)" aria-label="Close manual address"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <form id="ceroodManualAddressForm" onsubmit="saveCeroodManualAddress(event)">
+            <p style="font-size:12px;color:#64748b;margin:0 0 12px;">Enter the full address where you need service.</p>
+            <label for="ceroodManualHouse">House / street address *</label>
+            <input id="ceroodManualHouse" required maxlength="160" autocomplete="street-address" placeholder="Door no, street, building">
+            <label for="ceroodManualVillage">Village / area / town *</label>
+            <input id="ceroodManualVillage" required maxlength="100" placeholder="Village or town">
+            <label for="ceroodManualDistrict">District *</label>
+            <input id="ceroodManualDistrict" required maxlength="100" placeholder="District name">
+            <label for="ceroodManualState">State *</label>
+            <input id="ceroodManualState" required maxlength="100" placeholder="Tamil Nadu">
+            <label for="ceroodManualPincode">PIN code *</label>
+            <input id="ceroodManualPincode" required inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit PIN code" autocomplete="postal-code">
+            <label for="ceroodManualLandmark">Landmark (optional)</label>
+            <input id="ceroodManualLandmark" maxlength="140" placeholder="Near bus stand, temple, etc.">
+            <button type="submit" style="width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;background:#7c3aed;color:white;font-weight:600;cursor:pointer;">Save &amp; Continue</button>
+            <p style="font-size:11px;color:#64748b;line-height:1.5;">Service availability depends on technician coverage.</p>
+        </form>
+    </div>
+</div>
+
 <!-- Location Change Popup Modal -->
 <div class="cart-modal-overlay" id="locationPopupModal" onclick="checkCloseLocationModal(event)" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 99999;">
     <div class="loc-modal-card" id="locModalCard" style="background: #ffffff; width: 90%; max-width: 460px; border-radius: 16px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative;">
@@ -18884,6 +19006,21 @@ function closeCeroodInfoModal(modalId) {
             <i class="fa-solid fa-location-crosshairs" style="font-size: 16px;"></i>
             <span>Use current location</span>
         </div>
+
+        <!-- Opens a separate popup; search stays only in Change location. -->
+        <button type="button" onclick="openCeroodManualAddress(false)"
+                id="ceroodManualAddressToggle"
+                style="width:100%;display:flex;align-items:center;gap:10px;padding:15px 0;border:0;border-bottom:1px solid #f1f5f9;background:transparent;color:#7c3aed;font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;">
+            <i class="fa-solid fa-pen-to-square"></i> Enter address manually
+        </button>
+        <section id="ceroodSavedAddressCard" style="display:none;margin-top:16px;padding:14px;border:1px solid #d8c8ff;background:#faf8ff;border-radius:12px;">
+            <div style="color:#15803d;font-size:12px;font-weight:700;margin-bottom:8px;"><i class="fa-solid fa-circle-check"></i> Saved service address</div>
+            <div id="ceroodSavedAddressText" style="font-size:13px;line-height:1.65;color:#1e293b;overflow-wrap:anywhere;"></div>
+            <div style="display:flex;gap:10px;margin-top:13px;">
+                <button type="button" onclick="openCeroodManualAddress(true)" style="flex:1;border:1px solid #7c3aed;background:white;color:#7c3aed;border-radius:8px;padding:10px;cursor:pointer;font-weight:600;"><i class="fa-solid fa-pen"></i> Edit</button>
+                <button type="button" onclick="deleteCeroodManualAddress()" style="flex:1;border:1px solid #fecaca;background:#fff5f5;color:#dc2626;border-radius:8px;padding:10px;cursor:pointer;font-weight:600;"><i class="fa-solid fa-trash"></i> Delete</button>
+            </div>
+        </section>
 
         <div style="text-align: center; font-size: 11px; color: #0284c7; font-weight: 500; margin-top: 15px; letter-spacing: 0.5px;">
             <span><i class="fa-solid fa-shield-halved" style="margin-right: 4px;"></i> Cerood Secure Location</span>
