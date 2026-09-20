@@ -15743,6 +15743,12 @@ else if (bookingStatus === 'completed') {
 
 
 function filterProductsByGroup(groupId) {
+// Show offer banners only on the full homepage.
+// Hide MP4/image offers when a category is selected.
+document.querySelectorAll('.cerood-offer-banner')
+    .forEach(banner => {
+        banner.style.display = groupId ? 'none' : '';
+    });
 
     const bannerContainer =
         document.querySelector('.scroll-wrapper');
@@ -15820,6 +15826,12 @@ function getSmallProductImageUrl(imageUrl) {
 
     function filterProducts(keyword) {
         const query = keyword.toLowerCase().trim();
+
+        // Hide offer banners while searching.
+document.querySelectorAll('.cerood-offer-banner')
+    .forEach(banner => {
+        banner.style.display = query ? 'none' : '';
+    });
 
         const bannerContainer = document.querySelector('.scroll-wrapper');
         const titleContainer = document.querySelector('.section-title-container');
