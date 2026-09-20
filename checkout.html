@@ -2595,7 +2595,25 @@ Please check all required fields, mobile number, and pincode.
             document.getElementById('fieldName').value = currentUser.name || '';
             document.getElementById('fieldMobile').value = currentUser.phone || '';
             
-            let savedAddress = currentUser.address;
+            // Product page manual address takes priority over an older profile address.
+            let productManualAddress = null;
+            try {
+                const rawManual = localStorage.getItem('cerood_manual_service_address_details');
+                const parsedManual = rawManual ? JSON.parse(rawManual) : null;
+                if (parsedManual && parsedManual.house && parsedManual.village &&
+                    parsedManual.district && parsedManual.state &&
+                    /^\d{6}$/.test(String(parsedManual.pincode))) {
+                    productManualAddress = parsedManual;
+                }
+            } catch (error) {
+                console.warn('Unable to read product manual address:', error);
+            }
+            const manualFullAddress = productManualAddress ? [
+                productManualAddress.house, productManualAddress.village,
+                productManualAddress.district, productManualAddress.state,
+                productManualAddress.pincode, productManualAddress.landmark
+            ].filter(Boolean).join(', ') : '';
+            let savedAddress = manualFullAddress || currentUser.address;
             if (!savedAddress || savedAddress === "No address saved") {
                 const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
                 for (let key in adminCache) {
@@ -2610,7 +2628,11 @@ Please check all required fields, mobile number, and pincode.
                 document.getElementById('savedAddressContainer').style.display = 'block';
                 document.getElementById('savedAddressText').textContent = savedAddress;
                 document.getElementById('addressFormContainer').style.display = 'none';
-                parseAndFillAddressFields(savedAddress);
+                if (productManualAddress) {
+                    fillCheckoutFromProductManualAddress(productManualAddress);
+                } else {
+                    parseAndFillAddressFields(savedAddress);
+                }
             } else {
                 document.getElementById('savedAddressContainer').style.display = 'none';
                 document.getElementById('addressFormContainer').style.display = 'grid';
@@ -2881,6 +2903,35 @@ try {
 
     return;
 }
+        }
+
+        // Map product page manual fields directly; never parse its comma-separated text.
+        function fillCheckoutFromProductManualAddress(a) {
+            const set = (id, value) => {
+                const field = document.getElementById(id);
+                if (field) field.value = value || '';
+            };
+            set('fieldDoor', a.house);
+            set('fieldStreet', a.landmark || '');
+            set('fieldVillage', a.village);
+            set('fieldPincode', a.pincode);
+            set('fieldCountry', 'India');
+            loadStates();
+            const stateField = document.getElementById('fieldState');
+            if (stateField) {
+                const match = Array.from(stateField.options).find(option =>
+                    option.value.trim().toLowerCase() === String(a.state).trim().toLowerCase()
+                );
+                if (match) stateField.value = match.value;
+            }
+            loadDistricts();
+            const districtField = document.getElementById('fieldDistrict');
+            if (districtField) {
+                const match = Array.from(districtField.options).find(option =>
+                    option.value.trim().toLowerCase() === String(a.district).trim().toLowerCase()
+                );
+                if (match) districtField.value = match.value;
+            }
         }
 
        function parseAndFillAddressFields(fullAddr) {
