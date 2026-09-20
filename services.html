@@ -392,7 +392,23 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
+    
+/* CEROOD 2026 — shared visual system; existing functionality preserved */
+:root{--cr-purple:#6d4aff;--cr-ink:#18181b;--cr-muted:#646477;--cr-line:#e9e5f3;--cr-soft:#f5f3ff}
+html{scroll-behavior:smooth}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f8f7fc;color:var(--cr-ink)}
+.cr-site-header{position:relative;z-index:50;background:rgba(255,255,255,.97);border-bottom:1px solid var(--cr-line)}
+.cr-header-inner{max-width:1180px;min-height:76px;margin:auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.cr-logo{display:inline-flex;align-items:center;flex-shrink:0}.cr-logo img{height:43px;max-width:160px;width:auto;object-fit:contain}
+.cr-nav{display:flex;align-items:center;gap:24px}.cr-nav a{color:#52525b;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}.cr-nav a:hover{color:var(--cr-purple)}
+.cr-nav .cr-nav-cta{padding:12px 17px;border-radius:12px;color:white;background:var(--cr-purple);box-shadow:0 7px 18px rgba(109,74,255,.18)}.cr-nav .cr-nav-cta:hover{color:white;background:#5737df}
+.cr-footer{background:#17132b;color:#d4cfe6;padding:54px 24px 22px;margin-top:48px;font-size:13px;line-height:1.7}
+.cr-footer-inner{max-width:1180px;margin:auto}.cr-footer-grid{display:grid;grid-template-columns:1.7fr 1fr 1fr 1.25fr;gap:34px}.cr-footer-logo{width:auto;height:44px;max-width:170px;object-fit:contain;background:#fff;padding:5px 9px;border-radius:9px}.cr-footer h3{font-size:14px;color:#fff;margin:0 0 16px}.cr-footer p{margin:12px 0;color:#c6c0da;max-width:300px}.cr-footer a{display:block;color:#d4cfe6;text-decoration:none;margin:0 0 10px}.cr-footer a:hover{color:#fff}.cr-footer-bottom{border-top:1px solid rgba(255,255,255,.14);margin-top:34px;padding-top:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#aaa3c2;font-size:12px}.cr-footer-bottom a{display:inline;margin:0}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #b9a9ff;outline-offset:3px}
+@media(max-width:760px){.cr-header-inner{min-height:64px;padding:10px 16px}.cr-logo img{height:34px;max-width:115px}.cr-nav{gap:11px}.cr-nav a{font-size:12px}.cr-hide-mobile{display:none!important}.cr-nav .cr-nav-cta{padding:9px 11px;border-radius:10px}.cr-footer{padding:38px 18px 22px}.cr-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px}.cr-footer-grid>div:first-child{grid-column:1/-1}.cr-footer-bottom{margin-top:24px}}
+@media(max-width:370px){.cr-nav{gap:8px}.cr-nav a{font-size:11px}.cr-logo img{max-width:95px}}
+
+ .services-hero{position:relative;padding:68px 0 60px;background:radial-gradient(circle at 20% 10%,#e9e1ff,transparent 50%),linear-gradient(120deg,#f4f1ff,#fff);border-bottom:1px solid #e9e3f9}.services-label{padding:8px 14px;border:1px solid #dcd2ff;border-radius:999px;background:#fff}.services-hero h1{font-size:clamp(32px,4.5vw,50px);letter-spacing:-1.5px}.services-hero p{color:#615b70}.services-section{padding-top:54px}.service-grid{gap:20px}.service-card{background:#fff;border-color:var(--cr-line);border-radius:20px;min-height:260px;box-shadow:0 6px 20px rgba(32,23,80,.035)}.service-card:hover{border-color:#c6b9ff;box-shadow:0 18px 36px rgba(109,74,255,.11);transform:translateY(-4px)}.service-icon{width:54px;height:54px;border-radius:16px;background:#f0ebff;font-size:26px}.service-link-text{font-size:13px}.how-section{border:1px solid #e5dcff;background:linear-gradient(120deg,#eee8ff,#fff);border-radius:22px}.services-cta{background:#fff;border-color:var(--cr-line);border-radius:22px;box-shadow:0 10px 30px rgba(32,23,80,.04)}.primary-btn{background:var(--cr-purple);border-radius:12px}.secondary-btn{border-radius:12px}footer:not(.cr-footer){display:none}@media(max-width:600px){.services-hero{padding:47px 0 42px}.services-section{padding-top:34px}.service-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.service-card{min-height:255px;padding:16px;border-radius:15px}.service-icon{width:44px;height:44px;margin-bottom:17px}.service-card h3{font-size:16px}.service-card p{font-size:12px}.service-link-text{left:16px;bottom:15px;font-size:11px}.how-section{padding:24px 20px}}
+</style>
 
     <!-- SEO STRUCTURED DATA -->
 
@@ -454,25 +470,12 @@
       ]
     }
     </script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<header>
-    <div class="page-container services-header">
-
-        <a href="/" class="brand-link">
-            Cerood
-        </a>
-
-        <nav class="header-links" aria-label="Main navigation">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-        </nav>
-
-    </div>
-</header>
+<header class="cr-site-header"><div class="cr-header-inner"><a class="cr-logo" href="/" aria-label="Cerood Home"><img src="/cerood-logo.webp" alt="Cerood"></a><nav class="cr-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/services">Services</a><a class="cr-hide-mobile" href="/about">About</a><a class="cr-hide-mobile" href="/faq">FAQs</a><a class="cr-nav-cta" href="/contact">Get support ↗</a></nav></div></header>
 
 
 <main>
@@ -740,24 +743,7 @@
 </main>
 
 
-<footer>
-
-    <div class="page-container footer-inner">
-
-        <div>
-            © 2026 Cerood Home Services. All Rights Reserved.
-        </div>
-
-        <div class="footer-links">
-            <a href="/">Home</a>
-            <a href="/about">About Cerood</a>
-            <a href="/services">Services</a>
-            <a href="/contact">Contact Us</a>
-        </div>
-
-    </div>
-
-</footer>
+<footer class="cr-footer"><div class="cr-footer-inner"><div class="cr-footer-grid"><div><a href="/" aria-label="Cerood Home"><img class="cr-footer-logo" src="/cerood-logo.webp" alt="Cerood"></a><p>Home appliance service, made simple. Discover doorstep repair, installation and maintenance through Cerood.</p></div><div><h3>Explore</h3><a href="/">Home</a><a href="/services">Services</a><a href="/about">About Cerood</a></div><div><h3>Support</h3><a href="/faq">Help &amp; FAQs</a><a href="/contact">Contact us</a><a href="https://wa.me/918946055856" rel="noopener noreferrer" target="_blank">WhatsApp support</a></div><div><h3>Contact</h3><a href="tel:+918946055856">+91 8946055856</a><p>Dharmapuri, Tamil Nadu, India</p><p>Service availability depends on location and technician availability.</p></div></div><div class="cr-footer-bottom">© 2026 Cerood Home Services. All rights reserved. <span><a href="/terms.html">Terms</a> · <a href="/privacy-policy.html">Privacy</a></span></div></div></footer>
 
 </body>
 </html>
