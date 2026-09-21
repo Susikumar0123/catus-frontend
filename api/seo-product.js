@@ -190,13 +190,18 @@ try {
         // SEO TITLE + DESCRIPTION
         // ==========================================
 
-        const title =
-            page.seo_title ||
-            `${page.service_name} in ${page.location_name}, ${page.district} | Cerood`;
+        const seoLocation =
+    district === location
+        ? page.district
+        : `${page.location_name}, ${page.district}`;
 
-        const description =
-            page.seo_description ||
-            `${page.service_name} in ${page.location_name}, ${page.district}. Book doorstep service with Cerood.`;
+const title =
+    page.seo_title ||
+    `${page.service_name} in ${seoLocation} | Cerood`;
+
+const description =
+    page.seo_description ||
+    `Book ${page.service_name.toLowerCase()} in ${seoLocation} with Cerood. Check technician availability and request doorstep service online.`;
 
 
         // ==========================================
@@ -303,29 +308,17 @@ try {
             );
         }
 
-
-        // ==========================================
-// UNIQUE LOCAL SEO TITLE
+// ==========================================
+// SEO TITLE + OPEN GRAPH TITLE
 // ==========================================
 
-const seoTitlePlace =
-    district === location
-        ? page.district
-        : page.location_name;
-
-const localSeoPageTitle =
-    `${page.service_name} in ${seoTitlePlace} | Cerood`;
-
-html = html.replace(
-    /<title>[\s\S]*?<\/title>/i,
-    `<title>${escapeHtml(localSeoPageTitle)}</title>`
-);
+// The SEO title was already generated above.
+// Do not overwrite it again.
 
 html = html.replace(
     /<meta\s+property=["']og:title["'][^>]*>/i,
-    `<meta property="og:title" content="${escapeHtml(localSeoPageTitle)}">`
+    `<meta property="og:title" content="${escapeHtml(title)}">`
 );
-
         // ==========================================
 // SERVER-RENDER H1
 // ==========================================
@@ -347,7 +340,7 @@ const localSeoTitle =
 
 const localSeoDescription =
     `Looking for ${page.service_name.toLowerCase()} in ` +
-    `${page.location_name}, ${page.district}? ` +
+    `${seoLocation}? ` +
     `Cerood helps you book doorstep appliance service with ` +
     `easy online booking and local service support.`;
 
@@ -368,7 +361,7 @@ html = html.replace(
 
 html = html.replace(
     /<strong([^>]*?)id=["']ceroodLocalSeoLocation["']([^>]*)>[\s\S]*?<\/strong>/i,
-    `<strong$1id="ceroodLocalSeoLocation"$2>${escapeHtml(page.location_name)}, ${escapeHtml(page.district)}</strong>`
+    `<strong$1id="ceroodLocalSeoLocation"$2>${escapeHtml(seoLocation)}</strong>`
 );
 
         // ==========================================
