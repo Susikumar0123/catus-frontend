@@ -6023,46 +6023,6 @@ if (techResponse === 'Accepted') {
                     <h2>Cerood Admin - Bookings Report</h2>
                     ${tableHtml}
                 
-<script>
-// Cerood Partnership Leads: only admin-authenticated API endpoints are used.
-function partnerEsc(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
-async function loadPartnershipLeads() {
-    const body=document.getElementById('partnerLeadsBody'), note=document.getElementById('partnerLeadsMessage');
-    if (!body) return;
-    body.innerHTML='<tr><td colspan="7">Loading enquiries…</td></tr>'; note.textContent='';
-    try {
-        const response=await fetch(`${API_BASE_URL}/api/admin/partnership-leads`);
-        const result=await response.json();
-        if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load enquiries');
-        const leads=result.leads || [];
-        note.textContent=`${leads.length} partnership enquiries (latest 500)`;
-        if (!leads.length) {body.innerHTML='<tr><td colspan="7">No partnership enquiries yet.</td></tr>';return;}
-        const statuses=['New','Contacted','Follow-up','Partnered','Closed'];
-        body.innerHTML=leads.map(lead=>`<tr>
-          <td>${partnerEsc(new Date(lead.created_at).toLocaleString('en-IN'))}</td>
-          <td><strong>${partnerEsc(lead.business_name)}</strong><br>${partnerEsc(lead.partner_type)}</td>
-          <td>${partnerEsc(lead.contact_name)}<br><a href="tel:${partnerEsc(lead.phone)}">${partnerEsc(lead.phone)}</a><br>${partnerEsc(lead.email)}</td>
-          <td>${partnerEsc(lead.location)}<br>${partnerEsc(lead.property_size)}</td>
-          <td>${partnerEsc(lead.services)}<br><small>${partnerEsc(lead.message)}</small></td>
-          <td><select class="form-input" id="partnerStatus-${lead.id}">${statuses.map(s=>`<option value="${s}" ${s===lead.status?'selected':''}>${s}</option>`).join('')}</select>
-            <textarea class="form-input" id="partnerNotes-${lead.id}" rows="2" placeholder="Follow-up notes">${partnerEsc(lead.admin_notes)}</textarea></td>
-          <td><button class="manage-btn" onclick="savePartnershipLead(${Number(lead.id)})">Save</button></td>
-        </tr>`).join('');
-    } catch(error) {body.innerHTML='<tr><td colspan="7">Unable to load enquiries.</td></tr>';note.textContent=error.message;}
-}
-async function savePartnershipLead(id) {
-    const note=document.getElementById('partnerLeadsMessage');
-    try {
-        const response=await fetch(`${API_BASE_URL}/api/admin/partnership-leads/${id}`,{
-            method:'PATCH',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({status:document.getElementById(`partnerStatus-${id}`).value,admin_notes:document.getElementById(`partnerNotes-${id}`).value})
-        });
-        const result=await response.json();
-        if (!response.ok || !result.success) throw new Error(result.message || 'Update failed');
-        note.textContent=`Lead #${id} updated successfully.`;
-    } catch(error) {note.textContent=error.message;}
-}
-</script>
 
 </body>
                 </html>
@@ -7300,6 +7260,47 @@ async function uploadAdminImage(fileInput, targetInputId) {
  document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
  window.addEventListener('resize',()=>{if(window.innerWidth>760)setOpen(false)});
 })();
+</script>
+
+<script>
+// Cerood Partnership Leads: only admin-authenticated API endpoints are used.
+function partnerEsc(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+async function loadPartnershipLeads() {
+    const body=document.getElementById('partnerLeadsBody'), note=document.getElementById('partnerLeadsMessage');
+    if (!body) return;
+    body.innerHTML='<tr><td colspan="7">Loading enquiries…</td></tr>'; note.textContent='';
+    try {
+        const response=await fetch(`${API_BASE_URL}/api/admin/partnership-leads`);
+        const result=await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load enquiries');
+        const leads=result.leads || [];
+        note.textContent=`${leads.length} partnership enquiries (latest 500)`;
+        if (!leads.length) {body.innerHTML='<tr><td colspan="7">No partnership enquiries yet.</td></tr>';return;}
+        const statuses=['New','Contacted','Follow-up','Partnered','Closed'];
+        body.innerHTML=leads.map(lead=>`<tr>
+          <td>${partnerEsc(new Date(lead.created_at).toLocaleString('en-IN'))}</td>
+          <td><strong>${partnerEsc(lead.business_name)}</strong><br>${partnerEsc(lead.partner_type)}</td>
+          <td>${partnerEsc(lead.contact_name)}<br><a href="tel:${partnerEsc(lead.phone)}">${partnerEsc(lead.phone)}</a><br>${partnerEsc(lead.email)}</td>
+          <td>${partnerEsc(lead.location)}<br>${partnerEsc(lead.property_size)}</td>
+          <td>${partnerEsc(lead.services)}<br><small>${partnerEsc(lead.message)}</small></td>
+          <td><select class="form-input" id="partnerStatus-${lead.id}">${statuses.map(s=>`<option value="${s}" ${s===lead.status?'selected':''}>${s}</option>`).join('')}</select>
+            <textarea class="form-input" id="partnerNotes-${lead.id}" rows="2" placeholder="Follow-up notes">${partnerEsc(lead.admin_notes)}</textarea></td>
+          <td><button class="manage-btn" onclick="savePartnershipLead(${Number(lead.id)})">Save</button></td>
+        </tr>`).join('');
+    } catch(error) {body.innerHTML='<tr><td colspan="7">Unable to load enquiries.</td></tr>';note.textContent=error.message;}
+}
+async function savePartnershipLead(id) {
+    const note=document.getElementById('partnerLeadsMessage');
+    try {
+        const response=await fetch(`${API_BASE_URL}/api/admin/partnership-leads/${id}`,{
+            method:'PATCH',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({status:document.getElementById(`partnerStatus-${id}`).value,admin_notes:document.getElementById(`partnerNotes-${id}`).value})
+        });
+        const result=await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || 'Update failed');
+        note.textContent=`Lead #${id} updated successfully.`;
+    } catch(error) {note.textContent=error.message;}
+}
 </script>
 </body>
 
