@@ -361,6 +361,9 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 
             </div>
 
+            <div class="nav-item" onclick="switchMainPage('partnership-leads', 'Partnership Leads', this); loadPartnershipLeads();">
+                <i class="fa-solid fa-handshake"></i> Partnership Leads
+            </div>
             <div class="nav-item" onclick="switchMainPage('customers', 'Customers Master', this)">
 
                 <i class="fa-solid fa-users"></i> Customers Master
@@ -541,6 +544,19 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
             </div>
 
             <!-- TAB 2: CUSTOMERS MASTER -->
+
+            <!-- Partnership enquiries: separate from regular service bookings -->
+            <div id="page-partnership-leads" class="main-tab-pane">
+                <div class="panel-card">
+                    <div class="panel-header"><h3 style="margin:0">Business Partnership Enquiries</h3>
+                        <button class="manage-btn" onclick="loadPartnershipLeads()">Refresh</button></div>
+                    <div id="partnerLeadsMessage" style="padding:12px 20px;font-size:13px" role="status"></div>
+                    <div class="table-responsive"><table style="min-width:950px"><thead><tr>
+                        <th>Date</th><th>Type / Business</th><th>Contact</th><th>Location / Size</th><th>Services / Message</th><th>Status / Notes</th><th>Action</th>
+                    </tr></thead><tbody id="partnerLeadsBody"><tr><td colspan="7">Open this section to load enquiries.</td></tr></tbody></table></div>
+                </div>
+            </div>
+
             <div id="page-customers" class="main-tab-pane">
                 <div class="panel-card">
                     <div class="panel-header">
@@ -6006,7 +6022,49 @@ if (techResponse === 'Accepted') {
                 <body>
                     <h2>Cerood Admin - Bookings Report</h2>
                     ${tableHtml}
-                </body>
+                
+<script>
+// Cerood Partnership Leads: only admin-authenticated API endpoints are used.
+function partnerEsc(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+async function loadPartnershipLeads() {
+    const body=document.getElementById('partnerLeadsBody'), note=document.getElementById('partnerLeadsMessage');
+    if (!body) return;
+    body.innerHTML='<tr><td colspan="7">Loading enquiries…</td></tr>'; note.textContent='';
+    try {
+        const response=await fetch(`${API_BASE_URL}/api/admin/partnership-leads`);
+        const result=await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load enquiries');
+        const leads=result.leads || [];
+        note.textContent=`${leads.length} partnership enquiries (latest 500)`;
+        if (!leads.length) {body.innerHTML='<tr><td colspan="7">No partnership enquiries yet.</td></tr>';return;}
+        const statuses=['New','Contacted','Follow-up','Partnered','Closed'];
+        body.innerHTML=leads.map(lead=>`<tr>
+          <td>${partnerEsc(new Date(lead.created_at).toLocaleString('en-IN'))}</td>
+          <td><strong>${partnerEsc(lead.business_name)}</strong><br>${partnerEsc(lead.partner_type)}</td>
+          <td>${partnerEsc(lead.contact_name)}<br><a href="tel:${partnerEsc(lead.phone)}">${partnerEsc(lead.phone)}</a><br>${partnerEsc(lead.email)}</td>
+          <td>${partnerEsc(lead.location)}<br>${partnerEsc(lead.property_size)}</td>
+          <td>${partnerEsc(lead.services)}<br><small>${partnerEsc(lead.message)}</small></td>
+          <td><select class="form-input" id="partnerStatus-${lead.id}">${statuses.map(s=>`<option value="${s}" ${s===lead.status?'selected':''}>${s}</option>`).join('')}</select>
+            <textarea class="form-input" id="partnerNotes-${lead.id}" rows="2" placeholder="Follow-up notes">${partnerEsc(lead.admin_notes)}</textarea></td>
+          <td><button class="manage-btn" onclick="savePartnershipLead(${Number(lead.id)})">Save</button></td>
+        </tr>`).join('');
+    } catch(error) {body.innerHTML='<tr><td colspan="7">Unable to load enquiries.</td></tr>';note.textContent=error.message;}
+}
+async function savePartnershipLead(id) {
+    const note=document.getElementById('partnerLeadsMessage');
+    try {
+        const response=await fetch(`${API_BASE_URL}/api/admin/partnership-leads/${id}`,{
+            method:'PATCH',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({status:document.getElementById(`partnerStatus-${id}`).value,admin_notes:document.getElementById(`partnerNotes-${id}`).value})
+        });
+        const result=await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || 'Update failed');
+        note.textContent=`Lead #${id} updated successfully.`;
+    } catch(error) {note.textContent=error.message;}
+}
+</script>
+
+</body>
                 </html>
             `);
             printWin.document.close();
