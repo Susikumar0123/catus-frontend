@@ -80,11 +80,11 @@ const currency=n=>'₹'+Number(n).toLocaleString('en-IN');
 function setPayStatus(text,error=false){$('paymentStatus').textContent=text;$('paymentStatus').className='address-status '+(error?'error':'ok');}
 function updatePayButton(){const ready=checkoutEnabled&&quoteReady&&deliveryReady&&Boolean(otpToken)&&!busy&&!lastOrderId;$('payBtn').disabled=!ready;$('payBtn').textContent=busy?'Please wait…':lastOrderId?'Check order status':ready?'Proceed to secure payment':'Payment unavailable until verification';}
 function setOtpStatus(text,error=false){$('otpStatus').textContent=text;$('otpStatus').className='address-status '+(error?'error':'ok');}
-function refreshOtpButton(){const validPhone=/^[6-9]\d{9}$/.test($('phone').value.trim());$('sendOtpBtn').disabled=!otpWidgetReady||!quoteReady||!validPhone||busy;}
+function refreshOtpButton(){const validPhone=/^[6-9]\d{9}$/.test($('phone').value.trim());$('sendOtpBtn').disabled=!otpWidgetReady||!validPhone||busy||otpSending;}
 async function postJson(path,body){const r=await fetch(api+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid backend response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d;}
 function currentAddress(){return {full_name:$('fullName').value.trim(),phone:$('phone').value.trim(),street:$('door').value.trim(),area:$('area').value.trim(),city:$('city').value.trim(),district:$('district').value.trim(),state:$('state').value.trim(),pincode:$('pincode').value.trim()};}
-function getMsgToken(data){if(typeof data==='string')return data.trim();const a=[data?.accessToken,data?.access_token,data?.['access-token'],data?.token,data?.data?.accessToken,data?.data?.access_token,data?.data?.['access-token'],data?.data?.token,data?.response?.accessToken,data?.response?.access_token,data?.response?.['access-token'],data?.result?.accessToken,data?.message];return String(a.find(x=>typeof x==='string'&&x.trim()&&x.length>40)||'').trim();}
-function msg91Error(e){const raw=typeof e==='string'?e:(e?.message||e?.error||e?.data?.message||e?.response?.message||'');const msg=typeof raw==='string'?raw:'';if(/expired/i.test(msg))return 'OTP expired. Request a fresh OTP.';if(/invalid|incorrect|mismatch/i.test(msg))return 'MSG91 rejected this OTP. Request a new OTP and use only the latest code.';if(/request|reqid/i.test(msg))return 'OTP session expired or mismatched. Send a new OTP.';return 'MSG91 could not verify OTP. Request a fresh OTP and try again.';}
+function getMsgToken(data){if(typeof data==='string')return data.trim();const a=[data?.accessToken,data?.access_token,data?.['access-token'],data?.token,data?.data?.accessToken,data?.data?.access_token,data?.data?.['access-token'],data?.data?.token,data?.response?.accessToken,data?.response?.access_token,data?.response?.['access-token'],data?.result?.accessToken,data?.result?.['access-token'],data?.['access-token'],data?.data?.message,data?.response?.message,data?.message];return String(a.find(x=>typeof x==='string'&&x.trim()&&x.length>40)||'').trim();}
+function msg91Error(e){const raw=typeof e==='string'?e:(e?.message||e?.error||e?.data?.message||e?.response?.message||'');const msg=typeof raw==='string'?raw.trim():'';if(/expired/i.test(msg))return 'OTP expired. Request a fresh OTP.';if(/invalid|incorrect|mismatch/i.test(msg))return 'MSG91 rejected this OTP. Request a new OTP and use only the latest code.';if(/request|reqid/i.test(msg))return 'OTP session expired or mismatched. Send a new OTP.';return msg&&msg.length<180?'MSG91: '+msg:'MSG91 request failed. Check captcha, widget configuration and SMS delivery settings.';}
 let widgetPromise,otpRequestId='',otpSending=false;
 function loadOtpWidget(){if(widgetPromise)return widgetPromise;widgetPromise=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://verify.msg91.com/otp-provider.js';script.onload=()=>{try{if(typeof window.initSendOTP!=='function')throw Error('OTP widget unavailable');window.initSendOTP({widgetId:MSG91_WIDGET_ID,tokenAuth:MSG91_WIDGET_TOKEN,exposeMethods:true,captchaRenderId:'msg91Captcha',success:()=>{},failure:()=>{}});resolve()}catch(e){reject(e)}};script.onerror=()=>reject(Error('OTP service could not load'));document.head.append(script)});return widgetPromise;}
 async function initCheckout(){
@@ -99,7 +99,7 @@ async function initCheckout(){
     setOtpStatus('Loading mobile verification…');
     await loadOtpWidget();
     otpWidgetReady=true;
-    setOtpStatus(quoteReady?'Enter your registered mobile number and complete the captcha to test OTP.':'Select a product first; then enter your mobile number to test OTP.');
+    setOtpStatus(quoteReady?'Enter your mobile number and complete captcha to receive OTP.':'Enter your mobile number and complete captcha to test OTP. Select a product before buying.');
   }catch(e){
     checkoutEnabled=false;
     otpWidgetReady=false;
@@ -107,7 +107,28 @@ async function initCheckout(){
     setPayStatus('Checkout is unavailable. No payment can be initiated.',true);
   }finally{refreshOtpButton();updatePayButton()}
 }
-$('sendOtpBtn').addEventListener('click',()=>{const phone=$('phone').value.trim();if(otpSending)return;if(!/^[6-9]\d{9}$/.test(phone)){setOtpStatus('Enter a valid delivery mobile number.',true);return}if(typeof window.sendOtp!=='function'){setOtpStatus('OTP widget is loading.',true);return}if(typeof window.isCaptchaVerified==='function'&&!window.isCaptchaVerified()){setOtpStatus('Complete the captcha first.',true);return}otpToken='';otpPhone='';otpRequestId='';$('otpEntry').hidden=true;$('checkoutOtp').value='';updatePayButton();otpSending=true;$('sendOtpBtn').disabled=true;setOtpStatus('Sending OTP…');try{window.sendOtp('91'+phone,data=>{otpSending=false;otpPhone=phone;otpRequestId=String(data?.message||data?.reqId||data?.req_id||data?.data?.message||'').trim();$('otpEntry').hidden=false;$('verifyOtpBtn').disabled=false;setOtpStatus('OTP sent. Enter the latest code received on this number.');refreshOtpButton()},e=>{otpSending=false;setOtpStatus('OTP could not be sent. Complete captcha again and retry.',true);refreshOtpButton()})}catch(e){otpSending=false;setOtpStatus('OTP could not be sent. Retry captcha and try again.',true);refreshOtpButton()}});
+$('sendOtpBtn').addEventListener('click',()=>{
+ const phone=$('phone').value.trim();
+ if(otpSending)return;
+ if(!/^[6-9]\d{9}$/.test(phone)){setOtpStatus('Enter a valid delivery mobile number.',true);return}
+ if(typeof window.sendOtp!=='function'){setOtpStatus('OTP widget is still loading. Refresh the page if it does not load.',true);return}
+ if(typeof window.isCaptchaVerified==='function'&&!window.isCaptchaVerified()){setOtpStatus('Complete the captcha first.',true);return}
+ otpToken='';otpPhone='';otpRequestId='';$('otpEntry').hidden=true;$('checkoutOtp').value='';updatePayButton();
+ otpSending=true;refreshOtpButton();setOtpStatus('Sending OTP to your mobile…');
+ const onSuccess=data=>{
+   otpSending=false;
+   const result=typeof data==='object'&&data?data:{};
+   if(result.type==='error'||result.success===false){setOtpStatus(msg91Error(result),true);refreshOtpButton();return}
+   otpPhone=phone;
+   otpRequestId=String(result.reqId||result.req_id||result.data?.reqId||result.data?.req_id||result.message||'').trim();
+   const directToken=getMsgToken(data);
+   if(directToken&&result.invisibleVerified===true){otpToken=directToken;setOtpStatus('Mobile verified. Complete your delivery address to continue.');updatePayButton();}
+   else{$('otpEntry').hidden=false;setOtpStatus('OTP request accepted. Enter the code received. If no SMS arrives, check MSG91 widget logs.');}
+   refreshOtpButton();
+ };
+ const onFailure=e=>{otpSending=false;setOtpStatus('OTP send failed. '+msg91Error(e),true);refreshOtpButton()};
+ try{window.sendOtp('91'+phone,onSuccess,onFailure)}catch(e){onFailure(e)}
+});
 $('verifyOtpBtn').addEventListener('click',()=>{const code=$('checkoutOtp').value.trim();if(!/^\d{4,8}$/.test(code)){setOtpStatus('Enter the OTP sent to your mobile.',true);return}if(!otpPhone||$('phone').value.trim()!==otpPhone){setOtpStatus('Mobile changed. Send a fresh OTP.',true);return}if(typeof window.verifyOtp!=='function'){setOtpStatus('OTP service unavailable.',true);return}$('verifyOtpBtn').disabled=true;setOtpStatus('Verifying OTP with MSG91…');try{const onSuccess=async data=>{const token=getMsgToken(data);if(!token){setOtpStatus('MSG91 verified OTP but did not return a usable access token. Request a new OTP.',true);$('verifyOtpBtn').disabled=false;return}try{const d=await postJson('/api/renewed/secure-quote',{accessToken:token,items,address:currentAddress()});otpToken=token;$('subtotal').textContent=currency(d.subtotal);$('deliveryFee').textContent=currency(d.delivery_fee);$('estimatedTotal').textContent=currency(d.total);deliveryReady=true;setOtpStatus('Mobile verified and current price confirmed.');$('otpEntry').hidden=true;updatePayButton()}catch(e){otpToken=token;setOtpStatus('OTP verified by MSG91. Backend checkout check: '+e.message+'. Payment remains disabled.',true);updatePayButton();$('verifyOtpBtn').disabled=false}};const onFailure=e=>{setOtpStatus(msg91Error(e),true);$('verifyOtpBtn').disabled=false};if(otpRequestId)window.verifyOtp(code,onSuccess,onFailure,otpRequestId);else window.verifyOtp(code,onSuccess,onFailure)}catch(e){setOtpStatus(msg91Error(e),true);$('verifyOtpBtn').disabled=false}});
 $('phone').addEventListener('input',()=>{refreshOtpButton();if(otpPhone&&$('phone').value.trim()!==otpPhone){otpToken='';otpRequestId='';$('otpEntry').hidden=true;setOtpStatus('Mobile changed. Verify the new number again.',true);updatePayButton()}});
 for(const id of ['door','area','city','district','state','pincode'])$(id).addEventListener('input',()=>{deliveryReady=false;updatePayButton()});
