@@ -1,177 +1,2046 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Renewed Checkout | Cerood</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#171717;font-family:Inter,Arial,sans-serif}header{background:#fff;border-bottom:1px solid #eee;padding:20px max(16px,calc((100vw - 1050px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px}header a{color:#171717;text-decoration:none;font-size:13px}main{max-width:1050px;margin:32px auto;padding:0 16px}.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}.card{background:white;border-radius:14px;padding:24px;margin-bottom:18px}.card h2{font-size:18px;margin:0 0 18px}.item{display:flex;gap:14px;border-bottom:1px solid #eee;padding:14px 0}.item img{width:76px;height:76px;object-fit:contain;background:#f5f5f7;border-radius:9px}.item .name{font-size:14px;font-weight:600}.muted{color:#666;font-size:12px;line-height:1.6}.money{font-size:16px;font-weight:700;margin-top:7px}.row{display:flex;justify-content:space-between;gap:12px;margin:14px 0;font-size:13px}.total{font-size:18px;font-weight:700;border-top:1px solid #eee;padding-top:16px}.notice{background:#fff4e6;border:1px solid #f2d2a5;border-radius:10px;padding:15px;font-size:12px;line-height:1.7}.btn{display:inline-block;background:#171717;color:white;padding:13px 18px;border-radius:9px;text-decoration:none;font-size:13px;border:0;cursor:pointer}.btn:disabled{background:#aaa;cursor:not-allowed}.address-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:600}.field input,.field textarea{font:inherit;width:100%;padding:12px;border:1px solid #d5dbe4;border-radius:8px;background:#fff;font-size:13px}.field input:focus,.field textarea:focus{outline:2px solid #d7a7a8;outline-offset:1px}.field small{color:#a13232;font-size:11px}.address-status{font-size:12px;line-height:1.6;margin-top:12px;color:#555}.address-status.ok{color:#166534}.address-status.error{color:#b91c1c}.link{background:none;border:0;color:#b45353;cursor:pointer;font-size:12px;padding:5px 0}#status{font-size:13px;color:#666;margin-bottom:16px}@media(max-width:700px){.address-grid{grid-template-columns:1fr}.grid{grid-template-columns:1fr}main{margin:18px auto}.card{padding:17px}header{padding:16px}}
-/* Cerood Renewed brand polish — presentation only; existing checkout and API logic retained. */
-:root{--cerood-purple:#6d4aff;--cerood-purple-dark:#5937df;--cerood-ink:#242039;--cerood-muted:#68647b;--cerood-soft:#f5f3ff;--cerood-border:#e9e5f1}
-body{color:var(--cerood-ink);-webkit-font-smoothing:antialiased}
-a,button,input,select,textarea{-webkit-tap-highlight-color:transparent}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #b6a6ff;outline-offset:2px}
-button,a{transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
-@media(hover:hover){button:not(:disabled):hover,a.btn:hover{transform:translateY(-1px)}}
-@media(prefers-reduced-motion:reduce){button,a{transition:none!important}}
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Renewed Secure Checkout — Cerood</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f8fafc; color: #0f172a; }
+        .checkout-container { max-width: 1200px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+        
+        /* Header */
+        .checkout-header { background: #fff; padding: 15px 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .checkout-header img { height: 45px; cursor: pointer; }
+        .secure-badge { font-size: 14px; color: #16a34a; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 
-body{background:#f8f7fc;color:var(--cerood-ink)}
-header{border-bottom:1px solid var(--cerood-border);box-shadow:0 2px 14px rgba(39,23,83,.035)}
-header a{color:var(--cerood-purple-dark)}header strong{font-weight:850;letter-spacing:-.04em}
-main>h1{color:var(--cerood-ink);letter-spacing:-.035em}
-.card{border:1px solid var(--cerood-border);box-shadow:0 5px 24px rgba(38,25,75,.035)}
-.card h2{color:var(--cerood-ink)}.item img{background:#f7f6fc}
-.btn{background:var(--cerood-purple);border-radius:10px;font-weight:700;min-height:43px}
-.btn:hover:not(:disabled){background:var(--cerood-purple-dark)}
-.btn:disabled{background:#b6accb;color:#fff}
-.field input:focus,.field textarea:focus,#checkoutOtp:focus{outline:2px solid #b6a6ff;outline-offset:1px;border-color:var(--cerood-purple)}
-.link{color:var(--cerood-purple-dark);font-weight:650}
-.notice{background:#f5f3ff;border-color:#dcd4ff;color:#45336b}
-@media(max-width:700px){header{gap:8px}header a{font-size:12px}.card{border-radius:13px}main>h1{font-size:23px!important}}
-
-.cr-header{background:#fff;border-bottom:1px solid #eee;position:relative;z-index:10}
-.cr-header-inner{max-width:1460px;margin:auto;padding:18px 40px;display:flex;align-items:center;gap:18px}
-.cr-brand{display:flex;align-items:center;gap:10px;flex-shrink:0}.cr-brand img{height:60px;width:auto;max-width:150px;object-fit:contain}.cr-brand span{font-size:10px;font-weight:800;letter-spacing:.11em;color:#a86c6d;border-left:1px solid #ddd;padding-left:10px}
-.cr-search{display:flex;align-items:center;gap:10px;min-width:0;flex:1;border:1.5px solid #d7a7a8;border-radius:50px;padding:0 14px;background:#fff;box-shadow:0 2px 8px rgba(215,167,168,.1)}.cr-search:focus-within{box-shadow:0 0 0 3px rgba(215,167,168,.18)}.cr-search svg{height:18px;width:18px;fill:none;stroke:#64748b;stroke-width:2;flex-shrink:0}.cr-search input{width:100%;border:0;outline:0;background:transparent;font:inherit;font-size:14px;padding:12px 0;color:#1e293b}
-.cr-actions{display:flex;align-items:center;gap:14px;flex-shrink:0;font-size:13px}.cr-service{color:#475569;font-weight:500}.cr-cart{display:flex;align-items:center;gap:5px;font-weight:600}.cr-cart b{background:#10b981;color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:50%;display:grid;place-items:center}.cr-account{background:#d7a7a8;border-radius:50px;padding:10px 14px;font-weight:600;color:#111}.cr-account:hover{background:#c29394}
-.wrap{max-width:1460px;padding:0 40px}.hero{background:#f5f5f7;border:0}.hero-art{background:#fff}.tag{color:#a86c6d}.hero-cta,.uc-view{background:#171717;border-radius:8px}.hero-cta:hover,.uc-view:hover{background:#333}.trust>div,.chip .chip-art,.uc-card-img-wrapper,.empty{background:#f5f5f7}.chip:hover .chip-art,.chip[aria-pressed=true] .chip-art{background:#f5f5f7;border-color:#d7a7a8}.search-wrap{border-color:#d7a7a8}.search-wrap:focus-within{border-color:#d7a7a8;box-shadow:0 0 0 3px rgba(215,167,168,.18)}.uc-card{background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 5px rgba(0,0,0,.08);border-radius:11px}.uc-body{padding:9px 3px 0}.uc-price{color:#171717}.footer{border-color:#eee}.footrow a{color:#a86c6d}
-.cr-mobile-nav{display:none}
-
-
-
-/* Renewed product — current Cerood storefront shell */
-:root{--cerood-soft:#f5f5f7;--cerood-ink:#171717;--cerood-border:#e8e8e8}
-body{background:#fff!important;color:#171717!important}
-.cr-header{background:#fff;border:0;box-shadow:none;padding:0}
-.cr-header-inner{max-width:1460px;margin:18px auto 0;padding:13px 26px;min-height:86px;gap:14px;border-radius:15px;background:linear-gradient(105deg,#aec3d3 0%,#7697b6 47%,#506f90 100%)}
-.cr-brand img{height:60px;max-width:150px}.cr-brand span{color:#fff;border-color:#ffffff55}
-.cr-search{border:0;box-shadow:none;background:#fff;min-height:43px}.cr-search:focus-within{box-shadow:0 0 0 3px #ffffff70}
-.cr-location{border:0;background:#fff;border-radius:50px;min-width:184px;max-width:200px;height:40px;display:flex;align-items:center;justify-content:space-between;gap:7px;text-align:left;padding:6px 12px;font-size:10px;color:#334155;cursor:pointer}
-.cr-location span{min-width:0}.cr-location strong{display:block;color:#5b40ce;font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cr-location svg{width:15px;height:15px;flex:none}
-.cr-cart,.cr-account{background:#fff;color:#171717;border-radius:50px;padding:11px 14px;min-height:40px;white-space:nowrap}
-.cr-cart b{background:#6844e8}.cr-service{display:none}
-.cr-account:hover,.cr-cart:hover{background:#f5f5f7}
-.wrap{max-width:1460px;padding:0 40px}
-
-
-/* Checkout follows the live Cerood storefront shell. */
-:root{--cerood-ink:#171717;--cerood-border:#e8e8e8}
-body{background:#fff!important;color:#171717!important}
-header.cr-header{background:#fff;border:0;box-shadow:none;padding:0;display:block}
-header.cr-header a{color:inherit;font-size:inherit}
-header.cr-header .cr-brand span{color:#fff}
-header.cr-header .cr-search input{border:0;padding:12px 0;outline:0}
-header.cr-header .cr-cart,header.cr-header .cr-account{color:#171717}
-main{max-width:1460px;margin:25px auto;padding:0 40px}
-main>h1{font-size:27px!important;margin:0 0 7px;color:#171717}
-main>.muted{margin:0 0 18px}
-.grid{grid-template-columns:minmax(0,1.55fr) minmax(320px,1fr);gap:20px;align-items:start}
-.card{background:#fff;border:1px solid #edf0f4;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.04);padding:23px}
-.card h2{color:#171717}.item img{background:#f5f5f7}
-.grid>aside{position:sticky;top:14px}
-.btn{background:#171717;border-radius:8px;font-weight:600;min-height:43px}
-.btn:hover:not(:disabled){background:#333}.btn:disabled{background:#aaa}
-.field input:focus,.field textarea:focus,#checkoutOtp:focus{outline:2px solid #d7a7a8;border-color:#d7a7a8}
-.link{color:#a86c6d}.notice{background:#fff9f2;border-color:#f2d2a5;color:#55412b}
-.checkout-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.checkout-heading a{font-size:12px;color:#a86c6d;text-decoration:none;font-weight:600}
-.cr-mobile-nav{display:none}
-@media(max-width:1000px){.cr-header-inner{margin:10px 12px 0;padding:12px}.cr-brand span{display:none}.cr-location{min-width:125px}.cr-service{display:none}}
-@media(max-width:850px){main{padding:0 13px}.cr-header-inner{flex-wrap:wrap;gap:9px}.cr-search{order:3;flex-basis:100%}.cr-actions{margin-left:auto;gap:7px}.cr-brand img{height:43px}.cr-cart-label{display:none}.grid{grid-template-columns:1fr}.grid>aside{position:static}}
-@media(max-width:650px){.cr-header-inner{display:grid;grid-template-columns:auto 1fr auto;gap:9px;margin:8px 9px 0;padding:10px;min-height:0}.cr-brand img{height:42px}.cr-search{grid-column:1/-1;grid-row:2;min-height:40px}.cr-actions{grid-column:2/4;grid-row:1;justify-content:flex-end;gap:5px}.cr-location{min-width:0;max-width:130px;padding:7px;font-size:9px}.cr-location strong{max-width:104px;font-size:10px}.cr-cart,.cr-account{padding:8px;font-size:11px;min-height:36px}.cr-account span,.cr-cart-label{display:none}main{margin:20px auto 90px}.card{padding:17px}.cr-mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:50;justify-content:space-around;align-items:center;background:#fff;border-top:1px solid #e2e8f0;padding:8px 4px calc(8px + env(safe-area-inset-bottom))}.cr-mobile-nav a{font-size:10px;color:#475569;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:65px;text-decoration:none}.cr-mobile-nav .cr-nav-icon{font-size:19px}.cr-mobile-nav a[aria-current="page"]{color:#a86c6d;font-weight:700}}
-</style></head><body><header class="cr-header"><div class="cr-header-inner"><a aria-label="Cerood Renewed home" class="cr-brand" href="/renewed.html"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>RENEWED</span></a><div class="cr-search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search renewed products" autocomplete="off" id="headerProductSearch" placeholder="Search TV, fridge, washing machine, laptop..." type="search"/></div><nav aria-label="Renewed navigation" class="cr-actions"><button class="cr-location" title="Delivery location" type="button"><span>Delivery to<strong id="renewedDeliveryLocation">Select location</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><a class="cr-service" href="/">Home Services</a><a aria-label="Renewed cart" class="cr-cart" href="/renewed-checkout.html">🛒 <span class="cr-cart-label">Cart</span><b id="renewedCartCount">0</b></a><a aria-label="Renewed orders and account" class="cr-account" href="/renewed-dashboard.html">♙ <span>My Orders</span></a></nav></div></header><main><div class="checkout-heading"><h1 style="font-size:25px">Renewed checkout</h1><a href="/renewed.html">← Continue shopping</a></div><p class="muted">Check your selected Renewed products and current prices.</p><div id="status">Checking availability…</div><div class="grid"><div><section class="card"><h2>Your products</h2><div id="items"></div><a class="btn" href="/renewed.html">Browse products</a></section><section class="card"><h2>Delivery address</h2><p class="muted">Enter your delivery address. Payment is available only after mobile OTP verification and server-side stock and price checks.</p><form id="addressForm" novalidate><div class="address-grid"><div class="field"><label for="fullName">Full name *</label><input id="fullName" name="fullName" autocomplete="name" maxlength="100" required></div><div class="field"><label for="phone">Mobile number *</label><input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" pattern="[6-9][0-9]{9}" required></div><div class="field full"><label for="door">Door / flat number and street *</label><input id="door" name="door" autocomplete="address-line1" maxlength="180" required></div><div class="field full"><label for="area">Area / landmark *</label><input id="area" name="area" autocomplete="address-line2" maxlength="150" required></div><div class="field"><label for="city">City / town *</label><input id="city" name="city" autocomplete="address-level2" maxlength="100" required></div><div class="field"><label for="district">District *</label><input id="district" name="district" maxlength="100" required></div><div class="field"><label for="state">State *</label><input id="state" name="state" value="Tamil Nadu" autocomplete="address-level1" maxlength="100" required></div><div class="field"><label for="pincode">Pincode *</label><input id="pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[1-9][0-9]{5}" required></div></div><button class="btn" type="submit" style="margin-top:18px">Save address on this device</button><div id="addressStatus" class="address-status" role="status">Save your Tamil Nadu address to check whether a district delivery rate has been configured.</div></form></section><div class="notice" id="checkoutNotice"><strong>Checkout is currently closed.</strong><br>Prices shown are estimates until the backend confirms the amount and stock. No payment will be collected while checkout is disabled.</div></div><aside><section class="card"><h2>Price summary</h2><div class="row"><span>Product subtotal</span><strong id="subtotal">—</strong></div><div class="row"><span>Delivery fee</span><span id="deliveryFee">To be confirmed</span></div><div class="row total"><span>Estimated total</span><span id="estimatedTotal">Not available yet</span></div><div id="otpPanel" style="border-top:1px solid #eee;padding-top:16px;margin-top:16px"><h2 style="font-size:15px">Verify mobile to buy</h2><p class="muted">Use the same registered mobile number as your delivery address.</p><div id="msg91Captcha" style="margin:12px 0"></div><button class="btn" id="sendOtpBtn" type="button" disabled>Send OTP</button><div id="otpEntry" hidden style="margin-top:12px"><label for="checkoutOtp" class="muted">Enter OTP</label><input id="checkoutOtp" inputmode="numeric" autocomplete="one-time-code" maxlength="8" style="padding:12px;width:100%;border:1px solid #ddd;border-radius:8px;margin:8px 0"><button class="btn" id="verifyOtpBtn" type="button">Verify OTP</button></div><div id="otpStatus" class="address-status" role="status">Checking checkout availability…</div></div><div id="paymentMethods" class="card" style="padding:15px;margin:15px 0 0;border:1px solid #e6eaf0"><h2 style="font-size:15px;margin-bottom:12px">Choose payment method</h2><label style="display:flex;gap:10px;align-items:center;margin-bottom:12px;font-size:13px"><input type="radio" name="renewedPaymentMethod" value="cod" checked> 💵 Cash on Delivery <small id="codAvailability" style="color:#64748b">Checking…</small></label><label style="display:flex;gap:10px;align-items:center;font-size:13px"><input type="radio" name="renewedPaymentMethod" value="online"> 💳 Online Payment (Razorpay) <small id="onlineAvailability" style="color:#64748b">Checking…</small></label></div><button class="btn" id="payBtn" type="button" disabled style="width:100%;margin-top:14px">Payment coming soon</button><div id="paymentStatus" class="address-status" role="status">No payment has been initiated.</div><button class="link" type="button" id="checkOrderBtn" hidden>Check my order status</button></section></aside></div></main><script>(()=>{'use strict';const $=id=>document.getElementById(id),api='https://catus-backend-d2js.onrender.com';const fields=['fullName','phone','door','area','city','district','state','pincode'];const addressKey='cerood_renewed_address_draft';let quoteReady=false,checkoutEnabled=false,codEnabled=false,onlineEnabled=false,deliveryReady=false,otpWidgetReady=false,otpToken='',otpPhone='',lastOrderId='',busy=false;try{const saved=JSON.parse(sessionStorage.getItem(addressKey)||'{}');for(const key of fields){if(typeof saved[key]==='string'&&key!=='phone'&&key!=='pincode')$(key).value=saved[key];}}catch{}$('addressForm').addEventListener('submit',e=>{e.preventDefault();const data=Object.fromEntries(fields.map(k=>[k,$(k).value.trim()]));const message=$('addressStatus');if(!/^[6-9]\d{9}$/.test(data.phone)){message.textContent='Enter a valid 10-digit Indian mobile number.';message.className='address-status error';$('phone').focus();return}if(!/^[1-9]\d{5}$/.test(data.pincode)){message.textContent='Enter a valid 6-digit pincode.';message.className='address-status error';$('pincode').focus();return}if(fields.some(k=>!data[k])){message.textContent='Please fill all required address fields.';message.className='address-status error';return}try{sessionStorage.setItem(addressKey,JSON.stringify(data));message.textContent='Address saved. Checking district delivery rate…';message.className='address-status';checkDelivery(data)}catch{message.textContent='Could not save address in this browser. Please check browser storage settings.';message.className='address-status error'}});async function checkDelivery(address){const msg=$('addressStatus');deliveryReady=false;updatePayButton();$('deliveryFee').textContent='Checking…';$('estimatedTotal').textContent='Not available yet';if(!items.length||!quoteReady){msg.textContent='Product quote is not ready. Refresh and try again.';msg.className='address-status error';return}try{const r=await fetch(api+'/api/renewed/delivery-quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items,address})});const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Delivery quote unavailable');$('subtotal').textContent='₹'+Number(d.subtotal).toLocaleString('en-IN');if(d.delivery_fee===null){$('deliveryFee').textContent='To be confirmed';$('estimatedTotal').textContent='Not available yet';msg.textContent=d.message;msg.className='address-status'}else{$('deliveryFee').textContent='₹'+Number(d.delivery_fee).toLocaleString('en-IN');$('estimatedTotal').textContent='₹'+Number(d.total).toLocaleString('en-IN');deliveryReady=true;updatePayButton();msg.textContent=d.message+' No order or payment has been created.';msg.className='address-status ok'}}catch(e){$('deliveryFee').textContent='To be confirmed';$('estimatedTotal').textContent='Not available yet';deliveryReady=false;updatePayButton();msg.textContent='Delivery check failed: '+e.message;msg.className='address-status error'}}let items=[];try{items=JSON.parse((new URLSearchParams(location.search).get('mode')==='buy'?sessionStorage.getItem('cerood_renewed_buy_now'):localStorage.getItem('cerood_renewed_cart'))||'[]')}catch{}if(!Array.isArray(items))items=[];items=items.filter(x=>x&&/^[a-zA-Z0-9_-]{1,80}$/.test(String(x.product_id))&&Number.isSafeInteger(Number(x.quantity))&&Number(x.quantity)>0).slice(0,20).map(x=>({product_id:x.product_id,quantity:Number(x.quantity)}));if(!items.length){$('status').textContent='Your Renewed cart is empty. Select a product to continue.';initCheckout();return}fetch(api+'/api/renewed/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items})}).then(async r=>{const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Quote unavailable');$('status').textContent='Current product prices and availability verified.';quoteReady=true;refreshOtpButton();updatePayButton();$('subtotal').textContent='₹'+Number(d.subtotal).toLocaleString('en-IN');for(const p of d.items){const row=document.createElement('div');row.className='item';const img=document.createElement('img');if(p.image_url&&/^https?:\/\//.test(p.image_url))img.src=p.image_url;img.alt=p.name||'Product';const info=document.createElement('div');const name=document.createElement('div');name.className='name';name.textContent=p.name;const sub=document.createElement('div');sub.className='muted';sub.textContent='Quantity: '+p.quantity+' · '+(p.condition||'Renewed')+' · '+(p.warranty_days?`${p.warranty_days} day warranty`:'Warranty details on product page');const price=document.createElement('div');price.className='money';price.textContent='₹'+Number(p.line_total).toLocaleString('en-IN');info.append(name,sub,price);row.append(img,info);$('items').append(row)}}).catch(e=>{$('status').textContent='Cannot show quote: '+e.message;$('subtotal').textContent='—'});
-// Renewed secure checkout. No OTP access token is written to local/session storage.
-const MSG91_WIDGET_ID='366965657347303138353039';
-const MSG91_WIDGET_TOKEN='567815T0OZZpNFK06a9ba743P1';
-const currency=n=>'₹'+Number(n).toLocaleString('en-IN');
-function setPayStatus(text,error=false){$('paymentStatus').textContent=text;$('paymentStatus').className='address-status '+(error?'error':'ok');}
-function selectedMethod(){return document.querySelector('input[name=renewedPaymentMethod]:checked')?.value||'cod';}
-function updatePayButton(){const method=selectedMethod(),enabled=method==='cod'?codEnabled:onlineEnabled;
-const ready=enabled&&quoteReady&&deliveryReady&&Boolean(otpToken)&&otpPhone===$('phone').value.trim()&&!busy&&!lastOrderId;
-$('payBtn').disabled=!ready;
-$('payBtn').textContent=busy?'Please wait…':lastOrderId?'Order placed':ready?(method==='cod'?'Place Cash on Delivery Order':'Pay Online Securely'):(enabled?'Verify mobile & save address':'Selected payment method unavailable');}
-for(const el of document.querySelectorAll('input[name=renewedPaymentMethod]'))el.addEventListener('change',updatePayButton);
-function setOtpStatus(text,error=false){$('otpStatus').textContent=text;$('otpStatus').className='address-status '+(error?'error':'ok');}
-function refreshOtpButton(){const validPhone=/^[6-9]\d{9}$/.test($('phone').value.trim());$('sendOtpBtn').disabled=!otpWidgetReady||!validPhone||busy||otpSending;}
-async function postJson(path,body){const r=await fetch(api+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid backend response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d;}
-function currentAddress(){return {full_name:$('fullName').value.trim(),phone:$('phone').value.trim(),street:$('door').value.trim(),area:$('area').value.trim(),city:$('city').value.trim(),district:$('district').value.trim(),state:$('state').value.trim(),pincode:$('pincode').value.trim()};}
-function getMsgToken(data){if(typeof data==='string')return data.trim();const a=[data?.accessToken,data?.access_token,data?.['access-token'],data?.token,data?.data?.accessToken,data?.data?.access_token,data?.data?.['access-token'],data?.data?.token,data?.response?.accessToken,data?.response?.access_token,data?.response?.['access-token'],data?.result?.accessToken,data?.result?.['access-token'],data?.['access-token'],data?.data?.message,data?.response?.message,data?.message];return String(a.find(x=>typeof x==='string'&&x.trim()&&x.length>40)||'').trim();}
-function msg91Error(e){const raw=typeof e==='string'?e:(e?.message||e?.error||e?.data?.message||e?.response?.message||'');const msg=typeof raw==='string'?raw.trim():'';if(/expired/i.test(msg))return 'OTP expired. Request a fresh OTP.';if(/invalid|incorrect|mismatch/i.test(msg))return 'MSG91 rejected this OTP. Request a new OTP and use only the latest code.';if(/request|reqid/i.test(msg))return 'OTP session expired or mismatched. Send a new OTP.';return msg&&msg.length<180?'MSG91: '+msg:'MSG91 request failed. Check captcha, widget configuration and SMS delivery settings.';}
-let widgetPromise,otpRequestId='',otpSending=false;
-function loadOtpWidget(){if(widgetPromise)return widgetPromise;widgetPromise=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://verify.msg91.com/otp-provider.js';script.onload=()=>{try{if(typeof window.initSendOTP!=='function')throw Error('OTP widget unavailable');window.initSendOTP({widgetId:MSG91_WIDGET_ID,tokenAuth:MSG91_WIDGET_TOKEN,exposeMethods:true,captchaRenderId:'msg91Captcha',success:()=>{},failure:()=>{}});resolve()}catch(e){reject(e)}};script.onerror=()=>reject(Error('OTP service could not load'));document.head.append(script)});return widgetPromise;}
-async function initCheckout(){
-  try{
-    const r=await fetch(api+'/api/renewed/checkout-status',{cache:'no-store'});
-    const d=await r.json();
-    onlineEnabled=Boolean(r.ok&&d.success&&d.payment_enabled&&d.reservations_enabled);
-    codEnabled=Boolean(r.ok&&d.success&&d.cod_enabled);
-    checkoutEnabled=onlineEnabled||codEnabled;
-    $('codAvailability').textContent=codEnabled?'Available':'Not available yet';
-    $('onlineAvailability').textContent=onlineEnabled?'Available':'Not available yet';
-    document.querySelector('input[value=cod][name=renewedPaymentMethod]').disabled=!codEnabled;
-    document.querySelector('input[value=online][name=renewedPaymentMethod]').disabled=!onlineEnabled;
-    document.querySelector('input[name=renewedPaymentMethod][value='+(codEnabled?'cod':'online')+']').checked=true;
-    $('checkoutNotice').innerHTML=checkoutEnabled
-      ?'<strong>Checkout available.</strong><br>Final price and stock are checked again by the backend. COD is payable on delivery; online payment is confirmed only after server verification.'
-      :'<strong>Purchases are not open yet.</strong><br>OTP testing is available. Orders cannot be placed until Cerood enables a payment method.';
-    if(!checkoutEnabled)setPayStatus('COD and online payment are not enabled by Cerood yet.');
-    setOtpStatus('Loading mobile verification…');
-    await loadOtpWidget();
-    otpWidgetReady=true;
-    setOtpStatus(quoteReady?'Enter your mobile number and complete captcha to receive OTP.':'Enter your mobile number and complete captcha to test OTP. Select a product before buying.');
-  }catch(e){
-    checkoutEnabled=false;
-    otpWidgetReady=false;
-    setOtpStatus('Mobile verification unavailable: '+e.message,true);
-    setPayStatus('Checkout is unavailable. No payment can be initiated.',true);
-  }finally{refreshOtpButton();updatePayButton()}
+        /* Grid Layout - 60% Left and 40% Right */
+        .checkout-grid { display: grid; grid-template-columns: 58% 40%; gap: 2%; margin-top: 20px; align-items: start; }
+        
+        /* CARD BOXES: Height auto to eliminate unwanted gaps below buttons */
+        .card-box { 
+    background: #fff; 
+    padding: 25px; 
+    border-radius: 12px; 
+    border: none; 
+    box-shadow: none; 
+    margin-bottom: 20px; 
+    height: auto;
+    min-height: 580px; /* Fixed height koduthu motha page scroll aaguratha thadukka */
+    box-sizing: border-box; 
+    display: flex; 
+    flex-direction: column; 
 }
-$('sendOtpBtn').addEventListener('click',()=>{
- const phone=$('phone').value.trim();
- if(otpSending)return;
- if(!/^[6-9]\d{9}$/.test(phone)){setOtpStatus('Enter a valid delivery mobile number.',true);return}
- if(typeof window.sendOtp!=='function'){setOtpStatus('OTP widget is still loading. Refresh the page if it does not load.',true);return}
- if(typeof window.isCaptchaVerified==='function'&&!window.isCaptchaVerified()){setOtpStatus('Complete the captcha first.',true);return}
- otpToken='';otpPhone='';otpRequestId='';$('otpEntry').hidden=true;$('checkoutOtp').value='';updatePayButton();
- otpSending=true;refreshOtpButton();setOtpStatus('Sending OTP to your mobile…');
- const onSuccess=data=>{
-   otpSending=false;
-   const result=typeof data==='object'&&data?data:{};
-   if(result.type==='error'||result.success===false){setOtpStatus(msg91Error(result),true);refreshOtpButton();return}
-   otpPhone=phone;
-   otpRequestId=String(result.reqId||result.req_id||result.data?.reqId||result.data?.req_id||result.message||'').trim();
-   const directToken=getMsgToken(data);
-   if(directToken&&result.invisibleVerified===true){otpToken=directToken;setOtpStatus('Mobile verified. Complete your delivery address to continue.');updatePayButton();}
-   else{$('otpEntry').hidden=false;setOtpStatus('OTP request accepted. Enter the code received. If no SMS arrives, check MSG91 widget logs.');}
-   refreshOtpButton();
- };
- const onFailure=e=>{otpSending=false;setOtpStatus('OTP send failed. '+msg91Error(e),true);refreshOtpButton()};
- try{window.sendOtp('91'+phone,onSuccess,onFailure)}catch(e){onFailure(e)}
-});
-$('verifyOtpBtn').addEventListener('click',()=>{const code=$('checkoutOtp').value.trim();if(!/^\d{4,8}$/.test(code)){setOtpStatus('Enter the OTP sent to your mobile.',true);return}if(!otpPhone||$('phone').value.trim()!==otpPhone){setOtpStatus('Mobile changed. Send a fresh OTP.',true);return}if(typeof window.verifyOtp!=='function'){setOtpStatus('OTP service unavailable.',true);return}$('verifyOtpBtn').disabled=true;setOtpStatus('Verifying OTP with MSG91…');try{const onSuccess=async data=>{const token=getMsgToken(data);if(!token){setOtpStatus('MSG91 verified OTP but did not return a usable access token. Request a new OTP.',true);$('verifyOtpBtn').disabled=false;return}try{const d=await postJson('/api/renewed/secure-quote',{accessToken:token,items,address:currentAddress()});otpToken=token;$('subtotal').textContent=currency(d.subtotal);$('deliveryFee').textContent=currency(d.delivery_fee);$('estimatedTotal').textContent=currency(d.total);deliveryReady=true;setOtpStatus('Mobile verified and current price confirmed.');$('otpEntry').hidden=true;updatePayButton()}catch(e){otpToken=token;setOtpStatus('OTP verified by MSG91. Backend checkout check: '+e.message+'. Payment remains disabled.',true);updatePayButton();$('verifyOtpBtn').disabled=false}};const onFailure=e=>{setOtpStatus(msg91Error(e),true);$('verifyOtpBtn').disabled=false};if(otpRequestId)window.verifyOtp(code,onSuccess,onFailure,otpRequestId);else window.verifyOtp(code,onSuccess,onFailure)}catch(e){setOtpStatus(msg91Error(e),true);$('verifyOtpBtn').disabled=false}});
-$('phone').addEventListener('input',()=>{refreshOtpButton();if(otpPhone&&$('phone').value.trim()!==otpPhone){otpToken='';otpRequestId='';$('otpEntry').hidden=true;setOtpStatus('Mobile changed. Verify the new number again.',true);updatePayButton()}});
-for(const id of ['door','area','city','district','state','pincode'])$(id).addEventListener('input',()=>{deliveryReady=false;updatePayButton()});
-async function checkOrder(){if(!lastOrderId||!otpToken)return;try{const d=await postJson('/api/renewed/order-status',{order_id:lastOrderId,accessToken:otpToken});const s=d.order?.status||'unknown';setPayStatus(s==='paid'?'Payment confirmed! Your Renewed order ID: '+lastOrderId:'Order '+lastOrderId+' status: '+s+'. If money was debited, do not pay again.')}catch(e){setPayStatus('Order status unavailable: '+e.message+'. If debited, do not pay again.',true)}}
-$('checkOrderBtn').addEventListener('click',checkOrder);
-$('payBtn').addEventListener('click',async()=>{if(busy||!checkoutEnabled||!otpToken||!quoteReady||!deliveryReady||lastOrderId)return;const address=currentAddress();if(address.phone!==otpPhone){setPayStatus('Mobile changed; verify OTP again.',true);return}
-const method=selectedMethod();if(method==='cod'){
- if(!codEnabled)return;busy=true;updatePayButton();setPayStatus('Placing COD order. Do not close or repeat this request…');
- const key='cerood_renewed_cod_request';let requestId=sessionStorage.getItem(key);
- if(!requestId){requestId=crypto.randomUUID();sessionStorage.setItem(key,requestId)}
- try{const d=await postJson('/api/renewed/place-cod-order',{accessToken:otpToken,items,address,request_id:requestId});
- lastOrderId=d.order_id;sessionStorage.removeItem(key);setPayStatus('Cash on Delivery order confirmed! Order ID: '+d.order_id+' · Pay ₹'+Number(d.total).toLocaleString('en-IN')+' on delivery.');
- $('checkoutNotice').textContent='COD order placed successfully. No online payment was charged.';
- $('checkOrderBtn').hidden=false;$('checkOrderBtn').textContent='Open My Orders';$('checkOrderBtn').onclick=()=>location.href='/renewed-dashboard.html';
- if(new URLSearchParams(location.search).get('mode')==='buy')sessionStorage.removeItem('cerood_renewed_buy_now');
- else localStorage.removeItem('cerood_renewed_cart');
- }catch(e){setPayStatus('COD order not confirmed: '+e.message+' Retry with the same request; if unsure, check My Orders first.',true)}
- finally{busy=false;updatePayButton()}return;
+        .card-title { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: none; padding-bottom: 0; flex-shrink: 0; }
+        
+        /* Localized Scrolling inside Containers */
+        .card-body-scroll { 
+    flex-grow: 1; 
+    overflow-y: auto; /* Antha box-ku ulla mattum scroll varum */
+    padding-right: 4px; 
+    box-sizing: border-box; 
 }
-if(!onlineEnabled)return;
-busy=true;updatePayButton();setPayStatus('Rechecking price, reserving stock and creating Razorpay order…');try{const d=await postJson('/api/renewed/prepare-payment',{accessToken:otpToken,items,address});if(!d.order_id||!d.razorpay_order_id||!d.key_id||!Number.isSafeInteger(Number(d.amount))||Number(d.amount)<100)throw Error('Invalid payment order. Contact support.');lastOrderId=d.order_id;$('checkOrderBtn').hidden=false;updatePayButton();setPayStatus('Order reserved for 15 minutes. Opening secure Razorpay checkout…');await new Promise((resolve,reject)=>{if(window.Razorpay)return resolve();const s=document.createElement('script');s.src='https://checkout.razorpay.com/v1/checkout.js';s.onload=resolve;s.onerror=()=>reject(Error('Payment window failed to load. Do not start another payment.'));document.head.append(s)});const rz=new window.Razorpay({key:d.key_id,amount:d.amount,currency:'INR',name:'Cerood Renewed',description:'Renewed appliance order',order_id:d.razorpay_order_id,prefill:{name:address.full_name,contact:address.phone},notes:{renewed_order_id:lastOrderId},theme:{color:'#6d4aff'},handler:async proof=>{setPayStatus('Payment response received. Verifying with backend…');try{const verified=await postJson('/api/renewed/verify-payment',proof);if(verified.status==='paid'){setPayStatus('Payment verified! Order confirmed: '+lastOrderId);$('checkoutNotice').textContent='Payment confirmed. Thank you for choosing Cerood Renewed.'}else{await checkOrder()}}catch(e){setPayStatus('Payment verification pending: '+e.message+'. If debited, do not pay again; check order status.',true);await checkOrder()}},modal:{ondismiss:()=>{setPayStatus('Payment window closed. Your reservation may still be active. Check order status; do not start another payment.')},escape:false}});rz.on('payment.failed',()=>setPayStatus('Payment was not confirmed. If money was debited, check order status; do not pay again.',true));rz.open()}catch(e){setPayStatus(e.message+'. If an order was reserved, check order status before retrying.',true)}finally{busy=false;updatePayButton()}});
-initCheckout();})();
-</script><nav aria-label="Renewed mobile navigation" class="cr-mobile-nav"><a href="/renewed.html"><span class="cr-nav-icon">⌂</span>Home</a><a href="/renewed.html#products-section"><span class="cr-nav-icon">▦</span>Products</a><a href="/renewed-checkout.html"><span class="cr-nav-icon">🛒</span>Cart</a><a href="/renewed-dashboard.html"><span class="cr-nav-icon">♙</span>My Orders</a></nav><script>
-/* Renewed shared header — no changes to secure checkout or payment logic. */
-(()=>{
- const count=document.getElementById('renewedCartCount');
- const refresh=()=>{try{const cart=JSON.parse(localStorage.getItem('cerood_renewed_cart')||'[]');count.textContent=Array.isArray(cart)?cart.reduce((sum,x)=>sum+(Number(x.quantity)||0),0):0}catch{count.textContent='0'}};
- refresh();window.addEventListener('pageshow',refresh);window.addEventListener('storage',refresh);
- const search=document.getElementById('headerProductSearch');
- search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();location.href='/renewed.html?search='+encodeURIComponent(search.value.trim())+'#products-section'}});
- try{const saved=JSON.parse(localStorage.getItem('cerood_selected_location')||'null');if(saved){const name=typeof saved==='string'?saved:[saved.area,saved.city,saved.pincode].filter(Boolean).join(', ');if(name)document.getElementById('renewedDeliveryLocation').textContent=name}}catch{}
- document.querySelector('.cr-location').addEventListener('click',()=>{location.href='/'});
-})();
+.card-body-scroll::-webkit-scrollbar { width: 5px; }
+.card-body-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        /* Saved Address Container Styles */
+        .saved-address-card { background: #f0fdf4; border: none; border-radius: 10px; padding: 16px; margin-bottom: 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+        .saved-address-content-row { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; gap: 10px; }
+        .saved-address-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #0f172a; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .saved-address-info p { margin: 0; font-size: 13px; color: #334155; line-height: 1.5; }
+        
+        /* Action Buttons */
+        .action-btns-inline { display: flex; align-items: center; gap: 14px; white-space: nowrap; }
+        
+        .edit-text-btn { background: none; border: none; color: #0284c7; font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; transition: 0.2s; display: flex; align-items: center; gap: 4px; }
+        .edit-text-btn:hover { text-decoration: none; color: #0369a1; }
+
+        .remove-text-btn { background: none; border: none; color: #ef4444; font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; transition: 0.2s; display: flex; align-items: center; gap: 4px; }
+        .remove-text-btn:hover { text-decoration: none; color: #dc2626; }
+        
+        .add-new-btn { background: #f0fdf4; color: #10b981; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .add-new-btn:hover { background: #dcfce7; }
+
+        /* Form Inputs */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full { grid-column: span 2; }
+        .form-group label { font-size: 13px; font-weight: 600; color: #475569; }
+        .form-input { padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: 0.2s; color: #1e293b; width: 100%; box-sizing: border-box; }
+        .form-input:focus { border-color: #0284c7; background: #fff; }
+        .form-input.error { border-color: #ef4444 !important; background: #fef2f2 !important; }
+
+        /* Save Address Button */
+        .save-addr-action-btn { background: #10b981; color: #fff; border: none; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 10px; }
+        .save-addr-action-btn:hover { background: #059669; }
+
+        /* Order Summary */
+        .summary-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #475569; }
+        .summary-item.total { font-size: 17px; font-weight: 700; color: #0f172a; border-top: none; padding-top: 4px; margin-top: 8px; }
+        .summary-item.discount { color: #16a34a; font-weight: 600; }
+        
+        /* Confirm Button placed nicely right after content */
+        .confirm-btn { background: #0284c7; color: #fff; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.2s; margin-top: 15px; box-sizing: border-box; flex-shrink: 0; }
+        .confirm-btn:hover { background: #0369a1; }
+
+        /* Success View */
+        #successPageView { display: none; text-align: center; padding: 50px 20px; }
+        .success-animation-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 30px; }
+        .checkmark-circle { width: 90px; height: 90px; position: relative; display: inline-block; background: #10b981; border-radius: 50%; transform: scale(0); }
+        .checkmark-circle.animate { animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .checkmark { width: 38px; height: 80px; display: block; margin: 0 auto; }
+        .checkmark.draw::after { content: ''; display: block; width: 0px; height: 0px; border: solid white; border-width: 0 5px 5px 0; transform: rotate(45deg); position: absolute; top: 24px; left: 28px; }
+        .checkmark.draw.animate::after { animation: checkmarkDraw 0.4s ease-in-out 0.3s forwards; }
+        @keyframes checkmarkDraw { 0% { width: 0; height: 0; opacity: 0; } 50% { width: 14px; height: 0; opacity: 1; } 100% { width: 18px; height: 35px; opacity: 1; } }
+        @keyframes scaleUp { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+        .receipt-box { background: #fff; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 16px; text-align: left; position: relative; border-top: 6px solid #10b981; }
+        .receipt-row { display: flex; justify-content: space-between; border-bottom: none; padding: 10px 0; font-size: 14px; }
+        .receipt-label { color: #64748b; font-weight: 500; }
+        .receipt-value { color: #0f172a; font-weight: 700; text-align: right; max-width: 60%; }
+
+        .payment-method-card { border: none; border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; background: #f8fafc; }
+        .payment-method-card.selected { background: #e0f2fe; }
+        .payment-method-card input { accent-color: #0284c7; width: 16px; height: 16px; }
+
+        @media (max-width: 900px) { .checkout-grid { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: span 1; } }
+        /* Mobile Bottom Nav Styles for Checkout */
+.mobile-bottom-nav {
+    display: none; 
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    z-index: 99999;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+.bot-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    background: none; border: none; font-size: 11px; color: #64748b; cursor: pointer;
+}
+.bot-nav-item i { font-size: 18px; margin-bottom: 4px; }
+
+@media (max-width: 850px) {
+    .mobile-bottom-nav { display: flex !important; }
+    body { padding-bottom: 70px !important; }
+}
+/* Mobile view-la footer bottom nav-kku mela space irukka */
+    @media (max-width: 850px) {
+        footer {
+            margin-bottom: 60px; /* Bottom nav bar-kku space */
+        }
+    }
+/* Bill Summary Modern Styling */
+.bill-summary-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 15px;
+}
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+    color: #475569;
+    margin-bottom: 10px;
+}
+.bill-row.total-bill {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    border-top: 1px dashed #cbd5e1;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.bill-row.amount-to-pay {
+    font-size: 16px;
+    font-weight: 700;
+    color: #16a34a;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 12px;
+    margin-top: 8px;
+}
+.fee-info-icon {
+    font-size: 11px;
+    color: #94a3b8;
+    cursor: pointer;
+    margin-left: 4px;
+}
+    
+
+/* =========================================================
+   CATUS CHECKOUT — CATUS CLEAN 2026
+   Same system as Home + Product + Dashboard
+   ========================================================= */
+
+:root {
+    --catus-primary: #6d4aff;
+    --catus-primary-hover: #5f3df0;
+    --catus-primary-soft: #f4f1ff;
+    --catus-text: #18181b;
+    --catus-text-2: #52525b;
+    --catus-text-3: #8a8a96;
+    --catus-page: #f7f7f8;
+    --catus-surface: #ffffff;
+    --catus-line: #ececef;
+    --catus-danger: #c65b67;
+    --catus-danger-soft: #fff5f6;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+body {
+    background: var(--catus-page) !important;
+    color: var(--catus-text) !important;
+    font-weight: 400 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+}
+
+p, span, div, a, label, li, small {
+    font-weight: 400;
+}
+
+/* HEADER */
+.checkout-header {
+    background: rgba(255,255,255,.96) !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #f0f0f2 !important;
+    padding: 12px 26px !important;
+    backdrop-filter: blur(12px);
+}
+
+.checkout-header img {
+    height: 40px !important;
+}
+
+.secure-badge {
+    color: var(--catus-text-2) !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    gap: 7px !important;
+}
+
+.secure-badge i {
+    color: var(--catus-primary) !important;
+}
+
+/* MAIN LAYOUT */
+.checkout-container {
+    max-width: 1160px !important;
+    padding: 22px 18px 30px !important;
+}
+
+.checkout-grid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(340px, 1fr) !important;
+    gap: 18px !important;
+    margin-top: 8px !important;
+}
+
+/* CARDS */
+.card-box {
+    background: #ffffff !important;
+    border: 0 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 7px 24px rgba(24,24,27,.045) !important;
+    padding: 20px !important;
+    margin-bottom: 16px !important;
+    height: auto !important;
+    min-height: 560px !important;
+}
+
+.card-title {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--catus-text) !important;
+    margin-bottom: 14px !important;
+}
+
+.card-title i {
+    color: var(--catus-primary) !important;
+}
+
+/* scrollbar */
+.card-body-scroll {
+    padding-right: 3px !important;
+}
+
+.card-body-scroll::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+.card-body-scroll::-webkit-scrollbar-thumb {
+    background: #d9d9df !important;
+    border-radius: 8px !important;
+}
+
+/* back button */
+.card-box button[onclick="goBackToProduct()"] {
+    color: var(--catus-text-2) !important;
+    font-weight: 500 !important;
+    font-size: 12.5px !important;
+}
+
+.card-box button[onclick="goBackToProduct()"] i {
+    color: var(--catus-primary) !important;
+}
+
+/* SAVED ADDRESS */
+.saved-address-card {
+    background: #f8f8f9 !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+    gap: 10px !important;
+}
+
+.saved-address-info h4 {
+    color: var(--catus-text) !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+}
+
+.saved-address-info h4 i {
+    color: var(--catus-primary) !important;
+}
+
+.saved-address-info p {
+    color: var(--catus-text-2) !important;
+    font-size: 12.5px !important;
+}
+
+.edit-text-btn {
+    color: var(--catus-primary) !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+.edit-text-btn:hover {
+    color: var(--catus-primary-hover) !important;
+}
+
+.remove-text-btn {
+    color: var(--catus-danger) !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+.remove-text-btn:hover {
+    color: #b94d59 !important;
+}
+
+.add-new-btn {
+    background: var(--catus-primary-soft) !important;
+    color: var(--catus-primary) !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    padding: 7px 10px !important;
+    font-size: 10.5px !important;
+    font-weight: 500 !important;
+}
+
+.add-new-btn:hover {
+    background: #ece7ff !important;
+}
+
+/* FORM */
+.form-grid {
+    gap: 12px !important;
+}
+
+.form-group {
+    gap: 5px !important;
+}
+
+.form-group label {
+    color: #666672 !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+}
+
+.form-input {
+    background: #fafafa !important;
+    color: var(--catus-text) !important;
+    border: 1px solid #e5e5e8 !important;
+    border-radius: 10px !important;
+    padding: 11px 12px !important;
+    font-size: 13px !important;
+    box-shadow: none !important;
+}
+
+.form-input:focus {
+    background: #ffffff !important;
+    border-color: var(--catus-primary) !important;
+    box-shadow: 0 0 0 3px rgba(109,74,255,.07) !important;
+}
+
+.form-input.error {
+    border-color: #d97882 !important;
+    background: #fffafa !important;
+}
+
+/* save address */
+.save-addr-action-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    padding: 11px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+}
+
+.save-addr-action-btn:hover {
+    background: var(--catus-primary-hover) !important;
+}
+
+/* error box */
+#errorAlert {
+    background: var(--catus-danger-soft) !important;
+    color: var(--catus-danger) !important;
+    border: 0 !important;
+    font-weight: 500 !important;
+    border-radius: 10px !important;
+}
+
+/* SUMMARY ITEMS */
+#summaryItemsContainer > div {
+    border-bottom: 1px solid #f1f1f3 !important;
+}
+
+#summaryItemsContainer img {
+    border-radius: 10px !important;
+    box-shadow: none !important;
+}
+
+#summaryItemsContainer div[style*="font-weight: 600"] {
+    font-weight: 500 !important;
+    color: var(--catus-text) !important;
+}
+
+#summaryItemsContainer div[style*="font-weight: 700"] {
+    font-weight: 600 !important;
+    color: var(--catus-text) !important;
+}
+
+/* BILL SUMMARY */
+.bill-summary-box {
+    background: #fafafa !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+    margin-bottom: 14px !important;
+}
+
+.bill-row {
+    color: var(--catus-text-2) !important;
+    font-size: 12.5px !important;
+    margin-bottom: 9px !important;
+}
+
+.bill-row.total-bill {
+    color: var(--catus-text) !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    border-top: 1px solid #ececef !important;
+    padding-top: 10px !important;
+}
+
+.bill-row.amount-to-pay {
+    color: var(--catus-text) !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border-top: 1px solid #ececef !important;
+    padding-top: 11px !important;
+}
+
+.fee-info-icon {
+    color: #a0a0aa !important;
+}
+
+/* PAYMENT METHODS */
+.payment-method-card {
+    background: #f8f8f9 !important;
+    border: 0 !important;
+    border-radius: 11px !important;
+    padding: 10px 11px !important;
+    margin-bottom: 7px !important;
+}
+
+.payment-method-card.selected {
+    background: var(--catus-primary-soft) !important;
+    box-shadow: inset 0 0 0 1px rgba(109,74,255,.07) !important;
+}
+
+.payment-method-card input {
+    accent-color: var(--catus-primary) !important;
+}
+
+.payment-method-card strong {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+.payment-method-card span {
+    color: #777783 !important;
+}
+
+/* payment label */
+.card-body-scroll label[style*="font-weight: 700"] {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+}
+
+/* CONFIRM */
+.confirm-btn {
+    background: var(--catus-primary) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 11px !important;
+    padding: 13px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    margin-top: 12px !important;
+}
+
+.confirm-btn:hover {
+    background: var(--catus-primary-hover) !important;
+}
+
+/* SUCCESS / RECEIPT */
+#successPageView h1 {
+    color: var(--catus-text) !important;
+    font-weight: 600 !important;
+}
+
+#successPageView p {
+    color: var(--catus-text-2) !important;
+}
+
+.checkmark-circle {
+    background: var(--catus-primary) !important;
+}
+
+.receipt-box {
+    background: #ffffff !important;
+    border: 0 !important;
+    border-top: 4px solid var(--catus-primary) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 26px rgba(24,24,27,.05) !important;
+}
+
+.receipt-box h3 {
+    color: var(--catus-primary) !important;
+    font-weight: 600 !important;
+}
+
+.receipt-label {
+    color: #777783 !important;
+    font-weight: 400 !important;
+}
+
+.receipt-value {
+    color: var(--catus-text) !important;
+    font-weight: 500 !important;
+}
+
+#dispTotal {
+    color: var(--catus-primary) !important;
+    font-weight: 600 !important;
+}
+
+.receipt-row[style*="background: #f8fafc"] {
+    background: #f8f8f9 !important;
+    border-radius: 10px !important;
+}
+
+/* MOBILE NAV */
+.mobile-bottom-nav {
+    background: rgba(255,255,255,.97) !important;
+    border-top: 1px solid #f0f0f2 !important;
+    box-shadow: 0 -4px 18px rgba(24,24,27,.05) !important;
+}
+.mobile-bottom-nav .bot-nav-item svg {
+    width: 23px !important;
+    height: 23px !important;
+    fill: none !important;
+    stroke: #111111 !important;
+    stroke-width: 2 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    margin-bottom: 2px !important;
+}
+
+.mobile-bottom-nav .bot-nav-item span {
+    font-size: 9.5px !important;
+    color: #737373 !important;
+}
+
+.bot-nav-item {
+    color: #777783 !important;
+    font-weight: 400 !important;
+}
+
+.bot-nav-item:hover,
+.bot-nav-item.active {
+    color: var(--catus-primary) !important;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .checkout-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    .card-box {
+        min-height: 0 !important;
+        padding: 16px !important;
+        border-radius: 16px !important;
+    }
+
+    .checkout-container {
+        padding: 14px 12px 24px !important;
+    }
+}
+
+@media (max-width: 540px) {
+    .checkout-header {
+    padding: 10px 12px !important;
+
+    position: sticky !important;
+    top: 0 !important;
+
+    z-index: 99990 !important;
+
+    background: #ffffff !important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05) !important;
+}
+
+    .checkout-header img {
+        height: 34px !important;
+    }
+
+    .secure-badge {
+        font-size: 10px !important;
+    }
+
+    .card-title {
+        font-size: 14px !important;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .form-group.full {
+        grid-column: span 1 !important;
+    }
+}
+
+/* CATUS FOOTER — MATCH HOME + PRODUCT */
+.footer-wrapper {
+    background: #f5f3ff !important;
+    color: #52525b !important;
+    border-top: 1px solid #ede9fe !important;
+    padding: 40px 20px 20px !important;
+    margin-top: 40px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+.footer-inner {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.footer-wrapper h3 {
+    color: #18181b !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+}
+
+.footer-wrapper h4 {
+    color: #18181b !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+}
+
+.footer-wrapper p,
+.footer-wrapper li,
+.footer-wrapper a {
+    color: #52525b !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    line-height: 1.6 !important;
+}
+
+.footer-wrapper a {
+    text-decoration: none !important;
+}
+
+.footer-wrapper a:hover {
+    color: #6d4aff !important;
+}
+
+.footer-wrapper i {
+    color: #6d4aff !important;
+}
+
+.footer-wrapper > .footer-inner > div:last-child,
+.footer-wrapper > footer > div:last-child {
+    font-size: 11px !important;
+    color: #71717a !important;
+}
+@media (max-width: 768px) {
+
+    .footer-wrapper {
+        margin-bottom: 0 !important;
+        padding-bottom: 12px !important;
+    }
+
+
+    .mobile-bottom-nav {
+        margin-top: 0 !important;
+    }
+}
+/* MOBILE FOOTER + FIXED NAV CORRECT SPACING */
+@media (max-width: 768px) {
+
+    body {
+        padding-bottom: 64px !important;
+    }
+
+    .footer-wrapper {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    .footer-wrapper > .footer-inner > div:last-child,
+    .footer-wrapper > footer > div:last-child {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        padding: 14px 10px 16px !important;
+        margin: 0 !important;
+
+        text-align: center !important;
+        font-size: 11px !important;
+        line-height: 1.4 !important;
+
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .mobile-bottom-nav {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+
+        height: 64px !important;
+        margin: 0 !important;
+
+        z-index: 999999 !important;
+    }
+}
+/* FOOTER SVG SOCIAL ICONS */
+
+.footer-social-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+}
+
+.footer-social-svg {
+    width: 19px !important;
+    height: 19px !important;
+    display: block !important;
+}
+
+.whatsapp-circle-svg {
+    width: 22px !important;
+    height: 22px !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+}
+
+/* Call blue */
+.call-svg {
+    fill: #0284c7 !important;
+}
+
+/* Email red outline */
+.gmail-svg {
+    width: 20px !important;
+    height: 20px !important;
+    display: block !important;
+}
+/* CONTACT US — SVG ICONS */
+
+.footer-contact-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    margin: 0 0 8px 0 !important;
+}
+
+.footer-contact-row:last-child {
+    margin-bottom: 0 !important;
+}
+
+.footer-contact-icon {
+    width: 17px !important;
+    height: 17px !important;
+    flex: 0 0 17px !important;
+    display: block !important;
+}
+
+/* Phone blue */
+.contact-phone {
+    fill: #0284c7 !important;
+}
+
+/* Gmail multicolor */
+.contact-gmail {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Location Catus purple */
+.contact-location {
+    fill: none !important;
+    stroke: #6d4aff !important;
+    stroke-width: 2 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+}
+
+
+@media (max-width: 850px) {
+
+    .mobile-bottom-nav {
+        height: 64px !important;
+        padding: 0 !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+    }
+
+    .mobile-bottom-nav .bot-nav-item {
+        flex: 1 !important;
+        height: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 3px !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .mobile-bottom-nav .catus-bottom-icon {
+        width: 23px !important;
+        height: 23px !important;
+        margin: 0 !important;
+    }
+
+    .mobile-bottom-nav .bot-nav-item span {
+        font-size: 9px !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+    }
+}
+
+/* ===== CATUS SERVICE ADDRESS UX FIX ===== */
+
+/* Address card should use only required space */
+.checkout-grid > .card-box:first-child {
+    min-height: 0 !important;
+}
+
+/* Saved address */
+.checkout-grid > .card-box:first-child .saved-address-card {
+    padding: 16px !important;
+    margin-bottom: 12px !important;
+}
+
+.checkout-grid > .card-box:first-child .saved-address-content-row {
+    align-items: center !important;
+}
+
+.checkout-grid > .card-box:first-child .saved-address-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.checkout-grid > .card-box:first-child .saved-address-info p {
+    line-height: 1.55 !important;
+    margin-top: 5px !important;
+}
+
+/* Address form */
+.checkout-grid > .card-box:first-child .form-grid {
+    margin-top: 4px;
+}
+
+/* Mobile */
+@media (max-width: 540px) {
+
+    .checkout-grid > .card-box:first-child {
+        padding: 16px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .card-title {
+        gap: 10px !important;
+        align-items: center !important;
+    }
+
+    .checkout-grid > .card-box:first-child .card-title > span {
+        font-size: 14px !important;
+        white-space: nowrap;
+    }
+
+    .checkout-grid > .card-box:first-child .add-new-btn {
+        padding: 7px 9px !important;
+        font-size: 10px !important;
+        white-space: nowrap;
+    }
+
+    .checkout-grid > .card-box:first-child .saved-address-content-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .action-btns-inline {
+        width: 100%;
+        gap: 8px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .edit-text-btn,
+    .checkout-grid > .card-box:first-child .remove-text-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 9px 10px !important;
+        border-radius: 8px;
+    }
+
+    .checkout-grid > .card-box:first-child .edit-text-btn {
+        background: #f4f1ff !important;
+    }
+
+    .checkout-grid > .card-box:first-child .remove-text-btn {
+        background: #fff5f6 !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-input {
+        min-height: 46px !important;
+        font-size: 14px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .save-addr-action-btn {
+        min-height: 46px !important;
+        font-size: 14px !important;
+    }
+}
+.address-form-actions {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: 10px;
+}
+
+.cancel-addr-btn {
+    border: 1px solid #e5e5e8;
+    background: #ffffff;
+    color: #52525b;
+    border-radius: 10px;
+    min-height: 46px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.address-form-actions .save-addr-action-btn {
+    margin-top: 0 !important;
+}
+
+@media (max-width: 540px) {
+    .address-form-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* =====================================================
+   CATUS CHECKOUT — MODERN 5 ITEM MOBILE NAV
+===================================================== */
+
+@media (max-width: 850px) {
+
+    .catus-checkout-nav {
+        display: flex !important;
+
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+        height: 62px !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        background: #ffffff !important;
+        border-top: 1px solid #eeeeee !important;
+
+        box-shadow: 0 -2px 10px rgba(0,0,0,.03) !important;
+
+        align-items: center !important;
+        justify-content: space-around !important;
+
+        z-index: 999999 !important;
+    }
+
+    .catus-checkout-nav .bot-nav-item {
+        flex: 1 1 20% !important;
+
+        height: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 2px !important;
+
+        padding: 2px 0 !important;
+        margin: 0 !important;
+
+        background: transparent !important;
+        border: 0 !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring {
+        width: 32px !important;
+        height: 32px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 50% !important;
+
+        background: #ffffff !important;
+        border: 2px solid #e5e7eb !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        margin: 0 !important;
+
+        fill: none !important;
+        stroke: #111827 !important;
+        stroke-width: 1.9 !important;
+
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring svg * {
+        fill: none !important;
+        stroke: #111827 !important;
+    }
+
+    
+
+    /* CEROOD SINGLE-BRAND NAV ACCENT */
+
+.catus-checkout-nav .checkout-nav-ring {
+    border-top-color: var(--catus-primary) !important;
+    background: #ffffff !important;
+}
+
+.catus-checkout-nav .bot-nav-item:hover .checkout-nav-ring,
+.catus-checkout-nav .bot-nav-item:active .checkout-nav-ring {
+    background: var(--catus-primary-soft) !important;
+}
+
+.catus-checkout-nav .bot-nav-item:hover svg,
+.catus-checkout-nav .bot-nav-item:active svg {
+    stroke: var(--catus-primary) !important;
+}
+
+    /* LABEL */
+
+    .catus-checkout-nav .bot-nav-item > span:last-child {
+        color: #626262 !important;
+
+        font-size: 9px !important;
+        font-weight: 400 !important;
+
+        line-height: 11px !important;
+        margin: 0 !important;
+    }
+
+    body {
+        padding-bottom: 62px !important;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT FOOTER — LEGAL / COMPANY POLISH
+===================================================== */
+
+.cerood-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+}
+
+.cerood-footer-bottom p {
+    margin: 0 !important;
+
+    font-size: 11px !important;
+    color: #71717a !important;
+}
+
+.cerood-footer-legal {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 11px;
+}
+
+.cerood-footer-legal a {
+    color: #71717a !important;
+    text-decoration: none !important;
+}
+
+.cerood-footer-legal a:hover {
+    color: var(--catus-primary) !important;
+}
+
+.cerood-footer-legal span {
+    color: #b0b0b8 !important;
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .cerood-footer-bottom {
+        flex-direction: column;
+
+        justify-content: center;
+
+        gap: 6px;
+
+        text-align: center;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT — MOBILE FORM FINAL POLISH
+===================================================== */
+
+@media (max-width: 540px) {
+
+    .checkout-container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .checkout-grid {
+        gap: 12px !important;
+    }
+
+    .checkout-grid > .card-box:first-child {
+        padding: 14px !important;
+        border-radius: 14px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-grid {
+        gap: 12px !important;
+        margin-top: 8px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-group {
+        gap: 6px !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-group label {
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        color: #52525b !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-input {
+        min-height: 48px !important;
+        padding: 12px 13px !important;
+        font-size: 14px !important;
+        border-radius: 11px !important;
+        background: #ffffff !important;
+    }
+
+    .checkout-grid > .card-box:first-child .form-input:focus {
+        border-color: var(--catus-primary) !important;
+        box-shadow: 0 0 0 3px rgba(109,74,255,.07) !important;
+    }
+
+    .address-form-actions {
+        gap: 8px !important;
+        margin-top: 4px !important;
+    }
+
+    .cancel-addr-btn,
+    .address-form-actions .save-addr-action-btn {
+        min-height: 48px !important;
+        border-radius: 11px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT — DESKTOP SUMMARY CARD BALANCE
+===================================================== */
+
+@media (min-width: 901px) {
+
+    /* Right-side Bill Summary card */
+    .checkout-grid > .card-box:last-child {
+        min-height: 0 !important;
+        height: auto !important;
+        padding: 20px !important;
+        align-self: start !important;
+    }
+
+    .checkout-grid > .card-box:last-child .card-title {
+        margin-bottom: 12px !important;
+    }
+
+    .checkout-grid > .card-box:last-child .card-body-scroll {
+        overflow: visible !important;
+        max-height: none !important;
+        padding-right: 0 !important;
+    }
+
+    #summaryItemsContainer {
+        margin-bottom: 12px !important;
+    }
+
+    .bill-summary-box {
+        margin-top: 4px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .payment-method-card {
+        min-height: 48px !important;
+    }
+
+    .confirm-btn {
+        min-height: 48px !important;
+        margin-top: 12px !important;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT — PAYMENT TRUST NOTE
+===================================================== */
+
+.checkout-trust-note {
+    margin-top: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+
+    color: #71717a;
+    text-align: center;
+}
+
+.checkout-trust-note i {
+    font-size: 10px;
+    color: var(--catus-primary);
+}
+
+@media (max-width: 540px) {
+    .checkout-trust-note {
+        margin-top: 8px;
+        font-size: 10.5px;
+    }
+}
+
+/* =====================================================
+   CEROOD CHECKOUT — SUCCESS PAGE FINAL POLISH
+===================================================== */
+
+#successPageView {
+    max-width: 620px !important;
+    margin: 0 auto !important;
+    padding: 42px 16px 28px !important;
+}
+
+#successPageView .success-animation-container {
+    margin-bottom: 18px !important;
+}
+
+#successPageView .checkmark-circle {
+    width: 72px !important;
+    height: 72px !important;
+}
+
+#successPageView > h1 {
+    font-size: 26px !important;
+    margin-bottom: 8px !important;
+}
+
+#successPageView > p {
+    max-width: 480px;
+    margin: 0 auto 24px !important;
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+}
+
+.receipt-box {
+    max-width: 500px !important;
+    padding: 22px !important;
+}
+
+.receipt-row {
+    padding: 9px 0 !important;
+    gap: 18px !important;
+}
+
+.receipt-label {
+    font-size: 12.5px !important;
+}
+
+.receipt-value {
+    font-size: 12.5px !important;
+    word-break: break-word;
+}
+
+#dispAddress {
+    max-width: 65% !important;
+}
+
+#dispTotal {
+    font-size: 18px !important;
+}
+
+@media (max-width: 540px) {
+
+    #successPageView {
+        padding: 28px 10px 20px !important;
+    }
+
+    #successPageView > h1 {
+        font-size: 22px !important;
+    }
+
+    #successPageView > p {
+        font-size: 12px !important;
+        padding: 0 6px;
+    }
+
+    .receipt-box {
+        padding: 16px !important;
+        border-radius: 14px !important;
+    }
+
+    .receipt-row {
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    .receipt-label {
+        flex: 0 0 38%;
+        font-size: 11.5px !important;
+    }
+
+    .receipt-value {
+        flex: 1;
+        max-width: 62% !important;
+        font-size: 11.5px !important;
+        text-align: right !important;
+    }
+
+    #dispAddress {
+        max-width: 62% !important;
+        line-height: 1.5 !important;
+    }
+
+    #dispTotal {
+        font-size: 17px !important;
+    }
+
+    #successPageView > .confirm-btn {
+        max-width: 100% !important;
+        margin: 20px auto 0 !important;
+    }
+}
+
+.confirm-btn:disabled {
+    opacity: 0.72 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+.form-input:disabled {
+    background: #f7f7f8 !important;
+    color: var(--catus-text) !important;
+    opacity: 1 !important;
+    cursor: default !important;
+}
+
+/* =========================================
+   CEROOD PRODUCT MOBILE SAFE AREA - NOTCH FIX
+========================================= */
+@media (max-width: 850px) {
+
+    .uc-homepage-wrapper {
+        padding-top: max(
+            5px,
+            env(safe-area-inset-top)
+        ) !important;
+    }
+
+    .header-main-container {
+        padding-left: max(
+            12px,
+            env(safe-area-inset-left)
+        ) !important;
+
+        padding-right: max(
+            12px,
+            env(safe-area-inset-right)
+        ) !important;
+    }
+
+    .mobile-bottom-nav {
+        padding-bottom: max(
+            4px,
+            env(safe-area-inset-bottom)
+        ) !important;
+    }
+}
+
+/* ==========================================
+   CEROOD CHECKOUT — MATCH INDEX + PRODUCT
+   MOBILE ONLY
+========================================== */
+
+@media (max-width: 850px) {
+
+    /* 1. PAGE BACKGROUND */
+
+    body {
+        background: #f5f5f7 !important;
+    }
+
+    /* 2. HEADER — SAME BLUE-GREY GRADIENT */
+
+    .checkout-header {
+        width: 100% !important;
+        box-sizing: border-box !important;
+
+        padding: 12px 14px !important;
+
+        background:
+            radial-gradient(
+                circle at 15% 5%,
+                rgba(255,255,255,.38) 0%,
+                rgba(255,255,255,.10) 24%,
+                transparent 48%
+            ),
+            radial-gradient(
+                circle at 88% 20%,
+                rgba(93,145,190,.28) 0%,
+                transparent 45%
+            ),
+            linear-gradient(
+                135deg,
+                #8fa8bd 0%,
+                #718da7 48%,
+                #536f8c 100%
+            ) !important;
+
+        border: 0 !important;
+        border-radius: 0 0 14px 14px !important;
+
+        box-shadow:
+            0 5px 16px rgba(38,67,94,.10) !important;
+    }
+
+    .checkout-header img {
+        height: 36px !important;
+        width: auto !important;
+        object-fit: contain !important;
+    }
+
+    .checkout-header .secure-badge {
+        color: #ffffff !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+    }
+
+    .checkout-header .secure-badge i {
+        color: #ffffff !important;
+    }
+
+    /* 3. MOBILE BOTTOM NAV — BLACK */
+
+    .mobile-bottom-nav.catus-checkout-nav {
+        background: #000000 !important;
+        border-top: none !important;
+        box-shadow: none !important;
+    }
+
+    .catus-checkout-nav .bot-nav-item {
+        background: transparent !important;
+        color: #ffffff !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring {
+        background: #000000 !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring svg,
+    .catus-checkout-nav .checkout-nav-ring svg * {
+        stroke: #ffffff !important;
+    }
+
+    .catus-checkout-nav .bot-nav-item > span:last-child {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }
+
+    /* 4. CHECKOUT BUTTONS — BLACK + WHITE */
+
+    .confirm-btn,
+    .save-addr-action-btn,
+    .address-form-actions .save-addr-action-btn {
+        background: #171717 !important;
+        color: #ffffff !important;
+        border: none !important;
+    }
+
+    .confirm-btn:hover,
+    .confirm-btn:active,
+    .save-addr-action-btn:hover,
+    .save-addr-action-btn:active {
+        background: #333333 !important;
+    }
+
+    /* 5. SECONDARY BUTTONS */
+
+    .add-new-btn {
+        background: #f1f1f3 !important;
+        color: #171717 !important;
+    }
+
+    .cancel-addr-btn {
+        background: #ffffff !important;
+        color: #171717 !important;
+        border: 1px solid #e5e5e8 !important;
+    }
+
+    .edit-text-btn {
+        color: #171717 !important;
+    }
+
+    /* 6. INPUT FOCUS */
+
+    .form-input:focus {
+        border-color: #171717 !important;
+        box-shadow: 0 0 0 3px rgba(23,23,23,.07) !important;
+    }
+
+    /* 7. CARD TITLE ICONS */
+
+    .card-title i,
+    .card-box button[onclick="goBackToProduct()"] i {
+        color: #171717 !important;
+    }
+
+    /* 8. PAYMENT SELECTION */
+
+    .payment-method-card input {
+        accent-color: #171717 !important;
+    }
+
+    .payment-method-card.selected {
+        background: #f1f1f3 !important;
+    }
+
+}
+
+/* =========================================
+   CHECKOUT NAV — MATCH PRODUCT MOBILE NAV
+========================================= */
+
+@media (max-width: 850px) {
+
+    .mobile-bottom-nav.catus-checkout-nav {
+        display: flex !important;
+        position: fixed !important;
+
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+
+        height: calc(
+            62px + env(safe-area-inset-bottom)
+        ) !important;
+
+        padding: 3px 0 env(safe-area-inset-bottom) !important;
+
+        box-sizing: border-box !important;
+
+        background: #000000 !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        align-items: center !important;
+        justify-content: space-around !important;
+
+        z-index: 2147483647 !important;
+    }
+
+    /* EACH NAV BUTTON */
+
+    .catus-checkout-nav .bot-nav-item {
+        flex: 1 1 20% !important;
+
+        height: 100% !important;
+
+        padding: 2px 0 !important;
+        margin: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 3px !important;
+
+        background: transparent !important;
+        border: none !important;
+    }
+
+    /* CIRCLE — PRODUCT PAGE SIZE */
+
+    .catus-checkout-nav .checkout-nav-ring {
+        width: 35px !important;
+        height: 35px !important;
+
+        flex: 0 0 35px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 50% !important;
+
+        background: #000000 !important;
+        border: 2px solid #e3e6ea !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /* ICON */
+
+    .catus-checkout-nav .checkout-nav-ring svg {
+        width: 18px !important;
+        height: 18px !important;
+
+        margin: 0 !important;
+
+        fill: none !important;
+        stroke: #ffffff !important;
+        stroke-width: 1.8 !important;
+    }
+
+    .catus-checkout-nav .checkout-nav-ring svg * {
+        stroke: #ffffff !important;
+    }
+
+    /* LABEL */
+
+    .catus-checkout-nav .bot-nav-item > span:last-child {
+        font-size: 9px !important;
+        line-height: 11px !important;
+
+        font-weight: 400 !important;
+        color: #ffffff !important;
+
+        margin: 0 !important;
+    }
+
+    /* SAME COLOURED CIRCLE TOP BORDER */
+
+    .catus-checkout-nav .nav-home-ring {
+        border-top-color: #6d4aff !important;
+    }
+
+    .catus-checkout-nav .nav-services-ring {
+        border-top-color: #20bfd4 !important;
+    }
+
+    .catus-checkout-nav .nav-cart-ring {
+        border-top-color: #f4a000 !important;
+    }
+
+    .catus-checkout-nav .nav-bookings-ring {
+        border-top-color: #34b95a !important;
+    }
+
+    .catus-checkout-nav .nav-account-ring {
+        border-top-color: #f43f86 !important;
+    }
+
+    /* PRESS EFFECT */
+
+    .catus-checkout-nav .bot-nav-item:active {
+        transform: scale(0.92) !important;
+        opacity: 0.78 !important;
+    }
+
+    /* SPACE FOR FIXED NAV */
+
+    body {
+        padding-bottom:
+            calc(62px + env(safe-area-inset-bottom))
+            !important;
+    }
+}
+
+/* PAY LATER +50 BADGE */
+
+.payment-option-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.payment-option-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 3px;
+}
+
+.payment-option-title strong {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #171717 !important;
+}
+
+.payment-method-card .pay-later-fee {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #fff1df !important;
+    color: #a65300 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+}
+
+.payment-option-description {
+    display: block;
+    font-size: 11px !important;
+    color: #737373 !important;
+}
+
+
+/* CEROOD CHECKOUT — COMPACT DESKTOP CARDS (mobile unchanged) */
+@media (min-width: 901px) {
+  .checkout-container { max-width: 1050px !important; padding: 18px 20px 26px !important; }
+  .checkout-grid { grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr) !important; gap: 14px !important; margin-top: 4px !important; }
+  .checkout-grid > .card-box { min-width: 0 !important; min-height: 0 !important; height: auto !important; padding: 17px !important; border-radius: 14px !important; margin-bottom: 12px !important; }
+  .checkout-grid .card-title { font-size: 15px !important; margin-bottom: 11px !important; }
+  .checkout-grid .card-body-scroll { min-height: 0 !important; }
+  .checkout-grid .saved-address-card { padding: 12px !important; margin-bottom: 10px !important; }
+  .checkout-grid .form-grid { gap: 10px !important; }
+  .checkout-grid .form-input { padding: 10px 11px !important; }
+  #summaryItemsContainer > div { gap: 9px !important; padding-bottom: 8px !important; margin-bottom: 8px !important; }
+  #summaryItemsContainer img { width: 40px !important; height: 40px !important; flex-shrink: 0 !important; object-fit: cover !important; }
+  .checkout-grid .bill-summary-box { padding: 12px !important; margin-bottom: 10px !important; }
+  .checkout-grid .payment-method-card { min-height: 42px !important; padding: 8px 10px !important; }
+  .checkout-grid .confirm-btn { min-height: 44px !important; padding: 11px !important; }
+}
+
+/* CEROOD CHECKOUT — DESKTOP BLUE-GREY HEADER (mobile untouched) */
+@media (min-width: 901px) {
+  .checkout-header {
+    width: calc(100% - 40px) !important;
+    max-width: 1255px !important;
+    margin: 18px auto 0 !important;
+    box-sizing: border-box !important;
+    padding: 15px 25px !important;
+    border: 0 !important;
+    border-radius: 15px !important;
+    background:
+      radial-gradient(circle at 15% 5%, rgba(255,255,255,.38) 0%, rgba(255,255,255,.10) 24%, transparent 48%),
+      radial-gradient(circle at 88% 20%, rgba(93,145,190,.28) 0%, transparent 45%),
+      linear-gradient(135deg, #8fa8bd 0%, #718da7 48%, #536f8c 100%) !important;
+    box-shadow: 0 5px 16px rgba(38,67,94,.10) !important;
+  }
+  .checkout-header .secure-badge,
+  .checkout-header .secure-badge i { color: #ffffff !important; }
+}
+
+/* CEROOD PREMIUM CHECKOUT — DESKTOP ONLY; preserve existing mobile design */
+@media (min-width: 901px) {
+  body { background: #f5f6f9 !important; }
+  .checkout-header { min-height: 72px !important; padding: 13px 26px !important; box-shadow: 0 12px 30px rgba(39,65,91,.12) !important; }
+  .checkout-header img { height: 43px !important; filter: drop-shadow(0 2px 4px rgba(0,0,0,.07)); }
+  .checkout-header .secure-badge { background: rgba(255,255,255,.18) !important; border: 1px solid rgba(255,255,255,.35) !important; border-radius: 999px !important; padding: 10px 15px !important; letter-spacing: .01em !important; }
+  .checkout-container { max-width: 1120px !important; padding: 27px 20px 48px !important; }
+  .cerood-checkout-intro { display: flex !important; align-items: center; justify-content: space-between; gap: 20px; padding: 0 2px 20px; }
+  .cerood-checkout-intro h1 { font-size: 26px !important; line-height: 1.25; margin: 0 0 7px !important; color: #202435 !important; font-weight: 700 !important; }
+  .cerood-checkout-intro p { font-size: 13px; color: #778094; margin: 0; }
+  .cerood-checkout-intro .cerood-intro-chip { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 10px 14px; border: 1px solid #dfe8e4; background: #f0f8f4; border-radius: 999px; color: #27825d; font-size: 12px; font-weight: 600; }
+  .checkout-grid { grid-template-columns: minmax(0, 1.34fr) minmax(340px, 1fr) !important; gap: 22px !important; align-items: start !important; margin-top: 0 !important; }
+  .checkout-grid > .card-box { position: relative; overflow: hidden; background: #fff !important; border: 1px solid #e9ebf1 !important; border-radius: 20px !important; padding: 24px !important; box-shadow: 0 7px 28px rgba(28,40,67,.045), 0 1px 3px rgba(28,40,67,.025) !important; min-height: 0 !important; margin-bottom: 16px !important; }
+  .checkout-grid > .card-box::before { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 3px; background: linear-gradient(90deg,#6e8aa5,#a8b9cd 62%,#e8edf4); }
+  .checkout-grid .card-title { font-size: 17px !important; font-weight: 700 !important; letter-spacing: -.02em; margin-bottom: 19px !important; gap: 12px; }
+  .checkout-grid .card-title > span { display: inline-flex; align-items: center; gap: 8px; }
+  .checkout-grid .card-title i { color: #647e9b !important; }
+  .checkout-grid .card-body-scroll { overflow: visible !important; max-height: none !important; }
+  .checkout-grid .form-grid { gap: 15px !important; }
+  .checkout-grid .form-group { gap: 8px !important; }
+  .checkout-grid .form-group label { font-size: 12px !important; color: #4b5568 !important; font-weight: 600 !important; }
+  .checkout-grid .form-input { min-height: 47px !important; background: #f9fafc !important; border: 1px solid #e5e9f0 !important; border-radius: 11px !important; padding: 12px 14px !important; font-size: 13px !important; transition: border-color .2s, box-shadow .2s, background .2s !important; }
+  .checkout-grid .form-input:hover { border-color: #bcc9d8 !important; }
+  .checkout-grid .form-input:focus { border-color: #6b89a7 !important; background: #fff !important; box-shadow: 0 0 0 4px rgba(102,132,165,.12) !important; }
+  .checkout-grid .form-input::placeholder { color: #9ba3b1; }
+  .checkout-grid .saved-address-card { background: #f5f8fc !important; border: 1px solid #e6edf5 !important; padding: 16px !important; border-radius: 13px !important; }
+  .checkout-grid .add-new-btn { border: 1px solid #e0e7f0 !important; background: #f4f7fb !important; color: #496783 !important; padding: 10px 12px !important; font-size: 11px !important; border-radius: 10px !important; white-space: nowrap; }
+  .checkout-grid .add-new-btn:hover { background: #eaf1f9 !important; }
+  .checkout-grid .address-form-actions { gap: 12px !important; margin-top: 5px; }
+  .checkout-grid .cancel-addr-btn { border-color: #e1e6ef !important; background: #fff !important; border-radius: 11px !important; }
+  .checkout-grid .save-addr-action-btn { background: #26223c !important; color: #fff !important; min-height: 47px !important; border-radius: 11px !important; font-size: 13px !important; box-shadow: 0 5px 12px rgba(38,34,60,.10) !important; }
+  .checkout-grid .save-addr-action-btn:hover { background: #383151 !important; }
+  #summaryItemsContainer > div { padding: 11px 0 !important; margin-bottom: 3px !important; gap: 11px !important; }
+  #summaryItemsContainer img { width: 50px !important; height: 50px !important; border-radius: 10px !important; border: 1px solid #edf0f4 !important; object-fit: cover !important; }
+  .checkout-grid .bill-summary-box { background: #f6f8fb !important; border: 1px solid #e9edf3 !important; border-radius: 14px !important; padding: 17px !important; margin: 15px 0 !important; }
+  .checkout-grid .bill-row { font-size: 12.5px !important; margin-bottom: 12px !important; }
+  .checkout-grid .bill-row.total-bill { font-weight: 700 !important; font-size: 14px !important; }
+  .checkout-grid .bill-row.amount-to-pay { color: #253b53 !important; font-weight: 700 !important; font-size: 16px !important; margin-bottom: 0 !important; }
+  .checkout-grid .payment-method-card { min-height: 65px !important; padding: 12px 14px !important; border: 1px solid #e6e9f0 !important; border-radius: 12px !important; background: #fff !important; margin-bottom: 9px !important; transition: border-color .2s, background .2s, box-shadow .2s !important; }
+  .checkout-grid .payment-method-card:hover { border-color: #9cacc1 !important; background: #f9fbfd !important; }
+  .checkout-grid .payment-method-card.selected { background: #f4f7fc !important; border-color: #8ba2bf !important; box-shadow: 0 0 0 2px rgba(107,137,167,.10) !important; }
+  .checkout-grid .payment-method-card input { accent-color: #536f8c !important; }
+  .checkout-grid .confirm-btn { min-height: 51px !important; border-radius: 12px !important; background: #26223c !important; color: #fff !important; font-size: 14px !important; font-weight: 700 !important; box-shadow: 0 8px 19px rgba(38,34,60,.13) !important; transition: transform .2s, box-shadow .2s, background .2s !important; }
+  .checkout-grid .confirm-btn:hover:not(:disabled) { background: #393251 !important; transform: translateY(-1px); box-shadow: 0 11px 22px rgba(38,34,60,.17) !important; }
+  .checkout-grid .checkout-trust-note { font-size: 11px !important; color: #7b8494 !important; }
+  .checkout-grid .checkout-trust-note i { color: #56836c !important; }
+}
+@media (max-width: 900px) { .cerood-checkout-intro { display: none !important; } }
+
+
+/* CEROOD PREMIUM CHECKOUT — MOBILE / TABLET (same visual language as desktop) */
+@media (max-width: 900px) {
+  body { background: #f5f6f9 !important; }
+  .checkout-container { max-width: 700px !important; padding: 18px 12px 28px !important; }
+  .cerood-checkout-intro { display: flex !important; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 3px 3px 17px; }
+  .cerood-checkout-intro h1 { margin: 0 0 5px !important; font-size: clamp(20px, 5vw, 25px) !important; line-height: 1.24 !important; font-weight: 700 !important; color: #202435 !important; }
+  .cerood-checkout-intro p { margin: 0 !important; color: #778094 !important; font-size: 11.5px !important; line-height: 1.55; }
+  .cerood-checkout-intro .cerood-intro-chip { display: inline-flex !important; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; background: #f0f8f4; border: 1px solid #dfe8e4; color: #27825d; padding: 7px 9px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+  .checkout-grid { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; gap: 13px !important; margin-top: 0 !important; }
+  .checkout-grid > .card-box { position: relative; overflow: hidden; min-width: 0; min-height: 0 !important; height: auto !important; padding: 17px !important; margin-bottom: 0 !important; background: #fff !important; border: 1px solid #e9ebf1 !important; border-radius: 17px !important; box-shadow: 0 6px 23px rgba(28,40,67,.045),0 1px 3px rgba(28,40,67,.025) !important; }
+  .checkout-grid > .card-box::before { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 3px; background: linear-gradient(90deg,#6e8aa5,#a8b9cd 62%,#e8edf4); }
+  .checkout-grid .card-title { font-size: 15px !important; font-weight: 700 !important; gap: 8px !important; margin-bottom: 15px !important; }
+  .checkout-grid .card-title i, .checkout-grid .card-box button[onclick="goBackToProduct()"] i { color: #647e9b !important; }
+  .checkout-grid .card-body-scroll { overflow: visible !important; max-height: none !important; }
+  .checkout-grid .form-grid { gap: 12px !important; }
+  .checkout-grid .form-group { gap: 7px !important; }
+  .checkout-grid .form-group label { font-size: 12px !important; font-weight: 600 !important; color: #4b5568 !important; }
+  .checkout-grid .form-input { width: 100% !important; min-height: 48px !important; padding: 12px 13px !important; border-radius: 11px !important; border: 1px solid #e5e9f0 !important; background: #f9fafc !important; font-size: 14px !important; }
+  .checkout-grid .form-input:focus { border-color: #6b89a7 !important; background: #fff !important; box-shadow: 0 0 0 4px rgba(102,132,165,.12) !important; }
+  .checkout-grid .form-input::placeholder { color: #9ba3b1 !important; }
+  .checkout-grid .saved-address-card { background: #f5f8fc !important; border: 1px solid #e6edf5 !important; border-radius: 13px !important; padding: 14px !important; }
+  .checkout-grid .add-new-btn { background: #f4f7fb !important; color: #496783 !important; border: 1px solid #e0e7f0 !important; border-radius: 9px !important; padding: 8px 9px !important; }
+  .checkout-grid .cancel-addr-btn { background: #fff !important; border: 1px solid #e1e6ef !important; border-radius: 11px !important; }
+  .checkout-grid .save-addr-action-btn { background: #26223c !important; color: #fff !important; border-radius: 11px !important; min-height: 48px !important; box-shadow: 0 5px 12px rgba(38,34,60,.10) !important; }
+  #summaryItemsContainer > div { padding: 10px 0 !important; gap: 10px !important; }
+  #summaryItemsContainer img { width: 48px !important; height: 48px !important; object-fit: cover !important; border-radius: 10px !important; border: 1px solid #edf0f4 !important; }
+  .checkout-grid .bill-summary-box { background: #f6f8fb !important; border: 1px solid #e9edf3 !important; border-radius: 14px !important; padding: 15px !important; margin: 13px 0 !important; }
+  .checkout-grid .bill-row { font-size: 12.5px !important; margin-bottom: 11px !important; }
+  .checkout-grid .bill-row.total-bill { font-size: 14px !important; font-weight: 700 !important; }
+  .checkout-grid .bill-row.amount-to-pay { color: #253b53 !important; font-size: 16px !important; font-weight: 700 !important; margin-bottom: 0 !important; }
+  .checkout-grid .payment-method-card { min-height: 64px !important; background: #fff !important; border: 1px solid #e6e9f0 !important; border-radius: 12px !important; padding: 12px !important; margin-bottom: 9px !important; }
+  .checkout-grid .payment-method-card.selected { background: #f4f7fc !important; border-color: #8ba2bf !important; box-shadow: 0 0 0 2px rgba(107,137,167,.10) !important; }
+  .checkout-grid .payment-method-card input { accent-color: #536f8c !important; }
+  .checkout-grid .confirm-btn { min-height: 51px !important; border-radius: 12px !important; background: #26223c !important; color: #fff !important; font-size: 14px !important; font-weight: 700 !important; box-shadow: 0 8px 19px rgba(38,34,60,.13) !important; }
+  .checkout-grid .checkout-trust-note { color: #7b8494 !important; font-size: 11px !important; }
+  .checkout-grid .checkout-trust-note i { color: #56836c !important; }
+}
+@media (max-width: 540px) {
+  .checkout-container { padding: 15px 10px 28px !important; }
+  .checkout-grid > .card-box, .checkout-grid > .card-box:first-child { padding: 15px !important; border-radius: 15px !important; }
+  .cerood-checkout-intro .cerood-intro-chip { padding: 7px 8px; }
+  .checkout-grid .card-title { font-size: 14px !important; }
+  .checkout-grid .card-title > span { white-space: normal !important; }
+  .checkout-grid .add-new-btn { font-size: 10px !important; }
+  .checkout-grid .form-grid { grid-template-columns: 1fr !important; }
+  .checkout-grid .form-group.full { grid-column: span 1 !important; }
+}
+
+
+/* CEROOD BOOKING RESULT — PREMIUM SUCCESS + FAILURE, ALL SCREENS */
+#successPageView {
+  --result-ink:#202435; --result-muted:#717b8e;
+  display:none; width:min(100%,720px); max-width:720px !important;
+  margin:26px auto 48px !important; padding:28px 22px 30px !important;
+  box-sizing:border-box; text-align:center;
+  background:linear-gradient(180deg,#fff 0%,#fbfcff 100%);
+  border:1px solid #e8ebf2; border-radius:26px;
+  box-shadow:0 16px 48px rgba(35,48,72,.07),0 2px 8px rgba(35,48,72,.025);
+}
+#successPageView .success-animation-container {margin:0 auto 15px !important;}
+#successPageView .checkmark-circle {
+  width:76px !important;height:76px !important;
+  background:linear-gradient(135deg,#2db98b,#16876a) !important;
+  box-shadow:0 0 0 9px #eaf9f3,0 12px 24px rgba(24,135,106,.18);
+  display:flex;align-items:center;justify-content:center;
+}
+#successPageView .checkmark.draw::after {top:17px !important;left:24px !important;}
+#successPageView > h1 {font-size:clamp(23px,3vw,30px) !important;color:var(--result-ink) !important;font-weight:750 !important;letter-spacing:-.035em !important;line-height:1.2;margin:0 0 10px !important;}
+#successPageView > p {max-width:480px !important;font-size:13.5px !important;line-height:1.65 !important;color:var(--result-muted) !important;margin:0 auto 24px !important;}
+#successPageView .receipt-box {
+  max-width:none !important;margin:0 !important;padding:22px 24px !important;
+  border:1px solid #e9edf4 !important;border-top:3px solid #7190ad !important;
+  border-radius:17px !important;box-shadow:none !important;
+  background:#fff !important;text-align:left;
+}
+#successPageView .receipt-box h3 {font-size:16px !important;color:#27354b !important;font-weight:700 !important;}
+#successPageView .receipt-row {display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:11px 0 !important;border-bottom:1px solid #f0f2f6 !important;}
+#successPageView .receipt-row:last-child {border-bottom:0 !important;}
+#successPageView .receipt-label {flex:0 0 35%;max-width:35%;font-size:12.5px !important;color:#788295 !important;font-weight:500 !important;}
+#successPageView .receipt-value {flex:1;min-width:0;max-width:65% !important;font-size:12.5px !important;color:#283247 !important;font-weight:650 !important;text-align:right;overflow-wrap:anywhere;line-height:1.5;}
+#successPageView .receipt-row:last-child {background:#f3f6fa !important;border-radius:12px !important;padding:15px !important;margin-top:12px !important;}
+#successPageView #dispTotal {font-size:19px !important;color:#27354b !important;}
+#successPageView > button.confirm-btn {width:min(100%,340px) !important;max-width:340px !important;min-height:50px !important;margin:23px auto 0 !important;background:#26223c !important;color:white !important;border-radius:12px !important;font-size:13.5px !important;font-weight:700 !important;box-shadow:0 7px 18px rgba(38,34,60,.12) !important;}
+#successPageView > button.confirm-btn:hover {background:#393251 !important;}
+/* Failure is a distinct status; never style it as a confirmed booking. */
+#successPageView.cerood-result-failed .checkmark-circle {background:linear-gradient(135deg,#f46d70,#d94b58) !important;box-shadow:0 0 0 9px #fff0f1,0 12px 24px rgba(217,75,88,.15) !important;}
+#successPageView.cerood-result-failed .checkmark-circle i {font-size:32px !important;line-height:1 !important;}
+#successPageView.cerood-result-failed > h1 {color:#9d3341 !important;}
+#successPageView.cerood-result-failed .receipt-box {border:1px solid #f3dce0 !important;border-top:3px solid #e17b84 !important;background:#fffafa !important;}
+#successPageView.cerood-result-failed .cerood-result-message {display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px 10px;color:#78535c;text-align:center;}
+#successPageView.cerood-result-failed .cerood-result-message i {display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:#fff0f1;color:#cf5b67;font-size:20px;}
+#successPageView.cerood-result-failed .cerood-result-message p {margin:0;font-size:13px;line-height:1.7;color:#78535c;}
+#successPageView.cerood-result-uncertain .receipt-box {border-color:#f0e4c9 !important;border-top-color:#dba64d !important;background:#fffcf5 !important;}
+#successPageView.cerood-result-uncertain .cerood-result-message i {background:#fff4da;color:#b88429;}
+@media(max-width:540px) {
+ #successPageView {width:calc(100% - 20px);margin:14px auto 26px !important;padding:27px 14px 20px !important;border-radius:19px;}
+ #successPageView .checkmark-circle {width:66px !important;height:66px !important;}
+ #successPageView .checkmark.draw::after {top:12px !important;left:20px !important;}
+ #successPageView > h1 {font-size:23px !important;}
+ #successPageView > p {font-size:12px !important;padding:0 4px !important;margin-bottom:19px !important;}
+ #successPageView .receipt-box {padding:17px 14px !important;border-radius:14px !important;}
+ #successPageView .receipt-row {gap:10px !important;padding:10px 0 !important;}
+ #successPageView .receipt-label {flex-basis:37%;max-width:37%;font-size:11px !important;}
+ #successPageView .receipt-value {max-width:63% !important;font-size:11.5px !important;}
+ #successPageView #dispAddress {max-width:63% !important;}
+ #successPageView > button.confirm-btn {max-width:100% !important;margin-top:18px !important;}
+}
+
+
+/* Renewed checkout additions */
+.checkout-grid{grid-template-columns:minmax(0,1.45fr) minmax(330px,1fr)!important}
+.card-box{min-height:0!important}.card-title{gap:10px}.checkout-header .brand-word{font-weight:800;font-size:23px;letter-spacing:-1px;color:#18181b;text-decoration:none}
+.checkout-header .brand-word small{display:block;font-size:10px;letter-spacing:2px;color:#6d4aff}
+.product-line{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #eee}
+.product-line img{width:72px;height:72px;object-fit:contain;border-radius:10px;background:#f8fafc}
+.product-line .name{font-weight:600;font-size:14px}.product-line .sub{font-size:12px;color:#71717a;margin-top:4px}.product-line .price{margin-left:auto;font-weight:700;white-space:nowrap}
+.summary-line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px}
+.summary-line.total{border-top:1px solid #e5e7eb;font-size:17px;font-weight:700;margin-top:6px;padding-top:14px}
+.pay-choice{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin-top:9px;cursor:pointer;background:white}
+.pay-choice.selected{background:#f4f1ff;border-color:#6d4aff}.pay-choice input{accent-color:#6d4aff}.pay-choice strong{display:block;font-size:14px}.pay-choice small{font-size:12px;color:#71717a}
+.note{padding:12px 14px;background:#f5f3ff;border-radius:11px;color:#52525b;font-size:12px;line-height:1.6;margin-top:14px}
+.notice-error{color:#b91c1c!important;background:#fff5f5!important}.hidden{display:none!important}
+#successPageView{display:none}.receipt-box{max-width:560px!important}
+@media(max-width:900px){.checkout-grid{grid-template-columns:1fr!important}.checkout-header{padding:12px 16px!important}.checkout-container{padding:14px 10px!important}}
+</style></head><body>
+<header class="checkout-header"><a class="brand-word" href="/renewed.html">CEROOD<small>RENEWED STORE</small></a><span class="secure-badge"><i class="fa-solid fa-shield-halved"></i> Secure Checkout</span></header>
+<main class="checkout-container"><div id="checkoutView"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 style="margin:10px 0">Renewed Checkout</h2><a href="/renewed.html" style="font-size:13px;color:#536f8c">← Continue shopping</a></div><div id="topMessage" class="note" role="status">Checking products and checkout availability…</div>
+<div class="checkout-grid"><div><section class="card-box"><div class="card-title"><span><i class="fa-solid fa-location-dot"></i> Delivery Address</span><button type="button" class="add-new-btn" id="clearAddress">New address</button></div><div class="card-body-scroll"><form id="addressForm" novalidate><div class="form-grid">
+<div class="form-group"><label for="fullName">Full name *</label><input class="form-input" id="fullName" autocomplete="name" required maxlength="140"></div>
+<div class="form-group"><label for="phone">Mobile number *</label><input class="form-input" id="phone" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" required></div>
+<div class="form-group full"><label for="door">Door / flat / street *</label><input class="form-input" id="door" required maxlength="500"></div>
+<div class="form-group full"><label for="area">Area / landmark</label><input class="form-input" id="area" maxlength="200"></div>
+<div class="form-group"><label for="city">City / town *</label><input class="form-input" id="city" required maxlength="100"></div>
+<div class="form-group"><label for="district">District *</label><input class="form-input" id="district" required maxlength="100"></div>
+<div class="form-group"><label for="state">State *</label><input class="form-input" id="state" value="Tamil Nadu" required></div>
+<div class="form-group"><label for="pincode">Pincode *</label><input class="form-input" id="pincode" inputmode="numeric" maxlength="6" required></div></div>
+<button type="submit" class="save-addr-action-btn">Save address & check delivery</button><div id="addressMessage" class="note" role="status">Enter address to confirm the delivery charge.</div></form></div></section>
+<section class="card-box"><div class="card-title"><span><i class="fa-solid fa-box"></i> Your Renewed Products</span></div><div id="products"><p>Loading products…</p></div></section></div>
+<aside><section class="card-box"><div class="card-title"><span><i class="fa-solid fa-receipt"></i> Order Summary</span></div><div class="summary-line"><span>Product subtotal</span><strong id="subtotal">—</strong></div><div class="summary-line"><span>Delivery charge</span><strong id="deliveryFee">—</strong></div><div class="summary-line total"><span>Total</span><span id="total">—</span></div>
+<div style="margin-top:20px;font-size:14px;font-weight:700">Payment Method</div>
+<label class="pay-choice selected" id="codCard"><input type="radio" name="paymentMode" value="cod" checked><span><strong><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery</strong><small>Pay when your Renewed product arrives</small></span><small id="codAvailability" style="margin-left:auto">Checking…</small></label>
+<label class="pay-choice" id="onlineCard"><input type="radio" name="paymentMode" value="online"><span><strong><i class="fa-solid fa-credit-card"></i> Pay Online</strong><small>UPI / Card / Net Banking via Razorpay</small></span><small id="onlineAvailability" style="margin-left:auto">Checking…</small></label>
+<button class="confirm-btn" type="button" id="confirmBtn" disabled>Checking checkout… <i class="fa-solid fa-arrow-right"></i></button>
+<div id="paymentMessage" class="note" role="status">No order has been created.</div><div class="checkout-trust-note"><i class="fa-solid fa-lock"></i><span>Price and stock are confirmed by Cerood before order creation.</span></div></section></aside></div></div>
+<section id="successPageView"><div class="success-animation-container"><div class="checkmark-circle animate"><span class="checkmark draw animate"></span></div></div><h1 id="successHeading">Order Confirmed!</h1><p id="successMessage">Your Cerood Renewed order has been created.</p><div class="receipt-box"><h3>Order Receipt</h3><div class="receipt-row"><span class="receipt-label">Order ID</span><span class="receipt-value" id="receiptId"></span></div><div class="receipt-row"><span class="receipt-label">Payment Method</span><span class="receipt-value" id="receiptMethod"></span></div><div class="receipt-row"><span class="receipt-label">Total</span><span class="receipt-value" id="receiptTotal"></span></div><div class="receipt-row"><span class="receipt-label">Delivery Address</span><span class="receipt-value" id="receiptAddress"></span></div><a class="confirm-btn" style="text-decoration:none" href="/renewed-dashboard.html">My Renewed Orders →</a><a style="display:block;margin-top:18px;text-align:center" href="/renewed.html">Continue shopping</a></div></section></main>
+<script>
+(()=>{'use strict';
+const API='https://catus-backend-d2js.onrender.com', $=id=>document.getElementById(id), money=n=>'₹'+Number(n).toLocaleString('en-IN');
+const fields=['fullName','phone','door','area','city','district','state','pincode'];const storageKey='cerood_renewed_address_draft';
+let items=[],quoteReady=false,deliveryReady=false,codEnabled=false,onlineEnabled=false,guestEnabled=false,busy=false,orderId='',pendingOnline=false;
+const mode=new URLSearchParams(location.search).get('mode')==='buy'?'buy':'cart';
+function notify(id,msg,error=false){$(id).textContent=msg;$(id).classList.toggle('notice-error',error)}
+function address(){return {full_name:$('fullName').value.trim(),phone:$('phone').value.trim(),street:$('door').value.trim(),area:$('area').value.trim(),city:$('city').value.trim(),district:$('district').value.trim(),state:$('state').value.trim(),pincode:$('pincode').value.trim()}}
+function validAddress(a){if(!/^[6-9]\d{9}$/.test(a.phone))throw Error('Enter a valid 10-digit mobile number.');if(!/^[56]\d{5}$/.test(a.pincode))throw Error('Enter a Tamil Nadu 6-digit pincode.');if(!['tamil nadu','tamilnadu','tn'].includes(a.state.toLowerCase()))throw Error('Delivery is currently available only in Tamil Nadu.');if(a.full_name.length<2||a.street.length<5||a.city.length<2||a.district.length<2)throw Error('Complete your name and full delivery address.');return a}
+function selected(){return document.querySelector('input[name=paymentMode]:checked')?.value||'cod'}
+function refresh(){const method=selected(),enabled=method==='cod'?codEnabled:onlineEnabled,ready=guestEnabled&&quoteReady&&deliveryReady&&enabled&&!busy&&!orderId;$('confirmBtn').disabled=!ready;$('confirmBtn').innerHTML=busy?'Please wait…':orderId?'Order created':!guestEnabled?'Checkout update required':!enabled?'Payment method unavailable':!deliveryReady?'Save address & check delivery':method==='cod'?'Place Cash on Delivery Order →':'Continue to Secure Payment →';for(const m of ['cod','online'])$(m+'Card').classList.toggle('selected',selected()===m)}
+for(const radio of document.querySelectorAll('input[name=paymentMode]'))radio.addEventListener('change',refresh);
+async function post(path,body){const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid server response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d}
+function saveDraft(){try{sessionStorage.setItem(storageKey,JSON.stringify(Object.fromEntries(fields.map(f=>[f,$(f).value.trim()]))))}catch{}}
+try{const saved=JSON.parse(sessionStorage.getItem(storageKey)||'{}');for(const f of fields)if(saved[f]&&f!=='state')$(f).value=saved[f]}catch{}
+try{const u=JSON.parse(localStorage.getItem('catus_logged_user')||'null');if(u){if(!$('fullName').value)$('fullName').value=u.name||'';if(!$('phone').value)$('phone').value=u.phone||''}}catch{}
+$('clearAddress').addEventListener('click',()=>{for(const f of fields)$(f).value=f==='state'?'Tamil Nadu':'';deliveryReady=false;saveDraft();refresh();notify('addressMessage','Enter a new delivery address.');});
+async function delivery(){const a=validAddress(address());saveDraft();deliveryReady=false;refresh();notify('addressMessage','Checking delivery availability and final price…');const d=await post('/api/renewed/delivery-quote',{items,address:a});$('subtotal').textContent=money(d.subtotal);if(d.delivery_fee===null||d.total===null)throw Error(d.message||'Delivery unavailable');$('deliveryFee').textContent=money(d.delivery_fee);$('total').textContent=money(d.total);deliveryReady=true;refresh();notify('addressMessage','Address saved. Delivery fee confirmed.');return d}
+$('addressForm').addEventListener('submit',async e=>{e.preventDefault();try{await delivery()}catch(err){notify('addressMessage',err.message,true);refresh()}});
+for(const f of fields)$(f).addEventListener('input',()=>{if(deliveryReady){deliveryReady=false;refresh();notify('addressMessage','Address changed. Save again to reconfirm delivery charge.')}});
+function receipt(id,total,method,a){orderId=id;$('checkoutView').style.display='none';$('successPageView').style.display='block';$('receiptId').textContent=id;$('receiptTotal').textContent=money(total);$('receiptMethod').textContent=method==='cod'?'Cash on Delivery':'Online Payment — verified';$('receiptAddress').textContent=[a.street,a.area,a.city,a.district,a.state,a.pincode].filter(Boolean).join(', ');window.scrollTo({top:0,behavior:'smooth'});if(mode==='buy')sessionStorage.removeItem('cerood_renewed_buy_now');else localStorage.removeItem('cerood_renewed_cart')}
+async function start(){try{items=JSON.parse((mode==='buy'?sessionStorage.getItem('cerood_renewed_buy_now'):localStorage.getItem('cerood_renewed_cart'))||'[]')}catch{}if(!Array.isArray(items))items=[];items=items.filter(x=>x&&/^[a-zA-Z0-9_-]{1,80}$/.test(String(x.product_id))&&Number.isSafeInteger(Number(x.quantity))&&Number(x.quantity)>0).slice(0,20).map(x=>({product_id:String(x.product_id),quantity:Number(x.quantity)}));if(!items.length){notify('topMessage','Your cart is empty. Choose a Renewed product to continue.',true);return}
+try{const [q,r]=await Promise.all([post('/api/renewed/quote',{items}),fetch(API+'/api/renewed/checkout-status',{cache:'no-store'}).then(x=>x.json())]);quoteReady=true;guestEnabled=r.guest_checkout_enabled===true;codEnabled=guestEnabled&&r.cod_enabled===true;onlineEnabled=guestEnabled&&r.payment_enabled===true&&r.reservations_enabled===true;$('codAvailability').textContent=codEnabled?'Available':'Unavailable';$('onlineAvailability').textContent=onlineEnabled?'Available':'Unavailable';$('codCard').querySelector('input').disabled=!codEnabled;$('onlineCard').querySelector('input').disabled=!onlineEnabled;if(!codEnabled&&onlineEnabled)$('onlineCard').querySelector('input').checked=true;const target=$('products');target.textContent='';for(const p of q.items){const row=document.createElement('div');row.className='product-line';const img=document.createElement('img');if(/^https?:\/\//.test(p.image_url||''))img.src=p.image_url;img.alt=p.name||'Renewed product';const desc=document.createElement('div');desc.style.flex='1';const name=document.createElement('div');name.className='name';name.textContent=p.name;const sub=document.createElement('div');sub.className='sub';sub.textContent='Qty: '+p.quantity+' · '+(p.condition||'Renewed')+(p.warranty_days?' · '+p.warranty_days+' days warranty':'');desc.append(name,sub);const price=document.createElement('div');price.className='price';price.textContent=money(p.line_total);row.append(img,desc,price);target.append(row)}$('subtotal').textContent=money(q.subtotal);notify('topMessage',guestEnabled?(codEnabled||onlineEnabled?'Products verified. Save your delivery address to place the order.':'Checkout is not enabled by Cerood yet.'):'Backend guest checkout is not enabled. No order can be created.',!guestEnabled);refresh();if($('district').value&&$('pincode').value){try{await delivery()}catch(e){notify('addressMessage',e.message,true)}}}catch(e){notify('topMessage','Cannot load checkout: '+e.message,true)}}
+$('confirmBtn').addEventListener('click',async()=>{if(busy||orderId||!guestEnabled||!quoteReady||!deliveryReady)return;let a;try{a=validAddress(address())}catch(e){notify('paymentMessage',e.message,true);return}busy=true;refresh();const method=selected();if(method==='cod'){
+const key='cerood_renewed_cod_request';let requestId=sessionStorage.getItem(key);if(!requestId){requestId=crypto.randomUUID();sessionStorage.setItem(key,requestId)}notify('paymentMessage','Creating your COD order…');try{const d=await post('/api/renewed/place-cod-order',{items,address:a,request_id:requestId});sessionStorage.removeItem(key);receipt(d.order_id,d.total,'cod',a)}catch(e){notify('paymentMessage','Order not confirmed: '+e.message+' If unsure, check My Orders before retrying.',true)}finally{busy=false;refresh()}return}
+if(!onlineEnabled){busy=false;refresh();return}notify('paymentMessage','Creating a secure Razorpay order…');try{const d=await post('/api/renewed/prepare-payment',{items,address:a});if(!d.order_id||!d.razorpay_order_id||!d.key_id)throw Error('Invalid payment order. Contact support.');orderId=d.order_id;pendingOnline=true;refresh();if(!window.Razorpay)await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://checkout.razorpay.com/v1/checkout.js';s.onload=resolve;s.onerror=()=>reject(Error('Razorpay could not load. Do not start another payment.'));document.head.append(s)});const rz=new Razorpay({key:d.key_id,amount:d.amount,currency:'INR',name:'Cerood Renewed',description:'Renewed products',order_id:d.razorpay_order_id,prefill:{name:a.full_name,contact:a.phone},notes:{renewed_order_id:orderId},handler:async proof=>{notify('paymentMessage','Payment received. Verifying with server…');try{const v=await post('/api/renewed/verify-payment',proof);if(v.status==='paid'){pendingOnline=false;receipt(orderId,Number(d.amount)/100,'online',a)}else notify('paymentMessage','Payment verification pending. Do not pay again. Order ID: '+orderId,true)}catch(e){notify('paymentMessage','Verification pending: '+e.message+'. If debited, do not pay again. Order ID: '+orderId,true)}},modal:{ondismiss:()=>notify('paymentMessage','Payment window closed. Order ID: '+orderId+'. Check My Orders before paying again.',true)}});rz.on('payment.failed',()=>notify('paymentMessage','Payment not confirmed. If debited, do not retry; contact support with order ID '+orderId,true));rz.open()}catch(e){notify('paymentMessage',e.message+(orderId?' Order ID: '+orderId+'; do not pay again until status is checked.':''),true)}finally{busy=false;refresh()}});
+start();})();
 </script></body></html>
