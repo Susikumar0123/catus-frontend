@@ -13439,6 +13439,7 @@ async function openServiceProduct(serviceId) {
                 orderPollingInterval = null;
             }
             localStorage.removeItem('catus_logged_user');
+            localStorage.removeItem('cerood_renewed_customer_session');
             currentUser = null;
             closePremiumDashboard();
             updateHeaderLoginUI();
@@ -14884,6 +14885,8 @@ async function loginWithPassword() {
             currentUser = data.user;
             if(currentUser.wallet === undefined) currentUser.wallet = 0;
             localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
+            else localStorage.removeItem('cerood_renewed_customer_session');
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
@@ -15427,6 +15430,8 @@ async function submitNewPasswordReset() {
             'catus_logged_user',
             JSON.stringify(currentUser)
         );
+        if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
+        else localStorage.removeItem('cerood_renewed_customer_session');
 
         updateHeaderLoginUI();
         toggleAuthModal(false);
