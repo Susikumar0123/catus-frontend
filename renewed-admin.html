@@ -41,14 +41,14 @@
 </div>
 
             </div><section id="tab-orders" class="main-tab-pane empty"><h2>Renewed Orders <button class="renewed-light" id="refreshRenewedOrders">↻ Refresh</button></h2><p>Actual orders from the protected Cerood Renewed backend. Only paid orders can be dispatched.</p><p id="renewedOrdersMessage" role="status">Open Renewed Orders to load.</p><div id="renewedOrdersList" class="renewed-order-list"></div></section><section id="tab-delivery" class="main-tab-pane empty"><h2>Delivery Tracking</h2><p>Manage delivery status from Renewed Orders. The verified customer dashboard reads the same order status.</p><button class="renewed-primary" type="button" id="openRenewedOrders">Open Renewed Orders</button></section><section id="tab-payments" class="main-tab-pane empty"><h2>Payments</h2><p>Verified Razorpay payments and refunds will appear here after the admin payment API is connected.</p></section></main></div></div><script>
-(function(){'use strict';if(sessionStorage.getItem('adminAuthenticated')!=='true'||!sessionStorage.getItem('adminToken')){location.replace('admin_login.html');return}document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.main-tab-pane').forEach(x=>x.classList.toggle('active',x.id==='tab-'+b.dataset.tab));document.getElementById('heading').textContent=b.textContent.trim();if(b.dataset.tab==='inventory'&&typeof renewedRenderDrafts==='function')renewedRenderDrafts();if(b.dataset.tab==='orders'&&typeof window.loadRenewedOrders==='function')window.loadRenewedOrders()}));document.getElementById('logout').onclick=()=>{sessionStorage.removeItem('adminAuthenticated');sessionStorage.removeItem('adminToken');sessionStorage.removeItem('cerood_admin_token');location.href='admin_login.html'};})();
+(function(){'use strict';if(sessionStorage.getItem('renewedAdminAuthenticated')!=='true'||!sessionStorage.getItem('renewedAdminToken')){location.replace('renewed-admin-login.html');return}document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.main-tab-pane').forEach(x=>x.classList.toggle('active',x.id==='tab-'+b.dataset.tab));document.getElementById('heading').textContent=b.textContent.trim();if(b.dataset.tab==='inventory'&&typeof renewedRenderDrafts==='function')renewedRenderDrafts();if(b.dataset.tab==='orders'&&typeof window.loadRenewedOrders==='function')window.loadRenewedOrders()}));document.getElementById('logout').onclick=()=>{sessionStorage.removeItem('renewedAdminAuthenticated');sessionStorage.removeItem('renewedAdminToken');location.href='renewed-admin-login.html'};})();
 </script><script>/* Phase 4: server-side inventory, protected by existing admin Bearer token. */
 (function(){'use strict';
  const API='https://catus-backend-d2js.onrender.com';
  const ids=['Name','Category','Condition','Brand','Model','Price','Compare','Stock','Warranty','Location','Delivery','Image','Video','Defects','Accessories','Terms','Status'];
  const $=id=>document.getElementById('renewed'+id);
  let items=[];
- function token(){return localStorage.getItem('cerood_admin_token')||sessionStorage.getItem('cerood_admin_token')||localStorage.getItem('adminToken')||sessionStorage.getItem('adminToken')||'';}
+ function token(){return sessionStorage.getItem('renewedAdminToken')||'';}
  async function request(path,method='GET',payload){
    const headers={Authorization:'Bearer '+token(),Accept:'application/json'};
    if(payload)headers['Content-Type']='application/json';
@@ -108,7 +108,7 @@ const API='https://catus-backend-d2js.onrender.com';
 const stages=['confirmed','packing','packed','shipped','out_for_delivery','delivered'];
 const names={'confirmed':'Order confirmed','packing':'Packing','packed':'Packed','shipped':'Shipped','out_for_delivery':'Out for delivery','delivered':'Delivered'};
 const $=id=>document.getElementById(id);
-const token=()=>localStorage.getItem('cerood_admin_token')||sessionStorage.getItem('cerood_admin_token')||localStorage.getItem('adminToken')||sessionStorage.getItem('adminToken')||'';
+const token=()=>sessionStorage.getItem('renewedAdminToken')||'';
 const msg=(s,error=false)=>{$('renewedOrdersMessage').textContent=s;$('renewedOrdersMessage').style.color=error?'#b91c1c':'#166534'};
 async function api(path,method='GET',payload){const r=await fetch(API+path,{method,headers:{Authorization:'Bearer '+token(),...(payload?{'Content-Type':'application/json'}:{})},...(payload?{body:JSON.stringify(payload)}:{}),cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Request failed ('+r.status+')');return d;}
 function line(parent,label,value){const p=document.createElement('p');const strong=document.createElement('strong');strong.textContent=label+': ';p.append(strong,document.createTextNode(String(value??'—')));parent.append(p)}
