@@ -276,8 +276,11 @@ async function init(){const id=new URLSearchParams(location.search).get('id');if
  const FULL='cerood_renewed_saved_address_v1',LOC='cerood_renewed_delivery_location',OLD='cerood_selected_location';
  const label=document.getElementById('renewedDeliveryLocation');if(!label)return;
  function get(key){try{const x=JSON.parse(localStorage.getItem(key)||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}}
- function refresh(){const full=get(FULL),loc=get(LOC)||get(OLD);const x=full&&(!loc||!loc.pincode||String(full.pincode)===String(loc.pincode))?full:loc;
- label.textContent=x?[x.area,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', ')||'Select location':'Select location';}
+ function refresh(){const full=get(FULL),loc=get(LOC)||get(OLD);
+ const x=full&&(!loc||!loc.pincode||String(full.pincode)===String(loc.pincode))?full:loc;
+ const place=x?[x.area,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '):'';
+ label.textContent=place||'Select location';label.title=place||'Select delivery location';
+ }
  refresh();window.addEventListener('pageshow',refresh);window.addEventListener('storage',refresh);
  window.addEventListener('cerood-renewed-location-changed',refresh);
 })();
