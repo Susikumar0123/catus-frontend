@@ -132,53 +132,24 @@ body{background:#fff!important;color:var(--ink)!important;font-family:Inter,Aria
  .footer{padding-bottom:15px!important}
 }
 @media(max-width:360px){.cr-mobile-nav{left:6px!important;right:6px!important}.cr-mobile-nav .cr-nav-label{font-size:8px!important}.cr-mobile-nav a.cr-nav-cart{width:49px!important;height:49px!important;min-height:49px!important}}
-</style><style id="cerood-pure-white-curved-dock">
-/* Mobile-only: pure-white curved floating dock; preserve current header and page. */
+</style><style id="cerood-even-mobile-touch-nav">
+/* One flat, edge-to-edge, five-column dock: every button has the same selected state. */
 @media(max-width:650px){
- .cr-mobile-nav{
-   background:#ffffff!important;
-   border:1px solid #e9e9ef!important;
-   border-radius:27px!important;
-   height:68px!important;
-   padding:8px 4px 5px!important;
-   box-shadow:0 9px 23px rgba(20,25,45,.13)!important;
-   isolation:isolate!important;
- }
- .cr-mobile-nav::before{
-   content:"";position:absolute;z-index:-1;
-   width:83px;height:46px;left:50%;top:-23px;
-   transform:translateX(-50%);
-   background:#ffffff;
-   border-radius:50% 50% 44% 44%;
-   box-shadow:0 -1px 0 #e9e9ef;
- }
- .cr-mobile-nav a:not(.cr-nav-cart){min-height:51px!important;gap:5px!important}
- .cr-mobile-nav a.cr-nav-cart{
-   width:58px!important;height:58px!important;min-height:58px!important;
-   margin:-27px auto 0!important;
-   border:5px solid #ffffff!important;
-   background:linear-gradient(145deg,#9561f6,#6549ee)!important;
-   box-shadow:0 5px 14px rgba(98,73,232,.23)!important;
- }
- .cr-mobile-nav .cr-nav-cart .cr-nav-label{top:57px!important}
+ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))!important}
+ .cr-mobile-nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:0!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:calc(66px + env(safe-area-inset-bottom))!important;min-height:0!important;padding:5px 5px calc(5px + env(safe-area-inset-bottom))!important;margin:0!important;border:0!important;border-top:1px solid #e8e8f0!important;border-radius:0!important;background:#fff!important;box-shadow:0 -3px 14px rgba(24,27,55,.065)!important;overflow:hidden!important;isolation:isolate!important;align-items:stretch!important;justify-content:initial!important;z-index:1000!important}
+ .cr-mobile-nav::before,.cr-mobile-nav::after{content:none!important;display:none!important}
+ .cr-mobile-nav a,.cr-mobile-nav a.cr-nav-cart,.cr-mobile-nav a:not(.cr-nav-cart){box-sizing:border-box!important;position:relative!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;align-self:stretch!important;justify-self:stretch!important;min-width:0!important;width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:4px 1px!important;gap:4px!important;border:1px solid transparent!important;border-radius:14px!important;background:transparent!important;box-shadow:none!important;color:#414959!important;font-size:10px!important;font-weight:500!important;line-height:1.1!important;transform:none!important;filter:none!important;overflow:visible!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background .16s ease,color .16s ease,box-shadow .16s ease,transform .12s ease!important}
+ .cr-mobile-nav a::before,.cr-mobile-nav a::after{content:none!important;display:none!important}
+ .cr-mobile-nav .cr-nav-icon,.cr-mobile-nav .cr-nav-cart .cr-nav-icon{display:block!important;width:21px!important;height:21px!important;flex-shrink:0!important;stroke-width:1.8!important;filter:none!important}
+ .cr-mobile-nav .cr-nav-label,.cr-mobile-nav .cr-nav-cart .cr-nav-label{display:block!important;position:static!important;inset:auto!important;top:auto!important;left:auto!important;right:auto!important;color:inherit!important;font-size:9px!important;font-weight:inherit!important;line-height:1.1!important;letter-spacing:0!important;text-align:center!important;white-space:nowrap!important}
+ .cr-mobile-nav a.rn-nav-active,.cr-mobile-nav a[aria-current="page"],.cr-mobile-nav a[aria-current="location"],.cr-mobile-nav a.cr-nav-cart.rn-nav-active{background:#f0ebff!important;color:#6043e8!important;border-color:#ddd2ff!important;font-weight:700!important;box-shadow:inset 0 1px 5px rgba(111,76,231,.08),0 0 0 1px rgba(111,76,231,.025)!important}
+ .cr-mobile-nav a.rn-nav-pressed,.cr-mobile-nav a.cr-nav-cart.rn-nav-pressed{background:#e5dcff!important;color:#5635df!important;border-color:#c6b5ff!important;transform:scale(.96)!important;box-shadow:inset 0 2px 7px rgba(90,61,186,.15)!important}
+ .cr-mobile-nav .cr-nav-badge{top:1px!important;right:calc(50% - 22px)!important;min-width:15px!important;height:15px!important;background:#6547e8!important;color:#fff!important;border:2px solid #fff!important;font-size:8px!important;line-height:1!important;z-index:2!important}
  .cr-mobile-nav .cr-nav-badge[hidden]{display:none!important}
+ .cr-mobile-nav a:focus-visible{outline:2px solid #7d62ef!important;outline-offset:-2px!important}
+ .footer{padding-bottom:15px!important}
 }
-@media(max-width:360px){.cr-mobile-nav a.cr-nav-cart{width:53px!important;height:53px!important;min-height:53px!important}}
-</style><style id="cerood-glass-touch-nav">
-/* Mobile-only pure-white glass dock with tactile, accessible active states. */
-@media(max-width:650px){
- .cr-mobile-nav{background:#fff!important;border:1px solid #e9e8f4!important;box-shadow:0 10px 28px rgba(28,24,75,.13),inset 0 1px 0 #fff!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
- .cr-mobile-nav a:not(.cr-nav-cart){border-radius:17px!important;isolation:isolate;overflow:hidden;transition:background .22s ease,color .22s ease,box-shadow .22s ease,transform .18s ease!important;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
- .cr-mobile-nav a:not(.cr-nav-cart)::before{content:"";position:absolute;inset:2px 3px;border-radius:15px;border:1px solid transparent;pointer-events:none;transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
- .cr-mobile-nav a:not(.cr-nav-cart).rn-nav-active,.cr-mobile-nav a:not(.cr-nav-cart)[aria-current="page"]{color:#6243e8!important;font-weight:700!important;background:linear-gradient(145deg,rgba(246,242,255,.95),rgba(237,231,255,.83))!important;box-shadow:0 3px 10px rgba(111,76,231,.10),inset 0 1px 0 #fff!important}
- .cr-mobile-nav a:not(.cr-nav-cart).rn-nav-active::before,.cr-mobile-nav a:not(.cr-nav-cart)[aria-current="page"]::before{border-color:rgba(132,101,246,.23);box-shadow:inset 0 0 10px rgba(139,109,255,.11),0 0 10px rgba(136,100,255,.09)}
- .cr-mobile-nav a:not(.cr-nav-cart).rn-nav-active .cr-nav-icon,.cr-mobile-nav a:not(.cr-nav-cart)[aria-current="page"] .cr-nav-icon{filter:drop-shadow(0 0 3px rgba(106,75,245,.24))}
- .cr-mobile-nav a.rn-nav-pressed:not(.cr-nav-cart){transform:scale(.92)!important;background:#e9e0ff!important;box-shadow:inset 0 2px 9px rgba(93,57,194,.16)!important}
- .cr-mobile-nav a.rn-nav-pressed:not(.cr-nav-cart)::before{border-color:rgba(111,75,231,.42);box-shadow:inset 0 0 12px rgba(123,87,237,.23),0 0 13px rgba(113,73,245,.20)}
- .cr-mobile-nav a.cr-nav-cart{transition:transform .18s ease,box-shadow .22s ease,filter .22s ease!important;touch-action:manipulation}
- .cr-mobile-nav a.cr-nav-cart.rn-nav-pressed{transform:scale(.91)!important;box-shadow:0 0 0 5px rgba(126,90,255,.17),0 0 22px rgba(104,65,243,.42),inset 0 2px 10px rgba(255,255,255,.25)!important;filter:brightness(1.08)}
- .cr-mobile-nav a:focus-visible{outline:2px solid #8062ef!important;outline-offset:3px!important}
-}
+@media(max-width:360px){.cr-mobile-nav{padding-left:2px!important;padding-right:2px!important}.cr-mobile-nav .cr-nav-label{font-size:8px!important}}
 @media(prefers-reduced-motion:reduce){.cr-mobile-nav a{transition:none!important}}
 </style></head><body><header class="cr-header"><div class="cr-header-inner"><a aria-label="Cerood Renewed home" class="cr-brand" href="/renewed.html"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>RENEWED</span></a><div class="cr-search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search renewed products" autocomplete="off" id="headerProductSearch" placeholder="Search TV, fridge, washing machine, laptop..." type="search"/></div><nav aria-label="Renewed navigation" class="cr-actions"><button class="cr-location" title="Delivery location" type="button"><span>Delivery to<strong id="renewedDeliveryLocation">Select location</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><a class="cr-service" href="/">Home Services</a><a aria-label="Renewed cart" class="cr-cart" href="/renewed-checkout.html"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg><span class="cr-cart-label">Cart</span><b id="renewedCartCount">0</b></a><a aria-label="Renewed orders and account" class="cr-account" href="/renewed-dashboard.html"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="7.5" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg><span class="rn-account-label">My Orders</span></a></nav></div></header><main class="wrap"><div class="quick-services-bar"><div class="services-track"><button aria-pressed="true" class="service-chip" data-quick="all"><span class="chip-icon-bg">🛍️</span>All Renewed</button><button class="service-chip" data-quick="tv"><span class="chip-icon-bg">📺</span>Television</button><button class="service-chip" data-quick="refrigerator"><span class="chip-icon-bg">🧊</span>Refrigerator</button><button class="service-chip" data-quick="washing-machine"><span class="chip-icon-bg">🧺</span>Washing Machine</button><button class="service-chip" data-quick="ac"><span class="chip-icon-bg">❄️</span>Air Conditioner</button><button class="service-chip" data-quick="laptop"><span class="chip-icon-bg">💻</span>Laptop</button><button class="service-chip" data-quick="other"><span class="chip-icon-bg">⚙️</span>More</button></div></div><div class="breadcrumb"><a href="/">Home</a> / Renewed Store</div><section class="section" id="products-section"><div class="section-head"><h2>Explore available products</h2><span class="section-note">Cerood Renewed</span></div><div class="toolbar"><label class="search-wrap"><span aria-hidden="true" class="search-icon">⌕</span><input aria-label="Search renewed products" class="search" id="search" placeholder="Search appliances, brands, models…" type="search"/></label><select aria-label="Sort products" class="sort" id="sort"><option value="new">Newest</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></div><p class="status" id="status" role="status">Loading available products…</p><div class="grid" id="products"><div class="empty"><div class="emoji">🛍️</div><h3>Loading products…</h3></div></div></section><section aria-label="Renewed order live tracking" class="rn-track"><div><h2>📦 My Renewed Orders · Live Tracking</h2><p>Already ordered? Verify your mobile number to check the latest Cerood Renewed order status.</p></div><a href="/renewed-dashboard.html">Track My Order →</a></section><div class="promo-row"><div class="promo"><div><h3>Best Deals on Renewed</h3><p>Find verified pre-owned appliances.</p><a href="#products-section">Explore Deals →</a></div><span class="promo-emoji">🏷️</span></div><div class="promo"><div><h3>Sustainable Choice</h3><p>Give quality products a longer life.</p><a href="#products-section">Shop Renewed →</a></div><span class="promo-emoji">🌱</span></div></div></main><footer class="footer"><div class="wrap footrow"><span>© Cerood Renewed</span><a href="/">Doorstep Services →</a></div></footer><script>
 /* Phase 4: fetch published inventory from Cerood backend. */
@@ -303,11 +274,9 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_selected_location')||'nu
 (()=>{'use strict';
  const dock=document.querySelector('.cr-mobile-nav');if(!dock)return;
  const links=[...dock.querySelectorAll('a')];
- const home=dock.querySelector('.cr-nav-home'),explore=dock.querySelector('.cr-nav-explore');
- function update(){const onExplore=location.hash==='#products-section';
-  if(home){home.classList.toggle('rn-nav-active',!onExplore);if(!onExplore)home.setAttribute('aria-current','page');else home.removeAttribute('aria-current')}
-  if(explore){explore.classList.toggle('rn-nav-active',onExplore);if(onExplore)explore.setAttribute('aria-current','location');else explore.removeAttribute('aria-current')}
- }
+ const home=dock.querySelector('.cr-nav-home'),explore=dock.querySelector('.cr-nav-explore'),cart=dock.querySelector('.cr-nav-cart');
+ function select(link){links.forEach(a=>{const yes=a===link;a.classList.toggle('rn-nav-active',yes);if(yes)a.setAttribute('aria-current',a===explore?'location':'page');else a.removeAttribute('aria-current')})}
+ function sync(){select(location.hash==='#products-section'?explore:home)}
  links.forEach(a=>{
   const press=()=>a.classList.add('rn-nav-pressed');
   const release=()=>a.classList.remove('rn-nav-pressed');
@@ -316,8 +285,10 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_selected_location')||'nu
   a.addEventListener('pointercancel',release,{passive:true});
   a.addEventListener('pointerleave',release,{passive:true});
   a.addEventListener('blur',release);
-  a.addEventListener('click',()=>{if(a===explore||a===home)requestAnimationFrame(update)});
+  a.addEventListener('click',()=>{select(a);if(a===home||a===explore)requestAnimationFrame(sync)});
  });
- window.addEventListener('hashchange',update);window.addEventListener('pageshow',update);update();
+ // The cart opens a preview on this page; restore the correct tab when it closes.
+ if(cart){const observer=new MutationObserver(()=>{if(!document.querySelector('.rn-cart-shade')&&cart.classList.contains('rn-nav-active'))sync()});observer.observe(document.body,{childList:true})}
+ window.addEventListener('hashchange',sync);window.addEventListener('pageshow',sync);sync();
 })();
 </script></body></html>
