@@ -8307,64 +8307,22 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
 }
 
 </style>
-<style>
-
-/* CEROOD SHARED MOBILE NAV DESIGN — 2026-09-23
-   Visual-only: keeps existing navigation JS, cart, checkout and dashboard handlers. */
-@media (max-width:850px) {
-  body { padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important; }
-  #ceroodGlobalMobileNav.cerood-global-mobile-nav {
-    display:flex !important; position:fixed !important;
-    inset:auto 0 0 0 !important; width:100% !important;
-    height:calc(66px + env(safe-area-inset-bottom, 0px)) !important;
-    padding:4px 4px env(safe-area-inset-bottom, 0px) !important;
-    background:#08090c !important; border:0 !important;
-    border-top:1px solid #282a30 !important;
-    box-shadow:0 -5px 22px rgba(0,0,0,.12) !important;
-    box-sizing:border-box !important; align-items:center !important;
-    justify-content:space-around !important;
-    z-index:2147483647 !important;
-  }
-  #ceroodGlobalMobileNav .cerood-global-nav-btn {
-    flex:1 1 20% !important; min-width:0 !important; height:100% !important;
-    margin:0 !important; padding:2px 0 !important; border:0 !important;
-    border-radius:10px !important; background:transparent !important;
-    color:#fff !important; display:flex !important;
-    flex-direction:column !important; align-items:center !important;
-    justify-content:center !important; gap:3px !important;
-    font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
-    cursor:pointer !important; -webkit-tap-highlight-color:transparent !important;
-    touch-action:manipulation;
-  }
-  #ceroodGlobalMobileNav .cerood-global-nav-ring {
-    position:relative !important; flex:0 0 35px !important;
-    width:35px !important; height:35px !important;
-    display:flex !important; align-items:center !important;
-    justify-content:center !important; border-radius:50% !important;
-    background:#08090c !important; border:2px solid #e5e7eb !important;
-    box-sizing:border-box !important;
-  }
-  #ceroodGlobalMobileNav .cerood-global-nav-ring svg {
-    width:18px !important; height:18px !important;
-    fill:none !important; stroke:#fff !important;
-    stroke-width:1.8 !important;
-  }
-  #ceroodGlobalMobileNav .cerood-global-nav-ring svg * { stroke:#fff !important; }
-  #ceroodGlobalMobileNav .cerood-global-nav-btn > span:last-child {
-    margin:0 !important; color:#fff !important; font-size:10px !important;
-    line-height:12px !important; font-weight:500 !important;
-    letter-spacing:0 !important; white-space:nowrap !important;
-  }
-  #ceroodGlobalMobileNav .cerood-global-nav-btn:active { transform:scale(.94) !important; opacity:.82 !important; }
-  #ceroodGlobalMobileNav .cerood-global-nav-btn:focus-visible { outline:2px solid #fff !important; outline-offset:-3px !important; }
-  #ceroodGlobalMobileNav .ring-home { border-top-color:#8064ff !important; }
-  #ceroodGlobalMobileNav .ring-services { border-top-color:#20bfd4 !important; }
-  #ceroodGlobalMobileNav .ring-cart { border-top-color:#f4a000 !important; }
-  #ceroodGlobalMobileNav .ring-bookings { border-top-color:#34b95a !important; }
-  #ceroodGlobalMobileNav .ring-account { border-top-color:#f43f86 !important; }
+<style id="cerood-shared-mobile-nav-style">
+.cerood-shared-nav{display:none}
+@media(max-width:650px){
+ .cerood-shared-nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:0!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:calc(66px + env(safe-area-inset-bottom))!important;padding:5px 5px calc(5px + env(safe-area-inset-bottom))!important;margin:0!important;border:0!important;border-top:1px solid #e8e8f0!important;border-radius:0!important;background:#fff!important;box-shadow:0 -3px 14px rgba(24,27,55,.065)!important;align-items:stretch!important;z-index:2147483000!important;box-sizing:border-box!important}
+ .cerood-shared-nav a{box-sizing:border-box!important;position:relative!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;min-width:0!important;min-height:0!important;width:100%!important;height:100%!important;padding:4px 1px!important;gap:4px!important;border:1px solid transparent!important;border-radius:14px!important;background:transparent!important;color:#414959!important;font:500 10px/1.1 Inter,Arial,sans-serif!important;text-decoration:none!important;touch-action:manipulation}
+ .cerood-shared-nav .cr-nav-icon{display:block!important;width:21px!important;height:21px!important;flex-shrink:0!important;stroke-width:1.8!important}
+ .cerood-shared-nav .cr-nav-label{position:static!important;display:block!important;color:inherit!important;font-size:9px!important;font-weight:inherit!important;line-height:1.1!important;white-space:nowrap!important}
+ .cerood-shared-nav a.rn-nav-active,.cerood-shared-nav a[aria-current="page"]{background:#f0ebff!important;color:#6043e8!important;border-color:#ddd2ff!important;font-weight:700!important;box-shadow:inset 0 1px 5px rgba(111,76,231,.08)!important}
+ .cerood-shared-nav a.rn-nav-pressed{background:#e5dcff!important;color:#5635df!important;border-color:#c6b5ff!important;transform:scale(.96)!important}
+ .cerood-shared-nav .cr-nav-badge{position:absolute!important;top:1px!important;right:calc(50% - 22px)!important;min-width:15px!important;height:15px!important;border-radius:9px!important;background:#6547e8!important;color:#fff!important;border:2px solid #fff!important;display:grid!important;place-items:center!important;font-size:8px!important;line-height:1!important;z-index:2!important;padding:0 2px!important}
+ .cerood-shared-nav .cr-nav-badge[hidden]{display:none!important}
+ .cerood-shared-nav a:focus-visible{outline:2px solid #7d62ef!important;outline-offset:-2px!important}
+ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))!important}
 }
-@media (min-width:851px) { #ceroodGlobalMobileNav.cerood-global-mobile-nav { display:none !important; } }
-
+@media(max-width:360px){.cerood-shared-nav{padding-left:2px!important;padding-right:2px!important}.cerood-shared-nav .cr-nav-label{font-size:8px!important}}
+@media(prefers-reduced-motion:reduce){.cerood-shared-nav a{transition:none!important}}
 </style>
 </head>
 <body>
@@ -14932,7 +14890,48 @@ serviceStr =
     
     function downloadInvoice(orderId, serviceName, amount, status, dateStr, productId, custName, custPhone) {
         let printWindow = window.open('', '_blank', 'width=800,height=600');
-        let html = `<html><head><title>Invoice - ${orderId}</title><style>body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; } .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; } .logo { font-size: 22px; font-weight: bold; color: #0284c7; } .details { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 13px; } table { width: 100%; border-collapse: collapse; margin-top: 15px; } th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; font-size: 13px; } th { background: #f8fafc; color: #475569; } .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 20px; color: #16a34a; }</style></head><body><div class="header"><div class="logo">CEROOD SERVICES</div><div style="text-align: right;"><b>INVOICE</b><br>Date: ${dateStr}<br>Status: ${status}</div></div><div class="details"><div><b>Billed To:</b><br>${custName}<br>+91 ${custPhone}</div><div><b>Order Details:</b><br>Order ID: ${orderId}<br>Product ID: ${productId}</div></div><table><thead><tr><th>Service Description</th><th>Qty</th><th>Amount</th></tr></thead><tbody><tr><td>${serviceName}</td><td>1</td><td>₹${amount}</td></tr></tbody></table><div class="total">Total Paid: ₹${amount}</div><p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">Computer generated invoice.</p></body></html>`;
+        let html = `<html><head><title>Invoice - ${orderId}</title><style>body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; } .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; } .logo { font-size: 22px; font-weight: bold; color: #0284c7; } .details { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 13px; } table { width: 100%; border-collapse: collapse; margin-top: 15px; } th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; font-size: 13px; } th { background: #f8fafc; color: #475569; } .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 20px; color: #16a34a; }</style></head><body><div class="header"><div class="logo">CEROOD SERVICES</div><div style="text-align: right;"><b>INVOICE</b><br>Date: ${dateStr}<br>Status: ${status}</div></div><div class="details"><div><b>Billed To:</b><br>${custName}<br>+91 ${custPhone}</div><div><b>Order Details:</b><br>Order ID: ${orderId}<br>Product ID: ${productId}</div></div><table><thead><tr><th>Service Description</th><th>Qty</th><th>Amount</th></tr></thead><tbody><tr><td>${serviceName}</td><td>1</td><td>₹${amount}</td></tr></tbody></table><div class="total">Total Paid: ₹${amount}</div><p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">Computer generated invoice.</p><script id="cerood-shared-mobile-nav-functions">
+(function(){
+ const dock=document.getElementById('ceroodSharedMobileNav');if(!dock)return;
+ const links=Array.from(dock.querySelectorAll('a'));
+ function select(tab){links.forEach(a=>{const yes=a.classList.contains('cr-nav-'+tab);a.classList.toggle('rn-nav-active',yes);if(yes)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});}
+ window.ceroodSharedSelectNav=select;
+ dock.addEventListener('pointerdown',e=>{const a=e.target.closest('a');if(a&&dock.contains(a))a.classList.add('rn-nav-pressed')});
+ for(const evt of ['pointerup','pointercancel','pointerleave'])dock.addEventListener(evt,()=>links.forEach(a=>a.classList.remove('rn-nav-pressed')));
+ dock.querySelectorAll('[data-cerood-tab]').forEach(a=>a.addEventListener('click',function(e){
+   const tab=this.dataset.ceroodTab;
+   if(tab==='explore'){
+      e.preventDefault();
+      if(typeof toggleCartModal==='function')toggleCartModal(false);
+      const d=document.getElementById('premiumCustomerDashboard');if(d)d.style.display='none';
+      document.body.classList.remove('cerood-dashboard-open');document.body.style.overflow='auto';
+      const target=document.getElementById('productGridContainer')||document.getElementById('products-section');
+      if(target){target.scrollIntoView({behavior:'smooth',block:'start'});select('explore')}
+      else location.href='/#productGridContainer';
+      return;
+   }
+   e.preventDefault();
+   const original=tab==='orders'?'bookings':tab;
+   if(typeof ceroodMobileNavigate==='function')ceroodMobileNavigate(original,this);
+   else location.href=this.href;
+   if(tab==='home'||tab==='cart'||tab==='services')select(tab);
+   else if(tab==='orders'&&typeof currentUser!=='undefined'&&currentUser)select(tab);
+ }));
+ const badge=dock.querySelector('#ceroodSharedCartCount');
+ function update(){
+   let n=0;
+   try{const items=JSON.parse(localStorage.getItem('catus_cart')||'[]');n=Array.isArray(items)?items.length:0}catch(_){}
+   const existing=document.querySelector('.cart-badge');const visible=existing?parseInt(existing.textContent,10):NaN;
+   if(Number.isFinite(visible))n=visible;
+   badge.textContent=n>99?'99+':String(n);badge.hidden=n<1;
+ }
+ const existing=document.querySelector('.cart-badge');if(existing)new MutationObserver(update).observe(existing,{childList:true,characterData:true,subtree:true});
+ ['pageshow','storage','focus','cerood-cart-updated'].forEach(ev=>window.addEventListener(ev,update));
+ dock.querySelector('.cr-nav-cart').addEventListener('click',()=>setTimeout(update,60));
+ update();
+})();
+</script>
+</body></html>`;
         printWindow.document.write(html); printWindow.document.close(); printWindow.focus();
         setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
     }
@@ -15098,6 +15097,7 @@ function scrollToCategories() {
 }
 
 function ceroodSetMobileNavActive(tab) {
+    if (typeof window.ceroodSharedSelectNav === "function") window.ceroodSharedSelectNav(tab === "bookings" ? "orders" : tab);
 
     document
         .querySelectorAll('.cerood-global-nav-btn')
@@ -16214,69 +16214,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
       </div>
   </div>
- <div class="cerood-global-mobile-nav"
-     id="ceroodGlobalMobileNav">
-
-    <button class="cerood-global-nav-btn active"
-            data-nav="home"
-            onclick="ceroodMobileNavigate('home', this)">
-
-        <span class="cerood-global-nav-ring ring-home">
-            <i data-lucide="house"></i>
-        </span>
-
-        <span>Home</span>
-    </button>
-
-
-    <button class="cerood-global-nav-btn"
-            data-nav="services"
-            onclick="ceroodMobileNavigate('services', this)">
-
-        <span class="cerood-global-nav-ring ring-services">
-            <i data-lucide="layout-grid"></i>
-        </span>
-
-        <span>Services</span>
-    </button>
-
-
-    <button class="cerood-global-nav-btn"
-            data-nav="cart"
-            onclick="ceroodMobileNavigate('cart', this)">
-
-        <span class="cerood-global-nav-ring ring-cart">
-            <i data-lucide="shopping-cart"></i>
-        </span>
-
-        <span>Cart</span>
-    </button>
-
-
-    <button class="cerood-global-nav-btn"
-            data-nav="bookings"
-            onclick="ceroodMobileNavigate('bookings', this)">
-
-        <span class="cerood-global-nav-ring ring-bookings">
-            <i data-lucide="calendar-days"></i>
-        </span>
-
-        <span>Bookings</span>
-    </button>
-
-
-    <button class="cerood-global-nav-btn"
-            data-nav="account"
-            onclick="ceroodMobileNavigate('account', this)">
-
-        <span class="cerood-global-nav-ring ring-account">
-            <i data-lucide="user-round"></i>
-        </span>
-
-        <span>Account</span>
-    </button>
-
-</div> 
+ <nav class="cerood-shared-nav" id="ceroodSharedMobileNav" aria-label="Cerood mobile navigation"><a class="cr-nav-home" href="/" data-cerood-tab="home"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg><span class="cr-nav-label">Home</span></a><a class="cr-nav-explore rn-nav-active" href="/#productGridContainer" data-cerood-tab="explore" aria-current="page"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.8 8.2-2.3 5.3-5.3 2.3 2.3-5.3z"></path></svg><span class="cr-nav-label">Explore</span></a><a class="cr-nav-cart" href="/#cart" data-cerood-tab="cart"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><circle cx="9" cy="20" r="1"></circle><circle cx="19" cy="20" r="1"></circle><path d="M2 3h2l2.5 12h12.5l2-9H5"></path></svg><span class="cr-nav-label">Cart</span><span class="cr-nav-badge" id="ceroodSharedCartCount" hidden>0</span></a><a class="cr-nav-orders" href="/?open=bookings" data-cerood-tab="orders"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M5 4h14v17l-3.5-2-3.5 2-3.5-2L5 21z"></path><path d="M9 9h6M9 13h6"></path></svg><span class="cr-nav-label">Orders</span></a><a class="cr-nav-services" href="/#productGridContainer" data-cerood-tab="services"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="m14 7 3-3 3 3-3 3zM3 21l8-8M11 13l-2-2M15 11l-2-2"></path><path d="M4 4h5v5H4z"></path></svg><span class="cr-nav-label">Services</span></a></nav> 
 
 
     

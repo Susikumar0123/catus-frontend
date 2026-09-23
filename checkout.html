@@ -1994,64 +1994,22 @@ p, span, div, a, label, li, small {
 }
 
 </style>
-<style>
-
-/* CEROOD SHARED MOBILE NAV DESIGN — 2026-09-23
-   Visual-only: keeps existing navigation JS, cart, checkout and dashboard handlers. */
-@media (max-width:850px) {
-  body { padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important; }
-  .mobile-bottom-nav.catus-checkout-nav {
-    display:flex !important; position:fixed !important;
-    inset:auto 0 0 0 !important; width:100% !important;
-    height:calc(66px + env(safe-area-inset-bottom, 0px)) !important;
-    padding:4px 4px env(safe-area-inset-bottom, 0px) !important;
-    background:#08090c !important; border:0 !important;
-    border-top:1px solid #282a30 !important;
-    box-shadow:0 -5px 22px rgba(0,0,0,.12) !important;
-    box-sizing:border-box !important; align-items:center !important;
-    justify-content:space-around !important;
-    z-index:2147483647 !important;
-  }
-  .catus-checkout-nav .bot-nav-item {
-    flex:1 1 20% !important; min-width:0 !important; height:100% !important;
-    margin:0 !important; padding:2px 0 !important; border:0 !important;
-    border-radius:10px !important; background:transparent !important;
-    color:#fff !important; display:flex !important;
-    flex-direction:column !important; align-items:center !important;
-    justify-content:center !important; gap:3px !important;
-    font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
-    cursor:pointer !important; -webkit-tap-highlight-color:transparent !important;
-    touch-action:manipulation;
-  }
-  .catus-checkout-nav .checkout-nav-ring {
-    position:relative !important; flex:0 0 35px !important;
-    width:35px !important; height:35px !important;
-    display:flex !important; align-items:center !important;
-    justify-content:center !important; border-radius:50% !important;
-    background:#08090c !important; border:2px solid #e5e7eb !important;
-    box-sizing:border-box !important;
-  }
-  .catus-checkout-nav .checkout-nav-ring svg {
-    width:18px !important; height:18px !important;
-    fill:none !important; stroke:#fff !important;
-    stroke-width:1.8 !important;
-  }
-  .catus-checkout-nav .checkout-nav-ring svg * { stroke:#fff !important; }
-  .catus-checkout-nav .bot-nav-item > span:last-child {
-    margin:0 !important; color:#fff !important; font-size:10px !important;
-    line-height:12px !important; font-weight:500 !important;
-    letter-spacing:0 !important; white-space:nowrap !important;
-  }
-  .catus-checkout-nav .bot-nav-item:active { transform:scale(.94) !important; opacity:.82 !important; }
-  .catus-checkout-nav .bot-nav-item:focus-visible { outline:2px solid #fff !important; outline-offset:-3px !important; }
-  .catus-checkout-nav .nav-home-ring { border-top-color:#8064ff !important; }
-  .catus-checkout-nav .nav-services-ring { border-top-color:#20bfd4 !important; }
-  .catus-checkout-nav .nav-cart-ring { border-top-color:#f4a000 !important; }
-  .catus-checkout-nav .nav-bookings-ring { border-top-color:#34b95a !important; }
-  .catus-checkout-nav .nav-account-ring { border-top-color:#f43f86 !important; }
+<style id="cerood-shared-mobile-nav-style">
+.cerood-shared-nav{display:none}
+@media(max-width:650px){
+ .cerood-shared-nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:0!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:calc(66px + env(safe-area-inset-bottom))!important;padding:5px 5px calc(5px + env(safe-area-inset-bottom))!important;margin:0!important;border:0!important;border-top:1px solid #e8e8f0!important;border-radius:0!important;background:#fff!important;box-shadow:0 -3px 14px rgba(24,27,55,.065)!important;align-items:stretch!important;z-index:2147483000!important;box-sizing:border-box!important}
+ .cerood-shared-nav a{box-sizing:border-box!important;position:relative!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;min-width:0!important;min-height:0!important;width:100%!important;height:100%!important;padding:4px 1px!important;gap:4px!important;border:1px solid transparent!important;border-radius:14px!important;background:transparent!important;color:#414959!important;font:500 10px/1.1 Inter,Arial,sans-serif!important;text-decoration:none!important;touch-action:manipulation}
+ .cerood-shared-nav .cr-nav-icon{display:block!important;width:21px!important;height:21px!important;flex-shrink:0!important;stroke-width:1.8!important}
+ .cerood-shared-nav .cr-nav-label{position:static!important;display:block!important;color:inherit!important;font-size:9px!important;font-weight:inherit!important;line-height:1.1!important;white-space:nowrap!important}
+ .cerood-shared-nav a.rn-nav-active,.cerood-shared-nav a[aria-current="page"]{background:#f0ebff!important;color:#6043e8!important;border-color:#ddd2ff!important;font-weight:700!important;box-shadow:inset 0 1px 5px rgba(111,76,231,.08)!important}
+ .cerood-shared-nav a.rn-nav-pressed{background:#e5dcff!important;color:#5635df!important;border-color:#c6b5ff!important;transform:scale(.96)!important}
+ .cerood-shared-nav .cr-nav-badge{position:absolute!important;top:1px!important;right:calc(50% - 22px)!important;min-width:15px!important;height:15px!important;border-radius:9px!important;background:#6547e8!important;color:#fff!important;border:2px solid #fff!important;display:grid!important;place-items:center!important;font-size:8px!important;line-height:1!important;z-index:2!important;padding:0 2px!important}
+ .cerood-shared-nav .cr-nav-badge[hidden]{display:none!important}
+ .cerood-shared-nav a:focus-visible{outline:2px solid #7d62ef!important;outline-offset:-2px!important}
+ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))!important}
 }
-@media (min-width:851px) { .mobile-bottom-nav.catus-checkout-nav { display:none !important; } }
-
+@media(max-width:360px){.cerood-shared-nav{padding-left:2px!important;padding-right:2px!important}.cerood-shared-nav .cr-nav-label{font-size:8px!important}}
+@media(prefers-reduced-motion:reduce){.cerood-shared-nav a{transition:none!important}}
 </style>
 </head>
 <body>
@@ -4034,74 +3992,47 @@ document.getElementById('dispTotal').textContent =
 }
     </script>
    <!-- CATUS CHECKOUT MODERN MOBILE NAV -->
-<div class="mobile-bottom-nav catus-checkout-nav">
-
-    <!-- HOME -->
-    <button class="bot-nav-item"
-            onclick="window.location.href='/'">
-        <span class="checkout-nav-ring nav-home-ring">
-            <svg viewBox="0 0 24 24">
-                <path d="M3 10.5L12 3l9 7.5"></path>
-                <path d="M5 9.5V21h14V9.5"></path>
-                <path d="M9 21v-7h6v7"></path>
-            </svg>
-        </span>
-        <span>Home</span>
-    </button>
-
-    <!-- SERVICES -->
-    <button class="bot-nav-item"
-            onclick="window.location.href='/#productGridContainer'">
-        <span class="checkout-nav-ring nav-services-ring">
-            <svg viewBox="0 0 24 24">
-                <rect x="4" y="4" width="6" height="6" rx="1.5"></rect>
-                <rect x="14" y="4" width="6" height="6" rx="1.5"></rect>
-                <rect x="4" y="14" width="6" height="6" rx="1.5"></rect>
-                <rect x="14" y="14" width="6" height="6" rx="1.5"></rect>
-            </svg>
-        </span>
-        <span>Services</span>
-    </button>
-
-    <!-- CART -->
-    <button class="bot-nav-item"
-            onclick="window.location.href='/#cart'">
-        <span class="checkout-nav-ring nav-cart-ring">
-            <svg viewBox="0 0 24 24">
-                <circle cx="9" cy="20" r="1"></circle>
-                <circle cx="18" cy="20" r="1"></circle>
-                <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
-            </svg>
-        </span>
-        <span>Cart</span>
-    </button>
-
-    <!-- BOOKINGS -->
-    <button class="bot-nav-item"
-            onclick="window.location.href='/?open=bookings'">
-        <span class="checkout-nav-ring nav-bookings-ring">
-            <svg viewBox="0 0 24 24">
-                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
-                <path d="M8 3v4"></path>
-                <path d="M16 3v4"></path>
-                <path d="M7 10h10"></path>
-            </svg>
-        </span>
-        <span>Bookings</span>
-    </button>
-
-    <!-- ACCOUNT -->
-    <button class="bot-nav-item"
-            onclick="window.location.href='/?open=account'">
-        <span class="checkout-nav-ring nav-account-ring">
-            <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="8" r="3.5"></circle>
-                <path d="M5 20c.8-3.7 3.2-5.5 7-5.5s6.2 1.8 7 5.5"></path>
-            </svg>
-        </span>
-        <span>Account</span>
-    </button>
-
-</div>
+<nav class="cerood-shared-nav" id="ceroodSharedMobileNav" aria-label="Cerood mobile navigation"><a class="cr-nav-home" href="/"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg><span class="cr-nav-label">Home</span></a><a class="cr-nav-explore" href="/#productGridContainer"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.8 8.2-2.3 5.3-5.3 2.3 2.3-5.3z"></path></svg><span class="cr-nav-label">Explore</span></a><a class="cr-nav-cart rn-nav-active" href="/#cart" aria-current="page"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><circle cx="9" cy="20" r="1"></circle><circle cx="19" cy="20" r="1"></circle><path d="M2 3h2l2.5 12h12.5l2-9H5"></path></svg><span class="cr-nav-label">Cart</span><span class="cr-nav-badge" id="ceroodSharedCartCount" hidden>0</span></a><a class="cr-nav-orders" href="/?open=bookings"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M5 4h14v17l-3.5-2-3.5 2-3.5-2L5 21z"></path><path d="M9 9h6M9 13h6"></path></svg><span class="cr-nav-label">Orders</span></a><a class="cr-nav-services" href="/#productGridContainer"><svg aria-hidden="true" class="cr-nav-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="m14 7 3-3 3 3-3 3zM3 21l8-8M11 13l-2-2M15 11l-2-2"></path><path d="M4 4h5v5H4z"></path></svg><span class="cr-nav-label">Services</span></a></nav>
+<script id="cerood-shared-mobile-nav-functions">
+(function(){
+ const dock=document.getElementById('ceroodSharedMobileNav');if(!dock)return;
+ const links=Array.from(dock.querySelectorAll('a'));
+ function select(tab){links.forEach(a=>{const yes=a.classList.contains('cr-nav-'+tab);a.classList.toggle('rn-nav-active',yes);if(yes)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});}
+ window.ceroodSharedSelectNav=select;
+ dock.addEventListener('pointerdown',e=>{const a=e.target.closest('a');if(a&&dock.contains(a))a.classList.add('rn-nav-pressed')});
+ for(const evt of ['pointerup','pointercancel','pointerleave'])dock.addEventListener(evt,()=>links.forEach(a=>a.classList.remove('rn-nav-pressed')));
+ dock.querySelectorAll('[data-cerood-tab]').forEach(a=>a.addEventListener('click',function(e){
+   const tab=this.dataset.ceroodTab;
+   if(tab==='explore'){
+      e.preventDefault();
+      if(typeof toggleCartModal==='function')toggleCartModal(false);
+      const d=document.getElementById('premiumCustomerDashboard');if(d)d.style.display='none';
+      document.body.classList.remove('cerood-dashboard-open');document.body.style.overflow='auto';
+      const target=document.getElementById('productGridContainer')||document.getElementById('products-section');
+      if(target){target.scrollIntoView({behavior:'smooth',block:'start'});select('explore')}
+      else location.href='/#productGridContainer';
+      return;
+   }
+   e.preventDefault();
+   const original=tab==='orders'?'bookings':tab;
+   if(typeof ceroodMobileNavigate==='function')ceroodMobileNavigate(original,this);
+   else location.href=this.href;
+   if(tab==='home'||tab==='cart'||tab==='services')select(tab);
+   else if(tab==='orders'&&typeof currentUser!=='undefined'&&currentUser)select(tab);
+ }));
+ const badge=dock.querySelector('#ceroodSharedCartCount');
+ function update(){
+   let n=0;
+   try{const items=JSON.parse(localStorage.getItem('catus_cart')||'[]');n=Array.isArray(items)?items.length:0}catch(_){}
+   const existing=document.querySelector('.cart-badge');const visible=existing?parseInt(existing.textContent,10):NaN;
+   if(Number.isFinite(visible))n=visible;
+   badge.textContent=n>99?'99+':String(n);badge.hidden=n<1;
+ }
+ const existing=document.querySelector('.cart-badge');if(existing)new MutationObserver(update).observe(existing,{childList:true,characterData:true,subtree:true});
+ ['pageshow','storage','focus','cerood-cart-updated'].forEach(ev=>window.addEventListener(ev,update));
+ dock.querySelector('.cr-nav-cart').addEventListener('click',()=>setTimeout(update,60));
+ update();
+})();
+</script>
 </body>
 </html>
