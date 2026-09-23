@@ -1,0 +1,138 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cerood Beauty — Admin</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+:root{--purple:#6945d8;--deep:#4124a2;--ink:#211a36;--line:#eae5f5}*{box-sizing:border-box}body{margin:0;background:#f8f7fc;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{display:flex;min-height:100vh}.sidebar{width:246px;flex-shrink:0;background:white;border-right:1px solid var(--line);padding:22px 12px;display:flex;flex-direction:column;gap:7px}.brand{padding:8px 12px 24px;border-bottom:1px solid var(--line);margin-bottom:12px;font-weight:900;font-size:21px;letter-spacing:-.05em}.brand span{display:block;color:var(--purple);font-size:11px;letter-spacing:.17em;margin-top:4px}.nav{width:100%;text-align:left;border:0;border-radius:12px;padding:14px 12px;background:transparent;color:#675e79;font-weight:700;cursor:pointer}.nav i{width:25px}.nav.active,.nav:hover{background:#f2eeff;color:var(--deep)}.sidebar-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:16px}.content{flex:1;min-width:0}.top{background:white;border-bottom:1px solid var(--line);padding:20px 25px;display:flex;justify-content:space-between;gap:12px;align-items:center}.top h1{font-size:21px;margin:0}.top a{font-size:12px;text-decoration:none;color:var(--deep);font-weight:750}.workspace{padding:24px;max-width:1550px;margin:auto}.main-tab-pane{display:none}.main-tab-pane.active{display:block}.empty{background:#fff;border:1px solid var(--line);border-radius:17px;padding:30px;line-height:1.8}.empty h2{margin-top:0}.empty p{color:#64748b;font-size:13px}.renewed-admin{padding:0}.renewed-admin-head h2{font-size:23px}.renewed-panel,.renewed-stats>div{box-shadow:0 8px 30px rgba(43,27,90,.035)}.renewed-draft-image{object-fit:cover}.renewed-draft{overflow:hidden}.renewed-draft h4{overflow-wrap:anywhere}
+/* Cerood Beauty admin: isolated classes, existing service styling unchanged */
+.renewed-admin{padding:3px 2px 35px;color:#17243b}.renewed-admin *{box-sizing:border-box}.renewed-admin-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:17px}.renewed-kicker{color:#6550bb;font-size:10px;font-weight:800;letter-spacing:.14em}.renewed-admin-head h2{font-size:22px;margin:7px 0}.renewed-admin-head p{font-size:12px;color:#64748b;margin:0;line-height:1.6}.renewed-link{background:#28253d;color:white;text-decoration:none;border-radius:9px;padding:12px 15px;font-size:12px;font-weight:700}.renewed-warning{background:#fff7e9;border:1px solid #f6dfb7;border-radius:10px;padding:13px 16px;color:#78501d;font-size:12px;line-height:1.6;margin-bottom:15px}.renewed-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:17px}.renewed-stats>div{background:white;border:1px solid #e5eaf1;border-radius:12px;padding:17px}.renewed-stats small{display:block;color:#64748b;font-size:11px}.renewed-stats strong{display:block;font-size:22px;margin-top:8px}.renewed-stats>div:last-child strong{font-size:13px;color:#a16207}.renewed-columns{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);gap:15px;align-items:start}.renewed-panel{background:white;border:1px solid #e5eaf1;border-radius:13px;padding:20px;min-width:0}.renewed-panel-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:17px}.renewed-panel-title h3{font-size:16px;margin:0}.renewed-panel-title span{font-size:11px;color:#64748b}.renewed-light{border:1px solid #d9deea;background:#f8fafc;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:11px}.renewed-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.renewed-fields label{display:flex;flex-direction:column;gap:6px;color:#42526a;font-size:11px;font-weight:700;min-width:0}.renewed-fields .renewed-wide{grid-column:1/-1}.renewed-fields input,.renewed-fields select,.renewed-fields textarea,#renewedDraftSearch{width:100%;min-width:0;background:#fbfcff;border:1px solid #dce2eb;border-radius:8px;padding:11px 12px;font:400 12px Arial,sans-serif;color:#17243b}.renewed-fields textarea{resize:vertical}.renewed-fields :focus,#renewedDraftSearch:focus{outline:2px solid #b9a9f7;outline-offset:1px}.renewed-form-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}.renewed-primary{background:#2c263e;color:white;border:0;border-radius:9px;padding:13px 16px;font-weight:700;cursor:pointer;font-size:12px}.renewed-form-actions span{font-size:12px;color:#167a4d}.renewed-draft-list{display:grid;gap:11px;margin-top:15px}.renewed-draft{border:1px solid #e5eaf1;border-radius:11px;padding:12px;display:grid;grid-template-columns:65px minmax(0,1fr);gap:12px}.renewed-draft-image{width:65px;height:65px;border-radius:8px;background:#eef1f7;object-fit:cover}.renewed-draft h4{font-size:12px;margin:0 0 6px;overflow-wrap:anywhere}.renewed-draft p{font-size:11px;color:#64748b;margin:0 0 7px}.renewed-draft .renewed-draft-actions{display:flex;gap:7px;flex-wrap:wrap}.renewed-draft-actions button{font-size:11px;border:1px solid #dce2eb;background:white;border-radius:7px;padding:7px 10px;cursor:pointer}.renewed-draft-actions .renewed-delete{color:#b91c1c}.renewed-draft-list>p{font-size:12px;color:#64748b;line-height:1.6}@media(max-width:1050px){.renewed-columns{grid-template-columns:1fr}.renewed-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.renewed-panel{padding:14px}.renewed-fields{grid-template-columns:1fr}.renewed-fields .renewed-wide{grid-column:auto}.renewed-admin-head h2{font-size:19px}}
+
+
+@media(max-width:850px){.shell{display:block}.sidebar{width:100%;padding:12px;display:flex;flex-direction:row;overflow-x:auto;align-items:center}.brand{min-width:155px;margin:0;padding:8px;border:0;font-size:16px}.nav{white-space:nowrap;width:auto;padding:11px}.sidebar-foot{margin:0;padding:0;border:0}.top{padding:15px}.workspace{padding:13px}.renewed-columns{grid-template-columns:1fr}.renewed-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.renewed-fields{grid-template-columns:1fr}.renewed-fields .renewed-wide{grid-column:auto}.renewed-panel{padding:14px}}
+</style><style>.renewed-order-list{display:grid;gap:13px}.renewed-order-card{border:1px solid #eae5f5;border-radius:13px;padding:18px;background:#fff;overflow-wrap:anywhere}.renewed-order-card h3{margin:0 0 8px;font-size:15px}.renewed-order-card p{margin:5px 0;font-size:12px}.renewed-order-card label{display:block;font-size:12px;font-weight:700;margin-top:12px}.renewed-order-card select{max-width:100%;padding:10px;border:1px solid #eae5f5;border-radius:9px}.renewed-order-card button{margin:8px 0 0 8px;padding:10px;border:0;border-radius:9px;background:#6945d8;color:#fff;cursor:pointer}.renewed-order-card button:disabled{opacity:.5;cursor:not-allowed}.renewed-order-card .note{color:#64748b;font-size:11px}</style><style id="renewed-payment-order-filter-style">
+.renewed-payment-filters{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 18px}.renewed-payment-filter{border:1px solid #dce2eb;background:#fff;border-radius:9px;padding:10px 13px;font-size:12px;font-weight:650;color:#42526a;cursor:pointer}.renewed-payment-filter.active{border-color:#6945d8;background:#f2eeff;color:#4124a2}.renewed-payment-filter span{font-weight:500;margin-left:4px}.renewed-order-card{min-width:0}.renewed-order-type{display:inline-block;font-size:11px;font-weight:700;margin:0 0 8px;padding:5px 9px;border-radius:7px;background:#f2eeff;color:#4124a2}.renewed-order-type.cod{background:#f5f5f7;color:#374151}.renewed-order-type.other{background:#fff7e9;color:#78501d}@media(max-width:600px){.renewed-payment-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.renewed-payment-filter{min-width:0;text-align:center;padding:11px 7px}.renewed-order-card{padding:13px}}
+</style></head><body><div class="shell"><aside class="sidebar"><div class="brand">CEROOD<span>BEAUTY ADMIN</span></div><button class="nav active" data-tab="inventory"><i class="fa-solid fa-boxes-stacked"></i> Products & Stock</button><button class="nav" data-tab="orders"><i class="fa-solid fa-bag-shopping"></i> Beauty Orders</button><button class="nav" data-tab="delivery"><i class="fa-solid fa-truck"></i> Delivery Tracking</button><button class="nav" data-tab="payments"><i class="fa-solid fa-credit-card"></i> Payments</button><div class="sidebar-foot"><a class="nav" style="display:block;text-decoration:none" href="/cosmetics.html"><i class="fa-solid fa-store"></i> Open Store</a><button class="nav" id="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div></aside><div class="content"><header class="top"><h1 id="heading">Products & Stock</h1><a href="/cosmetics.html">View Beauty Store ↗</a></header><main class="workspace"><div id="tab-inventory" class="main-tab-pane active"><div id="page-renewed-store" class="main-tab-pane active">
+ <div class="renewed-admin">
+  <div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD BEAUTY · INVENTORY</span><h2>Beauty Product Management</h2><p>Manage beauty and cosmetics listings, drafts and published inventory.</p></div><a href="/cosmetics.html" target="_blank" rel="noopener" class="renewed-link">Open Beauty Store ↗</a></div>
+  <div class="renewed-warning"><i class="fa-solid fa-circle-info"></i> <strong>Phase 4:</strong> Products require the separate Cerood Beauty backend and Supabase tables. Before publishing, record ingredients, MRP, net quantity, batch, expiry, manufacturer and required label details. COD checkout is enabled when the backend permits it.</div>
+  <div class="renewed-stats"><div><small>All products</small><strong id="renewedTotal">0</strong></div><div><small>Sealed</small><strong id="renewedRefurbished">0</strong></div><div><small>New</small><strong id="renewedUsed">0</strong></div><div><small>Published</small><strong id="renewedPublished">0</strong></div></div>
+  <div class="renewed-columns">
+   <form id="renewedDraftForm" class="renewed-panel" autocomplete="off">
+    <div class="renewed-panel-title"><h3 id="renewedFormHeading">Add renewed product</h3><button type="button" class="renewed-light" onclick="renewedResetForm()">Clear form</button></div>
+    <input type="hidden" id="renewedDraftId">
+    <div class="renewed-fields">
+      <label class="renewed-wide">Product title *<input id="renewedName" required maxlength="140" placeholder="Vitamin C Face Serum 30ml"></label>
+      <label>Category *<select id="renewedCategory" required><option value="">Select category</option><option value="tv">Skincare</option><option value="refrigerator">Makeup</option><option value="washing-machine">Haircare</option><option value="ac">Fragrance</option><option value="laptop">Body Care</option><option value="other">Beauty Tools</option></select></label>
+      <label>Condition *<select id="renewedCondition" required><option value="">Select condition</option><option value="Sealed">Sealed</option><option value="New">New</option><option value="Gift set">Gift set</option></select></label>
+      <label>Listing status<select id="renewedStatus"><option value="draft">Draft (not visible)</option><option value="published">Published (visible if in stock)</option></select></label>
+      <label>Brand<input id="renewedBrand" maxlength="80" placeholder="Samsung"></label>
+      <label>Model<input id="renewedModel" maxlength="80" placeholder="UA32…"></label>
+      <label>Selling price (₹) *<input id="renewedPrice" type="number" min="1" step="1" required placeholder="4999"></label>
+      <label>Reference price (₹)<input id="renewedCompare" type="number" min="0" step="1" placeholder="Optional"></label>
+      <label>Available units *<input id="renewedStock" type="number" min="0" max="99999" step="1" required value="1"></label>
+      <label>Warranty (days)<input id="renewedWarranty" type="number" min="0" max="3650" step="1" value="0"></label>
+      <label>Product location<input id="renewedLocation" maxlength="100" placeholder="Dharmapuri"></label>
+      <label>Delivery information<input id="renewedDelivery" maxlength="160" placeholder="Confirm by pincode"></label>
+      <label class="renewed-wide">Actual product photo URL<input id="renewedImage" type="url" placeholder="https://…/actual-product.jpg"></label>
+      <label class="renewed-wide">Working demo video URL<input id="renewedVideo" type="url" placeholder="https://…/working-demo.mp4"></label>
+      <label class="renewed-wide">Product condition / known defects<textarea id="renewedDefects" rows="3" maxlength="2000" placeholder="Ingredients, usage directions, skin type, batch and expiry details…"></textarea></label>
+      <label class="renewed-wide">Accessories included<textarea id="renewedAccessories" rows="2" maxlength="1000" placeholder="Remote, stand, power cable…"></textarea></label>
+      <label class="renewed-wide">Warranty terms / exclusions<textarea id="renewedTerms" rows="2" maxlength="1500" placeholder="Exactly what is covered, if any…"></textarea></label>
+    </div>
+    <div class="renewed-form-actions"><button type="submit" class="renewed-primary"><i class="fa-solid fa-floppy-disk"></i> Save product to server</button><span id="renewedMessage" role="status"></span></div>
+   </form>
+   <section class="renewed-panel renewed-draft-panel"><div class="renewed-panel-title"><h3>Saved products</h3><span id="renewedDraftCount">0 items</span></div><input id="renewedDraftSearch" type="search" placeholder="Search renewed products…" aria-label="Search renewed drafts"><div id="renewedDraftList" class="renewed-draft-list"><p>No drafts yet.</p></div></section>
+  </div>
+ </div>
+</div>
+
+            </div><section id="tab-orders" class="main-tab-pane empty"><h2>Beauty Orders <button class="renewed-light" id="refreshRenewedOrders">↻ Refresh</button></h2><p>Actual orders from the protected Cerood Beauty backend. Paid online orders and confirmed COD orders can be dispatched.</p><p id="renewedOrdersMessage" role="status">Open Beauty Orders to load.</p><div class="renewed-payment-filters" role="group" aria-label="Filter renewed orders by payment method"><button type="button" class="renewed-payment-filter active" data-renewed-payment-filter="all" aria-pressed="true">All orders <span id="renewedCountAll">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="online" aria-pressed="false">Online paid <span id="renewedCountOnline">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="cod" aria-pressed="false">COD orders <span id="renewedCountCod">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="other" aria-pressed="false">Other / pending <span id="renewedCountOther">0</span></button></div><div id="renewedOrdersList" class="renewed-order-list"></div></section><section id="tab-delivery" class="main-tab-pane empty"><h2>Delivery Tracking</h2><p>Manage delivery status from Beauty Orders. The verified customer dashboard reads the same order status.</p><button class="renewed-primary" type="button" id="openRenewedOrders">Open Beauty Orders</button></section><section id="tab-payments" class="main-tab-pane empty"><h2>Payments</h2><p>Verified Razorpay payments and refunds will appear here after the admin payment API is connected.</p></section></main></div></div><script>
+(function(){'use strict';if(sessionStorage.getItem('cosmeticsAdminAuthenticated')!=='true'||!sessionStorage.getItem('cosmeticsAdminToken')){location.replace('renewed-admin-login.html');return}document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.workspace > .main-tab-pane').forEach(x=>x.classList.toggle('active',x.id==='tab-'+b.dataset.tab));document.getElementById('heading').textContent=b.textContent.trim();if(b.dataset.tab==='inventory'&&typeof renewedRenderDrafts==='function')renewedRenderDrafts();if(b.dataset.tab==='orders'&&typeof window.loadRenewedOrders==='function')window.loadRenewedOrders()}));document.getElementById('logout').onclick=()=>{sessionStorage.removeItem('cosmeticsAdminAuthenticated');sessionStorage.removeItem('cosmeticsAdminToken');location.href='renewed-admin-login.html'};})();
+</script><script>/* Phase 4: server-side inventory, protected by existing admin Bearer token. */
+(function(){'use strict';
+ const API='https://catus-backend-d2js.onrender.com';
+ const ids=['Name','Category','Condition','Brand','Model','Price','Compare','Stock','Warranty','Location','Delivery','Image','Video','Defects','Accessories','Terms','Status'];
+ const $=id=>document.getElementById('renewed'+id);
+ let items=[];
+ function token(){return sessionStorage.getItem('cosmeticsAdminToken')||'';}
+ async function request(path,method='GET',payload){
+   const headers={Authorization:'Bearer '+token(),Accept:'application/json'};
+   if(payload)headers['Content-Type']='application/json';
+   const response=await fetch(API+path,{method,headers,...(payload?{body:JSON.stringify(payload)}:{})});
+   const data=await response.json().catch(()=>({}));
+   if(!response.ok||!data.success)throw Error(data.message||'Request failed: '+response.status);
+   return data;
+ }
+ function message(s,error){$('Message').textContent=s;$('Message').style.color=error?'#b91c1c':'#167a4d'}
+ const fieldMap={Name:'name',Category:'category',Condition:'condition',Brand:'brand',Model:'model',Price:'price',Compare:'compare_price',Stock:'stock',Warranty:'warranty_days',Location:'location',Delivery:'delivery',Image:'image_url',Video:'video_url',Defects:'known_defects',Accessories:'accessories',Terms:'warranty_terms',Status:'status'};
+ window.renewedResetForm=function(){document.getElementById('renewedDraftForm').reset();$('DraftId').value='';$('Stock').value='1';$('Warranty').value='0';$('FormHeading').textContent='Add renewed product';message('')};
+ window.renewedRenderDrafts=async function(){
+   try{const data=await request('/api/admin/cosmetics/products');items=data.products;render();}
+   catch(e){message(e.message,true);$('DraftList').textContent='Could not load products from server. Check admin login and backend deployment.';}
+ };
+ function render(){
+   const q=$('DraftSearch').value.trim().toLowerCase();
+   $('Total').textContent=items.length;
+   $('Refurbished').textContent=items.filter(p=>p.condition==='Sealed').length;
+   $('Used').textContent=items.filter(p=>p.condition==='New').length;
+   $('Published').textContent=items.filter(p=>p.status==='published').length;
+   $('DraftCount').textContent=items.length+' items';
+   const root=$('DraftList');root.replaceChildren();
+   const filtered=items.filter(p=>[p.name,p.brand,p.model,p.category].join(' ').toLowerCase().includes(q));
+   if(!filtered.length){root.textContent='No matching products.';return;}
+   for(const p of filtered){
+     const card=document.createElement('article');card.className='renewed-draft';
+     const pic=document.createElement(p.image_url?'img':'div');pic.className='renewed-draft-image';
+     if(p.image_url){pic.src=p.image_url;pic.alt='Product photo';pic.onerror=()=>pic.removeAttribute('src')}else pic.textContent='📦';
+     const info=document.createElement('div'),title=document.createElement('h4'),sub=document.createElement('p'),actions=document.createElement('div');
+     title.textContent=p.name;sub.textContent=p.condition+' · ₹'+Number(p.price).toLocaleString('en-IN')+' · '+p.stock+' unit(s) · '+p.status;
+     actions.className='renewed-draft-actions';
+     const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.onclick=()=>{for(const [k,v] of Object.entries(fieldMap))$(k).value=p[v]??'';$('DraftId').value=p.id;$('FormHeading').textContent='Edit renewed product';document.getElementById('renewedDraftForm').scrollIntoView({behavior:'smooth',block:'start'})};
+     const del=document.createElement('button');del.type='button';del.className='renewed-delete';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Permanently delete this product?'))return;try{await request('/api/admin/cosmetics/products/'+encodeURIComponent(p.id),'DELETE');message('Product deleted.');await renewedRenderDrafts()}catch(e){message(e.message,true)}};
+     const preview=document.createElement('button');preview.type='button';preview.textContent='Test preview';
+     preview.title='Admin-only stock and price check. Does not collect payment.';
+     preview.onclick=async()=>{preview.disabled=true;try{const d=await request('/api/admin/cosmetics/test-preview/'+encodeURIComponent(p.id));
+       const product=d.product;message('ADMIN TEST · '+product.name+' · ₹'+Number(product.price).toLocaleString('en-IN')+' · stock '+product.stock+' · '+product.status+' · NO PAYMENT CREATED');
+     }catch(e){message(e.message,true)}finally{preview.disabled=false}};
+     actions.append(edit,preview,del);info.append(title,sub,actions);card.append(pic,info);root.append(card);
+   }
+ }
+ document.getElementById('renewedDraftForm').addEventListener('submit',async e=>{
+   e.preventDefault();if(!e.currentTarget.reportValidity())return;
+   const payload={};for(const [k,v] of Object.entries(fieldMap))payload[v]=$(k).value.trim();
+   const id=$('DraftId').value;const path='/api/admin/cosmetics/products'+(id?'/'+encodeURIComponent(id):'');
+   try{await request(path,id?'PUT':'POST',payload);renewedResetForm();message('Saved to Supabase successfully.');await renewedRenderDrafts()}
+   catch(err){message(err.message,true)}
+ });
+ $('DraftSearch').addEventListener('input',render);
+ // Standalone panel: load inventory after the admin session check.
+ if(token()) window.renewedRenderDrafts();
+})();
+</script><script>
+(()=>{'use strict';
+const API='https://catus-backend-d2js.onrender.com';
+const stages=['confirmed','packing','packed','shipped','out_for_delivery','delivered'];
+const names={'confirmed':'Order confirmed','packing':'Packing','packed':'Packed','shipped':'Shipped','out_for_delivery':'Out for delivery','delivered':'Delivered'};
+const $=id=>document.getElementById(id);
+const token=()=>sessionStorage.getItem('cosmeticsAdminToken')||'';
+const msg=(s,error=false)=>{$('renewedOrdersMessage').textContent=s;$('renewedOrdersMessage').style.color=error?'#b91c1c':'#166534'};
+let cachedOrders=[],paymentFilter='all';
+function orderPaymentGroup(o){
+  const method=String(o.payment_method||'').toLowerCase(),status=String(o.status||'').toLowerCase();
+  if(method==='cod'&&['processing','paid'].includes(status))return 'cod';
+  if(method!=='cod'&&status==='paid')return 'online';
+  return 'other';
+}
+function renderPaymentCounts(){
+  const counts={all:cachedOrders.length,online:0,cod:0,other:0};
+  for(const o of cachedOrders)counts[orderPaymentGroup(o)]++;
+  for(const [group,id] of Object.entries({all:'renewedCountAll',online:'renewedCountOnline',cod:'renewedCountCod',other:'renewedCountOther'}))$(id).textContent='('+counts[group]+')';
+  document.querySelectorAll('[data-renewed-payment-filter]').forEach(b=>{const active=b.dataset.renewedPaymentFilter===paymentFilter;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+}
+function renderFilteredOrders(){renderPaymentCounts();render(cachedOrders.filter(o=>paymentFilter==='all'||orderPaymentGroup(o)===paymentFilter))}
+document.querySelectorAll('[data-renewed-payment-filter]').forEach(b=>b.addEventListener('click',()=>{paymentFilter=b.dataset.renewedPaymentFilter;renderFilteredOrders()}));
+
+async function api(path,method='GET',payload){const r=await fetch(API+path,{method,headers:{Authorization:'Bearer '+token(),...(payload?{'Content-Type':'application/json'}:{})},...(payload?{body:JSON.stringify(payload)}:{}),cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Request failed ('+r.status+')');return d;}
+function line(parent,label,value){const p=document.createElement('p');const strong=document.createElement('strong');strong.textContent=label+': ';p.append(strong,document.createTextNode(String(value??'—')));parent.append(p)}
+function render(orders){const root=$('renewedOrdersList');root.replaceChildren();if(!orders.length){msg(cachedOrders.length?'No orders in this payment category.':'No Renewed orders yet.');return}msg(orders.length+' order(s) shown · '+cachedOrders.length+' total.');for(const o of orders){const card=document.createElement('article');card.className='renewed-order-card';const h=document.createElement('h3');h.textContent='Order #'+o.id;card.append(h);const type=document.createElement('span');type.className='renewed-order-type '+(orderPaymentGroup(o)==='cod'?'cod':orderPaymentGroup(o)==='other'?'other':'');type.textContent=orderPaymentGroup(o)==='cod'?'Cash on Delivery':orderPaymentGroup(o)==='online'?'Online payment received':'Payment pending / other';card.append(type);line(card,'Customer',o.customer_name);line(card,'Mobile',o.customer_phone);line(card,'Payment method',o.payment_method==='cod'?'Cash on Delivery':(o.payment_method||'Online'));line(card,'Payment status',o.status==='processing'&&o.payment_method==='cod'?'COD confirmed — collect on delivery':o.status);line(card,'Amount','₹'+Number(o.total).toLocaleString('en-IN'));line(card,'Created',new Date(o.created_at).toLocaleString('en-IN'));const addr=o.delivery_address;line(card,'Address',typeof addr==='object'?Object.values(addr||{}).filter(x=>typeof x==='string'||typeof x==='number').join(', '):addr);for(const item of o.items||[])line(card,'Product',item.product_name+' × '+item.quantity+' — ₹'+item.line_total);const label=document.createElement('label');label.textContent='Delivery status';const select=document.createElement('select');const current=o.delivery_status||'confirmed';for(const stage of stages){const opt=document.createElement('option');opt.value=stage;opt.textContent=names[stage];select.append(opt)}select.value=current;select.disabled=!(o.status==='paid'||(o.status==='processing'&&o.payment_method==='cod'))||current==='delivered';const btn=document.createElement('button');btn.type='button';btn.textContent='Save status';btn.disabled=select.disabled;const note=document.createElement('p');note.className='note';note.textContent=(o.status==='paid'||(o.status==='processing'&&o.payment_method==='cod'))?'Status cannot move backward.':'Dispatch locked until payment is verified or COD order confirmed.';btn.onclick=async()=>{if(!confirm('Update delivery status for this order?'))return;btn.disabled=true;try{await api('/api/admin/cosmetics/orders/'+encodeURIComponent(o.id)+'/delivery-status','PATCH',{delivery_status:select.value});msg('Delivery status saved. Customer tracking will reflect the update.');await window.loadRenewedOrders()}catch(e){msg(e.message,true);btn.disabled=false}};label.append(select);card.append(label,btn,note);root.append(card)}}
+window.loadRenewedOrders=async()=>{msg('Loading Renewed orders…');try{const d=await api('/api/admin/cosmetics/orders');cachedOrders=Array.isArray(d.orders)?d.orders:[];renderFilteredOrders()}catch(e){msg(e.message,true);$('renewedOrdersList').replaceChildren()}};
+$('refreshRenewedOrders').onclick=window.loadRenewedOrders;
+$('openRenewedOrders').onclick=()=>document.querySelector('[data-tab="orders"]').click();
+})();
+</script></body></html>
