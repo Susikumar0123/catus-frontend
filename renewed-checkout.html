@@ -2005,7 +2005,7 @@ p, span, div, a, label, li, small {
 .summary-products .product-line .price{font-size:14px;text-align:right}
 .summary-products .product-line > div:nth-child(2){min-width:0}
 @media(max-width:540px){.summary-products .product-line img{width:55px;height:55px;flex-basis:55px}.summary-products .product-line{gap:8px}.summary-products .product-line .price{font-size:13px}}
-</style></head><body>
+select.form-input{appearance:auto;cursor:pointer;background-color:#fafafa!important}select.form-input:disabled{opacity:.7;cursor:not-allowed}</style></head><body>
 <header class="checkout-header"><a class="brand-word" href="/renewed.html" aria-label="Cerood Renewed home"><img src="/cerood-logo.webp" alt="Cerood logo" width="110" height="43" style="display:block;width:auto;max-width:125px;object-fit:contain"></a><span class="secure-badge"><i class="fa-solid fa-shield-halved"></i> Secure Checkout</span></header>
 <main class="checkout-container"><div id="checkoutView"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 style="margin:10px 0">Renewed Checkout</h2><a href="/renewed.html" style="font-size:13px;color:#536f8c">← Continue shopping</a></div><div id="topMessage" class="note" role="status">Checking products and checkout availability…</div>
 <div class="checkout-grid"><div><section class="card-box"><div class="card-title"><span><i class="fa-solid fa-location-dot"></i> Delivery Address</span><button type="button" class="add-new-btn" id="clearAddress">New address</button></div><div class="card-body-scroll"><form id="addressForm" novalidate><div class="form-grid">
@@ -2014,8 +2014,8 @@ p, span, div, a, label, li, small {
 <div class="form-group full"><label for="door">Door / flat / street *</label><input class="form-input" id="door" required maxlength="500"></div>
 <div class="form-group full"><label for="area">Area / landmark</label><input class="form-input" id="area" maxlength="200"></div>
 <div class="form-group"><label for="city">City / town *</label><input class="form-input" id="city" required maxlength="100"></div>
-<div class="form-group"><label for="district">District *</label><input class="form-input" id="district" required maxlength="100"></div>
-<div class="form-group"><label for="state">State *</label><input class="form-input" id="state" placeholder="State / union territory" required></div>
+<div class="form-group"><label for="district">District *</label><select class="form-input" id="district" required disabled><option value="">Select state first</option></select></div>
+<div class="form-group"><label for="state">State *</label><select class="form-input" id="state" required><option value="">Select state / union territory</option></select></div>
 <div class="form-group"><label for="pincode">Pincode *</label><input class="form-input" id="pincode" inputmode="numeric" maxlength="6" required></div></div>
 <button type="submit" class="save-addr-action-btn">Save address & check delivery</button><div id="addressMessage" class="note" role="status">Enter your Indian delivery address to check the shipping charge.</div></form></div></section>
 </div>
@@ -2031,6 +2031,39 @@ p, span, div, a, label, li, small {
 const API='https://catus-backend-d2js.onrender.com', $=id=>document.getElementById(id), money=n=>'₹'+Number(n).toLocaleString('en-IN');
 const fields=['fullName','phone','door','area','city','district','state','pincode'];const storageKey='cerood_renewed_address_draft';
 const pendingPaymentKey='cerood_renewed_pending_payment_v1';
+// India states and districts: dropdown-only, districts loaded from an IGOD-derived public dataset.
+const indiaStateNames='Andaman and Nicobar Islands|Andhra Pradesh|Arunachal Pradesh|Assam|Bihar|Chandigarh|Chhattisgarh|Dadra and Nagar Haveli and Daman and Diu|Delhi|Goa|Gujarat|Haryana|Himachal Pradesh|Jammu and Kashmir|Jharkhand|Karnataka|Kerala|Ladakh|Lakshadweep|Madhya Pradesh|Maharashtra|Manipur|Meghalaya|Mizoram|Nagaland|Odisha|Puducherry|Punjab|Rajasthan|Sikkim|Tamil Nadu|Telangana|Tripura|Uttar Pradesh|Uttarakhand|West Bengal'.split('|');
+const indiaStateSelect=$('state'),indiaDistrictSelect=$('district');
+const indiaDistrictSources=[
+ 'https://raw.githubusercontent.com/KTBsomen/Indian-state-district-json/main/india-states-districts-latest.json',
+ 'https://cdn.jsdelivr.net/gh/KTBsomen/Indian-state-district-json@main/india-states-districts-latest.json'
+];
+let indiaDistrictMap=Object.create(null);
+function fillIndiaStates(){indiaStateSelect.innerHTML='<option value="">Select state / union territory</option>';for(const name of indiaStateNames){indiaStateSelect.add(new Option(name,name))}}
+function fillIndiaDistricts(selected=''){
+ indiaDistrictSelect.innerHTML='<option value="">Select district</option>';
+ const names=indiaDistrictMap[indiaStateSelect.value]||[];
+ indiaDistrictSelect.disabled=!names.length;
+ for(const name of names)indiaDistrictSelect.add(new Option(name,name));
+ if(names.includes(selected))indiaDistrictSelect.value=selected;
+}
+async function loadIndiaDistricts(){
+ indiaDistrictSelect.innerHTML='<option value="">Loading districts…</option>';
+ let data=null;
+ for(const url of indiaDistrictSources){try{const response=await fetch(url,{cache:'force-cache'});if(!response.ok)continue;const result=await response.json();if(Array.isArray(result)&&result.length>=30){data=result;break}}catch(e){console.warn('District data source unavailable',e)}}
+ if(!data){indiaDistrictSelect.innerHTML='<option value="">District list unavailable — reload page</option>';notify('addressMessage','Could not load India district list. Please refresh the page and try again.',true);return}
+ indiaDistrictMap=Object.create(null);
+ for(const item of data){if(typeof item.state==='string'&&Array.isArray(item.districts))indiaDistrictMap[item.state]=[...new Set(item.districts.filter(x=>typeof x==='string'&&x.trim()))].sort((a,b)=>a.localeCompare(b,'en-IN'))}
+ const saved=JSON.parse(sessionStorage.getItem(storageKey)||'{}');
+ const previousState=indiaStateSelect.value;
+ if(saved.state&&indiaStateNames.includes(saved.state))indiaStateSelect.value=saved.state;
+ else if(previousState&&indiaStateNames.includes(previousState))indiaStateSelect.value=previousState;
+ fillIndiaDistricts(saved.district||'');
+}
+fillIndiaStates();
+indiaStateSelect.addEventListener('change',()=>{fillIndiaDistricts();deliveryReady=false;saveDraft();refresh();notify('addressMessage','State changed. Select district and save the address again.')});
+indiaDistrictSelect.addEventListener('change',()=>{deliveryReady=false;saveDraft();refresh()});
+
 function savePendingPayment(p){try{localStorage.setItem(pendingPaymentKey,JSON.stringify(p))}catch(e){console.warn('Could not persist pending payment',e)}}
 function readPendingPayment(){try{const p=JSON.parse(localStorage.getItem(pendingPaymentKey)||'null');return p&&/^[0-9a-f-]{36}$/i.test(p.order_id||'')?p:null}catch{return null}}
 function clearPendingPayment(){try{localStorage.removeItem(pendingPaymentKey)}catch{}}
@@ -2040,15 +2073,16 @@ let items=[],quoteReady=false,deliveryReady=false,codEnabled=false,onlineEnabled
 const mode=new URLSearchParams(location.search).get('mode')==='buy'?'buy':'cart';
 function notify(id,msg,error=false){$(id).textContent=msg;$(id).classList.toggle('notice-error',error)}
 function address(){return {full_name:$('fullName').value.trim(),phone:$('phone').value.trim(),street:$('door').value.trim(),area:$('area').value.trim(),city:$('city').value.trim(),district:$('district').value.trim(),state:$('state').value.trim(),pincode:$('pincode').value.trim()}}
-function validAddress(a){if(!/^[6-9]\d{9}$/.test(a.phone))throw Error('Enter a valid 10-digit mobile number.');if(!/^[1-9]\d{5}$/.test(a.pincode))throw Error('Enter a valid Indian 6-digit PIN code.');if(!/^[A-Za-z][A-Za-z .,'()&/-]{1,99}$/.test(a.state))throw Error('Enter a valid Indian state or union territory.');if(a.full_name.length<2||a.street.length<5||a.city.length<2||a.district.length<2)throw Error('Complete your name and full delivery address.');return a}
+function validAddress(a){if(!/^[6-9]\d{9}$/.test(a.phone))throw Error('Enter a valid 10-digit mobile number.');if(!/^[1-9]\d{5}$/.test(a.pincode))throw Error('Enter a valid Indian 6-digit PIN code.');if(!indiaStateNames.includes(a.state)||!(indiaDistrictMap[a.state]||[]).includes(a.district))throw Error('Enter a valid Indian state or union territory.');if(a.full_name.length<2||a.street.length<5||a.city.length<2||a.district.length<2)throw Error('Complete your name and full delivery address.');return a}
 function selected(){return document.querySelector('input[name=paymentMode]:checked')?.value||'cod'}
 function refresh(){const method=selected(),enabled=method==='cod'?codEnabled:onlineEnabled,ready=guestEnabled&&quoteReady&&deliveryReady&&enabled&&!busy&&!orderId;$('confirmBtn').disabled=!ready;$('confirmBtn').innerHTML=busy?'Please wait…':orderId?'Order created':!guestEnabled?'Checkout update required':!enabled?'Payment method unavailable':!deliveryReady?'Save address & check delivery':method==='cod'?'Place Cash on Delivery Order →':'Continue to Secure Payment →';for(const m of ['cod','online'])$(m+'Card').classList.toggle('selected',selected()===m)}
 for(const radio of document.querySelectorAll('input[name=paymentMode]'))radio.addEventListener('change',refresh);
 async function post(path,body){const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid server response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d}
 function saveDraft(){try{sessionStorage.setItem(storageKey,JSON.stringify(Object.fromEntries(fields.map(f=>[f,$(f).value.trim()]))))}catch{}}
-try{const saved=JSON.parse(sessionStorage.getItem(storageKey)||'{}');for(const f of fields)if(saved[f])$(f).value=saved[f]}catch{}
+try{const saved=JSON.parse(sessionStorage.getItem(storageKey)||'{}');for(const f of fields)if(saved[f]&&f!=='district'&&f!=='state')$(f).value=saved[f]}catch{}
+loadIndiaDistricts().catch(e=>console.warn('District list load failed',e));
 try{const u=JSON.parse(localStorage.getItem('catus_logged_user')||'null');if(u){if(!$('fullName').value)$('fullName').value=u.name||'';if(!$('phone').value)$('phone').value=u.phone||''}}catch{}
-$('clearAddress').addEventListener('click',()=>{for(const f of fields)$(f).value='';deliveryReady=false;saveDraft();refresh();notify('addressMessage','Enter a new delivery address.');});
+$('clearAddress').addEventListener('click',()=>{for(const f of fields)$(f).value='';fillIndiaDistricts();deliveryReady=false;saveDraft();refresh();notify('addressMessage','Enter a new delivery address.');});
 async function delivery(){const a=validAddress(address());saveDraft();deliveryReady=false;refresh();notify('addressMessage','Checking delivery availability and final price…');const d=await post('/api/renewed/delivery-quote',{items,address:a});$('subtotal').textContent=money(d.subtotal);if(d.delivery_fee===null||d.total===null)throw Error(d.message||'Delivery unavailable');$('deliveryFee').textContent=money(d.delivery_fee);$('total').textContent=money(d.total);deliveryReady=true;refresh();notify('addressMessage','Address saved. Delivery fee confirmed.');return d}
 $('addressForm').addEventListener('submit',async e=>{e.preventDefault();try{await delivery()}catch(err){notify('addressMessage',err.message,true);refresh()}});
 for(const f of fields)$(f).addEventListener('input',()=>{if(deliveryReady){deliveryReady=false;refresh();notify('addressMessage','Address changed. Save again to reconfirm delivery charge.')}});
