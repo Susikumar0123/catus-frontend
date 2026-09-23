@@ -2023,6 +2023,26 @@ select.form-input{appearance:auto;cursor:pointer;background-color:#fafafa!import
  .cr-mobile-nav.cerood-equal-nav a:focus-visible{outline:2px solid #7d62ef!important;outline-offset:-2px!important}
 }
 @media(max-width:360px){.cr-mobile-nav.cerood-equal-nav{padding-left:2px!important;padding-right:2px!important}.cr-mobile-nav.cerood-equal-nav .cr-nav-label{font-size:8px!important}}
+</style><style id="cerood-checkout-no-underlines-clean-payments">
+/* Checkout: remove link underlines without removing payment selection outlines. */
+@media (max-width:850px) {
+  .cr-mobile-nav.cerood-equal-nav a,
+  .cr-mobile-nav.cerood-equal-nav a:link,
+  .cr-mobile-nav.cerood-equal-nav a:visited,
+  .cr-mobile-nav.cerood-equal-nav a:hover,
+  .cr-mobile-nav.cerood-equal-nav a:active,
+  .cr-mobile-nav.cerood-equal-nav .cr-nav-label {
+    text-decoration:none!important;
+    text-decoration-line:none!important;
+  }
+}
+.checkout-container a,
+.checkout-container a:link,
+.checkout-container a:visited,
+.checkout-container a:hover {
+  text-decoration:none!important;
+}
+#codCard strong, #onlineCard strong {text-decoration:none!important}
 </style></head><body>
 <header class="checkout-header"><a class="brand-word" href="/renewed.html" aria-label="Cerood Renewed home"><img src="/cerood-logo.webp" alt="Cerood logo" width="110" height="43" style="display:block;width:auto;max-width:125px;object-fit:contain"></a><span class="secure-badge"><i class="fa-solid fa-shield-halved"></i> Secure Checkout</span></header>
 <main class="checkout-container"><div id="checkoutView"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 style="margin:10px 0">Renewed Checkout</h2><a href="/renewed.html" style="font-size:13px;color:#536f8c">← Continue shopping</a></div><div id="topMessage" class="note" role="status">Checking products and checkout availability…</div>
@@ -2039,8 +2059,8 @@ select.form-input{appearance:auto;cursor:pointer;background-color:#fafafa!import
 </div>
 <aside><section class="card-box"><div class="card-title"><span><i class="fa-solid fa-receipt"></i> Order Summary</span></div><div id="products" class="summary-products"><p>Loading products…</p></div><div class="summary-line"><span>Product subtotal</span><strong id="subtotal">—</strong></div><div class="summary-line"><span>Delivery charge</span><strong id="deliveryFee">—</strong></div><div class="summary-line total"><span>Total</span><span id="total">—</span></div>
 <div style="margin-top:20px;font-size:14px;font-weight:700">Payment Method</div>
-<label class="pay-choice selected" id="codCard"><input type="radio" name="paymentMode" value="cod" checked><span><strong><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery</strong><small>Pay when your Renewed product arrives</small></span><small id="codAvailability" style="margin-left:auto">Checking…</small></label>
-<label class="pay-choice" id="onlineCard"><input type="radio" name="paymentMode" value="online"><span><strong><i class="fa-solid fa-credit-card"></i> Pay Online</strong><small>UPI / Card / Net Banking via Razorpay</small></span><small id="onlineAvailability" style="margin-left:auto">Checking…</small></label>
+<label class="pay-choice selected" id="codCard"><input type="radio" name="paymentMode" value="cod" checked><span><strong>Cash on Delivery</strong><small>Pay when your Renewed product arrives</small></span><small id="codAvailability" style="margin-left:auto">Checking…</small></label>
+<label class="pay-choice" id="onlineCard"><input type="radio" name="paymentMode" value="online"><span><strong>Pay Online</strong><small>UPI / Card / Net Banking via Razorpay</small></span><small id="onlineAvailability" style="margin-left:auto">Checking…</small></label>
 <button class="confirm-btn" type="button" id="confirmBtn" disabled>Checking checkout… <i class="fa-solid fa-arrow-right"></i></button>
 <div id="paymentMessage" class="note" role="status">No order has been created.</div><div class="checkout-trust-note"><i class="fa-solid fa-lock"></i><span>Price and stock are confirmed by Cerood before order creation.</span></div></section></aside></div></div>
 <section id="successPageView"><div class="success-animation-container"><div class="checkmark-circle animate"><span class="checkmark draw animate"></span></div></div><h1 id="successHeading">Order Confirmed!</h1><p id="successMessage">Your Cerood Renewed order has been created.</p><div class="receipt-box"><h3>Order Receipt</h3><div class="receipt-row"><span class="receipt-label">Order ID</span><span class="receipt-value" id="receiptId"></span></div><div class="receipt-row"><span class="receipt-label">Payment Method</span><span class="receipt-value" id="receiptMethod"></span></div><div class="receipt-row"><span class="receipt-label">Total</span><span class="receipt-value" id="receiptTotal"></span></div><div class="receipt-row"><span class="receipt-label">Delivery Address</span><span class="receipt-value" id="receiptAddress"></span></div><a class="confirm-btn" style="text-decoration:none" href="/renewed-dashboard.html">My Renewed Orders →</a><a style="display:block;margin-top:18px;text-align:center" href="/renewed.html">Continue shopping</a></div></section></main>
