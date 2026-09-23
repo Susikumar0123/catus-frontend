@@ -13697,47 +13697,7 @@ async function openServiceProduct(serviceId) {
                 Total Paid: ₹${amount}
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
-        <script id="cerood-shared-mobile-nav-functions">
-(function(){
- const dock=document.getElementById('ceroodSharedMobileNav');if(!dock)return;
- const links=Array.from(dock.querySelectorAll('a'));
- function select(tab){links.forEach(a=>{const yes=a.classList.contains('cr-nav-'+tab);a.classList.toggle('rn-nav-active',yes);if(yes)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});}
- window.ceroodSharedSelectNav=select;
- dock.addEventListener('pointerdown',e=>{const a=e.target.closest('a');if(a&&dock.contains(a))a.classList.add('rn-nav-pressed')});
- for(const evt of ['pointerup','pointercancel','pointerleave'])dock.addEventListener(evt,()=>links.forEach(a=>a.classList.remove('rn-nav-pressed')));
- dock.querySelectorAll('[data-cerood-tab]').forEach(a=>a.addEventListener('click',function(e){
-   const tab=this.dataset.ceroodTab;
-   if(tab==='explore'){
-      e.preventDefault();
-      if(typeof toggleCartModal==='function')toggleCartModal(false);
-      const d=document.getElementById('premiumCustomerDashboard');if(d)d.style.display='none';
-      document.body.classList.remove('cerood-dashboard-open');document.body.style.overflow='auto';
-      const target=document.getElementById('productGridContainer')||document.getElementById('products-section');
-      if(target){target.scrollIntoView({behavior:'smooth',block:'start'});select('explore')}
-      else location.href='/#productGridContainer';
-      return;
-   }
-   e.preventDefault();
-   const original=tab==='orders'?'bookings':tab;
-   if(typeof ceroodMobileNavigate==='function')ceroodMobileNavigate(original,this);
-   else location.href=this.href;
-   if(tab==='home'||tab==='cart'||tab==='services')select(tab);
-   else if(tab==='orders'&&typeof currentUser!=='undefined'&&currentUser)select(tab);
- }));
- const badge=dock.querySelector('#ceroodSharedCartCount');
- function update(){
-   let n=0;
-   try{const items=JSON.parse(localStorage.getItem('catus_cart')||'[]');n=Array.isArray(items)?items.length:0}catch(_){}
-   const existing=document.querySelector('.cart-badge');const visible=existing?parseInt(existing.textContent,10):NaN;
-   if(Number.isFinite(visible))n=visible;
-   badge.textContent=n>99?'99+':String(n);badge.hidden=n<1;
- }
- const existing=document.querySelector('.cart-badge');if(existing)new MutationObserver(update).observe(existing,{childList:true,characterData:true,subtree:true});
- ['pageshow','storage','focus','cerood-cart-updated'].forEach(ev=>window.addEventListener(ev,update));
- dock.querySelector('.cr-nav-cart').addEventListener('click',()=>setTimeout(update,60));
- update();
-})();
-</script>
+        
 </body>
         </html>
         `;
@@ -19332,6 +19292,47 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<script id="cerood-shared-mobile-nav-functions">
+(function(){
+ const dock=document.getElementById('ceroodSharedMobileNav');if(!dock)return;
+ const links=Array.from(dock.querySelectorAll('a'));
+ function select(tab){links.forEach(a=>{const yes=a.classList.contains('cr-nav-'+tab);a.classList.toggle('rn-nav-active',yes);if(yes)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});}
+ window.ceroodSharedSelectNav=select;
+ dock.addEventListener('pointerdown',e=>{const a=e.target.closest('a');if(a&&dock.contains(a))a.classList.add('rn-nav-pressed')});
+ for(const evt of ['pointerup','pointercancel','pointerleave'])dock.addEventListener(evt,()=>links.forEach(a=>a.classList.remove('rn-nav-pressed')));
+ dock.querySelectorAll('[data-cerood-tab]').forEach(a=>a.addEventListener('click',function(e){
+   const tab=this.dataset.ceroodTab;
+   if(tab==='explore'){
+      e.preventDefault();
+      if(typeof toggleCartModal==='function')toggleCartModal(false);
+      const d=document.getElementById('premiumCustomerDashboard');if(d)d.style.display='none';
+      document.body.classList.remove('cerood-dashboard-open');document.body.style.overflow='auto';
+      const target=document.getElementById('productGridContainer')||document.getElementById('products-section');
+      if(target){target.scrollIntoView({behavior:'smooth',block:'start'});select('explore')}
+      else location.href='/#productGridContainer';
+      return;
+   }
+   e.preventDefault();
+   const original=tab==='orders'?'bookings':tab;
+   if(typeof ceroodMobileNavigate==='function')ceroodMobileNavigate(original,this);
+   else location.href=this.href;
+   if(tab==='home'||tab==='cart'||tab==='services')select(tab);
+   else if(tab==='orders'&&typeof currentUser!=='undefined'&&currentUser)select(tab);
+ }));
+ const badge=dock.querySelector('#ceroodSharedCartCount');
+ function update(){
+   let n=0;
+   try{const items=JSON.parse(localStorage.getItem('catus_cart')||'[]');n=Array.isArray(items)?items.length:0}catch(_){}
+   const existing=document.querySelector('.cart-badge');const visible=existing?parseInt(existing.textContent,10):NaN;
+   if(Number.isFinite(visible))n=visible;
+   badge.textContent=n>99?'99+':String(n);badge.hidden=n<1;
+ }
+ const existing=document.querySelector('.cart-badge');if(existing)new MutationObserver(update).observe(existing,{childList:true,characterData:true,subtree:true});
+ ['pageshow','storage','focus','cerood-cart-updated'].forEach(ev=>window.addEventListener(ev,update));
+ dock.querySelector('.cr-nav-cart').addEventListener('click',()=>setTimeout(update,60));
+ update();
+})();
+</script>
 </body>
 
 </html>

@@ -14890,47 +14890,7 @@ serviceStr =
     
     function downloadInvoice(orderId, serviceName, amount, status, dateStr, productId, custName, custPhone) {
         let printWindow = window.open('', '_blank', 'width=800,height=600');
-        let html = `<html><head><title>Invoice - ${orderId}</title><style>body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; } .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; } .logo { font-size: 22px; font-weight: bold; color: #0284c7; } .details { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 13px; } table { width: 100%; border-collapse: collapse; margin-top: 15px; } th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; font-size: 13px; } th { background: #f8fafc; color: #475569; } .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 20px; color: #16a34a; }</style></head><body><div class="header"><div class="logo">CEROOD SERVICES</div><div style="text-align: right;"><b>INVOICE</b><br>Date: ${dateStr}<br>Status: ${status}</div></div><div class="details"><div><b>Billed To:</b><br>${custName}<br>+91 ${custPhone}</div><div><b>Order Details:</b><br>Order ID: ${orderId}<br>Product ID: ${productId}</div></div><table><thead><tr><th>Service Description</th><th>Qty</th><th>Amount</th></tr></thead><tbody><tr><td>${serviceName}</td><td>1</td><td>₹${amount}</td></tr></tbody></table><div class="total">Total Paid: ₹${amount}</div><p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">Computer generated invoice.</p><script id="cerood-shared-mobile-nav-functions">
-(function(){
- const dock=document.getElementById('ceroodSharedMobileNav');if(!dock)return;
- const links=Array.from(dock.querySelectorAll('a'));
- function select(tab){links.forEach(a=>{const yes=a.classList.contains('cr-nav-'+tab);a.classList.toggle('rn-nav-active',yes);if(yes)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});}
- window.ceroodSharedSelectNav=select;
- dock.addEventListener('pointerdown',e=>{const a=e.target.closest('a');if(a&&dock.contains(a))a.classList.add('rn-nav-pressed')});
- for(const evt of ['pointerup','pointercancel','pointerleave'])dock.addEventListener(evt,()=>links.forEach(a=>a.classList.remove('rn-nav-pressed')));
- dock.querySelectorAll('[data-cerood-tab]').forEach(a=>a.addEventListener('click',function(e){
-   const tab=this.dataset.ceroodTab;
-   if(tab==='explore'){
-      e.preventDefault();
-      if(typeof toggleCartModal==='function')toggleCartModal(false);
-      const d=document.getElementById('premiumCustomerDashboard');if(d)d.style.display='none';
-      document.body.classList.remove('cerood-dashboard-open');document.body.style.overflow='auto';
-      const target=document.getElementById('productGridContainer')||document.getElementById('products-section');
-      if(target){target.scrollIntoView({behavior:'smooth',block:'start'});select('explore')}
-      else location.href='/#productGridContainer';
-      return;
-   }
-   e.preventDefault();
-   const original=tab==='orders'?'bookings':tab;
-   if(typeof ceroodMobileNavigate==='function')ceroodMobileNavigate(original,this);
-   else location.href=this.href;
-   if(tab==='home'||tab==='cart'||tab==='services')select(tab);
-   else if(tab==='orders'&&typeof currentUser!=='undefined'&&currentUser)select(tab);
- }));
- const badge=dock.querySelector('#ceroodSharedCartCount');
- function update(){
-   let n=0;
-   try{const items=JSON.parse(localStorage.getItem('catus_cart')||'[]');n=Array.isArray(items)?items.length:0}catch(_){}
-   const existing=document.querySelector('.cart-badge');const visible=existing?parseInt(existing.textContent,10):NaN;
-   if(Number.isFinite(visible))n=visible;
-   badge.textContent=n>99?'99+':String(n);badge.hidden=n<1;
- }
- const existing=document.querySelector('.cart-badge');if(existing)new MutationObserver(update).observe(existing,{childList:true,characterData:true,subtree:true});
- ['pageshow','storage','focus','cerood-cart-updated'].forEach(ev=>window.addEventListener(ev,update));
- dock.querySelector('.cr-nav-cart').addEventListener('click',()=>setTimeout(update,60));
- update();
-})();
-</script>
+        let html = `<html><head><title>Invoice - ${orderId}</title><style>body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; } .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; } .logo { font-size: 22px; font-weight: bold; color: #0284c7; } .details { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 13px; } table { width: 100%; border-collapse: collapse; margin-top: 15px; } th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; font-size: 13px; } th { background: #f8fafc; color: #475569; } .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 20px; color: #16a34a; }</style></head><body><div class="header"><div class="logo">CEROOD SERVICES</div><div style="text-align: right;"><b>INVOICE</b><br>Date: ${dateStr}<br>Status: ${status}</div></div><div class="details"><div><b>Billed To:</b><br>${custName}<br>+91 ${custPhone}</div><div><b>Order Details:</b><br>Order ID: ${orderId}<br>Product ID: ${productId}</div></div><table><thead><tr><th>Service Description</th><th>Qty</th><th>Amount</th></tr></thead><tbody><tr><td>${serviceName}</td><td>1</td><td>₹${amount}</td></tr></tbody></table><div class="total">Total Paid: ₹${amount}</div><p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">Computer generated invoice.</p>
 </body></html>`;
         printWindow.document.write(html); printWindow.document.close(); printWindow.focus();
         setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
@@ -16840,6 +16800,47 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<script id="cerood-shared-mobile-nav-functions">
+(function(){
+ const dock=document.getElementById('ceroodSharedMobileNav');if(!dock)return;
+ const links=Array.from(dock.querySelectorAll('a'));
+ function select(tab){links.forEach(a=>{const yes=a.classList.contains('cr-nav-'+tab);a.classList.toggle('rn-nav-active',yes);if(yes)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});}
+ window.ceroodSharedSelectNav=select;
+ dock.addEventListener('pointerdown',e=>{const a=e.target.closest('a');if(a&&dock.contains(a))a.classList.add('rn-nav-pressed')});
+ for(const evt of ['pointerup','pointercancel','pointerleave'])dock.addEventListener(evt,()=>links.forEach(a=>a.classList.remove('rn-nav-pressed')));
+ dock.querySelectorAll('[data-cerood-tab]').forEach(a=>a.addEventListener('click',function(e){
+   const tab=this.dataset.ceroodTab;
+   if(tab==='explore'){
+      e.preventDefault();
+      if(typeof toggleCartModal==='function')toggleCartModal(false);
+      const d=document.getElementById('premiumCustomerDashboard');if(d)d.style.display='none';
+      document.body.classList.remove('cerood-dashboard-open');document.body.style.overflow='auto';
+      const target=document.getElementById('productGridContainer')||document.getElementById('products-section');
+      if(target){target.scrollIntoView({behavior:'smooth',block:'start'});select('explore')}
+      else location.href='/#productGridContainer';
+      return;
+   }
+   e.preventDefault();
+   const original=tab==='orders'?'bookings':tab;
+   if(typeof ceroodMobileNavigate==='function')ceroodMobileNavigate(original,this);
+   else location.href=this.href;
+   if(tab==='home'||tab==='cart'||tab==='services')select(tab);
+   else if(tab==='orders'&&typeof currentUser!=='undefined'&&currentUser)select(tab);
+ }));
+ const badge=dock.querySelector('#ceroodSharedCartCount');
+ function update(){
+   let n=0;
+   try{const items=JSON.parse(localStorage.getItem('catus_cart')||'[]');n=Array.isArray(items)?items.length:0}catch(_){}
+   const existing=document.querySelector('.cart-badge');const visible=existing?parseInt(existing.textContent,10):NaN;
+   if(Number.isFinite(visible))n=visible;
+   badge.textContent=n>99?'99+':String(n);badge.hidden=n<1;
+ }
+ const existing=document.querySelector('.cart-badge');if(existing)new MutationObserver(update).observe(existing,{childList:true,characterData:true,subtree:true});
+ ['pageshow','storage','focus','cerood-cart-updated'].forEach(ev=>window.addEventListener(ev,update));
+ dock.querySelector('.cr-nav-cart').addEventListener('click',()=>setTimeout(update,60));
+ update();
+})();
+</script>
 </body>
 
 </html>
