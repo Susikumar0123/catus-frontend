@@ -210,7 +210,7 @@ async function init(){const id=new URLSearchParams(location.search).get('id');if
   const locationButton=document.querySelector('.cr-location');
   const locationLabel=document.getElementById('renewedDeliveryLocation');
   const LOCATION_KEY='cerood_selected_location';
-  function readLocation(){try{const value=JSON.parse(localStorage.getItem(LOCATION_KEY)||'null');return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch{return {}}}
+  function readLocation(){try{const partial=JSON.parse(localStorage.getItem('cerood_renewed_delivery_location')||'null');const full=JSON.parse(localStorage.getItem('cerood_renewed_saved_address_v1')||'null');return partial&&typeof partial==='object'?partial:full&&typeof full==='object'?full:{}}catch{return {}}}
   function updateLocationLabel(value){const name=[value.area,value.city,value.pincode].filter(Boolean).join(', ');locationLabel.textContent=name||'Select location'}
   let locationShade=null;
   function closeLocation(){if(!locationShade)return;locationShade.remove();locationShade=null;document.removeEventListener('keydown',onLocationKey)}
@@ -233,7 +233,7 @@ async function init(){const id=new URLSearchParams(location.search).get('id');if
       const pincode=locationShade.querySelector('#rnLocationPincode').value.trim();
       if(!city||!/^[0-9]{6}$/.test(pincode)){locationShade.querySelector('#rnLocationError').textContent='Enter a city and a valid 6-digit pincode.';return}
       const value={...readLocation(),area,city,pincode};
-      try{localStorage.setItem(LOCATION_KEY,JSON.stringify(value));updateLocationLabel(value);closeLocation()}catch{locationShade.querySelector('#rnLocationError').textContent='Unable to save location. Check browser storage settings.'}
+      try{localStorage.setItem('cerood_renewed_delivery_location',JSON.stringify(value));localStorage.setItem(LOCATION_KEY,JSON.stringify(value));window.dispatchEvent(new Event('cerood-renewed-location-changed'));updateLocationLabel(value);closeLocation()}catch{locationShade.querySelector('#rnLocationError').textContent='Unable to save location. Check browser storage settings.'}
     });
     document.addEventListener('keydown',onLocationKey);
     locationShade.querySelector('#rnLocationArea').focus();
@@ -270,5 +270,15 @@ async function init(){const id=new URLSearchParams(location.search).get('id');if
  function open(){if(shade){close();return}shade=document.createElement('div');shade.className='rn-cart-shade';shade.innerHTML='<section class="rn-cart-panel" role="dialog" aria-modal="true" aria-label="Your Renewed cart"><div class="rn-cart-head"><h2>🛒 Your Cart</h2><button type="button" class="rn-cart-close" aria-label="Close cart">×</button></div><div class="rn-cart-items"></div><div class="rn-cart-bottom" hidden></div></section>';document.body.append(shade);document.body.style.overflow='hidden';shade.addEventListener('click',e=>{if(e.target===shade||e.target.closest('.rn-cart-close')){close();return}const remove=e.target.closest('[data-remove]');if(remove){const id=remove.dataset.remove;localStorage.setItem(KEY,JSON.stringify(read().filter(x=>x.product_id!==id)));window.dispatchEvent(new Event('renewed-cart-updated'));draw()}});shade.querySelector('.rn-cart-close').focus();draw()}
  document.querySelectorAll('a.cr-cart, .cr-mobile-nav a[href="/renewed-checkout.html"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();open()}));
  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});window.addEventListener('renewed-cart-updated',()=>{count();if(shade)draw()});window.addEventListener('storage',()=>{count();if(shade)draw()});window.addEventListener('pageshow',count);count();
+})();
+</script><script id="cerood-renewed-shared-location-sync">
+(function(){
+ const FULL='cerood_renewed_saved_address_v1',LOC='cerood_renewed_delivery_location',OLD='cerood_selected_location';
+ const label=document.getElementById('renewedDeliveryLocation');if(!label)return;
+ function get(key){try{const x=JSON.parse(localStorage.getItem(key)||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}}
+ function refresh(){const full=get(FULL),loc=get(LOC)||get(OLD);const x=full&&(!loc||!loc.pincode||String(full.pincode)===String(loc.pincode))?full:loc;
+ label.textContent=x?[x.area,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', ')||'Select location':'Select location';}
+ refresh();window.addEventListener('pageshow',refresh);window.addEventListener('storage',refresh);
+ window.addEventListener('cerood-renewed-location-changed',refresh);
 })();
 </script></body></html>
