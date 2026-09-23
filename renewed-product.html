@@ -71,6 +71,11 @@ body{background:#fff!important;color:#171717!important}
 .rn-track a:hover{background:#333}@media(max-width:650px){.rn-track{padding:17px;display:block}.rn-track h2{font-size:18px}.rn-track a{margin-top:13px;width:100%}}
 /* Renewed related products */
 .rn-related{margin:30px 0 40px}.rn-related h2{font-size:22px;margin:0 0 16px}.rn-related-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}.rn-related-card{display:flex;flex-direction:column;min-width:0;border:1px solid #e8ebf0;border-radius:12px;padding:9px;background:#fff}.rn-related-photo{position:relative;aspect-ratio:1.15;background:#f5f5f7;border-radius:9px;overflow:hidden;display:grid;place-items:center;color:#737373;font-size:12px}.rn-related-photo img{width:100%;height:100%;object-fit:contain}.rn-related-name{font-size:13px;line-height:1.4;margin:10px 0 7px;font-weight:600}.rn-related-price{font-size:16px;font-weight:700;margin-top:auto}.rn-related-meta{font-size:11px;color:#64748b;margin:6px 0}.rn-related-link{display:block;text-align:center;background:#171717;color:#fff;padding:10px 8px;border-radius:7px;font-size:12px;font-weight:600;margin-top:9px}.rn-related-sold{position:absolute;left:7px;top:7px;background:#171717;color:#fff;border-radius:5px;padding:5px 7px;font-size:10px;font-weight:700}.rn-related-empty{font-size:13px;color:#64748b}.rn-cart-feedback{font-size:12px;font-weight:600;color:#15803d;min-height:0}.rn-cart-feedback:empty{display:none}@media(max-width:900px){.rn-related-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:650px){.rn-related-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.rn-related h2{font-size:19px}}
+</style><style id="renewed-location-dialog-style">
+.rn-location-shade{position:fixed;inset:0;z-index:100001;background:rgba(17,24,39,.52);display:flex;align-items:center;justify-content:center;padding:16px}
+.rn-location-dialog{width:min(440px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;color:#171717;border-radius:16px;padding:23px;box-shadow:0 18px 65px #0003;font-family:Inter,Arial,sans-serif}
+.rn-location-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.rn-location-head h2{font-size:19px;margin:0}.rn-location-close{border:0;background:#f3f4f6;border-radius:50%;font-size:23px;width:36px;height:36px;flex:none}
+.rn-location-dialog p{font-size:12px;line-height:1.6;color:#64748b;margin:11px 0 18px}.rn-location-dialog form{display:grid;gap:9px}.rn-location-dialog label{font-size:12px;font-weight:700;margin-top:5px}.rn-location-dialog input{width:100%;padding:12px 13px;border:1px solid #dbe1eb;border-radius:9px;font:inherit;font-size:14px}.rn-location-dialog input:focus{outline:2px solid #a7b8ef;outline-offset:1px}.rn-location-error{color:#a43747;font-size:12px;min-height:0}.rn-location-save{background:#171717;color:#fff;border:0;border-radius:9px;padding:13px;font-weight:700;margin-top:4px}
 </style></head><body>
 <header class="cr-header"><div class="cr-header-inner"><a aria-label="Cerood Renewed home" class="cr-brand" href="/renewed.html"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>RENEWED</span></a><div class="cr-search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search renewed products" autocomplete="off" id="headerProductSearch" placeholder="Search TV, fridge, washing machine, laptop..." type="search"/></div><nav aria-label="Renewed navigation" class="cr-actions"><button class="cr-location" title="Delivery location" type="button"><span>Delivery to<strong id="renewedDeliveryLocation">Select location</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><a class="cr-service" href="/">Home Services</a><a aria-label="Renewed cart" class="cr-cart" href="/renewed-checkout.html">🛒 <span class="cr-cart-label">Cart</span><b id="renewedCartCount">0</b></a><a aria-label="Renewed orders and account" class="cr-account" href="/renewed-dashboard.html">♙ <span>My Orders</span></a></nav></div></header>
 <main class="wrap"><div class="crumb"><a href="/">Home</a> › <a href="/renewed.html">Renewed Store</a> › <span id="crumbName">Product details</span></div>
@@ -121,7 +126,39 @@ async function init(){const id=new URLSearchParams(location.search).get('id');if
  const search=document.getElementById('headerProductSearch');
  search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();window.location.href='/renewed.html?search='+encodeURIComponent(search.value.trim())+'#products-section'}});
  try{const saved=JSON.parse(localStorage.getItem('cerood_selected_location')||'null');if(saved){const name=typeof saved==='string'?saved:[saved.area,saved.city,saved.pincode].filter(Boolean).join(', ');if(name)document.getElementById('renewedDeliveryLocation').textContent=name}}catch{}
- document.querySelector('.cr-location').addEventListener('click',()=>{window.location.href='/';});
+ // Renewed delivery location stays on this product page (never redirects to Home Services).
+  const locationButton=document.querySelector('.cr-location');
+  const locationLabel=document.getElementById('renewedDeliveryLocation');
+  const LOCATION_KEY='cerood_selected_location';
+  function readLocation(){try{const value=JSON.parse(localStorage.getItem(LOCATION_KEY)||'null');return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch{return {}}}
+  function updateLocationLabel(value){const name=[value.area,value.city,value.pincode].filter(Boolean).join(', ');locationLabel.textContent=name||'Select location'}
+  let locationShade=null;
+  function closeLocation(){if(!locationShade)return;locationShade.remove();locationShade=null;document.removeEventListener('keydown',onLocationKey)}
+  function onLocationKey(event){if(event.key==='Escape')closeLocation()}
+  function openLocation(){
+    if(locationShade)return;
+    const saved=readLocation();
+    locationShade=document.createElement('div');
+    locationShade.className='rn-location-shade';
+    locationShade.innerHTML=`<section class="rn-location-dialog" role="dialog" aria-modal="true" aria-labelledby="rnLocationTitle"><div class="rn-location-head"><h2 id="rnLocationTitle">📍 Renewed delivery location</h2><button type="button" class="rn-location-close" aria-label="Close">×</button></div><p>Choose the delivery area for Renewed products. Availability and delivery fee are confirmed at checkout.</p><form id="rnLocationForm"><label for="rnLocationArea">Area / Landmark</label><input id="rnLocationArea" name="area" autocomplete="address-line2" placeholder="Area or landmark" maxlength="120"><label for="rnLocationCity">City / Town</label><input id="rnLocationCity" name="city" autocomplete="address-level2" placeholder="City or town" maxlength="100" required><label for="rnLocationPincode">6-digit Pincode</label><input id="rnLocationPincode" name="pincode" inputmode="numeric" autocomplete="postal-code" placeholder="6-digit pincode" maxlength="6" pattern="[0-9]{6}" required><div class="rn-location-error" id="rnLocationError" role="alert"></div><button class="rn-location-save" type="submit">Save location</button></form></section>`;
+    document.body.append(locationShade);
+    locationShade.querySelector('#rnLocationArea').value=String(saved.area||'');
+    locationShade.querySelector('#rnLocationCity').value=String(saved.city||'');
+    locationShade.querySelector('#rnLocationPincode').value=String(saved.pincode||'');
+    locationShade.addEventListener('click',event=>{if(event.target===locationShade||event.target.closest('.rn-location-close'))closeLocation()});
+    locationShade.querySelector('#rnLocationForm').addEventListener('submit',event=>{
+      event.preventDefault();
+      const area=locationShade.querySelector('#rnLocationArea').value.trim();
+      const city=locationShade.querySelector('#rnLocationCity').value.trim();
+      const pincode=locationShade.querySelector('#rnLocationPincode').value.trim();
+      if(!city||!/^[0-9]{6}$/.test(pincode)){locationShade.querySelector('#rnLocationError').textContent='Enter a city and a valid 6-digit pincode.';return}
+      const value={...readLocation(),area,city,pincode};
+      try{localStorage.setItem(LOCATION_KEY,JSON.stringify(value));updateLocationLabel(value);closeLocation()}catch{locationShade.querySelector('#rnLocationError').textContent='Unable to save location. Check browser storage settings.'}
+    });
+    document.addEventListener('keydown',onLocationKey);
+    locationShade.querySelector('#rnLocationArea').focus();
+  }
+  locationButton.addEventListener('click',openLocation);
 })();
 </script><style id="renewed-cart-preview-style">
 /* Cerood Renewed shared cart preview — storefront + product page */
