@@ -5,22 +5,18 @@
       "source": "/about",
       "destination": "/about.html"
     },
-{
-  "source": "/contact",
-  "destination": "/contact.html"
-},
-
-{
-  "source": "/services",
-  "destination": "/services.html"
-},
-
-{
-  "source": "/faq",
-  "destination": "/faq.html"
-},
-
-
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/services.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/faq.html"
+    },
     {
       "source": "/sitemap.xml",
       "destination": "https://catus-backend-d2js.onrender.com/api/sitemap.xml"
@@ -30,20 +26,21 @@
       "destination": "https://catus-backend-d2js.onrender.com/api/sitemap/:page"
     },
     {
+      "source": "/sitemaps/:division/:page.xml",
+      "destination": "https://catus-backend-d2js.onrender.com/api/sitemaps/:division/:page.xml"
+    },
+    {
       "source": "/:state/:district/:location/:serviceId(\\d{1,})",
       "destination": "https://catus-backend-d2js.onrender.com/api/seo-redirect/:state/:district/:location/:serviceId"
     },
-     
     {
-  "source": "/:state/:district",
-  "destination": "/district.html?state=:state&district=:district"
-},
-
-{
-  "source": "/:state/:district/location/:location",
-  "destination": "/location.html?state=:state&district=:district&location=:location"
-},
-
+      "source": "/:state/:district",
+      "destination": "/district.html?state=:state&district=:district"
+    },
+    {
+      "source": "/:state/:district/location/:location",
+      "destination": "/location.html?state=:state&district=:district&location=:location"
+    },
     {
       "source": "/:state/:district/:service",
       "destination": "/api/seo-product?state=:state&district=:district&location=:district&service=:service&clean=1"
