@@ -13813,27 +13813,6 @@ async function openServiceProduct(serviceId) {
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
         
-<script id="cerood-existing-dashboard-navigation-fix">
-/* Keep customer in the existing Home Services dashboard and its live booking/profile tabs. */
-function ceroodOpenExistingDashboard(event, tab) {
-  if (event) event.preventDefault();
-  if (typeof openPremiumDashboard !== 'function') return false;
-  openPremiumDashboard();
-  if (window.currentUser || (typeof currentUser !== 'undefined' && currentUser)) {
-    window.setTimeout(function () {
-      if (typeof switchDashTab === 'function') switchDashTab(tab, null, true);
-    }, 80);
-  }
-  return false;
-}
-window.addEventListener('DOMContentLoaded', function () {
-  var match = location.hash.match(/^#cerood-dashboard-(home|bookings|profile)$/);
-  if (match) {
-    history.replaceState(null, '', location.pathname + location.search);
-    ceroodOpenExistingDashboard(null, match[1]);
-  }
-});
-</script>
 </body>
         </html>
         `;
@@ -19491,6 +19470,29 @@ if ('serviceWorker' in navigator) {
 
 <script id="csf-insert-divisions">document.addEventListener("DOMContentLoaded",function(){var h=document.querySelector(".uc-homepage-wrapper .header-main-container");if(h&&!document.querySelector(".csf-divisions"))h.insertAdjacentHTML("afterend",'<nav class="csf-divisions" aria-label="Cerood divisions"><a href="/cosmetics.html">Beauty</a><a class="active" aria-current="page" href="/home-services.html">Services</a><a href="/renewed.html">Renewed</a><a href="/clothing.html">Fashion</a></nav>');});</script>
 <nav class="csf-bottom" aria-label="Cerood mobile navigation"><a href="/"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"/></svg><span>Home</span></a><a href="/home-services.html" class="active"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"/></svg><span>Explore</span></a><a href="#" data-cerood-dashboard-tab="home" onclick="return ceroodOpenExistingDashboard(event, 'home')"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></a><a href="#" data-cerood-dashboard-tab="bookings" onclick="return ceroodOpenExistingDashboard(event, 'bookings')"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>Orders</span></a><a href="#" data-cerood-dashboard-tab="profile" onclick="return ceroodOpenExistingDashboard(event, 'profile')"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"/></svg><span>Account</span></a></nav>
+
+<script id="cerood-existing-dashboard-navigation-fix">
+/* Keep customer in the existing Home Services dashboard and its live booking/profile tabs. */
+function ceroodOpenExistingDashboard(event, tab) {
+  if (event) event.preventDefault();
+  if (typeof openPremiumDashboard !== 'function') return false;
+  openPremiumDashboard();
+  if (window.currentUser || (typeof currentUser !== 'undefined' && currentUser)) {
+    window.setTimeout(function () {
+      if (typeof switchDashTab === 'function') switchDashTab(tab, null, true);
+    }, 80);
+  }
+  return false;
+}
+window.addEventListener('DOMContentLoaded', function () {
+  var match = location.hash.match(/^#cerood-dashboard-(home|bookings|profile)$/);
+  if (match) {
+    history.replaceState(null, '', location.pathname + location.search);
+    ceroodOpenExistingDashboard(null, match[1]);
+  }
+});
+</script>
+
 </body>
 
 </html>
