@@ -8396,7 +8396,22 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
   }
 }
 </style>
-</head>
+<style id="cerood-unified-mobile-v2">
+.cerood-unified-nav,.cerood-unified-categories,.cerood-unified-tools{display:none}
+.cerood-unified-menu{position:relative}.cerood-unified-menu summary{list-style:none;cursor:pointer}.cerood-unified-menu summary::-webkit-details-marker{display:none}
+.cerood-unified-menu-list{position:absolute;right:0;top:calc(100% + 8px);width:min(280px,calc(100vw - 30px));max-height:65vh;overflow:auto;background:white;border:1px solid #e5e7eb;border-radius:13px;box-shadow:0 12px 30px #17233d30;padding:7px;z-index:2147483000}
+.cerood-unified-menu-list a{display:block;padding:12px 13px;border-radius:8px;font-size:13px;color:#26364d;text-decoration:none}.cerood-unified-menu-list a:hover{background:#f3f0ff}
+@media(max-width:850px){
+.cerood-unified-nav{display:flex!important;position:fixed;bottom:0;left:0;right:0;z-index:99990;background:#fff;border-top:1px solid #e4e7ee;min-height:65px;padding:4px 3px calc(4px + env(safe-area-inset-bottom));justify-content:space-around;align-items:center;box-sizing:border-box}
+.cerood-unified-nav a{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:#42516a;font:500 10px Inter,Arial,sans-serif;padding:5px 1px;border-radius:13px}
+.cerood-unified-nav a.is-active{color:#6242e6;background:#f4f0ff}.cerood-unified-nav svg{height:21px;width:21px}
+.cerood-unified-categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:8px 9px 10px;position:relative;z-index:2}
+.cerood-unified-categories a{text-align:center;background:#f5f6fb;color:#42516a;border-radius:11px;padding:12px 2px;font:700 11px Inter,Arial,sans-serif;text-decoration:none}
+.cerood-unified-tools{display:flex;align-items:center;gap:5px;margin-left:auto;flex-shrink:0}.cerood-unified-tools>a,.cerood-unified-tools>button,.cerood-unified-menu summary{width:38px;height:38px;border:0;border-radius:12px;background:#fff;color:#26364d;display:grid;place-items:center;padding:7px;box-sizing:border-box;cursor:pointer}
+.cerood-unified-tools svg{height:22px;width:22px}.cerood-unified-menu-list{display:block}
+body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
+}
+</style><style>@media(max-width:850px){.header-main-container{background:linear-gradient(110deg,#a8bdcf,#50708f)!important;border-radius:15px!important;padding:10px!important;display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;gap:8px!important;align-items:center!important}.header-main-container .brand-logo{grid-column:1;grid-row:1}.header-main-container .mobile-location-widget{grid-column:2;grid-row:1;min-width:0!important;max-width:100%!important;overflow:hidden}.header-main-container .cerood-unified-tools{grid-column:3;grid-row:1}.header-main-container .search-container{grid-column:1/-1;grid-row:2;order:unset!important;flex:unset!important;width:100%!important;background:#fff!important;border:0!important;margin:0!important}.header-main-container .header-nav-right{display:none!important}.cerood-global-mobile-nav{display:none!important}.cerood-unified-nav{z-index:2147482000!important}}</style></head>
 <body>
 
     <!-- CEROOD PWA INSTALL BANNER -->
@@ -8450,7 +8465,7 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
               <div id="suggestionsBox"></div>
           </div>
 
-          <div class="header-nav-right">
+          <div class="cerood-unified-tools"><button type="button" aria-label="Cart" onclick="toggleCartModal(true)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg></button><details class="cerood-unified-menu"><summary aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-unified-menu-list"><a href="/">Home</a><a href="/#divisions">Explore</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed Store</a><a href="/cosmetics.html">Beauty Store</a><a href="/clothing.html">Fashion Store</a><a href="/cerood-orders.html#account">Dashboard</a><a href="/cerood-orders.html">My Orders</a><a href="/cerood-orders.html#account">Account</a><a href="/cerood-cart.html">Cart</a><a href="/contact.html">Help</a></div></details></div><div class="header-nav-right">
 
               <!-- Catus-Style Header Location Widget -->
               <div class="header-location-widget" onclick="openLocationModal()" style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
@@ -8477,7 +8492,8 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
       </div>
     </div>
 
-    <!-- BREADCRUMB -->
+    <nav class="cerood-unified-categories" aria-label="Cerood divisions"><a href="/cosmetics.html">Beauty</a><a href="/home-services.html">Services</a><a href="/renewed.html">Renewed</a><a href="/clothing.html">Fashion</a></nav>
+<!-- BREADCRUMB -->
     <div class="breadcrumb">
     <a href="/">Home</a>
 
