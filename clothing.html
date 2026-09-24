@@ -333,7 +333,7 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_clothing_selected_locati
     document.addEventListener('keydown',onKey);
     shade.addEventListener('click',e=>{if(e.target===shade)close()});
     panel.querySelector('#rn-loc-close').addEventListener('click',close);
-    panel.addEventListener('submit',e=>{e.preventDefault();const loc={area:panel.elements.namedItem('area').value.trim(),city:panel.elements.namedItem('city').value.trim(),pincode:panel.elements.namedItem('pincode').value.trim()};if(!/^\d{6}$/.test(loc.pincode))return;localStorage.setItem(key,JSON.stringify(loc));localStorage.setItem('cerood_clothing_selected_location',JSON.stringify(loc));window.dispatchEvent(new Event('cerood-clothing-location-changed'));show(loc);close()});
+    panel.addEventListener('submit',e=>{e.preventDefault();const loc={area:panel.elements.namedItem('area').value.trim(),city:panel.elements.namedItem('city').value.trim(),pincode:panel.elements.namedItem('pincode').value.trim()};if(!/^\d{6}$/.test(loc.pincode))return;localStorage.setItem(key,JSON.stringify(loc));localStorage.setItem('cerood_clothing_selected_location',JSON.stringify(loc));window.CeroodLocation?.set(loc);window.dispatchEvent(new Event('cerood-clothing-location-changed'));show(loc);close()});
     panel.elements.namedItem('area').focus();
   });
 })();
@@ -406,4 +406,5 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_clothing_selected_locati
 <!-- Cerood Notify Stage 2: opt-in only; existing page logic untouched. -->
 <script src="/cerood-notify.js" defer></script>
 <script src="/cerood-notify-ui.js" data-division="fashion" defer></script>
+<script src="/cerood-location.js" defer></script>
 </body></html>
