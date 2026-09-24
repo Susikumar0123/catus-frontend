@@ -2140,6 +2140,25 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
 @media(max-width:360px){.csf-bottom a{font-size:9px}.csf-divisions a{font-size:10px}.uc-homepage-wrapper .header-main-container{column-gap:5px!important}.csf-home-cart,.csf-menu summary{width:35px;height:35px}}
 </style>
+
+<style id="cerood-service-fullbleed-mobile-header-fix">
+/* Only mobile header geometry. Preserve existing cart, menu, search and bottom navigation. */
+@media (max-width:850px){
+ html,body{max-width:100%;overflow-x:clip}
+ /* Product: break out of the master-app-container's horizontal padding. */
+ .master-app-container>.uc-homepage-wrapper{width:100vw!important;max-width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important;padding:0!important;box-sizing:border-box!important}
+ .uc-homepage-wrapper>.header-main-container{width:100%!important;max-width:100%!important;margin:0!important;padding:12px 13px 10px!important;border-radius:0!important;background:linear-gradient(110deg,#a8bdcf,#50708f)!important;box-sizing:border-box!important;grid-template-columns:42px minmax(0,1fr) auto!important;column-gap:6px!important;row-gap:9px!important}
+ .uc-homepage-wrapper .header-main-container>.mobile-location-widget{min-width:0!important;width:100%!important;max-width:100%!important}
+ .uc-homepage-wrapper .header-main-container>.cerood-unified-tools{display:flex!important;flex-shrink:0!important;gap:5px!important}
+ .uc-homepage-wrapper .header-main-container>.search-container{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+ /* Checkout: full-bleed blue background with two aligned rows. */
+ .checkout-header{width:100vw!important;max-width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important;padding:12px 13px 10px!important;box-sizing:border-box!important;border-radius:0!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;align-items:center!important;column-gap:6px!important;row-gap:9px!important;background:linear-gradient(110deg,#a8bdcf,#50708f)!important}
+ .checkout-header>img{grid-column:1!important;grid-row:1!important;max-width:42px!important;width:auto!important;height:40px!important;object-fit:contain!important}
+ .checkout-header>.cerood-unified-tools{grid-column:3!important;grid-row:1!important;display:flex!important;gap:5px!important;justify-self:end!important;align-items:center!important}
+ .checkout-header>.csf-checkout-search{grid-column:1/-1!important;grid-row:2!important;display:flex!important;min-width:0!important;width:100%!important;box-sizing:border-box!important;margin:0!important}
+ .checkout-header>.secure-badge{display:none!important}
+}
+</style>
 </head>
 <body>
 
@@ -2152,8 +2171,6 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
     Secure Checkout
 </div><form class="csf-checkout-search" role="search" action="/home-services.html" method="get"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input name="search" aria-label="Search home services" placeholder="Search TV repair, AC service, RO..." type="search"></form>
     </div>
-
-    <nav class="cerood-unified-categories csf-divisions" aria-label="Cerood divisions"><a href="/cosmetics.html">Beauty</a><a href="/home-services.html">Services</a><a href="/renewed.html">Renewed</a><a href="/clothing.html">Fashion</a></nav>
 <!-- MAIN CHECKOUT VIEW -->
     <div class="checkout-container" id="checkoutMainSection">
         <div class="cerood-checkout-intro" aria-hidden="true">
