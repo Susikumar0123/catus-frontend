@@ -64,6 +64,17 @@
 @media(max-width:850px){.crn-header .desktop-nav{display:none}.crn-header-main{min-height:0;margin:8px 0 0;padding:10px;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:36px 42px;column-gap:8px;row-gap:7px;border-radius:14px}.crn-logo{grid-column:1;grid-row:1;justify-self:start;min-width:0}.crn-logo img{height:36px;max-width:60px}.crn-header .crn-location{display:none}.crn-header .crn-mobile-location{display:flex;grid-column:2;grid-row:1;justify-self:end;flex:none;width:min(47vw,170px);max-width:170px;min-width:0;height:34px;min-height:34px;padding:3px 8px;font-size:9px}.crn-header .crn-mobile-location b{font-size:10px;line-height:13px}.crn-header .crn-mobile-location>.crn-icon{width:14px;height:14px}.crn-header .crn-search{grid-column:1/-1;grid-row:2;order:initial;flex:none;width:100%;max-width:none;min-height:42px;height:42px;padding:0 12px;border-radius:12px;gap:8px}.crn-header .crn-search input{font-size:12px}.crn-header .crn-actions{display:none}.crn-mobile-nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:1000;align-items:stretch;justify-content:initial;gap:0;width:100%;height:calc(66px + env(safe-area-inset-bottom));padding:5px 5px calc(5px + env(safe-area-inset-bottom));margin:0;border:0;border-top:1px solid #e8e8f0;border-radius:0;background:#fff;box-shadow:0 -3px 14px rgba(24,27,55,.065);overflow:hidden}.crn-mobile-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:0;height:100%;padding:4px 1px;border:1px solid transparent;border-radius:14px;background:transparent;color:#414959;font-size:9px;font-weight:500;line-height:1.1;text-decoration:none;white-space:nowrap}.crn-mobile-nav a .crn-icon{width:21px;height:21px;flex:0 0 auto}.crn-mobile-nav a[aria-current="page"],.crn-mobile-nav a.crn-nav-active{background:#f0ebff;color:#6043e8;border-color:#ddd2ff;font-weight:700}.crn-mobile-nav a:active{background:#e5dcff;color:#5635df;transform:scale(.97)}.crn-mobile-nav a:focus-visible{outline:2px solid #7d62ef;outline-offset:-2px}body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}.benefits{margin-bottom:20px}}
 @media(max-width:360px){.crn-mobile-nav{padding-left:2px;padding-right:2px}.crn-mobile-nav a{font-size:8px}.crn-header .crn-mobile-location{width:126px}}
 @media(prefers-reduced-motion:reduce){.crn-mobile-nav a{transition:none}}
+/* Mobile full-width header: remove the outer shell gutter around the blue header,
+   while retaining comfortable spacing for the logo, location and search input. */
+@media (max-width:850px){
+  .crn-header{width:100%;margin:0;padding:0;border:0;}
+  .crn-header>.shell{width:100%;max-width:none;margin:0;padding:0!important;}
+  .crn-header-main{width:100%;max-width:none;margin:0;padding:12px 13px 13px;
+    border-radius:0;box-sizing:border-box;grid-template-columns:minmax(0,1fr) minmax(0,auto);}
+  .crn-header .crn-search{width:100%;min-width:0;max-width:none;box-sizing:border-box;}
+  .crn-header .crn-mobile-location{max-width:min(47vw,170px);}
+}
+
 </style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style id="cerood-homepage-auth-style">
 /* Cerood existing Home Services auth modal */
         /* --- PREMIUM Catus STYLE AUTH MODAL CSS --- */
