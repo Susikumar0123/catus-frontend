@@ -64,13 +64,207 @@
 @media(max-width:850px){.crn-header .desktop-nav{display:none}.crn-header-main{min-height:0;margin:8px 0 0;padding:10px;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:36px 42px;column-gap:8px;row-gap:7px;border-radius:14px}.crn-logo{grid-column:1;grid-row:1;justify-self:start;min-width:0}.crn-logo img{height:36px;max-width:60px}.crn-header .crn-location{display:none}.crn-header .crn-mobile-location{display:flex;grid-column:2;grid-row:1;justify-self:end;flex:none;width:min(47vw,170px);max-width:170px;min-width:0;height:34px;min-height:34px;padding:3px 8px;font-size:9px}.crn-header .crn-mobile-location b{font-size:10px;line-height:13px}.crn-header .crn-mobile-location>.crn-icon{width:14px;height:14px}.crn-header .crn-search{grid-column:1/-1;grid-row:2;order:initial;flex:none;width:100%;max-width:none;min-height:42px;height:42px;padding:0 12px;border-radius:12px;gap:8px}.crn-header .crn-search input{font-size:12px}.crn-header .crn-actions{display:none}.crn-mobile-nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:1000;align-items:stretch;justify-content:initial;gap:0;width:100%;height:calc(66px + env(safe-area-inset-bottom));padding:5px 5px calc(5px + env(safe-area-inset-bottom));margin:0;border:0;border-top:1px solid #e8e8f0;border-radius:0;background:#fff;box-shadow:0 -3px 14px rgba(24,27,55,.065);overflow:hidden}.crn-mobile-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:0;height:100%;padding:4px 1px;border:1px solid transparent;border-radius:14px;background:transparent;color:#414959;font-size:9px;font-weight:500;line-height:1.1;text-decoration:none;white-space:nowrap}.crn-mobile-nav a .crn-icon{width:21px;height:21px;flex:0 0 auto}.crn-mobile-nav a[aria-current="page"],.crn-mobile-nav a.crn-nav-active{background:#f0ebff;color:#6043e8;border-color:#ddd2ff;font-weight:700}.crn-mobile-nav a:active{background:#e5dcff;color:#5635df;transform:scale(.97)}.crn-mobile-nav a:focus-visible{outline:2px solid #7d62ef;outline-offset:-2px}body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}.benefits{margin-bottom:20px}}
 @media(max-width:360px){.crn-mobile-nav{padding-left:2px;padding-right:2px}.crn-mobile-nav a{font-size:8px}.crn-header .crn-mobile-location{width:126px}}
 @media(prefers-reduced-motion:reduce){.crn-mobile-nav a{transition:none}}
+</style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style id="cerood-homepage-auth-style">
+/* Cerood existing Home Services auth modal */
+        /* --- PREMIUM Catus STYLE AUTH MODAL CSS --- */
+.auth-modal-wrapper {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 9999999;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto !important; /* 🛑 மொபைலில் டச் வேலை செய்ய இது கட்டாயம் தேவை */
+}
+.auth-modal-container {
+    display: flex;
+    width: 750px;
+    max-width: 95vw;
+    height: 520px;
+    background: #f6d2bc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    position: relative;
+}
+.auth-left-panel {
+    width: 38%;
+    background: #d7a7a8;
+    color: #111111;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center !important; /* 🛑 மேலிருந்து கீழே சரியாக நடுவில் இருக்க */
+    align-items: flex-start;
+    position: relative;
+}
+.auth-left-panel h2 { font-size: 28px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.3; text-align: left;}
+.auth-left-panel p { font-size: 16px; color: #111111; margin: 0; line-height: 1.5; text-align: left;}
+.auth-right-panel { width: 62%; padding: 40px 35px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; background: #f6d2bc; overflow-y: auto; }
+.auth-close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; color: #878787; cursor: pointer; }
+.auth-input-field { width: 100%; padding: 10px 0; font-size: 15px; border: none; border-bottom: 1.5px solid #b89789; outline: none; color: #111111; margin-top: 25px; margin-bottom: 5px; background: transparent; box-sizing: border-box; }
+.auth-input-field:focus { border-bottom-color: #8b6d76; }
+.auth-input-field::placeholder {
+    color: #555555 !important;
+}
+.auth-primary-btn { width: 100%; background: #d7a7a8; color: #111111; border: none; padding: 14px; border-radius: 2px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 25px; }
+.auth-primary-btn:hover {
+    background: #c29394 !important; 
+}
+.auth-terms-text { font-size: 11px; color: #334155; margin-top: 20px; line-height: 1.4; }
+.auth-terms-text a { color: #2874f0; text-decoration: none; }
+.auth-bottom-link { margin-top: auto; text-align: center; font-size: 14px; color: #000000; font-weight: 700; cursor: pointer; padding-top: 20px; }
+.auth-bottom-link:hover {
+    text-decoration: underline;
+}
+
+/* ===== CEROOD AUTH V2 / PHASE 1: scoped only to #authModal ===== */
+#authModal.auth-modal-wrapper { background:rgba(10,17,31,.62)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important; }
+#authModal .auth-modal-container {width:810px!important;max-width:calc(100vw - 36px)!important;height:min(570px,calc(100dvh - 42px))!important;max-height:calc(100dvh - 42px)!important;border:1px solid rgba(255,255,255,.7)!important;border-radius:26px!important;background:#fff!important;box-shadow:0 30px 100px rgba(15,23,42,.27)!important;}
+#authModal .auth-left-panel {width:37%!important;box-sizing:border-box!important;background:linear-gradient(155deg,#191c35 0%,#3b3267 65%,#755d96 100%)!important;color:#fff!important;padding:44px 33px!important;}
+#authModal .auth-left-panel:before {content:'CEROOD  /  ACCOUNT';position:absolute;top:34px;left:33px;font-size:10px;font-weight:800;letter-spacing:2px;color:#d9d4fa;}
+#authModal .auth-left-panel:after {content:'✦';position:absolute;bottom:22px;right:30px;color:#c8b9ff;font-size:66px;opacity:.4;}
+#authModal .auth-left-panel h2 {font-size:32px!important;font-weight:750!important;letter-spacing:-1.2px!important;line-height:1.17!important;color:#fff!important;}
+#authModal .auth-left-panel p {font-size:14px!important;line-height:1.7!important;color:#e7e2ff!important;}
+#authModal .auth-right-panel {width:63%!important;box-sizing:border-box!important;padding:52px 43px 32px!important;background:#fff!important;overflow-y:auto!important;}
+#authModal .auth-close-btn {top:16px!important;right:18px!important;display:grid!important;place-items:center!important;width:36px!important;height:36px!important;border-radius:50%!important;background:#f3f4f6!important;color:#334155!important;z-index:5!important;}
+#authModal .auth-right-panel h3 {font-size:26px!important;letter-spacing:-.8px!important;font-weight:750!important;line-height:1.25!important;color:#161b2b!important;}
+#authModal .auth-right-panel p {line-height:1.65!important;}
+#authModal .auth-input-field:not(#inputRegOTP) {min-height:54px!important;padding:14px 16px!important;margin-top:17px!important;background:#f8f9fc!important;border:1.5px solid #e5e7ef!important;border-radius:13px!important;font-size:15px!important;letter-spacing:normal!important;}
+#authModal .auth-input-field:not(#inputRegOTP):focus {background:#fff!important;border-color:#7154bb!important;box-shadow:0 0 0 4px rgba(113,84,187,.12)!important;}
+#authModal .auth-primary-btn {min-height:52px!important;margin-top:22px!important;padding:13px 18px!important;background:#24203c!important;color:#fff!important;border-radius:13px!important;font-weight:700!important;font-size:14px!important;letter-spacing:.2px!important;box-shadow:0 8px 18px rgba(36,32,60,.15)!important;transition:background .18s,transform .18s!important;}
+#authModal .auth-primary-btn:hover {background:#47366e!important;transform:translateY(-1px)!important;}
+#authModal .auth-primary-btn:disabled {opacity:.65!important;transform:none!important;cursor:wait!important;}
+#authModal .auth-bottom-link {font-size:12px!important;font-weight:650!important;color:#6750a4!important;}
+#authModal .auth-terms-text {font-size:11px!important;color:#64748b!important;}
+#authModal .auth-terms-text a {color:#6045a0!important;}
+#authModal .cerood-auth-progress {display:flex;align-items:center;gap:7px;margin:0 34px 26px 0;flex-wrap:wrap;}
+#authModal .cerood-auth-progress .auth-progress-label {font-size:10px;font-weight:750;letter-spacing:.7px;color:#8c90a1;text-transform:uppercase;}
+#authModal .cerood-auth-progress .auth-progress-label.is-current {color:#5d469a;}
+#authModal .cerood-auth-progress .auth-progress-label.is-done {color:#2b946c;}
+#authModal .cerood-auth-progress .auth-progress-arrow {font-size:11px;color:#bec0cc;}
+#authModal .cerood-auth-progress .auth-progress-caption {flex-basis:100%;margin-top:5px;color:#6b7280;font-size:11px;line-height:1.4;}
+@media(max-width:768px) {
+ #authModal.auth-modal-wrapper {align-items:flex-end!important;}
+ #authModal .auth-modal-container {width:100%!important;max-width:100%!important;height:auto!important;max-height:94dvh!important;border-radius:24px 24px 0 0!important;overflow:hidden!important;}
+ #authModal .auth-left-panel {display:none!important;}
+ #authModal .auth-right-panel {width:100%!important;height:auto!important;max-height:94dvh!important;padding:44px 24px max(24px,env(safe-area-inset-bottom))!important;overflow-y:auto!important;}
+ #authModal .auth-right-panel h3 {font-size:25px!important;}
+ #authModal .cerood-auth-progress {margin-bottom:23px;}
+ #authModal .auth-close-btn {top:12px!important;right:15px!important;}
+}
+/* ===== END CEROOD AUTH V2 PHASE 1 ===== */
+
+/* CEROOD AUTH V2.1: compact step bar and unobstructed mobile sheet */
+#authModal .cerood-auth-progress { display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px!important; margin:0 38px 26px 0!important; }
+#authModal .cerood-auth-progress .auth-progress-label {position:relative;display:block;min-width:0;padding:13px 0 0!important;font-size:10px!important;letter-spacing:.45px!important;white-space:nowrap;}
+#authModal .cerood-auth-progress .auth-progress-label:before {content:'';position:absolute;top:0;left:0;right:0;height:4px;background:#e5e7eb;border-radius:999px;}
+#authModal .cerood-auth-progress .auth-progress-label.is-current:before {background:#6750a4;}
+#authModal .cerood-auth-progress .auth-progress-label.is-done:before {background:#2b946c;}
+#authModal .cerood-auth-progress .auth-progress-arrow, #authModal .cerood-auth-progress .auth-progress-caption {display:none!important;}
+body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
+@media(max-width:768px) {
+ #authModal.auth-modal-wrapper {z-index:2147483000!important;}
+ #authModal .auth-modal-container {max-height:calc(100dvh - 12px)!important;}
+ #authModal .auth-right-panel {max-height:calc(100dvh - 12px)!important;overscroll-behavior:contain!important;scrollbar-width:none;}
+ #authModal .auth-right-panel::-webkit-scrollbar {display:none;}
+ #authModal .cerood-auth-progress {margin-bottom:24px!important;}
+}
+/* END CEROOD AUTH V2.1 */
+
+
+/* CEROOD AUTH DESKTOP: match the mobile visual language, not mobile bottom nav. */
+@media (min-width: 769px) {
+  #authModal.auth-modal-wrapper {
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    padding: 24px !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(15, 23, 42, .58) !important;
+    backdrop-filter: blur(7px) !important;
+    -webkit-backdrop-filter: blur(7px) !important;
+  }
+  #authModal .auth-modal-container {
+    display: flex !important;
+    flex-direction: column !important;
+    width: min(100%, 470px) !important;
+    max-width: 470px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 48px) !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 20px !important;
+    background: #fff !important;
+    box-shadow: 0 24px 75px rgba(15, 23, 42, .22) !important;
+    overflow: hidden !important;
+  }
+  #authModal .auth-left-panel { display: none !important; }
+  #authModal .auth-right-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 48px) !important;
+    padding: 28px 25px 30px !important;
+    box-sizing: border-box !important;
+    overflow-y: auto !important;
+    background: #fff !important;
+    scrollbar-width: none;
+  }
+  #authModal .auth-right-panel::-webkit-scrollbar { display: none; }
+  #authModal .cerood-auth-progress {
+    margin: 0 45px 29px 0 !important;
+  }
+  #authModal .auth-close-btn,
+  #authModal .desktop-header-close.auth-close-btn {
+    position: absolute !important;
+    top: 18px !important;
+    right: 17px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid #e9eaf0 !important;
+    border-radius: 50% !important;
+    background: #f3f4f6 !important;
+    color: #334155 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+  }
+  #authModal .auth-right-panel h3 { font-size: 25px !important; }
+  #authModal .auth-input-field:not(#inputRegOTP) { min-height: 54px !important; }
+  #authModal .auth-primary-btn { min-height: 52px !important; }
+}
+/* END CEROOD AUTH DESKTOP */
+
+
+/* Homepage-only isolation and mobile bottom navigation */
+#authModal{box-sizing:border-box;}
+#authModal *,#authModal *::before,#authModal *::after{box-sizing:border-box;}
+#authModal .auth-modal-container{font-family:Inter,Arial,sans-serif;}
+#authModal .auth-right-panel{color:#172033;}
+#authModal .auth-right-panel button{cursor:pointer;}
+#authModal .auth-right-panel .auth-primary-btn{display:block;width:100%;}
+#authModal .auth-right-panel .auth-bottom-link{cursor:pointer;}
+#authModal .auth-right-panel .toggle-password-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#667085;}
+#authModal .auth-right-panel .password-field-wrapper{position:relative;}
+#authModal .auth-right-panel .password-field-wrapper input{padding-right:45px!important;}
+@media(max-width:768px){#authModal.auth-modal-wrapper{bottom:0!important;height:100dvh!important;}#authModal .auth-modal-container{max-height:calc(100dvh - 65px)!important;margin-bottom:65px!important;}#authModal .auth-right-panel{max-height:calc(100dvh - 65px)!important;}}
 </style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a class="logo crn-logo" href="/" aria-label="Cerood home"><img src="/cerood-logo.webp" alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false"/><span class="crn-logo-fallback" hidden>cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Service location<b id="locationText">Tamil Nadu</b></span><svg class="crn-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="mobile-location location-trigger crn-mobile-location" id="mobileLocationButton" type="button"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Service location<b id="mobileLocationText">Tamil Nadu</b></span><svg class="crn-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
 <form class="search crn-search" id="siteSearch"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input aria-label="Search Cerood" id="searchText" placeholder="Search products, services &amp; more..." type="search"/><button type="submit" aria-label="Search"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button></form>
-<div class="actions crn-actions"><a class="crn-service-pill" href="/home-services.html">Home Services</a><a class="crn-pill crn-cart" href="/cerood-cart.html" aria-label="Cart"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg><span>Cart</span></a><a class="crn-pill crn-account" href="/cerood-orders.html#account" aria-label="Login or account"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span>Login / Account</span></a></div>
-</div><nav class="desktop-nav"><a href="/">Home</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed</a><a href="/cosmetics.html">Beauty</a><a href="/clothing.html">Fashion</a><a class="right" href="#divisions">Explore</a><a href="/contact.html">Help</a></nav></div></header><main class="shell"><section class="hero"><div class="hero-copy"><div class="eyebrow">WELCOME TO CEROOD</div><h1>Everything you need.<br><em>One Cerood.</em></h1><p>Home Services. Renewed Electronics.<br>Beauty Essentials. Fashion for Everyone.</p><a class="primary" href="#divisions">Explore Cerood →</a><div class="trustline"><span>Trusted Services</span><span>Quality Products</span><span>Secure Payments</span></div></div><div class="hero-art"><img src="https://images.unsplash.com/photo-1631545806609-9e8e5e1d3c12?w=600&q=80" alt="Home air conditioning" onerror="this.onerror=null;this.src='/cerood-renewed-banner-desktop.webp'"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80" alt="Laptop"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80" alt="Beauty products"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80" alt="Fashion"></div></section><section class="section search-results" id="ceroodSearchResults"><div class="section-head"><div><h2>Search Results</h2><p id="ceroodSearchMeta" class="search-meta" role="status" aria-live="polite" aria-atomic="true"></p><button type="button" id="ceroodSearchRetry" class="cerood-search-retry" hidden>Retry unavailable catalogues ↻</button></div><button type="button" class="search-clear" id="ceroodSearchClear">Clear ×</button></div><div class="cerood-search-filters" id="ceroodSearchFilters" role="group" aria-label="Filter search results by division" hidden><button type="button" data-division="All" aria-pressed="true">All</button><button type="button" data-division="Home Services" aria-pressed="false">Home Services</button><button type="button" data-division="Renewed" aria-pressed="false">Renewed</button><button type="button" data-division="Beauty" aria-pressed="false">Beauty</button><button type="button" data-division="Fashion" aria-pressed="false">Fashion</button></div><div class="cerood-search-sort" id="ceroodSearchSortWrap" hidden><label for="ceroodSearchSort">Sort results</label><select id="ceroodSearchSort" aria-label="Sort search results"><option value="relevance">Relevance (default)</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Name: A to Z</option></select></div><div class="trending" id="ceroodSearchGrid"></div><div class="search-more-wrap"><button class="search-more" id="ceroodSearchMore" type="button" hidden>Show more results</button></div></section><section class="section" id="divisions"><div class="section-head"><div><h2>Explore Our Divisions</h2><p>Four ways to a better everyday life.</p></div></div><div class="divisions"><a class="division service" href="/home-services.html"><img src="https://images.unsplash.com/photo-1631545806609-9e8e5e1d3c12?w=800&q=80" alt="Home Services" onerror="this.onerror=null;this.src='/cerood-renewed-banner-desktop.webp'"><div class="division-body"><h3>🏠 Home Services</h3><p>Repair, Installation & Maintenance</p><span class="cta">Get Service →</span></div></a><a class="division renewed" href="/renewed.html"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80" alt="Renewed electronics"><div class="division-body"><h3>♻️ Renewed</h3><p>Pre-owned Electronics. Great Value</p><span class="cta">Shop Renewed →</span></div></a><a class="division beauty" href="/cosmetics.html"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80" alt="Beauty products"><div class="division-body"><h3>💄 Beauty</h3><p>Skincare, Cosmetics & Personal Care</p><span class="cta">Shop Beauty →</span></div></a><a class="division fashion" href="/clothing.html"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80" alt="Fashion clothing"><div class="division-body"><h3>👕 Fashion</h3><p>Men, Women & Kids. Latest Styles</p><span class="cta">Shop Fashion →</span></div></a></div></section><section class="section"><div class="section-head"><div><h2>Trending on Cerood</h2><p>Discover services and products across our divisions.</p></div><a class="viewall" href="#divisions">View All →</a></div><div class="trending" id="ceroodTrending" aria-live="polite"><a class="product" href="/home-services.html"><img src="https://images.unsplash.com/photo-1631545806609-9e8e5e1d3c12?w=400&q=75" alt="AC service"><b>AC Service</b><span class="price">Explore services</span><span class="cta">Book Now</span></a><a class="product" href="/renewed.html"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=75" alt="Renewed laptop"><b>Renewed Laptops</b><span class="price">Shop Renewed</span><span class="cta">View Products</span></a><a class="product" href="/cosmetics.html"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=75" alt="Skincare"><b>Skincare Essentials</b><span class="price">Shop Beauty</span><span class="cta">View Products</span></a><a class="product" href="/clothing.html"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=75" alt="Fashion shoes"><b>Fashion Picks</b><span class="price">Shop Fashion</span><span class="cta">View Products</span></a><a class="product" href="/home-services.html"><img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=400&q=75" alt="Washing machine"><b>Appliance Repair</b><span class="price">Explore services</span><span class="cta">Book Now</span></a><a class="product" href="/cosmetics.html"><img src="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=400&q=75" alt="Perfume"><b>Beauty & Fragrance</b><span class="price">Shop Beauty</span><span class="cta">View Products</span></a></div></section><section class="benefits"><div>♧ &nbsp;Wide Coverage<span>Across Tamil Nadu</span></div><div>▣ &nbsp;Easy Booking<span>Explore in a few steps</span></div><div>♢ &nbsp;Secure Payments<span>Available checkout options</span></div><div>♙ &nbsp;One Brand<span>Four Cerood divisions</span></div></section></main><nav class="bottom crn-mobile-nav" aria-label="Cerood mobile navigation"><a href="/" aria-current="page"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span class="crn-nav-label">Home</span></a><a href="/renewed.html" aria-label="Shop renewed electronics"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10l-2.5-2.5M17 7l-2.5 2.5"/><path d="M17 17H7l2.5 2.5M7 17l2.5-2.5"/><path d="M20 11a8 8 0 0 0-13-5M4 13a8 8 0 0 0 13 5"/></svg><span class="crn-nav-label">Renewed</span></a><a href="/cosmetics.html" aria-label="Shop beauty products"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.9 5.9L20 11l-6.1 2.1L12 19l-1.9-5.9L4 11l6.1-2.1L12 3Z"/><path d="m19 17 .7 1.3L21 19l-1.3.7L19 21l-.7-1.3L17 19l1.3-.7L19 17Z"/></svg><span class="crn-nav-label">Beauty</span></a><a href="/clothing.html" aria-label="Shop fashion and clothing"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 4 4 2 4-2 5 4-3 4-2-1v10H8V11l-2 1-3-4 5-4Z"/><path d="M8 4c.5 2.2 1.8 3 4 3s3.5-.8 4-3"/></svg><span class="crn-nav-label">Fashion</span></a><a href="/cerood-orders.html#account"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span class="crn-nav-label">Account</span></a></nav><div id="ceroodLocationDialog" class="cerood-location-overlay" hidden><section class="cerood-location-panel" role="dialog" aria-modal="true" aria-labelledby="ceroodLocationTitle"><h2 id="ceroodLocationTitle">Choose your service location</h2><p>This address is shared with Cerood Home Services on this device. Product delivery availability and service coverage are confirmed separately at checkout/booking.</p><form id="ceroodLocationForm"><div class="cerood-location-grid"><label class="wide">House / door / building *<input name="house" autocomplete="address-line1" required maxlength="120"></label><label>Village / city *<input name="village" autocomplete="address-level2" required maxlength="100"></label><label>District *<input name="district" required maxlength="100"></label><label>State *<input name="state" value="Tamil Nadu" required maxlength="100"></label><label>6-digit PIN code *<input name="pincode" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{6}" maxlength="6" required></label><label class="wide">Landmark (optional)<input name="landmark" maxlength="120"></label></div><p id="ceroodLocationError" class="cerood-location-error" role="alert"></p><div class="cerood-location-controls"><button type="button" id="ceroodLocationCancel">Cancel</button><button type="submit">Save location</button></div></form></section></div><script>try{const v=localStorage.getItem('cerood_selected_location')||localStorage.getItem('catus_location_name')||localStorage.getItem('catus_user_location')||localStorage.getItem('selectedLocation');if(v){let l;try{l=JSON.parse(v)}catch(_){l=v;}const t=typeof l==='string'?l:(l?.display_name||l?.name||l?.address||'Tamil Nadu');document.getElementById('locationText').textContent=t;document.getElementById('mobileLocationText').textContent=t;}}catch(e){}</script><script id="cerood-common-location">(function(){'use strict';
+<div class="actions crn-actions"><a class="crn-service-pill" href="/home-services.html">Home Services</a><a class="crn-pill crn-cart" href="/cerood-cart.html" aria-label="Cart"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg><span>Cart</span></a><a class="crn-pill crn-account" href="/cerood-orders.html#account" data-cerood-auth-trigger aria-label="Login or account"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span>Login / Account</span></a></div>
+</div><nav class="desktop-nav"><a href="/">Home</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed</a><a href="/cosmetics.html">Beauty</a><a href="/clothing.html">Fashion</a><a class="right" href="#divisions">Explore</a><a href="/contact.html">Help</a></nav></div></header><main class="shell"><section class="hero"><div class="hero-copy"><div class="eyebrow">WELCOME TO CEROOD</div><h1>Everything you need.<br><em>One Cerood.</em></h1><p>Home Services. Renewed Electronics.<br>Beauty Essentials. Fashion for Everyone.</p><a class="primary" href="#divisions">Explore Cerood →</a><div class="trustline"><span>Trusted Services</span><span>Quality Products</span><span>Secure Payments</span></div></div><div class="hero-art"><img src="https://images.unsplash.com/photo-1631545806609-9e8e5e1d3c12?w=600&q=80" alt="Home air conditioning" onerror="this.onerror=null;this.src='/cerood-renewed-banner-desktop.webp'"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80" alt="Laptop"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80" alt="Beauty products"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80" alt="Fashion"></div></section><section class="section search-results" id="ceroodSearchResults"><div class="section-head"><div><h2>Search Results</h2><p id="ceroodSearchMeta" class="search-meta" role="status" aria-live="polite" aria-atomic="true"></p><button type="button" id="ceroodSearchRetry" class="cerood-search-retry" hidden>Retry unavailable catalogues ↻</button></div><button type="button" class="search-clear" id="ceroodSearchClear">Clear ×</button></div><div class="cerood-search-filters" id="ceroodSearchFilters" role="group" aria-label="Filter search results by division" hidden><button type="button" data-division="All" aria-pressed="true">All</button><button type="button" data-division="Home Services" aria-pressed="false">Home Services</button><button type="button" data-division="Renewed" aria-pressed="false">Renewed</button><button type="button" data-division="Beauty" aria-pressed="false">Beauty</button><button type="button" data-division="Fashion" aria-pressed="false">Fashion</button></div><div class="cerood-search-sort" id="ceroodSearchSortWrap" hidden><label for="ceroodSearchSort">Sort results</label><select id="ceroodSearchSort" aria-label="Sort search results"><option value="relevance">Relevance (default)</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Name: A to Z</option></select></div><div class="trending" id="ceroodSearchGrid"></div><div class="search-more-wrap"><button class="search-more" id="ceroodSearchMore" type="button" hidden>Show more results</button></div></section><section class="section" id="divisions"><div class="section-head"><div><h2>Explore Our Divisions</h2><p>Four ways to a better everyday life.</p></div></div><div class="divisions"><a class="division service" href="/home-services.html"><img src="https://images.unsplash.com/photo-1631545806609-9e8e5e1d3c12?w=800&q=80" alt="Home Services" onerror="this.onerror=null;this.src='/cerood-renewed-banner-desktop.webp'"><div class="division-body"><h3>🏠 Home Services</h3><p>Repair, Installation & Maintenance</p><span class="cta">Get Service →</span></div></a><a class="division renewed" href="/renewed.html"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80" alt="Renewed electronics"><div class="division-body"><h3>♻️ Renewed</h3><p>Pre-owned Electronics. Great Value</p><span class="cta">Shop Renewed →</span></div></a><a class="division beauty" href="/cosmetics.html"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80" alt="Beauty products"><div class="division-body"><h3>💄 Beauty</h3><p>Skincare, Cosmetics & Personal Care</p><span class="cta">Shop Beauty →</span></div></a><a class="division fashion" href="/clothing.html"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80" alt="Fashion clothing"><div class="division-body"><h3>👕 Fashion</h3><p>Men, Women & Kids. Latest Styles</p><span class="cta">Shop Fashion →</span></div></a></div></section><section class="section"><div class="section-head"><div><h2>Trending on Cerood</h2><p>Discover services and products across our divisions.</p></div><a class="viewall" href="#divisions">View All →</a></div><div class="trending" id="ceroodTrending" aria-live="polite"><a class="product" href="/home-services.html"><img src="https://images.unsplash.com/photo-1631545806609-9e8e5e1d3c12?w=400&q=75" alt="AC service"><b>AC Service</b><span class="price">Explore services</span><span class="cta">Book Now</span></a><a class="product" href="/renewed.html"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=75" alt="Renewed laptop"><b>Renewed Laptops</b><span class="price">Shop Renewed</span><span class="cta">View Products</span></a><a class="product" href="/cosmetics.html"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=75" alt="Skincare"><b>Skincare Essentials</b><span class="price">Shop Beauty</span><span class="cta">View Products</span></a><a class="product" href="/clothing.html"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=75" alt="Fashion shoes"><b>Fashion Picks</b><span class="price">Shop Fashion</span><span class="cta">View Products</span></a><a class="product" href="/home-services.html"><img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=400&q=75" alt="Washing machine"><b>Appliance Repair</b><span class="price">Explore services</span><span class="cta">Book Now</span></a><a class="product" href="/cosmetics.html"><img src="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=400&q=75" alt="Perfume"><b>Beauty & Fragrance</b><span class="price">Shop Beauty</span><span class="cta">View Products</span></a></div></section><section class="benefits"><div>♧ &nbsp;Wide Coverage<span>Across Tamil Nadu</span></div><div>▣ &nbsp;Easy Booking<span>Explore in a few steps</span></div><div>♢ &nbsp;Secure Payments<span>Available checkout options</span></div><div>♙ &nbsp;One Brand<span>Four Cerood divisions</span></div></section></main><nav class="bottom crn-mobile-nav" aria-label="Cerood mobile navigation"><a href="/" aria-current="page"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span class="crn-nav-label">Home</span></a><a href="/renewed.html" aria-label="Shop renewed electronics"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10l-2.5-2.5M17 7l-2.5 2.5"/><path d="M17 17H7l2.5 2.5M7 17l2.5-2.5"/><path d="M20 11a8 8 0 0 0-13-5M4 13a8 8 0 0 0 13 5"/></svg><span class="crn-nav-label">Renewed</span></a><a href="/cosmetics.html" aria-label="Shop beauty products"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.9 5.9L20 11l-6.1 2.1L12 19l-1.9-5.9L4 11l6.1-2.1L12 3Z"/><path d="m19 17 .7 1.3L21 19l-1.3.7L19 21l-.7-1.3L17 19l1.3-.7L19 17Z"/></svg><span class="crn-nav-label">Beauty</span></a><a href="/clothing.html" aria-label="Shop fashion and clothing"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 4 4 2 4-2 5 4-3 4-2-1v10H8V11l-2 1-3-4 5-4Z"/><path d="M8 4c.5 2.2 1.8 3 4 3s3.5-.8 4-3"/></svg><span class="crn-nav-label">Fashion</span></a><a href="/cerood-orders.html#account" data-cerood-auth-trigger><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span class="crn-nav-label">Account</span></a></nav><div id="ceroodLocationDialog" class="cerood-location-overlay" hidden><section class="cerood-location-panel" role="dialog" aria-modal="true" aria-labelledby="ceroodLocationTitle"><h2 id="ceroodLocationTitle">Choose your service location</h2><p>This address is shared with Cerood Home Services on this device. Product delivery availability and service coverage are confirmed separately at checkout/booking.</p><form id="ceroodLocationForm"><div class="cerood-location-grid"><label class="wide">House / door / building *<input name="house" autocomplete="address-line1" required maxlength="120"></label><label>Village / city *<input name="village" autocomplete="address-level2" required maxlength="100"></label><label>District *<input name="district" required maxlength="100"></label><label>State *<input name="state" value="Tamil Nadu" required maxlength="100"></label><label>6-digit PIN code *<input name="pincode" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{6}" maxlength="6" required></label><label class="wide">Landmark (optional)<input name="landmark" maxlength="120"></label></div><p id="ceroodLocationError" class="cerood-location-error" role="alert"></p><div class="cerood-location-controls"><button type="button" id="ceroodLocationCancel">Cancel</button><button type="submit">Save location</button></div></form></section></div><script>try{const v=localStorage.getItem('cerood_selected_location')||localStorage.getItem('catus_location_name')||localStorage.getItem('catus_user_location')||localStorage.getItem('selectedLocation');if(v){let l;try{l=JSON.parse(v)}catch(_){l=v;}const t=typeof l==='string'?l:(l?.display_name||l?.name||l?.address||'Tamil Nadu');document.getElementById('locationText').textContent=t;document.getElementById('mobileLocationText').textContent=t;}}catch(e){}</script><script id="cerood-common-location">(function(){'use strict';
  const dialog=document.getElementById('ceroodLocationDialog'),form=document.getElementById('ceroodLocationForm'),error=document.getElementById('ceroodLocationError');
  const fields=['house','village','district','state','pincode','landmark'];let previousFocus=null;
  function display(){let name=localStorage.getItem('catus_location_name')||'';let district=localStorage.getItem('catus_district_name')||'';let pin=localStorage.getItem('catus_pincode')||'';let text=[name,district].filter(Boolean).join(', ');if(pin)text+=' - '+pin;if(!text)text='Tamil Nadu';['locationText','mobileLocationText'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text;});}
@@ -325,4 +519,1926 @@
  restoreSearchFromUrl();
  window.addEventListener('popstate',restoreSearchFromUrl);
 })();
+</script><p id="ceroodHomepageAuthStatus" role="status" aria-live="polite" hidden style="position:fixed;bottom:74px;left:12px;right:12px;background:#24203c;color:white;padding:12px;border-radius:10px;z-index:2147483600;text-align:center"></p><div class="auth-modal-wrapper" id="authModal" role="dialog" aria-modal="true" aria-label="Cerood login and registration" onclick="checkCloseAuthModal(event)">
+<div class="auth-modal-container" id="authDrawer" style="position: relative;">
+<!-- =================================================
+             LEFT PANEL
+        ================================================== -->
+<div class="auth-left-panel" style="position: relative;">
+<div>
+<h2 id="leftPanelTitle">
+                    Looks like you're new here!
+                </h2>
+<p id="leftPanelDesc">
+                    Sign up with your mobile number to get started
+                </p>
+</div>
+</div>
+<!-- =================================================
+             RIGHT PANEL
+        ================================================== -->
+<div class="auth-right-panel">
+<!-- CLOSE BUTTON -->
+<button aria-label="Close" class="desktop-header-close auth-close-btn" onclick="toggleAuthModal(false)" type="button">
+<i class="fa-solid fa-xmark"></i>
+</button>
+<!-- AUTH V2: visual progress only; existing authentication logic unchanged -->
+<div aria-label="Account verification progress" class="cerood-auth-progress" id="ceroodAuthProgress">
+<span class="auth-progress-label is-current" data-auth-progress="phone">Mobile</span>
+<span class="auth-progress-arrow">›</span>
+<span class="auth-progress-label" data-auth-progress="captcha">Security</span>
+<span class="auth-progress-arrow">›</span>
+<span class="auth-progress-label" data-auth-progress="otp">OTP</span>
+</div>
+<!-- =================================================
+                 STEP 1 : MOBILE NUMBER
+            ================================================== -->
+<div id="authStepPhone" style="
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                ">
+<div style="margin-top: 10px;">
+<h3 style="
+                            margin: 0 0 10px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        ">
+                        Welcome to Cerood
+                    </h3>
+<p style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 20px 0;
+                            line-height: 1.5;
+                        ">
+                        Enter your mobile number to continue
+                    </p>
+<input autocomplete="tel" class="auth-input-field" id="inputPhone" inputmode="numeric" maxlength="10" placeholder="Enter Mobile number" type="tel"/>
+<p class="auth-terms-text">
+                        By continuing, you agree to Cerood's
+                        <a href="/terms.html" target="_blank">Terms of Use</a>
+                        and
+                        <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>.
+                    </p>
+</div>
+<button class="auth-primary-btn" onclick="checkUserAndProceed()" type="button">
+                    CONTINUE
+                </button>
+<div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">
+                    New to Cerood? Create an account
+                </div>
+</div>
+<!-- =================================================
+                 STEP 2 : EXISTING USER PASSWORD LOGIN
+            ================================================== -->
+<div id="authStepPassword" style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                ">
+<div style="margin-top: 10px;">
+<h3 style="
+                            margin: 0 0 10px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        ">
+                        Welcome Back
+                    </h3>
+<p id="passInfoText" style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 18px 0;
+                            line-height: 1.5;
+                        ">
+                        Enter your password to login.
+                    </p>
+<!-- PASSWORD -->
+<div class="password-field-wrapper" style="position: relative;">
+<input autocomplete="current-password" class="auth-input-field" id="inputPassword" placeholder="Enter your password" type="password"/>
+<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+                                'inputPassword',
+                                this
+                            )"></i>
+</div>
+<!-- FORGOT -->
+<div style="
+                            text-align: right;
+                            margin-top: 10px;
+                        ">
+<span onclick="triggerForgotPassword()" style="
+                                color: #2874f0;
+                                font-size: 13px;
+                                font-weight: 600;
+                                cursor: pointer;
+                            ">
+                            Forgot?
+                        </span>
+</div>
+</div>
+<button class="auth-primary-btn" onclick="loginWithPassword()" type="button">
+                    LOGIN
+                </button>
+<div class="auth-bottom-link" onclick="backToPhoneStep()">
+                    ← Change Mobile Number
+                </div>
+</div>
+<!-- =================================================
+                 STEP 3 : NEW USER REGISTRATION
+            ================================================== -->
+<div id="authStepRegister" style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                ">
+<div style="margin-top: 10px;">
+<h3 style="
+                            margin: 0 0 8px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        ">
+                        Looks like you're new here!
+                    </h3>
+<p style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 18px 0;
+                            line-height: 1.5;
+                        ">
+                        Create your Cerood account to get started.
+                    </p>
+<!-- MOBILE NUMBER -->
+<input autocomplete="tel" class="auth-input-field" id="regMobile" inputmode="numeric" maxlength="10" placeholder="Mobile Number" type="tel"/>
+<!-- FULL NAME -->
+<input autocomplete="name" class="auth-input-field" id="regName" placeholder="Full Name" type="text"/>
+<!-- OPTIONAL EMAIL -->
+<input autocomplete="email" class="auth-input-field" id="regEmail" placeholder="Gmail ID (Optional)" type="email"/>
+<!-- PINCODE -->
+<input autocomplete="postal-code" class="auth-input-field" id="regPincode" inputmode="numeric" maxlength="6" placeholder="6-digit Pincode" type="text"/>
+<!-- CREATE PASSWORD -->
+<div class="password-field-wrapper" style="position: relative;">
+<input autocomplete="new-password" class="auth-input-field" id="regPassword" minlength="4" placeholder="Create Password (min 4 chars)" type="password"/>
+<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+                                'regPassword',
+                                this
+                            )"></i>
+</div>
+<!-- CONFIRM PASSWORD -->
+<div class="password-field-wrapper" style="
+                            position: relative;
+                            margin-top: 8px;
+                        ">
+<input autocomplete="new-password" class="auth-input-field" id="regConfirmPassword" minlength="4" placeholder="Confirm Password" type="password"/>
+<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+                                'regConfirmPassword',
+                                this
+                            )"></i>
+</div>
+<!-- PASSWORD ERROR -->
+<span id="passwordErrorMsg" style="
+                            color: #ef4444;
+                            font-size: 12px;
+                            display: none;
+                            margin-top: 7px;
+                        ">
+                        Passwords do not match!
+                    </span>
+</div>
+<button class="auth-primary-btn" onclick="proceedToOtpFromRegister()" type="button">
+                    GET OTP &amp; REGISTER
+                </button>
+<div class="auth-bottom-link" onclick="backToPhoneStep()">
+                    Existing User? Log in
+                </div>
+</div>
+<!-- =================================================
+     STEP 4 : SECURITY VERIFICATION
+================================================== -->
+<div id="authStepCaptcha" style="
+        display: none;
+        flex-direction: column;
+        height: 100%;
+    ">
+<div style="margin-top: 10px;">
+<h3 style="
+                margin: 0 0 8px 0;
+                font-size: 20px;
+                font-weight: 600;
+                color: #111111;
+            ">
+            Security Verification
+        </h3>
+<p id="captchaInfo" style="
+                font-size: 13px;
+                color: #64748b;
+                margin: 0 0 22px 0;
+                line-height: 1.5;
+            ">
+            Complete the security check below to receive your OTP.
+        </p>
+<div id="msg91Captcha" style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 80px;
+                margin: 15px 0 20px 0;
+            "></div>
+</div>
+<div class="auth-bottom-link" onclick="backToPhoneStep()">
+        ← Change Mobile Number
+    </div>
+</div>
+<!-- =================================================
+     STEP 5 : OTP VERIFICATION
+     COMMON FOR REGISTER + FORGOT PASSWORD
+================================================== -->
+<div id="authStepOTP" style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                ">
+<div style="margin-top: 10px;">
+<h3 id="otpTitle" style="
+                            margin: 0 0 8px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        ">
+                        Verify OTP
+                    </h3>
+<p id="setPasswordInfo" style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 22px 0;
+                            line-height: 1.5;
+                        ">
+                        Please enter the OTP sent to your mobile.
+                    </p>
+<!-- OTP -->
+<input autocomplete="one-time-code" class="auth-input-field" id="inputRegOTP" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit OTP" style="
+                            text-align: center;
+                            font-size: 22px;
+                            font-weight: 600;
+                            letter-spacing: 8px;
+                        " type="text"/>
+<!-- RESEND -->
+<div style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            font-size: 12px;
+                            margin: 12px 0 15px 0;
+                        ">
+<span style="color: #878787;">
+                            Resend code in
+                            <b id="timerCount" style="color: #212121;">
+                                2:00
+                            </b>
+</span>
+<span id="resendOtpBtn" onclick="resendCurrentOtp()" style="
+                                color: #2874f0;
+                                font-weight: 600;
+                                cursor: pointer;
+                                display: none;
+                            ">
+                            Resend OTP
+                        </span>
+</div>
+<!-- OTP INFO -->
+<div id="otpErrorMsg" style="
+                            display: none;
+                            color: #ef4444;
+                            font-size: 12px;
+                            margin-top: 5px;
+                        "></div>
+</div>
+<button class="auth-primary-btn" id="otpContinueBtn" onclick="verifyOtpAndSetPassword()" type="button">
+                    VERIFY &amp; CONTINUE
+                </button>
+<div class="auth-bottom-link" onclick="backToPhoneStep()">
+                    ← Change Mobile Number
+                </div>
+</div>
+<!-- =================================================
+                 STEP 5 : FORGOT PASSWORD - CREATE NEW PASSWORD
+            ================================================== -->
+<div id="authStepNewPassword" style="
+                    display: none;
+                    flex-direction: column;
+                    height: 100%;
+                ">
+<div style="margin-top: 10px;">
+<h3 style="
+                            margin: 0 0 8px 0;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #111111;
+                        ">
+                        Create New Password
+                    </h3>
+<p style="
+                            font-size: 13px;
+                            color: #64748b;
+                            margin: 0 0 20px 0;
+                            line-height: 1.5;
+                        ">
+                        Your OTP has been verified.
+                        Please create a new password for your account.
+                    </p>
+<!-- NEW PASSWORD -->
+<div class="password-field-wrapper" style="position: relative;">
+<input autocomplete="new-password" class="auth-input-field" id="newResetPassword" minlength="4" placeholder="New Password (min 4 chars)" type="password"/>
+<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+                                'newResetPassword',
+                                this
+                            )"></i>
+</div>
+<!-- CONFIRM NEW PASSWORD -->
+<div class="password-field-wrapper" style="
+                            position: relative;
+                            margin-top: 8px;
+                        ">
+<input autocomplete="new-password" class="auth-input-field" id="newResetConfirmPassword" minlength="4" placeholder="Confirm New Password" type="password"/>
+<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+                                'newResetConfirmPassword',
+                                this
+                            )"></i>
+</div>
+<!-- PASSWORD ERROR -->
+<span id="resetPasswordErrorMsg" style="
+                            color: #ef4444;
+                            font-size: 12px;
+                            display: none;
+                            margin-top: 7px;
+                        ">
+                        Passwords do not match!
+                    </span>
+<!-- PASSWORD SUCCESS INFO -->
+<div id="resetPasswordInfoMsg" style="
+                            display: none;
+                            color: #16a34a;
+                            font-size: 12px;
+                            margin-top: 8px;
+                        "></div>
+</div>
+<button class="auth-primary-btn" onclick="submitNewPasswordReset()" type="button">
+                    UPDATE PASSWORD &amp; LOGIN
+                </button>
+<div class="auth-bottom-link" onclick="showAuthStep('otp')">
+                    ← Back to OTP
+                </div>
+</div>
+</div>
+</div>
+</div><script id="cerood-homepage-auth">  const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000' 
+    : 'https://catus-backend-d2js.onrender.com';
+    const MSG91_WIDGET_ID = '366965657347303138353039';
+const MSG91_WIDGET_TOKEN = '567815T0OZZpNFK06a9ba743P1';
+
+const msg91Configuration = {
+    widgetId: MSG91_WIDGET_ID,
+    tokenAuth: MSG91_WIDGET_TOKEN,
+    exposeMethods: true,
+    captchaRenderId: 'msg91Captcha',
+
+    success: function (data) {
+        console.log('MSG91 success:', data);
+    },
+
+    failure: function (error) {
+        console.error('MSG91 failure:', error);
+    }
+};
+
+let msg91LoadPromise = null;
+
+function loadMsg91() {
+
+    // Already loaded
+    if (
+        typeof window.sendOtp === 'function' &&
+        typeof window.verifyOtp === 'function'
+    ) {
+        return Promise.resolve();
+    }
+
+    // Already loading
+    if (msg91LoadPromise) {
+        return msg91LoadPromise;
+    }
+
+    msg91LoadPromise = new Promise((resolve, reject) => {
+
+        const script =
+            document.createElement('script');
+
+        script.src =
+            'https://verify.msg91.com/otp-provider.js';
+
+        script.async = true;
+
+        script.onload = () => {
+
+            try {
+
+                if (
+                    typeof window.initSendOTP !== 'function'
+                ) {
+                    throw new Error(
+                        'MSG91 initSendOTP not available'
+                    );
+                }
+
+                window.initSendOTP(
+                    msg91Configuration
+                );
+
+                resolve();
+
+            } catch (error) {
+
+                msg91LoadPromise = null;
+                reject(error);
+            }
+        };
+
+        script.onerror = () => {
+
+            msg91LoadPromise = null;
+
+            reject(
+                new Error(
+                    'MSG91 script failed to load'
+                )
+            );
+        };
+
+        document.head.appendChild(script);
+    });
+
+    return msg91LoadPromise;
+}
+
+
+
+// Homepage adapters for the original Home Services authentication flow.
+let currentUser = null;
+let tempPhone = '';
+try { currentUser = JSON.parse(localStorage.getItem('catus_logged_user') || 'null'); } catch (_) {}
+function showToast(message) { const status=document.getElementById('ceroodHomepageAuthStatus'); if(status){status.textContent=message;status.hidden=false;} }
+function updateHeaderLoginUI() {
+  let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
+  currentUser=user;
+  document.querySelectorAll('[data-cerood-auth-trigger]').forEach(a=>{
+    const label=a.querySelector('span');if(label)label.textContent=user?'Account':(a.closest('.bottom')?'Account':'Login / Account');
+    a.setAttribute('aria-label',user?'Open Cerood account':'Login or register with Cerood');
+  });
+}
+function openCeroodAccountAfterAuth() { window.location.href='/cerood-orders.html#account'; }
+document.addEventListener('click',function(event){
+ const a=event.target.closest('[data-cerood-auth-trigger]');if(!a)return;
+ let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
+ if(user)return;
+ event.preventDefault();showAuthStep('phone');toggleAuthModal(true);
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('authModal')?.style.display==='flex')toggleAuthModal(false);});
+window.addEventListener('storage',e=>{if(e.key==='catus_logged_user')updateHeaderLoginUI();});
+updateHeaderLoginUI();
+
+     let twoMinTimer = null;
+     let pendingRegData = {};
+
+     let authFlowMode = null;
+     // 'register' = new registration
+     // 'forgot'   = forgot password
+
+     let otpVerified = false;
+     let msg91ReqId = '';
+let msg91AccessToken = '';
+
+function getMsg91ReqId(data) {
+
+    if (!data) return '';
+
+    if (typeof data === 'string') {
+        return data.trim();
+    }
+
+    return String(
+        data.reqId ||
+        data.req_id ||
+        data.requestId ||
+        data.request_id ||
+        data.message ||
+        data.data?.reqId ||
+        data.data?.req_id ||
+        data.data?.requestId ||
+        data.data?.request_id ||
+        ''
+    ).trim();
+}
+
+function getMsg91AccessToken(data) {
+
+    if (!data) return '';
+
+    if (typeof data === 'string') {
+        return data.trim();
+    }
+
+    const directValues = [
+        data.accessToken,
+        data.access_token,
+        data['access-token'],
+        data.token,
+        data.message,
+
+        data.data?.accessToken,
+        data.data?.access_token,
+        data.data?.['access-token'],
+        data.data?.token,
+        data.data?.message,
+
+        data.response?.accessToken,
+        data.response?.access_token,
+        data.response?.['access-token'],
+        data.response?.token,
+
+        data.result?.accessToken,
+        data.result?.access_token,
+        data.result?.['access-token'],
+        data.result?.token
+    ];
+
+    for (const value of directValues) {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim()
+        ) {
+            return String(value).trim();
+        }
+    }
+
+    function deepSearch(obj, depth = 0) {
+
+        if (
+            !obj ||
+            typeof obj !== 'object' ||
+            depth > 6
+        ) {
+            return '';
+        }
+
+        for (const [key, value] of Object.entries(obj)) {
+
+            const normalizedKey =
+                String(key)
+                    .replace(/[-_]/g, '')
+                    .toLowerCase();
+
+            if (
+                normalizedKey === 'accesstoken' ||
+                normalizedKey === 'token'
+            ) {
+
+                if (
+                    value !== undefined &&
+                    value !== null &&
+                    String(value).trim()
+                ) {
+                    return String(value).trim();
+                }
+            }
+
+            if (
+                value &&
+                typeof value === 'object'
+            ) {
+
+                const nested =
+                    deepSearch(
+                        value,
+                        depth + 1
+                    );
+
+                if (nested) {
+                    return nested;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    return deepSearch(data);
+}
+
+
+// 🛑 மொபைல் நம்பரை செக் செய்து டேட்டாபேஸில் இருந்தால் நேராக பாஸ்வேர்ட் பக்கத்திற்கு அனுப்பும் சரியான லாஜிக்
+async function checkUserAndProceed() {
+    const phone = document.getElementById('inputPhone').value.trim();
+    if (phone.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+    }
+    tempPhone = phone;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/check-user`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            // ஒருவேளை டேட்டாபேஸில் இந்த நம்பர் ஏற்கனவே பதிவு செய்யப்பட்டிருந்தால்
+            if (data.exists === true) {
+                showAuthStep('password'); // நேராக லாகின் (Password) பக்கத்திற்குச் செல்லும்
+            } else {
+                // புதிய நம்பர் என்றால் மட்டுமே ரெஜிஸ்டர் பக்கத்திற்குச் செல்லும்
+                showAuthStep('register');
+            }
+        } else {
+            showAuthStep('register');
+        }
+    } catch (err) {
+        console.error("Check user error:", err);
+        alert('Server connection error.');
+    }
+}
+function updateCeroodAuthProgress(step) {
+    const bar = document.getElementById('ceroodAuthProgress');
+    if (!bar) return;
+    const passwordFlow = step === 'password';
+    const stages = passwordFlow ? ['phone','password'] : ['phone','captcha','otp'];
+    const labels = passwordFlow ? ['Mobile','Password'] : ['Mobile','Security','OTP'];
+    const current = passwordFlow ? 1 : (step === 'captcha' ? 1 : step === 'otp' || step === 'newpassword' ? 2 : 0);
+    bar.replaceChildren();
+    stages.forEach((stage, index) => {
+        if (index) {
+            const arrow = document.createElement('span');
+            arrow.className = 'auth-progress-arrow';
+            arrow.textContent = '›';
+            bar.appendChild(arrow);
+        }
+        const label = document.createElement('span');
+        label.className = 'auth-progress-label' + (index === current ? ' is-current' : index < current ? ' is-done' : '');
+        label.textContent = labels[index];
+        bar.appendChild(label);
+    });
+
+}
+
+function showAuthStep(step) {
+    updateCeroodAuthProgress(step);
+
+const steps = [
+    'authStepPhone',
+    'authStepPassword',
+    'authStepRegister',
+    'authStepCaptcha',
+    'authStepOTP',
+    'authStepNewPassword'
+];
+
+    steps.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = 'none';
+        }
+    });
+
+    const activeId = {
+    phone: 'authStepPhone',
+    password: 'authStepPassword',
+    register: 'authStepRegister',
+    captcha: 'authStepCaptcha',
+    otp: 'authStepOTP',
+    newpassword: 'authStepNewPassword'
+}[step];
+
+    if (activeId) {
+        const activeEl = document.getElementById(activeId);
+        if (activeEl) {
+            activeEl.style.display = 'flex';
+        }
+    }
+
+    const titleEl = document.getElementById('leftPanelTitle');
+    const descEl = document.getElementById('leftPanelDesc');
+
+    if (!titleEl || !descEl) return;
+
+    switch (step) {
+
+        case 'phone':
+            titleEl.textContent = 'Welcome to Cerood';
+            descEl.textContent =
+                'Enter your mobile number to continue';
+            break;
+
+        case 'password':
+            titleEl.textContent = 'Welcome Back';
+            descEl.textContent =
+                'Login to your Cerood account';
+            break;
+
+        case 'register':
+            titleEl.textContent = "Looks like you're new here!";
+            descEl.textContent =
+                'Create your Cerood account';
+            break;
+
+        case 'captcha':
+    titleEl.textContent = 'Security Verification';
+    descEl.textContent =
+        'Complete the security check to receive your OTP';
+    break;
+
+        case 'otp':
+
+            if (authFlowMode === 'register') {
+                titleEl.textContent = 'Verify Your Mobile';
+                descEl.textContent =
+                    'Enter the OTP to complete registration';
+            } else {
+                titleEl.textContent = 'Verify OTP';
+                descEl.textContent =
+                    'Enter the OTP sent to your mobile';
+            }
+
+            break;
+
+        case 'newpassword':
+            titleEl.textContent = 'Reset Password';
+            descEl.textContent =
+                'Create a new password for your account';
+            break;
+    }
+}
+
+function backToPhoneStep() {
+
+    if (twoMinTimer) {
+        clearInterval(twoMinTimer);
+        twoMinTimer = null;
+    }
+
+    tempPhone = '';
+    pendingRegData = {};
+    authFlowMode = null;
+    otpVerified = false;
+    msg91ReqId = '';
+    msg91AccessToken = '';
+
+    const ids = [
+        'inputPassword',
+        'inputRegOTP',
+        'newResetPassword',
+        'newResetConfirmPassword'
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.value = '';
+        }
+    });
+
+    const passwordError =
+        document.getElementById('passwordErrorMsg');
+
+    if (passwordError) {
+        passwordError.style.display = 'none';
+    }
+
+    const resetError =
+        document.getElementById('resetPasswordErrorMsg');
+
+    if (resetError) {
+        resetError.style.display = 'none';
+    }
+
+    showAuthStep('phone');
+}
+
+// "New to Catus? Create an account" கிளிக் செய்தால்
+function switchToNewUserRegisterDirect() {
+
+    const phoneInput =
+        document.getElementById('inputPhone');
+
+    const regMobileInput =
+        document.getElementById('regMobile');
+
+    const phone =
+        phoneInput
+            ? phoneInput.value.trim()
+            : '';
+
+    // First screen-la already mobile enter pannirundha
+    // registration mobile field-la auto-fill pannuvom.
+    if (/^\d{10}$/.test(phone)) {
+
+        tempPhone = phone;
+
+        if (regMobileInput) {
+            regMobileInput.value = phone;
+        }
+
+    } else {
+
+        tempPhone = '';
+
+        if (regMobileInput) {
+            regMobileInput.value = '';
+        }
+    }
+
+    authFlowMode = 'register';
+
+    showAuthStep('register');
+}
+
+async function proceedToOtpFromRegister() {
+
+    const mobileInput =
+        document.getElementById('regMobile');
+
+    const nameInput =
+        document.getElementById('regName');
+
+    const emailInput =
+        document.getElementById('regEmail');
+
+    const pincodeInput =
+        document.getElementById('regPincode');
+
+    const passwordInput =
+        document.getElementById('regPassword');
+
+    const confirmPasswordInput =
+        document.getElementById('regConfirmPassword');
+
+    const errorMsgEl =
+        document.getElementById('passwordErrorMsg');
+
+    const phone =
+        mobileInput
+            ? mobileInput.value.trim()
+            : '';
+
+    const name =
+        nameInput
+            ? nameInput.value.trim()
+            : '';
+
+    const email =
+        emailInput
+            ? emailInput.value.trim()
+            : '';
+
+    const pincode =
+        pincodeInput
+            ? pincodeInput.value.trim()
+            : '';
+
+    const password =
+        passwordInput
+            ? passwordInput.value.trim()
+            : '';
+
+    const confirmPassword =
+        confirmPasswordInput
+            ? confirmPasswordInput.value.trim()
+            : '';
+
+
+    // ==========================================
+    // MOBILE VALIDATION
+    // ==========================================
+
+    if (!/^\d{10}$/.test(phone)) {
+
+        alert(
+            'Please enter a valid 10-digit mobile number.'
+        );
+
+        if (mobileInput) {
+            mobileInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // NAME VALIDATION
+    // ==========================================
+
+    if (!name) {
+
+        alert('Please enter your full name.');
+
+        if (nameInput) {
+            nameInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // PINCODE VALIDATION
+    // ==========================================
+
+    if (!/^\d{6}$/.test(pincode)) {
+
+        alert('Please enter a valid 6-digit pincode.');
+
+        if (pincodeInput) {
+            pincodeInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // PASSWORD VALIDATION
+    // ==========================================
+
+    if (!password || password.length < 4) {
+
+        alert(
+            'Password must be at least 4 characters.'
+        );
+
+        if (passwordInput) {
+            passwordInput.focus();
+        }
+
+        return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+        if (errorMsgEl) {
+            errorMsgEl.textContent =
+                'Passwords do not match!';
+
+            errorMsgEl.style.display =
+                'block';
+        }
+
+        return;
+    }
+
+    if (errorMsgEl) {
+        errorMsgEl.style.display = 'none';
+    }
+
+
+    // ==========================================
+    // OPTIONAL EMAIL VALIDATION
+    // ==========================================
+
+    if (
+        email &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+
+        alert(
+            'Please enter a valid Gmail/email address or leave it empty.'
+        );
+
+        if (emailInput) {
+            emailInput.focus();
+        }
+
+        return;
+    }
+
+
+    // ==========================================
+    // SAVE TEMP REGISTRATION DATA
+    // ==========================================
+
+    tempPhone = phone;
+
+    authFlowMode = 'register';
+
+    pendingRegData = {
+        name: name,
+        email: email,
+        pincode: pincode,
+        password: password,
+        address: 'No address saved'
+    };
+
+
+    // ==========================================
+    // SEND REGISTRATION OTP
+    // ==========================================
+
+    // Show separate security verification step first
+showAuthStep('captcha');
+
+const infoEl =
+    document.getElementById('setPasswordInfo');
+
+
+
+    try {
+
+    showToast(
+        'Sending OTP...',
+        false
+    );
+
+    await loadMsg91();
+    await waitForMsg91Captcha();
+
+    if (typeof window.sendOtp !== 'function') {
+        alert(
+            'OTP service is loading. Please try again.'
+        );
+        return;
+    }
+
+    window.sendOtp(
+        `91${phone}`,
+
+        function (data) {
+
+            console.log(
+                'MSG91 Registration OTP sent:',
+                data
+            );
+
+            msg91ReqId = getMsg91ReqId(data);
+
+if (!msg91ReqId) {
+    console.error(
+        'MSG91 reqId missing in registration response:',
+        data
+    );
+
+    alert(
+        'OTP session could not be created. Please try again.'
+    );
+
+    return;
+}
+
+msg91AccessToken = '';
+otpVerified = false;
+
+// OTP successfully sent.
+// Now open the separate OTP verification page.
+showAuthStep('otp');
+
+if (infoEl) {
+    infoEl.textContent =
+        `Registration OTP sent to +91 ${phone}. Please enter it below.`;
+}
+
+            const otpInput =
+                document.getElementById(
+                    'inputRegOTP'
+                );
+
+            if (otpInput) {
+                otpInput.value = '';
+                otpInput.focus();
+            }
+
+            startTwoMinTimer();
+
+            showToast(
+                'OTP sent successfully!',
+                false
+            );
+        },
+
+        function (error) {
+
+            console.error(
+                'MSG91 Registration OTP error:',
+                error
+            );
+
+            alert(
+                'Unable to send OTP. Please try again.'
+            );
+        }
+    );
+
+} catch (error) {
+
+    console.error(
+        'MSG91 Registration OTP error:',
+        error
+    );
+
+    alert(
+        'Unable to start OTP service.'
+    );
+}
+}
+
+// 3. பாஸ்வேர்ட் மூலம் லாகின் செய்தல் (பழைய யூசர்)
+async function loginWithPassword() {
+    const password = document.getElementById('inputPassword').value.trim();
+    if (!password) { alert('Please enter your password.'); return; }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/login-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: tempPhone, password: password })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            if(currentUser.wallet === undefined) currentUser.wallet = 0;
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
+            else localStorage.removeItem('cerood_renewed_customer_session');
+            updateHeaderLoginUI();
+            toggleAuthModal(false);
+            openCeroodAccountAfterAuth();
+            showToast("Login Successful!", false);
+        } else {
+            alert(data.message || 'Incorrect password.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Server connection error.');
+    }
+}
+
+async function waitForMsg91Captcha() {
+
+    const initStartedAt = Date.now();
+
+    // Wait until MSG91 + captcha methods are fully initialized
+    while (
+        (
+            typeof window.isCaptchaVerified !== 'function' ||
+            typeof window.sendOtp !== 'function'
+        ) &&
+        Date.now() - initStartedAt < 10000
+    ) {
+        await new Promise(
+            resolve => setTimeout(resolve, 100)
+        );
+    }
+
+    if (
+        typeof window.isCaptchaVerified !== 'function' ||
+        typeof window.sendOtp !== 'function'
+    ) {
+        throw new Error(
+            'MSG91 captcha did not initialize'
+        );
+    }
+
+    const startedAt = Date.now();
+
+    while (Date.now() - startedAt < 120000) {
+
+        try {
+
+            if (window.isCaptchaVerified() === true) {
+                return;
+            }
+
+        } catch (error) {
+            console.log('Captcha status waiting...');
+        }
+
+        await new Promise(
+            resolve => setTimeout(resolve, 500)
+        );
+    }
+
+    throw new Error(
+        'Captcha verification timeout'
+    );
+}
+
+async function triggerForgotPassword() {
+
+    if (!tempPhone) {
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
+
+    if (twoMinTimer) {
+    clearInterval(twoMinTimer);
+    twoMinTimer = null;
+}
+
+msg91ReqId = '';
+msg91AccessToken = '';
+otpVerified = false;
+
+const oldOtpInput =
+    document.getElementById('inputRegOTP');
+
+if (oldOtpInput) {
+    oldOtpInput.value = '';
+}
+const timerCountEl =
+    document.getElementById('timerCount');
+
+const resendBtnEl =
+    document.getElementById('resendOtpBtn');
+
+if (timerCountEl) {
+
+    timerCountEl.textContent = '2:00';
+
+    if (timerCountEl.parentElement) {
+        timerCountEl.parentElement.style.display = '';
+    }
+}
+
+if (resendBtnEl) {
+    resendBtnEl.style.display = 'none';
+}
+
+    authFlowMode = 'forgot';
+
+// First show separate CAPTCHA / Security Verification page
+showAuthStep('captcha');
+
+const captchaInfoEl =
+    document.getElementById('captchaInfo');
+
+if (captchaInfoEl) {
+    captchaInfoEl.textContent =
+        `Complete the security check to send a password reset OTP to +91 ${tempPhone}.`;
+}
+
+    showToast(
+    "Sending OTP for password reset...",
+    false
+);
+
+try {
+
+    await loadMsg91();
+    await waitForMsg91Captcha();
+
+    if (typeof window.sendOtp !== 'function') {
+        alert('OTP service is loading. Please try again.');
+        return;
+    }
+
+    window.sendOtp(
+        `91${tempPhone}`,
+
+        function (data) {
+
+            console.log(
+                'MSG91 Forgot Password OTP sent:',
+                data
+            );
+            console.log(
+    'MSG91 FULL SEND RESPONSE:',
+    JSON.stringify(data, null, 2)
+);
+
+            msg91ReqId = getMsg91ReqId(data);
+
+if (!msg91ReqId) {
+    console.error(
+        'MSG91 reqId missing in forgot password response:',
+        data
+    );
+
+    alert(
+        'OTP session could not be created. Please try again.'
+    );
+
+    return;
+}
+
+msg91AccessToken = '';
+otpVerified = false;
+
+            showAuthStep('otp');
+
+            const infoEl =
+                document.getElementById('setPasswordInfo');
+
+            if (infoEl) {
+                infoEl.textContent =
+                    `Reset OTP sent to +91 ${tempPhone}. Please enter it below.`;
+            }
+
+            const otpInput =
+                document.getElementById('inputRegOTP');
+
+            if (otpInput) {
+                otpInput.value = '';
+                otpInput.focus();
+            }
+
+            startTwoMinTimer();
+
+            showToast(
+                'OTP sent successfully!',
+                false
+            );
+        },
+
+        function (error) {
+
+            console.error(
+                'MSG91 Forgot Password OTP error:',
+                error
+            );
+
+            alert(
+                'Unable to send OTP. Please try again.'
+            );
+        }
+    );
+
+} catch (error) {
+
+    console.error(
+        'MSG91 Forgot Password OTP error:',
+        error
+    );
+
+    alert(
+        'Unable to start OTP service.'
+    );
+}
+}
+
+// ⏱️ 2 நிமிடங்கள் டைமர் லாஜிக்
+function startTwoMinTimer() {
+
+    let timeLeft = 120;
+
+    const timerCountEl =
+        document.getElementById('timerCount');
+
+    const resendBtnEl =
+        document.getElementById('resendOtpBtn');
+
+    if (twoMinTimer) {
+        clearInterval(twoMinTimer);
+        twoMinTimer = null;
+    }
+
+    if (timerCountEl) {
+
+        timerCountEl.textContent = '2:00';
+
+        if (timerCountEl.parentElement) {
+            timerCountEl.parentElement.style.display = '';
+        }
+    }
+
+    if (resendBtnEl) {
+        resendBtnEl.style.display = 'none';
+    }
+
+    twoMinTimer = setInterval(() => {
+
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+
+        if (timerCountEl) {
+            timerCountEl.textContent =
+                `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        if (timeLeft <= 0) {
+
+            clearInterval(twoMinTimer);
+            twoMinTimer = null;
+
+            if (
+                timerCountEl &&
+                timerCountEl.parentElement
+            ) {
+                timerCountEl.parentElement.style.display = 'none';
+            }
+
+            if (resendBtnEl) {
+                resendBtnEl.style.display = 'inline';
+            }
+
+            return;
+        }
+
+        timeLeft--;
+
+    }, 1000);
+}
+
+async function verifyOtpAndSetPassword() {
+
+    const otpInput =
+        document.getElementById('inputRegOTP');
+
+    const otp =
+        otpInput
+            ? otpInput.value.trim()
+            : '';
+
+    if (!/^\d{4}$/.test(otp)) {
+        alert('Please enter a valid 4-digit OTP.');
+        return;
+    }
+
+    if (!tempPhone) {
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
+
+    if (!authFlowMode) {
+        alert('Authentication session expired. Please start again.');
+        backToPhoneStep();
+        return;
+    }
+
+    if (!msg91ReqId) {
+        alert('OTP session expired. Please request OTP again.');
+        return;
+    }
+
+    if (typeof window.verifyOtp !== 'function') {
+        alert('OTP service is loading. Please try again.');
+        return;
+    }
+
+    window.verifyOtp(
+        otp,
+
+        async function (data) {
+
+            console.log(
+                'MSG91 OTP verified:',
+                data
+            );
+            
+
+            msg91AccessToken =
+                getMsg91AccessToken(data);
+
+            if (!msg91AccessToken) {
+
+                console.error(
+                    'MSG91 access token missing:',
+                    data
+                );
+
+                alert(
+                    'OTP verification token missing. Please try again.'
+                );
+
+                return;
+            }
+
+            if (authFlowMode === 'register') {
+
+                try {
+
+                    const response = await fetch(
+                        `${API_BASE_URL}/api/msg91/complete-registration`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                accessToken: msg91AccessToken,
+                                phone: tempPhone,
+                                name: pendingRegData.name || '',
+                                email: pendingRegData.email || '',
+                                pincode: pendingRegData.pincode || '',
+                                password: pendingRegData.password || ''
+                            })
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if (!response.ok || !result.success) {
+                        alert(
+                            result.message ||
+                            'Unable to complete registration.'
+                        );
+                        return;
+                    }
+
+                    currentUser = result.user;
+
+                    if (
+                        currentUser &&
+                        currentUser.wallet === undefined
+                    ) {
+                        currentUser.wallet = 0;
+                    }
+
+                    localStorage.setItem(
+                        'catus_logged_user',
+                        JSON.stringify(currentUser)
+                    );
+
+                    updateHeaderLoginUI();
+                    toggleAuthModal(false);
+                    openCeroodAccountAfterAuth();
+
+                    showToast(
+                        'Account created successfully!',
+                        false
+                    );
+
+                    pendingRegData = {};
+                    authFlowMode = null;
+                    otpVerified = false;
+                    msg91ReqId = '';
+                    msg91AccessToken = '';
+
+                } catch (error) {
+
+                    console.error(
+                        'Registration completion error:',
+                        error
+                    );
+
+                    alert(
+                        'Server connection error during registration.'
+                    );
+                }
+
+                return;
+            }
+
+            if (authFlowMode === 'forgot') {
+
+                otpVerified = true;
+
+                showAuthStep('newpassword');
+
+                showToast(
+                    'OTP verified successfully!',
+                    false
+                );
+
+                return;
+            }
+        },
+
+        function (error) {
+
+            console.error(
+                'MSG91 OTP verification failed:',
+                error
+            );
+
+            alert(
+                'Invalid or incorrect OTP. Please try again.'
+            );
+        },
+
+        msg91ReqId
+    );
+}
+
+async function submitNewPasswordReset() {
+
+    if (!otpVerified || !msg91AccessToken) {
+        alert('Please verify OTP first.');
+        showAuthStep('otp');
+        return;
+    }
+
+    const passwordInput =
+        document.getElementById('newResetPassword');
+
+    const confirmInput =
+        document.getElementById('newResetConfirmPassword');
+
+    const errorMsg =
+        document.getElementById('resetPasswordErrorMsg');
+
+    const password =
+        passwordInput
+            ? passwordInput.value.trim()
+            : '';
+
+    const confirmPassword =
+        confirmInput
+            ? confirmInput.value.trim()
+            : '';
+
+    if (errorMsg) {
+        errorMsg.style.display = 'none';
+    }
+
+    if (!password || password.length < 4) {
+        alert('Password must be at least 4 characters.');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+
+        if (errorMsg) {
+            errorMsg.textContent =
+                'Passwords do not match!';
+
+            errorMsg.style.display = 'block';
+        }
+
+        return;
+    }
+
+    if (!tempPhone) {
+        alert('Mobile number missing. Please re-enter.');
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/msg91/reset-password`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    accessToken: msg91AccessToken,
+                    phone: tempPhone,
+                    password: password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert(
+                data.message ||
+                'Failed to update password.'
+            );
+            return;
+        }
+
+        currentUser = data.user;
+
+        if (
+            currentUser &&
+            currentUser.wallet === undefined
+        ) {
+            currentUser.wallet = 0;
+        }
+
+        localStorage.setItem(
+            'catus_logged_user',
+            JSON.stringify(currentUser)
+        );
+        if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
+        else localStorage.removeItem('cerood_renewed_customer_session');
+
+        updateHeaderLoginUI();
+        toggleAuthModal(false);
+        openCeroodAccountAfterAuth();
+
+        showToast(
+            'Password updated successfully!',
+            false
+        );
+
+        otpVerified = false;
+        authFlowMode = null;
+        msg91ReqId = '';
+        msg91AccessToken = '';
+
+    } catch (error) {
+
+        console.error(
+            'MSG91 password reset error:',
+            error
+        );
+
+        alert(
+            'Server connection error while updating password.'
+        );
+    }
+}
+// முழுமையான மற்றும் துல்லியமான Modal Toggle பங்க்ஷன்
+function toggleAuthModal(open) {
+
+    const modal =
+        document.getElementById('authModal');
+
+    if (!modal) return;
+
+    if (open) {
+
+        modal.style.display = 'flex';
+        document.body.classList.add('cerood-auth-open');
+
+        document.body.style.overflow = 'hidden';
+
+        tempPhone = '';
+        pendingRegData = {};
+        authFlowMode = null;
+        otpVerified = false;
+
+        showAuthStep('phone');
+
+    } else {
+
+        modal.style.display = 'none';
+        document.body.classList.remove('cerood-auth-open');
+
+        document.body.style.overflow = 'auto';
+
+        if (twoMinTimer) {
+            clearInterval(twoMinTimer);
+            twoMinTimer = null;
+        }
+    }
+    
+}
+
+// 🛑 எளிமையான மற்றும் துல்லியமான Backdrop Close லாஜிக் (Mobile & Desktop)
+function checkCloseAuthModal(event) {
+    const modalContainer = document.getElementById('authDrawer');
+    
+    // நீங்கள் தொட்ட இடம் (event.target) அந்த வெள்ளை/நீலப் பெட்டிக்கு (auth-modal-container) வெளியே உள்ளதா எனச் சோதிக்கிறது
+    if (modalContainer && !modalContainer.contains(event.target)) {
+        toggleAuthModal(false);
+    }
+}
+
+// மொபைல் போன்களில் டச் (Touch) செய்யும்போது வெளியே க்ளோஸ் ஆவதை உறுதி செய்ய
+document.addEventListener('DOMContentLoaded', () => {
+    const authModal = document.getElementById('authModal');
+    if (authModal) {
+        authModal.addEventListener('touchend', (e) => {
+            const modalContainer = document.getElementById('authDrawer');
+            if (modalContainer && !modalContainer.contains(e.target)) {
+                toggleAuthModal(false);
+            }
+        });
+    }
+});
+
+let otpCountdownTimer = null;
+
+// OTP டைமரைத் தொடங்கும் பங்க்ஷன்
+function startOtpTimer() {
+    let timeLeft = 30;
+    const timerCountEl = document.getElementById('timerCount');
+    const otpTimerTextEl = document.getElementById('otpTimerText');
+    const resendBtnEl = document.getElementById('resendOtpBtn');
+
+    if (otpTimerTextEl) otpTimerTextEl.style.display = 'block';
+    if (resendBtnEl) resendBtnEl.style.display = 'none';
+    if (timerCountEl) timerCountEl.textContent = timeLeft;
+
+    if (otpCountdownTimer) clearInterval(otpCountdownTimer);
+
+    otpCountdownTimer = setInterval(() => {
+        timeLeft--;
+        if (timerCountEl) timerCountEl.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(otpCountdownTimer);
+            if (otpTimerTextEl) otpTimerTextEl.style.display = 'none';
+            if (resendBtnEl) resendBtnEl.style.display = 'block'; // 30 விநாடிகளுக்குப் பிறகு ரீசெண்ட் பட்டன் தோன்றும்
+        }
+    }, 1000);
+}
+
+// "Resend OTP" பட்டனை க்ளிக் செய்யும்போது மீண்டும் SMS அனுப்பும் பங்க்ஷன்
+async function resendCurrentOtp() {
+
+    if (!tempPhone || !authFlowMode) {
+        alert(
+            'Please restart the authentication process.'
+        );
+        return;
+    }
+
+    if (!msg91ReqId) {
+        alert(
+            'OTP session expired. Please restart.'
+        );
+        return;
+    }
+
+    if (typeof window.retryOtp !== 'function') {
+        alert(
+            'OTP service is loading. Please try again.'
+        );
+        return;
+    }
+
+    try {
+
+        window.retryOtp(
+            null,
+
+            function (data) {
+
+                console.log(
+                    'MSG91 OTP resent:',
+                    data
+                );
+
+                const newReqId =
+                    getMsg91ReqId(data);
+
+                if (newReqId) {
+                    msg91ReqId = newReqId;
+                }
+
+                msg91AccessToken = '';
+                otpVerified = false;
+
+                const otpInput =
+                    document.getElementById(
+                        'inputRegOTP'
+                    );
+
+                if (otpInput) {
+                    otpInput.value = '';
+                    otpInput.focus();
+                }
+
+                startTwoMinTimer();
+
+                showToast(
+                    'OTP resent successfully!',
+                    false
+                );
+            },
+
+            function (error) {
+
+                console.error(
+                    'MSG91 resend OTP error:',
+                    error
+                );
+
+                alert(
+                    'Unable to resend OTP. Please try again.'
+                );
+            },
+
+            msg91ReqId
+        );
+
+    } catch (error) {
+
+        console.error(
+            'MSG91 resend OTP error:',
+            error
+        );
+
+        alert(
+            'Unable to resend OTP. Please try again.'
+        );
+    }
+}
+
+function togglePasswordVisibility(fieldId, iconElement) {
+    const passwordInput = document.getElementById(fieldId);
+    if (!passwordInput) return;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        iconElement.classList.remove("fa-eye");
+        iconElement.classList.add("fa-eye-slash"); // கண் வெட்டப்பட்ட ஐகானாக மாறும்
+    } else {
+        passwordInput.type = "password";
+        iconElement.classList.remove("fa-eye-slash");
+        iconElement.classList.add("fa-eye"); // சாதாரண கண் ஐகானாக மாறும்
+    }
+}
+
+
 </script></body></html>
