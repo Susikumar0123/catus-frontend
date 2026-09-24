@@ -8472,78 +8472,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
  .checkout-header>.secure-badge{display:none!important}
 }
 </style>
-<style id="cerood-16-page-mobile-alignment-final">
-/* CEROOD 2026-09-24 — mobile visual alignment only. No JS/HTML behavior changes. */
-@media(max-width:850px){
- html{overflow-x:clip} body{max-width:100%;overflow-x:clip;padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
- /* The same 42px controls and 10px inset in every Cerood mobile header. */
- .cr-header,.crn-header,.uc-homepage-wrapper,.checkout-header{box-sizing:border-box!important}
- .cr-header,.crn-header,.uc-homepage-wrapper{width:100%!important;max-width:none!important;margin:0!important;border-radius:0!important;background:linear-gradient(110deg,#a8bdcf,#50708f)!important}
- .cr-header .cr-header-inner,.crn-header .crn-header-main,.uc-homepage-wrapper .header-main-container{box-sizing:border-box!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:10px!important;column-gap:7px!important;row-gap:8px!important;align-items:center!important}
- .cr-header .cr-header-inner{display:grid!important;grid-template-columns:42px minmax(0,1fr) 42px 42px!important;grid-template-rows:42px 42px!important;min-height:0!important}
- .cr-header .cr-brand{grid-column:1!important;grid-row:1!important;min-width:0!important;width:42px!important;height:42px!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0!important}
- .cr-header .cr-brand img{width:42px!important;height:42px!important;max-width:42px!important;object-fit:contain!important}
- .cr-header .cr-brand>span{display:none!important}
- .cr-header .cr-actions{display:contents!important}
- .cr-header .cr-location{grid-column:2!important;grid-row:1!important;justify-self:stretch!important;width:100%!important;min-width:0!important;max-width:none!important;height:42px!important;min-height:42px!important;box-sizing:border-box!important;padding:4px 8px!important;border-radius:23px!important;margin:0!important;display:flex!important;align-items:center!important;overflow:hidden!important}
- .cr-header .cr-location span{min-width:0!important;overflow:hidden!important;font-size:10px!important;line-height:1.25!important}
- .cr-header .cr-location strong{display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;max-width:100%!important;font-size:10px!important}
- .cr-header .crn-mobile-cart,.cr-header .cerood-beauty-checkout-cart,.cr-header .cerood-fashion-checkout-cart{grid-column:3!important;grid-row:1!important}
- .cr-header .crn-header-menu,.cr-header .cerood-beauty-menu,.cr-header .cerood-fashion-menu{grid-column:4!important;grid-row:1!important;min-width:0!important}
- .cr-header .cr-search{grid-column:1/-1!important;grid-row:2!important;display:flex!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:none!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0 12px!important;border-radius:12px!important;background:#fff!important}
- .cr-header .cr-search input{width:100%!important;min-width:0!important;height:42px!important;font-size:12px!important}
- .cr-header .crn-mobile-cart,.cr-header .crn-menu-button,.cr-header .cerood-beauty-menu>summary,.cr-header .cerood-fashion-menu>summary{box-sizing:border-box!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;margin:0!important;padding:9px!important;border-radius:12px!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important}
- .cr-header .crn-mobile-cart svg,.cr-header .crn-menu-button svg,.cr-header .cerood-beauty-menu>summary svg,.cr-header .cerood-fashion-menu>summary svg{width:22px!important;height:22px!important;flex-shrink:0!important}
- .cr-header .cr-service,.cr-header .cr-account{display:none!important}
- .cr-header:has(.crn-mobile-cart) .cr-cart{display:none!important}
- .cr-header:not(:has(.crn-mobile-cart)) .cr-cart{grid-column:3!important;grid-row:1!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;padding:9px!important;margin:0!important;border-radius:12px!important;background:#fff!important}
- .cr-header:not(:has(.crn-mobile-cart)) .cr-cart svg{width:22px!important;height:22px!important}
- /* Index uses a different DOM; preserve its existing buttons and search handler. */
- .crn-header .shell{width:100%!important;max-width:none!important;padding:0!important;margin:0!important}
- .crn-header .crn-header-main{display:grid!important;grid-template-columns:42px minmax(0,1fr) 42px 42px!important;grid-template-rows:42px 42px!important;min-height:0!important}
- .crn-header .crn-logo{grid-column:1!important;grid-row:1!important;width:42px!important;min-width:42px!important;height:42px!important;margin:0!important;display:flex!important;align-items:center!important}
- .crn-header .crn-logo img{width:42px!important;height:42px!important;object-fit:contain!important}
- .crn-header .crn-mobile-location{grid-column:2!important;grid-row:1!important;width:100%!important;max-width:none!important;min-width:0!important;height:42px!important;margin:0!important;padding:4px 7px!important;border-radius:23px!important}
- .crn-header .crn-mobile-location span,.crn-header .crn-mobile-location b{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
- .crn-header .cerood-unified-tools{grid-column:3/5!important;grid-row:1!important;width:91px!important;min-width:91px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;margin:0!important}
- .crn-header .cerood-unified-tools>a,.crn-header .cerood-unified-tools>button,.crn-header .cerood-unified-menu>summary{box-sizing:border-box!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;border-radius:12px!important;margin:0!important;padding:9px!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important}
- .crn-header .crn-search{grid-column:1/-1!important;grid-row:2!important;width:100%!important;min-width:0!important;max-width:none!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0 12px!important;border-radius:12px!important;background:#fff!important}
- .crn-header .crn-search input{height:42px!important;min-width:0!important;font-size:12px!important}
- /* Home Services and service-product use a third DOM structure. */
- .uc-homepage-wrapper .header-main-container{display:grid!important;grid-template-columns:42px minmax(0,1fr) 42px 42px!important;grid-template-rows:42px 42px!important;min-height:0!important}
- .uc-homepage-wrapper .brand-logo{grid-column:1!important;grid-row:1!important;width:42px!important;height:42px!important;min-width:42px!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
- .uc-homepage-wrapper .brand-logo img{width:42px!important;height:42px!important;max-width:42px!important;object-fit:contain!important}
- .uc-homepage-wrapper .mobile-location-widget{grid-column:2!important;grid-row:1!important;min-width:0!important;width:100%!important;max-width:none!important;height:42px!important;min-height:42px!important;box-sizing:border-box!important;margin:0!important;padding:4px 8px!important;border-radius:23px!important;display:flex!important;align-items:center!important;overflow:hidden!important}
- .uc-homepage-wrapper .mobile-location-widget span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
- .uc-homepage-wrapper .csf-home-tools,.uc-homepage-wrapper .cerood-unified-tools{grid-column:3/5!important;grid-row:1!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;width:91px!important;min-width:91px!important;margin:0!important}
- .uc-homepage-wrapper .csf-home-cart,.uc-homepage-wrapper .csf-menu>summary,.uc-homepage-wrapper .cerood-unified-tools>button,.uc-homepage-wrapper .cerood-unified-menu>summary{box-sizing:border-box!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;border-radius:12px!important;margin:0!important;padding:9px!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important}
- .uc-homepage-wrapper .search-container{grid-column:1/-1!important;grid-row:2!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:none!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0 12px!important;border-radius:12px!important;background:#fff!important}
- .uc-homepage-wrapper .search-container input{min-width:0!important;width:100%!important;height:42px!important;font-size:12px!important}
- /* Checkout: deliberately no location pill; search stays below logo/cart/menu. */
- .checkout-header{display:grid!important;grid-template-columns:42px minmax(0,1fr) 42px 42px!important;grid-template-rows:42px 42px!important;gap:8px 7px!important;align-items:center!important;min-height:0!important;width:100%!important;max-width:none!important;margin:0!important;padding:10px!important;border-radius:0!important;background:linear-gradient(110deg,#a8bdcf,#50708f)!important}
- .checkout-header>.brand-word,.checkout-header>img{grid-column:1!important;grid-row:1!important;width:42px!important;height:42px!important;max-width:42px!important;margin:0!important;object-fit:contain!important;align-self:center!important}
- .checkout-header>.brand-word img{width:42px!important;height:42px!important;max-width:42px!important;object-fit:contain!important}
- .checkout-header>.secure-badge{display:none!important}
- .checkout-header>.cerood-beauty-checkout-cart,.checkout-header>.cerood-fashion-checkout-cart{grid-column:3!important;grid-row:1!important}
- .checkout-header>.cerood-beauty-menu,.checkout-header>.cerood-fashion-menu{grid-column:4!important;grid-row:1!important}
- .checkout-header>.crn-checkout-actions,.checkout-header>.cerood-beauty-checkout-cart,.checkout-header>.cerood-fashion-checkout-cart,.checkout-header>.cerood-unified-tools{grid-column:3/5!important;grid-row:1!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;width:91px!important;min-width:91px!important;margin:0!important}
- .checkout-header .crn-mobile-cart,.checkout-header .crn-menu-button,.checkout-header .cerood-beauty-checkout-cart,.checkout-header .cerood-fashion-checkout-cart,.checkout-header .cerood-beauty-menu>summary,.checkout-header .cerood-fashion-menu>summary,.checkout-header .cerood-unified-tools>a,.checkout-header .cerood-unified-menu>summary{box-sizing:border-box!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;max-width:42px!important;margin:0!important;padding:9px!important;border-radius:12px!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important}
- .checkout-header>.crn-checkout-search,.checkout-header>.cerood-beauty-checkout-search,.checkout-header>.cerood-fashion-checkout-search,.checkout-header>.csf-checkout-search{grid-column:1/-1!important;grid-row:2!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;min-width:0!important;width:100%!important;max-width:none!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0 12px!important;border-radius:12px!important;background:#fff!important;color:#64748b!important;font-size:12px!important;overflow:hidden!important}
- .checkout-header .csf-checkout-search input{min-width:0!important;width:100%!important;height:42px!important}
- /* One consistent 5-slot dock across all 16 files. */
- nav.crn-mobile-nav,nav.csf-bottom,nav.cerood-beauty-dock,nav.cerood-fashion-dock{position:fixed!important;bottom:0!important;left:0!important;right:0!important;width:100%!important;max-width:none!important;min-height:calc(62px + env(safe-area-inset-bottom))!important;height:calc(62px + env(safe-area-inset-bottom))!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:0!important;align-items:start!important;margin:0!important;padding:5px 7px env(safe-area-inset-bottom)!important;background:#fff!important;border-top:1px solid #e5e7eb!important;border-radius:0!important;z-index:2147482000!important;box-shadow:0 -2px 10px #17233d0a!important}
- nav.crn-mobile-nav>a,nav.csf-bottom>a,nav.cerood-beauty-dock>a,nav.cerood-fashion-dock>a{box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:none!important;height:52px!important;min-height:52px!important;max-height:52px!important;padding:5px 1px!important;margin:0!important;border-radius:13px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;text-align:center!important;font-size:10px!important;line-height:1.15!important;white-space:nowrap!important}
- nav.crn-mobile-nav>a svg,nav.csf-bottom>a svg,nav.cerood-beauty-dock>a svg,nav.cerood-fashion-dock>a svg{box-sizing:border-box!important;width:21px!important;height:21px!important;min-width:21px!important;min-height:21px!important;max-width:21px!important;max-height:21px!important;margin:0!important;flex:none!important}
- nav.crn-mobile-nav>a span,nav.csf-bottom>a span,nav.cerood-beauty-dock>a span,nav.cerood-fashion-dock>a span{font-size:10px!important;line-height:12px!important;white-space:nowrap!important;display:block!important;margin:0!important}
- nav.crn-mobile-nav>a[aria-current=page],nav.csf-bottom>a.active,nav.cerood-beauty-dock>a[aria-current=page],nav.cerood-fashion-dock>a[aria-current=page]{background:#f1edff!important;color:#5135d9!important}
- /* Existing division tabs: keep their page-specific visibility; equal spacing where present. */
- nav.crn-division-tabs,nav.cerood-beauty-divisions,nav.cerood-fashion-divisions,nav.cerood-unified-categories{box-sizing:border-box!important;width:100%!important;max-width:none!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;padding:6px 10px!important;margin:0!important}
- nav.crn-division-tabs>a,nav.cerood-beauty-divisions>a,nav.cerood-fashion-divisions>a,nav.cerood-unified-categories>a{box-sizing:border-box!important;min-width:0!important;width:100%!important;height:38px!important;min-height:38px!important;margin:0!important;padding:0 2px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:10px!important;font-size:11px!important;white-space:nowrap!important}
-}
-@media(max-width:370px){nav.crn-mobile-nav>a span,nav.csf-bottom>a span,nav.cerood-beauty-dock>a span,nav.cerood-fashion-dock>a span{font-size:9px!important}}
 
-@media(max-width:850px){body:has(nav.cerood-beauty-dock) nav.cr-mobile-nav:not(.crn-mobile-nav){display:none!important} body:has(nav.cerood-fashion-dock) nav.cr-mobile-nav:not(.crn-mobile-nav){display:none!important}}
-</style>
 </head>
 <body>
 
