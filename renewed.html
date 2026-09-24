@@ -412,4 +412,8 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_selected_location')||'nu
 </script><script id="cerood-renewed-unified-nav-script">(()=>{'use strict';
  const root=document.querySelector('.crn-header-menu');if(root){const button=root.querySelector('.crn-menu-button'),panel=root.querySelector('.crn-menu-panel');const close=()=>{panel.hidden=true;button.setAttribute('aria-expanded','false')};button.addEventListener('click',e=>{e.stopPropagation();const open=panel.hidden;panel.hidden=!open;button.setAttribute('aria-expanded',String(open))});document.addEventListener('click',e=>{if(!root.contains(e.target))close()});document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});}
  const badge=document.getElementById('crnHeaderCartCount');if(badge){const sync=()=>{let n=0;const old=document.getElementById('renewedCartCount');if(old&&Number(old.textContent)>0)n=Number(old.textContent);else try{const items=JSON.parse(localStorage.getItem('cerood_renewed_cart')||'[]');if(Array.isArray(items))n=items.reduce((sum,item)=>sum+Math.max(1,Number(item.quantity)||1),0)}catch(e){}badge.textContent=n>99?'99+':String(n);badge.hidden=n<1};sync();const old=document.getElementById('renewedCartCount');if(old)new MutationObserver(sync).observe(old,{childList:true,characterData:true,subtree:true});window.addEventListener('storage',sync);window.addEventListener('pageshow',sync);}
-})();</script></body></html>
+})();</script>
+<!-- Cerood Notify Stage 2: opt-in only; existing page logic untouched. -->
+<script src="/cerood-notify.js" defer></script>
+<script src="/cerood-notify-ui.js" data-division="renewed" defer></script>
+</body></html>

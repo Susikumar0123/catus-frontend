@@ -402,4 +402,8 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_clothing_selected_locati
  if(cart){const observer=new MutationObserver(()=>{if(!document.querySelector('.rn-cart-shade')&&cart.classList.contains('rn-nav-active'))sync()});observer.observe(document.body,{childList:true})}
  window.addEventListener('hashchange',sync);window.addEventListener('pageshow',sync);sync();
 })();
-</script></body></html>
+</script>
+<!-- Cerood Notify Stage 2: opt-in only; existing page logic untouched. -->
+<script src="/cerood-notify.js" defer></script>
+<script src="/cerood-notify-ui.js" data-division="fashion" defer></script>
+</body></html>
