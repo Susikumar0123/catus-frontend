@@ -17826,12 +17826,18 @@ function deleteCeroodManualAddress() {
     const oldFull = ceroodAddressText(a);
     localStorage.removeItem(CEROOD_MANUAL_ADDRESS_KEY);
     localStorage.removeItem('cerood_manual_service_address');
-    if (localStorage.getItem('catus_user_location') === oldFull) {
-        ['catus_user_location','catus_location_name','catus_district_name','catus_state_name',
+    // Explicit Delete clears the selected browsing location across every Cerood division.
+    // Saved checkout/order addresses remain untouched.
+    if (window.CeroodLocation?.clear) window.CeroodLocation.clear();
+    else {
+        localStorage.setItem('cerood_global_location_cleared_v1', '1');
+        ['cerood_global_location_v1','cerood_selected_location','cerood_clothing_selected_location',
+         'cerood_renewed_delivery_location','cerood_cosmetics_delivery_location','cerood_clothing_delivery_location',
+         'catus_user_location','catus_location_name','catus_district_name','catus_state_name',
          'catus_pincode','catus_location_slug','catus_district_slug','catus_state_slug',
          'catus_location_id'].forEach(k => localStorage.removeItem(k));
-        updateLocationDisplays('Select Location');
     }
+    updateLocationDisplays('Select Location');
     renderCeroodSavedAddress();
     showToast('Saved service address deleted.', false);
 }

@@ -2,6 +2,8 @@
 (function () {
   'use strict';
   const KEY='cerood_global_location_v1';
+  const CLEARED='cerood_global_location_cleared_v1';
+  const EMPTY='Select Location';
   const STORES={renewed:'cerood_renewed_delivery_location',cosmetics:'cerood_cosmetics_delivery_location',clothing:'cerood_clothing_delivery_location'};
   const LABELS=['locationText','mobileLocationText','renewedDeliveryLocation','beautyDeliveryLocation','fashionDeliveryLocation'];
   const nativeSet=Storage.prototype.setItem;
@@ -24,21 +26,30 @@
     if(!area&&!pin)return null;
     return normal({area,district:localStorage.getItem('catus_district_name'),state:localStorage.getItem('catus_state_name'),pincode:pin});
   }
-  function get(){return normal(read(KEY))||normal(read('cerood_selected_location'))||home()||normal(read(STORES.renewed))||normal(read(STORES.cosmetics))||normal(read(STORES.clothing))||normal(read('cerood_clothing_selected_location'));}
+  function get(){if(localStorage.getItem(CLEARED)==='1')return null;return normal(read(KEY))||normal(read('cerood_selected_location'))||home()||normal(read(STORES.renewed))||normal(read(STORES.cosmetics))||normal(read(STORES.clothing))||normal(read('cerood_clothing_selected_location'));}
   function label(v){return v?[v.area||v.city,v.district||(!v.area?v.city:''),v.pincode].filter(Boolean).join(', '):'';}
   function paint(){
-    const v=get(),str=label(v);if(!str)return;
+    const v=get(),str=label(v)||EMPTY;
     LABELS.forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=str;el.title=str;}});
     // Home Services controls its own location text and booking state: never replace those.
   }
-  function save(v){v=normal(v);if(!good(v))return false;nativeSet.call(localStorage,KEY,JSON.stringify(v));paint();window.dispatchEvent(new CustomEvent('cerood-global-location-changed',{detail:v}));return true;}
+  function save(v){v=normal(v);if(!good(v))return false;localStorage.removeItem(CLEARED);nativeSet.call(localStorage,KEY,JSON.stringify(v));paint();window.dispatchEvent(new CustomEvent('cerood-global-location-changed',{detail:v}));return true;}
+  function clearLocation(){
+    // A deliberate empty selection must never fall back to stale store or Home Services values.
+    nativeSet.call(localStorage,CLEARED,'1');
+    [KEY,'cerood_selected_location','cerood_clothing_selected_location',...Object.values(STORES),
+     'catus_user_location','catus_location_name','catus_district_name','catus_state_name','catus_pincode',
+     'catus_location_slug','catus_district_slug','catus_state_slug','catus_location_id',
+     'selectedLocation'].forEach(k=>localStorage.removeItem(k));
+    paint();window.dispatchEvent(new CustomEvent('cerood-global-location-changed',{detail:null}));
+  }
   function fromHome(){const v=home();if(good(v))save(v);}
   function fromStore(kind){const v=normal(read(STORES[kind]));if(good(v))save(v);}
   // Observe existing location saves, without changing legacy keys or checkout addresses.
   try{Storage.prototype.setItem=function(k,v){const r=nativeSet.call(this,k,v);if(this===localStorage&&/^catus_(location_name|district_name|state_name|pincode)$/.test(k)){
-    if(!pending){pending=true;queueMicrotask(()=>{pending=false;fromHome()});}
+    if(!pending){pending=true;queueMicrotask(()=>{pending=false;if(localStorage.getItem(CLEARED)!=='1')fromHome()});}
   }return r;};}catch(_){}
-  window.CeroodLocation={get,set:save,refresh:paint,label};
+  window.CeroodLocation={get,set:save,clear:clearLocation,refresh:paint,label};
   window.addEventListener('cerood-location-updated',()=>{const v=normal(read('cerood_selected_location'));if(good(v))save(v);});
   window.addEventListener('cerood-renewed-location-changed',()=>fromStore('renewed'));
   window.addEventListener('cerood-cosmetics-location-changed',()=>fromStore('cosmetics'));
@@ -46,7 +57,7 @@
   window.addEventListener('storage',e=>{if(e.key===KEY||e.key==='cerood_selected_location'||e.key?.startsWith('catus_'))paint();});
   function init(){
     // Existing Home Services location is authoritative on the Home Services page.
-    if(/\/home-services(?:\.html)?$/.test(location.pathname)&&good(home()))fromHome();
+    if(/\/home-services(?:\.html)?$/.test(location.pathname)&&localStorage.getItem(CLEARED)!=='1'&&good(home()))fromHome();
     paint();
     // Existing manual location forms remain intact. Add optional browser GPS to the three store forms.
     const kind=/\/renewed(?:\.html)?$/.test(location.pathname)?'renewed':/\/cosmetics(?:\.html)?$/.test(location.pathname)?'cosmetics':/\/clothing(?:\.html)?$/.test(location.pathname)?'clothing':null;
@@ -188,7 +199,7 @@
       if(shade){close();return;}const card=frame();heading(card,'Change location');
       card.insertAdjacentHTML('beforeend',`<div class="cu-search"><span aria-hidden="true">⌕</span><input id="cuQuery" placeholder="Search village, area, town or pincode" autocomplete="off" aria-label="Search village, area, town or pincode"></div><div class="cu-suggestions" role="listbox"></div><p class="cu-status" role="status"></p><button type="button" class="cu-action" id="cuGps">⊙ &nbsp; Use current location</button><button type="button" class="cu-action" id="cuManual">✎ &nbsp; Enter address manually</button><div id="cuSaved"></div><div class="cu-secure">♢ Cerood Secure Location</div>`);
       const input=card.querySelector('#cuQuery'),results=card.querySelector('.cu-suggestions'),status=card.querySelector('.cu-status');
-      function renderSaved(){const a=address(),slot=card.querySelector('#cuSaved');slot.replaceChildren();if(!a)return;const section=document.createElement('section');section.className='cu-saved';section.innerHTML='<div style="color:#15803d;font-size:12px;font-weight:700;margin-bottom:8px">● Saved service address</div><div class="cu-saved-text" style="font-size:13px;line-height:1.65;overflow-wrap:anywhere"></div><div class="cu-buttons"><button type="button">✎ Edit</button><button type="button">▤ Delete</button></div>';section.querySelector('.cu-saved-text').textContent=[a.house,a.village,a.district,a.state,a.pincode,a.landmark].filter(Boolean).join(', ');section.querySelectorAll('button')[0].onclick=()=>showManual(true);section.querySelectorAll('button')[1].onclick=()=>{if(!confirm('Delete your saved service address?'))return;localStorage.removeItem(ADDRESS);localStorage.removeItem('cerood_manual_service_address');renderSaved();};slot.append(section);}
+      function renderSaved(){const a=address(),slot=card.querySelector('#cuSaved');slot.replaceChildren();if(!a)return;const section=document.createElement('section');section.className='cu-saved';section.innerHTML='<div style="color:#15803d;font-size:12px;font-weight:700;margin-bottom:8px">● Saved service address</div><div class="cu-saved-text" style="font-size:13px;line-height:1.65;overflow-wrap:anywhere"></div><div class="cu-buttons"><button type="button">✎ Edit</button><button type="button">▤ Delete</button></div>';section.querySelector('.cu-saved-text').textContent=[a.house,a.village,a.district,a.state,a.pincode,a.landmark].filter(Boolean).join(', ');section.querySelectorAll('button')[0].onclick=()=>showManual(true);section.querySelectorAll('button')[1].onclick=()=>{if(!confirm('Delete your saved service address?'))return;localStorage.removeItem(ADDRESS);localStorage.removeItem('cerood_manual_service_address');localStorage.removeItem('cerood_manual_service_address_data');clearLocation();renderSaved();};slot.append(section);}
       renderSaved();card.querySelector('#cuManual').onclick=()=>showManual(false);
       input.addEventListener('input',()=>{
         const q=input.value.trim();results.replaceChildren();status.textContent='';clearTimeout(timer);if(controller)controller.abort();const current=++seq;if(q.length<2)return;
