@@ -7,7 +7,9 @@
 @media(max-width:850px){.shell{display:block}.sidebar{width:100%;padding:12px;display:flex;flex-direction:row;overflow-x:auto;align-items:center}.brand{min-width:155px;margin:0;padding:8px;border:0;font-size:16px}.nav{white-space:nowrap;width:auto;padding:11px}.sidebar-foot{margin:0;padding:0;border:0}.top{padding:15px}.workspace{padding:13px}.renewed-columns{grid-template-columns:1fr}.renewed-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.renewed-fields{grid-template-columns:1fr}.renewed-fields .renewed-wide{grid-column:auto}.renewed-panel{padding:14px}}
 </style><style>.renewed-order-list{display:grid;gap:13px}.renewed-order-card{border:1px solid #eae5f5;border-radius:13px;padding:18px;background:#fff;overflow-wrap:anywhere}.renewed-order-card h3{margin:0 0 8px;font-size:15px}.renewed-order-card p{margin:5px 0;font-size:12px}.renewed-order-card label{display:block;font-size:12px;font-weight:700;margin-top:12px}.renewed-order-card select{max-width:100%;padding:10px;border:1px solid #eae5f5;border-radius:9px}.renewed-order-card button{margin:8px 0 0 8px;padding:10px;border:0;border-radius:9px;background:#6945d8;color:#fff;cursor:pointer}.renewed-order-card button:disabled{opacity:.5;cursor:not-allowed}.renewed-order-card .note{color:#64748b;font-size:11px}</style><style id="renewed-payment-order-filter-style">
 .renewed-payment-filters{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 18px}.renewed-payment-filter{border:1px solid #dce2eb;background:#fff;border-radius:9px;padding:10px 13px;font-size:12px;font-weight:650;color:#42526a;cursor:pointer}.renewed-payment-filter.active{border-color:#6945d8;background:#f2eeff;color:#4124a2}.renewed-payment-filter span{font-weight:500;margin-left:4px}.renewed-order-card{min-width:0}.renewed-order-type{display:inline-block;font-size:11px;font-weight:700;margin:0 0 8px;padding:5px 9px;border-radius:7px;background:#f2eeff;color:#4124a2}.renewed-order-type.cod{background:#f5f5f7;color:#374151}.renewed-order-type.other{background:#fff7e9;color:#78501d}@media(max-width:600px){.renewed-payment-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.renewed-payment-filter{min-width:0;text-align:center;padding:11px 7px}.renewed-order-card{padding:13px}}
-</style></head><body><div class="shell"><aside class="sidebar"><div class="brand">CEROOD<span>RENEWED ADMIN</span></div><button class="nav active" data-tab="inventory"><i class="fa-solid fa-boxes-stacked"></i> Products & Stock</button><button class="nav" data-tab="orders"><i class="fa-solid fa-bag-shopping"></i> Renewed Orders</button><button class="nav" data-tab="delivery"><i class="fa-solid fa-truck"></i> Delivery Tracking</button><button class="nav" data-tab="payments"><i class="fa-solid fa-credit-card"></i> Payments</button><a class="nav" href="/notify-admin.html" style="display:block;text-decoration:none">🔔 Notify Studio</a><div class="sidebar-foot"><a class="nav" style="display:block;text-decoration:none" href="/renewed.html"><i class="fa-solid fa-store"></i> Open Store</a><button class="nav" id="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div></aside><div class="content"><header class="top"><h1 id="heading">Products & Stock</h1><a href="/renewed.html">View Renewed Store ↗</a></header><main class="workspace"><div id="tab-inventory" class="main-tab-pane active"><div id="page-renewed-store" class="main-tab-pane active">
+</style><style id="cerood-seller-admin-style">
+.seller-admin-filters{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.seller-admin-filters button{border:1px solid #dce2eb;background:#fff;border-radius:9px;padding:10px 12px;font-size:12px;cursor:pointer}.seller-admin-filters button.active{background:#f2eeff;border-color:#6945d8;color:#4124a2;font-weight:800}.seller-admin-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px}.seller-admin-card{border:1px solid #eae5f5;background:#fff;border-radius:14px;padding:18px;min-width:0;overflow-wrap:anywhere}.seller-admin-card h3{font-size:16px;margin:0 0 8px}.seller-admin-card p{font-size:12px;line-height:1.55;margin:7px 0;color:#42526a}.seller-admin-card .seller-admin-status{display:inline-block;padding:5px 9px;border-radius:20px;background:#f2eeff;color:#4124a2;font-size:11px;font-weight:800;text-transform:capitalize}.seller-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.seller-admin-actions button{border:1px solid #dce2eb;border-radius:8px;padding:10px 12px;background:#fff;cursor:pointer;font-weight:700;font-size:12px}.seller-admin-actions button:disabled{opacity:.5;cursor:not-allowed}.seller-admin-actions .approve{background:#047857;color:#fff;border-color:#047857}.seller-admin-actions .reject{color:#b91c1c;border-color:#fecaca}.seller-admin-actions .suspend{color:#92400e;border-color:#fcd34d}.seller-admin-message{font-size:13px;color:#42526a;line-height:1.6;min-height:22px}.seller-admin-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}.seller-admin-toolbar input{padding:10px 12px;border:1px solid #dce2eb;border-radius:9px;min-width:180px;max-width:100%;flex:1}.seller-admin-toolbar button{border:0;border-radius:9px;background:#28253d;color:white;padding:11px 14px;cursor:pointer}
+</style></head><body><div class="shell"><aside class="sidebar"><div class="brand">CEROOD<span>RENEWED ADMIN</span></div><button class="nav active" data-tab="inventory"><i class="fa-solid fa-boxes-stacked"></i> Products & Stock</button><button class="nav" data-tab="orders"><i class="fa-solid fa-bag-shopping"></i> Renewed Orders</button><button class="nav" data-tab="delivery"><i class="fa-solid fa-truck"></i> Delivery Tracking</button><button class="nav" data-tab="payments"><i class="fa-solid fa-credit-card"></i> Payments</button><button class="nav" data-tab="sellers"><i class="fa-solid fa-users"></i> Seller Management</button><a class="nav" href="/notify-admin.html" style="display:block;text-decoration:none">🔔 Notify Studio</a><div class="sidebar-foot"><a class="nav" style="display:block;text-decoration:none" href="/renewed.html"><i class="fa-solid fa-store"></i> Open Store</a><button class="nav" id="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div></aside><div class="content"><header class="top"><h1 id="heading">Products & Stock</h1><a href="/renewed.html">View Renewed Store ↗</a></header><main class="workspace"><div id="tab-inventory" class="main-tab-pane active"><div id="page-renewed-store" class="main-tab-pane active">
  <div class="renewed-admin">
   <div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD RENEWED · INVENTORY</span><h2>Second-hand Product Management</h2><p>Manage refurbished and pre-owned appliance listings, drafts and published inventory.</p></div><a href="/renewed.html" target="_blank" rel="noopener" class="renewed-link">Open Renewed Store ↗</a></div>
   <div class="renewed-warning"><i class="fa-solid fa-circle-info"></i> <strong>Phase 4:</strong> Products save to the Cerood backend and Supabase. Only published items with stock above zero appear in the store. COD checkout is enabled when the backend permits it.</div>
@@ -42,8 +44,24 @@
  </div>
 </div>
 
-            </div><section id="tab-orders" class="main-tab-pane empty"><h2>Renewed Orders <button class="renewed-light" id="refreshRenewedOrders">↻ Refresh</button></h2><p>Actual orders from the protected Cerood Renewed backend. Paid online orders and confirmed COD orders can be dispatched.</p><p id="renewedOrdersMessage" role="status">Open Renewed Orders to load.</p><div class="renewed-payment-filters" role="group" aria-label="Filter renewed orders by payment method"><button type="button" class="renewed-payment-filter active" data-renewed-payment-filter="all" aria-pressed="true">All orders <span id="renewedCountAll">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="online" aria-pressed="false">Online paid <span id="renewedCountOnline">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="cod" aria-pressed="false">COD orders <span id="renewedCountCod">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="other" aria-pressed="false">Other / pending <span id="renewedCountOther">0</span></button></div><div id="renewedOrdersList" class="renewed-order-list"></div></section><section id="tab-delivery" class="main-tab-pane empty"><h2>Delivery Tracking</h2><p>Manage delivery status from Renewed Orders. The verified customer dashboard reads the same order status.</p><button class="renewed-primary" type="button" id="openRenewedOrders">Open Renewed Orders</button></section><section id="tab-payments" class="main-tab-pane empty"><h2>Payments</h2><p>Verified Razorpay payments and refunds will appear here after the admin payment API is connected.</p></section></main></div></div><script>
-(function(){'use strict';if(sessionStorage.getItem('renewedAdminAuthenticated')!=='true'||!sessionStorage.getItem('renewedAdminToken')){location.replace('renewed-admin-login.html');return}document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.workspace > .main-tab-pane').forEach(x=>x.classList.toggle('active',x.id==='tab-'+b.dataset.tab));document.getElementById('heading').textContent=b.textContent.trim();if(b.dataset.tab==='inventory'&&typeof renewedRenderDrafts==='function')renewedRenderDrafts();if(b.dataset.tab==='orders'&&typeof window.loadRenewedOrders==='function')window.loadRenewedOrders()}));document.getElementById('logout').onclick=()=>{sessionStorage.removeItem('renewedAdminAuthenticated');sessionStorage.removeItem('renewedAdminToken');location.href='renewed-admin-login.html'};})();
+            </div><section id="tab-orders" class="main-tab-pane empty"><h2>Renewed Orders <button class="renewed-light" id="refreshRenewedOrders">↻ Refresh</button></h2><p>Actual orders from the protected Cerood Renewed backend. Paid online orders and confirmed COD orders can be dispatched.</p><p id="renewedOrdersMessage" role="status">Open Renewed Orders to load.</p><div class="renewed-payment-filters" role="group" aria-label="Filter renewed orders by payment method"><button type="button" class="renewed-payment-filter active" data-renewed-payment-filter="all" aria-pressed="true">All orders <span id="renewedCountAll">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="online" aria-pressed="false">Online paid <span id="renewedCountOnline">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="cod" aria-pressed="false">COD orders <span id="renewedCountCod">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="other" aria-pressed="false">Other / pending <span id="renewedCountOther">0</span></button></div><div id="renewedOrdersList" class="renewed-order-list"></div></section><section id="tab-delivery" class="main-tab-pane empty"><h2>Delivery Tracking</h2><p>Manage delivery status from Renewed Orders. The verified customer dashboard reads the same order status.</p><button class="renewed-primary" type="button" id="openRenewedOrders">Open Renewed Orders</button></section><section id="tab-payments" class="main-tab-pane empty"><h2>Payments</h2><p>Verified Razorpay payments and refunds will appear here after the admin payment API is connected.</p></section><section id="tab-sellers" class="main-tab-pane">
+ <div class="renewed-admin">
+  <div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD · MARKETPLACE</span><h2>Seller Management</h2><p>Review verified seller applications and manage account access.</p></div></div>
+  <div class="renewed-panel">
+   <div class="seller-admin-toolbar"><input id="sellerAdminSearch" type="search" placeholder="Search shop, owner, mobile, district…" aria-label="Search sellers"><button type="button" id="sellerAdminRefresh">↻ Refresh sellers</button></div>
+   <div class="seller-admin-filters" role="group" aria-label="Seller status filters">
+    <button type="button" data-seller-filter="all" class="active" aria-pressed="true">All <span id="sellerCountAll">0</span></button>
+    <button type="button" data-seller-filter="pending" aria-pressed="false">Pending <span id="sellerCountPending">0</span></button>
+    <button type="button" data-seller-filter="approved" aria-pressed="false">Approved <span id="sellerCountApproved">0</span></button>
+    <button type="button" data-seller-filter="rejected" aria-pressed="false">Rejected <span id="sellerCountRejected">0</span></button>
+    <button type="button" data-seller-filter="suspended" aria-pressed="false">Suspended <span id="sellerCountSuspended">0</span></button>
+   </div>
+   <p id="sellerAdminMessage" class="seller-admin-message" role="status" aria-live="polite">Open Seller Management to load applications.</p>
+   <div id="sellerAdminList" class="seller-admin-list"></div>
+  </div>
+ </div>
+</section></main></div></div><script>
+(function(){'use strict';if(sessionStorage.getItem('renewedAdminAuthenticated')!=='true'||!sessionStorage.getItem('renewedAdminToken')){location.replace('renewed-admin-login.html');return}document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.workspace > .main-tab-pane').forEach(x=>x.classList.toggle('active',x.id==='tab-'+b.dataset.tab));document.getElementById('heading').textContent=b.textContent.trim();if(b.dataset.tab==='inventory'&&typeof renewedRenderDrafts==='function')renewedRenderDrafts();if(b.dataset.tab==='orders'&&typeof window.loadRenewedOrders==='function')window.loadRenewedOrders();if(b.dataset.tab==='sellers'&&typeof window.loadCeroodSellers==='function')window.loadCeroodSellers()}));document.getElementById('logout').onclick=()=>{sessionStorage.removeItem('renewedAdminAuthenticated');sessionStorage.removeItem('renewedAdminToken');location.href='renewed-admin-login.html'};})();
 </script><script>/* Phase 4: server-side inventory, protected by existing admin Bearer token. */
 (function(){'use strict';
  const API='https://catus-backend-d2js.onrender.com';
@@ -134,5 +152,70 @@ function render(orders){const root=$('renewedOrdersList');root.replaceChildren()
 window.loadRenewedOrders=async()=>{msg('Loading Renewed orders…');try{const d=await api('/api/admin/renewed/orders');cachedOrders=Array.isArray(d.orders)?d.orders:[];renderFilteredOrders()}catch(e){msg(e.message,true);$('renewedOrdersList').replaceChildren()}};
 $('refreshRenewedOrders').onclick=window.loadRenewedOrders;
 $('openRenewedOrders').onclick=()=>document.querySelector('[data-tab="orders"]').click();
+})();
+</script><script id="cerood-seller-admin-script">
+(()=>{'use strict';
+ const API='https://catus-backend-d2js.onrender.com';
+ const $=id=>document.getElementById(id);
+ let sellers=[],filter='all',loading=false;
+ const statuses=['pending','approved','rejected','suspended'];
+ function message(s,error=false){$('sellerAdminMessage').textContent=s;$('sellerAdminMessage').style.color=error?'#b91c1c':'#42526a';}
+ async function api(path,method='GET',body){
+  const token=sessionStorage.getItem('renewedAdminToken');
+  if(!token)throw Error('Admin session expired. Please log in again.');
+  const response=await fetch(API+path,{method,headers:{Authorization:'Bearer '+token,Accept:'application/json',...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{}),cache:'no-store'});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||!data.success)throw Error(data.message||'Request failed ('+response.status+')');
+  return data;
+ }
+ function info(parent,label,value){
+  const p=document.createElement('p'),strong=document.createElement('strong');strong.textContent=label+': ';
+  p.append(strong,document.createTextNode(String(value===null||value===undefined||value===''?'—':value)));parent.append(p);
+ }
+ function render(){
+  const counts={all:sellers.length,pending:0,approved:0,rejected:0,suspended:0};
+  for(const seller of sellers)if(Object.hasOwn(counts,seller.status))counts[seller.status]++;
+  for(const key of ['all',...statuses])$('sellerCount'+key[0].toUpperCase()+key.slice(1)).textContent='('+counts[key]+')';
+  document.querySelectorAll('[data-seller-filter]').forEach(b=>{const active=b.dataset.sellerFilter===filter;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+  const q=$('sellerAdminSearch').value.trim().toLowerCase();
+  const shown=sellers.filter(s=>(filter==='all'||s.status===filter)&&[s.shop_name,s.owner_name,s.phone,s.district,s.state,s.email].join(' ').toLowerCase().includes(q));
+  const root=$('sellerAdminList');root.replaceChildren();
+  if(!shown.length){message(sellers.length?'No sellers match this filter.':'No seller applications yet.');return;}
+  message(shown.length+' seller(s) shown · '+sellers.length+' total.');
+  for(const seller of shown){
+   const card=document.createElement('article');card.className='seller-admin-card';
+   const title=document.createElement('h3');title.textContent=seller.shop_name||'Unnamed shop';card.append(title);
+   const badge=document.createElement('span');badge.className='seller-admin-status';badge.textContent=seller.status||'unknown';card.append(badge);
+   info(card,'Owner',seller.owner_name);info(card,'Mobile',seller.phone);info(card,'Email',seller.email);
+   info(card,'Business type',seller.business_type);info(card,'GSTIN',seller.gst_number);
+   info(card,'Address',seller.address);info(card,'Location',[seller.district,seller.state,seller.pincode].filter(Boolean).join(', '));
+   info(card,'Commission',seller.commission_percent===null||seller.commission_percent===undefined?'Not set':seller.commission_percent+'%');
+   info(card,'Applied',seller.created_at?new Date(seller.created_at).toLocaleString('en-IN'):'—');
+   const actions=document.createElement('div');actions.className='seller-admin-actions';
+   for(const [status,label,cls] of [['approved','Approve','approve'],['rejected','Reject','reject'],['suspended','Suspend','suspend']]){
+    if(seller.status===status)continue;
+    const btn=document.createElement('button');btn.type='button';btn.className=cls;btn.textContent=label;
+    btn.onclick=async()=>{
+     if(!confirm(label+' seller "'+(seller.shop_name||seller.owner_name||'')+'"?'))return;
+     [...actions.querySelectorAll('button')].forEach(b=>b.disabled=true);
+     try{
+      await api('/api/admin/sellers/'+encodeURIComponent(seller.id)+'/status','PATCH',{status});
+      message('Seller status updated.');await window.loadCeroodSellers();
+     }catch(e){message(e.message,true);[...actions.querySelectorAll('button')].forEach(b=>b.disabled=false);}
+    };
+    actions.append(btn);
+   }
+   card.append(actions);root.append(card);
+  }
+ }
+ window.loadCeroodSellers=async()=>{
+  if(loading)return;loading=true;$('sellerAdminRefresh').disabled=true;message('Loading seller applications…');
+  try{const data=await api('/api/admin/sellers');if(!Array.isArray(data.sellers))throw Error('Invalid seller list from server.');sellers=data.sellers;render();}
+  catch(e){$('sellerAdminList').replaceChildren();message(e.message,true);}
+  finally{loading=false;$('sellerAdminRefresh').disabled=false;}
+ };
+ $('sellerAdminRefresh').addEventListener('click',window.loadCeroodSellers);
+ $('sellerAdminSearch').addEventListener('input',render);
+ document.querySelectorAll('[data-seller-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.sellerFilter;render();}));
 })();
 </script></body></html>
