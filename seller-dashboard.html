@@ -420,6 +420,19 @@
 
 @media(max-width:650px){.seller-grid{grid-template-columns:1fr}.seller-card,.seller-stat{padding:17px}.seller-header-inner{padding:12px 16px}.seller-detail{flex-direction:column;gap:4px}.seller-container{width:calc(100% - 24px);margin-top:20px}}
 
+
+/* Seller orders: isolated from product forms and Home Services */
+.seller-orders-list{display:grid;gap:16px}
+.seller-order-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 5px 24px #14213a08}
+.seller-order-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.seller-order-product{display:flex;align-items:flex-start;gap:16px}
+.seller-order-product img{width:100px;height:100px;object-fit:contain;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px}
+.seller-order-product h3{margin:0 0 7px;font-size:17px}
+.seller-order-info{min-width:0;flex:1;overflow-wrap:anywhere}
+.seller-order-info p{margin:5px 0;color:#475569;font-size:13px}
+.seller-order-status{display:inline-block;border-radius:999px;background:#eff6ff;color:#1d4ed8;padding:7px 11px;font-size:12px;font-weight:750}
+.seller-order-address{white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:600px){.seller-order-card{padding:15px}.seller-order-product img{width:75px;height:75px}}
 </style>
 
 </head>
@@ -539,6 +552,8 @@
         My Products
 
       </button>
+
+      <button class="seller-tab" data-tab="orders" type="button">My Orders</button>
 
       <button
 
@@ -762,6 +777,19 @@
 
       ></div>
 
+    </section>
+
+    <!-- SELLER ORDERS -->
+    <section id="section-orders" class="seller-section">
+      <div class="seller-dashboard-heading">
+        <div>
+          <h1>My Orders</h1>
+          <p>Confirmed orders containing your products only.</p>
+        </div>
+        <button id="refreshSellerOrders" class="seller-btn seller-btn-outline" type="button">Refresh Orders</button>
+      </div>
+      <div id="ordersMessage" class="seller-message" role="status" aria-live="polite"></div>
+      <div id="sellerOrdersList" class="seller-orders-list"></div>
     </section>
 
     <!-- ADD PRODUCT -->
@@ -1498,6 +1526,12 @@ function showTab(tabName) {
 
   }
 
+  if (tabName === 'orders') {
+
+    loadSellerOrders();
+
+  }
+
   window.scrollTo({
 
     top: 0,
@@ -1789,6 +1823,109 @@ function renderProductCounts() {
     ).length;
 
 }
+
+// ==========================================
+// SELLER ORDERS (READ ONLY)
+// ==========================================
+
+function sellerOrderText(parent, tag, value, className = '') {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  el.textContent = value == null ? '—' : String(value);
+  parent.appendChild(el);
+  return el;
+}
+
+function sellerOrderAddress(address) {
+  if (!address) return '—';
+  if (typeof address === 'string') {
+    try { address = JSON.parse(address); }
+    catch { return address; }
+  }
+  if (typeof address !== 'object') return String(address);
+  return Object.values(address)
+    .filter(value => value != null && value !== '' && typeof value !== 'object')
+    .map(String)
+    .join(', ') || '—';
+}
+
+function renderSellerOrders(orders) {
+  const container = $('sellerOrdersList');
+  container.replaceChildren();
+
+  if (!orders.length) {
+    const empty = document.createElement('div');
+    empty.className = 'seller-card';
+    empty.textContent = 'No confirmed orders for your products yet.';
+    container.appendChild(empty);
+    return;
+  }
+
+  orders.forEach(order => {
+    const card = document.createElement('article');
+    card.className = 'seller-order-card';
+
+    const top = document.createElement('div');
+    top.className = 'seller-order-top';
+    const title = document.createElement('div');
+    sellerOrderText(title, 'strong', 'Order #' + order.order_id);
+    const orderedAt = order.ordered_at ? new Date(order.ordered_at) : null;
+    sellerOrderText(title, 'div',
+      orderedAt && !Number.isNaN(orderedAt.getTime())
+        ? orderedAt.toLocaleString('en-IN') : 'Date unavailable',
+      'product-meta');
+    top.appendChild(title);
+    sellerOrderText(top, 'span',
+      'Seller: ' + (order.seller_order_status || 'new'),
+      'seller-order-status');
+    card.appendChild(top);
+
+    const product = document.createElement('div');
+    product.className = 'seller-order-product';
+    if (order.product_image) {
+      const img = document.createElement('img');
+      img.src = order.product_image;
+      img.alt = order.product_name || 'Ordered product';
+      img.loading = 'lazy';
+      product.appendChild(img);
+    }
+    const info = document.createElement('div');
+    info.className = 'seller-order-info';
+    sellerOrderText(info, 'h3', order.product_name || 'Product');
+    sellerOrderText(info, 'p',
+      'Qty: ' + order.quantity + ' · Your item total: ₹' +
+      Number(order.line_total || 0).toLocaleString('en-IN'));
+    sellerOrderText(info, 'p', 'Payment: ' + (order.payment_method || '—') +
+      ' · Order status: ' + (order.payment_status || '—'));
+    sellerOrderText(info, 'p', 'Delivery: ' + (order.delivery_status || '—'));
+    sellerOrderText(info, 'p', 'Customer: ' + (order.customer_name || '—'));
+    sellerOrderText(info, 'p', 'Phone: ' + (order.customer_phone || '—'));
+    sellerOrderText(info, 'p', 'Address: ' + sellerOrderAddress(order.delivery_address),
+      'seller-order-address');
+    product.appendChild(info);
+    card.appendChild(product);
+    container.appendChild(card);
+  });
+}
+
+let loadingSellerOrders = false;
+async function loadSellerOrders() {
+  if (loadingSellerOrders) return;
+  loadingSellerOrders = true;
+  showMessage('ordersMessage', 'Loading your orders...');
+  try {
+    const data = await apiRequest('/api/seller/orders');
+    renderSellerOrders(Array.isArray(data.orders) ? data.orders : []);
+    clearMessage('ordersMessage');
+  } catch (error) {
+    $('sellerOrdersList').replaceChildren();
+    showMessage('ordersMessage', error.message, 'error');
+  } finally {
+    loadingSellerOrders = false;
+  }
+}
+
+$('refreshSellerOrders').addEventListener('click', loadSellerOrders);
 
 // ==========================================
 
