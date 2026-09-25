@@ -19556,6 +19556,25 @@ window.addEventListener('DOMContentLoaded', function () {
 <!-- Cerood Notify Stage 2: opt-in only; existing page logic untouched. -->
 <script src="/cerood-notify.js" defer></script>
 <script src="/cerood-notify-ui.js" data-division="services" defer></script>
+
+<!-- Cerood global browsing location: late header sync only; checkout and booking addresses unchanged. -->
+<script id="cerood-home-global-location-header-sync">
+(function(){
+  function syncHeader(){
+    var api=window.CeroodLocation;
+    if(!api||typeof api.get!=='function')return;
+    var selected=api.get();
+    var text=selected?(api.label(selected)||'Select Location'):'Select Location';
+    ['headerLocationDisplay','mobileHeaderLocationDisplay'].forEach(function(id){
+      var el=document.getElementById(id);if(el){el.textContent=text;el.title=text;}
+    });
+  }
+  document.addEventListener('DOMContentLoaded',syncHeader);
+  window.addEventListener('load',syncHeader);
+  window.addEventListener('pageshow',syncHeader);
+  window.addEventListener('cerood-global-location-changed',syncHeader);
+})();
+</script>
 </body>
 
 </html>
