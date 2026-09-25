@@ -481,7 +481,7 @@ function receipts(){try{const a=JSON.parse(localStorage.getItem(KEY)||'[]');retu
 function message(text){$('accountStatus').textContent=text}
 function sellerFulfilmentInfo(item){
  const raw=String(item.seller_order_status||'').toLowerCase();
- if(!item.seller_id&&!raw)return null;
+ if(!item.seller_id)return null;
  const status=raw||'new';
  const labels={new:'Awaiting seller acceptance',accepted:'Seller accepted',packed:'Seller packed',shipped:'Seller shipped',rejected:'Seller rejected'};
  const dates={accepted:item.seller_accepted_at,packed:item.seller_packed_at,shipped:item.seller_shipped_at,rejected:item.seller_rejected_at};
