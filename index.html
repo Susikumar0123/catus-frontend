@@ -306,6 +306,27 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 @media(max-width:360px){.crn-header-main{grid-template-columns:minmax(25px,1fr) minmax(0,41vw) auto!important;column-gap:5px!important;padding-left:8px!important;padding-right:8px!important}.crn-header-main .cerood-unified-tools{gap:4px!important}.crn-header-main .cerood-unified-tools>a,.crn-header-main .cerood-unified-menu summary{width:33px!important;height:35px!important}.crn-header-main .crn-mobile-location{padding-left:5px!important;padding-right:5px!important}}
 </style>
 <script src="/cerood-location.js" defer></script>
+
+<style id="cerood-home-services-smooth-navigation-20260925">
+/* Same-origin cross-document visual transitions only. No link interception, JS or checkout changes. */
+@view-transition { navigation: auto; }
+@media (max-width: 850px) {
+  /* Shared mobile dock retains its own visual layer across pages. */
+  nav.csf-bottom, nav.bottom.crn-mobile-nav { view-transition-name: cerood-services-mobile-dock; }
+  ::view-transition-old(cerood-services-mobile-dock),
+  ::view-transition-new(cerood-services-mobile-dock) {
+    animation-duration: .01s;
+    animation-timing-function: linear;
+  }
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation-duration: .22s;
+    animation-timing-function: ease-out;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01s !important; }
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a class="logo crn-logo" href="/" aria-label="Cerood home"><img src="/cerood-logo.webp" alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false"/><span class="crn-logo-fallback" hidden>cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Service location<b id="locationText">Select Location</b></span><svg class="crn-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>

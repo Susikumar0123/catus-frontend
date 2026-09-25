@@ -8474,6 +8474,27 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 </style>
 
 <script src="/cerood-location.js" defer></script>
+
+<style id="cerood-home-services-smooth-navigation-20260925">
+/* Same-origin cross-document visual transitions only. No link interception, JS or checkout changes. */
+@view-transition { navigation: auto; }
+@media (max-width: 850px) {
+  /* Shared mobile dock retains its own visual layer across pages. */
+  nav.csf-bottom, nav.bottom.crn-mobile-nav { view-transition-name: cerood-services-mobile-dock; }
+  ::view-transition-old(cerood-services-mobile-dock),
+  ::view-transition-new(cerood-services-mobile-dock) {
+    animation-duration: .01s;
+    animation-timing-function: linear;
+  }
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation-duration: .22s;
+    animation-timing-function: ease-out;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01s !important; }
+}
+</style>
 </head>
 <body>
 
