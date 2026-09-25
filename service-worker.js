@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cerood-pwa-v2';
+const CACHE_NAME = 'cerood-pwa-v3';
 
 const APP_SHELL = [
     '/',
@@ -40,6 +40,11 @@ self.addEventListener('fetch', event => {
 
     // Only handle GET requests
     if (request.method !== 'GET') return;
+
+    // Let browser handle page navigation directly
+if (request.mode === 'navigate') {
+    return;
+}
 
     // Do not intercept external API requests
     if (url.origin !== self.location.origin) return;
