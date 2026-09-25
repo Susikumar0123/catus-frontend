@@ -433,6 +433,11 @@
 .seller-order-status{display:inline-block;border-radius:999px;background:#eff6ff;color:#1d4ed8;padding:7px 11px;font-size:12px;font-weight:750}
 .seller-order-address{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:600px){.seller-order-card{padding:15px}.seller-order-product img{width:75px;height:75px}}
+
+.seller-order-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.seller-order-actions .seller-btn{min-width:120px}
+.seller-order-reject{background:#fff!important;border-color:#dc2626!important;color:#b91c1c!important}
+.seller-order-actions .seller-btn:disabled{opacity:.55;cursor:not-allowed}
 </style>
 
 </head>
@@ -1904,6 +1909,55 @@ function renderSellerOrders(orders) {
       'seller-order-address');
     product.appendChild(info);
     card.appendChild(product);
+
+    // Only undecided items may be accepted or rejected.
+    const currentStatus = String(order.seller_order_status || 'new').toLowerCase();
+    if (currentStatus === 'new') {
+      const actions = document.createElement('div');
+      actions.className = 'seller-order-actions';
+
+      const accept = document.createElement('button');
+      accept.type = 'button';
+      accept.className = 'seller-btn';
+      accept.textContent = 'Accept Order';
+
+      const reject = document.createElement('button');
+      reject.type = 'button';
+      reject.className = 'seller-btn seller-order-reject';
+      reject.textContent = 'Reject Order';
+
+      const decide = async decision => {
+        if (decision === 'rejected' && !window.confirm(
+          'Reject this item? Cerood admin must handle customer refund or cancellation separately.'
+        )) return;
+
+        accept.disabled = true;
+        reject.disabled = true;
+        clearMessage('ordersMessage');
+        try {
+          const result = await apiRequest(
+            '/api/seller/orders/' + encodeURIComponent(order.order_item_id) + '/decision',
+            {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ decision })
+            }
+          );
+          await loadSellerOrders();
+          showMessage('ordersMessage', result.message || 'Order updated.', 'success');
+        } catch (error) {
+          showMessage('ordersMessage', error.message || 'Could not update order.', 'error');
+          accept.disabled = false;
+          reject.disabled = false;
+        }
+      };
+
+      accept.addEventListener('click', () => decide('accepted'));
+      reject.addEventListener('click', () => decide('rejected'));
+      actions.append(accept, reject);
+      card.appendChild(actions);
+    }
+
     container.appendChild(card);
   });
 }
