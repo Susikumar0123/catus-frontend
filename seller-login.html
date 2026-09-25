@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Seller Login | CEROOD</title>
+
+  <meta
+    name="robots"
+    content="noindex,nofollow"
+  >
+
+  <link
+    rel="stylesheet"
+    href="seller-auth.css"
+  >
+
+</head>
+
+<body>
+
+  <header class="seller-header">
+
+    <div class="seller-header-inner">
+
+      <a
+        href="/"
+        class="seller-logo"
+      >
+        CEROOD
+      </a>
+
+      <a
+        href="seller-register.html"
+        class="seller-header-link"
+      >
+        Become a Seller
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <main class="seller-auth-container">
+
+    <section class="seller-card">
+
+      <h1>Seller Login</h1>
+
+      <p>
+        Sign in to manage your CEROOD
+        seller account.
+      </p>
+
+
+      <form id="sellerLoginForm">
+
+        <div class="seller-field">
+
+          <label for="phone">
+            Mobile Number
+          </label>
+
+          <input
+            id="phone"
+            type="tel"
+            inputmode="numeric"
+            maxlength="10"
+            pattern="[6-9][0-9]{9}"
+            autocomplete="username"
+            placeholder="Enter registered mobile"
+            required
+          >
+
+        </div>
+
+
+        <div class="seller-field">
+
+          <label for="password">
+            Password
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter seller password"
+            required
+          >
+
+        </div>
+
+
+        <button
+          id="loginBtn"
+          class="seller-btn seller-btn-full"
+          type="submit"
+          style="margin-top:23px"
+        >
+
+          Login to Seller Dashboard
+
+        </button>
+
+      </form>
+
+
+      <div
+        id="loginMessage"
+        class="seller-message"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+
+      <div class="seller-link-row">
+
+        New to CEROOD?
+
+        <a href="seller-register.html">
+          Register as Seller
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script src="seller-config.js"></script>
+
+  <script>
+
+    'use strict';
+
+
+    const form =
+      document.getElementById(
+        'sellerLoginForm'
+      );
+
+    const button =
+      document.getElementById(
+        'loginBtn'
+      );
+
+    const message =
+      document.getElementById(
+        'loginMessage'
+      );
+
+
+    // ======================================
+    // DISPLAY LOGIN MESSAGE
+    // ======================================
+
+    function showMessage(
+      text,
+      type = 'info'
+    ) {
+
+      message.textContent = text;
+
+      message.className =
+        'seller-message ' + type;
+
+    }
+
+
+    // ======================================
+    // REDIRECT EXISTING SELLER
+    // ======================================
+
+    if (
+      window.CeroodSellerAuth.getToken()
+    ) {
+
+      window.location.replace(
+        window.CEROOD_SELLER.DASHBOARD_PAGE
+      );
+
+    }
+
+
+    // ======================================
+    // SELLER LOGIN
+    // ======================================
+
+    form.addEventListener(
+      'submit',
+      async function (event) {
+
+        event.preventDefault();
+
+
+        const phone =
+          document.getElementById(
+            'phone'
+          ).value.replace(/\D/g, '');
+
+
+        const password =
+          document.getElementById(
+            'password'
+          ).value;
+
+
+        if (
+          !/^[6-9]\d{9}$/.test(phone)
+        ) {
+
+          showMessage(
+            'Enter a valid mobile number.',
+            'error'
+          );
+
+          return;
+
+        }
+
+
+        if (!password) {
+
+          showMessage(
+            'Enter your password.',
+            'error'
+          );
+
+          return;
+
+        }
+
+
+        button.disabled = true;
+
+        button.textContent =
+          'Signing in...';
+
+
+        showMessage(
+          'Checking your seller account...'
+        );
+
+
+        try {
+
+          const response = await fetch(
+
+            window.CEROOD_SELLER.API_BASE_URL +
+            '/api/sellers/login',
+
+            {
+
+              method: 'POST',
+
+              headers: {
+
+                'Content-Type':
+                  'application/json'
+
+              },
+
+              body: JSON.stringify({
+
+                phone,
+
+                password
+
+              }),
+
+              cache: 'no-store'
+
+            }
+
+          );
+
+
+          const data =
+            await response.json();
+
+
+          if (
+
+            !response.ok ||
+
+            !data.success
+
+          ) {
+
+            if (
+              data.status === 'pending'
+            ) {
+
+              throw new Error(
+                'Your seller application is waiting for CEROOD admin approval.'
+              );
+
+            }
+
+
+            if (
+              data.status === 'rejected'
+            ) {
+
+              throw new Error(
+                'Your seller application was not approved.'
+              );
+
+            }
+
+
+            if (
+              data.status === 'suspended'
+            ) {
+
+              throw new Error(
+                'Your seller account is suspended.'
+              );
+
+            }
+
+
+            throw new Error(
+
+              data.message ||
+
+              'Seller login failed.'
+
+            );
+
+          }
+
+
+          if (
+
+            !data.token ||
+
+            !data.seller
+
+          ) {
+
+            throw new Error(
+              'Incomplete login response.'
+            );
+
+          }
+
+
+          // ==================================
+          // SAVE SELLER SESSION
+          // ==================================
+
+          window.CeroodSellerAuth.saveSession(
+
+            data.token,
+
+            data.seller
+
+          );
+
+
+          showMessage(
+            'Login successful. Opening dashboard...',
+            'success'
+          );
+
+
+          window.location.replace(
+
+            window.CEROOD_SELLER.DASHBOARD_PAGE
+
+          );
+
+
+        } catch (error) {
+
+          showMessage(
+
+            error.message ||
+
+            'Unable to login. Try again.',
+
+            'error'
+
+          );
+
+
+        } finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            'Login to Seller Dashboard';
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Seller Dashboard | CEROOD</title>
+
+  <meta
+    name="robots"
+    content="noindex,nofollow"
+  >
+
+  <link
+    rel="stylesheet"
+    href="seller-auth.css"
+  >
+
+</head>
+
+<body>
+
+  <header class="seller-header">
+
+    <div class="seller-header-inner">
+
+      <a
+        href="/"
+        class="seller-logo"
+      >
+        CEROOD
+      </a>
+
+      <button
+        id="logoutBtn"
+        class="seller-btn seller-btn-outline"
+        type="button"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <main class="seller-container">
+
+    <div
+      id="loadingPanel"
+      class="seller-card"
+    >
+
+      <p>
+        Loading your seller account...
+      </p>
+
+    </div>
+
+
+    <div
+      id="dashboardContent"
+      class="seller-hidden"
+    >
+
+      <div class="seller-dashboard-heading">
+
+        <div>
+
+          <h1 id="welcomeTitle">
+            Seller Dashboard
+          </h1>
+
+          <p>
+            Manage your CEROOD seller account.
+          </p>
+
+        </div>
+
+        <span
+          id="sellerStatus"
+          class="seller-badge"
+        >
+          Approved
+        </span>
+
+      </div>
+
+
+      <!-- ACCOUNT OVERVIEW -->
+
+      <div class="seller-grid">
+
+        <div class="seller-stat">
+
+          <div class="seller-stat-label">
+            Account Status
+          </div>
+
+          <div
+            id="statStatus"
+            class="seller-stat-value"
+          >
+            —
+          </div>
+
+        </div>
+
+
+        <div class="seller-stat">
+
+          <div class="seller-stat-label">
+            Commission Rate
+          </div>
+
+          <div
+            id="statCommission"
+            class="seller-stat-value"
+          >
+            —
+          </div>
+
+        </div>
+
+
+        <div class="seller-stat">
+
+          <div class="seller-stat-label">
+            Seller ID
+          </div>
+
+          <div
+            id="statSellerId"
+            class="seller-stat-value"
+            style="font-size:17px"
+          >
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- BUSINESS DETAILS -->
+
+      <section
+        class="seller-card"
+        style="margin-bottom:20px"
+      >
+
+        <h2>
+          Business Information
+        </h2>
+
+        <div class="seller-detail">
+
+          <span>Owner Name</span>
+
+          <span id="detailOwner">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>Shop Name</span>
+
+          <span id="detailShop">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>Mobile</span>
+
+          <span id="detailPhone">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>Email</span>
+
+          <span id="detailEmail">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>Business Type</span>
+
+          <span id="detailType">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>GST Number</span>
+
+          <span id="detailGST">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>Address</span>
+
+          <span id="detailAddress">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>District</span>
+
+          <span id="detailDistrict">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>State</span>
+
+          <span id="detailState">—</span>
+
+        </div>
+
+
+        <div class="seller-detail">
+
+          <span>Pincode</span>
+
+          <span id="detailPincode">—</span>
+
+        </div>
+
+      </section>
+
+
+      <!-- PRODUCT MANAGEMENT PLACEHOLDER -->
+
+      <section
+        class="seller-card"
+        style="margin-bottom:20px"
+      >
+
+        <h2>
+          My Products
+        </h2>
+
+        <div class="seller-empty">
+
+          <h3>
+            Product Management
+          </h3>
+
+          <p>
+            Seller product upload and admin product
+            approval will be enabled in the next
+            marketplace phase.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- ORDERS PLACEHOLDER -->
+
+      <section class="seller-card">
+
+        <h2>
+          Seller Orders
+        </h2>
+
+        <div class="seller-empty">
+
+          <h3>
+            Order Management
+          </h3>
+
+          <p>
+            Seller-specific orders, fulfillment,
+            commission and payout tracking
+            are not enabled yet.
+          </p>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <div
+      id="dashboardMessage"
+      class="seller-message"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+  </main>
+
+
+  <script src="seller-config.js"></script>
+
+  <script>
+
+    'use strict';
+
+
+    const $ = (id) =>
+      document.getElementById(id);
+
+
+    // ======================================
+    // LOGOUT
+    // ======================================
+
+    function logoutSeller() {
+
+      window.CeroodSellerAuth.clearSession();
+
+      window.location.replace(
+
+        window.CEROOD_SELLER.LOGIN_PAGE
+
+      );
+
+    }
+
+
+    $('logoutBtn').addEventListener(
+
+      'click',
+
+      logoutSeller
+
+    );
+
+
+    // ======================================
+    // DISPLAY SELLER DETAILS
+    // ======================================
+
+    function setText(id, value) {
+
+      $(id).textContent =
+
+        value === null ||
+
+        value === undefined ||
+
+        value === ''
+
+          ? '—'
+
+          : String(value);
+
+    }
+
+
+    function renderSeller(seller) {
+
+      setText(
+
+        'welcomeTitle',
+
+        'Welcome, ' +
+        (seller.shop_name || 'Seller')
+
+      );
+
+
+      setText(
+
+        'sellerStatus',
+
+        seller.status || '—'
+
+      );
+
+
+      setText(
+
+        'statStatus',
+
+        seller.status || '—'
+
+      );
+
+
+      setText(
+
+        'statCommission',
+
+        seller.commission_percent === null ||
+
+        seller.commission_percent === undefined
+
+          ? 'Not set'
+
+          : seller.commission_percent + '%'
+
+      );
+
+
+      setText(
+
+        'statSellerId',
+
+        seller.id
+
+          ? seller.id.slice(0, 8)
+
+          : '—'
+
+      );
+
+
+      setText(
+        'detailOwner',
+        seller.owner_name
+      );
+
+
+      setText(
+        'detailShop',
+        seller.shop_name
+      );
+
+
+      setText(
+        'detailPhone',
+        seller.phone
+      );
+
+
+      setText(
+        'detailEmail',
+        seller.email
+      );
+
+
+      setText(
+        'detailType',
+        seller.business_type
+      );
+
+
+      setText(
+        'detailGST',
+        seller.gst_number
+      );
+
+
+      setText(
+        'detailAddress',
+        seller.address
+      );
+
+
+      setText(
+        'detailDistrict',
+        seller.district
+      );
+
+
+      setText(
+        'detailState',
+        seller.state
+      );
+
+
+      setText(
+        'detailPincode',
+        seller.pincode
+      );
+
+
+      $('loadingPanel').classList.add(
+        'seller-hidden'
+      );
+
+
+      $('dashboardContent').classList.remove(
+        'seller-hidden'
+      );
+
+    }
+
+
+    // ======================================
+    // LOAD SELLER FROM BACKEND
+    // ======================================
+
+    async function loadSellerDashboard() {
+
+      const token =
+        window.CeroodSellerAuth.getToken();
+
+
+      if (!token) {
+
+        logoutSeller();
+
+        return;
+
+      }
+
+
+      try {
+
+        const {
+
+          response,
+
+          data
+
+        } = await window.CeroodSellerAuth.request(
+
+          '/api/sellers/me'
+
+        );
+
+
+        if (response.status === 401) {
+
+          logoutSeller();
+
+          return;
+
+        }
+
+
+        if (
+
+          !response.ok ||
+
+          !data.success ||
+
+          !data.seller
+
+        ) {
+
+          throw new Error(
+
+            data.message ||
+
+            'Unable to load seller account.'
+
+          );
+
+        }
+
+
+        // Only approved sellers
+        // can access dashboard.
+
+        if (
+
+          data.seller.status !==
+          'approved'
+
+        ) {
+
+          throw new Error(
+            'Seller account is not approved.'
+          );
+
+        }
+
+
+        renderSeller(
+          data.seller
+        );
+
+
+      } catch (error) {
+
+        $('loadingPanel').classList.add(
+          'seller-hidden'
+        );
+
+
+        const message =
+          $('dashboardMessage');
+
+
+        message.textContent =
+
+          error.message ||
+
+          'Unable to load dashboard.';
+
+
+        message.className =
+          'seller-message error';
+
+
+        if (
+          !window.CeroodSellerAuth.getToken()
+        ) {
+
+          logoutSeller();
+
+        }
+
+      }
+
+    }
+
+
+    // ======================================
+    // INITIALIZE DASHBOARD
+    // ======================================
+
+    loadSellerDashboard();
+
+  </script>
+
+</body>
+
+</html>
