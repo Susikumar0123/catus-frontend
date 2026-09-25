@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cerood-pwa-v1';
+const CACHE_NAME = 'cerood-pwa-v2';
 
 const APP_SHELL = [
     '/',
@@ -29,16 +29,57 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
+// ==========================================
+// CEROOD SAFE FETCH OPTIMIZATION
+// ==========================================
+
 self.addEventListener('fetch', event => {
 
-    if (event.request.method !== 'GET') return;
+    const request = event.request;
+    const url = new URL(request.url);
+
+    // Only handle GET requests
+    if (request.method !== 'GET') return;
+
+    // Do not intercept external API requests
+    if (url.origin !== self.location.origin) return;
+
+    // Do not intercept dynamic API requests
+    if (url.pathname.startsWith('/api/')) return;
+
+    // Do not intercept checkout or payment pages
+    if (
+        url.pathname.includes('checkout') ||
+        url.pathname.includes('payment')
+    ) {
+        return;
+    }
+
+    // Do not intercept authentication requests
+    if (
+        url.pathname.includes('login') ||
+        url.pathname.includes('otp') ||
+        url.pathname.includes('auth')
+    ) {
+        return;
+    }
+
+    // Let the browser handle other requests normally
+    // Preserve offline fallback for existing cached files
 
     event.respondWith(
-        fetch(event.request)
-            .then(response => {
-                return response;
-            })
-            .catch(() => caches.match(event.request))
+        fetch(request).catch(async () => {
+
+            const cachedResponse =
+                await caches.match(request);
+
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            return Response.error();
+
+        })
     );
 
 });
