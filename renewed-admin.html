@@ -1,4 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cerood Renewed — Admin</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Cerood Renewed — Admin</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/><style>
 
 :root{--purple:#6945d8;--deep:#4124a2;--ink:#211a36;--line:#eae5f5}*{box-sizing:border-box}body{margin:0;background:#f8f7fc;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{display:flex;min-height:100vh}.sidebar{width:246px;flex-shrink:0;background:white;border-right:1px solid var(--line);padding:22px 12px;display:flex;flex-direction:column;gap:7px}.brand{padding:8px 12px 24px;border-bottom:1px solid var(--line);margin-bottom:12px;font-weight:900;font-size:21px;letter-spacing:-.05em}.brand span{display:block;color:var(--purple);font-size:11px;letter-spacing:.17em;margin-top:4px}.nav{width:100%;text-align:left;border:0;border-radius:12px;padding:14px 12px;background:transparent;color:#675e79;font-weight:700;cursor:pointer}.nav i{width:25px}.nav.active,.nav:hover{background:#f2eeff;color:var(--deep)}.sidebar-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:16px}.content{flex:1;min-width:0}.top{background:white;border-bottom:1px solid var(--line);padding:20px 25px;display:flex;justify-content:space-between;gap:12px;align-items:center}.top h1{font-size:21px;margin:0}.top a{font-size:12px;text-decoration:none;color:var(--deep);font-weight:750}.workspace{padding:24px;max-width:1550px;margin:auto}.main-tab-pane{display:none}.main-tab-pane.active{display:block}.empty{background:#fff;border:1px solid var(--line);border-radius:17px;padding:30px;line-height:1.8}.empty h2{margin-top:0}.empty p{color:#64748b;font-size:13px}.renewed-admin{padding:0}.renewed-admin-head h2{font-size:23px}.renewed-panel,.renewed-stats>div{box-shadow:0 8px 30px rgba(43,27,90,.035)}.renewed-draft-image{object-fit:cover}.renewed-draft{overflow:hidden}.renewed-draft h4{overflow-wrap:anywhere}
 
@@ -38,77 +39,90 @@
 .seller-product-status.approved{background:#dcfce7;color:#166534}
 .seller-product-status.rejected{background:#fee2e2;color:#991b1b}
 </style>
-</head><body><div class="shell"><aside class="sidebar"><div class="brand">CEROOD<span>RENEWED ADMIN</span></div><button class="nav active" data-tab="inventory"><i class="fa-solid fa-boxes-stacked"></i> Products & Stock</button><button class="nav" data-tab="orders"><i class="fa-solid fa-bag-shopping"></i> Renewed Orders</button><button class="nav" data-tab="delivery"><i class="fa-solid fa-truck"></i> Delivery Tracking</button><button class="nav" data-tab="payments"><i class="fa-solid fa-credit-card"></i> Payments</button><button class="nav" data-tab="sellers"><i class="fa-solid fa-users"></i> Seller Management</button><button class="nav" data-tab="seller-products"><i class="fa-solid fa-clipboard-check"></i> Seller Product Approval</button><a class="nav" href="/notify-admin.html" style="display:block;text-decoration:none">🔔 Notify Studio</a><div class="sidebar-foot"><a class="nav" style="display:block;text-decoration:none" href="/renewed.html"><i class="fa-solid fa-store"></i> Open Store</a><button class="nav" id="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div></aside><div class="content"><header class="top"><h1 id="heading">Products & Stock</h1><a href="/renewed.html">View Renewed Store ↗</a></header><main class="workspace"><div id="tab-inventory" class="main-tab-pane active"><div id="page-renewed-store" class="main-tab-pane active">
+<style id="cerood-renewed-add-layout-fix">
+/* CEROOD inventory / add-product layout correction: scoped to Renewed admin only */
+#tab-inventory .renewed-inventory-list-wrap{display:block;width:100%;min-width:0}
+#tab-inventory .renewed-draft-panel{width:100%;max-width:none;margin:0}
+#tab-inventory .renewed-draft-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px}
+#tab-inventory .renewed-draft{min-width:0;grid-template-columns:76px minmax(0,1fr)}
+#tab-inventory .renewed-draft-image{width:76px;height:76px}
+#tab-add-renewed .cerood-add-renewed-page{max-width:1040px;margin:0 auto;padding:4px 0 36px}
+#tab-add-renewed #renewedDraftForm{display:block!important;position:static!important;float:none!important;clear:both!important;width:100%!important;max-width:100%!important;margin:0!important;grid-column:auto!important;transform:none!important;visibility:visible!important;opacity:1!important}
+#tab-add-renewed .renewed-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+#tab-add-renewed .renewed-fields .renewed-wide{grid-column:1/-1}
+#tab-add-renewed .renewed-fields input,#tab-add-renewed .renewed-fields select,#tab-add-renewed .renewed-fields textarea{width:100%;max-width:100%;min-width:0}
+#tab-add-renewed .renewed-panel-title{margin-bottom:22px}
+@media(max-width:650px){#tab-add-renewed .renewed-fields{grid-template-columns:minmax(0,1fr)}#tab-add-renewed .renewed-fields .renewed-wide{grid-column:auto}#tab-add-renewed .renewed-admin-head h2{font-size:20px}}
+</style></head><body><div class="shell"><aside class="sidebar"><div class="brand">CEROOD<span>RENEWED ADMIN</span></div><button class="nav active" data-tab="inventory"><i class="fa-solid fa-boxes-stacked"></i> Products &amp; Stock</button><button class="nav" data-tab="add-renewed" type="button"><i class="fa-solid fa-circle-plus"></i> Add Renewed Product</button><button class="nav" data-tab="orders"><i class="fa-solid fa-bag-shopping"></i> Renewed Orders</button><button class="nav" data-tab="delivery"><i class="fa-solid fa-truck"></i> Delivery Tracking</button><button class="nav" data-tab="payments"><i class="fa-solid fa-credit-card"></i> Payments</button><button class="nav" data-tab="sellers"><i class="fa-solid fa-users"></i> Seller Management</button><button class="nav" data-tab="seller-products"><i class="fa-solid fa-clipboard-check"></i> Seller Product Approval</button><a class="nav" href="/notify-admin.html" style="display:block;text-decoration:none">🔔 Notify Studio</a><div class="sidebar-foot"><a class="nav" href="/renewed.html" style="display:block;text-decoration:none"><i class="fa-solid fa-store"></i> Open Store</a><button class="nav" id="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div></aside><div class="content"><header class="top"><h1 id="heading">Products &amp; Stock</h1><a href="/renewed.html">View Renewed Store ↗</a></header><main class="workspace"><div class="main-tab-pane active" id="tab-inventory"><div class="main-tab-pane active" id="page-renewed-store">
 
  <div class="renewed-admin">
 
-  <div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD RENEWED · INVENTORY</span><h2>Second-hand Product Management</h2><p>Manage refurbished and pre-owned appliance listings, drafts and published inventory.</p></div><a href="/renewed.html" target="_blank" rel="noopener" class="renewed-link">Open Renewed Store ↗</a></div>
+  <div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD RENEWED · INVENTORY</span><h2>Second-hand Product Management</h2><p>Manage refurbished and pre-owned appliance listings, drafts and published inventory.</p></div><a class="renewed-link" href="/renewed.html" rel="noopener" target="_blank">Open Renewed Store ↗</a><button class="renewed-primary" id="renewedOpenAdd" type="button">+ Add Renewed Product</button></div>
 
-  <div class="renewed-warning"><i class="fa-solid fa-circle-info"></i> <strong>Phase 4:</strong> Products save to the Cerood backend and Supabase. Only published items with stock above zero appear in the store. COD checkout is enabled when the backend permits it.</div>
+  <div class="renewed-warning"><i class="fa-solid fa-circle-info"></i> <strong>Phase 4:</strong> Products save to the Cerood backend and Supabase. Only published items with stock above zero appear in the store. COD checkout is enabled when the backend permits it. Use Add Renewed Product for CEROOD-owned listings; seller listings require separate approval.</div>
 
   <div class="renewed-stats"><div><small>All products</small><strong id="renewedTotal">0</strong></div><div><small>Refurbished</small><strong id="renewedRefurbished">0</strong></div><div><small>Pre-owned</small><strong id="renewedUsed">0</strong></div><div><small>Published</small><strong id="renewedPublished">0</strong></div></div>
 
-  <div class="renewed-columns">
+  <div class="renewed-inventory-list-wrap">
 
-   <form id="renewedDraftForm" class="renewed-panel" autocomplete="off">
+   
 
-    <div class="renewed-panel-title"><h3 id="renewedFormHeading">Add renewed product</h3><button type="button" class="renewed-light" onclick="renewedResetForm()">Clear form</button></div>
-
-    <input type="hidden" id="renewedDraftId">
-
-    <div class="renewed-fields">
-
-      <label class="renewed-wide">Product title *<input id="renewedName" required maxlength="140" placeholder="Samsung 32-inch Smart TV"></label>
-
-      <label>Category *<select id="renewedCategory" required><option value="">Select category</option><option value="tv">Smart TV</option><option value="refrigerator">Refrigerator</option><option value="washing-machine">Washing Machine</option><option value="ac">Air Conditioner</option><option value="laptop">Laptop</option><option value="other">Other Appliance</option></select></label>
-
-      <label>Condition *<select id="renewedCondition" required><option value="">Select condition</option><option value="Refurbished">Refurbished</option><option value="Pre-owned">Pre-owned</option><option value="Open box">Open box</option></select></label>
-
-      <label>Listing status<select id="renewedStatus"><option value="draft">Draft (not visible)</option><option value="published">Published (visible if in stock)</option></select></label>
-
-      <label>Brand<input id="renewedBrand" maxlength="80" placeholder="Samsung"></label>
-
-      <label>Model<input id="renewedModel" maxlength="80" placeholder="UA32…"></label>
-
-      <label>Selling price (₹) *<input id="renewedPrice" type="number" min="1" step="1" required placeholder="4999"></label>
-
-      <label>Reference price (₹)<input id="renewedCompare" type="number" min="0" step="1" placeholder="Optional"></label>
-
-      <label>Available units *<input id="renewedStock" type="number" min="0" max="99999" step="1" required value="1"></label>
-
-      <label>Warranty (days)<input id="renewedWarranty" type="number" min="0" max="3650" step="1" value="0"></label>
-
-      <label>Product location<input id="renewedLocation" maxlength="100" placeholder="Dharmapuri"></label>
-
-      <label>Delivery information<input id="renewedDelivery" maxlength="160" placeholder="Confirm by pincode"></label>
-
-      <label class="renewed-wide">Actual product photo URL<input id="renewedImage" type="url" placeholder="https://…/actual-product.jpg"></label>
-
-      <label class="renewed-wide">Working demo video URL<input id="renewedVideo" type="url" placeholder="https://…/working-demo.mp4"></label>
-
-      <label class="renewed-wide">Product condition / known defects<textarea id="renewedDefects" rows="3" maxlength="2000" placeholder="Scratches, replaced parts, faults, testing results…"></textarea></label>
-
-      <label class="renewed-wide">Accessories included<textarea id="renewedAccessories" rows="2" maxlength="1000" placeholder="Remote, stand, power cable…"></textarea></label>
-
-      <label class="renewed-wide">Warranty terms / exclusions<textarea id="renewedTerms" rows="2" maxlength="1500" placeholder="Exactly what is covered, if any…"></textarea></label>
-
-    </div>
-
-    <div class="renewed-form-actions"><button type="submit" class="renewed-primary"><i class="fa-solid fa-floppy-disk"></i> Save product to server</button><span id="renewedMessage" role="status"></span></div>
-
-   </form>
-
-   <section class="renewed-panel renewed-draft-panel"><div class="renewed-panel-title"><h3>Saved products</h3><span id="renewedDraftCount">0 items</span></div><input id="renewedDraftSearch" type="search" placeholder="Search renewed products…" aria-label="Search renewed drafts"><div id="renewedDraftList" class="renewed-draft-list"><p>No drafts yet.</p></div></section>
+   <section class="renewed-panel renewed-draft-panel"><div class="renewed-panel-title"><h3>Saved products</h3><span id="renewedDraftCount">0 items</span></div><input aria-label="Search renewed drafts" id="renewedDraftSearch" placeholder="Search renewed products…" type="search"/><div class="renewed-draft-list" id="renewedDraftList"><p>No drafts yet.</p></div></section>
 
   </div>
 
  </div>
-
 </div>
 
 
 
-            </div><section id="tab-orders" class="main-tab-pane empty"><h2>Renewed Orders <button class="renewed-light" id="refreshRenewedOrders">↻ Refresh</button></h2><p>Actual orders from the protected Cerood Renewed backend. Paid online orders and confirmed COD orders can be dispatched.</p><p id="renewedOrdersMessage" role="status">Open Renewed Orders to load.</p><div class="renewed-payment-filters" role="group" aria-label="Filter renewed orders by payment method"><button type="button" class="renewed-payment-filter active" data-renewed-payment-filter="all" aria-pressed="true">All orders <span id="renewedCountAll">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="online" aria-pressed="false">Online paid <span id="renewedCountOnline">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="cod" aria-pressed="false">COD orders <span id="renewedCountCod">0</span></button><button type="button" class="renewed-payment-filter" data-renewed-payment-filter="other" aria-pressed="false">Other / pending <span id="renewedCountOther">0</span></button></div><div id="renewedOrdersList" class="renewed-order-list"></div></section><section id="tab-delivery" class="main-tab-pane empty"><h2>Delivery Tracking</h2><p>Manage delivery status from Renewed Orders. The verified customer dashboard reads the same order status.</p><button class="renewed-primary" type="button" id="openRenewedOrders">Open Renewed Orders</button></section><section id="tab-payments" class="main-tab-pane empty"><h2>Payments</h2><p>Verified Razorpay payments and refunds will appear here after the admin payment API is connected.</p></section><section id="tab-sellers" class="main-tab-pane">
+            </div><section class="main-tab-pane" id="tab-add-renewed"><div class="renewed-admin cerood-add-renewed-page"><div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD RENEWED · INVENTORY</span><h2>Add Renewed Product</h2><p>Create or edit CEROOD-owned product listings. Seller submissions are reviewed separately under Seller Product Approval.</p></div></div><form autocomplete="off" class="renewed-panel" id="renewedDraftForm">
+
+    <div class="renewed-panel-title"><h3 id="renewedFormHeading">Add renewed product</h3><button class="renewed-light" onclick="renewedResetForm()" type="button">Clear form</button></div>
+
+    <input id="renewedDraftId" type="hidden"/>
+
+    <div class="renewed-fields">
+
+      <label class="renewed-wide">Product title *<input id="renewedName" maxlength="140" placeholder="Samsung 32-inch Smart TV" required=""/></label>
+
+      <label>Category *<select id="renewedCategory" required=""><option value="">Select category</option><option value="tv">Smart TV</option><option value="refrigerator">Refrigerator</option><option value="washing-machine">Washing Machine</option><option value="ac">Air Conditioner</option><option value="laptop">Laptop</option><option value="other">Other Appliance</option></select></label>
+
+      <label>Condition *<select id="renewedCondition" required=""><option value="">Select condition</option><option value="Refurbished">Refurbished</option><option value="Pre-owned">Pre-owned</option><option value="Open box">Open box</option></select></label>
+
+      <label>Listing status<select id="renewedStatus"><option value="draft">Draft (not visible)</option><option value="published">Published (visible if in stock)</option></select></label>
+
+      <label>Brand<input id="renewedBrand" maxlength="80" placeholder="Samsung"/></label>
+
+      <label>Model<input id="renewedModel" maxlength="80" placeholder="UA32…"/></label>
+
+      <label>Selling price (₹) *<input id="renewedPrice" min="1" placeholder="4999" required="" step="1" type="number"/></label>
+
+      <label>Reference price (₹)<input id="renewedCompare" min="0" placeholder="Optional" step="1" type="number"/></label>
+
+      <label>Available units *<input id="renewedStock" max="99999" min="0" required="" step="1" type="number" value="1"/></label>
+
+      <label>Warranty (days)<input id="renewedWarranty" max="3650" min="0" step="1" type="number" value="0"/></label>
+
+      <label>Product location<input id="renewedLocation" maxlength="100" placeholder="Dharmapuri"/></label>
+
+      <label>Delivery information<input id="renewedDelivery" maxlength="160" placeholder="Confirm by pincode"/></label>
+
+      <label class="renewed-wide">Actual product photo URL<input id="renewedImage" placeholder="https://…/actual-product.jpg" type="url"/></label>
+
+      <label class="renewed-wide">Working demo video URL<input id="renewedVideo" placeholder="https://…/working-demo.mp4" type="url"/></label>
+
+      <label class="renewed-wide">Product condition / known defects<textarea id="renewedDefects" maxlength="2000" placeholder="Scratches, replaced parts, faults, testing results…" rows="3"></textarea></label>
+
+      <label class="renewed-wide">Accessories included<textarea id="renewedAccessories" maxlength="1000" placeholder="Remote, stand, power cable…" rows="2"></textarea></label>
+
+      <label class="renewed-wide">Warranty terms / exclusions<textarea id="renewedTerms" maxlength="1500" placeholder="Exactly what is covered, if any…" rows="2"></textarea></label>
+
+    </div>
+
+    <div class="renewed-form-actions"><button class="renewed-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save product to server</button><span id="renewedMessage" role="status"></span></div>
+
+   </form></div></section><section class="main-tab-pane empty" id="tab-orders"><h2>Renewed Orders <button class="renewed-light" id="refreshRenewedOrders">↻ Refresh</button></h2><p>Actual orders from the protected Cerood Renewed backend. Paid online orders and confirmed COD orders can be dispatched.</p><p id="renewedOrdersMessage" role="status">Open Renewed Orders to load.</p><div aria-label="Filter renewed orders by payment method" class="renewed-payment-filters" role="group"><button aria-pressed="true" class="renewed-payment-filter active" data-renewed-payment-filter="all" type="button">All orders <span id="renewedCountAll">0</span></button><button aria-pressed="false" class="renewed-payment-filter" data-renewed-payment-filter="online" type="button">Online paid <span id="renewedCountOnline">0</span></button><button aria-pressed="false" class="renewed-payment-filter" data-renewed-payment-filter="cod" type="button">COD orders <span id="renewedCountCod">0</span></button><button aria-pressed="false" class="renewed-payment-filter" data-renewed-payment-filter="other" type="button">Other / pending <span id="renewedCountOther">0</span></button></div><div class="renewed-order-list" id="renewedOrdersList"></div></section><section class="main-tab-pane empty" id="tab-delivery"><h2>Delivery Tracking</h2><p>Manage delivery status from Renewed Orders. The verified customer dashboard reads the same order status.</p><button class="renewed-primary" id="openRenewedOrders" type="button">Open Renewed Orders</button></section><section class="main-tab-pane empty" id="tab-payments"><h2>Payments</h2><p>Verified Razorpay payments and refunds will appear here after the admin payment API is connected.</p></section><section class="main-tab-pane" id="tab-sellers">
 
  <div class="renewed-admin">
 
@@ -116,50 +130,49 @@
 
   <div class="renewed-panel">
 
-   <div class="seller-admin-toolbar"><input id="sellerAdminSearch" type="search" placeholder="Search shop, owner, mobile, district…" aria-label="Search sellers"><button type="button" id="sellerAdminRefresh">↻ Refresh sellers</button></div>
+   <div class="seller-admin-toolbar"><input aria-label="Search sellers" id="sellerAdminSearch" placeholder="Search shop, owner, mobile, district…" type="search"/><button id="sellerAdminRefresh" type="button">↻ Refresh sellers</button></div>
 
-   <div class="seller-admin-filters" role="group" aria-label="Seller status filters">
+   <div aria-label="Seller status filters" class="seller-admin-filters" role="group">
 
-    <button type="button" data-seller-filter="all" class="active" aria-pressed="true">All <span id="sellerCountAll">0</span></button>
+    <button aria-pressed="true" class="active" data-seller-filter="all" type="button">All <span id="sellerCountAll">0</span></button>
 
-    <button type="button" data-seller-filter="pending" aria-pressed="false">Pending <span id="sellerCountPending">0</span></button>
+    <button aria-pressed="false" data-seller-filter="pending" type="button">Pending <span id="sellerCountPending">0</span></button>
 
-    <button type="button" data-seller-filter="approved" aria-pressed="false">Approved <span id="sellerCountApproved">0</span></button>
+    <button aria-pressed="false" data-seller-filter="approved" type="button">Approved <span id="sellerCountApproved">0</span></button>
 
-    <button type="button" data-seller-filter="rejected" aria-pressed="false">Rejected <span id="sellerCountRejected">0</span></button>
+    <button aria-pressed="false" data-seller-filter="rejected" type="button">Rejected <span id="sellerCountRejected">0</span></button>
 
-    <button type="button" data-seller-filter="suspended" aria-pressed="false">Suspended <span id="sellerCountSuspended">0</span></button>
+    <button aria-pressed="false" data-seller-filter="suspended" type="button">Suspended <span id="sellerCountSuspended">0</span></button>
 
    </div>
 
-   <p id="sellerAdminMessage" class="seller-admin-message" role="status" aria-live="polite">Open Seller Management to load applications.</p>
+   <p aria-live="polite" class="seller-admin-message" id="sellerAdminMessage" role="status">Open Seller Management to load applications.</p>
 
-   <div id="sellerAdminList" class="seller-admin-list"></div>
+   <div class="seller-admin-list" id="sellerAdminList"></div>
 
   </div>
 
  </div>
-
 </section>
 <!-- CEROOD Seller Product Approval: isolated admin tab -->
-<section id="tab-seller-products" class="main-tab-pane">
-  <div class="renewed-admin">
-    <div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD · MARKETPLACE</span><h2>Seller Product Approval</h2><p>Review actual product photos, demo videos, condition and warranty before publishing.</p></div></div>
-    <div class="renewed-panel">
-      <div class="seller-admin-toolbar">
-        <input id="sellerProductSearch" type="search" placeholder="Search product, seller, brand…" aria-label="Search seller products">
-        <button id="sellerProductRefresh" type="button">↻ Refresh products</button>
-      </div>
-      <div class="seller-admin-filters" role="group" aria-label="Product approval filters">
-        <button type="button" data-product-filter="all" class="active" aria-pressed="true">All <span id="sellerProductCountAll">(0)</span></button>
-        <button type="button" data-product-filter="pending" aria-pressed="false">Pending <span id="sellerProductCountPending">(0)</span></button>
-        <button type="button" data-product-filter="approved" aria-pressed="false">Approved <span id="sellerProductCountApproved">(0)</span></button>
-        <button type="button" data-product-filter="rejected" aria-pressed="false">Rejected <span id="sellerProductCountRejected">(0)</span></button>
-      </div>
-      <p id="sellerProductMessage" class="seller-admin-message" role="status" aria-live="polite">Open Seller Product Approval to load products.</p>
-      <div id="sellerProductList" class="seller-admin-list"></div>
-    </div>
-  </div>
+<section class="main-tab-pane" id="tab-seller-products">
+<div class="renewed-admin">
+<div class="renewed-admin-head"><div><span class="renewed-kicker">CEROOD · MARKETPLACE</span><h2>Seller Product Approval</h2><p>Review actual product photos, demo videos, condition and warranty before publishing.</p></div></div>
+<div class="renewed-panel">
+<div class="seller-admin-toolbar">
+<input aria-label="Search seller products" id="sellerProductSearch" placeholder="Search product, seller, brand…" type="search"/>
+<button id="sellerProductRefresh" type="button">↻ Refresh products</button>
+</div>
+<div aria-label="Product approval filters" class="seller-admin-filters" role="group">
+<button aria-pressed="true" class="active" data-product-filter="all" type="button">All <span id="sellerProductCountAll">(0)</span></button>
+<button aria-pressed="false" data-product-filter="pending" type="button">Pending <span id="sellerProductCountPending">(0)</span></button>
+<button aria-pressed="false" data-product-filter="approved" type="button">Approved <span id="sellerProductCountApproved">(0)</span></button>
+<button aria-pressed="false" data-product-filter="rejected" type="button">Rejected <span id="sellerProductCountRejected">(0)</span></button>
+</div>
+<p aria-live="polite" class="seller-admin-message" id="sellerProductMessage" role="status">Open Seller Product Approval to load products.</p>
+<div class="seller-admin-list" id="sellerProductList"></div>
+</div>
+</div>
 </section>
 </main></div></div><script>
 
@@ -243,7 +256,7 @@
 
      actions.className='renewed-draft-actions';
 
-     const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.onclick=()=>{for(const [k,v] of Object.entries(fieldMap))$(k).value=p[v]??'';$('DraftId').value=p.id;$('FormHeading').textContent='Edit renewed product';document.getElementById('renewedDraftForm').scrollIntoView({behavior:'smooth',block:'start'})};
+     const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.onclick=()=>{for(const [k,v] of Object.entries(fieldMap))$(k).value=p[v]??'';$('DraftId').value=p.id;$('FormHeading').textContent='Edit renewed product';document.querySelector('[data-tab="add-renewed"]').click();document.getElementById('renewedDraftForm').scrollIntoView({behavior:'smooth',block:'start'})};
 
      const del=document.createElement('button');del.type='button';del.className='renewed-delete';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Permanently delete this product?'))return;try{await request('/api/admin/renewed/products/'+encodeURIComponent(p.id),'DELETE');message('Product deleted.');await renewedRenderDrafts()}catch(e){message(e.message,true)}};
 
@@ -271,7 +284,7 @@
 
    const id=$('DraftId').value;const path='/api/admin/renewed/products'+(id?'/'+encodeURIComponent(id):'');
 
-   try{await request(path,id?'PUT':'POST',payload);renewedResetForm();message('Saved to Supabase successfully.');await renewedRenderDrafts()}
+   try{await request(path,id?'PUT':'POST',payload);renewedResetForm();message('Saved to Supabase successfully.');await renewedRenderDrafts();document.querySelector('[data-tab="inventory"]').click()}
 
    catch(err){message(err.message,true)}
 
@@ -618,4 +631,4 @@ document.querySelectorAll('[data-product-filter]').forEach(button=>button.addEve
 document.querySelector('[data-tab="seller-products"]').addEventListener('click',window.loadSellerProducts);
 })();
 </script>
-</body></html>
+<script id="cerood-renewed-inventory-navigation">document.getElementById('renewedOpenAdd').addEventListener('click',()=>{window.renewedResetForm();document.querySelector('[data-tab="add-renewed"]').click();});</script></body></html>
