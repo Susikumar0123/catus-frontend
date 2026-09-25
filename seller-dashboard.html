@@ -1,639 +1,4820 @@
 
+
 <!DOCTYPE html>
+
 <html lang="en">
+
+
 
 <head>
 
-  <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
 
-  <title>Seller Dashboard | CEROOD</title>
+<meta charset="UTF-8">
 
-  <meta
-    name="robots"
-    content="noindex,nofollow"
-  >
 
-  <link
-    rel="stylesheet"
-    href="seller-auth.css"
-  >
 
+<meta
+
+  name="viewport"
+
+  content="width=device-width, initial-scale=1"
+
+>
+
+
+
+<title>CEROOD Seller Dashboard</title>
+
+
+
+<meta
+
+  name="robots"
+
+  content="noindex,nofollow"
+
+>
+
+
+
+<link
+
+  rel="stylesheet"
+
+  href="seller-auth.css"
+
+>
+
+
+
+<style>
+
+
+
+.seller-tabs {
+
+  display: flex;
+
+  gap: 10px;
+
+  overflow-x: auto;
+
+  margin-bottom: 22px;
+
+  padding-bottom: 5px;
+
+}
+
+
+
+.seller-tab {
+
+  flex-shrink: 0;
+
+  border: 1px solid #dbe3ef;
+
+  background: #fff;
+
+  color: #334155;
+
+  border-radius: 10px;
+
+  padding: 12px 17px;
+
+  font-weight: 700;
+
+}
+
+
+
+.seller-tab.active {
+
+  background: #175cd3;
+
+  border-color: #175cd3;
+
+  color: #fff;
+
+}
+
+
+
+.seller-section {
+
+  display: none;
+
+}
+
+
+
+.seller-section.active {
+
+  display: block;
+
+}
+
+
+
+.product-form-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 15px;
+
+}
+
+
+
+.product-field {
+
+  margin-bottom: 16px;
+
+}
+
+
+
+.product-field label {
+
+  display: block;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  margin-bottom: 8px;
+
+}
+
+
+
+.product-field input,
+
+.product-field select,
+
+.product-field textarea {
+
+  width: 100%;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 10px;
+
+  padding: 13px;
+
+  background: #fff;
+
+  color: #111827;
+
+  font: inherit;
+
+}
+
+
+
+.product-field textarea {
+
+  min-height: 95px;
+
+  resize: vertical;
+
+}
+
+
+
+.product-field small {
+
+  display: block;
+
+  margin-top: 6px;
+
+  color: #64748b;
+
+  line-height: 1.5;
+
+}
+
+
+
+.media-preview {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 15px;
+
+  margin-top: 12px;
+
+}
+
+
+
+.media-preview img,
+
+.media-preview video {
+
+  width: 180px;
+
+  height: 140px;
+
+  object-fit: contain;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+}
+
+
+
+.product-list {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 17px;
+
+}
+
+
+
+.product-card {
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 15px;
+
+  overflow: hidden;
+
+  background: #fff;
+
+}
+
+
+
+.product-card img {
+
+  display: block;
+
+  width: 100%;
+
+  height: 190px;
+
+  object-fit: contain;
+
+  background: #f8fafc;
+
+}
+
+
+
+.product-card-body {
+
+  padding: 17px;
+
+}
+
+
+
+.product-card h3 {
+
+  margin: 0 0 10px;
+
+  font-size: 17px;
+
+}
+
+
+
+.product-price {
+
+  font-size: 22px;
+
+  font-weight: 800;
+
+  margin: 10px 0;
+
+}
+
+
+
+.product-meta {
+
+  font-size: 13px;
+
+  color: #64748b;
+
+  margin: 7px 0;
+
+}
+
+
+
+.product-actions {
+
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 15px;
+
+}
+
+
+
+.product-actions button {
+
+  flex: 1;
+
+  padding: 11px;
+
+  border-radius: 9px;
+
+  font-weight: 700;
+
+  border: 1px solid #175cd3;
+
+  background: #fff;
+
+  color: #175cd3;
+
+}
+
+
+
+.product-actions button.danger {
+
+  color: #b91c1c;
+
+  border-color: #fecaca;
+
+}
+
+
+
+.approval-badge {
+
+  display: inline-block;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  text-transform: capitalize;
+
+}
+
+
+
+.approval-badge.pending {
+
+  background: #fef3c7;
+
+  color: #92400e;
+
+}
+
+
+
+.approval-badge.approved {
+
+  background: #dcfce7;
+
+  color: #166534;
+
+}
+
+
+
+.approval-badge.rejected {
+
+  background: #fee2e2;
+
+  color: #991b1b;
+
+}
+
+
+
+.form-actions {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+}
+
+
+
+@media (max-width: 850px) {
+
+
+
+  .product-list {
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+
+
+}
+
+
+
+@media (max-width: 600px) {
+
+
+
+  .product-form-grid,
+
+  .product-list {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+
+  .seller-container {
+
+    width: calc(100% - 24px);
+
+  }
+
+
+
+  .media-preview img,
+
+  .media-preview video {
+
+    width: 100%;
+
+    height: 190px;
+
+  }
+
+
+
+}
+
+
+
+</style>
+
+
+
+<style id="cerood-seller-dashboard-fix">
+*{box-sizing:border-box}body{margin:0;background:#f6f7fb;color:#14213a;font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+.seller-header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:5}
+.seller-header-inner{max-width:1180px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.seller-logo{font-weight:900;font-size:24px;letter-spacing:.06em;color:#175cd3;text-decoration:none}
+.seller-container{max-width:1180px;width:calc(100% - 32px);margin:30px auto 70px}
+.seller-hidden{display:none!important}.seller-dashboard-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:0 0 22px}
+.seller-dashboard-heading h1{margin:0 0 4px;font-size:clamp(22px,3vw,29px)}.seller-dashboard-heading p{margin:0;color:#64748b;font-size:14px}
+.seller-card,.seller-stat{background:white;border:1px solid #e2e8f0;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 5px 24px #14213a08}
+.seller-card h2{margin-top:0}.seller-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.seller-stat-label{font-size:13px;color:#64748b}.seller-stat-value{font-size:28px;font-weight:850;margin-top:7px}
+.seller-btn{border:1px solid #175cd3;border-radius:10px;padding:11px 16px;background:#175cd3;color:white;font:inherit;font-size:13px;font-weight:750;cursor:pointer;margin:0}
+.seller-btn-outline{background:white;color:#175cd3}.seller-badge{border-radius:999px;background:#dcfce7;color:#166534;padding:7px 13px;font-size:12px;font-weight:800;text-transform:capitalize}
+.seller-message:not(:empty){padding:12px 14px;margin:12px 0 18px;border-radius:10px;background:#eff6ff;color:#1d4ed8;font-size:13px}.seller-message.error:not(:empty){background:#fef2f2;color:#b91c1c}.seller-message.success:not(:empty){background:#f0fdf4;color:#166534}
+.seller-detail{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #edf2f7;font-size:13px;overflow-wrap:anywhere}.seller-detail span:first-child{font-weight:700;color:#475569}
+.seller-tabs button{margin-top:0;cursor:pointer}.product-form-grid>*{min-width:0}.product-field input,.product-field select,.product-field textarea{box-sizing:border-box;margin-top:0;max-width:100%}.product-actions button{margin:0;cursor:pointer}
+@media(max-width:650px){.seller-grid{grid-template-columns:1fr}.seller-card,.seller-stat{padding:17px}.seller-header-inner{padding:12px 16px}.seller-detail{flex-direction:column;gap:4px}.seller-container{width:calc(100% - 24px);margin-top:20px}}
+</style>
 </head>
+
+
 
 <body>
 
-  <header class="seller-header">
 
-    <div class="seller-header-inner">
 
-      <a
-        href="/"
-        class="seller-logo"
-      >
-        CEROOD
-      </a>
+<header class="seller-header">
 
-      <button
-        id="logoutBtn"
-        class="seller-btn seller-btn-outline"
-        type="button"
-      >
-        Logout
-      </button>
 
-    </div>
 
-  </header>
+  <div class="seller-header-inner">
 
 
-  <main class="seller-container">
 
-    <div
-      id="loadingPanel"
-      class="seller-card"
-    >
+    <a
 
-      <p>
-        Loading your seller account...
-      </p>
+      href="/"
 
-    </div>
+      class="seller-logo"
 
+    >
 
-    <div
-      id="dashboardContent"
-      class="seller-hidden"
-    >
+      CEROOD
 
-      <div class="seller-dashboard-heading">
+    </a>
 
-        <div>
 
-          <h1 id="welcomeTitle">
-            Seller Dashboard
-          </h1>
 
-          <p>
-            Manage your CEROOD seller account.
-          </p>
+    <button
 
-        </div>
+      id="logoutBtn"
 
-        <span
-          id="sellerStatus"
-          class="seller-badge"
-        >
-          Approved
-        </span>
+      class="seller-btn seller-btn-outline"
 
-      </div>
+      type="button"
 
+    >
 
-      <!-- ACCOUNT OVERVIEW -->
+      Logout
 
-      <div class="seller-grid">
+    </button>
 
-        <div class="seller-stat">
 
-          <div class="seller-stat-label">
-            Account Status
-          </div>
 
-          <div
-            id="statStatus"
-            class="seller-stat-value"
-          >
-            —
-          </div>
+  </div>
 
-        </div>
 
 
-        <div class="seller-stat">
+</header>
 
-          <div class="seller-stat-label">
-            Commission Rate
-          </div>
 
-          <div
-            id="statCommission"
-            class="seller-stat-value"
-          >
-            —
-          </div>
 
-        </div>
 
 
-        <div class="seller-stat">
+<main class="seller-container">
 
-          <div class="seller-stat-label">
-            Seller ID
-          </div>
 
-          <div
-            id="statSellerId"
-            class="seller-stat-value"
-            style="font-size:17px"
-          >
-            —
-          </div>
 
-        </div>
+  <div id="loadingPanel" class="seller-card">
 
-      </div>
 
 
-      <!-- BUSINESS DETAILS -->
+    Loading seller dashboard...
 
-      <section
-        class="seller-card"
-        style="margin-bottom:20px"
-      >
 
-        <h2>
-          Business Information
-        </h2>
 
-        <div class="seller-detail">
+  </div>
 
-          <span>Owner Name</span>
 
-          <span id="detailOwner">—</span>
 
-        </div>
 
 
-        <div class="seller-detail">
+  <div
 
-          <span>Shop Name</span>
+    id="dashboardContent"
 
-          <span id="detailShop">—</span>
+    class="seller-hidden"
 
-        </div>
+  >
 
 
-        <div class="seller-detail">
 
-          <span>Mobile</span>
+    <div class="seller-dashboard-heading">
 
-          <span id="detailPhone">—</span>
 
-        </div>
 
+      <div>
 
-        <div class="seller-detail">
 
-          <span>Email</span>
 
-          <span id="detailEmail">—</span>
+        <h1 id="welcomeTitle">
 
-        </div>
+          Seller Dashboard
 
+        </h1>
 
-        <div class="seller-detail">
 
-          <span>Business Type</span>
 
-          <span id="detailType">—</span>
+        <p>
 
-        </div>
+          Manage your CEROOD marketplace products.
 
+        </p>
 
-        <div class="seller-detail">
 
-          <span>GST Number</span>
 
-          <span id="detailGST">—</span>
+      </div>
 
-        </div>
 
 
-        <div class="seller-detail">
+      <span
 
-          <span>Address</span>
+        id="sellerStatus"
 
-          <span id="detailAddress">—</span>
+        class="seller-badge"
 
-        </div>
+      >
 
+        Approved
 
-        <div class="seller-detail">
+      </span>
 
-          <span>District</span>
 
-          <span id="detailDistrict">—</span>
 
-        </div>
+    </div>
 
 
-        <div class="seller-detail">
 
-          <span>State</span>
 
-          <span id="detailState">—</span>
 
-        </div>
+    <!-- DASHBOARD TABS -->
 
 
-        <div class="seller-detail">
 
-          <span>Pincode</span>
+    <nav class="seller-tabs">
 
-          <span id="detailPincode">—</span>
 
-        </div>
 
-      </section>
+      <button
 
+        class="seller-tab active"
 
-      <!-- PRODUCT MANAGEMENT PLACEHOLDER -->
+        data-tab="overview"
 
-      <section
-        class="seller-card"
-        style="margin-bottom:20px"
-      >
+        type="button"
 
-        <h2>
-          My Products
-        </h2>
+      >
 
-        <div class="seller-empty">
+        Overview
 
-          <h3>
-            Product Management
-          </h3>
+      </button>
 
-          <p>
-            Seller product upload and admin product
-            approval will be enabled in the next
-            marketplace phase.
-          </p>
 
-        </div>
 
-      </section>
+      <button
 
+        class="seller-tab"
 
-      <!-- ORDERS PLACEHOLDER -->
+        data-tab="products"
 
-      <section class="seller-card">
+        type="button"
 
-        <h2>
-          Seller Orders
-        </h2>
+      >
 
-        <div class="seller-empty">
+        My Products
 
-          <h3>
-            Order Management
-          </h3>
+      </button>
 
-          <p>
-            Seller-specific orders, fulfillment,
-            commission and payout tracking
-            are not enabled yet.
-          </p>
 
-        </div>
 
-      </section>
+      <button
 
-    </div>
+        class="seller-tab"
 
+        data-tab="add-product"
 
-    <div
-      id="dashboardMessage"
-      class="seller-message"
-      role="status"
-      aria-live="polite"
-    ></div>
+        type="button"
 
-  </main>
+      >
 
+        Add Product
 
-  <script src="seller-config.js"></script>
+      </button>
 
-  <script>
 
-    'use strict';
 
+      <button
 
-    const $ = (id) =>
-      document.getElementById(id);
+        class="seller-tab"
 
+        data-tab="account"
 
-    // ======================================
-    // LOGOUT
-    // ======================================
+        type="button"
 
-    function logoutSeller() {
+      >
 
-      window.CeroodSellerAuth.clearSession();
+        My Account
 
-      window.location.replace(
+      </button>
 
-        window.CEROOD_SELLER.LOGIN_PAGE
 
-      );
 
-    }
+    </nav>
 
 
-    $('logoutBtn').addEventListener(
 
-      'click',
 
-      logoutSeller
 
-    );
+    <div
 
+      id="dashboardMessage"
 
-    // ======================================
-    // DISPLAY SELLER DETAILS
-    // ======================================
+      class="seller-message"
 
-    function setText(id, value) {
+      role="status"
 
-      $(id).textContent =
+      aria-live="polite"
 
-        value === null ||
+    ></div>
 
-        value === undefined ||
 
-        value === ''
 
-          ? '—'
 
-          : String(value);
 
-    }
+    <!-- OVERVIEW -->
 
 
-    function renderSeller(seller) {
 
-      setText(
+    <section
 
-        'welcomeTitle',
+      id="section-overview"
 
-        'Welcome, ' +
-        (seller.shop_name || 'Seller')
+      class="seller-section active"
 
-      );
+    >
 
 
-      setText(
 
-        'sellerStatus',
+      <div class="seller-grid">
 
-        seller.status || '—'
 
-      );
 
+        <div class="seller-stat">
 
-      setText(
 
-        'statStatus',
 
-        seller.status || '—'
+          <div class="seller-stat-label">
 
-      );
+            Total Products
 
+          </div>
 
-      setText(
 
-        'statCommission',
 
-        seller.commission_percent === null ||
+          <div
 
-        seller.commission_percent === undefined
+            id="totalProducts"
 
-          ? 'Not set'
+            class="seller-stat-value"
 
-          : seller.commission_percent + '%'
+          >
 
-      );
+            0
 
+          </div>
 
-      setText(
 
-        'statSellerId',
 
-        seller.id
+        </div>
 
-          ? seller.id.slice(0, 8)
 
-          : '—'
 
-      );
+        <div class="seller-stat">
 
 
-      setText(
-        'detailOwner',
-        seller.owner_name
-      );
 
+          <div class="seller-stat-label">
 
-      setText(
-        'detailShop',
-        seller.shop_name
-      );
+            Approved Products
 
+          </div>
 
-      setText(
-        'detailPhone',
-        seller.phone
-      );
 
 
-      setText(
-        'detailEmail',
-        seller.email
-      );
+          <div
 
+            id="approvedProducts"
 
-      setText(
-        'detailType',
-        seller.business_type
-      );
+            class="seller-stat-value"
 
+          >
 
-      setText(
-        'detailGST',
-        seller.gst_number
-      );
+            0
 
+          </div>
 
-      setText(
-        'detailAddress',
-        seller.address
-      );
 
 
-      setText(
-        'detailDistrict',
-        seller.district
-      );
+        </div>
 
 
-      setText(
-        'detailState',
-        seller.state
-      );
 
+        <div class="seller-stat">
 
-      setText(
-        'detailPincode',
-        seller.pincode
-      );
 
 
-      $('loadingPanel').classList.add(
-        'seller-hidden'
-      );
+          <div class="seller-stat-label">
 
+            Commission Rate
 
-      $('dashboardContent').classList.remove(
-        'seller-hidden'
-      );
+          </div>
 
-    }
 
 
-    // ======================================
-    // LOAD SELLER FROM BACKEND
-    // ======================================
+          <div
 
-    async function loadSellerDashboard() {
+            id="commissionRate"
 
-      const token =
-        window.CeroodSellerAuth.getToken();
+            class="seller-stat-value"
 
+          >
 
-      if (!token) {
+            —
 
-        logoutSeller();
+          </div>
 
-        return;
 
-      }
 
+        </div>
 
-      try {
 
-        const {
 
-          response,
+      </div>
 
-          data
 
-        } = await window.CeroodSellerAuth.request(
 
-          '/api/sellers/me'
 
-        );
 
+      <div class="seller-card">
 
-        if (response.status === 401) {
 
-          logoutSeller();
 
-          return;
+        <h2>
 
-        }
+          Start Selling on CEROOD
 
+        </h2>
 
-        if (
 
-          !response.ok ||
 
-          !data.success ||
+        <p>
 
-          !data.seller
+          Add your actual product photos, price,
 
-        ) {
+          condition, warranty and known defects.
 
-          throw new Error(
+          Products are reviewed before appearing
 
-            data.message ||
+          in the CEROOD Renewed Store.
 
-            'Unable to load seller account.'
+        </p>
 
-          );
 
-        }
 
+        <button
 
-        // Only approved sellers
-        // can access dashboard.
+          class="seller-btn"
 
-        if (
+          type="button"
 
-          data.seller.status !==
-          'approved'
+          onclick="showTab('add-product')"
 
-        ) {
+        >
 
-          throw new Error(
-            'Seller account is not approved.'
-          );
+          + Add New Product
 
-        }
+        </button>
 
 
-        renderSeller(
-          data.seller
-        );
 
+      </div>
 
-      } catch (error) {
 
-        $('loadingPanel').classList.add(
-          'seller-hidden'
-        );
 
+    </section>
 
-        const message =
-          $('dashboardMessage');
 
 
-        message.textContent =
 
-          error.message ||
 
-          'Unable to load dashboard.';
+    <!-- MY PRODUCTS -->
 
 
-        message.className =
-          'seller-message error';
 
+    <section
 
-        if (
-          !window.CeroodSellerAuth.getToken()
-        ) {
+      id="section-products"
 
-          logoutSeller();
+      class="seller-section"
 
-        }
+    >
 
-      }
 
-    }
 
+      <div class="seller-dashboard-heading">
 
-    // ======================================
-    // INITIALIZE DASHBOARD
-    // ======================================
 
-    loadSellerDashboard();
 
-  </script>
+        <div>
+
+
+
+          <h1>
+
+            My Products
+
+          </h1>
+
+
+
+          <p>
+
+            Only your own product listings appear here.
+
+          </p>
+
+
+
+        </div>
+
+
+
+        <button
+
+          class="seller-btn"
+
+          type="button"
+
+          onclick="showTab('add-product')"
+
+        >
+
+          + Add Product
+
+        </button>
+
+
+
+      </div>
+
+
+
+
+
+      <div
+
+        id="productsMessage"
+
+        class="seller-message"
+
+        role="status"
+
+      ></div>
+
+
+
+
+
+      <div
+
+        id="productsList"
+
+        class="product-list"
+
+      ></div>
+
+
+
+    </section>
+
+
+
+
+
+    <!-- ADD PRODUCT -->
+
+
+
+    <section
+
+      id="section-add-product"
+
+      class="seller-section"
+
+    >
+
+
+
+      <div class="seller-card">
+
+
+
+        <h1 id="productFormTitle">
+
+          Add New Product
+
+        </h1>
+
+
+
+        <p>
+
+          Enter accurate details about the actual
+
+          product you are selling.
+
+        </p>
+
+
+
+
+
+        <form id="productForm">
+
+
+
+          <div class="product-field">
+
+
+
+            <label for="productName">
+
+              Product Name *
+
+            </label>
+
+
+
+            <input
+
+              id="productName"
+
+              maxlength="140"
+
+              placeholder="Samsung 32 inch Smart TV"
+
+              required
+
+            >
+
+
+
+          </div>
+
+
+
+
+
+          <div class="product-form-grid">
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productCategory">
+
+                Category *
+
+              </label>
+
+
+
+              <select
+
+                id="productCategory"
+
+                required
+
+              >
+
+
+
+                <option value="">
+
+                  Select Category
+
+                </option>
+
+
+
+                <option value="tv">
+
+                  Smart TV
+
+                </option>
+
+
+
+                <option value="laptop">
+
+                  Laptop
+
+                </option>
+
+
+
+                <option value="ac">
+
+                  Air Conditioner
+
+                </option>
+
+
+
+                <option value="refrigerator">
+
+                  Refrigerator
+
+                </option>
+
+
+
+                <option value="washing-machine">
+
+                  Washing Machine
+
+                </option>
+
+
+
+                <option value="other">
+
+                  Other
+
+                </option>
+
+
+
+              </select>
+
+
+
+            </div>
+
+
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productCondition">
+
+                Product Condition *
+
+              </label>
+
+
+
+              <select
+
+                id="productCondition"
+
+                required
+
+              >
+
+
+
+                <option value="">
+
+                  Select Condition
+
+                </option>
+
+
+
+                <option value="Refurbished">
+
+                  Refurbished
+
+                </option>
+
+
+
+                <option value="Pre-owned">
+
+                  Pre-owned
+
+                </option>
+
+
+
+                <option value="Open box">
+
+                  Open Box
+
+                </option>
+
+
+
+              </select>
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+          <div class="product-form-grid">
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productBrand">
+
+                Brand
+
+              </label>
+
+
+
+              <input
+
+                id="productBrand"
+
+                maxlength="80"
+
+                placeholder="Samsung"
+
+              >
+
+
+
+            </div>
+
+
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productModel">
+
+                Model
+
+              </label>
+
+
+
+              <input
+
+                id="productModel"
+
+                maxlength="80"
+
+                placeholder="UA32"
+
+              >
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+          <div class="product-form-grid">
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productPrice">
+
+                Selling Price (₹) *
+
+              </label>
+
+
+
+              <input
+
+                id="productPrice"
+
+                type="number"
+
+                min="1"
+
+                max="100000000"
+
+                step="1"
+
+                required
+
+              >
+
+
+
+            </div>
+
+
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productComparePrice">
+
+                Original Price (₹)
+
+              </label>
+
+
+
+              <input
+
+                id="productComparePrice"
+
+                type="number"
+
+                min="0"
+
+                step="1"
+
+              >
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+          <div class="product-form-grid">
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productStock">
+
+                Available Stock *
+
+              </label>
+
+
+
+              <input
+
+                id="productStock"
+
+                type="number"
+
+                min="0"
+
+                max="99999"
+
+                step="1"
+
+                value="1"
+
+                required
+
+              >
+
+
+
+            </div>
+
+
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productWarranty">
+
+                Warranty (Days) *
+
+              </label>
+
+
+
+              <input
+
+                id="productWarranty"
+
+                type="number"
+
+                min="0"
+
+                max="3650"
+
+                step="1"
+
+                value="30"
+
+                required
+
+              >
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+          <div class="product-form-grid">
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productLocation">
+
+                Product Location
+
+              </label>
+
+
+
+              <input
+
+                id="productLocation"
+
+                maxlength="100"
+
+                placeholder="Dharmapuri"
+
+              >
+
+
+
+            </div>
+
+
+
+
+
+            <div class="product-field">
+
+
+
+              <label for="productDelivery">
+
+                Delivery Details
+
+              </label>
+
+
+
+              <input
+
+                id="productDelivery"
+
+                maxlength="160"
+
+                placeholder="India-wide delivery"
+
+              >
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+          <!-- PRODUCT PHOTO -->
+
+
+
+          <div class="product-field">
+
+
+
+            <label for="productPhoto">
+
+              Actual Product Photo *
+
+            </label>
+
+
+
+            <input
+
+              id="productPhoto"
+
+              type="file"
+
+              accept="image/jpeg,image/png,image/webp"
+
+            >
+
+
+
+            <small>
+
+              Upload the actual product photo.
+
+              JPG, PNG or WebP.
+
+              Maximum 10 MB.
+
+            </small>
+
+
+
+            <div
+
+              id="photoPreview"
+
+              class="media-preview"
+
+            ></div>
+
+
+
+          </div>
+
+
+
+
+
+          <!-- PRODUCT VIDEO -->
+
+
+
+          <div class="product-field">
+
+
+
+            <label for="productVideo">
+
+              Working Demo Video
+
+            </label>
+
+
+
+            <input
+
+              id="productVideo"
+
+              type="file"
+
+              accept="video/mp4,video/webm"
+
+            >
+
+
+
+            <small>
+
+              Optional. Show the product working.
+
+              MP4 or WebM. Maximum 25 MB.
+
+            </small>
+
+
+
+            <div
+
+              id="videoPreview"
+
+              class="media-preview"
+
+            ></div>
+
+
+
+          </div>
+
+
+
+
+
+          <!-- ACCESSORIES -->
+
+
+
+          <div class="product-field">
+
+
+
+            <label for="productAccessories">
+
+              Included Accessories
+
+            </label>
+
+
+
+            <input
+
+              id="productAccessories"
+
+              placeholder="Remote, Stand, Power Cable"
+
+            >
+
+
+
+            <small>
+
+              Separate accessories with commas.
+
+            </small>
+
+
+
+          </div>
+
+
+
+
+
+          <!-- DEFECTS -->
+
+
+
+          <div class="product-field">
+
+
+
+            <label for="productDefects">
+
+              Known Defects *
+
+            </label>
+
+
+
+            <textarea
+
+              id="productDefects"
+
+              maxlength="2000"
+
+              placeholder="Mention scratches, repairs, missing parts or type None."
+
+              required
+
+            ></textarea>
+
+
+
+          </div>
+
+
+
+
+
+          <!-- WARRANTY TERMS -->
+
+
+
+          <div class="product-field">
+
+
+
+            <label for="productWarrantyTerms">
+
+              Warranty Terms *
+
+            </label>
+
+
+
+            <textarea
+
+              id="productWarrantyTerms"
+
+              maxlength="1500"
+
+              placeholder="Explain warranty coverage and exclusions."
+
+              required
+
+            ></textarea>
+
+
+
+          </div>
+
+
+
+
+
+          <div
+
+            id="productFormMessage"
+
+            class="seller-message"
+
+            role="status"
+
+            aria-live="polite"
+
+          ></div>
+
+
+
+
+
+          <div class="form-actions">
+
+
+
+            <button
+
+              id="saveProductBtn"
+
+              class="seller-btn"
+
+              type="submit"
+
+            >
+
+              Submit Product for Approval
+
+            </button>
+
+
+
+
+
+            <button
+
+              id="cancelEditBtn"
+
+              class="seller-btn seller-btn-outline seller-hidden"
+
+              type="button"
+
+            >
+
+              Cancel Edit
+
+            </button>
+
+
+
+          </div>
+
+
+
+        </form>
+
+
+
+      </div>
+
+
+
+    </section>
+
+
+
+
+
+    <!-- ACCOUNT -->
+
+
+
+    <section
+
+      id="section-account"
+
+      class="seller-section"
+
+    >
+
+
+
+      <div class="seller-card">
+
+
+
+        <h2>
+
+          Business Information
+
+        </h2>
+
+
+
+        <div id="accountDetails"></div>
+
+
+
+      </div>
+
+
+
+    </section>
+
+
+
+  </div>
+
+
+
+</main>
+
+
+
+
+
+<script src="seller-config.js"></script>
+
+
+
+<script>
+
+
+
+'use strict';
+
+
+
+
+
+// ==========================================
+
+// GLOBAL STATE
+
+// ==========================================
+
+
+
+const $ = id =>
+
+  document.getElementById(id);
+
+
+
+const API =
+
+  (window.CEROOD_SELLER_CONFIG?.apiBase || 'https://catus-backend-d2js.onrender.com');
+
+
+
+const auth = {
+ getToken: () => sessionStorage.getItem('cerood_seller_token'),
+ clearSession: () => sessionStorage.removeItem('cerood_seller_token')
+};
+
+
+
+let seller = null;
+
+
+
+let products = [];
+
+
+
+let editingProductId = null;
+
+
+
+let savedPhotoUrl = '';
+
+
+
+let savedVideoUrl = '';
+
+
+
+let savingProduct = false;
+
+
+
+
+
+// ==========================================
+
+// AUTH
+
+// ==========================================
+
+
+
+function logoutSeller() {
+
+
+
+  auth.clearSession();
+
+
+
+  window.location.replace(
+
+    'seller-login.html'
+
+  );
+
+
+
+}
+
+
+
+$('logoutBtn').addEventListener(
+
+  'click',
+
+  logoutSeller
+
+);
+
+
+
+
+
+// ==========================================
+
+// MESSAGE
+
+// ==========================================
+
+
+
+function showMessage(
+
+  elementId,
+
+  message,
+
+  type = 'info'
+
+) {
+
+
+
+  const element = $(elementId);
+
+
+
+  element.textContent = message;
+
+
+
+  element.className =
+
+    'seller-message ' + type;
+
+
+
+}
+
+
+
+function clearMessage(elementId) {
+
+
+
+  $(elementId).textContent = '';
+
+
+
+  $(elementId).className =
+
+    'seller-message';
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// TAB NAVIGATION
+
+// ==========================================
+
+
+
+function showTab(tabName) {
+
+
+
+  document
+
+    .querySelectorAll('.seller-tab')
+
+    .forEach(button => {
+
+
+
+      button.classList.toggle(
+
+
+
+        'active',
+
+
+
+        button.dataset.tab === tabName
+
+
+
+      );
+
+
+
+    });
+
+
+
+
+
+  document
+
+    .querySelectorAll('.seller-section')
+
+    .forEach(section => {
+
+
+
+      section.classList.toggle(
+
+
+
+        'active',
+
+
+
+        section.id ===
+
+          'section-' + tabName
+
+
+
+      );
+
+
+
+    });
+
+
+
+
+
+  if (tabName === 'products') {
+
+
+
+    loadProducts();
+
+
+
+  }
+
+
+
+
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: 'smooth'
+
+  });
+
+
+
+}
+
+
+
+document
+
+  .querySelectorAll('.seller-tab')
+
+  .forEach(button => {
+
+
+
+    button.addEventListener(
+
+      'click',
+
+      () => {
+
+
+
+        showTab(
+
+          button.dataset.tab
+
+        );
+
+
+
+      }
+
+    );
+
+
+
+  });
+
+
+
+
+
+// ==========================================
+
+// API REQUEST
+
+// ==========================================
+
+
+
+async function apiRequest(
+
+  path,
+
+  options = {}
+
+) {
+
+
+
+  const token =
+
+    auth.getToken();
+
+
+
+  if (!token) {
+
+
+
+    logoutSeller();
+
+
+
+    throw new Error(
+
+      'Seller login required.'
+
+    );
+
+
+
+  }
+
+
+
+  const headers = {
+
+
+
+    ...(options.headers || {}),
+
+
+
+    Authorization:
+
+      'Bearer ' + token
+
+
+
+  };
+
+
+
+  const response = await fetch(
+
+
+
+    API + path,
+
+
+
+    {
+
+
+
+      ...options,
+
+
+
+      headers,
+
+
+
+      cache: 'no-store'
+
+
+
+    }
+
+
+
+  );
+
+
+
+
+
+  let data;
+
+
+
+  try {
+
+
+
+    data = await response.json();
+
+
+
+  } catch {
+
+
+
+    data = {
+
+
+
+      success: false,
+
+
+
+      message:
+
+        'Invalid server response.'
+
+
+
+    };
+
+
+
+  }
+
+
+
+
+
+  if (response.status === 401) {
+
+
+
+    logoutSeller();
+
+
+
+    throw new Error(
+
+      'Session expired.'
+
+    );
+
+
+
+  }
+
+
+
+
+
+  if (
+
+
+
+    !response.ok ||
+
+
+
+    !data.success
+
+
+
+  ) {
+
+
+
+    throw new Error(
+
+
+
+      data.message ||
+
+
+
+      'Request failed.'
+
+
+
+    );
+
+
+
+  }
+
+
+
+
+
+  return data;
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// ACCOUNT DETAILS
+
+// ==========================================
+
+
+
+function addAccountRow(
+
+  container,
+
+  label,
+
+  value
+
+) {
+
+
+
+  const row =
+
+    document.createElement('div');
+
+
+
+  row.className =
+
+    'seller-detail';
+
+
+
+
+
+  const name =
+
+    document.createElement('span');
+
+
+
+  name.textContent = label;
+
+
+
+
+
+  const detail =
+
+    document.createElement('span');
+
+
+
+  detail.textContent =
+
+    value ?? '—';
+
+
+
+
+
+  row.append(
+
+    name,
+
+    detail
+
+  );
+
+
+
+  container.appendChild(row);
+
+
+
+}
+
+
+
+
+
+function renderAccount() {
+
+
+
+  $('welcomeTitle').textContent =
+
+
+
+    'Welcome, ' +
+
+
+
+    (seller.shop_name || 'Seller');
+
+
+
+
+
+  $('sellerStatus').textContent =
+
+    seller.status;
+
+
+
+
+
+  $('commissionRate').textContent =
+
+
+
+    seller.commission_percent == null
+
+
+
+      ? 'Not set'
+
+
+
+      : Number(
+
+          seller.commission_percent
+
+        ).toFixed(2) + '%';
+
+
+
+
+
+  const container =
+
+    $('accountDetails');
+
+
+
+  container.replaceChildren();
+
+
+
+
+
+  const details = [
+
+
+
+    ['Owner Name', seller.owner_name],
+
+
+
+    ['Shop Name', seller.shop_name],
+
+
+
+    ['Mobile', seller.phone],
+
+
+
+    ['Email', seller.email],
+
+
+
+    ['Business Type', seller.business_type],
+
+
+
+    ['GST Number', seller.gst_number],
+
+
+
+    ['Address', seller.address],
+
+
+
+    ['District', seller.district],
+
+
+
+    ['State', seller.state],
+
+
+
+    ['Pincode', seller.pincode],
+
+
+
+    ['Seller ID', seller.id]
+
+
+
+  ];
+
+
+
+
+
+  details.forEach(([label, value]) => {
+
+
+
+    addAccountRow(
+
+
+
+      container,
+
+
+
+      label,
+
+
+
+      value || '—'
+
+
+
+    );
+
+
+
+  });
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// PRODUCT COUNTS
+
+// ==========================================
+
+
+
+function renderProductCounts() {
+
+
+
+  $('totalProducts').textContent =
+
+    products.length;
+
+
+
+
+
+  $('approvedProducts').textContent =
+
+
+
+    products.filter(
+
+
+
+      product =>
+
+
+
+        product.approval_status ===
+
+        'approved'
+
+
+
+    ).length;
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// MY PRODUCTS
+
+// ==========================================
+
+
+
+async function loadProducts() {
+
+
+
+  clearMessage(
+
+    'productsMessage'
+
+  );
+
+
+
+
+
+  try {
+
+
+
+    const data = await apiRequest(
+
+
+
+      '/api/sellers/products'
+
+
+
+    );
+
+
+
+
+
+    products =
+
+      Array.isArray(data.products)
+
+
+
+        ? data.products
+
+
+
+        : [];
+
+
+
+
+
+    renderProducts();
+
+
+
+    renderProductCounts();
+
+
+
+
+
+  } catch (error) {
+
+
+
+    showMessage(
+
+
+
+      'productsMessage',
+
+
+
+      error.message,
+
+
+
+      'error'
+
+
+
+    );
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// PRODUCT CARD
+
+// ==========================================
+
+
+
+function renderProducts() {
+
+
+
+  const container =
+
+    $('productsList');
+
+
+
+  container.replaceChildren();
+
+
+
+
+
+  if (!products.length) {
+
+
+
+    const empty =
+
+      document.createElement('div');
+
+
+
+    empty.className =
+
+      'seller-card';
+
+
+
+    empty.textContent =
+
+      'No products added yet. Click Add Product to create your first listing.';
+
+
+
+    container.appendChild(empty);
+
+
+
+    return;
+
+
+
+  }
+
+
+
+
+
+  products.forEach(product => {
+
+
+
+    const card =
+
+      document.createElement('article');
+
+
+
+    card.className =
+
+      'product-card';
+
+
+
+
+
+    const image =
+
+      document.createElement('img');
+
+
+
+    image.src =
+
+      product.image_url || '';
+
+
+
+    image.alt =
+
+      product.name || 'Product';
+
+
+
+    image.loading = 'lazy';
+
+
+
+
+
+    const body =
+
+      document.createElement('div');
+
+
+
+    body.className =
+
+      'product-card-body';
+
+
+
+
+
+    const title =
+
+      document.createElement('h3');
+
+
+
+    title.textContent =
+
+      product.name;
+
+
+
+
+
+    const price =
+
+      document.createElement('div');
+
+
+
+    price.className =
+
+      'product-price';
+
+
+
+    price.textContent =
+
+
+
+      '₹' +
+
+
+
+      Number(
+
+        product.price || 0
+
+      ).toLocaleString('en-IN');
+
+
+
+
+
+    const status =
+
+      document.createElement('span');
+
+
+
+    const approval =
+
+
+
+      product.approval_status ||
+
+      'pending';
+
+
+
+    status.className =
+
+
+
+      'approval-badge ' +
+
+      approval;
+
+
+
+    status.textContent =
+
+      approval;
+
+
+
+
+
+    const stock =
+
+      document.createElement('div');
+
+
+
+    stock.className =
+
+      'product-meta';
+
+
+
+    stock.textContent =
+
+
+
+      'Stock: ' +
+
+      product.stock;
+
+
+
+
+
+    const listing =
+
+      document.createElement('div');
+
+
+
+    listing.className =
+
+      'product-meta';
+
+
+
+    listing.textContent =
+
+
+
+      'Listing: ' +
+
+      product.status;
+
+
+
+
+
+    const actions =
+
+      document.createElement('div');
+
+
+
+    actions.className =
+
+      'product-actions';
+
+
+
+
+
+    const editButton =
+
+      document.createElement('button');
+
+
+
+    editButton.type =
+
+      'button';
+
+
+
+    editButton.textContent =
+
+      'Edit';
+
+
+
+    editButton.addEventListener(
+
+
+
+      'click',
+
+
+
+      () => editProduct(
+
+        product.id
+
+      )
+
+
+
+    );
+
+
+
+
+
+    const withdrawButton =
+
+      document.createElement('button');
+
+
+
+    withdrawButton.type =
+
+      'button';
+
+
+
+    withdrawButton.className =
+
+      'danger';
+
+
+
+    withdrawButton.textContent =
+
+      'Withdraw';
+
+
+
+    withdrawButton.addEventListener(
+
+
+
+      'click',
+
+
+
+      () => withdrawProduct(
+
+        product.id
+
+      )
+
+
+
+    );
+
+
+
+
+
+    actions.append(
+
+      editButton,
+
+      withdrawButton
+
+    );
+
+
+
+
+
+    body.append(
+
+
+
+      title,
+
+
+
+      price,
+
+
+
+      status,
+
+
+
+      stock,
+
+
+
+      listing,
+
+
+
+      actions
+
+
+
+    );
+
+
+
+
+
+    card.append(
+
+      image,
+
+      body
+
+    );
+
+
+
+
+
+    container.appendChild(
+
+      card
+
+    );
+
+
+
+  });
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// MEDIA UPLOAD
+
+// ==========================================
+
+
+
+async function uploadMedia(file) {
+
+
+
+  if (!file) {
+
+
+
+    throw new Error(
+
+      'Select a media file.'
+
+    );
+
+
+
+  }
+
+
+
+
+
+  if (
+
+    file.size >
+
+    25 * 1024 * 1024
+
+  ) {
+
+
+
+    throw new Error(
+
+      'Maximum file size is ' + limit + ' MB.'
+
+    );
+
+
+
+  }
+
+
+
+
+
+  const formData =
+
+    new FormData();
+
+
+
+  formData.append(
+
+    'file',
+
+    file
+
+  );
+
+
+
+
+
+  const data = await apiRequest(
+
+
+
+    '/api/sellers/upload-media',
+
+
+
+    {
+
+
+
+      method: 'POST',
+
+
+
+      body: formData
+
+
+
+    }
+
+
+
+  );
+
+
+
+
+
+  if (!data.url) {
+
+
+
+    throw new Error(
+
+      'Upload URL missing.'
+
+    );
+
+
+
+  }
+
+
+
+
+
+  return data.url;
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// PHOTO PREVIEW
+
+// ==========================================
+
+
+
+$('productPhoto').addEventListener(
+
+
+
+  'change',
+
+
+
+  function () {
+
+
+
+    const file =
+
+      this.files[0];
+
+
+
+
+
+    const preview =
+
+      $('photoPreview');
+
+
+
+    preview.replaceChildren();
+
+
+
+
+
+    if (!file) return;
+
+
+
+
+
+    const image =
+
+      document.createElement('img');
+
+
+
+
+
+    const objectUrl =
+
+      URL.createObjectURL(file);
+
+
+
+
+
+    image.src =
+
+      objectUrl;
+
+
+
+
+
+    image.onload = () => {
+
+
+
+      URL.revokeObjectURL(
+
+        objectUrl
+
+      );
+
+
+
+    };
+
+
+
+
+
+    preview.appendChild(
+
+      image
+
+    );
+
+
+
+  }
+
+
+
+);
+
+
+
+
+
+// ==========================================
+
+// VIDEO PREVIEW
+
+// ==========================================
+
+
+
+$('productVideo').addEventListener(
+
+
+
+  'change',
+
+
+
+  function () {
+
+
+
+    const file =
+
+      this.files[0];
+
+
+
+
+
+    const preview =
+
+      $('videoPreview');
+
+
+
+    preview.replaceChildren();
+
+
+
+
+
+    if (!file) return;
+
+
+
+
+
+    const video =
+
+      document.createElement('video');
+
+
+
+
+
+    const objectUrl =
+
+      URL.createObjectURL(file);
+
+
+
+
+
+    video.src =
+
+      objectUrl;
+
+
+
+    video.controls = true;
+
+
+
+    video.preload =
+
+      'metadata';
+
+
+
+
+
+    video.onloadedmetadata = () => {
+
+
+
+      URL.revokeObjectURL(
+
+        objectUrl
+
+      );
+
+
+
+    };
+
+
+
+
+
+    preview.appendChild(
+
+      video
+
+    );
+
+
+
+  }
+
+
+
+);
+
+
+
+
+
+// ==========================================
+
+// PRODUCT FORM DATA
+
+// ==========================================
+
+
+
+function getProductFormData() {
+
+
+
+  const value = id =>
+
+    $(id).value.trim();
+
+
+
+
+
+  return {
+
+
+
+    name:
+
+      value('productName'),
+
+
+
+    category:
+
+      value('productCategory'),
+
+
+
+    condition:
+
+      value('productCondition'),
+
+
+
+    brand:
+
+      value('productBrand'),
+
+
+
+    model:
+
+      value('productModel'),
+
+
+
+    price:
+
+      Number(
+
+        value('productPrice')
+
+      ),
+
+
+
+    compare_price:
+
+
+
+      value('productComparePrice')
+
+
+
+        ? Number(
+
+            value('productComparePrice')
+
+          )
+
+
+
+        : null,
+
+
+
+    stock:
+
+      Number(
+
+        value('productStock')
+
+      ),
+
+
+
+    warranty_days:
+
+      Number(
+
+        value('productWarranty')
+
+      ),
+
+
+
+    location:
+
+      value('productLocation'),
+
+
+
+    delivery:
+
+      value('productDelivery'),
+
+
+
+    image_url:
+
+      savedPhotoUrl,
+
+
+
+    video_url:
+
+      savedVideoUrl,
+
+
+
+    accessories:
+
+
+
+      value('productAccessories')
+
+
+
+        .split(',')
+
+
+
+        .map(item =>
+
+          item.trim()
+
+        )
+
+
+
+        .filter(Boolean),
+
+
+
+    known_defects:
+
+      value('productDefects'),
+
+
+
+    warranty_terms:
+
+      value('productWarrantyTerms')
+
+
+
+  };
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// SAVE PRODUCT
+
+// ==========================================
+
+
+
+$('productForm').addEventListener(
+
+
+
+  'submit',
+
+
+
+  async function (event) {
+
+
+
+    event.preventDefault();
+
+
+
+
+
+    if (savingProduct) return;
+
+
+
+
+
+    savingProduct = true;
+
+
+
+
+
+    const button =
+
+      $('saveProductBtn');
+
+
+
+
+
+    button.disabled = true;
+
+
+
+
+
+    try {
+
+
+
+      const photo =
+
+        $('productPhoto').files[0];
+
+
+
+
+
+      const video =
+
+        $('productVideo').files[0];
+
+
+
+
+
+      // ================================
+
+      // UPLOAD PHOTO
+
+      // ================================
+
+
+
+      if (photo) {
+
+
+
+        showMessage(
+
+
+
+          'productFormMessage',
+
+
+
+          'Uploading product photo...'
+
+
+
+        );
+
+
+
+
+
+        savedPhotoUrl =
+
+          await uploadMedia(
+
+            photo
+
+          );
+
+
+
+      }
+
+
+
+
+
+      if (!savedPhotoUrl) {
+
+
+
+        throw new Error(
+
+          'Actual product photo is required.'
+
+        );
+
+
+
+      }
+
+
+
+
+
+      // ================================
+
+      // UPLOAD VIDEO
+
+      // ================================
+
+
+
+      if (video) {
+
+
+
+        showMessage(
+
+
+
+          'productFormMessage',
+
+
+
+          'Uploading product video...'
+
+
+
+        );
+
+
+
+
+
+        savedVideoUrl =
+
+          await uploadMedia(
+
+            video
+
+          );
+
+
+
+      }
+
+
+
+
+
+      // ================================
+
+      // SAVE PRODUCT
+
+      // ================================
+
+
+
+      const product =
+
+        getProductFormData();
+
+
+
+
+
+      showMessage(
+
+
+
+        'productFormMessage',
+
+
+
+        'Submitting product for approval...'
+
+
+
+      );
+
+
+
+
+
+      const path =
+
+
+
+        editingProductId
+
+
+
+          ? '/api/sellers/products/' +
+
+            editingProductId
+
+
+
+          : '/api/sellers/products';
+
+
+
+
+
+      const method =
+
+
+
+        editingProductId
+
+
+
+          ? 'PUT'
+
+
+
+          : 'POST';
+
+
+
+
+
+      await apiRequest(
+
+
+
+        path,
+
+
+
+        {
+
+
+
+          method,
+
+
+
+          headers: {
+
+
+
+            'Content-Type':
+
+              'application/json'
+
+
+
+          },
+
+
+
+          body:
+
+            JSON.stringify(
+
+              product
+
+            )
+
+
+
+        }
+
+
+
+      );
+
+
+
+
+
+      showMessage(
+
+
+
+        'productFormMessage',
+
+
+
+        'Product submitted successfully. Waiting for CEROOD admin approval.',
+
+
+
+        'success'
+
+
+
+      );
+
+
+
+
+
+      resetProductForm();
+
+
+
+
+
+      await loadProducts();
+
+
+
+
+
+      showTab(
+
+        'products'
+
+      );
+
+
+
+
+
+    } catch (error) {
+
+
+
+      showMessage(
+
+
+
+        'productFormMessage',
+
+
+
+        error.message,
+
+
+
+        'error'
+
+
+
+      );
+
+
+
+
+
+    } finally {
+
+
+
+      savingProduct = false;
+
+
+
+      button.disabled = false;
+
+
+
+    }
+
+
+
+  }
+
+
+
+);
+
+
+
+
+
+// ==========================================
+
+// EDIT PRODUCT
+
+// ==========================================
+
+
+
+function editProduct(id) {
+
+
+
+  const product =
+
+    products.find(
+
+
+
+      item =>
+
+        item.id === id
+
+
+
+    );
+
+
+
+
+
+  if (!product) return;
+
+
+
+
+
+  editingProductId =
+
+    product.id;
+
+
+
+
+
+  savedPhotoUrl =
+
+    product.image_url || '';
+
+
+
+
+
+  savedVideoUrl =
+
+    product.video_url || '';
+
+
+
+
+
+  const fields = {
+
+
+
+    productName:
+
+      product.name,
+
+
+
+    productCategory:
+
+      product.category,
+
+
+
+    productCondition:
+
+      product.condition,
+
+
+
+    productBrand:
+
+      product.brand,
+
+
+
+    productModel:
+
+      product.model,
+
+
+
+    productPrice:
+
+      product.price,
+
+
+
+    productComparePrice:
+
+      product.compare_price,
+
+
+
+    productStock:
+
+      product.stock,
+
+
+
+    productWarranty:
+
+      product.warranty_days,
+
+
+
+    productLocation:
+
+      product.location,
+
+
+
+    productDelivery:
+
+      product.delivery,
+
+
+
+    productAccessories:
+
+
+
+      Array.isArray(
+
+        product.accessories
+
+      )
+
+
+
+        ? product.accessories.join(', ')
+
+
+
+        : '',
+
+
+
+    productDefects:
+
+      product.known_defects,
+
+
+
+    productWarrantyTerms:
+
+      product.warranty_terms
+
+
+
+  };
+
+
+
+
+
+  Object.entries(fields).forEach(
+
+
+
+    ([id, value]) => {
+
+
+
+      $(id).value =
+
+        value ?? '';
+
+
+
+    }
+
+
+
+  );
+
+
+
+
+
+  $('productPhoto').value = '';
+
+
+
+  $('productVideo').value = '';
+
+
+
+
+
+  $('photoPreview').replaceChildren();
+
+
+
+  $('videoPreview').replaceChildren();
+
+
+
+
+
+  if (savedPhotoUrl) {
+
+
+
+    const image =
+
+      document.createElement('img');
+
+
+
+    image.src =
+
+      savedPhotoUrl;
+
+
+
+    image.alt =
+
+      'Current product photo';
+
+
+
+    $('photoPreview').appendChild(
+
+      image
+
+    );
+
+
+
+  }
+
+
+
+
+
+  if (savedVideoUrl) {
+
+
+
+    const video =
+
+      document.createElement('video');
+
+
+
+    video.src =
+
+      savedVideoUrl;
+
+
+
+    video.controls = true;
+
+
+
+    $('videoPreview').appendChild(
+
+      video
+
+    );
+
+
+
+  }
+
+
+
+
+
+  $('productFormTitle').textContent =
+
+    'Edit Product';
+
+
+
+
+
+  $('saveProductBtn').textContent =
+
+    'Submit Changes for Approval';
+
+
+
+
+
+  $('cancelEditBtn').classList.remove(
+
+    'seller-hidden'
+
+  );
+
+
+
+
+
+  clearMessage(
+
+    'productFormMessage'
+
+  );
+
+
+
+
+
+  showTab(
+
+    'add-product'
+
+  );
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// RESET FORM
+
+// ==========================================
+
+
+
+function resetProductForm() {
+
+
+
+  $('productForm').reset();
+
+
+
+
+
+  editingProductId = null;
+
+
+
+  savedPhotoUrl = '';
+
+
+
+  savedVideoUrl = '';
+
+
+
+
+
+  $('photoPreview').replaceChildren();
+
+
+
+  $('videoPreview').replaceChildren();
+
+
+
+
+
+  $('productFormTitle').textContent =
+
+    'Add New Product';
+
+
+
+
+
+  $('saveProductBtn').textContent =
+
+    'Submit Product for Approval';
+
+
+
+
+
+  $('cancelEditBtn').classList.add(
+
+    'seller-hidden'
+
+  );
+
+
+
+}
+
+
+
+
+
+$('cancelEditBtn').addEventListener(
+
+
+
+  'click',
+
+
+
+  () => {
+
+
+
+    resetProductForm();
+
+
+
+    clearMessage(
+
+      'productFormMessage'
+
+    );
+
+
+
+    showTab(
+
+      'products'
+
+    );
+
+
+
+  }
+
+
+
+);
+
+
+
+
+
+// ==========================================
+
+// WITHDRAW PRODUCT
+
+// ==========================================
+
+
+
+async function withdrawProduct(id) {
+
+
+
+  const confirmed =
+
+    window.confirm(
+
+
+
+      'Withdraw this product from sale?'
+
+
+
+    );
+
+
+
+
+
+  if (!confirmed) return;
+
+
+
+
+
+  try {
+
+
+
+    await apiRequest(
+
+
+
+      '/api/sellers/products/' +
+
+      id +
+
+      '/withdraw',
+
+
+
+      {
+
+
+
+        method: 'PATCH'
+
+
+
+      }
+
+
+
+    );
+
+
+
+
+
+    await loadProducts();
+
+
+
+
+
+    showMessage(
+
+
+
+      'productsMessage',
+
+
+
+      'Product withdrawn successfully.',
+
+
+
+      'success'
+
+
+
+    );
+
+
+
+
+
+  } catch (error) {
+
+
+
+    showMessage(
+
+
+
+      'productsMessage',
+
+
+
+      error.message,
+
+
+
+      'error'
+
+
+
+    );
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+// ==========================================
+
+// INITIALIZE DASHBOARD
+
+// ==========================================
+
+
+
+async function initializeDashboard() {
+
+
+
+  if (!auth.getToken()) {
+
+
+
+    logoutSeller();
+
+
+
+    return;
+
+
+
+  }
+
+
+
+
+
+  try {
+
+
+
+    const data = await apiRequest(
+
+
+
+      '/api/sellers/me'
+
+
+
+    );
+
+
+
+
+
+    if (
+
+
+
+      !data.seller ||
+
+
+
+      data.seller.status !==
+
+      'approved'
+
+
+
+    ) {
+
+
+
+      throw new Error(
+
+        'Approved seller account required.'
+
+      );
+
+
+
+    }
+
+
+
+
+
+    seller =
+
+      data.seller;
+
+
+
+
+
+    renderAccount();
+
+
+
+
+
+    $('loadingPanel').classList.add(
+
+      'seller-hidden'
+
+    );
+
+
+
+
+
+    $('dashboardContent').classList.remove(
+
+      'seller-hidden'
+
+    );
+
+
+
+
+
+    await loadProducts();
+
+
+
+
+
+  } catch (error) {
+
+
+
+    $('loadingPanel').textContent =
+
+
+
+      error.message ||
+
+
+
+      'Unable to load seller dashboard.';
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+initializeDashboard();
+
+
+
+</script>
+
+
 
 </body>
+
+
 
 </html>
