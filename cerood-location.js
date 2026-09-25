@@ -58,6 +58,54 @@
       btn.style.cssText='border:1px solid #c7c4dd;background:#f7f5ff;color:#342b72;border-radius:9px;padding:12px;font:600 13px Inter,Arial,sans-serif;cursor:pointer';
       const msg=document.createElement('small');msg.setAttribute('role','status');msg.style.cssText='font:12px Inter,Arial,sans-serif;color:#475569';
       panel.insertBefore(btn,panel.querySelector('button[type="submit"]'));panel.insertBefore(msg,btn.nextSibling);
+      // Reuse Home Services' existing database-backed village/town/pincode search.
+      const areaInput=panel.elements.namedItem('area');
+      const cityInput=panel.elements.namedItem('city');
+      const pinInput=panel.elements.namedItem('pincode');
+      if(areaInput&&cityInput&&pinInput){
+        areaInput.setAttribute('autocomplete','off');
+        areaInput.placeholder='Search village, town, area or pincode';
+        const suggestions=document.createElement('div');
+        suggestions.dataset.ceroodSuggestions='1';
+        suggestions.setAttribute('role','listbox');
+        suggestions.style.cssText='display:none;max-height:215px;overflow:auto;border:1px solid #d8d5e8;border-radius:9px;background:white;box-shadow:0 8px 20px #0001';
+        areaInput.closest('label').insertAdjacentElement('afterend',suggestions);
+        const searchStatus=document.createElement('small');
+        searchStatus.setAttribute('role','status');
+        searchStatus.style.cssText='font:12px Inter,Arial,sans-serif;color:#64748b';
+        suggestions.insertAdjacentElement('afterend',searchStatus);
+        let timer,request,serial=0,chosen=false;
+        const clear=()=>{suggestions.replaceChildren();suggestions.style.display='none';};
+        areaInput.addEventListener('input',()=>{
+          chosen=false;clear();clearTimeout(timer);if(request)request.abort();
+          const q=areaInput.value.trim();if(q.length<3){searchStatus.textContent='';return;}
+          const seq=++serial;
+          searchStatus.textContent='Searching locations…';
+          timer=setTimeout(async()=>{
+            request=new AbortController();
+            try{
+              const r=await fetch('https://catus-backend-d2js.onrender.com/api/search-locations?q='+encodeURIComponent(q),{signal:request.signal});
+              if(!r.ok)throw Error('Location search unavailable');
+              const data=await r.json();if(seq!==serial||!areaInput.isConnected)return;
+              const items=data.success&&Array.isArray(data.locations)?data.locations:[];
+              clear();searchStatus.textContent=items.length?'Select your location from suggestions.':'No matching location. You can enter the details manually.';
+              items.slice(0,12).forEach(item=>{
+                const row=document.createElement('button');row.type='button';row.setAttribute('role','option');
+                row.textContent=[item.name,item.district,item.state,item.pincode].filter(Boolean).join(', ');
+                row.style.cssText='display:block;width:100%;padding:11px;text-align:left;border:0;border-bottom:1px solid #eee;background:#fff;color:#171717;font:13px Inter,Arial,sans-serif;cursor:pointer';
+                row.addEventListener('click',()=>{
+                  areaInput.value=item.name||'';
+                  cityInput.value=item.district||item.name||'';
+                  if(/^\d{6}$/.test(String(item.pincode||'')))pinInput.value=String(item.pincode);
+                  chosen=true;clear();searchStatus.textContent='Location selected. Check details, then Save location.';
+                });suggestions.append(row);
+              });if(items.length)suggestions.style.display='block';
+            }catch(e){if(e.name!=='AbortError'&&seq===serial){clear();searchStatus.textContent='Search unavailable. Enter your location manually.';}}
+          },400);
+        });
+        panel.addEventListener('submit',()=>{clearTimeout(timer);if(request)request.abort();clear();},{capture:true});
+      }
+
       btn.addEventListener('click',()=>{
         if(!navigator.geolocation){msg.textContent='GPS unavailable. Enter your location manually.';return;}
         btn.disabled=true;msg.textContent='Detecting location…';
