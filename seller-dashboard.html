@@ -1830,7 +1830,7 @@ function renderProductCounts() {
 }
 
 // ==========================================
-// SELLER ORDERS (READ ONLY)
+// SELLER ORDERS (ACCEPT / REJECT / PACK / SHIP)
 // ==========================================
 
 function sellerOrderText(parent, tag, value, className = '') {
@@ -1956,6 +1956,71 @@ function renderSellerOrders(orders) {
       reject.addEventListener('click', () => decide('rejected'));
       actions.append(accept, reject);
       card.appendChild(actions);
+    } else if (currentStatus === 'accepted' || currentStatus === 'packed') {
+      // Only the next fulfilment stage is available.
+      const nextStatus = currentStatus === 'accepted' ? 'packed' : 'shipped';
+      const actions = document.createElement('div');
+      actions.className = 'seller-order-actions';
+
+      const fulfilButton = document.createElement('button');
+      fulfilButton.type = 'button';
+      fulfilButton.className = 'seller-btn';
+      fulfilButton.textContent = nextStatus === 'packed'
+        ? 'Mark as Packed' : 'Mark as Shipped';
+
+      fulfilButton.addEventListener('click', async () => {
+        const prompt = nextStatus === 'packed'
+          ? 'Confirm this item has been packed?'
+          : 'Confirm this item has actually been dispatched?';
+        if (!window.confirm(prompt)) return;
+
+        fulfilButton.disabled = true;
+        clearMessage('ordersMessage');
+        try {
+          const result = await apiRequest(
+            '/api/seller/orders/' +
+              encodeURIComponent(order.order_item_id) +
+              '/fulfilment',
+            {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status: nextStatus })
+            }
+          );
+          await loadSellerOrders();
+          showMessage(
+            'ordersMessage',
+            result.message || 'Order fulfilment updated.',
+            'success'
+          );
+        } catch (error) {
+          showMessage(
+            'ordersMessage',
+            error.message || 'Could not update fulfilment.',
+            'error'
+          );
+          fulfilButton.disabled = false;
+        }
+      });
+
+      actions.appendChild(fulfilButton);
+      card.appendChild(actions);
+    }
+
+    if (order.seller_packed_at || order.seller_shipped_at) {
+      const formatDate = value => {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime())
+          ? 'Date unavailable' : date.toLocaleString('en-IN');
+      };
+      if (order.seller_packed_at) {
+        sellerOrderText(card, 'p',
+          'Packed: ' + formatDate(order.seller_packed_at), 'product-meta');
+      }
+      if (order.seller_shipped_at) {
+        sellerOrderText(card, 'p',
+          'Shipped: ' + formatDate(order.seller_shipped_at), 'product-meta');
+      }
     }
 
     container.appendChild(card);
