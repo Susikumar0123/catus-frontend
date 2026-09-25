@@ -8495,6 +8495,21 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
   ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01s !important; }
 }
 </style>
+
+<style id="cerood-mobile-fixed-header-20260925">
+/* Mobile-only fixed header. A measured spacer retains normal document flow. */
+@media (max-width:850px) {
+  .master-app-container > .uc-homepage-wrapper {
+    position:fixed!important;top:0!important;left:0!important;right:0!important;
+    width:100%!important;max-width:100%!important;
+    margin:0!important;z-index:2147481000!important;
+    box-sizing:border-box!important;
+  }
+  #cerood-mobile-fixed-header-spacer {display:block;width:100%;height:var(--cerood-fixed-header-height,110px);pointer-events:none;}
+  nav.csf-bottom,nav.bottom.crn-mobile-nav {position:fixed!important;bottom:0!important;}
+}
+@media (min-width:851px) {#cerood-mobile-fixed-header-spacer {display:none!important;}}
+</style>
 </head>
 <body>
 
@@ -17055,6 +17070,40 @@ window.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+
+<script id="cerood-mobile-fixed-header-measure-20260925">
+(function () {
+  'use strict';
+  var selector = '.master-app-container > .uc-homepage-wrapper';
+  function setup() {
+    var header = document.querySelector(selector);
+    if (!header || header.dataset.ceroodFixedHeaderReady === '1') return;
+    header.dataset.ceroodFixedHeaderReady = '1';
+    var spacer = document.createElement('div');
+    spacer.id = 'cerood-mobile-fixed-header-spacer';
+    spacer.setAttribute('aria-hidden', 'true');
+    header.parentNode.insertBefore(spacer, header);
+    function sync() {
+      if (!window.matchMedia('(max-width: 850px)').matches) {
+        spacer.style.height = '0px';
+        return;
+      }
+      var height = Math.ceil(header.getBoundingClientRect().height);
+      if (height > 0) {
+        spacer.style.height = height + 'px';
+        document.documentElement.style.setProperty('--cerood-fixed-header-height', height + 'px');
+      }
+    }
+    sync();
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(sync).observe(header);
+    window.addEventListener('resize', sync, {passive:true});
+    window.addEventListener('pageshow', sync);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup, {once:true});
+  else setup();
+})();
+</script>
 </body>
 
 </html>
