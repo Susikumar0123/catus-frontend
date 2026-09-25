@@ -814,30 +814,31 @@
     // EXTRACT MSG91 REQUEST ID
     // ==========================================
 
-    function getMsg91ReqId(data) {
+   function getMsg91ReqId(data) {
 
-      if (!data) return '';
+  if (!data) return '';
 
-      if (typeof data === 'string') {
-        return data.trim();
-      }
+  if (typeof data === 'string') {
+    return data.trim();
+  }
 
-      return String(
+  return String(
 
-        data.reqId ||
-        data.req_id ||
-        data.requestId ||
-        data.request_id ||
-        data.data?.reqId ||
-        data.data?.req_id ||
-        data.data?.requestId ||
-        data.data?.request_id ||
-        ''
+    data.reqId ||
+    data.req_id ||
+    data.requestId ||
+    data.request_id ||
+    data.data?.reqId ||
+    data.data?.req_id ||
+    data.data?.requestId ||
+    data.data?.request_id ||
+    data.message ||
+    data.data?.message ||
+    ''
 
-      ).trim();
+  ).trim();
 
-    }
-
+}
 
     // ==========================================
     // EXTRACT MSG91 ACCESS TOKEN
@@ -1015,54 +1016,46 @@
     // WAIT FOR CAPTCHA
     // ==========================================
 
-    async function waitForCaptcha() {
+   async function waitForCaptcha() {
 
-      const started = Date.now();
+  if (
+    typeof window.isCaptchaVerified !==
+    'function'
+  ) {
 
+    throw new Error(
+      'Security verification is not ready. Refresh and try again.'
+    );
 
-      while (
+  }
 
-        Date.now() - started < 120000
+  let verified = false;
 
-      ) {
+  try {
 
-        if (
+    verified =
+      window.isCaptchaVerified() === true;
 
-          typeof window.isCaptchaVerified ===
-          'function'
+  } catch (error) {
 
-        ) {
+    console.error(
+      'Captcha verification check failed:',
+      error
+    );
 
-          try {
+  }
 
-            if (
-              window.isCaptchaVerified() === true
-            ) {
+  if (!verified) {
 
-              return;
+    throw new Error(
+      'Please complete the CAPTCHA before sending OTP.'
+    );
 
-            }
+  }
 
-          } catch (_) {}
+  return true;
 
-        }
-
-
-        await new Promise(resolve =>
-
-          setTimeout(resolve, 500)
-
-        );
-
-      }
-
-
-      throw new Error(
-        'Security verification timed out. Please try again.'
-      );
-
-    }
-
+}
 
     // ==========================================
     // COLLECT FORM DATA
