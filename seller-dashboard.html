@@ -4436,7 +4436,7 @@ const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"
 @media(max-width:650px){#ceroodUploadChooser .market-choice,#ceroodUploadChooser .cerood-bulk-choice{grid-template-columns:1fr}.cerood-chooser-body{padding:13px}}
 </style>
 <div id="ceroodUploadChooser" hidden role="dialog" aria-modal="true" aria-labelledby="ceroodUploadChooserTitle">
- <div class="cerood-chooser-box"><div class="cerood-chooser-head"><strong id="ceroodUploadChooserTitle">Add Single Catalog</strong><small id="cwVersionMark" style="font-size:10px;color:#667085;margin-right:auto">CEROOD category wizard v3</small><button type="button" id="ceroodUploadChooserClose" aria-label="Close">×</button></div>
+ <div class="cerood-chooser-box"><div class="cerood-chooser-head"><strong id="ceroodUploadChooserTitle">Add Single Catalog</strong><small id="cwVersionMark" style="font-size:10px;color:#667085;margin-right:auto">CEROOD category wizard v4</small><button type="button" id="ceroodUploadChooserClose" aria-label="Close">×</button></div>
  <div class="cerood-chooser-body"><p id="ceroodUploadChooserNote">Choose your marketplace</p><div id="ceroodBulkChoice" class="cerood-bulk-choice" hidden>
  <button type="button" disabled><span class="market-symbol">📺</span><strong>Renewed</strong><small>Bulk upload not connected yet</small></button>
  <button type="button" disabled><span class="market-symbol">✨</span><strong>Cosmetics</strong><small>Bulk upload not connected yet</small></button>
@@ -4560,8 +4560,8 @@ trees.clothing['Men Fashion']['Footwear']={'Flipflops & Slippers':['Sliders','Cl
 const labels={clothing:'Fashion',cosmetics:'Cosmetics',renewed:'Renewed'};
 let market='clothing',selected=[],file=null,url='',mode='single',search='';
 const wizard=document.createElement('div');wizard.id='cwWizard';single.prepend(wizard);
-modal.dataset.wizardVersion='v3';
-const back=document.createElement('button');back.type='button';back.id='cwFinalBack';back.hidden=true;back.textContent='← Back to Select Category';single.insertBefore(back,panel);
+modal.dataset.wizardVersion='v4';
+const back=document.createElement('button');back.type='button';back.id='cwFinalBack';back.hidden=true;back.textContent='← Back to Select Category';single.insertBefore(back,wizard);
 const escapeHTML=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function at(path){let n=trees[market];for(const k of path)n=n?.[k];return n}
 function options(n){return !n?[]:Array.isArray(n)?n:Object.keys(n)}
