@@ -2271,6 +2271,58 @@ html body{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
  html{scroll-padding-top:var(--cerood-fashion-header-height,116px)}
 }
 </style>
+
+<style id="cerood-fashion-checkout-desktop-repair-20260926">
+/* Desktop only: match the reference checkout header and two-column layout.
+   Keep the existing mobile header, address, cart, COD and Razorpay scripts unchanged. */
+@media (min-width: 901px) {
+  html body { padding-top: 0 !important; overflow-x: clip; }
+  html body > .checkout-header {
+    display: flex !important; flex-wrap: nowrap !important; align-items: center !important;
+    justify-content: space-between !important; gap: 16px !important;
+    position: sticky !important; top: 0 !important; left: auto !important; right: auto !important;
+    width: 100% !important; max-width: none !important; min-width: 0 !important;
+    height: auto !important; min-height: 68px !important; margin: 0 !important;
+    padding: 12px max(24px, calc((100vw - 1160px) / 2)) !important;
+    background: #fff !important; border: 0 !important;
+    border-bottom: 1px solid #ececef !important; border-radius: 0 !important;
+    box-shadow: none !important; transform: none !important; z-index: 1000 !important;
+    box-sizing: border-box !important;
+  }
+  html body > .checkout-header > .brand-word {
+    display: inline-flex !important; align-items: center !important; flex: 0 0 auto !important;
+    width: auto !important; height: auto !important; margin: 0 !important;
+  }
+  html body > .checkout-header > .brand-word img {
+    display: block !important; width: auto !important; max-width: 125px !important;
+    height: 40px !important; object-fit: contain !important;
+  }
+  html body > .checkout-header > .secure-badge {
+    display: inline-flex !important; align-items: center !important;
+    gap: 7px !important; margin-left: auto !important; white-space: nowrap !important;
+  }
+  html body > .checkout-header > .cerood-checkout-location,
+  html body > .checkout-header > .cerood-fashion-checkout-cart,
+  html body > .checkout-header > .cerood-fashion-menu,
+  html body > .checkout-header > .cerood-fashion-checkout-search,
+  html body > .checkout-header > .cerood-inner-search { display: none !important; }
+  html body > .checkout-container {
+    width: 100% !important; max-width: 1160px !important;
+    margin: 0 auto !important; padding: 22px 18px 30px !important;
+    box-sizing: border-box !important;
+  }
+  html body .checkout-grid {
+    display: grid !important; grid-template-columns: minmax(0, 1.5fr) minmax(340px, 1fr) !important;
+    align-items: start !important; gap: 18px !important; margin-top: 8px !important;
+  }
+  html body .checkout-grid > div, html body .checkout-grid > aside,
+  html body .checkout-grid .card-box { min-width: 0 !important; max-width: 100% !important; }
+  html body .checkout-grid .card-box { height: auto !important; min-height: 0 !important; }
+}
+/* A header SVG must never grow to its intrinsic viewport-filling dimensions. */
+.checkout-header .cerood-location-pin { width: 12px !important; height: 14px !important; flex: 0 0 12px !important; }
+.checkout-header .cerood-checkout-location > svg:not(.cerood-location-pin) { width: 12px !important; height: 12px !important; flex: 0 0 12px !important; }
+</style>
 </head><body>
 <header class="checkout-header"><a aria-label="Cerood Fashion home" class="brand-word" href="/clothing.html"><img alt="Cerood logo" height="43" src="/cerood-logo.webp" style="display:block;width:auto;max-width:125px;object-fit:contain" width="110"/></a><button aria-label="Go to delivery address" class="cerood-checkout-location" type="button"><svg aria-hidden="true" class="cerood-location-pin" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.15 7.5 12.5 7.5 12.5s7.5-7.35 7.5-12.5A7.5 7.5 0 0 0 12 2Zm0 10.1a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"></path></svg><span>Delivery to<strong id="fashionCheckoutLocation">Delivery address</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><span class="secure-badge"><i class="fa-solid fa-shield-halved"></i> Secure Checkout</span><a aria-label="Fashion cart" class="cerood-fashion-checkout-cart" href="/clothing-checkout.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg></a><details class="cerood-fashion-menu"><summary aria-label="Open Fashion navigation menu" title="Menu"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></summary><div class="cerood-fashion-menu-list"><a href="/clothing.html">Shop Fashion</a><a href="/clothing.html#products-section">Explore Products</a><a href="/clothing-dashboard.html?fashionPane=overview">Dashboard</a><a href="/clothing-dashboard.html?fashionPane=purchases">My Orders</a><a href="/clothing-dashboard.html?fashionPane=tracking">Live Tracking</a><a href="/clothing-dashboard.html?fashionPane=reviews">Reviews &amp; Ratings</a><a href="/clothing-dashboard.html?fashionPane=warranty">Warranty &amp; Invoices</a><a href="/clothing-dashboard.html?fashionPane=overview">My Account</a><a href="/clothing-checkout.html">Fashion Cart / Checkout</a><a href="/home-services.html">Home Services</a><a href="/cosmetics.html">Beauty</a><a href="/renewed.html">Renewed</a></div></details><a aria-label="Search Fashion products" class="cerood-fashion-checkout-search" href="/clothing.html#products-section"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><span>Search fashion, clothing, sizes...</span></a><form action="/clothing.html" class="cerood-inner-search" method="get" role="search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search clothing products" autocomplete="off" name="q" placeholder="Search fashion products..." type="search"/></form></header>
 <main class="checkout-container"><div id="checkoutView"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div class="cerood-fashion-checkout-intro"><h2>Complete your booking</h2><p>Confirm your delivery address, review the bill<br class="fashion-intro-break"/> and choose how to pay.</p></div><span class="cerood-fashion-checkout-safe">◈ Checkout</span></div><div class="note" id="topMessage" role="status">Loading your Fashion cart…</div>
