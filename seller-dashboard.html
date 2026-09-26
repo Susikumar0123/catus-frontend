@@ -876,6 +876,12 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
         class="product-list"
 
       ></div>
+      <div class="seller-card" id="ceroodOtherMarketplaceProducts" style="margin-top:18px">
+        <div class="hub-section-toolbar"><strong>Cosmetics &amp; Fashion listings</strong><button type="button" class="seller-btn seller-btn-outline" id="ceroodRefreshOtherProducts">Refresh</button></div>
+        <p class="hub-muted">Your submissions and admin approval status across both marketplaces.</p>
+        <div id="ceroodOtherProductMessage" class="marketplace-message" role="status"></div>
+        <div id="ceroodOtherProductList" class="product-list"></div>
+      </div>
 
     </section>
 
@@ -3496,14 +3502,15 @@ initializeDashboard();
  byId('hubSingleCatalog').addEventListener('click',()=>byId('ceroodMarketplacePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));
  let qualityFilter='all';
  function updateQuality(){
-  const list=Array.isArray(window.products)?window.products:typeof products!=='undefined'?products:[];
+  const renewed=Array.isArray(window.products)?window.products:typeof products!=='undefined'?products:[];
+  const list=[...renewed,...(window.ceroodMarketplaceProducts||[])];
   const status=p=>String(p.approval_status||'pending').toLowerCase();
   const count=s=>list.filter(p=>status(p)===s).length;
   byId('hubQualityTotal').textContent=list.length;byId('hubQualityApproved').textContent=count('approved');byId('hubQualityPending').textContent=count('pending');byId('hubQualityRejected').textContent=count('rejected');
   byId('hubCatalogTotal').textContent=list.length;byId('hubCatalogApproved').textContent=count('approved');byId('hubCatalogPending').textContent=count('pending');
   const target=byId('hubQualityProducts');target.replaceChildren();const selected=list.filter(p=>qualityFilter==='all'||status(p)===qualityFilter);
   if(!selected.length){const empty=document.createElement('p');empty.className='hub-muted';empty.textContent='No products in this category.';target.append(empty);return}
-  const table=document.createElement('table');table.className='hub-product-table';table.innerHTML='<thead><tr><th>Product</th><th>Approval</th><th>Action</th></tr></thead>';const body=document.createElement('tbody');selected.forEach(p=>{const tr=document.createElement('tr');[p.name||'Product',status(p)].forEach(t=>{const td=document.createElement('td');td.textContent=t;tr.append(td)});const td=document.createElement('td'),btn=document.createElement('button');btn.type='button';btn.className='hub-table-link';btn.textContent='View';btn.addEventListener('click',()=>showTab('products'));td.append(btn);tr.append(td);body.append(tr)});table.append(body);target.append(table);
+  const table=document.createElement('table');table.className='hub-product-table';table.innerHTML='<thead><tr><th>Product</th><th>Approval</th><th>Action</th></tr></thead>';const body=document.createElement('tbody');selected.forEach(p=>{const tr=document.createElement('tr');[p.name||p.product_data?.name||'Product',status(p)].forEach(t=>{const td=document.createElement('td');td.textContent=t;tr.append(td)});const td=document.createElement('td'),btn=document.createElement('button');btn.type='button';btn.className='hub-table-link';btn.textContent='View';btn.addEventListener('click',()=>showTab('products'));td.append(btn);tr.append(td);body.append(tr)});table.append(body);target.append(table);
  }
  document.querySelectorAll('[data-quality-filter]').forEach(btn=>btn.addEventListener('click',()=>{qualityFilter=btn.dataset.qualityFilter;document.querySelectorAll('[data-quality-filter]').forEach(b=>b.classList.toggle('active',b===btn));updateQuality()}));
  const oldShow=window.showTab;window.showTab=function(tab){oldShow(tab);if(['quality','add-product'].includes(tab))updateQuality()};
@@ -3562,6 +3569,55 @@ initializeDashboard();
  form.addEventListener('submit',async e=>{e.preventDefault();if(busy||market==='renewed')return;busy=true;const btn=el('marketSubmit');btn.disabled=true;msg.className='marketplace-message';try{const f=el('marketImage').files[0];if(!f||!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024)throw Error('Upload JPG, PNG or WebP image up to 10 MB.');msg.textContent='Uploading product image...';const image_url=await uploadMedia(f);const v=id=>el(id).value.trim();const product={name:v('marketName'),category:v('marketCategory'),brand:v('marketBrand'),variant:v('marketVariant'),price:v('marketPrice'),compare_price:v('marketCompare'),stock:v('marketStock'),net_quantity:market==='cosmetics'?v('marketQuantity'):'',batch_number:market==='cosmetics'?v('marketBatch'):'',manufacture_date:market==='cosmetics'?v('marketMfg'):'',expiry_date:market==='cosmetics'?v('marketExpiry'):'',ingredients:market==='cosmetics'?v('marketIngredients'):'',description:v('marketDescription'),image_url};msg.textContent='Submitting to '+(market==='clothing'?'Fashion':'Cosmetics')+' admin...';await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});msg.textContent='Submitted! Waiting for '+(market==='clothing'?'Fashion':'Cosmetics')+' admin approval.';form.reset();el('marketPreview').hidden=true;await loadQueue()}catch(err){msg.className='marketplace-message error';msg.textContent=err.message}finally{busy=false;btn.disabled=false}});
  // Start with marketplace choices visible; do not force Renewed form open.
  renewed.hidden=true;form.hidden=true;queue.hidden=true;
+})();
+</script>
+<script id="cerood-unified-seller-catalog">
+(()=>{
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const escStatus=x=>String(x||'pending').toLowerCase();
+  let busy=false;
+  window.ceroodMarketplaceProducts=[];
+  function display(rows){
+    const target=$('ceroodOtherProductList');if(!target)return;target.replaceChildren();
+    if(!rows.length){const p=document.createElement('p');p.className='hub-muted';p.textContent='No Cosmetics or Fashion products submitted yet.';target.append(p);return}
+    rows.forEach(r=>{
+      const p=r.product_data||{},card=document.createElement('article'),img=document.createElement('img'),body=document.createElement('div'),name=document.createElement('h3'),price=document.createElement('div'),meta=document.createElement('p'),badge=document.createElement('span'),note=document.createElement('p');
+      card.className='product-card';img.alt=p.name||'Product';img.loading='lazy';if(/^https:\/\//.test(p.image_url||''))img.src=p.image_url;
+      body.className='product-card-body';name.textContent=p.name||'Product';price.className='product-price';price.textContent='₹'+Number(p.price||0).toLocaleString('en-IN');
+      meta.className='product-meta';meta.textContent=(r.marketplace==='clothing'?'Fashion':'Cosmetics')+' · '+(p.category||'')+' · Stock: '+(p.stock??'—');
+      badge.className='approval-badge '+escStatus(r.approval_status);badge.textContent=escStatus(r.approval_status)==='pending'?'Under review':escStatus(r.approval_status);
+      note.className='product-meta';note.textContent=r.rejection_reason?'Reason: '+r.rejection_reason:r.published_product_id?'Published product ID: '+r.published_product_id:'';
+      body.append(name,price,meta,badge,note);card.append(img,body);target.append(card);
+    });
+  }
+  async function refresh(){
+    if(busy)return;busy=true;const msg=$('ceroodOtherProductMessage');if(msg)msg.textContent='Loading Cosmetics & Fashion listings...';
+    try{
+      const data=await apiRequest('/api/sellers/catalog-submissions');
+      if(data.success===false)throw Error(data.message||'Unable to load submissions');
+      const rows=Array.isArray(data.products)?data.products:[];
+      window.ceroodMarketplaceProducts=rows;display(rows);
+      if(msg)msg.textContent='';
+      // Existing Renewed cards are untouched. Refresh totals for all three marketplaces.
+      const renewed=typeof products!=='undefined'&&Array.isArray(products)?products:[];
+      const all=[...renewed,...rows],count=s=>all.filter(p=>escStatus(p.approval_status)===s).length;
+      if($('hubCatalogTotal'))$('hubCatalogTotal').textContent=all.length;
+      if($('hubCatalogApproved'))$('hubCatalogApproved').textContent=count('approved');
+      if($('hubCatalogPending'))$('hubCatalogPending').textContent=count('pending');
+      if($('hubQualityTotal'))$('hubQualityTotal').textContent=all.length;
+      if($('hubQualityApproved'))$('hubQualityApproved').textContent=count('approved');
+      if($('hubQualityPending'))$('hubQualityPending').textContent=count('pending');
+      if($('hubQualityRejected'))$('hubQualityRejected').textContent=count('rejected');
+    }catch(e){if(msg){msg.className='marketplace-message error';msg.textContent='Cosmetics & Fashion listings could not load: '+e.message}}finally{busy=false}
+  }
+  $('ceroodRefreshOtherProducts')?.addEventListener('click',refresh);
+  document.querySelectorAll('.seller-tab[data-tab="products"],.seller-tab[data-tab="add-product"],.seller-tab[data-tab="quality"]').forEach(b=>b.addEventListener('click',()=>{if(!document.getElementById('dashboardContent')?.classList.contains('seller-hidden'))refresh()}));
+  // After a successful new submission, fetch the latest admin-review state.
+  $('ceroodMarketplaceForm')?.addEventListener('submit',()=>setTimeout(refresh,1600));
+  const originalLoad=window.loadProducts;
+  if(typeof originalLoad==='function')window.loadProducts=async function(...args){const result=await originalLoad.apply(this,args);await refresh();return result};
+  if(!document.getElementById('dashboardContent')?.classList.contains('seller-hidden'))refresh();
 })();
 </script>
 </body>
