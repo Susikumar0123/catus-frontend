@@ -657,7 +657,14 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #section-products #ceroodCosmeticsProducts,#section-products #ceroodFashionProducts{padding:18px}
 @media(max-width:500px){#section-products .product-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#section-products .product-card{min-height:305px}#section-products .product-card>img{height:108px;min-height:108px}#section-products .product-card-body{padding:8px}}
 </style>
-</head>
+<style id="cerood-inline-edit-style">
+#ceroodInlineRenewedEditor[hidden],#ceroodInlineMarketplaceEditor[hidden]{display:none!important}
+#ceroodInlineRenewedEditor,#ceroodInlineMarketplaceEditor{scroll-margin-top:22px;margin:12px 0 20px}
+#ceroodInlineRenewedEditor #renewedProductFormCard{display:block!important;max-width:980px}
+#ceroodInlineMarketplaceEditor .seller-card{max-width:980px}
+#ceroodInlineMarketplaceEditor .marketplace-fields label{display:block}
+#ceroodInlineMarketplaceEditor .marketplace-fields label input,#ceroodInlineMarketplaceEditor .marketplace-fields label textarea{margin-top:7px}
+</style></head>
 
 <body>
 
@@ -920,6 +927,8 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 
       ></div>
 
+      <div id="ceroodInlineRenewedEditor" hidden></div>
+      <div id="ceroodInlineMarketplaceEditor" hidden></div>
       <div class="hub-section-toolbar cerood-renewed-heading"><strong>📺 Renewed Products</strong></div>
       <div
 
@@ -3239,11 +3248,16 @@ function editProduct(id) {
 
   );
 
-  showTab(
-
-    'add-product'
-
-  );
+  // Edit within My Products: move the EXISTING form, keeping all inputs and handlers.
+  showTab('products');
+  const inlineHost = $('ceroodInlineRenewedEditor');
+  const existingForm = $('renewedProductFormCard');
+  if (inlineHost && existingForm) {
+    inlineHost.hidden = false;
+    existingForm.hidden = false;
+    inlineHost.appendChild(existingForm);
+    inlineHost.scrollIntoView({behavior:'smooth',block:'start'});
+  }
 
 }
 
@@ -3254,6 +3268,16 @@ function editProduct(id) {
 // ==========================================
 
 function resetProductForm() {
+
+  // Return the original Renewed form to Catalog Uploads after edit/cancel.
+  const existingForm = $('renewedProductFormCard');
+  const originalParent = $('section-add-product');
+  const inlineHost = $('ceroodInlineRenewedEditor');
+  if (existingForm && inlineHost && inlineHost.contains(existingForm)) {
+    originalParent.appendChild(existingForm);
+    existingForm.hidden = true;
+    inlineHost.hidden = true;
+  }
 
   $('productForm').reset();
 
@@ -3654,12 +3678,71 @@ initializeDashboard();
   }
   async function editMarketplaceProduct(r){
     if(r.approval_status==='withdrawn')return;
+    const host=$('ceroodInlineMarketplaceEditor');
+    if(!host)return;
     const p=r.product_data||{};
-    const fields=[['name','Product name'],['category','Category'],['brand','Brand'],['variant','Variant / size'],['price','Price'],['compare_price','Compare price'],['stock','Stock'],['description','Description']];
-    if(r.marketplace==='cosmetics')fields.push(['net_quantity','Net quantity'],['batch_number','Batch number'],['manufacture_date','Manufacture date YYYY-MM-DD'],['expiry_date','Expiry date YYYY-MM-DD'],['ingredients','Ingredients']);
-    const updated={...p};for(const [key,label] of fields){const value=prompt(label,String(p[key]??''));if(value===null)return;updated[key]=value;}
-    if(!confirm(r.approval_status==='approved'?'Save changes? The live listing will be unpublished until admin approves again.':'Save changes and send for admin review?'))return;
-    try{await apiRequest('/api/sellers/catalog-submissions/'+encodeURIComponent(r.id),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:updated})});await refresh();alert('Changes submitted for admin review.')}catch(e){alert('Edit failed: '+e.message)}
+    host.replaceChildren();host.hidden=false;
+    const panel=document.createElement('div');panel.className='seller-card';
+    const title=document.createElement('h2');title.textContent='Edit '+(r.marketplace==='clothing'?'Fashion':'Cosmetics')+' Product';
+    const info=document.createElement('p');info.className='hub-muted';info.textContent='Edit all product details here. Approved products return to admin review and are temporarily unpublished after saving.';
+    const form=document.createElement('form');form.className='marketplace-fields';form.noValidate=false;
+    const specs=[
+      ['name','Product name','text',true],['category','Category','text',true],
+      ['brand','Brand','text',true],['variant','Variant / size / colour','text'],
+      ['shade','Shade / colour','text'],['net_quantity','Net quantity','text',r.marketplace==='cosmetics'],
+      ['price','Selling price (₹)','number',true],['compare_price','MRP / compare price (₹)','number'],
+      ['stock','Available stock','number',true],['batch_number','Batch number','text'],
+      ['manufacture_date','Manufacture date','date'],['expiry_date','Expiry date','date',r.marketplace==='cosmetics'],
+      ['manufacturer','Manufacturer','text'],['importer','Importer','text'],
+      ['ingredients','Ingredients','textarea'],['directions','Directions for use','textarea'],
+      ['warnings','Warnings','textarea'],['description','Product description','textarea']
+    ];
+    const values={};
+    for(const [key,label,type,required] of specs){
+      if(r.marketplace==='clothing'&&['net_quantity','batch_number','manufacture_date','expiry_date','ingredients','directions','warnings','manufacturer','importer'].includes(key)&&!(p[key]))continue;
+      const wrap=document.createElement('div');wrap.className=['description','ingredients','directions','warnings'].includes(key)?'full':'';
+      const lab=document.createElement('label');lab.textContent=label+(required?' *':'');
+      const input=document.createElement(type==='textarea'?'textarea':'input');
+      if(type!=='textarea')input.type=type;
+      if(type==='number'){input.min=key==='stock'?'0':key==='compare_price'?'0':'0.01';input.step=key==='stock'?'1':'0.01'}
+      input.value=p[key]??'';input.required=!!required;input.name=key;
+      lab.append(input);wrap.append(lab);form.append(wrap);values[key]=input;
+    }
+    const imageWrap=document.createElement('div');imageWrap.className='full';
+    const imageLabel=document.createElement('label');imageLabel.textContent='Replace product image (optional)';
+    const imageInput=document.createElement('input');imageInput.type='file';imageInput.accept='image/jpeg,image/png,image/webp';
+    const preview=document.createElement('img');preview.className='marketplace-preview';preview.alt='Current product image';
+    if(/^https:\/\//i.test(p.image_url||''))preview.src=p.image_url;else preview.hidden=true;
+    imageInput.addEventListener('change',()=>{const f=imageInput.files[0];if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);if(f){preview.dataset.objectUrl=URL.createObjectURL(f);preview.src=preview.dataset.objectUrl;preview.hidden=false}});
+    imageLabel.append(imageInput);imageWrap.append(imageLabel,preview);form.append(imageWrap);
+    const videoWrap=document.createElement('div');videoWrap.className='full';
+    const videoLabel=document.createElement('label');videoLabel.textContent='Replace product video (optional)';
+    const videoInput=document.createElement('input');videoInput.type='file';videoInput.accept='video/mp4,video/webm';
+    videoLabel.append(videoInput);videoWrap.append(videoLabel);
+    if(p.video_url){const note=document.createElement('small');note.textContent='Current video saved';videoWrap.append(note)}
+    form.append(videoWrap);
+    const message=document.createElement('p');message.className='marketplace-message full';message.setAttribute('role','status');
+    const buttons=document.createElement('div');buttons.className='form-actions full';
+    const save=document.createElement('button');save.type='submit';save.className='seller-btn';save.textContent='Save changes for admin approval';
+    const cancel=document.createElement('button');cancel.type='button';cancel.className='seller-btn seller-btn-outline';cancel.textContent='Cancel';
+    cancel.addEventListener('click',()=>{if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);host.replaceChildren();host.hidden=true});
+    buttons.append(save,cancel);form.append(message,buttons);panel.append(title,info,form);host.append(panel);
+    host.scrollIntoView({behavior:'smooth',block:'start'});
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();if(!form.reportValidity())return;
+      save.disabled=true;message.textContent='Saving product changes...';message.className='marketplace-message full';
+      try{
+        const updated={...p};for(const [key,input] of Object.entries(values))updated[key]=input.value.trim();
+        const file=imageInput.files[0];if(file){if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>10*1024*1024)throw Error('Image must be JPG, PNG or WebP, maximum 10 MB.');updated.image_url=await uploadMedia(file)}
+        const video=videoInput.files[0];if(video){if(!['video/mp4','video/webm'].includes(video.type)||video.size>30*1024*1024)throw Error('Video must be MP4 or WebM, maximum 30 MB.');updated.video_url=await uploadMedia(video)}
+        if(r.approval_status==='approved'&&!confirm('This approved product will be unpublished until admin approves the changes. Continue?'))return;
+        await apiRequest('/api/sellers/catalog-submissions/'+encodeURIComponent(r.id),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:updated})});
+        if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);
+        host.replaceChildren();host.hidden=true;await refresh();
+        const status=$('ceroodOtherProductMessage');if(status){status.className='marketplace-message';status.textContent='Changes saved and sent for admin approval.'}
+      }catch(err){message.className='marketplace-message error full';message.textContent='Edit failed: '+err.message}
+      finally{save.disabled=false}
+    });
   }
   async function withdrawMarketplaceProduct(r){
     if(r.approval_status==='withdrawn'||!confirm('Withdraw this product from sale?'))return;
