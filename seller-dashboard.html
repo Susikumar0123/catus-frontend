@@ -781,7 +781,6 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
               <div class="cerood-welcome-copy"><span class="cerood-celebrate" aria-hidden="true">🎉</span><h2 id="ceroodHomeMessage">Start your CEROOD selling journey</h2><p id="ceroodHomeDescription">Upload your first product with clear photos, price and warranty details.</p><button type="button" class="seller-btn" id="ceroodHomeCTA">Upload your first catalog</button></div>
             </div>
           </div>
-          <div class="cerood-home-stats" aria-label="Your seller overview"><div><span>Total products</span><strong id="totalProducts">0</strong></div><div><span>Approved products</span><strong id="approvedProducts">0</strong></div><div><span>Commission rate</span><strong id="commissionRate">—</strong></div></div>
         </div>
         <aside class="cerood-learning"><h2>Learn &amp; Grow on CEROOD</h2><button type="button" class="cerood-learning-link" id="ceroodPlayTraining"><span class="cerood-learn-icon">🎧</span><span><strong>Seller training <em>Video Guide</em></strong><small>Learn how to manage and grow your business on CEROOD.</small></span><b>›</b></button><button type="button" class="cerood-learning-link" id="ceroodPlayCatalog"><span class="cerood-learn-icon">▶</span><span><strong>Prepare your catalogs</strong><small>Upload real product photos and accurate details.</small></span><b>›</b></button><button type="button" class="cerood-learning-link" data-go="pricing"><span class="cerood-learn-icon">%</span><span><strong>Pricing &amp; commission</strong><small>Review your listings and prices.</small></span><b>›</b></button><button type="button" class="cerood-learning-link" data-go="orders"><span class="cerood-learn-icon">🚚</span><span><strong>Delivery &amp; orders</strong><small>Track and process your orders.</small></span><b>›</b></button></aside>
       </div>
@@ -3433,31 +3432,41 @@ initializeDashboard();
 </script>
 <script id="cerood-home-onboarding-video">
 (function(){
- // PASTE YOUR PUBLIC YOUTUBE VIDEO URL HERE (YouTube watch, youtu.be or Shorts):
- const CEROOD_SELLER_TUTORIAL_URL =
-  'https://www.youtube.com/watch?v=YOUR_VIDEO_ID';
+ const CEROOD_SELLER_TUTORIAL_URL='https://www.youtube.com/watch?v=YOUR_VIDEO_ID';
  const byId=id=>document.getElementById(id);
- const videoId=(url)=>{try{const u=new URL(url);const host=u.hostname.toLowerCase();let id='';if(host==='youtu.be'||host==='www.youtu.be')id=u.pathname.split('/')[1];else if(['youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'].includes(host)){id=u.searchParams.get('v')||u.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/)?.[1]||'';}return /^[a-zA-Z0-9_-]{11}$/.test(id)?id:''}catch{return ''}};
+ const videoId=url=>{try{const u=new URL(url);let id='';if(['youtu.be','www.youtu.be'].includes(u.hostname))id=u.pathname.split('/')[1];else if(['youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'].includes(u.hostname))id=u.searchParams.get('v')||u.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/)?.[1]||'';return /^[a-zA-Z0-9_-]{11}$/.test(id)?id:''}catch{return ''}};
  const id=videoId(CEROOD_SELLER_TUTORIAL_URL);
  if(id){const frame=document.createElement('iframe');frame.src='https://www.youtube-nocookie.com/embed/'+id+'?rel=0';frame.title='CEROOD Seller Training';frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';frame.allowFullscreen=true;frame.loading='lazy';byId('ceroodTutorial').replaceChildren(frame)}
- const openVideo=()=>{if(id){byId('ceroodTutorial').querySelector('iframe')?.scrollIntoView({behavior:'smooth',block:'center'})}else{byId('ceroodTutorial').scrollIntoView({behavior:'smooth',block:'center'})}};
+ const openVideo=()=>byId('ceroodTutorial').scrollIntoView({behavior:'smooth',block:'center'});
  byId('ceroodPlayTraining').addEventListener('click',openVideo);
  byId('ceroodPlayCatalog').addEventListener('click',()=>showTab('add-product'));
- document.querySelectorAll('.cerood-home [data-go]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.go)));
+ document.querySelectorAll('.cerood-learning [data-go]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.go)));
+ let selectedStep=null,ordersLoaded=false,ordersLoading=false;
+ const steps=['ceroodStepUpload','ceroodStepLive','ceroodStepOrder'];
  function update(){
-  const list=Array.isArray(window.products)?window.products:(typeof products!=='undefined'&&Array.isArray(products)?products:[]);
-  const total=list.length,approved=list.filter(p=>String(p.approval_status||'').toLowerCase()==='approved').length;
+  const list=typeof products!=='undefined'&&Array.isArray(products)?products:[];
+  const uploaded=list.length>0;
+  const approved=list.some(p=>String(p.approval_status||'').toLowerCase()==='approved');
   const orders=Array.isArray(window.hubSellerOrders)?window.hubSellerOrders:[];
+  const hasOrder=orders.length>0;
+  const done=[uploaded,approved,hasOrder];
+  const firstIncomplete=done.findIndex(v=>!v);
+  const current=selectedStep===null?(firstIncomplete<0?2:firstIncomplete):selectedStep;
   byId('ceroodHomeShop').textContent=(typeof seller!=='undefined'&&seller?.shop_name)||'Seller';
-  const current=total===0?0:approved===0?1:orders.length===0?2:3;
-  ['ceroodStepUpload','ceroodStepLive','ceroodStepOrder'].forEach((key,i)=>{const el=byId(key);el.classList.toggle('is-done',i<current);el.classList.toggle('is-current',i===Math.min(current,2));el.querySelector('.cerood-step-mark').textContent=i<current?'✓':String(i+1)});
-  const states=[['Start your CEROOD selling journey','Upload your first product with clear photos, price, condition and warranty details.','Upload your first catalog','add-product'],['Your catalogs are under review','CEROOD reviews submitted products before they appear in the Renewed Store. Check your listings for updates.','View my products','products'],['Your products are live!','Your approved listings are ready for customers. Check Manage Orders for new purchases.','Manage orders','orders'],['You have received your first order!','Open Manage Orders to accept and process your confirmed orders.','Process your orders','orders']];
+  steps.forEach((key,i)=>{const el=byId(key);el.classList.toggle('is-done',done[i]);el.classList.toggle('is-current',i===current);el.setAttribute('aria-pressed',String(i===current));el.querySelector('.cerood-step-mark').textContent=done[i]?'✓':String(i+1)});
+  const states=[
+   uploaded?['Catalog uploaded','You have uploaded a product. Open Catalog Uploads to add another product or update its details.','View catalogs','add-product']:['Upload catalogs to get started','Add your first product with real photos, price, condition and warranty details.','Upload your first catalog','add-product'],
+   approved?['Your catalogs are live!','At least one of your products has been approved for sale on CEROOD. View your listings for details.','View live products','products']:uploaded?['Catalog approval pending','Your submitted products are waiting for CEROOD approval. You can check their status under My Products.','Check approval status','products']:['Upload a catalog first','Once you upload a product, CEROOD can review it. This step will show a tick only after a product is approved.','Upload catalog','add-product'],
+   hasOrder?['Your first order is received!','An order for your products is available. Open Manage Orders to review and process it.','Manage orders','orders']:approved?['Get your first order','Your product is approved. When an order appears in your seller account, this step will be marked complete.','View orders','orders']:['Get your first order','This step will be marked complete only after an order appears in your seller account.','View orders','orders']
+  ];
   const state=states[current];byId('ceroodHomeMessage').textContent=state[0];byId('ceroodHomeDescription').textContent=state[1];const cta=byId('ceroodHomeCTA');cta.textContent=state[2];cta.onclick=()=>showTab(state[3]);
  }
- const previousLoad=window.loadProducts;if(typeof previousLoad==='function')window.loadProducts=async function(...args){const result=await previousLoad.apply(this,args);update();return result};
- const previousOrders=window.loadSellerOrders;if(typeof previousOrders==='function')window.loadSellerOrders=async function(...args){const result=await previousOrders.apply(this,args);update();return result};
- const previousShow=window.showTab;window.showTab=function(...args){const result=previousShow.apply(this,args);if(args[0]==='overview')update();return result};
+ steps.forEach((key,i)=>byId(key).addEventListener('click',()=>{selectedStep=i;update()}));
+ const oldLoad=window.loadProducts;if(typeof oldLoad==='function')window.loadProducts=async function(...args){const result=await oldLoad.apply(this,args);update();return result};
+ const oldOrders=window.loadSellerOrders;if(typeof oldOrders==='function')window.loadSellerOrders=async function(...args){const result=await oldOrders.apply(this,args);ordersLoaded=true;update();return result};
+ const oldShow=window.showTab;window.showTab=function(...args){const result=oldShow.apply(this,args);if(args[0]==='overview'){selectedStep=null;update();if(!ordersLoaded&&!ordersLoading&&typeof window.loadSellerOrders==='function'){ordersLoading=true;window.loadSellerOrders().finally(()=>{ordersLoading=false;ordersLoaded=true;update()})}}return result};
  update();
+ if(typeof window.loadSellerOrders==='function'&&!ordersLoading){ordersLoading=true;window.loadSellerOrders().finally(()=>{ordersLoading=false;ordersLoaded=true;update()})}
 })();
 </script>
 </body>
