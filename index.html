@@ -774,6 +774,41 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product .division-tag,
  #ceroodMarketplaceGroupList .cerood-marketplace-group-head>a{display:none!important}
 }
+</style><style id="cerood-mobile-two-column-swipe-20260927">
+/* Homepage marketplace only: two visible category cards, remaining cards swipe sideways. */
+@media (max-width:850px){
+ #ceroodMarketplaceGroupList{
+  display:grid!important;
+  grid-template-columns:none!important;
+  grid-template-rows:1fr!important;
+  grid-auto-flow:column!important;
+  grid-auto-columns:calc((100% - 7px)/2)!important;
+  gap:7px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scroll-snap-type:x mandatory!important;
+  scroll-padding-inline:0!important;
+  overscroll-behavior-x:contain!important;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  align-items:stretch!important;
+  padding:0 0 5px!important;
+ }
+ #ceroodMarketplaceGroupList::-webkit-scrollbar{display:none}
+ #ceroodMarketplaceGroupList>.cerood-marketplace-group{
+  width:100%!important;min-width:0!important;max-width:none!important;
+  margin:0!important;scroll-snap-align:start!important;
+  scroll-snap-stop:normal;
+ }
+ #ceroodMarketplaceGroupList .cerood-marketplace-group-head h3,
+ #ceroodMarketplaceGroupList .cerood-mixed-tile .cerood-marketplace-group-head h3{
+  font-size:10px!important;
+ }
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product>b{font-size:8px!important}
+}
+@media(max-width:350px){
+ #ceroodMarketplaceGroupList{grid-template-columns:none!important;grid-auto-columns:calc((100% - 6px)/2)!important}
+}
 </style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
