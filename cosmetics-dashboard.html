@@ -433,42 +433,29 @@ body{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
   .cr-actions{margin-left:auto;gap:6px}
   .cr-location{min-width:130px;max-width:160px}
 }
-</style><style id="cerood-beauty-dashboard-stable-desktop-sidebar-20260926">
-/* Desktop only: prevent the left navigation from shifting with long panes. */
+</style><style id="cerood-beauty-dashboard-clothing-match-20260926">
+/* Desktop-only: one account shell, sidebar left and selected content right. */
 @media (min-width: 851px) {
-  #accountShell {
-    display: grid !important;
-    grid-template-columns: 210px minmax(0, 1fr) !important;
-    grid-template-rows: auto minmax(0, 1fr) !important;
-    column-gap: 25px !important;
-    align-content: start !important;
-    align-items: start !important;
-  }
-  #accountShell > h2 {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    align-self: start !important;
-    margin: 0 0 14px !important;
-  }
-  #accountShell > .account-grid { display: contents !important; }
-  #accountShell > .account-grid > .account-menu {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    align-self: start !important;
-    align-content: start !important;
-    position: relative !important;
-    top: auto !important;
-    bottom: auto !important;
-    margin: 0 !important;
-    height: max-content !important;
-  }
-  #accountShell > .account-grid > div {
-    grid-column: 2 !important;
-    grid-row: 1 / span 2 !important;
-    align-self: start !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-  }
+  .container { max-width: 1280px; }
+  #accountShell { display:grid; grid-template-columns: 225px minmax(0,1fr); grid-template-rows:min-content min-content; align-content:start; column-gap:0; padding:0; overflow:visible; }
+  #accountShell > h2 { grid-column:1; grid-row:1; align-self:start; margin:0; padding:27px 22px 4px; font-size:19px; }
+  #accountShell > .account-grid { display:contents; }
+  #accountShell .account-menu { grid-column:1; grid-row:2; display:flex; flex-direction:column; align-self:start; gap:5px; min-width:0; margin:0; padding:14px 13px 28px; border-right:1px solid #e6eaf0; }
+  #accountShell .account-menu button { width:100%; min-height:43px; padding:12px; font-size:13px; border-radius:9px; }
+  #accountShell .account-menu button.active { background:#eaf1f9; color:#203952; }
+  #accountShell .account-grid > div:last-child { grid-column:2; grid-row:1 / span 2; min-width:0; padding:27px 25px 30px; }
+  #accountShell .account-pane { min-width:0; }
+  #accountShell .account-pane:not(.active) { display:none!important; }
+  #accountShell .account-pane.active { display:block; }
+  #pane-tracking > #orderTracker { display:block; width:100%; margin:12px 0 0; max-width:100%; }
+  #pane-tracking > #orderTracker .card { padding:18px; margin-bottom:14px; }
+  #pane-tracking > #orderTracker #orderResult { max-width:100%; }
+  #pane-tracking > #orderTracker .tracking-products { grid-template-columns:1fr; }
+  #pane-tracking > #orderTracker .tracking-product { width:100%; }
+  #pane-tracking > #orderTracker .orderbox { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #pane-tracking > #orderTracker .timeline { margin-top:20px; }
+  #pane-tracking > #orderTracker #trackingHeading { display:none; }
+  #pane-tracking > #goTracker { display:none; }
 }
 </style></head><body><header class="cr-header"><div class="cr-header-inner"><a aria-label="Cerood Beauty home" class="cr-brand" href="/cosmetics.html"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>BEAUTY</span></a><div class="cr-search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search beauty products" autocomplete="off" id="search" placeholder="Search skincare, makeup, haircare..." type="search"/></div><nav aria-label="Beauty navigation" class="cr-actions"><button class="cr-location" title="Delivery address" type="button"><svg aria-hidden="true" class="cb-pin" fill="none" stroke="#6146f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery to<strong id="beautyDeliveryLocation">Select location</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><a class="cr-service" href="/">Home Services</a><a aria-label="Beauty cart" class="cr-cart" href="/cosmetics-checkout.html"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg><span class="cr-cart-label">Cart</span><b id="beautyCartCount">0</b></a><a aria-label="Beauty orders and account" class="cr-account" href="/cosmetics-dashboard.html"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="7.5" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg><span class="rn-account-label">My Orders</span></a></nav><details class="cerood-beauty-menu"><summary aria-label="Open Beauty navigation menu" title="Menu"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></summary><div class="cerood-beauty-menu-list"><a href="/cosmetics.html">Shop Beauty</a><a href="/cosmetics.html#products-section">Explore Products</a><a href="/cosmetics-dashboard.html?beautyPane=overview">Dashboard</a><a href="/cosmetics-dashboard.html?beautyPane=purchases">My Orders</a><a href="/cosmetics-dashboard.html?beautyPane=tracking">Live Tracking</a><a href="/cosmetics-dashboard.html?beautyPane=reviews">Reviews &amp; Ratings</a><a href="/cosmetics-dashboard.html?beautyPane=warranty">Warranty &amp; Invoices</a><a href="/cosmetics-dashboard.html?beautyPane=overview">My Account</a><a href="/cosmetics-checkout.html">Beauty Cart / Checkout</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed</a><a href="/clothing.html">Fashion</a></div></details></div></header><main class="container"><div class="crumb"><a href="/cosmetics.html">Beauty Store</a> / My Orders</div><h1>My Beauty Orders</h1><p class="lead">View orders, delivery updates and warranty details.</p><section class="card" id="accountShell"><h2>My account</h2><div class="account-grid account-shell"><nav aria-label="Customer dashboard sections" class="account-menu"><button class="active" data-pane="overview" type="button">Overview</button><button data-pane="purchases" type="button">My Orders</button><button data-pane="tracking" type="button">Live Tracking</button><button data-pane="reviews" type="button">Reviews &amp; Ratings</button><button data-pane="warranty" type="button">Warranty &amp; Invoices</button></nav><div><div class="account-pane active" id="pane-overview"><h2>Overview</h2><div class="stats"><div class="stat">Total orders<strong id="statTotal">—</strong></div><div class="stat">Active<strong id="statActive">—</strong></div><div class="stat">Delivered<strong id="statDelivered">—</strong></div></div><p class="account-note" id="accountStatus" role="status">Loading your purchases…</p><button class="btn secondary" disabled="" id="loadMyOrders" type="button">Refresh orders</button><button class="btn secondary" id="claimGuestOrders" type="button">Link guest orders</button><p class="account-note" id="claimStatus" role="status">Link guest orders placed on this browser to your account.</p></div><div class="account-pane" id="pane-purchases"><h2>My orders</h2><div aria-label="Order type" class="order-tabs" role="group"><button class="order-tab active" data-order-filter="active" type="button">In progress <span id="activeCount"></span></button><button class="order-tab" data-order-filter="completed" type="button">Completed <span id="completedCount"></span></button></div><div class="account-note" id="purchaseList">Loading your orders…</div></div><div class="account-pane" id="pane-tracking"><h2>Order tracking</h2><p class="account-note">Select an order to see its delivery progress.</p><button class="btn secondary" id="goTracker" type="button">View tracking</button></div><div class="account-pane" id="pane-reviews"><h2>Reviews &amp; ratings</h2><p class="account-note">Ratings are saved as drafts on this device, not published.</p><div class="review-list" id="reviewList"></div></div><div class="account-pane" id="pane-warranty"><h2>Warranty &amp; Invoices</h2><p class="account-note">Warranty begins on the recorded delivery date. Receipts are not tax invoices.</p><div aria-live="polite" class="warranty-list" id="warrantyList">Loading warranty details…</div></div></div></div></section><div class="layout tracking-layout" id="orderTracker"><div><section class="card"><h2 id="trackingHeading">Order tracking</h2><div hidden="" id="orderResult"><div aria-label="Products in this order" class="tracking-products" id="shownProducts"></div><div class="orderbox"><div>Order ID: <span id="shownId"></span></div><div>Order amount: <strong id="shownTotal"></strong></div><div>Order placed: <span id="shownDate"></span></div><div>Current status: <strong id="shownStatus"></strong></div></div><ol class="timeline" id="timeline"></ol><div class="delivery-complete" hidden="" id="deliveryComplete"><strong>✓ Order completed</strong><p>Your order has been delivered.</p><button class="btn secondary" id="completedOrdersBtn" type="button">View orders</button><button class="btn" id="rateOrderBtn" type="button">★ Rate your purchase</button></div><p class="muted" id="updated"></p></div><div class="muted" id="placeholder">Select an order to view its status.</div></section><section class="card"><h2>Need help?</h2><p class="muted">Payment deducted but order pending? Do not pay again. Contact Cerood with your order ID.</p><a class="btn" href="/cosmetics.html" style="display:inline-block">Continue shopping →</a></section></div></div></main><nav aria-label="Beauty mobile navigation" class="cr-mobile-nav cerood-equal-nav"><a href="/cosmetics.html"><svg aria-hidden="true" class="cr-nav-icon" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg><span class="cr-nav-label">Home</span></a><a href="/cosmetics.html#products-section"><svg aria-hidden="true" class="cr-nav-icon" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.7 4.3-4.3 2.7 2.7-4.3z"></path></svg><span class="cr-nav-label">Explore</span></a><a href="/cosmetics-checkout.html"><svg aria-hidden="true" class="cr-nav-icon" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 2h4l2.5 13h12L22 6H6"></path></svg><span class="cr-nav-badge" hidden="" id="ceroodEqualNavCartCount">0</span><span class="cr-nav-label">Cart</span></a><a aria-current="page" href="/cosmetics-dashboard.html"><svg aria-hidden="true" class="cr-nav-icon" viewbox="0 0 24 24"><path d="M5 3h14v18l-3-2-4 2-4-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg><span class="cr-nav-label">Orders</span></a><a href="/"><svg aria-hidden="true" class="cr-nav-icon" viewbox="0 0 24 24"><path d="M4 4h6v6H4zM14 14h6v6h-6zM7 10v7h7M17 14V7h-7"></path></svg><span class="cr-nav-label">Services</span></a></nav><script>
 (()=>{'use strict';
@@ -523,6 +510,35 @@ function printOrderReceipt(o){
   <table class="totals"><tr><td>Products subtotal</td><td class="right">${amount(o.subtotal)}</td></tr><tr><td>Delivery charge</td><td class="right">${amount(o.delivery_fee)}</td></tr><tr class="grand"><td>Total (INR)</td><td class="right">${amount(o.total)}</td></tr></table>
   <div class="notice">This is an order summary generated from your Cerood Beauty order record. It does not confirm COD payment collection, and it is not a GST tax invoice. For a final sales invoice or billing correction, contact Cerood with your order reference.</div>
 
+<script id="cerood-beauty-dashboard-clothing-match-behavior-20260926">
+(()=>{
+  const tracker=document.getElementById('orderTracker');
+  const pane=document.getElementById('pane-tracking');
+  const shell=document.getElementById('accountShell');
+  if(!tracker||!pane||!shell)return;
+  const anchor=document.createComment('original tracking position');
+  tracker.parentNode.insertBefore(anchor,tracker);
+  const desktop=window.matchMedia('(min-width: 851px)');
+  function openTracking(){
+    document.querySelectorAll('[data-pane]').forEach(b=>b.classList.toggle('active',b.dataset.pane==='tracking'));
+    document.querySelectorAll('.account-pane').forEach(p=>p.classList.toggle('active',p.id==='pane-tracking'));
+  }
+  function sync(){
+    if(desktop.matches){
+      if(tracker.parentNode!==pane)pane.appendChild(tracker);
+    }else if(tracker.parentNode!==anchor.parentNode){
+      anchor.parentNode.insertBefore(tracker,anchor.nextSibling);
+    }
+  }
+  sync();
+  desktop.addEventListener('change',sync);
+  // Existing Track order / View order buttons keep their original show/order logic.
+  document.getElementById('purchaseList')?.addEventListener('click',e=>{
+    const b=e.target.closest('button');
+    if(desktop.matches&&b&&/^(Track order|View order)$/.test(b.textContent.trim()))openTracking();
+  },true);
+})();
+</script>
 </body></html>`;
   win.document.open();win.document.write(html);win.document.close();win.focus();
 }
