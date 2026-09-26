@@ -876,11 +876,16 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
         class="product-list"
 
       ></div>
-      <div class="seller-card" id="ceroodOtherMarketplaceProducts" style="margin-top:18px">
-        <div class="hub-section-toolbar"><strong>Cosmetics &amp; Fashion listings</strong><button type="button" class="seller-btn seller-btn-outline" id="ceroodRefreshOtherProducts">Refresh</button></div>
-        <p class="hub-muted">Your submissions and admin approval status across both marketplaces.</p>
+      <div class="seller-card" id="ceroodCosmeticsProducts" style="margin-top:18px">
+        <div class="hub-section-toolbar"><strong>✨ Cosmetics &amp; Beauty Products</strong><button type="button" class="seller-btn seller-btn-outline" id="ceroodRefreshOtherProducts">Refresh</button></div>
+        <p class="hub-muted">Beauty products and their admin approval status.</p>
         <div id="ceroodOtherProductMessage" class="marketplace-message" role="status"></div>
-        <div id="ceroodOtherProductList" class="product-list"></div>
+        <div id="ceroodCosmeticsProductList" class="product-list"></div>
+      </div>
+      <div class="seller-card" id="ceroodFashionProducts" style="margin-top:18px">
+        <div class="hub-section-toolbar"><strong>👕 Fashion &amp; Clothing Products</strong></div>
+        <p class="hub-muted">Clothing products and their admin approval status.</p>
+        <div id="ceroodFashionProductList" class="product-list"></div>
       </div>
 
     </section>
@@ -3579,8 +3584,8 @@ initializeDashboard();
   let busy=false;
   window.ceroodMarketplaceProducts=[];
   function display(rows){
-    const target=$('ceroodOtherProductList');if(!target)return;target.replaceChildren();
-    if(!rows.length){const p=document.createElement('p');p.className='hub-muted';p.textContent='No Cosmetics or Fashion products submitted yet.';target.append(p);return}
+    const beauty=$('ceroodCosmeticsProductList'),fashion=$('ceroodFashionProductList');if(!beauty||!fashion)return;beauty.replaceChildren();fashion.replaceChildren();
+    if(!rows.length){/* Both category sections display their own empty states below. */}
     rows.forEach(r=>{
       const p=r.product_data||{},card=document.createElement('article'),img=document.createElement('img'),body=document.createElement('div'),name=document.createElement('h3'),price=document.createElement('div'),meta=document.createElement('p'),badge=document.createElement('span'),note=document.createElement('p');
       card.className='product-card';img.alt=p.name||'Product';img.loading='lazy';if(/^https:\/\//.test(p.image_url||''))img.src=p.image_url;
@@ -3588,8 +3593,10 @@ initializeDashboard();
       meta.className='product-meta';meta.textContent=(r.marketplace==='clothing'?'Fashion':'Cosmetics')+' · '+(p.category||'')+' · Stock: '+(p.stock??'—');
       badge.className='approval-badge '+escStatus(r.approval_status);badge.textContent=escStatus(r.approval_status)==='pending'?'Under review':escStatus(r.approval_status);
       note.className='product-meta';note.textContent=r.rejection_reason?'Reason: '+r.rejection_reason:r.published_product_id?'Published product ID: '+r.published_product_id:'';
-      body.append(name,price,meta,badge,note);card.append(img,body);target.append(card);
+      body.append(name,price,meta,badge,note);card.append(img,body);(r.marketplace==='clothing'?fashion:beauty).append(card);
     });
+    if(!beauty.children.length){const p=document.createElement('p');p.className='hub-muted';p.textContent='No Cosmetics products submitted yet.';beauty.append(p)}
+    if(!fashion.children.length){const p=document.createElement('p');p.className='hub-muted';p.textContent='No Fashion products submitted yet.';fashion.append(p)}
   }
   async function refresh(){
     if(busy)return;busy=true;const msg=$('ceroodOtherProductMessage');if(msg)msg.textContent='Loading Cosmetics & Fashion listings...';
