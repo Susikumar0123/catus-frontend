@@ -744,6 +744,20 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #section-add-product .ccat-qc-draft{background:#f2f4f7;color:#475467}
 #section-add-product .ccat-qc-unknown{background:#fff5e7;color:#92400e}
 #section-add-product .ccat-single-view{border:1px solid #4933b9;border-radius:5px;color:#fff;background:#4933b9;padding:9px 12px;cursor:pointer;font-weight:600;white-space:nowrap}
+/* Catalog management: keep original product handlers, present actions in the single-upload table. */
+.seller-tab[data-tab="products"][hidden]{display:none!important}
+#section-add-product .ccat-single-actions{min-width:190px;display:flex;gap:6px;flex-wrap:wrap;align-content:center}
+#section-add-product .ccat-single-actions button{font-size:11px;padding:7px 9px;border-radius:5px;cursor:pointer}
+#section-add-product .ccat-single-outline{background:#fff;border:1px solid #4933b9;color:#4933b9;font-weight:600}
+#section-add-product .ccat-single-danger{background:#fff;border:1px solid #f4b1ad;color:#b42318;font-weight:600}
+#section-add-product .ccat-single-danger:disabled{opacity:.45;cursor:not-allowed}
+#section-add-product .ccat-product-detail{background:#f8faff;display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;padding:17px!important}
+#section-add-product .ccat-product-detail small{display:block;color:#667085;margin-bottom:4px}
+#section-add-product .ccat-product-detail strong{overflow-wrap:anywhere}
+#section-add-product tr[hidden]{display:none!important}
+#section-add-product #ccatCatalogEditor:not([hidden]){margin:16px 0;border:1px solid #dbe3f5;border-radius:9px;padding:16px;background:#fff}
+#section-add-product #ccatCatalogEditor[hidden]{display:none!important}
+#section-add-product #ccatCatalogMessage:not(:empty){padding:10px;color:#475467}
 </style>
 </head>
 
@@ -812,7 +826,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
  <div class="hub-nav-group"><button type="button" class="hub-nav hub-expand" aria-expanded="true"><span class="hub-modern-icon" style="--icon-color:#f59e0b;--icon-bg:#fff1d6" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14M5 9h14M6 13h7M13 13c0 4-2 6-7 7l9 1"/></svg></span> Pricing <i>⌄</i></button><div class="hub-submenu"><button type="button" class="hub-sub seller-tab" data-tab="pricing">Manage Pricing</button><button type="button" class="hub-sub seller-tab" data-tab="price-drop">Schedule Price Drop</button><button type="button" class="hub-sub seller-tab" data-tab="rto-pricing">Reduce RTO & Returns</button></div></div>
  <button type="button" class="hub-nav seller-tab" data-tab="claims"><span class="hub-modern-icon" style="--icon-color:#22c55e;--icon-bg:#dcfce7" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4v14H4V3z"/><path d="M15 3v5h5M8 12h8M8 16h6"/></svg></span> Claims</button>
  <button type="button" class="hub-nav seller-tab" data-tab="inventory"><span class="hub-modern-icon" style="--icon-color:#3b82f6;--icon-bg:#dbeafe" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10"/></svg></span> Inventory</button>
- <button type="button" class="hub-nav seller-tab" data-tab="products"><span class="hub-modern-icon" style="--icon-color:#8b5cf6;--icon-bg:#ede9fe" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span> My Products</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="products" hidden aria-hidden="true"><span class="hub-modern-icon" style="--icon-color:#8b5cf6;--icon-bg:#ede9fe" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span> My Products</button>
  <button type="button" class="hub-nav seller-tab" data-tab="add-product"><span class="hub-modern-icon" style="--icon-color:#38bdf8;--icon-bg:#e0f2fe" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM4 10h16M10 10v10M14 15h4M16 13v4"/></svg></span> Catalog Uploads</button>
  <button type="button" class="hub-nav seller-tab" data-tab="fashion-bulk"><span class="hub-modern-icon" style="--icon-color:#8b5cf6;--icon-bg:#ede9fe" aria-hidden="true">▦</span> Fashion Bulk Catalog</button>
  <button type="button" class="hub-nav seller-tab" data-tab="image-upload"><span class="hub-modern-icon" style="--icon-color:#06b6d4;--icon-bg:#cffafe" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 17 5-5 4 4 3-3 6 6"/></svg></span> Image Bulk Upload</button>
@@ -1059,6 +1073,8 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
   <div class="ccat-records"><div class="ccat-main-tabs" role="tablist" aria-label="Catalog upload type"><button type="button" class="active" data-ccat-tab="bulk">Bulk Uploads <span id="ccatBulkCount">(0)</span></button><button type="button" data-ccat-tab="single">Single Uploads <span id="ccatSingleCount"></span></button></div>
   <div id="ccatBulkPanel"><div class="ccat-status-tabs" role="tablist" aria-label="Bulk catalog validation"><button type="button" class="active" data-ccat-status="all">All</button><button type="button" data-ccat-status="action">Action Required <span id="ccatActionCount">(0)</span></button><button type="button" data-ccat-status="valid">Validated Locally <span id="ccatValidCount">(0)</span></button></div><div class="ccat-controls"><label>Filter by: <select id="ccatCategory"><option value="all">Select Category</option></select></label><input type="search" id="ccatSearch" placeholder="Search by file ID or name" aria-label="Search catalog uploads"></div><div class="ccat-alert">ⓘ &nbsp; CSV / Excel checks are local previews only. Server-side QC and bulk publishing are not connected yet.</div><div class="ccat-table-scroll"><table class="ccat-table"><thead><tr><th>S.no</th><th>Category</th><th>File ID / name</th><th>Created Date</th><th>Rows</th><th>Validation Status</th><th>Actions</th></tr></thead><tbody id="ccatTableBody"><tr><td colspan="7" class="ccat-empty">No bulk CSV / Excel files checked yet. Choose “Add Catalog in Bulk” to begin.</td></tr></tbody></table></div></div>
   <div id="ccatSinglePanel" hidden>
+  <div id="ccatCatalogEditor" hidden></div>
+  <div id="ccatCatalogMessage" role="status" aria-live="polite"></div>
   <div class="ccat-status-tabs" role="tablist" aria-label="Single catalog QC status"><button type="button" class="active" data-ccat-single-status="all">All <span id="ccatSingleAll">(0)</span></button><button type="button" data-ccat-single-status="action">Action Required <span id="ccatSingleAction">(0)</span></button><button type="button" data-ccat-single-status="pending">QC in Progress <span id="ccatSinglePending">(0)</span></button><button type="button" data-ccat-single-status="rejected">QC Error <span id="ccatSingleRejected">(0)</span></button><button type="button" data-ccat-single-status="approved">QC Pass <span id="ccatSingleApproved">(0)</span></button><button type="button" data-ccat-single-status="draft">Draft <span id="ccatSingleDraft">(0)</span></button></div>
   <div class="ccat-controls"><label>Filter by: <select id="ccatSingleCategory"><option value="all">Select Category</option></select></label><input type="search" id="ccatSingleSearch" placeholder="Search product name or ID" aria-label="Search single catalogs"></div>
   <div class="ccat-alert">ⓘ &nbsp; QC labels reflect the product approval status returned by CEROOD. This page does not perform or change QC approval.</div>
@@ -3930,6 +3946,7 @@ initializeDashboard();
     }catch(e){if(msg){msg.className='marketplace-message error';msg.textContent='Cosmetics & Fashion listings could not load: '+e.message}}finally{busy=false}
   }
   window.ceroodEditMarketplaceProduct=editMarketplaceProduct;
+  window.ceroodWithdrawMarketplaceProduct=withdrawMarketplaceProduct;
   $('ceroodRefreshOtherProducts')?.addEventListener('click',refresh);
   document.querySelectorAll('.seller-tab[data-tab="products"],.seller-tab[data-tab="add-product"],.seller-tab[data-tab="quality"]').forEach(b=>b.addEventListener('click',()=>{if(!document.getElementById('dashboardContent')?.classList.contains('seller-hidden'))refresh()}));
   // After a successful new submission, fetch the latest admin-review state.
@@ -4146,15 +4163,64 @@ const $=id=>document.getElementById(id),panel=$('ccatSinglePanel');if(!panel)ret
 let active='all',items=[],loading=false;
 const label=p=>{const a=String(p.approval_status||'pending').trim().toLowerCase();if(['approved','approve','qc_pass','passed'].includes(a))return {key:'approved',text:'QC Pass'};if(['rejected','reject','qc_error','failed'].includes(a))return {key:'rejected',text:'QC Error'};if(['draft'].includes(a))return {key:'draft',text:'Draft'};if(['pending','under_review','in_review','submitted','review'].includes(a))return {key:'pending',text:'QC in Progress'};return {key:'unknown',text:'Status: '+a}};
 function textCell(row,value){const c=row.insertCell();c.textContent=String(value??'—');return c}
+function message(text){$('ccatCatalogMessage').textContent=text||''}
+function openEditor(p){
+ const host=$('ccatCatalogEditor');host.hidden=false;host.replaceChildren();message('');
+ if(p.marketplace==='renewed'){
+   if(typeof editProduct!=='function'){message('Renewed editor unavailable.');return}
+   editProduct(p.id); // Reuse original Renewed form, media upload and save handlers.
+   const original=$('ceroodInlineRenewedEditor'),form=$('renewedProductFormCard');
+   if(form){host.append(form);form.hidden=false;original.hidden=true}
+ }else{
+   const editor=window.ceroodEditMarketplaceProduct;
+   if(typeof editor!=='function'){message('Marketplace editor unavailable.');return}
+   const original=$('ceroodInlineMarketplaceEditor');
+   host.append(original);original.hidden=false;
+   Promise.resolve(editor(p.source)).catch(e=>message('Edit failed: '+e.message));
+ }
+ showTab('add-product');panel.hidden=false;
+ panel.closest('.ccat-records').querySelectorAll('[data-ccat-tab]').forEach(b=>b.classList.toggle('active',b.dataset.ccatTab==='single'));
+ $('ccatBulkPanel').hidden=true;
+ host.scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function withdraw(p){
+ if(['withdrawn','blocked'].includes(String(p.approval_status).toLowerCase())){message('Product already withdrawn.');return}
+ try{
+  if(p.marketplace==='renewed')await withdrawProduct(p.id);
+  else {if(typeof window.ceroodWithdrawMarketplaceProduct!=='function')throw Error('Withdraw function unavailable');await window.ceroodWithdrawMarketplaceProduct(p.source)}
+  await refresh();message('Product list refreshed.');
+ }catch(e){message('Could not withdraw product: '+e.message)}
+}
 function render(){
  const count=k=>items.filter(p=>label(p).key===k).length;
  $('ccatSingleCount').textContent='('+items.length+')';$('ccatSingleAll').textContent='('+items.length+')';$('ccatSingleAction').textContent='('+count('rejected')+')';$('ccatSinglePending').textContent='('+count('pending')+')';$('ccatSingleRejected').textContent='('+count('rejected')+')';$('ccatSingleApproved').textContent='('+count('approved')+')';$('ccatSingleDraft').textContent='('+count('draft')+')';
  const select=$('ccatSingleCategory'),old=select.value,cats=[...new Set(items.map(p=>p.category).filter(Boolean))].sort();select.replaceChildren(new Option('Select Category','all'));cats.forEach(c=>select.add(new Option(c,c)));select.value=cats.includes(old)?old:'all';
  const q=$('ccatSingleSearch').value.trim().toLowerCase();const filtered=items.filter(p=>{const state=label(p).key;return (active==='all'||(active==='action'?state==='rejected':state===active))&&(select.value==='all'||p.category===select.value)&&(!q||String(p.name||'').toLowerCase().includes(q)||String(p.id||'').toLowerCase().includes(q))});
  const body=$('ccatSingleBody');body.replaceChildren();if(!filtered.length){const tr=body.insertRow(),td=tr.insertCell();td.colSpan=8;td.className='ccat-empty';td.textContent=items.length?'No products match these filters.':'No single-product listings found for this seller.';return}
- filtered.forEach((p,i)=>{const tr=body.insertRow();textCell(tr,i+1);const photo=tr.insertCell();if(p.image_url){const img=document.createElement('img');img.className='ccat-single-thumb';img.alt=p.name||'Product';img.loading='lazy';img.src=p.image_url;img.onerror=()=>{img.replaceWith(document.createTextNode('No image'))};photo.append(img)}else photo.textContent='No image';textCell(tr,p.category||'—');const info=textCell(tr,p.name||'Unnamed product'),id=document.createElement('small');id.className='ccat-single-id';id.textContent='ID: '+(p.id||'—');info.append(id);let date='—';if(p.created_at){const d=new Date(p.created_at);if(!Number.isNaN(d.getTime()))date=d.toLocaleString('en-IN')}textCell(tr,date);textCell(tr,1);const qc=tr.insertCell(),state=label(p),badge=document.createElement('span');badge.className='ccat-chip ccat-qc-'+state.key;badge.textContent=state.text;qc.append(badge);const action=tr.insertCell(),btn=document.createElement('button');btn.type='button';btn.className='ccat-single-view';btn.textContent='View Catalog';btn.onclick=()=>{window.showTab('products');const cards=Array.from(document.querySelectorAll('#productsList .product-card'));const match=cards.find(c=>c.querySelector('h3')?.textContent===p.name);if(match){match.scrollIntoView({behavior:'smooth',block:'center'});match.style.outline='2px solid #4933b9';setTimeout(()=>match.style.removeProperty('outline'),2500)}};action.append(btn)})
+ filtered.forEach((p,i)=>{
+  const tr=body.insertRow();textCell(tr,i+1);const photo=tr.insertCell();if(p.image_url){const img=document.createElement('img');img.className='ccat-single-thumb';img.alt=p.name||'Product';img.loading='lazy';img.src=p.image_url;img.onerror=()=>{img.replaceWith(document.createTextNode('No image'))};photo.append(img)}else photo.textContent='No image';
+  textCell(tr,p.category||p.marketplace||'—');const info=textCell(tr,p.name||'Unnamed product'),id=document.createElement('small');id.className='ccat-single-id';id.textContent='ID: '+(p.id||'—');info.append(id);
+  let date='—';if(p.created_at){const d=new Date(p.created_at);if(!Number.isNaN(d.getTime()))date=d.toLocaleString('en-IN')}textCell(tr,date);textCell(tr,1);
+  const qc=tr.insertCell(),state=label(p),badge=document.createElement('span');badge.className='ccat-chip ccat-qc-'+state.key;badge.textContent=state.text;qc.append(badge);
+  const action=tr.insertCell();action.className='ccat-single-actions';
+  const view=document.createElement('button');view.type='button';view.className='ccat-single-view';view.textContent='View Catalog';
+  const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.className='ccat-single-outline';edit.onclick=()=>openEditor(p);
+  const remove=document.createElement('button');remove.type='button';remove.textContent='Withdraw';remove.className='ccat-single-danger';remove.disabled=['withdrawn','blocked'].includes(String(p.approval_status).toLowerCase());remove.onclick=()=>withdraw(p);
+  const detail=document.createElement('tr');detail.hidden=true;const cell=detail.insertCell();cell.colSpan=8;cell.className='ccat-product-detail';
+  const fields=[['Product',p.name],['Marketplace',p.marketplace],['Category',p.category],['Price','₹'+Number(p.price||0).toLocaleString('en-IN')],['Stock',p.stock??'—'],['Listing status',p.status||'—'],['QC status',state.text],['Product ID',p.id]];
+  fields.forEach(([key,value])=>{const box=document.createElement('div'),k=document.createElement('small'),v=document.createElement('strong');k.textContent=key;v.textContent=String(value??'—');box.append(k,v);cell.append(box)});
+  view.onclick=()=>{detail.hidden=!detail.hidden;view.textContent=detail.hidden?'View Catalog':'Hide Details'};
+  action.append(view,edit,remove);tr.after(detail);
+ });
 }
-async function refresh(){if(loading)return;loading=true;const body=$('ccatSingleBody');body.replaceChildren();const tr=body.insertRow(),td=tr.insertCell();td.colSpan=8;td.className='ccat-empty';td.textContent='Loading your single-product catalogs…';try{const data=await apiRequest('/api/sellers/products');items=Array.isArray(data.products)?data.products:[];render()}catch(e){body.replaceChildren();const r=body.insertRow(),c=r.insertCell();c.colSpan=8;c.className='ccat-empty';c.textContent='Could not load catalogs: '+e.message}finally{loading=false}}
+async function refresh(){if(loading)return;loading=true;const body=$('ccatSingleBody');body.replaceChildren();const tr=body.insertRow(),td=tr.insertCell();td.colSpan=8;td.className='ccat-empty';td.textContent='Loading your single-product catalogs…';try{
+ const results=await Promise.allSettled([apiRequest('/api/sellers/products'),apiRequest('/api/sellers/catalog-submissions')]);
+ if(results.every(r=>r.status==='rejected'))throw Error('Could not load any marketplace listings');
+ const renewed=results[0].status==='fulfilled'?(results[0].value.products||[]):[];
+ const others=results[1].status==='fulfilled'?(results[1].value.products||[]):[];
+ items=[...renewed.map(p=>({...p,marketplace:'renewed',source:p})),...others.map(r=>({...r,marketplace:r.marketplace||'cosmetics',source:r,name:r.product_data?.name||r.name||'Unnamed product',category:r.product_data?.category||r.category||r.marketplace,image_url:r.product_data?.image_url||r.image_url,price:r.product_data?.price??r.price,stock:r.product_data?.stock??r.stock,status:r.status||r.product_data?.status}))];
+ render();if(results.some(r=>r.status==='rejected'))message('Some marketplace listings could not be loaded. Try Refresh products.');
+ }catch(e){body.replaceChildren();const r=body.insertRow(),c=r.insertCell();c.colSpan=8;c.className='ccat-empty';c.textContent='Could not load catalogs: '+e.message}finally{loading=false}}
 $('ccatSingleRefresh').onclick=refresh;$('ccatSingleSearch').oninput=render;$('ccatSingleCategory').onchange=render;
 panel.querySelectorAll('[data-ccat-single-status]').forEach(b=>b.onclick=()=>{active=b.dataset.ccatSingleStatus;panel.querySelectorAll('[data-ccat-single-status]').forEach(x=>x.classList.toggle('active',x===b));render()});
 const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"]');tab?.addEventListener('click',()=>{refresh()},false);
