@@ -506,6 +506,50 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 @media(max-width:800px){.seller-workspace{padding:0 12px 25px}.hub-topbar{margin:0 -12px 16px}.hub-dispatch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hub-order-controls input{flex:1;min-width:160px}}
 @media(max-width:480px){.hub-order-tabs{padding:0 5px}.hub-order-tab{padding:14px 9px}.hub-order-controls{align-items:stretch}.hub-order-controls input{width:100%}}
 </style>
+<style id="cerood-sidebar-selection-spacing-fix">
+/* Separate parent category selection from the selected submenu item. */
+.hub-menu-scroll .hub-nav-group{width:100%;margin:0;padding:0;}
+.hub-menu-scroll .hub-nav-group>.hub-expand{width:100%;margin:0;border-radius:0;min-height:42px;position:relative;z-index:0;}
+.hub-menu-scroll .hub-nav-group>.hub-expand.group-active{background:#50535a;color:#fff;}
+.hub-menu-scroll .hub-submenu{margin:0 0 5px 23px;padding:5px 7px 5px 10px;border-left:1px solid #62656b;display:flex;flex-direction:column;gap:4px;background:#292929;}
+.hub-menu-scroll .hub-submenu.is-collapsed{display:none;}
+.hub-menu-scroll .hub-submenu>.hub-sub{display:flex;flex:none;min-height:36px;width:100%;margin:0!important;padding:9px 11px;border:0;border-radius:6px;background:transparent;line-height:1.35;position:relative;z-index:0;}
+.hub-menu-scroll .hub-submenu>.hub-sub.active{background:#535760!important;color:#fff!important;font-weight:650;}
+.hub-menu-scroll .hub-submenu>.hub-sub:hover:not(.active){background:#393c42;}
+.hub-menu-scroll .hub-nav:not(.hub-expand).active{background:#535760;}
+/* Brand sits at the left edge of the bottom bar, aligned with the menu. */
+.hub-sidebar>.hub-side-footer{text-align:left!important;padding:12px 13px!important;display:flex;align-items:center;justify-content:flex-start;min-height:43px;letter-spacing:.03em;}
+<style id="cerood-sidebar-single-active-fix">
+/* An expanded category is not a selected page: highlight ONLY the clicked option. */
+.hub-menu-scroll .hub-nav-group > .hub-expand.group-active,
+.hub-menu-scroll .hub-nav-group > .hub-expand.active {
+  background:transparent!important;
+  color:#e5e7eb!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+.hub-menu-scroll .hub-nav-group > .hub-expand:hover {background:#393c42!important;}
+.hub-menu-scroll .hub-submenu {padding-top:7px!important;padding-bottom:7px!important;gap:5px!important;}
+.hub-menu-scroll .hub-submenu > .hub-sub {box-shadow:none!important;}
+.hub-menu-scroll .hub-submenu > .hub-sub.active {
+  background:#535760!important;
+  color:#fff!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+}
+/* Same one-item selection treatment for standalone navigation links. */
+.hub-menu-scroll > .hub-nav.active {
+  background:#535760!important;
+  color:#fff!important;
+  border-radius:7px!important;
+  width:calc(100% - 14px)!important;
+  margin-left:7px!important;
+  padding-left:8px!important;
+  box-shadow:none!important;
+}
+.hub-sidebar > .hub-side-footer {text-align:left!important;justify-content:flex-start!important;}
+</style>
+</style>
 </head>
 
 <body>
