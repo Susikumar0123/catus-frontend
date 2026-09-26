@@ -387,7 +387,107 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
  .benefits{background:#fff}
 }
 @media(min-width:851px) and (max-width:1120px){#ceroodMarketplaceGroupList{grid-template-columns:repeat(2,minmax(0,1fr))}.cerood-desktop-promo{padding:15px;min-height:160px}.cerood-desktop-promo h2{font-size:21px}}
-</style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
+</style>
+<style id="cerood-desktop-four-tile-reference-20260927">
+/* Desktop marketplace groups: reference screenshot's compact four-tile cards.
+   Only this homepage section changes; mobile, trending, search and app flows stay intact. */
+@media (min-width:851px) {
+  #ceroodMarketplaceGroups { margin-top:24px; }
+  #ceroodMarketplaceGroups > .section-head { margin-bottom:15px; }
+  #ceroodMarketplaceGroupList {
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px; align-items:stretch;
+  }
+  #ceroodMarketplaceGroupList > .cerood-marketplace-group {
+    margin:0; min-width:0; padding:13px 12px 18px;
+    background:#fff; border:1px solid #d7dce4; border-radius:17px;
+    box-shadow:none;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-group-head {
+    display:flex; flex-wrap:nowrap; align-items:flex-start;
+    justify-content:space-between; gap:8px;
+    min-height:42px; margin:0 0 7px;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-group-head h3 {
+    margin:0; min-width:0; font-size:0; line-height:1.3;
+    font-weight:750; color:#20242b;
+  }
+  #ceroodMarketplaceGroupList > .cerood-marketplace-group:nth-child(1) h3::after {
+    content:'Renewed Electronics';
+  }
+  #ceroodMarketplaceGroupList > .cerood-marketplace-group:nth-child(2) h3::after {
+    content:'Beauty Essentials';
+  }
+  #ceroodMarketplaceGroupList > .cerood-marketplace-group:nth-child(3) h3::after {
+    content:'Fashion Collection';
+  }
+  #ceroodMarketplaceGroupList > .cerood-marketplace-group:nth-child(4) h3::after {
+    content:'Home Services';
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-group-head h3::after {
+    display:block; font-size:clamp(15px,1.35vw,19px);
+    line-height:1.3; letter-spacing:-.25px;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-group-head > a {
+    display:flex; flex:0 0 22px; align-items:center; justify-content:center;
+    width:22px; height:27px; overflow:hidden; font-size:0;
+    color:#17233d; white-space:nowrap;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-group-head > a::after {
+    content:'›'; font:400 35px/22px Arial,sans-serif;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid,
+  #ceroodMarketplaceGroupList .cerood-service-feature-grid {
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-rows:repeat(2,minmax(0,auto));
+    gap:24px 9px; align-content:start;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product {
+    display:flex; flex-direction:column; min-width:0;
+    margin:0; padding:0; border:0; border-radius:0;
+    background:transparent; text-decoration:none;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product > img,
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product > .product-fallback,
+  #ceroodMarketplaceGroupList .cerood-service-feature-icon {
+    display:block; width:100%; height:auto; aspect-ratio:1/1;
+    object-fit:contain; background:#f5f3ff;
+    border-radius:12px; overflow:hidden;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product > .product-fallback,
+  #ceroodMarketplaceGroupList .cerood-service-feature-icon {
+    display:grid; place-items:center;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product > b,
+  #ceroodMarketplaceGroupList .cerood-service-feature-grid a > span:last-child {
+    display:-webkit-box; -webkit-box-orient:vertical;
+    -webkit-line-clamp:2; line-clamp:2;
+    overflow:hidden; min-height:0; height:auto;
+    margin:7px 0 0; color:#242832;
+    font-size:12px; font-weight:500; line-height:1.4;
+    overflow-wrap:anywhere;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product .division-tag,
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product .price,
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product .cta {
+    display:none!important;
+  }
+  #ceroodMarketplaceGroupList .cerood-service-feature-grid a {
+    min-width:0; gap:0; font-size:12px; font-weight:500;
+  }
+  #ceroodMarketplaceGroupList .cerood-service-feature-icon {
+    font-size:clamp(30px,3.5vw,49px); background:#edf5ff;
+  }
+  #ceroodMarketplaceGroupList .cerood-marketplace-grid .product:focus-visible,
+  #ceroodMarketplaceGroupList .cerood-service-feature-grid a:focus-visible {
+    outline:2px solid #5135d9; outline-offset:3px; border-radius:10px;
+  }
+}
+@media (min-width:851px) and (max-width:1120px) {
+  #ceroodMarketplaceGroupList { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+</style>
+</head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a class="logo crn-logo" href="/" aria-label="Cerood home"><img src="/cerood-logo.webp" alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false"/><span class="crn-logo-fallback" hidden>cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg class="crn-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="mobile-location location-trigger crn-mobile-location" id="mobileLocationButton" type="button"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Delivery location<b id="mobileLocationText">Select Location</b></span><svg class="crn-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
