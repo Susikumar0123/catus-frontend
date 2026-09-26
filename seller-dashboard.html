@@ -440,6 +440,19 @@
 .seller-order-actions .seller-btn:disabled{opacity:.55;cursor:not-allowed}
 </style>
 
+<style id="cerood-seller-hub-layout">
+:root{--hub-purple:#4933b9;--hub-border:#e2e5f0;--hub-bg:#f5f7ff}
+body{font-size:13px;background:var(--hub-bg)!important;color:#202638!important}
+.seller-header{display:none!important}
+.seller-container{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+#dashboardContent:not(.seller-hidden){display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh}
+.hub-sidebar{position:sticky;top:0;height:100vh;background:#292929;color:#f9fafb;display:flex;flex-direction:column;min-width:0;z-index:30}
+.hub-brand{height:77px;display:flex;align-items:center;gap:11px;padding:14px 13px;border-bottom:1px solid #484848}.hub-brand-icon{width:33px;height:33px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#18c2bc,#6745ff);font-size:20px;font-weight:900}.hub-brand b{display:block;font-size:15px;letter-spacing:.03em}.hub-brand small{display:block;color:#bbb;font-size:10px}.hub-store{display:flex;align-items:center;gap:10px;min-height:52px;padding:9px 13px;border-bottom:1px solid #444;font-size:13px;font-weight:700}.hub-store-icon{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#f3f1ff;color:#4933b9}.hub-store span:nth-child(2){flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hub-chevron{color:#ddd}.hub-side-tools{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #4b4b4b}.hub-side-tool{font:inherit;font-size:12px;text-align:left;padding:12px 9px;background:none;color:#e5e5e5;border:0;border-right:1px solid #4b4b4b;cursor:pointer}.hub-menu-scroll{flex:1;overflow:auto;padding:9px 0 18px;scrollbar-width:thin}.hub-menu-caption{padding:18px 13px 7px;color:#a7a7a7;font-size:10px;letter-spacing:.07em}.hub-nav,.hub-sub{width:100%;display:flex;align-items:center;gap:10px;padding:11px 14px;background:transparent;color:#e5e7eb;border:0;text-align:left;cursor:pointer;font:inherit;font-size:12.5px;min-height:39px}.hub-nav>span{font-size:17px;min-width:18px;text-align:center}.hub-nav i{margin-left:auto;font-style:normal}.hub-nav:hover,.hub-sub:hover,.hub-side-tool:hover,.hub-nav.active,.hub-sub.active,.hub-side-tool.active{background:#53555a;color:#fff}.hub-submenu{border-left:1px solid #666;margin-left:23px}.hub-sub{padding:9px 12px;font-size:11.5px;min-height:34px}.hub-submenu.is-collapsed{display:none}.hub-side-footer{border-top:1px solid #444;padding:13px;text-align:center;font-size:15px;font-weight:800;letter-spacing:.06em}.hub-side-footer span{font-size:10px;font-weight:500;color:#b8b8c5}.hub-brand #hubClose{display:none}
+.seller-workspace{min-width:0;padding:0 17px 35px}.hub-topbar{height:67px;background:white;border-bottom:1px solid var(--hub-border);display:flex;align-items:center;gap:14px;margin:0 -17px 18px;padding:0 17px}.hub-page-title{font-size:19px;font-weight:750;flex:1}.hub-top-actions{display:flex;align-items:center;gap:12px}.hub-top-status{font-size:12px;color:#64748b}.hub-help{border:1px solid #d6cdfc;border-radius:7px;padding:9px 12px;color:var(--hub-purple);background:white;font-size:12px;cursor:pointer}#hubMenu{display:none;background:transparent;border:0;font-size:23px;cursor:pointer;color:#292929}
+#dashboardContent>.seller-workspace>nav.seller-tabs{display:none!important}.seller-dashboard-heading{margin:0 0 16px}.seller-dashboard-heading h1,.hub-section-heading h1{font-size:20px!important;margin:0 0 5px!important}.seller-dashboard-heading p,.hub-section-heading p{font-size:12.5px!important;color:#64748b;margin:0}.seller-card,.seller-stat{border-radius:9px;padding:18px;margin-bottom:14px;box-shadow:none;border-color:var(--hub-border)}.seller-card h2{font-size:16px}.seller-grid{gap:12px}.seller-stat-label{font-size:12px}.seller-stat-value{font-size:24px}.seller-btn{border-radius:6px;background:var(--hub-purple);border-color:var(--hub-purple);padding:9px 13px;font-size:12px}.seller-btn-outline{background:white;color:var(--hub-purple)}.seller-tab:not(.hub-nav):not(.hub-sub):not(.hub-side-tool):not(.hub-help){font-size:12px}.product-list{gap:12px}.product-card{border-radius:9px}.product-card img{height:155px}.product-card-body{padding:13px}.product-card h3{font-size:14px}.product-price{font-size:19px}.product-field input,.product-field select,.product-field textarea{border-radius:6px;padding:10px;font-size:13px}.seller-order-card{box-shadow:none;border-radius:9px;padding:16px}.seller-order-product h3{font-size:15px}.hub-placeholder-card{margin-top:18px;border:1px solid var(--hub-border);background:white;min-height:290px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:28px}.hub-placeholder-icon{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:#eeebff;color:var(--hub-purple);font-size:28px}.hub-placeholder-card h2{font-size:17px;margin:13px 0 3px}.hub-placeholder-card p{color:#64748b;font-size:12px;max-width:420px}.hub-coming{border:1px solid #e4dcff;color:#5742b4;background:#f8f6ff;border-radius:20px;padding:7px 12px;font-size:11px;margin-top:9px}.hub-mobile-overlay{display:none}
+@media(max-width:800px){#dashboardContent:not(.seller-hidden){display:block}.hub-sidebar{position:fixed;left:0;top:0;width:245px;max-width:85vw;transform:translateX(-105%);transition:transform .2s}.hub-sidebar.hub-open{transform:translateX(0)}.hub-mobile-overlay.hub-open{display:block;position:fixed;inset:0;background:#0007;z-index:25}.hub-brand #hubClose{display:block;margin-left:auto;color:white;background:none;border:0;font-size:24px}.seller-workspace{padding:0 12px 28px}.hub-topbar{margin:0 -12px 16px;padding:0 12px;height:60px}#hubMenu{display:block}.hub-page-title{font-size:17px}.hub-top-status{display:none}.seller-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.seller-grid,.product-list{grid-template-columns:1fr}.hub-help{font-size:11px;padding:7px}.seller-dashboard-heading h1{font-size:18px!important}.seller-order-product{gap:9px}.seller-order-product img{width:66px;height:66px}}
+</style>
 </head>
 
 <body>
@@ -494,6 +507,32 @@
 
   >
 
+
+<aside class="hub-sidebar" id="hubSidebar" aria-label="Seller navigation">
+ <div class="hub-brand"><span class="hub-brand-icon">C</span><div><b>CEROOD</b><small>Seller Hub</small></div><button type="button" id="hubClose" aria-label="Close menu">×</button></div>
+ <div class="hub-store"><span class="hub-store-icon">▣</span><span id="hubShopName">My Store</span><span class="hub-chevron">⌄</span></div>
+ <div class="hub-side-tools"><button type="button" class="hub-side-tool seller-tab" data-tab="notices">♧ &nbsp; Notices</button><button type="button" class="hub-side-tool seller-tab" data-tab="support">☏ &nbsp; Support</button></div>
+ <div class="hub-menu-scroll">
+ <button type="button" class="hub-nav seller-tab active" data-tab="overview"><span>⌂</span> Home</button>
+ <div class="hub-menu-caption">MANAGE BUSINESS</div>
+ <div class="hub-nav-group"><button type="button" class="hub-nav hub-expand" aria-expanded="true"><span>▣</span> Orders <i>⌄</i></button><div class="hub-submenu"><button type="button" class="hub-sub seller-tab" data-tab="orders">Manage Orders</button><button type="button" class="hub-sub seller-tab" data-tab="dispatch">Dispatch Performance</button></div></div>
+ <button type="button" class="hub-nav seller-tab" data-tab="returns"><span>↩</span> Returns / RTO</button>
+ <div class="hub-nav-group"><button type="button" class="hub-nav hub-expand" aria-expanded="true"><span>₹</span> Pricing <i>⌄</i></button><div class="hub-submenu"><button type="button" class="hub-sub seller-tab" data-tab="pricing">Manage Pricing</button><button type="button" class="hub-sub seller-tab" data-tab="price-drop">Schedule Price Drop</button><button type="button" class="hub-sub seller-tab" data-tab="rto-pricing">Reduce RTO & Returns</button></div></div>
+ <button type="button" class="hub-nav seller-tab" data-tab="claims"><span>▤</span> Claims</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="inventory"><span>▥</span> Inventory</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="products"><span>▧</span> Catalog / My Products</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="add-product"><span>⊞</span> Catalog Uploads</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="image-upload"><span>▧</span> Image Bulk Upload</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="quality"><span>✦</span> Quality</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="payments"><span>▣</span> Payments</button>
+ <div class="hub-menu-caption">ACCOUNT & HELP</div>
+ <button type="button" class="hub-nav seller-tab" data-tab="account"><span>♙</span> My Account</button>
+ <button type="button" class="hub-nav seller-tab" data-tab="support"><span>?</span> Help & Support</button>
+ </div><div class="hub-side-footer">CEROOD <span>Seller Hub</span></div>
+</aside>
+<div class="hub-mobile-overlay" id="hubOverlay"></div>
+<div class="seller-workspace">
+<div class="hub-topbar"><button type="button" id="hubMenu" aria-label="Open menu">☰</button><div class="hub-page-title" id="hubPageTitle">Home</div><div class="hub-top-actions"><span class="hub-top-status">Seller panel</span><button type="button" class="hub-help seller-tab" data-tab="support">☏ &nbsp; Need Help?</button></div></div>
     <div class="seller-dashboard-heading">
 
       <div>
@@ -1383,6 +1422,19 @@
 
     </section>
 
+<section id="section-notices" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Notices</h1><p>Announcements and seller notifications</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Notices</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-support" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Support</h1><p>Help, FAQs and support tickets</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Support</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-dispatch" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Dispatch Performance</h1><p>Monitor order dispatch and fulfilment</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Dispatch Performance</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-returns" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Return / RTO Orders</h1><p>Track returns, return-to-origin and exchanges</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Return / RTO Orders</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-pricing" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Manage Pricing</h1><p>View product prices and commission details</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Manage Pricing</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-price-drop" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Schedule Price Drop</h1><p>Plan future price changes</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Schedule Price Drop</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-rto-pricing" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Reduce RTO & Returns</h1><p>Pricing tools for returns management</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Reduce RTO & Returns</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-claims" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Claims</h1><p>Track and manage seller claims</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Claims</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-inventory" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Inventory</h1><p>Monitor your available product stock</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Inventory</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-image-upload" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Image Bulk Upload</h1><p>Manage product image uploads</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Image Bulk Upload</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-quality" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Quality</h1><p>Review catalog quality and listing issues</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Quality</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+<section id="section-payments" class="seller-section hub-placeholder"><div class="hub-section-heading"><h1>Payments</h1><p>View earnings and seller settlements</p></div><div class="hub-placeholder-card"><span class="hub-placeholder-icon">▤</span><h2>Payments</h2><p>This section is ready in the Seller Hub layout. We will add its actual features and data later.</p><span class="hub-coming">Layout ready · Features coming later</span></div></section>
+  </div>
   </div>
 
 </main>
@@ -3238,6 +3290,19 @@ initializeDashboard();
 
 </script>
 
+<script id="cerood-seller-hub-navigation">
+(function(){
+ const sidebar=document.getElementById('hubSidebar'),overlay=document.getElementById('hubOverlay');
+ const close=()=>{sidebar.classList.remove('hub-open');overlay.classList.remove('hub-open')};
+ document.getElementById('hubMenu').addEventListener('click',()=>{sidebar.classList.add('hub-open');overlay.classList.add('hub-open')});
+ document.getElementById('hubClose').addEventListener('click',close);overlay.addEventListener('click',close);
+ document.querySelectorAll('.hub-expand').forEach(button=>button.addEventListener('click',()=>{const menu=button.nextElementSibling;const collapsed=menu.classList.toggle('is-collapsed');button.setAttribute('aria-expanded',String(!collapsed))}));
+ const names={overview:'Home',products:'My Products',orders:'Orders','add-product':'Catalog Uploads',account:'My Account',notices:'Notices',support:'Support',dispatch:'Dispatch Performance',returns:'Return / RTO Orders',pricing:'Manage Pricing','price-drop':'Schedule Price Drop','rto-pricing':'Reduce RTO & Returns',claims:'Claims',inventory:'Inventory','image-upload':'Image Bulk Upload',quality:'Quality',payments:'Payments'};
+ document.querySelectorAll('.hub-sidebar .seller-tab,.hub-topbar .seller-tab').forEach(button=>button.addEventListener('click',()=>{document.getElementById('hubPageTitle').textContent=names[button.dataset.tab]||'Seller Hub';close()}));
+ const originalRenderAccount=window.renderAccount;
+ if(typeof originalRenderAccount==='function')window.renderAccount=function(){originalRenderAccount();document.getElementById('hubShopName').textContent=seller?.shop_name||'My Store'};
+})();
+</script>
 </body>
 
 </html>
