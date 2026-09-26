@@ -4210,6 +4210,35 @@ async function withdraw(p){
   await refresh();message('Product list refreshed.');
  }catch(e){message('Could not withdraw product: '+e.message)}
 }
+// Reusable, read-only catalog popup; does not move or modify product editor forms.
+const catalogPopup=document.createElement('div');catalogPopup.id='ccatViewPopup';catalogPopup.hidden=true;
+catalogPopup.setAttribute('role','dialog');catalogPopup.setAttribute('aria-modal','true');catalogPopup.setAttribute('aria-labelledby','ccatViewPopupTitle');
+catalogPopup.innerHTML='<div class="ccat-view-window"><div class="ccat-view-head"><div><small>PRODUCT CATALOG</small><h2 id="ccatViewPopupTitle">Product details</h2></div><button type="button" id="ccatViewPopupClose" aria-label="Close catalog details">×</button></div><div class="ccat-view-content" id="ccatViewPopupContent"></div><div class="ccat-view-foot"><button type="button" id="ccatViewPopupDone">Close</button></div></div>';
+document.body.append(catalogPopup);
+let lastCatalogFocus=null;
+function closeCatalogPopup(){if(catalogPopup.hidden)return;catalogPopup.hidden=true;document.body.classList.remove('ccat-view-open');lastCatalogFocus?.focus?.();}
+catalogPopup.querySelector('#ccatViewPopupClose').onclick=closeCatalogPopup;
+catalogPopup.querySelector('#ccatViewPopupDone').onclick=closeCatalogPopup;
+catalogPopup.addEventListener('click',e=>{if(e.target===catalogPopup)closeCatalogPopup()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!catalogPopup.hidden){e.preventDefault();closeCatalogPopup()}});
+function showCatalogPopup(p,state){
+ lastCatalogFocus=document.activeElement;
+ const content=catalogPopup.querySelector('#ccatViewPopupContent');content.replaceChildren();
+ catalogPopup.querySelector('#ccatViewPopupTitle').textContent=p.name||'Product details';
+ const intro=document.createElement('div');intro.className='ccat-view-intro';
+ const picture=document.createElement('div');picture.className='ccat-view-picture';
+ if(p.image_url){const img=document.createElement('img');img.src=p.image_url;img.alt=p.name||'Product image';img.onerror=()=>{img.replaceWith(document.createTextNode('Image unavailable'))};picture.append(img)}else picture.textContent='No product image';
+ const summary=document.createElement('div');summary.className='ccat-view-summary';
+ const heading=document.createElement('h3');heading.textContent=p.name||'Unnamed product';summary.append(heading);
+ const price=document.createElement('div');price.className='ccat-view-price';price.textContent='₹'+Number(p.price||0).toLocaleString('en-IN');summary.append(price);
+ const status=document.createElement('span');status.className='ccat-chip ccat-qc-'+state.key;status.textContent=state.text;summary.append(status);
+ intro.append(picture,summary);content.append(intro);
+ const grid=document.createElement('div');grid.className='ccat-view-fields';content.append(grid);
+ const raw=p.source?.product_data||p.source||{};
+ const fields=[['Marketplace',p.marketplace],['Category',p.category],['Product ID',p.id],['Stock',p.stock??'—'],['Listing status',p.status||'—'],['QC status',state.text],['Brand',raw.brand],['Model',raw.model],['Condition',raw.condition],['SKU',raw.sku],['MRP / Compare price',raw.compare_price!=null?'₹'+Number(raw.compare_price).toLocaleString('en-IN'):null],['Warranty (days)',raw.warranty_days],['Location',raw.location],['Delivery',raw.delivery],['Created date',p.created_at?new Date(p.created_at).toLocaleString('en-IN'):'—'],['Description',raw.description],['Known defects',raw.known_defects],['Accessories',Array.isArray(raw.accessories)?raw.accessories.join(', '):raw.accessories],['Warranty terms',raw.warranty_terms]];
+ fields.forEach(([key,value])=>{if(value===null||value===undefined||value==='')return;const box=document.createElement('div');box.className='ccat-view-field';const k=document.createElement('small');k.textContent=key;const v=document.createElement('strong');v.textContent=String(value);box.append(k,v);grid.append(box)});
+ catalogPopup.hidden=false;document.body.classList.add('ccat-view-open');catalogPopup.querySelector('#ccatViewPopupClose').focus();
+}
 function render(){
  const count=k=>items.filter(p=>label(p).key===k).length;
  $('ccatSingleCount').textContent='('+items.length+')';$('ccatSingleAll').textContent='('+items.length+')';$('ccatSingleAction').textContent='('+count('rejected')+')';$('ccatSinglePending').textContent='('+count('pending')+')';$('ccatSingleRejected').textContent='('+count('rejected')+')';$('ccatSingleApproved').textContent='('+count('approved')+')';$('ccatSingleDraft').textContent='('+count('draft')+')';
@@ -4225,11 +4254,8 @@ function render(){
   const view=document.createElement('button');view.type='button';view.className='ccat-single-view';view.textContent='View Catalog';
   const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.className='ccat-single-outline';edit.onclick=()=>openEditor(p);
   const remove=document.createElement('button');remove.type='button';remove.textContent='Withdraw';remove.className='ccat-single-danger';remove.disabled=['withdrawn','blocked'].includes(String(p.approval_status).toLowerCase());remove.onclick=()=>withdraw(p);
-  const detail=document.createElement('tr');detail.hidden=true;detail.className='ccat-detail-row';const cell=detail.insertCell();cell.colSpan=8;cell.className='ccat-product-detail';const detailGrid=document.createElement('div');detailGrid.className='ccat-detail-grid';cell.append(detailGrid);
-  const fields=[['Product',p.name],['Marketplace',p.marketplace],['Category',p.category],['Price','₹'+Number(p.price||0).toLocaleString('en-IN')],['Stock',p.stock??'—'],['Listing status',p.status||'—'],['QC status',state.text],['Product ID',p.id]];
-  fields.forEach(([key,value])=>{const box=document.createElement('div'),k=document.createElement('small'),v=document.createElement('strong');k.textContent=key;v.textContent=String(value??'—');box.append(k,v);detailGrid.append(box)});
-  view.onclick=()=>{detail.hidden=!detail.hidden;view.textContent=detail.hidden?'View Catalog':'Hide Details'};
-  action.append(view,edit,remove);tr.after(detail);
+  view.onclick=()=>showCatalogPopup(p,state);
+  action.append(view,edit,remove);
  });
 }
 async function refresh(){if(loading)return;loading=true;const body=$('ccatSingleBody');body.replaceChildren();const tr=body.insertRow(),td=tr.insertCell();td.colSpan=8;td.className='ccat-empty';td.textContent='Loading your single-product catalogs…';try{
@@ -4393,6 +4419,31 @@ const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"
 #section-add-product .ccat-single-footer{display:flex!important;flex-direction:row!important;justify-content:flex-end!important;align-items:center!important;gap:12px!important;padding:16px 12px!important;margin:0!important;}
 #section-add-product .ccat-single-footer>.seller-btn,#section-add-product #ccatShowSingle{position:static!important;float:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0!important;min-height:40px!important;padding:10px 15px!important;line-height:1.3!important;white-space:nowrap!important;}
 @media(max-width:750px){#section-add-product .ccat-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:14px;gap:12px;}#section-add-product .ccat-single-footer{flex-wrap:wrap!important;}}
+</style>
+
+<style id="ccat-view-popup-style">
+#ccatViewPopup[hidden]{display:none!important}
+#ccatViewPopup{position:fixed;inset:0;z-index:2147483000;display:flex;justify-content:center;align-items:center;background:rgba(18,25,42,.62);padding:20px;box-sizing:border-box}
+#ccatViewPopup *{box-sizing:border-box}
+#ccatViewPopup .ccat-view-window{width:min(860px,100%);max-height:calc(100dvh - 40px);display:flex;flex-direction:column;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 24px 80px #0004;color:#1d2939}
+#ccatViewPopup .ccat-view-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 22px;border-bottom:1px solid #e1e7f0}
+#ccatViewPopup .ccat-view-head small{font-size:10px;font-weight:700;letter-spacing:.09em;color:#667085}
+#ccatViewPopup .ccat-view-head h2{font-size:18px;margin:5px 0 0;overflow-wrap:anywhere}
+#ccatViewPopup #ccatViewPopupClose{border:0;background:#f2f4f8;border-radius:7px;width:36px;height:36px;flex:none;font-size:24px;cursor:pointer}
+#ccatViewPopup .ccat-view-content{overflow:auto;padding:22px;overscroll-behavior:contain}
+#ccatViewPopup .ccat-view-intro{display:grid;grid-template-columns:170px minmax(0,1fr);gap:22px;align-items:center;padding-bottom:20px;border-bottom:1px solid #e6eaf2}
+#ccatViewPopup .ccat-view-picture{width:170px;height:170px;border:1px solid #e6eaf2;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#667085;background:#f8faff}
+#ccatViewPopup .ccat-view-picture img{max-width:100%;max-height:100%;object-fit:contain}
+#ccatViewPopup .ccat-view-summary h3{font-size:20px;line-height:1.4;margin:0 0 12px;overflow-wrap:anywhere}
+#ccatViewPopup .ccat-view-price{font-size:23px;font-weight:750;margin-bottom:12px}
+#ccatViewPopup .ccat-view-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px 22px;padding-top:22px}
+#ccatViewPopup .ccat-view-field{min-width:0;border-bottom:1px solid #e9edf5;padding-bottom:11px}
+#ccatViewPopup .ccat-view-field small{display:block;font-size:11px;color:#667085;margin-bottom:5px}
+#ccatViewPopup .ccat-view-field strong{display:block;font-size:13px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
+#ccatViewPopup .ccat-view-foot{border-top:1px solid #e6eaf2;padding:13px 22px;display:flex;justify-content:flex-end}
+#ccatViewPopup .ccat-view-foot button{border:0;background:#4432b6;color:white;padding:10px 23px;border-radius:6px;cursor:pointer;font-weight:650}
+body.ccat-view-open{overflow:hidden}
+@media(max-width:600px){#ccatViewPopup{padding:0}#ccatViewPopup .ccat-view-window{height:100dvh;max-height:100dvh;border-radius:0}#ccatViewPopup .ccat-view-intro{grid-template-columns:100px minmax(0,1fr);gap:12px}#ccatViewPopup .ccat-view-picture{width:100px;height:100px}#ccatViewPopup .ccat-view-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#ccatViewPopup .ccat-view-content{padding:15px}}
 </style>
 </body>
 
