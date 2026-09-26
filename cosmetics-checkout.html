@@ -2298,6 +2298,46 @@ body{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
 }
 @media (min-width:851px) { #cerood-beauty-header-spacer { display:none!important; } }
 </style>
+
+<style id="cerood-beauty-desktop-checkout-layout-fix-20260926">
+/* Desktop-only: contain mobile header controls and prevent unbounded SVG icons. */
+@media (min-width: 901px) {
+  html, body { max-width:100%; overflow-x:clip; }
+  body > header.checkout-header {
+    box-sizing:border-box !important;
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:20px !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-height:70px !important;
+    padding:12px max(24px, calc((100vw - 1160px)/2)) !important;
+    margin:0 !important;
+    border-radius:0 !important;
+    background:#fff !important;
+  }
+  body > header.checkout-header > .brand-word { display:flex !important; flex:0 0 auto !important; align-items:center !important; min-width:0 !important; }
+  body > header.checkout-header > .brand-word img { display:block !important; width:auto !important; max-width:125px !important; height:40px !important; object-fit:contain !important; }
+  body > header.checkout-header > .secure-badge { display:flex !important; flex:0 0 auto !important; white-space:nowrap !important; }
+  body > header.checkout-header > :not(.brand-word):not(.secure-badge) { display:none !important; }
+  body > header.checkout-header svg { width:20px !important; height:20px !important; max-width:20px !important; max-height:20px !important; flex:0 0 20px !important; }
+  body > main.checkout-container { box-sizing:border-box !important; width:100% !important; max-width:1160px !important; margin:0 auto !important; padding:22px 18px 36px !important; }
+  body .checkout-grid { display:grid !important; grid-template-columns:minmax(0, 1.5fr) minmax(0, 1fr) !important; gap:18px !important; align-items:start !important; width:100% !important; min-width:0 !important; }
+  body .checkout-grid > * { min-width:0 !important; max-width:100% !important; box-sizing:border-box !important; }
+  body .checkout-grid .card-box { box-sizing:border-box !important; min-width:0 !important; max-width:100% !important; height:auto !important; min-height:0 !important; overflow-wrap:anywhere; }
+  body .checkout-grid .card-body-scroll { min-width:0 !important; max-height:none !important; overflow:visible !important; }
+  body .checkout-grid .form-grid { min-width:0 !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  body .checkout-grid .form-group { min-width:0 !important; }
+  body .checkout-grid .form-group.full { grid-column:span 2 !important; }
+  body .checkout-grid .form-input { min-width:0 !important; max-width:100% !important; }
+  body .checkout-grid svg { width:18px !important; height:18px !important; max-width:18px !important; max-height:18px !important; flex-shrink:0 !important; }
+  body .checkout-grid #summaryItemsContainer img { max-width:100% !important; object-fit:contain; }
+  body .checkout-grid .saved-address-content-row { min-width:0 !important; }
+  body .checkout-grid .saved-address-info { min-width:0 !important; }
+}
+</style>
 </head><body>
 <header class="checkout-header"><a aria-label="Cerood Beauty home" class="brand-word" href="/cosmetics.html"><img alt="Cerood logo" height="43" src="/cerood-logo.webp" style="display:block;width:auto;max-width:125px;object-fit:contain" width="110"/></a><span class="secure-badge"><i class="fa-solid fa-shield-halved"></i> Secure Checkout</span><a aria-label="Beauty checkout cart" class="cerood-beauty-checkout-cart" href="#checkoutView"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg></a><details class="cerood-beauty-menu"><summary aria-label="Open Beauty navigation menu" title="Menu"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></summary><div class="cerood-beauty-menu-list"><a href="/cosmetics.html">Shop Beauty</a><a href="/cosmetics.html#products-section">Explore Products</a><a href="/cosmetics-dashboard.html?beautyPane=overview">Dashboard</a><a href="/cosmetics-dashboard.html?beautyPane=purchases">My Orders</a><a href="/cosmetics-dashboard.html?beautyPane=tracking">Live Tracking</a><a href="/cosmetics-dashboard.html?beautyPane=reviews">Reviews &amp; Ratings</a><a href="/cosmetics-dashboard.html?beautyPane=warranty">Warranty &amp; Invoices</a><a href="/cosmetics-dashboard.html?beautyPane=overview">My Account</a><a href="/cosmetics-checkout.html">Beauty Cart / Checkout</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed</a><a href="/clothing.html">Fashion</a></div></details><a aria-label="Search Beauty products" class="cerood-beauty-checkout-search" href="/cosmetics.html#products-section">⌕   Search skincare, makeup, haircare...</a><form action="/cosmetics.html" class="cerood-inner-search" method="get" role="search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search cosmetics products" autocomplete="off" name="q" placeholder="Search skincare, makeup, haircare..." type="search"/></form><button aria-label="View delivery address" class="cb-checkout-location" onclick="document.querySelector('.saved-address-card, #deliveryAddress, .address-card, #addressSection')?.scrollIntoView({behavior:'smooth',block:'center'})" type="button"><svg aria-hidden="true" class="cb-pin" fill="none" stroke="#6146f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery address</span></button><button aria-label="Go to Beauty store" class="cb-menu" onclick="window.location.href='/cosmetics.html'" type="button">☰</button><form action="/cosmetics.html" class="cb-checkout-search" method="get" role="search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search beauty products" name="q" placeholder="Search skincare, makeup, haircare..." type="search"/></form></header>
 <main class="checkout-container"><div id="checkoutView"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 style="margin:10px 0">Beauty Checkout</h2><a href="/cosmetics.html" style="font-size:13px;color:#536f8c">← Continue shopping</a></div><div class="note" id="topMessage" role="status">Loading your Beauty cart…</div>
