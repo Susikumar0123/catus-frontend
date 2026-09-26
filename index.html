@@ -592,8 +592,10 @@ main.shell .cerood-marketplace-grid .product img{
 </style>
 <style id="cerood-hero-blue-white-text-only-20260927">
 /* Only the Welcome to Cerood hero. All other sections and the header remain untouched. */
-.hero {
-  background:linear-gradient(110deg,#416ba6 0%,#365f98 55%,#31588e 100%) !important;
+/* Override the earlier main.shell .hero white-background reset at equal specificity. */
+main.shell .hero {
+  background-color:#365f98 !important;
+  background-image:linear-gradient(110deg,#416ba6 0%,#365f98 55%,#31588e 100%) !important;
 }
 .hero .eyebrow,
 .hero h1,
