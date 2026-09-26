@@ -557,91 +557,22 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 .cerood-mega-all{display:block;padding:10px;font-size:12px;color:#5135d9}
 }
 </style>
-<style id="cerood-index-pure-white-background-20260927">
-/* Homepage-only white surface palette; keep layout, media, JS and link behavior intact. */
-:root{color-scheme:light}
-html,body,body > main,main.shell,.shell,.header,.crn-header,
-.crn-header-main,.crn-header .crn-search,.search,.hero,.benefits,
-.section,.cerood-all-departments,.division,.division-body,
-.service,.renewed,.beauty,.fashion,.service .cta,.renewed .cta,
-.beauty .cta,.fashion .cta,.product,.product-fallback,
-.trending-message,.search-empty,.search-results,.cerood-search-sort,
-.cerood-search-sort select,.search-clear,.search-more,
-.cerood-search-retry,.cerood-department-tile,.cerood-department-symbol,
-.cerood-marketplace-groups,.cerood-marketplace-group,
-.cerood-marketplace-grid,.cerood-marketplace-grid .product,
-.cerood-marketplace-grid .product img,
-.cerood-marketplace-grid .product .product-fallback,
-.cerood-service-feature-icon,.cerood-desktop-promo,
-.promo-renewed,.promo-beauty,.promo-fashion,
-.cerood-top-category-wrap,.cerood-top-category-strip,
-.cerood-top-category>summary,.cerood-top-category-icon,
-.cerood-top-category-panel,.cerood-top-category-links a,
-.cerood-mega-column,.cerood-mega-column:nth-child(even),
-.cerood-mega-all,.cerood-unified-nav,.cerood-unified-categories a,
-.cerood-unified-tools>a,.cerood-unified-tools>button,
-.cerood-unified-menu summary,.cerood-unified-menu-list,
-.crn-mobile-nav,.bottom,.crn-mobile-nav a,
-.crn-header .crn-location,.crn-header .crn-mobile-location,
-.crn-header .crn-actions a,.location-trigger,
-.cerood-location-panel,.cerood-location-grid input,
-.cerood-location-controls button,#authModal .auth-modal-container,
-#authModal .auth-left-panel,#authModal .auth-right-panel,
-#authModal .auth-input-field,#authModal .auth-close-btn,
-#ceroodMarketplaceGroupList>.cerood-marketplace-group,
-#ceroodMarketplaceGroupList .cerood-marketplace-grid .product,
-#ceroodMarketplaceGroupList .cerood-marketplace-grid .product>img,
-#ceroodMarketplaceGroupList .cerood-marketplace-grid .product>.product-fallback,
-#ceroodMarketplaceGroupList .cerood-service-feature-icon,
-#ceroodTrending .product,#ceroodTrending .product>.product-fallback,
-#ceroodSearchGrid .product,#ceroodSearchGrid .product>.product-fallback,
-.cerood-search-filters button,
-.cerood-top-category:hover>summary,.cerood-top-category[open]>summary,
-.cerood-top-category>summary:focus-visible,
-.cerood-top-category-links a:hover,.cerood-top-category-links a:focus-visible,
-.cerood-mega-column a:hover,.cerood-mega-column a:focus-visible,
-.crn-header .crn-actions a:hover,.crn-header .crn-location:hover,
-.location-trigger:hover,.location-trigger:focus-visible {
- background:#ffffff!important;
- background-color:#ffffff!important;
- background-image:none!important;
-}
-/* Preserve contrast of text and click targets against the new white surfaces. */
-.crn-logo-fallback,#authModal .auth-left-panel,
-#authModal .auth-left-panel h2,#authModal .auth-left-panel p{color:#17233d!important}
-.primary,.product .cta,.cerood-search-filters button[aria-pressed="true"],
-#authModal .auth-primary-btn,.cerood-location-controls button[type=submit]{
- background:#ffffff!important;background-image:none!important;
- color:#5135d9!important;border:1px solid #5135d9!important;
-}
-.cerood-top-category-icon,.cerood-department-symbol{border-color:#e9e9f3}
-@media(min-width:851px){body{background:#fff!important}}
-@media(max-width:850px){.crn-header-main,.bottom.crn-mobile-nav,
-.crn-header-main .crn-search{background:#fff!important;background-image:none!important}}
-</style>
 
-<style id="cerood-absolute-pure-white-fix-20260927">
-/* All visible homepage surfaces, including nested and dynamically loaded cards.
-   Product photographs remain unchanged; only CSS backgrounds are flattened. */
-html,body,body::before,body::after,
-body > header,body > nav,body > main,body > footer,
-body > header *,body > nav *,body > main *,body > footer *,
-body > header *::before,body > header *::after,
-body > nav *::before,body > nav *::after,
-body > main *::before,body > main *::after,
-body > footer *::before,body > footer *::after {
- background-color:#fff!important;
- background-image:none!important;
+<style id="cerood-homepage-white-content-only-20260927">
+/* White homepage content only. Header, navigation, controls and modals retain their original styles. */
+html,body{background-color:#fff!important}
+main.shell,main.shell .section,main.shell .cerood-all-departments,
+main.shell .cerood-marketplace-group,main.shell .division,
+main.shell .division-body,main.shell .product,
+main.shell .benefits,main.shell .hero,
+main.shell .cerood-desktop-promo,
+main.shell .cerood-service-feature-icon,
+main.shell .cerood-department-tile,
+main.shell .cerood-department-symbol,
+main.shell .product-fallback,
+main.shell .cerood-marketplace-grid .product img{
+ background-color:#fff!important;background-image:none!important;
 }
-/* Keep existing photos visible and avoid altering their actual image pixels. */
-body img,body video,body picture,body svg {background-color:transparent!important;}
-/* Buttons and selected filters stay legible against white. */
-body > header button,body > nav button,body > main button,body > main .cta,
-body > main .primary,body > main .cerood-search-filters button[aria-pressed="true"] {
- color:#5135d9!important;
-}
-/* The hero / promo panels are now plain white, including on narrow screens. */
-@media(max-width:850px){html,body,.crn-header-main,.hero,.cerood-desktop-promo{background:#fff!important;background-image:none!important;}}
 </style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a class="logo crn-logo" href="/" aria-label="Cerood home"><img src="/cerood-logo.webp" alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false"/><span class="crn-logo-fallback" hidden>cerood.</span></a>
