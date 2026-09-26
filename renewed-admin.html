@@ -596,10 +596,10 @@ function renderProducts(){
     for(const [label,value] of [
       ['Seller',product.shop_name],['Owner',product.owner_name],['Mobile',product.seller_phone],
       ['Category',product.category],['Condition',product.condition],['Brand',product.brand],
-      ['Model',product.model],['Stock',product.stock],['Warranty',product.warranty_days==null?'—':product.warranty_days+' days'],
+      ['Model',product.model],['Seller saved stock (review this quantity)',product.stock],['Seller saved price (₹)',product.price],['Seller saved MRP (₹)',product.compare_price],['Last seller/product update',product.updated_at?new Date(product.updated_at).toLocaleString('en-IN'):'—'],['Warranty',product.warranty_days==null?'—':product.warranty_days+' days'],
       ['Location',product.location],['Known defects',product.known_defects],
       ['Accessories',Array.isArray(product.accessories)?product.accessories.join(', '):product.accessories],
-      ['Warranty terms',product.warranty_terms],['Listing status',product.status]
+      ['Warranty terms',product.warranty_terms],['Listing status',product.status],['Review note',status==='pending'?'These are the saved requested values; they are not live until approved.':'Review the current saved values.']
     ])info(body,label,value);
     if(product.video_url){
       const video=document.createElement('video');video.className='seller-product-video';
