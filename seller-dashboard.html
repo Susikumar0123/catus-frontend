@@ -642,6 +642,21 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
   #section-products .product-actions button { font-size: 10px; }
 }
 </style>
+<style id="cerood-my-products-unified-grid-fix">
+/* Uniform image frames and card rows across all three marketplaces. */
+#section-products .product-list{grid-template-columns:repeat(auto-fill,minmax(165px,195px));gap:12px;align-items:stretch}
+#section-products .product-card{display:flex;flex-direction:column;min-height:320px}
+#section-products .product-card>img{height:122px;min-height:122px;width:100%;object-fit:contain;object-position:center;padding:10px;background:#f8fafc}
+#section-products .product-card-body{display:flex;flex:1;flex-direction:column;gap:4px;padding:10px}
+#section-products .product-card h3{min-height:35px;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#section-products .product-price{margin:0;line-height:1.3}
+#section-products .product-meta{margin:2px 0}
+#section-products .product-actions{margin-top:auto;padding-top:8px}
+#section-products .cerood-renewed-heading{margin:7px 0 12px}
+#section-products .cerood-renewed-heading strong{font-size:15px}
+#section-products #ceroodCosmeticsProducts,#section-products #ceroodFashionProducts{padding:18px}
+@media(max-width:500px){#section-products .product-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#section-products .product-card{min-height:305px}#section-products .product-card>img{height:108px;min-height:108px}#section-products .product-card-body{padding:8px}}
+</style>
 </head>
 
 <body>
@@ -905,6 +920,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 
       ></div>
 
+      <div class="hub-section-toolbar cerood-renewed-heading"><strong>📺 Renewed Products</strong></div>
       <div
 
         id="productsList"
@@ -3621,18 +3637,33 @@ initializeDashboard();
   window.ceroodMarketplaceProducts=[];
   function display(rows){
     const beauty=$('ceroodCosmeticsProductList'),fashion=$('ceroodFashionProductList');if(!beauty||!fashion)return;beauty.replaceChildren();fashion.replaceChildren();
-    if(!rows.length){/* Both category sections display their own empty states below. */}
     rows.forEach(r=>{
-      const p=r.product_data||{},card=document.createElement('article'),img=document.createElement('img'),body=document.createElement('div'),name=document.createElement('h3'),price=document.createElement('div'),meta=document.createElement('p'),badge=document.createElement('span'),note=document.createElement('p');
+      const p=r.product_data||{},card=document.createElement('article'),img=document.createElement('img'),body=document.createElement('div'),name=document.createElement('h3'),price=document.createElement('div'),meta=document.createElement('p'),badge=document.createElement('span'),note=document.createElement('p'),actions=document.createElement('div'),edit=document.createElement('button'),withdraw=document.createElement('button');
       card.className='product-card';img.alt=p.name||'Product';img.loading='lazy';if(/^https:\/\//.test(p.image_url||''))img.src=p.image_url;
       body.className='product-card-body';name.textContent=p.name||'Product';price.className='product-price';price.textContent='₹'+Number(p.price||0).toLocaleString('en-IN');
       meta.className='product-meta';meta.textContent=(r.marketplace==='clothing'?'Fashion':'Cosmetics')+' · '+(p.category||'')+' · Stock: '+(p.stock??'—');
       badge.className='approval-badge '+escStatus(r.approval_status);badge.textContent=escStatus(r.approval_status)==='pending'?'Under review':escStatus(r.approval_status);
-      note.className='product-meta';note.textContent=r.rejection_reason?'Reason: '+r.rejection_reason:r.published_product_id?'Published product ID: '+r.published_product_id:'';
-      body.append(name,price,meta,badge,note);card.append(img,body);(r.marketplace==='clothing'?fashion:beauty).append(card);
+      note.className='product-meta';note.textContent=r.rejection_reason?'Reason: '+r.rejection_reason:r.approval_status==='approved'?'Listing: published':'';
+      actions.className='product-actions';edit.type='button';edit.textContent='Edit';withdraw.type='button';withdraw.className='danger';withdraw.textContent='Withdraw';
+      const inactive=r.approval_status==='withdrawn';edit.disabled=inactive;withdraw.disabled=inactive;
+      edit.addEventListener('click',()=>editMarketplaceProduct(r));withdraw.addEventListener('click',()=>withdrawMarketplaceProduct(r));
+      actions.append(edit,withdraw);body.append(name,price,badge,meta,note,actions);card.append(img,body);(r.marketplace==='clothing'?fashion:beauty).append(card);
     });
     if(!beauty.children.length){const p=document.createElement('p');p.className='hub-muted';p.textContent='No Cosmetics products submitted yet.';beauty.append(p)}
     if(!fashion.children.length){const p=document.createElement('p');p.className='hub-muted';p.textContent='No Fashion products submitted yet.';fashion.append(p)}
+  }
+  async function editMarketplaceProduct(r){
+    if(r.approval_status==='withdrawn')return;
+    const p=r.product_data||{};
+    const fields=[['name','Product name'],['category','Category'],['brand','Brand'],['variant','Variant / size'],['price','Price'],['compare_price','Compare price'],['stock','Stock'],['description','Description']];
+    if(r.marketplace==='cosmetics')fields.push(['net_quantity','Net quantity'],['batch_number','Batch number'],['manufacture_date','Manufacture date YYYY-MM-DD'],['expiry_date','Expiry date YYYY-MM-DD'],['ingredients','Ingredients']);
+    const updated={...p};for(const [key,label] of fields){const value=prompt(label,String(p[key]??''));if(value===null)return;updated[key]=value;}
+    if(!confirm(r.approval_status==='approved'?'Save changes? The live listing will be unpublished until admin approves again.':'Save changes and send for admin review?'))return;
+    try{await apiRequest('/api/sellers/catalog-submissions/'+encodeURIComponent(r.id),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:updated})});await refresh();alert('Changes submitted for admin review.')}catch(e){alert('Edit failed: '+e.message)}
+  }
+  async function withdrawMarketplaceProduct(r){
+    if(r.approval_status==='withdrawn'||!confirm('Withdraw this product from sale?'))return;
+    try{await apiRequest('/api/sellers/catalog-submissions/'+encodeURIComponent(r.id),{method:'DELETE'});await refresh();alert('Product withdrawn.')}catch(e){alert('Withdraw failed: '+e.message)}
   }
   async function refresh(){
     if(busy)return;busy=true;const msg=$('ceroodOtherProductMessage');if(msg)msg.textContent='Loading Cosmetics & Fashion listings...';
