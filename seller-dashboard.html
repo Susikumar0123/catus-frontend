@@ -4225,9 +4225,9 @@ function render(){
   const view=document.createElement('button');view.type='button';view.className='ccat-single-view';view.textContent='View Catalog';
   const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.className='ccat-single-outline';edit.onclick=()=>openEditor(p);
   const remove=document.createElement('button');remove.type='button';remove.textContent='Withdraw';remove.className='ccat-single-danger';remove.disabled=['withdrawn','blocked'].includes(String(p.approval_status).toLowerCase());remove.onclick=()=>withdraw(p);
-  const detail=document.createElement('tr');detail.hidden=true;const cell=detail.insertCell();cell.colSpan=8;cell.className='ccat-product-detail';
+  const detail=document.createElement('tr');detail.hidden=true;detail.className='ccat-detail-row';const cell=detail.insertCell();cell.colSpan=8;cell.className='ccat-product-detail';const detailGrid=document.createElement('div');detailGrid.className='ccat-detail-grid';cell.append(detailGrid);
   const fields=[['Product',p.name],['Marketplace',p.marketplace],['Category',p.category],['Price','₹'+Number(p.price||0).toLocaleString('en-IN')],['Stock',p.stock??'—'],['Listing status',p.status||'—'],['QC status',state.text],['Product ID',p.id]];
-  fields.forEach(([key,value])=>{const box=document.createElement('div'),k=document.createElement('small'),v=document.createElement('strong');k.textContent=key;v.textContent=String(value??'—');box.append(k,v);cell.append(box)});
+  fields.forEach(([key,value])=>{const box=document.createElement('div'),k=document.createElement('small'),v=document.createElement('strong');k.textContent=key;v.textContent=String(value??'—');box.append(k,v);detailGrid.append(box)});
   view.onclick=()=>{detail.hidden=!detail.hidden;view.textContent=detail.hidden?'View Catalog':'Hide Details'};
   action.append(view,edit,remove);tr.after(detail);
  });
@@ -4380,6 +4380,20 @@ const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"
  bulkTab?.classList.remove('active');singleTab?.classList.add('active');$('ccatBulkPanel').hidden=true;$('ccatSinglePanel').hidden=false;
 })();
 </script>
+
+<style id="cerood-catalog-detail-footer-v3">
+/* A table cell must remain a table cell; grid belongs to an inner div. */
+#section-add-product .ccat-single-table td.ccat-product-detail{display:table-cell!important;width:auto!important;max-width:none!important;padding:0!important;vertical-align:top!important;background:#f8faff!important;border:1px solid #dce4f2!important;}
+#section-add-product .ccat-single-table .ccat-detail-row{display:table-row!important;}
+#section-add-product .ccat-single-table .ccat-detail-row[hidden]{display:none!important;}
+#section-add-product .ccat-detail-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 22px;padding:20px 22px;width:100%;min-width:0;}
+#section-add-product .ccat-detail-grid>div{min-width:0;padding:0 0 9px;border-bottom:1px solid #e4e9f4;}
+#section-add-product .ccat-detail-grid small{display:block;color:#667085;font-size:11px;margin:0 0 5px;}
+#section-add-product .ccat-detail-grid strong{display:block;overflow-wrap:anywhere;font-size:12px;line-height:1.5;}
+#section-add-product .ccat-single-footer{display:flex!important;flex-direction:row!important;justify-content:flex-end!important;align-items:center!important;gap:12px!important;padding:16px 12px!important;margin:0!important;}
+#section-add-product .ccat-single-footer>.seller-btn,#section-add-product #ccatShowSingle{position:static!important;float:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0!important;min-height:40px!important;padding:10px 15px!important;line-height:1.3!important;white-space:nowrap!important;}
+@media(max-width:750px){#section-add-product .ccat-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:14px;gap:12px;}#section-add-product .ccat-single-footer{flex-wrap:wrap!important;}}
+</style>
 </body>
 
 </html>
