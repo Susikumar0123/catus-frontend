@@ -388,6 +388,22 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
 @media(min-width:851px) and (max-width:1120px){#ceroodMarketplaceGroupList{grid-template-columns:repeat(2,minmax(0,1fr))}.cerood-desktop-promo{padding:15px;min-height:160px}.cerood-desktop-promo h2{font-size:21px}}
 </style>
+<style id="cerood-desktop-full-bleed-gradient-header-fix">
+/* Desktop only: full-viewport gradient behind the original header controls. */
+@media (min-width:851px) {
+  .header.crn-header { background:#fff; }
+  .header.crn-header > .shell:first-child {
+    width:100%; max-width:none; padding-left:0; padding-right:0;
+    margin:0;
+  }
+  .header.crn-header .crn-header-main {
+    width:100%; max-width:none; margin:0; border-radius:0;
+    padding:13px max(20px, calc((100vw - 1560px)/2 + 20px));
+    background:linear-gradient(110deg,#a8bdcf,#50708f);
+    box-sizing:border-box;
+  }
+}
+</style>
 <style id="cerood-desktop-four-tile-reference-20260927">
 /* Desktop marketplace groups: reference screenshot's compact four-tile cards.
    Only this homepage section changes; mobile, trending, search and app flows stay intact. */
