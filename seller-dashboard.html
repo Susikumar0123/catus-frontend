@@ -765,7 +765,47 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #ceroodUploadChooser #ceroodSingleChoice[hidden]{display:none!important}
 #section-add-product .ccat-bulk-entry{display:flex;justify-content:flex-end;padding:12px 16px;border-bottom:1px solid #e1e7f3}
 #section-add-product .ccat-bulk-entry .seller-btn{min-height:38px}
-</style></head>
+</style><style id="cerood-wizard-reference-layout-v4">
+#ceroodUploadChooser.cw-single .cerood-chooser-box{width:min(1280px,calc(100vw - 28px));height:min(860px,calc(100dvh - 28px));max-height:calc(100dvh - 28px);display:flex;flex-direction:column;overflow:hidden}
+#ceroodUploadChooser.cw-single .cerood-chooser-head{padding:17px 22px;flex-shrink:0}
+#ceroodUploadChooser.cw-single .cerood-chooser-body{padding:0;flex:1;min-height:0;overflow:hidden;background:#f5f8ff}
+#ceroodUploadChooser.cw-single #ceroodSingleChoice{height:100%;min-height:0}
+#ceroodUploadChooser.cw-single #cwWizard{height:100%;min-height:0;display:flex;flex-direction:column;gap:0}
+#ceroodUploadChooser.cw-single #cwWizard[hidden]{display:none!important}
+#cwWizard .cw-steps{background:#fff;display:flex;align-items:center;gap:24px;border-bottom:1px solid #dfe5f2;padding:0 20px;min-height:58px;flex-shrink:0}
+#cwWizard .cw-steps>span{display:flex;align-items:center;gap:9px;height:58px;color:#64748b;white-space:nowrap}
+#cwWizard .cw-steps>span.active{color:#3929b0;border-bottom:2px solid #3929b0;font-weight:700}
+#cwWizard .cw-steps b{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:#eeebff;color:#3929b0}
+#cwWizard .cw-market-picker{margin-left:auto!important;font-size:12px}
+#cwWizard .cw-market-picker select{border:1px solid #d9e0ee;border-radius:5px;padding:8px;background:#fff;color:#293044;font:inherit}
+#cwWizard .cw-search-label{font-weight:700;margin:16px 20px 6px}
+#cwWizard .cw-search-wrap{position:relative;margin:0 20px 16px;flex-shrink:0}
+#cwWizard .cw-search{width:min(490px,100%);height:44px;padding:10px 13px;background:#fff}
+#cwWizard #cwSearchResults:not([hidden]){position:absolute;z-index:4;top:45px;left:0;width:min(600px,100%);background:#fff;border:1px solid #dfe5f0;max-height:230px;overflow:auto;box-shadow:0 12px 30px #0002}
+#cwWizard #cwSearchResults button{display:block;width:100%;border:0;border-bottom:1px solid #edf0f7;background:white;text-align:left;padding:11px;cursor:pointer}
+#cwWizard .cw-grid{flex:1;min-height:0;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(260px,1.95fr);gap:12px;padding:0 20px 16px;overflow:hidden}
+#cwWizard .cw-column{max-height:none;height:100%;overflow-y:auto;scrollbar-width:thin;background:#fff;border:0}
+#cwWizard .cw-column h3{font-size:12px;background:#fff;padding:14px 11px;margin:0}
+#cwWizard .cw-column button{padding:13px 11px;border-bottom:1px solid #e5e9f3;font-size:12px;min-height:43px}
+#cwWizard .cw-column button.active{background:#4029b9;color:#fff;font-weight:650}
+#cwWizard .cw-image-box{height:100%;min-height:0;overflow:auto;border:1px solid #e3e9f3}
+#cwWizard .cw-photo-stage{flex:0 0 auto;min-height:245px;padding:20px 12px}
+#cwWizard .cw-photo-icon{font-size:70px}
+#cwWizard .cw-photo-preview{width:190px;height:160px;object-fit:contain}
+#cwWizard .cw-guidelines{width:100%;padding:12px;text-align:left;border-top:1px solid #e4e8f1}
+#cwWizard .cw-warning{background:#fff9e9;border:1px solid #f5d587;border-radius:6px;padding:10px;margin-bottom:12px;font-size:11px}
+#cwWizard .cw-guidelines p{font-size:11px;color:#667085;margin:9px 0}
+#cwWizard .cw-bulk-note{font-size:12px;color:#667085;line-height:1.5}
+#cwWizard .cw-footer{flex-shrink:0;margin:0;padding:14px 20px;background:#fff;border-top:1px solid #dfe5f2;display:flex;justify-content:space-between}
+#cwWizard .cw-footer button{font-weight:650;border-radius:5px;padding:11px 16px;cursor:pointer}
+#cwWizard .cw-discard{background:#fff;color:#3929b0;border:1px solid #3929b0}
+#cwWizard .cw-next{background:#3929b0;color:#fff;border:1px solid #3929b0}
+#cwWizard .cw-next:disabled{background:#c5cad7;color:white;border-color:#c5cad7;cursor:not-allowed}
+#ceroodUploadChooser.cw-final .cerood-chooser-body{overflow:auto}
+@media(max-width:900px){#cwWizard .cw-grid{grid-template-columns:repeat(2,minmax(0,1fr));overflow:auto}#cwWizard .cw-column{height:230px}#cwWizard .cw-image-box{grid-column:1/-1;height:auto}#cwWizard .cw-steps{gap:10px;overflow-x:auto}#cwWizard .cw-market-picker{margin-left:0!important}}
+@media(max-width:520px){#cwWizard .cw-grid{grid-template-columns:1fr}#cwWizard .cw-image-box{grid-column:auto}#cwWizard .cw-steps{padding:0 10px}#cwWizard .cw-search-wrap{margin-left:12px;margin-right:12px}#cwWizard .cw-search-label{margin-left:12px}}
+</style>
+</head>
 
 <body>
 
@@ -4494,32 +4534,37 @@ body.ccat-view-open{overflow:hidden}
 </style>
 <script id="cerood-single-category-wizard-js">
 (()=>{'use strict';
-const $=id=>document.getElementById(id),modal=$('ceroodUploadChooser'),single=$('ceroodSingleChoice'),panel=$('ceroodMarketplacePanel');if(!modal||!single||!panel)return;
+const $=id=>document.getElementById(id),modal=$('ceroodUploadChooser'),single=$('ceroodSingleChoice'),panel=$('ceroodMarketplacePanel'),bulk=$('ceroodBulkChoice');
+if(!modal||!single||!panel)return;
 const trees={
  clothing:{'Men Fashion':{'Men Clothing':{'Top Wear':['T-Shirts','Shirts','Polo Shirts','Hoodies'],'Bottom Wear':['Jeans','Trousers','Shorts'],'Ethnic Wear':['Kurtas','Sets']},'Footwear':{'Casual':['Sneakers','Sliders','Sandals'],'Formal':['Formal Shoes']},'Accessories':{'Accessories':['Belts','Wallets','Caps']}},'Women Fashion':{'Women Clothing':{'Ethnic Wear':['Kurtis','Sarees','Salwar Suits'],'Western Wear':['Tops','Dresses','Jeans']},'Footwear':{'Footwear':['Sandals','Flats','Heels']}},'Kids & Toys':{'Kids Clothing':{'Clothing':['T-Shirts','Sets','Dresses']}}},
  cosmetics:{'Personal Care & Wellness':{'Skincare':{'Face Care':['Face Wash','Moisturizer','Sunscreen','Serum'],'Body Care':['Body Lotion','Soap']},'Haircare':{'Hair Products':['Shampoo','Conditioner','Hair Oil']}},'Beauty & Makeup':{'Makeup':{'Face':['Foundation','Compact','Concealer'],'Lips':['Lipstick','Lip Balm'],'Eyes':['Eyeliner','Mascara']},'Fragrance':{'Perfume':['Perfume','Deodorant']}}},
  renewed:{'Consumer Electronics':{'Televisions':{'TV':['Smart TV','LED TV','LCD TV']},'Computers':{'Laptops':['Laptop','Gaming Laptop'],'Desktops':['Desktop PC']},'Audio':{'Speakers':['Home Theatre','Bluetooth Speaker']}},'Home Appliances':{'Kitchen':{'Appliances':['Refrigerator','Microwave']},'Laundry':{'Appliances':['Washing Machine']},'Cooling':{'Appliances':['Air Conditioner']}}}
 };
-let market='clothing',selected=[],stage='category',file=null,objectUrl='';
-const wizard=document.createElement('div');wizard.id='cwWizard';single.prepend(wizard);
-const back=document.createElement('button');back.type='button';back.id='cwFinalBack';back.hidden=true;back.textContent='← Back to product images';back.style.cssText='margin:0 0 12px;border:1px solid #dce3f0;border-radius:6px;background:#fff;padding:9px 12px;cursor:pointer';single.insertBefore(back,panel);
+// Extend the existing category tree without changing database category values.
+Object.assign(trees.clothing['Women Fashion'],{'Accessories':{'Jewellery':['Jewellery Set','Earrings & Studs','Maangtika','Mangalsutras','Nosepins','Kamarband','Real Silver Rings'],'Fashion Accessories':['Belts','Hair Accessories','Scarves & Stoles']},'Footwear':{'Flats & Slippers':['Sliders','Flip Flops','Sandals'],'Shoes':['Sneakers','Heels']}});
+trees.clothing['Men Fashion']['Footwear']={'Flipflops & Slippers':['Sliders','Clogs'],'Sandals & Floaters':['Sandals','Floaters'],'Shoes':['Sneakers','Formal Shoes']};
 const labels={clothing:'Fashion',cosmetics:'Cosmetics',renewed:'Renewed'};
-function nodeAt(path){let n=trees[market];for(const key of path){n=n?.[key]}return n}
-function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function reset(){if(modal.hidden)return;modal.classList.add('cw-single');modal.classList.remove('cw-final');stage='category';selected=[];file=null;if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl=''}wizard.hidden=false;back.hidden=true;panel.style.setProperty('display','none','important');$('ceroodUploadChooserNote').hidden=true;render()}
-function column(index){let node=nodeAt(selected.slice(0,index));if(index===0)node=trees[market];if(!node)return '<div class="cw-column"><h3>Choose a category</h3></div>';let keys=Array.isArray(node)?node:Object.keys(node);return `<div class="cw-column"><h3>${['Your Categories','Category','Product Group','Product Type'][index]}</h3>${keys.map((k,i)=>`<button type="button" data-cw-col="${index}" data-cw-key="${esc(k)}" class="${selected[index]===k?'active':''}">${esc(k)}</button>`).join('')}</div>`}
-function render(){
- wizard.innerHTML=`<div class="cw-top"><strong>Add Single Catalog · Select category & front image</strong><input class="cw-search" id="cwSearch" type="search" placeholder="Search Sarees, T-Shirts, Smart TV, Face Wash..."></div><div class="cw-markets">${Object.keys(labels).map(k=>`<button type="button" data-cw-market="${k}" class="${market===k?'active':''}">${labels[k]}</button>`).join('')}</div><div class="cw-grid">${[0,1,2,3].map(column).join('')}<aside class="cw-image-box"><div class="cw-path">${selected.length?selected.map(esc).join(' / '):'Select a product category'}</div><div class="cw-photo-stage">${objectUrl?`<img class="cw-photo-preview" src="${objectUrl}" alt="Product front image preview">`:`<span class="cw-photo-icon">${market==='clothing'?'👕':market==='cosmetics'?'✨':'📺'}</span>`}<strong>Please provide only the front image of each product</strong><label class="cw-upload-btn">↑ &nbsp; Add Product Images<input type="file" id="cwFrontImage" accept="image/jpeg,image/png,image/webp" hidden></label><small>${file?esc(file.name):'JPG, PNG or WebP · up to 10 MB'}</small></div><button type="button" class="cw-continue" id="cwToDetails" ${selected.length<4||!file?'disabled':''}>Continue to Product Details →</button></aside></div><div class="cw-footer"><span>1. Choose category & upload image &nbsp; → &nbsp; 2. Fill product details</span><button type="button" id="cwToDetailsBottom" ${selected.length<4||!file?'disabled':''}>Continue →</button></div>`;
+let market='clothing',selected=[],file=null,url='',mode='single',search='';
+const wizard=document.createElement('div');wizard.id='cwWizard';single.prepend(wizard);
+const back=document.createElement('button');back.type='button';back.id='cwFinalBack';back.hidden=true;back.textContent='← Back to Select Category';single.insertBefore(back,panel);
+const escapeHTML=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function at(path){let n=trees[market];for(const k of path)n=n?.[k];return n}
+function options(n){return !n?[]:Array.isArray(n)?n:Object.keys(n)}
+function column(i){const keys=options(i===0?trees[market]:at(selected.slice(0,i)));
+return `<div class="cw-column" role="listbox" aria-label="Category level ${i+1}">${i===0?'<h3>♧ Your Categories</h3>':''}${keys.map(k=>`<button type="button" data-cw-col="${i}" data-cw-key="${escapeHTML(k)}" class="${selected[i]===k?'active':''}" aria-selected="${selected[i]===k}">${escapeHTML(k)}</button>`).join('')}</div>`}
+function setTitle(){const isBulk=mode==='bulk';$('ceroodUploadChooserTitle').textContent=isBulk?'Bulk Catalog Upload':'Add Single Catalog';$('ceroodUploadChooserNote').hidden=true;modal.classList.add('cw-single');modal.classList.remove('cw-final');bulk.hidden=true;wizard.hidden=false;back.hidden=true;panel.style.setProperty('display','none','important')}
+function render(){setTitle();const ready=selected.length===4&&(mode==='bulk'||!!file);const path=selected.length?selected.join(' / '):'Choose a category from the left';
+wizard.innerHTML=`<div class="cw-steps"><span class="active"><b>1</b> Select Category</span><span><b>2</b> ${mode==='bulk'?'Upload Catalog File':'Add Product Details'}</span><span class="cw-market-picker">Marketplace: <select id="cwMarket">${Object.entries(labels).map(([k,v])=>`<option value="${k}" ${market===k?'selected':''}>${v}</option>`).join('')}</select></span></div><label class="cw-search-label" for="cwSearch">Search Category</label><div class="cw-search-wrap"><input id="cwSearch" class="cw-search" type="search" placeholder="Try Sarees, Toys, Charger, Mugs and more..." value="${escapeHTML(search)}"><div id="cwSearchResults" hidden></div></div><div class="cw-grid">${[0,1,2,3].map(column).join('')}<aside class="cw-image-box"><div class="cw-path">${escapeHTML(path)}</div><div class="cw-photo-stage">${url&&mode==='single'?`<img class="cw-photo-preview" src="${url}" alt="Selected product front image">`:`<div class="cw-photo-icon" aria-hidden="true">${market==='clothing'?'👕':market==='cosmetics'?'✨':'📺'}</div>`}<strong>${mode==='bulk'?'Select the correct category before uploading the catalog file':'Please provide only front image for each product'}</strong>${mode==='single'?`<label class="cw-upload-btn">↑ &nbsp; Add Product Images<input type="file" id="cwFrontImage" accept="image/jpeg,image/png,image/webp" hidden></label><small>${file?escapeHTML(file.name):'JPG, PNG or WebP · maximum 10 MB'}</small>`:`<p class="cw-bulk-note">${market==='clothing'?'Next: upload your existing CSV / Excel catalog.':'Bulk upload for this marketplace is not connected yet.'}</p>`}</div><div class="cw-guidelines"><div class="cw-warning">ⓘ &nbsp; Follow guidelines to reduce quality check failure</div><strong>General Guidelines</strong><p>① Choose the exact category for the product.</p><p>② Use clear, original product images.</p><p>③ Avoid watermarks or promotional text.</p></div></aside></div><div class="cw-footer"><button type="button" class="cw-discard" id="cwDiscard">Discard Catalog</button><button type="button" class="cw-next" id="cwToDetails" ${!ready||(mode==='bulk'&&market!=='clothing')?'disabled':''}>${mode==='bulk'?'Continue to Bulk Upload':'Continue to Product Details'} →</button></div>`;
 }
-
-function setMarket(m){market=m;selected=[];file=null;stage='category';render()}
-wizard.addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;if(b.dataset.cwMarket){setMarket(b.dataset.cwMarket);return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol);selected=selected.slice(0,i);selected.push(b.dataset.cwKey);render();return}if((b.id==='cwToDetails'||b.id==='cwToDetailsBottom')&&file&&selected.length===4){finish()}});
-wizard.addEventListener('change',e=>{if(e.target.id!=='cwFrontImage')return;let f=e.target.files[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(f);render()});
-wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;let q=e.target.value.trim().toLowerCase();if(!q)return;let results=[];function walk(node,path){if(Array.isArray(node)){for(let x of node){let p=[...path,x];if(p.join(' ').toLowerCase().includes(q))results.push(p)}}else for(let [k,v] of Object.entries(node))walk(v,[...path,k])}walk(trees[market],[]);let old=wizard.querySelector('#cwSearchResults');old?.remove();let out=document.createElement('div');out.id='cwSearchResults';out.style.cssText='background:white;border:1px solid #dfe5f0;padding:8px;max-height:150px;overflow:auto';for(let p of results.slice(0,15)){let btn=document.createElement('button');btn.type='button';btn.style.cssText='display:block;width:100%;text-align:left;padding:8px;border:0;background:white;cursor:pointer';btn.textContent=p.join(' / ');btn.onclick=()=>{selected=p;render()};out.append(btn)}e.target.after(out)});
-function finish(){stage='details';wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 3 of 3 · Fill in product details · '+selected.join(' / ');let button=panel.querySelector('[data-market="'+market+'"]');button?.click();let cat=$(market==='renewed'?'productCategory':'marketCategory');if(cat){let wanted=selected.join(' ').toLowerCase(),opts=[...cat.options];let best=opts.find(o=>wanted.includes(o.value.toLowerCase())&&o.value)||opts.find(o=>wanted.includes(o.text.toLowerCase())&&o.value);if(best){cat.value=best.value;cat.dispatchEvent(new Event('change',{bubbles:true}))}}
-let input=$(market==='renewed'?'productPhoto':'marketImage');if(input&&file&&typeof DataTransfer!=='undefined'){try{let dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}))}catch(e){console.warn('Please select the product image in the final form',e)}}}
-back.addEventListener('click',()=>{modal.classList.remove('cw-final');wizard.hidden=false;back.hidden=true;panel.style.setProperty('display','none','important');$('ceroodUploadChooserNote').hidden=true;stage='category';render()});
-modal.addEventListener('cerood:chooser-open',e=>{if(e.detail.mode==='single'){market='clothing';reset()}else{modal.classList.remove('cw-single','cw-final');wizard.hidden=true;panel.style.removeProperty('display')}});
+function reset(nextMode){mode=nextMode;market='clothing';selected=[];search='';file=null;if(url){URL.revokeObjectURL(url);url=''}render()}
+function finalDetails(){wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details · '+selected.join(' / ');panel.querySelector('[data-market="'+market+'"]')?.click();const cat=$(market==='renewed'?'productCategory':'marketCategory');if(cat){let text=selected.join(' ').toLowerCase(),best=[...cat.options].find(o=>o.value&&text.includes(o.value.toLowerCase()));if(best){cat.value=best.value;cat.dispatchEvent(new Event('change',{bubbles:true}))}}const input=$(market==='renewed'?'productPhoto':'marketImage');if(input&&file&&typeof DataTransfer!=='undefined'){try{const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}))}catch(e){console.warn('Select image in product form',e)}}}
+function finish(){if(selected.length!==4)return;if(mode==='single'){if(!file)return;finalDetails();return}if(market!=='clothing')return;modal.querySelector('#ceroodUploadChooserClose')?.click();document.querySelector('[data-tab="fashion-bulk"]')?.click();const bulkTitle=$('cfBulkFile');if(bulkTitle){bulkTitle.closest('section')?.scrollIntoView({behavior:'smooth',block:'start'})}}
+wizard.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol);selected=selected.slice(0,i);selected.push(b.dataset.cwKey);search='';render();return}if(b.id==='cwToDetails')finish()});
+wizard.addEventListener('change',e=>{if(e.target.id==='cwMarket'){market=e.target.value;selected=[];file=null;search='';if(url)URL.revokeObjectURL(url);url='';render();return}if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
+wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;search=e.target.value;const out=$('cwSearchResults');out.replaceChildren();if(!search.trim()){out.hidden=true;return}let found=[];function walk(n,path){if(Array.isArray(n)){for(const k of n){const p=[...path,k];if(p.join(' ').toLowerCase().includes(search.toLowerCase()))found.push(p)}}else for(const [k,v] of Object.entries(n))walk(v,[...path,k])}walk(trees[market],[]);for(const p of found.slice(0,20)){let b=document.createElement('button');b.type='button';b.textContent=p.join(' / ');b.onclick=()=>{selected=p;search='';render()};out.append(b)}out.hidden=false});
+back.addEventListener('click',()=>{modal.classList.remove('cw-final');panel.style.setProperty('display','none','important');$('ceroodUploadChooserNote').hidden=true;render()});
+modal.addEventListener('cerood:chooser-open',e=>reset(e.detail.mode));
 $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.remove('cw-single','cw-final');panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false});
 })();
 </script>
