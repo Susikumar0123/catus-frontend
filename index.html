@@ -50,7 +50,7 @@
 </style><style id="cerood-location-style">.location-trigger{border:0;background:transparent;text-align:left;cursor:pointer;padding:5px 7px;border-radius:8px}.location-trigger:hover,.location-trigger:focus-visible{background:#f2efff;outline:2px solid #e5dcff}.mobile-location.location-trigger{text-align:left;padding:5px 0}.cerood-location-overlay[hidden]{display:none!important}.cerood-location-overlay{position:fixed;inset:0;background:#111827a6;z-index:99999;display:grid;place-items:center;padding:16px}.cerood-location-panel{width:min(100%,480px);max-height:90vh;overflow:auto;background:white;border-radius:16px;padding:23px;box-shadow:0 15px 65px #10102644}.cerood-location-panel h2{margin:0 0 6px;font-size:21px}.cerood-location-panel p{font-size:12px;color:#58647a;line-height:1.6}.cerood-location-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.cerood-location-grid label{font-size:12px;font-weight:600;display:block}.cerood-location-grid input{display:block;margin-top:5px;width:100%;height:41px;border:1px solid #d9d9e8;border-radius:8px;padding:8px;font-size:13px}.cerood-location-grid .wide{grid-column:1/-1}.cerood-location-controls{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}.cerood-location-controls button{border:1px solid #d9d9e8;border-radius:8px;padding:10px 16px;background:white}.cerood-location-controls button[type=submit]{background:#5135d9;color:white;border-color:#5135d9}.cerood-location-error{color:#b91c1c!important;min-height:1.4em}@media(max-width:390px){.cerood-location-grid{grid-template-columns:1fr}.cerood-location-grid .wide{grid-column:auto}}</style><style id="cerood-reference-header-and-mobile-nav">
 /* Header and flat 5-button mobile dock adapted from the supplied Beauty storefront. */
 .crn-header{border:0;background:#fff}.crn-header .shell{max-width:1460px}
-.crn-header-main{margin:16px auto 0;padding:13px 22px;min-height:86px;border-radius:15px;background:linear-gradient(110deg,#a8bdcf,#50708f);display:flex;align-items:center;gap:13px;flex-wrap:nowrap}
+.crn-header-main{margin:16px auto 0;padding:13px 22px;min-height:86px;border-radius:15px;background:linear-gradient(110deg,#adc2d3 0%,#507091 100%);display:flex;align-items:center;gap:13px;flex-wrap:nowrap}
 .crn-logo{display:flex;align-items:center;flex:0 0 auto;min-width:65px;letter-spacing:0}.crn-logo img{display:block;width:auto;height:60px;max-width:82px;object-fit:contain}.crn-logo-fallback{font-size:22px;color:#fff;letter-spacing:-1px}.crn-logo-fallback:not([hidden]){display:inline!important}
 .crn-icon{width:19px;height:19px;display:block;flex:0 0 auto}.crn-chevron{width:13px;height:13px;flex:0 0 auto}
 .crn-header .crn-location,.crn-header .crn-mobile-location{position:static;display:flex;align-items:center;justify-content:space-between;gap:7px;flex:0 1 205px;min-width:125px;max-width:205px;width:205px;height:41px;min-height:41px;padding:5px 11px;border:1px solid #d9e1eb;border-radius:999px;background:#fff;color:#172133;text-align:left;font-size:10px;line-height:14px;overflow:hidden;white-space:normal;cursor:pointer}
@@ -284,12 +284,12 @@ body.cerood-auth-open .mobile-bottom-nav {display:none!important;}
 .cerood-unified-tools svg{height:22px;width:22px}.cerood-unified-menu-list{display:block}
 body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
-</style><style>@media(max-width:850px){.crn-header-main{background:linear-gradient(110deg,#a8bdcf,#50708f)!important}.crn-header-main .cerood-unified-tools{grid-column:3;grid-row:1}.crn-header-main .crn-search{background:#fff!important}.bottom.crn-mobile-nav{display:none!important}}</style><style id="cerood-index-mobile-final-layout">
+</style><style>@media(max-width:850px){.crn-header-main{background:linear-gradient(110deg,#adc2d3 0%,#507091 100%)!important}.crn-header-main .cerood-unified-tools{grid-column:3;grid-row:1}.crn-header-main .crn-search{background:#fff!important}.bottom.crn-mobile-nav{display:none!important}}</style><style id="cerood-index-mobile-final-layout">
 @media (max-width:850px){
  html,body{width:100%;max-width:100%;overflow-x:clip}
  .crn-header{width:100%;margin:0;padding:0;border:0;background:#fff}
  .crn-header>.shell{width:100%;max-width:none;margin:0;padding:0!important}
- .crn-header-main{display:grid!important;grid-template-columns:minmax(32px,1fr) minmax(0,min(46vw,174px)) auto!important;grid-template-rows:40px 44px!important;column-gap:7px!important;row-gap:8px!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:12px 12px 13px!important;border-radius:0!important;box-sizing:border-box!important;background:linear-gradient(110deg,#a8bdcf,#50708f)!important;align-items:center!important}
+ .crn-header-main{display:grid!important;grid-template-columns:minmax(32px,1fr) minmax(0,min(46vw,174px)) auto!important;grid-template-rows:40px 44px!important;column-gap:7px!important;row-gap:8px!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:12px 12px 13px!important;border-radius:0!important;box-sizing:border-box!important;background:linear-gradient(110deg,#adc2d3 0%,#507091 100%)!important;align-items:center!important}
  .crn-header-main .crn-logo{grid-column:1!important;grid-row:1!important;min-width:0!important;justify-self:start!important}
  .crn-header-main .crn-logo img{height:36px!important;max-width:51px!important}
  .crn-header-main .crn-mobile-location{grid-column:2!important;grid-row:1!important;justify-self:stretch!important;width:100%!important;max-width:none!important;min-width:0!important;flex:none!important;height:36px!important;min-height:36px!important;padding:3px 8px!important}
@@ -399,7 +399,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
   .header.crn-header .crn-header-main {
     width:100%; max-width:none; margin:0; border-radius:0;
     padding:13px max(20px, calc((100vw - 1560px)/2 + 20px));
-    background:linear-gradient(110deg,#a8bdcf,#50708f);
+    background:linear-gradient(110deg,#adc2d3 0%,#507091 100%);
     box-sizing:border-box;
   }
 }
