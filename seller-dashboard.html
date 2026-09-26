@@ -465,6 +465,47 @@ body{font-size:13px!important;line-height:1.45!important;background:#f5f7ff!impo
 .hub-content-card{border:1px solid #e2e5f0;border-radius:6px;background:#fff;padding:22px;min-height:180px}.hub-content-card h2{font-size:17px;font-weight:700;margin:0 0 6px}.hub-content-card>p{font-size:12.5px;color:#64748b;margin:0 0 18px}.hub-content-note{font-size:13px;color:#344054;border-top:1px solid #eef0f5;padding:17px 0;line-height:1.65}.hub-help-links{display:flex;gap:10px;flex-wrap:wrap}.hub-data{max-width:100%;overflow-x:auto}.hub-product-table{width:100%;border-collapse:collapse;text-align:left;font-size:12.5px;min-width:560px}.hub-product-table th{background:#f7f8fc;font-size:12px;font-weight:700;color:#475467}.hub-product-table th,.hub-product-table td{padding:12px;border-bottom:1px solid #e9edf4}.hub-table-link{color:#4933b9;background:#fff;border:1px solid #d8d0ff;border-radius:5px;padding:6px 12px;cursor:pointer;font-weight:600}
 @media(max-width:800px){.seller-workspace{padding:0 12px 24px}.hub-topbar{margin:0 -12px 16px;padding:0 12px}.hub-content-card{padding:16px}}
 </style>
+<style id="cerood-meesho-orders-layout">
+:root{--hub-purple:#4530b5;--hub-border:#e1e4ed;--hub-bg:#fff}
+body{background:#fff!important;color:#242a38!important;font-family:Inter,system-ui,sans-serif!important}
+#dashboardContent:not(.seller-hidden){grid-template-columns:224px minmax(0,1fr)}
+.hub-sidebar{background:#292929}.hub-brand{height:72px}.hub-store{min-height:53px}.hub-menu-scroll{padding-top:8px}
+.hub-nav{font-size:13px;font-weight:500;min-height:40px}.hub-sub{font-size:12px;min-height:37px}
+.seller-workspace{background:#fff;padding:0 16px 32px;min-width:0}
+.hub-topbar{height:65px;margin:0 -16px 18px;padding:0 18px;background:#fff}
+.hub-page-title{font-size:20px;font-weight:700;color:#242a38}
+.seller-section>.seller-dashboard-heading{margin:0 0 12px;align-items:center}
+.seller-section>.seller-dashboard-heading h1{display:none}
+.seller-section>.seller-dashboard-heading p{font-size:12px!important;margin:0;color:#667085}
+.seller-section>.seller-dashboard-heading:has(>div>h1):not(:has(button)){display:none}
+.seller-section>.seller-dashboard-heading:has(button)>div{flex:1}
+.seller-section>.seller-dashboard-heading:has(button)>div>p{display:none}
+.seller-card,.seller-stat,.hub-content-card{border-radius:7px;box-shadow:none}
+.hub-content-card{padding:18px;min-height:0}
+.hub-content-card>h2{display:none}
+.hub-content-card>p{display:none}
+.hub-content-note{border-top:0;padding:6px 0 15px}
+.hub-section-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}
+.hub-section-toolbar strong{font-size:15px}
+.hub-order-toolbar{background:#fff;border:1px solid var(--hub-border);border-radius:7px;margin-bottom:16px;overflow:hidden}
+.hub-order-tabs{display:flex;align-items:center;overflow-x:auto;scrollbar-width:thin;gap:5px;padding:0 14px;border-bottom:1px solid var(--hub-border)}
+.hub-order-tab{white-space:nowrap;cursor:pointer;border:0;border-bottom:2px solid transparent;background:transparent;color:#344054;font:600 12.5px Inter,system-ui,sans-serif;padding:17px 12px 15px}
+.hub-order-tab.active{color:var(--hub-purple);border-bottom-color:var(--hub-purple)}
+.hub-order-tab span{font-size:11px;font-weight:600;color:#667085}.hub-order-tab.active span{color:var(--hub-purple)}
+.hub-order-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;flex-wrap:wrap}
+.hub-order-controls label{font-size:12px;color:#667085;display:flex;align-items:center;gap:9px}
+.hub-order-controls select,.hub-order-controls input{height:38px;border:1px solid #cfd5e2;border-radius:5px;padding:0 12px;background:white;color:#344054;font:12px Inter,system-ui,sans-serif}
+.hub-order-controls input{width:min(100%,290px)}
+.seller-orders-list{gap:12px}.seller-order-card{border-radius:7px;padding:18px}
+.seller-order-top{border-bottom:1px solid #e9edf4;padding-bottom:12px;margin-bottom:14px}
+.seller-order-product h3{font-size:14px}.seller-order-info p{font-size:12px}
+.hub-dispatch-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.hub-dispatch-stat{display:flex;flex-direction:column;gap:8px;align-items:flex-start;background:#fff;border:1px solid #e1e4ed;border-radius:7px;padding:18px;cursor:pointer;text-align:left;color:#344054}
+.hub-dispatch-stat strong{font-size:27px}.hub-dispatch-stat span{font-size:12px}
+.hub-product-table th,.hub-product-table td{padding:14px 12px}
+@media(max-width:800px){.seller-workspace{padding:0 12px 25px}.hub-topbar{margin:0 -12px 16px}.hub-dispatch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hub-order-controls input{flex:1;min-width:160px}}
+@media(max-width:480px){.hub-order-tabs{padding:0 5px}.hub-order-tab{padding:14px 9px}.hub-order-controls{align-items:stretch}.hub-order-controls input{width:100%}}
+</style>
 </head>
 
 <body>
@@ -840,13 +881,13 @@ body{font-size:13px!important;line-height:1.45!important;background:#f5f7ff!impo
     <section id="section-orders" class="seller-section">
       <div class="seller-dashboard-heading">
         <div>
-          <h1>My Orders</h1>
+          <h1>Manage Orders</h1>
           <p>Confirmed orders containing your products only.</p>
         </div>
         <button id="refreshSellerOrders" class="seller-btn seller-btn-outline" type="button">Refresh Orders</button>
       </div>
       <div id="ordersMessage" class="seller-message" role="status" aria-live="polite"></div>
-      <div id="sellerOrdersList" class="seller-orders-list"></div>
+      <div class="hub-order-toolbar"><div class="hub-order-tabs" role="tablist" aria-label="Order status"><button type="button" class="hub-order-tab active" data-order-filter="all">All <span data-count="all">0</span></button><button type="button" class="hub-order-tab" data-order-filter="new">Pending <span data-count="new">0</span></button><button type="button" class="hub-order-tab" data-order-filter="accepted">Accepted <span data-count="accepted">0</span></button><button type="button" class="hub-order-tab" data-order-filter="packed">Ready to Ship <span data-count="packed">0</span></button><button type="button" class="hub-order-tab" data-order-filter="shipped">Shipped <span data-count="shipped">0</span></button><button type="button" class="hub-order-tab" data-order-filter="rejected">Rejected <span data-count="rejected">0</span></button></div><div class="hub-order-controls"><label>Filter by <select id="hubOrderDate"><option value="all">All dates</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select></label><input id="hubOrderSearch" type="search" placeholder="Search order ID or product" aria-label="Search orders"></div></div><div id="sellerOrdersList" class="seller-orders-list"></div>
     </section>
 
     <!-- ADD PRODUCT -->
@@ -1437,13 +1478,13 @@ body{font-size:13px!important;line-height:1.45!important;background:#f5f7ff!impo
 
 <section id="section-notices" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Notices</h2><p>Seller announcements and account updates</p><div class="hub-content-note">No announcements at the moment. Check this page for CEROOD seller updates.</div></div></section>
 <section id="section-support" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Help & Support</h2><p>Seller help and account assistance</p><div class="hub-content-note">For help with an order, keep its Order ID ready. Use Manage Orders to check the current status.</div><div class="hub-help-links"><button type="button" class="seller-btn hub-go" data-go="orders">Manage Orders</button><button type="button" class="seller-btn seller-btn-outline hub-go" data-go="account">Account Details</button></div></div></section>
-<section id="section-dispatch" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Dispatch Performance</h2><p>Orders requiring action</p><div class="hub-content-note">Check your accepted and packed orders below. Use Manage Orders to update their fulfilment stage.</div><div id="hub-dispatch-data" class="hub-data"></div></div></section>
+<section id="section-dispatch" class="seller-section hub-placeholder"><div class="hub-content-card"><div class="hub-section-toolbar"><strong>Dispatch Overview</strong><button type="button" class="seller-btn seller-btn-outline hub-go" data-go="orders">Manage Orders</button></div><div id="hub-dispatch-data" class="hub-data"></div></div></section>
 <section id="section-returns" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Returns / RTO</h2><p>Returns and return-to-origin</p><div class="hub-content-note">Returns and RTO tracking will appear here after the returns workflow is connected.</div></div></section>
-<section id="section-pricing" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Manage Pricing</h2><p>Your product prices</p><div class="hub-content-note">View the current prices of your products below. Use My Products → Edit to submit a price change for approval.</div><div id="hub-pricing-data" class="hub-data"></div></div></section>
+<section id="section-pricing" class="seller-section hub-placeholder"><div class="hub-content-card"><div class="hub-section-toolbar"><strong>Product Prices</strong><button type="button" class="seller-btn seller-btn-outline hub-go" data-go="products">Edit Products</button></div><div id="hub-pricing-data" class="hub-data"></div></div></section>
 <section id="section-price-drop" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Schedule Price Drop</h2><p>Planned product discounts</p><div class="hub-content-note">Scheduled price changes are not enabled yet. To change a price now, open My Products → Edit.</div><button type="button" class="seller-btn hub-go" data-go="products">My Products</button></div></section>
 <section id="section-rto-pricing" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Reduce RTO & Returns</h2><p>Returns prevention</p><div class="hub-content-note">Confirm product condition, defects and accessories accurately when uploading a product.</div><button type="button" class="seller-btn hub-go" data-go="products">My Products</button></div></section>
 <section id="section-claims" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Claims</h2><p>Seller claim requests</p><div class="hub-content-note">Claims submission and tracking will be enabled after the claims workflow is connected.</div></div></section>
-<section id="section-inventory" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Inventory</h2><p>Product stock overview</p><div class="hub-content-note">Your product stock and listing status appear below.</div><div id="hub-inventory-data" class="hub-data"></div></div></section>
+<section id="section-inventory" class="seller-section hub-placeholder"><div class="hub-content-card"><div class="hub-section-toolbar"><strong>Stock & Listings</strong><button type="button" class="seller-btn seller-btn-outline hub-go" data-go="add-product">Add Product</button></div><div id="hub-inventory-data" class="hub-data"></div></div></section>
 <section id="section-image-upload" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Image Bulk Upload</h2><p>Upload product photos</p><div class="hub-content-note">Bulk upload is not enabled yet. Use Catalog Uploads to add photos to an individual product.</div><button type="button" class="seller-btn hub-go" data-go="products">My Products</button></div></section>
 <section id="section-quality" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Quality</h2><p>Product listing quality</p><div class="hub-content-note">Include actual product photos, accurate condition, defects, accessories and warranty terms.</div><button type="button" class="seller-btn hub-go" data-go="add-product">Add Product</button></div></section>
 <section id="section-payments" class="seller-section hub-placeholder"><div class="hub-content-card"><h2>Payments</h2><p>Seller earnings and settlements</p><div class="hub-content-note">Payment settlement details will appear after the payout system is connected. No earnings are estimated here.</div></div></section>
@@ -1920,13 +1961,16 @@ function sellerOrderAddress(address) {
 }
 
 function renderSellerOrders(orders) {
+  window.hubSellerOrders = Array.isArray(orders) ? orders : [];
+  if(typeof window.hubRefreshOrderCounts === "function") window.hubRefreshOrderCounts();
+  orders = window.hubFilterOrders ? window.hubFilterOrders(window.hubSellerOrders) : orders;
   const container = $('sellerOrdersList');
   container.replaceChildren();
 
   if (!orders.length) {
     const empty = document.createElement('div');
     empty.className = 'seller-card';
-    empty.textContent = 'No confirmed orders for your products yet.';
+    empty.textContent = window.hubSellerOrders?.length ? 'No orders match this filter.' : 'No confirmed orders for your products yet.';
     container.appendChild(empty);
     return;
   }
@@ -3326,7 +3370,7 @@ initializeDashboard();
    group.querySelector('.hub-expand').classList.toggle('group-active',selected);
    if(selected){group.querySelector('.hub-submenu').classList.remove('is-collapsed');group.querySelector('.hub-expand').setAttribute('aria-expanded','true');group.querySelector('.hub-expand i').textContent='⌄'}
   });
-  if(['inventory','pricing','dispatch'].includes(tab))renderHubData(tab);
+  if(['inventory','pricing','dispatch'].includes(tab)){if(tab==='dispatch' && typeof window.loadSellerOrders==='function')window.loadSellerOrders().then(()=>renderHubData(tab));else renderHubData(tab);}
   close();
  };
  document.querySelectorAll('.hub-go').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.go)));
@@ -3338,9 +3382,7 @@ initializeDashboard();
  function renderHubData(tab){
   const target=document.getElementById('hub-'+tab+'-data');if(!target)return;
   target.replaceChildren();
-  if(tab==='dispatch'){
-   const btn=document.createElement('button');btn.className='seller-btn';btn.textContent='Open Manage Orders';btn.addEventListener('click',()=>showTab('orders'));target.append(btn);return;
-  }
+  if(tab==='dispatch'){ const orders=window.hubSellerOrders||[]; const stages=['new','accepted','packed','shipped']; const labels=['Pending','Accepted','Ready to Ship','Shipped'];const grid=document.createElement('div');grid.className='hub-dispatch-grid';stages.forEach((stage,i)=>{const b=document.createElement('button');b.type='button';b.className='hub-dispatch-stat';b.innerHTML='<strong></strong><span></span>';b.querySelector('strong').textContent=orders.filter(o=>String(o.seller_order_status||'new').toLowerCase()===stage).length;b.querySelector('span').textContent=labels[i];b.addEventListener('click',()=>{window.hubOrderFilter=stage;showTab('orders');renderSellerOrders(window.hubSellerOrders||[])});grid.append(b)});target.append(grid);return;}
   if(!products.length){const p=document.createElement('p');p.textContent='No products found.';target.append(p);return;}
   const table=document.createElement('table');table.className='hub-product-table';
   const thead=document.createElement('thead'),tr=document.createElement('tr');
@@ -3355,6 +3397,32 @@ initializeDashboard();
   });table.append(tbody);target.append(table);
  }
  window.showTab('overview');
+})();
+</script>
+<script id="cerood-meaningful-order-filters">
+(function(){
+ window.hubSellerOrders=[];window.hubOrderFilter='all';
+ window.hubFilterOrders=function(orders){
+  const search=(document.getElementById('hubOrderSearch')?.value||'').trim().toLowerCase();
+  const days=document.getElementById('hubOrderDate')?.value||'all';
+  return orders.filter(o=>{
+   const stage=String(o.seller_order_status||'new').toLowerCase();
+   if(window.hubOrderFilter!=='all'&&stage!==window.hubOrderFilter)return false;
+   if(search&&!String(o.order_id||'').toLowerCase().includes(search)&&!String(o.product_name||'').toLowerCase().includes(search)&&!String(o.order_item_id||'').toLowerCase().includes(search))return false;
+   if(days!=='all') {const d=new Date(o.ordered_at);if(!Number.isFinite(d.getTime())||d.getTime()<Date.now()-Number(days)*86400000)return false;}
+   return true;
+  });
+ };
+ window.hubRefreshOrderCounts=function(){
+  const orders=window.hubSellerOrders||[];
+  document.querySelectorAll('[data-order-filter]').forEach(b=>{
+   const f=b.dataset.orderFilter;
+   b.classList.toggle('active',f===window.hubOrderFilter);
+   const count=b.querySelector('[data-count]');if(count)count.textContent= f==='all'?orders.length:orders.filter(o=>String(o.seller_order_status||'new').toLowerCase()===f).length;
+  });
+ };
+ document.querySelectorAll('[data-order-filter]').forEach(b=>b.addEventListener('click',()=>{window.hubOrderFilter=b.dataset.orderFilter;window.hubRefreshOrderCounts();renderSellerOrders(window.hubSellerOrders||[])}));
+ ['hubOrderSearch','hubOrderDate'].forEach(id=>document.getElementById(id)?.addEventListener(id==='hubOrderSearch'?'input':'change',()=>renderSellerOrders(window.hubSellerOrders||[])));
 })();
 </script>
 </body>
