@@ -3391,7 +3391,7 @@ function editProduct(id) {
   );
 
   // Edit within My Products: move the EXISTING form, keeping all inputs and handlers.
-  showTab('products');
+  showTab('add-product');
   const inlineHost = $('ceroodInlineRenewedEditor');
   const existingForm = $('renewedProductFormCard');
   if (inlineHost && existingForm) {
@@ -3468,10 +3468,16 @@ $('cancelEditBtn').addEventListener(
 
     );
 
-    showTab(
-
-      'products'
-
+    // Keep the seller on Catalog Uploads → Single Uploads after cancelling.
+    showTab('add-product');
+    const single = $('ccatSinglePanel');
+    const bulk = $('ccatBulkPanel');
+    const editor = $('ccatCatalogEditor');
+    if (single) single.hidden = false;
+    if (bulk) bulk.hidden = true;
+    if (editor) { editor.hidden = true; editor.replaceChildren(); }
+    document.querySelectorAll('[data-ccat-tab]').forEach(button =>
+      button.classList.toggle('active', button.dataset.ccatTab === 'single')
     );
 
   }
@@ -3872,7 +3878,7 @@ initializeDashboard();
     const buttons=document.createElement('div');buttons.className='form-actions full';
     const save=document.createElement('button');save.type='submit';save.className='seller-btn';save.textContent='Save changes for admin approval';
     const cancel=document.createElement('button');cancel.type='button';cancel.className='seller-btn seller-btn-outline';cancel.textContent='Cancel';
-    cancel.addEventListener('click',()=>{if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);host.replaceChildren();host.hidden=true});
+    cancel.addEventListener('click',()=>{if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);host.replaceChildren();host.hidden=true;const catalogEditor=document.getElementById('ccatCatalogEditor');if(catalogEditor&&catalogEditor.contains(host)){catalogEditor.hidden=true;document.getElementById('ceroodInlineMarketplaceEditor')?.closest('#ccatCatalogEditor')?.classList.remove('editing');}});
     buttons.append(save,cancel);form.append(message,buttons);panel.append(title,info,form);host.append(panel);
     host.scrollIntoView({behavior:'smooth',block:'start'});
     form.addEventListener('submit',async e=>{
