@@ -4426,7 +4426,7 @@ const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"
 @media(max-width:650px){#ceroodUploadChooser .market-choice,#ceroodUploadChooser .cerood-bulk-choice{grid-template-columns:1fr}.cerood-chooser-body{padding:13px}}
 </style>
 <div id="ceroodUploadChooser" hidden role="dialog" aria-modal="true" aria-labelledby="ceroodUploadChooserTitle">
- <div class="cerood-chooser-box"><div class="cerood-chooser-head"><strong id="ceroodUploadChooserTitle">Add Single Catalog</strong><button type="button" id="ceroodUploadChooserClose" aria-label="Close">×</button></div>
+ <div class="cerood-chooser-box"><div class="cerood-chooser-head"><strong id="ceroodUploadChooserTitle">Add Single Catalog</strong><small id="cwVersionMark" style="font-size:10px;color:#667085;margin-right:auto">Category wizard v2</small><button type="button" id="ceroodUploadChooserClose" aria-label="Close">×</button></div>
  <div class="cerood-chooser-body"><p id="ceroodUploadChooserNote">Choose your marketplace</p><div id="ceroodBulkChoice" class="cerood-bulk-choice" hidden>
  <button type="button" disabled><span class="market-symbol">📺</span><strong>Renewed</strong><small>Bulk upload not connected yet</small></button>
  <button type="button" disabled><span class="market-symbol">✨</span><strong>Cosmetics</strong><small>Bulk upload not connected yet</small></button>
@@ -4442,7 +4442,7 @@ const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"
  originalPanel.insertBefore(panelMarker,panel);originalRenewed.insertBefore(renewedMarker,renewed);
  let mode='single';
  function close(){if(modal.hidden)return;panelMarker.parentNode?.insertBefore(panel,panelMarker.nextSibling);renewedMarker.parentNode?.insertBefore(renewed,renewedMarker.nextSibling);modal.hidden=true;document.body.style.overflow='';panel.classList.add('ccat-form-closed');renewed.hidden=true;$('ceroodMarketplaceForm').hidden=true;$('marketplaceQueue').hidden=true;}
- function open(which){mode=which;modal.hidden=false;document.body.style.overflow='hidden';$('ceroodUploadChooserTitle').textContent=which==='single'?'Add Single Catalog':'Add Catalog in Bulk';$('ceroodUploadChooserNote').textContent=which==='single'?'Choose the marketplace for your product.':'Choose the marketplace for your bulk catalog.';bulk.hidden=which!=='bulk';single.hidden=which!=='single';if(which==='single'){single.append(panel,renewed);panel.classList.remove('ccat-form-closed');renewed.hidden=true;$('ceroodMarketplaceForm').hidden=true;$('marketplaceQueue').hidden=true;panel.querySelectorAll('[data-market]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false')})}else{panelMarker.parentNode?.insertBefore(panel,panelMarker.nextSibling);renewedMarker.parentNode?.insertBefore(renewed,renewedMarker.nextSibling)}modal.dispatchEvent(new CustomEvent('cerood:chooser-open',{detail:{mode:which}}));$('ceroodUploadChooserClose').focus()}
+ function open(which){mode=which;modal.hidden=false;document.body.style.overflow='hidden';$('ceroodUploadChooserTitle').textContent=which==='single'?'Add Single Catalog':'Add Catalog in Bulk';$('ceroodUploadChooserNote').textContent=which==='single'?'Choose the marketplace for your product.':'Choose the marketplace for your bulk catalog.';bulk.hidden=which!=='bulk';single.hidden=which!=='single';if(which==='single'){single.append(panel,renewed);panel.classList.remove('ccat-form-closed');renewed.hidden=true;$('ceroodMarketplaceForm').hidden=true;$('marketplaceQueue').hidden=true;panel.querySelectorAll('[data-market]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false')})}else{panelMarker.parentNode?.insertBefore(panel,panelMarker.nextSibling);renewedMarker.parentNode?.insertBefore(renewed,renewedMarker.nextSibling)}modal.dispatchEvent(new CustomEvent('cerood:chooser-open',{detail:{mode:which}}));window.__ceroodWizardOpen?.(which);$('ceroodUploadChooserClose').focus()}
  // Capture before old click handlers: prevent page scrolling and old direct navigation.
  function intercept(e,which){e.preventDefault();e.stopImmediatePropagation();open(which)}
  ['hubSingleCatalog','ccatShowSingle'].forEach(id=>$(id)?.addEventListener('click',e=>intercept(e,'single'),true));
@@ -4498,8 +4498,11 @@ body.ccat-view-open{overflow:hidden}
 #ceroodUploadChooser.cw-single .cerood-chooser-box{width:min(1240px,calc(100vw - 28px));height:min(780px,calc(100dvh - 28px));max-height:calc(100dvh - 28px);display:flex;flex-direction:column;overflow:hidden}
 #ceroodUploadChooser.cw-single .cerood-chooser-body{flex:1;min-height:0;overflow:auto;background:#f5f8ff;padding:16px 20px}
 #ceroodUploadChooser.cw-single .cerood-chooser-head{flex-shrink:0}
+#ceroodUploadChooser:not(.cw-single) #cwVersionMark{display:none}
 #ceroodUploadChooser.cw-single #ceroodSingleChoice{height:100%;min-height:0}
 #ceroodUploadChooser.cw-single #ceroodSingleChoice > #ceroodMarketplacePanel{display:none!important}
+#ceroodUploadChooser.cw-single:not(.cw-final) .market-choice{display:none!important}
+#ceroodUploadChooser.cw-single:not(.cw-final) #renewedProductFormCard{display:none!important}
 #ceroodUploadChooser.cw-final #ceroodSingleChoice > #ceroodMarketplacePanel{display:block!important}
 #ceroodUploadChooser.cw-final .market-choice{display:none!important}
 #ceroodUploadChooser.cw-final .cerood-chooser-body{background:white}
@@ -4547,6 +4550,7 @@ trees.clothing['Men Fashion']['Footwear']={'Flipflops & Slippers':['Sliders','Cl
 const labels={clothing:'Fashion',cosmetics:'Cosmetics',renewed:'Renewed'};
 let market='clothing',selected=[],file=null,url='',mode='single',search='';
 const wizard=document.createElement('div');wizard.id='cwWizard';single.prepend(wizard);
+modal.dataset.wizardVersion='v2';
 const back=document.createElement('button');back.type='button';back.id='cwFinalBack';back.hidden=true;back.textContent='← Back to Select Category';single.insertBefore(back,panel);
 const escapeHTML=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function at(path){let n=trees[market];for(const k of path)n=n?.[k];return n}
@@ -4564,7 +4568,7 @@ wizard.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)ret
 wizard.addEventListener('change',e=>{if(e.target.id==='cwMarket'){market=e.target.value;selected=[];file=null;search='';if(url)URL.revokeObjectURL(url);url='';render();return}if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
 wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;search=e.target.value;const out=$('cwSearchResults');out.replaceChildren();if(!search.trim()){out.hidden=true;return}let found=[];function walk(n,path){if(Array.isArray(n)){for(const k of n){const p=[...path,k];if(p.join(' ').toLowerCase().includes(search.toLowerCase()))found.push(p)}}else for(const [k,v] of Object.entries(n))walk(v,[...path,k])}walk(trees[market],[]);for(const p of found.slice(0,20)){let b=document.createElement('button');b.type='button';b.textContent=p.join(' / ');b.onclick=()=>{selected=p;search='';render()};out.append(b)}out.hidden=false});
 back.addEventListener('click',()=>{modal.classList.remove('cw-final');panel.style.setProperty('display','none','important');$('ceroodUploadChooserNote').hidden=true;render()});
-modal.addEventListener('cerood:chooser-open',e=>reset(e.detail.mode));
+window.__ceroodWizardOpen=reset;modal.addEventListener('cerood:chooser-open',e=>reset(e.detail.mode));
 $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.remove('cw-single','cw-final');panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false});
 })();
 </script>
