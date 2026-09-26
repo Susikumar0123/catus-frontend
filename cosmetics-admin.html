@@ -13,4 +13,41 @@ async function load(){if(!sessionStorage.getItem(KEY)){state.textContent='Please
 document.getElementById('refreshBeautyOrders').onclick=load;
 document.querySelector('[data-pane="orders"]').addEventListener('click',load);
 })();
-</script></body></html>
+</script><style id="cerood-seller-approval-css">
+#sellerApprovalPane{display:none;margin-top:18px}#sellerApprovalPane.open{display:block}
+#sellerApprovalPane .approval-top{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+#sellerApprovalPane .approval-top select{width:auto;min-width:145px}#sellerApprovalPane .approval-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,315px),1fr));gap:14px}
+#sellerApprovalPane .approval-card{border:1px solid #e5dff0;border-radius:13px;padding:16px;background:white;min-width:0;overflow-wrap:anywhere}
+#sellerApprovalPane .approval-card img{width:100%;height:180px;object-fit:contain;background:#f8f7fb;border-radius:8px}
+#sellerApprovalPane .approval-card h3{font-size:15px;margin:12px 0 8px}#sellerApprovalPane .approval-card p{font-size:12px;line-height:1.6;color:#625a70;margin:6px 0}
+#sellerApprovalPane .approval-card .approval-status{display:inline-block;background:#fff4d6;color:#805000;border-radius:12px;padding:4px 9px;font-size:11px;font-weight:700}
+#sellerApprovalPane .approval-card .approval-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}#sellerApprovalPane .approval-actions button{border-radius:8px;border:1px solid #ddd4e8;background:#fff;padding:10px 12px;font-size:12px;font-weight:700}
+#sellerApprovalPane .approval-actions button.approve{background:#047857;color:white;border-color:#047857}#sellerApprovalPane .approval-actions button.reject{color:#b91c1c;border-color:#fecaca}#sellerApprovalPane .approval-actions button:disabled{opacity:.5;cursor:wait}
+#sellerApprovalPane .approval-error{color:#b91c1c}#sellerApprovalPane .approval-msg{font-size:12px;line-height:1.6}
+</style>
+<script id="cerood-seller-approval-js">
+(()=>{'use strict';
+const MARKETPLACE='cosmetics', TOKEN_KEY='cosmeticsAdminToken', API='https://catus-backend-d2js.onrender.com';
+const shell=document.getElementById('shell'),inventory=document.getElementById('inventory'),orders=document.getElementById('orders');
+if(!shell||!inventory||!orders)return;
+const side=shell.querySelector('.side');if(!side)return;
+const tab=document.createElement('button');tab.type='button';tab.id='sellerApprovalTab';tab.textContent='Seller Product Approvals';
+const orderTab=side.querySelector('[data-pane="orders"]');if(orderTab)orderTab.after(tab);else side.append(tab);
+const pane=document.createElement('section');pane.id='sellerApprovalPane';pane.className='panel';
+pane.innerHTML='<div class="approval-top"><div><h2 style="margin:0 0 5px">Seller Product Approvals</h2><p class="muted" style="margin:0">Cosmetics seller submissions. Approve only after checking product details.</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><select id="sellerApprovalFilter" aria-label="Approval status"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All</option></select><button type="button" class="primary" id="sellerApprovalRefresh">Refresh</button></div></div><p id="sellerApprovalMessage" class="approval-msg" role="status"></p><div id="sellerApprovalList" class="approval-grid"></div>';
+inventory.after(pane);
+const msg=pane.querySelector('#sellerApprovalMessage'),list=pane.querySelector('#sellerApprovalList'),filter=pane.querySelector('#sellerApprovalFilter');
+let submissions=[],loading=false;
+function showMessage(t,error=false){msg.textContent=t;msg.classList.toggle('approval-error',error)}
+function element(tag,text){const e=document.createElement(tag);if(text!==undefined)e.textContent=String(text);return e}
+async function api(path,method='GET',body){const token=sessionStorage.getItem(TOKEN_KEY);if(!token)throw Error('Admin login required. Sign in again.');const r=await fetch(API+path,{method,headers:{Authorization:'Bearer '+token,Accept:'application/json',...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{}),cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Request failed: '+r.status);return d}
+function detail(card,label,value){if(value===undefined||value===null||value==='')return;card.append(element('p',label+': '+String(value)))}
+function render(){list.replaceChildren();const selected=filter.value;const rows=submissions.filter(x=>selected==='all'||x.approval_status===selected);showMessage(rows.length+' submission(s) · '+MARKETPLACE);for(const s of rows){const p=s.product_data||{},card=element('article');card.className='approval-card';if(p.image_url&&/^https:\/\//i.test(p.image_url)){const img=element('img');img.src=p.image_url;img.alt='Seller product image';img.loading='lazy';card.append(img)}card.append(element('h3',p.name||'Untitled product'));const status=element('span',s.approval_status||'pending');status.className='approval-status';card.append(status);detail(card,'Seller',s.shop_name||s.owner_name||s.seller_id);detail(card,'Seller phone',s.seller_phone);detail(card,'Category',p.category);detail(card,'Brand',p.brand);detail(card,'Price','₹'+p.price);detail(card,'MRP',p.compare_price);detail(card,'Stock',p.stock);detail(card,'Variant',p.variant);detail(card,'Colour / shade',p.shade);detail(card,'Size / quantity',p.net_quantity);detail(card,'Batch / SKU',p.batch_number);detail(card,'Manufactured',p.manufacture_date);detail(card,'Expiry',p.expiry_date);detail(card,'Ingredients / size chart',p.ingredients);detail(card,'Care / usage',p.directions);detail(card,'Warnings / returns',p.warnings);detail(card,'Description',p.description);detail(card,'Submitted',s.created_at?new Date(s.created_at).toLocaleString('en-IN'):'');detail(card,'Rejection reason',s.rejection_reason);if(p.video_url&&/^https:\/\//i.test(p.video_url)){const a=element('a','View product video ↗');a.href=p.video_url;a.target='_blank';a.rel='noopener noreferrer';card.append(a)}if(s.approval_status==='pending'){const actions=element('div');actions.className='approval-actions';for(const state of ['approved','rejected']){const btn=element('button',state==='approved'?'Approve':'Reject');btn.type='button';btn.className=state==='approved'?'approve':'reject';btn.onclick=async()=>{let reason='';if(state==='rejected'){const answer=prompt('Reason for rejecting this product (required):');if(answer===null)return;reason=answer.trim();if(!reason){alert('Enter rejection reason.');return}}else if(!confirm('Approve and publish this product on the Cosmetics storefront?'))return;actions.querySelectorAll('button').forEach(x=>x.disabled=true);try{await api('/api/admin/catalog-submissions/'+encodeURIComponent(s.id)+'/approval','PATCH',{approval_status:state,rejection_reason:reason});await load();showMessage(state==='approved'?'Approved and published successfully.':'Submission rejected.')}catch(err){showMessage(err.message,true);actions.querySelectorAll('button').forEach(x=>x.disabled=false)}};actions.append(btn)}card.append(actions)}list.append(card)}}
+async function load(){if(loading)return;loading=true;showMessage('Loading seller submissions…');try{const d=await api('/api/admin/catalog-submissions?marketplace='+MARKETPLACE);submissions=Array.isArray(d.products)?d.products:[];render()}catch(e){list.replaceChildren();showMessage(e.message,true)}finally{loading=false}}
+function show(){if(!sessionStorage.getItem(TOKEN_KEY)){showMessage('Sign in to admin first.',true);return}inventory.hidden=true;orders.hidden=true;pane.classList.add('open');side.querySelectorAll('[data-pane]').forEach(x=>x.classList.remove('active'));tab.classList.add('active');document.getElementById('heading').textContent='Seller Product Approvals';load()}
+tab.addEventListener('click',show);side.querySelectorAll('[data-pane]').forEach(b=>b.addEventListener('click',()=>{pane.classList.remove('open');tab.classList.remove('active')}));
+const logout=document.getElementById('logout');if(logout)logout.addEventListener('click',()=>{pane.classList.remove('open');tab.classList.remove('active')});
+pane.querySelector('#sellerApprovalRefresh').addEventListener('click',load);filter.addEventListener('change',render);
+})();
+</script>
+</body></html>
