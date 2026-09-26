@@ -754,6 +754,26 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
  #ceroodMarketplaceGroupList .cerood-marketplace-group-head>a{display:none!important}
 }
 @media(max-width:350px){#ceroodMarketplaceGroupList{grid-template-columns:repeat(2,minmax(0,1fr))!important}#ceroodMarketplaceGroupList .cerood-marketplace-grid .product>b{font-size:10px!important}}
+</style><style id="cerood-amazon-compact-mobile-card-fix-20260927">
+/* Reference-sized typography and compact tiles; homepage marketplace on mobile only. */
+@media (max-width:850px){
+ main.shell{padding-left:5px!important;padding-right:5px!important}
+ #ceroodMarketplaceGroups{margin-top:7px!important}
+ #ceroodMarketplaceGroupList{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:4px!important}
+ #ceroodMarketplaceGroupList>.cerood-marketplace-group{padding:5px 4px 7px!important;border-radius:8px!important}
+ #ceroodMarketplaceGroupList .cerood-marketplace-group-head{min-height:22px!important;max-height:28px!important;margin:0 0 4px!important;align-items:flex-start!important}
+ #ceroodMarketplaceGroupList .cerood-marketplace-group-head h3,
+ #ceroodMarketplaceGroupList .cerood-mixed-tile .cerood-marketplace-group-head h3{font-size:9px!important;line-height:1.18!important;font-weight:750!important;letter-spacing:-.025em!important;max-height:2.36em!important;min-height:0!important;margin:0!important;overflow:hidden!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important}
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px 3px!important}
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product{min-width:0!important;min-height:0!important;padding:0!important;border:0!important;box-shadow:none!important}
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product>img,
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product>.product-fallback{width:100%!important;aspect-ratio:1.08!important;object-fit:contain!important;border-radius:4px!important}
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product>b{font-size:7px!important;line-height:1.2!important;font-weight:400!important;letter-spacing:0!important;margin:3px 0 0!important;max-height:2.4em!important;min-height:0!important;overflow:hidden!important}
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product .cta,
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product .price,
+ #ceroodMarketplaceGroupList .cerood-marketplace-grid .product .division-tag,
+ #ceroodMarketplaceGroupList .cerood-marketplace-group-head>a{display:none!important}
+}
 </style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
