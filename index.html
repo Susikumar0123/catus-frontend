@@ -619,6 +619,30 @@ html,body,body > main,main.shell,.shell,.header,.crn-header,
 @media(max-width:850px){.crn-header-main,.bottom.crn-mobile-nav,
 .crn-header-main .crn-search{background:#fff!important;background-image:none!important}}
 </style>
+
+<style id="cerood-absolute-pure-white-fix-20260927">
+/* All visible homepage surfaces, including nested and dynamically loaded cards.
+   Product photographs remain unchanged; only CSS backgrounds are flattened. */
+html,body,body::before,body::after,
+body > header,body > nav,body > main,body > footer,
+body > header *,body > nav *,body > main *,body > footer *,
+body > header *::before,body > header *::after,
+body > nav *::before,body > nav *::after,
+body > main *::before,body > main *::after,
+body > footer *::before,body > footer *::after {
+ background-color:#fff!important;
+ background-image:none!important;
+}
+/* Keep existing photos visible and avoid altering their actual image pixels. */
+body img,body video,body picture,body svg {background-color:transparent!important;}
+/* Buttons and selected filters stay legible against white. */
+body > header button,body > nav button,body > main button,body > main .cta,
+body > main .primary,body > main .cerood-search-filters button[aria-pressed="true"] {
+ color:#5135d9!important;
+}
+/* The hero / promo panels are now plain white, including on narrow screens. */
+@media(max-width:850px){html,body,.crn-header-main,.hero,.cerood-desktop-promo{background:#fff!important;background-image:none!important;}}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a class="logo crn-logo" href="/" aria-label="Cerood home"><img src="/cerood-logo.webp" alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false"/><span class="crn-logo-fallback" hidden>cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg class="crn-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg class="crn-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
