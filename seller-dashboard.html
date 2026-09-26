@@ -4171,24 +4171,37 @@ const label=p=>{const a=String(p.approval_status||'pending').trim().toLowerCase(
 function textCell(row,value){const c=row.insertCell();c.textContent=String(value??'—');return c}
 function message(text){$('ccatCatalogMessage').textContent=text||''}
 function openEditor(p){
- const host=$('ccatCatalogEditor');host.hidden=false;host.replaceChildren();message('');
+ const modal=document.getElementById('ccatEditModal');
+ const body=document.getElementById('ccatEditModalBody');
+ const title=document.getElementById('ccatEditModalTitle');
+ if(!modal||!body){message('Catalog editor popup unavailable.');return;}
+ // Always restore the previous editor BEFORE clearing the modal body.
+ window.ceroodCatalogCloseEditor?.();
+ message('');
  if(p.marketplace==='renewed'){
-   if(typeof editProduct!=='function'){message('Renewed editor unavailable.');return}
-   editProduct(p.id); // Reuse original Renewed form, media upload and save handlers.
-   const original=$('ceroodInlineRenewedEditor'),form=$('renewedProductFormCard');
-   if(form){host.append(form);form.hidden=false;original.hidden=true}
+   if(typeof editProduct!=='function'){message('Renewed editor unavailable.');return;}
+   editProduct(p.id); // Existing full Renewed editor and save/media handlers.
+   const form=$('renewedProductFormCard');
+   if(!form){message('Renewed form unavailable.');return;}
+   body.append(form);form.hidden=false;
+   title.textContent='Edit Renewed Product';
  }else{
    const editor=window.ceroodEditMarketplaceProduct;
-   if(typeof editor!=='function'){message('Marketplace editor unavailable.');return}
-   const original=$('ceroodInlineMarketplaceEditor');
-   host.append(original);original.hidden=false;
-   Promise.resolve(editor(p.source)).catch(e=>message('Edit failed: '+e.message));
+   if(typeof editor!=='function'){message('Marketplace editor unavailable.');return;}
+   const host=$('ceroodInlineMarketplaceEditor');
+   if(!host){message('Marketplace form unavailable.');return;}
+   body.append(host);host.hidden=false;
+   title.textContent='Edit '+(p.marketplace==='clothing'?'Fashion':'Cosmetics')+' Product';
+   Promise.resolve(editor(p.source)).catch(e=>{message('Edit failed: '+e.message);window.ceroodCatalogCloseEditor?.()});
  }
- showTab('add-product');panel.hidden=false;
+ modal.hidden=false;document.body.classList.add('ccat-edit-modal-open');
+ // The existing editProduct switches sections; return to Catalog Uploads without
+ // discarding any form values or switching to My Products.
+ showTab('add-product');panel.hidden=false;$('ccatBulkPanel').hidden=true;
  panel.closest('.ccat-records').querySelectorAll('[data-ccat-tab]').forEach(b=>b.classList.toggle('active',b.dataset.ccatTab==='single'));
- $('ccatBulkPanel').hidden=true;
- host.scrollIntoView({behavior:'smooth',block:'start'});
+ document.getElementById('ccatEditModalClose')?.focus();
 }
+
 async function withdraw(p){
  if(['withdrawn','blocked'].includes(String(p.approval_status).toLowerCase())){message('Product already withdrawn.');return}
  try{
@@ -4230,6 +4243,74 @@ async function refresh(){if(loading)return;loading=true;const body=$('ccatSingle
 $('ccatSingleRefresh').onclick=refresh;$('ccatSingleSearch').oninput=render;$('ccatSingleCategory').onchange=render;
 panel.querySelectorAll('[data-ccat-single-status]').forEach(b=>b.onclick=()=>{active=b.dataset.ccatSingleStatus;panel.querySelectorAll('[data-ccat-single-status]').forEach(x=>x.classList.toggle('active',x===b));render()});
 const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"]');tab?.addEventListener('click',()=>{refresh()},false);
+})();
+</script>
+
+<style id="ccat-edit-modal-style">
+ #ccatEditModal[hidden]{display:none!important}
+ #ccatEditModal{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(16,24,40,.68)}
+ .ccat-edit-modal-panel{display:flex;flex-direction:column;width:min(100%,1050px);max-height:calc(100dvh - 36px);overflow:hidden;background:#fff;border-radius:11px;box-shadow:0 20px 75px #0004}
+ .ccat-edit-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;border-bottom:1px solid #e1e4ed;flex-shrink:0}
+ .ccat-edit-modal-head strong{font-size:16px}.ccat-edit-modal-head button{border:0;background:#f1f3f8;border-radius:6px;font-size:22px;cursor:pointer;width:34px;height:34px}
+ #ccatEditModalBody{overflow:auto;overscroll-behavior:contain;padding:20px;min-height:100px}
+ #ccatEditModalBody #renewedProductFormCard,#ccatEditModalBody #ceroodInlineMarketplaceEditor{display:block!important;max-width:none!important;margin:0!important}
+ #ccatEditModalBody .seller-card{max-width:none!important;margin:0!important}
+ body.ccat-edit-modal-open{overflow:hidden}
+ @media(max-width:600px){#ccatEditModal{padding:0}.ccat-edit-modal-panel{width:100%;max-height:100dvh;border-radius:0}#ccatEditModalBody{padding:12px}}
+</style>
+<div id="ccatEditModal" hidden role="dialog" aria-modal="true" aria-labelledby="ccatEditModalTitle">
+ <div class="ccat-edit-modal-panel">
+  <div class="ccat-edit-modal-head"><strong id="ccatEditModalTitle">Edit Product</strong><button id="ccatEditModalClose" type="button" aria-label="Close editor">×</button></div>
+  <div id="ccatEditModalBody"></div>
+ </div>
+</div>
+<script id="ccat-edit-modal-functional">
+(()=>{'use strict';
+ const $=id=>document.getElementById(id),modal=$('ccatEditModal'),body=$('ccatEditModalBody');
+ let closing=false;
+ function close(){
+  if(closing||modal.hidden)return;
+  closing=true;
+  // Return live forms to their permanent containers before clearing ANY wrapper.
+  const renewed=$('renewedProductFormCard'),market=$('ceroodInlineMarketplaceEditor');
+  if(renewed&&body.contains(renewed)){
+   $('section-add-product').append(renewed);
+   if(typeof window.resetProductForm==='function')window.resetProductForm();
+   renewed.hidden=true;
+  }
+  if(market&&body.contains(market)){
+   $('section-products').prepend(market);
+   market.hidden=true;market.replaceChildren();
+  }
+  body.replaceChildren();modal.hidden=true;document.body.classList.remove('ccat-edit-modal-open');
+  const legacy=$('ccatCatalogEditor');if(legacy){legacy.hidden=true;/* Do not remove forms from here. */}
+  $('ccatSinglePanel').hidden=false;$('ccatBulkPanel').hidden=true;
+  document.querySelectorAll('[data-ccat-tab]').forEach(b=>b.classList.toggle('active',b.dataset.ccatTab==='single'));
+  closing=false;
+ }
+ window.ceroodCatalogCloseEditor=close;
+ $('ccatEditModalClose').addEventListener('click',close);
+ modal.addEventListener('click',e=>{if(e.target===modal)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden){e.preventDefault();close()}});
+ // Capture Renewed Cancel before legacy handlers move the form and empty its parent.
+ modal.addEventListener('click',e=>{
+  if(modal.hidden)return;
+  if(e.target.closest('#cancelEditBtn')){
+   e.preventDefault();e.stopImmediatePropagation();close();return;
+  }
+  const btn=e.target.closest('button');
+  if(btn&&btn.textContent.trim()==='Cancel'&&body.contains(btn)){
+   e.preventDefault();e.stopImmediatePropagation();close();
+  }
+ },true);
+ // Existing save handlers can reset/hide the form. Close popup on successful reset.
+ const observer=new MutationObserver(()=>{
+  if(modal.hidden||closing)return;
+  const renewed=$('renewedProductFormCard'),market=$('ceroodInlineMarketplaceEditor');
+  if((renewed&&body.contains(renewed)&&renewed.hidden)||(market&&body.contains(market)&&market.hidden))close();
+ });
+ observer.observe($('renewedProductFormCard'),{attributes:true,attributeFilter:['hidden']});
+ observer.observe($('ceroodInlineMarketplaceEditor'),{attributes:true,attributeFilter:['hidden']});
 })();
 </script>
 </body>
