@@ -335,7 +335,6 @@ html body{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
   html body { padding-top: 0 !important; }
 }
 </style>
-
 <style id="cerood-fashion-dashboard-desktop-sidebar-20260926">
 /* Desktop-only: one account shell, sidebar left and selected content right. */
 @media (min-width: 851px) {
@@ -412,37 +411,7 @@ function printOrderReceipt(o){
   <h2>Order details</h2><div><span class="label">Order reference:</span> ${esc(o.id)}</div><div><span class="label">Order date:</span> ${esc(date(o.created_at))}</div><div><span class="label">Customer:</span> ${esc(o.customer_name||'Not provided')}</div><div><span class="label">Delivery status:</span> ${esc(names[o.delivery_status]||o.delivery_status||o.status||'—')}</div><div><span class="label">Payment:</span> ${payment}</div>
   <h2>Products</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price (INR)</th><th class="right">Amount (INR)</th></tr></thead><tbody>${items}</tbody></table>
   <table class="totals"><tr><td>Products subtotal</td><td class="right">${amount(o.subtotal)}</td></tr><tr><td>Delivery charge</td><td class="right">${amount(o.delivery_fee)}</td></tr><tr class="grand"><td>Total (INR)</td><td class="right">${amount(o.total)}</td></tr></table>
-  <div class="notice">This is an order summary generated from your Cerood Fashion order record. It does not confirm COD payment collection, and it is not a GST tax invoice. For a final sales invoice or billing correction, contact Cerood with your order reference.</div>
-<script id="cerood-fashion-dashboard-desktop-sidebar-behavior-20260926">
-(()=>{
-  const tracker=document.getElementById('orderTracker');
-  const pane=document.getElementById('pane-tracking');
-  const shell=document.getElementById('accountShell');
-  if(!tracker||!pane||!shell)return;
-  const anchor=document.createComment('original tracking position');
-  tracker.parentNode.insertBefore(anchor,tracker);
-  const desktop=window.matchMedia('(min-width: 851px)');
-  function openTracking(){
-    document.querySelectorAll('[data-pane]').forEach(b=>b.classList.toggle('active',b.dataset.pane==='tracking'));
-    document.querySelectorAll('.account-pane').forEach(p=>p.classList.toggle('active',p.id==='pane-tracking'));
-  }
-  function sync(){
-    if(desktop.matches){
-      if(tracker.parentNode!==pane)pane.appendChild(tracker);
-    }else if(tracker.parentNode!==anchor.parentNode){
-      anchor.parentNode.insertBefore(tracker,anchor.nextSibling);
-    }
-  }
-  sync();
-  desktop.addEventListener('change',sync);
-  // Existing Track order / View order buttons keep their original show/order logic.
-  document.getElementById('purchaseList')?.addEventListener('click',e=>{
-    const b=e.target.closest('button');
-    if(desktop.matches&&b&&/^(Track order|View order)$/.test(b.textContent.trim()))openTracking();
-  },true);
-})();
-</script>
-</body></html>`;
+  <div class="notice">This is an order summary generated from your Cerood Fashion order record. It does not confirm COD payment collection, and it is not a GST tax invoice. For a final sales invoice or billing correction, contact Cerood with your order reference.</div></body></html>`;
   win.document.open();win.document.write(html);win.document.close();win.focus();
 }
 function card(o){const el=document.createElement('article');el.className='purchase';const head=document.createElement('div');head.className='purchase-head';const title=document.createElement('strong');title.textContent='Order #'+o.id.slice(0,8).toUpperCase();const badge=document.createElement('span');badge.className='tag';badge.textContent=names[o.delivery_status]||String(o.status).replaceAll('_',' ');head.append(title,badge);el.append(head);const detail=document.createElement('p');detail.className='account-note';detail.textContent=new Date(o.created_at).toLocaleDateString('en-IN')+' · '+money(o.total)+' · '+(o.payment_method==='cod'?'Cash on Delivery':'Online payment');el.append(detail);for(const item of o.items||[]){const row=document.createElement('div');row.className='purchase-item';if(item.image_url){const img=document.createElement('img');img.src=item.image_url;img.alt='Fashion product';img.loading='lazy';row.append(img)}const info=document.createElement('div');const name=document.createElement('strong');name.textContent=item.product_name;const meta=document.createElement('div');meta.textContent='Qty '+item.quantity+' · '+money(item.line_total);info.append(name,meta);row.append(info);el.append(row)}const b=document.createElement('button');b.className='btn secondary';b.type='button';b.textContent=isComplete(o)?'View order':'Track order';b.onclick=()=>{show(o);document.getElementById('orderTracker').scrollIntoView({behavior:'smooth'})};el.append(b);if(isComplete(o)){const rate=document.createElement('button');rate.type='button';rate.className='btn secondary';rate.textContent='Rate purchase';rate.style.marginLeft='8px';rate.onclick=()=>{openPane('reviews');$('accountShell').scrollIntoView({behavior:'smooth'})};el.append(rate)}const receiptBtn=document.createElement('button');receiptBtn.className='btn secondary';receiptBtn.type='button';receiptBtn.textContent='Save receipt';receiptBtn.style.marginLeft='8px';receiptBtn.onclick=()=>printOrderReceipt(o);el.append(receiptBtn);return el}
@@ -560,6 +529,35 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});t
   window.addEventListener('resize', sync, { passive: true });
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(sync).observe(header);
   window.addEventListener('load', sync, { once: true });
+})();
+</script>
+<script id="cerood-fashion-dashboard-desktop-sidebar-behavior-20260926">
+(()=>{
+  const tracker=document.getElementById('orderTracker');
+  const pane=document.getElementById('pane-tracking');
+  const shell=document.getElementById('accountShell');
+  if(!tracker||!pane||!shell)return;
+  const anchor=document.createComment('original tracking position');
+  tracker.parentNode.insertBefore(anchor,tracker);
+  const desktop=window.matchMedia('(min-width: 851px)');
+  function openTracking(){
+    document.querySelectorAll('[data-pane]').forEach(b=>b.classList.toggle('active',b.dataset.pane==='tracking'));
+    document.querySelectorAll('.account-pane').forEach(p=>p.classList.toggle('active',p.id==='pane-tracking'));
+  }
+  function sync(){
+    if(desktop.matches){
+      if(tracker.parentNode!==pane)pane.appendChild(tracker);
+    }else if(tracker.parentNode!==anchor.parentNode){
+      anchor.parentNode.insertBefore(tracker,anchor.nextSibling);
+    }
+  }
+  sync();
+  desktop.addEventListener('change',sync);
+  // Existing Track order / View order buttons keep their original show/order logic.
+  document.getElementById('purchaseList')?.addEventListener('click',e=>{
+    const b=e.target.closest('button');
+    if(desktop.matches&&b&&/^(Track order|View order)$/.test(b.textContent.trim()))openTracking();
+  },true);
 })();
 </script>
 </body></html>
