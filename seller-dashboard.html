@@ -576,6 +576,19 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 @media(max-width:1050px){.cerood-home-layout{grid-template-columns:minmax(0,1fr)}.cerood-learning{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.cerood-learning h2{grid-column:1/-1}.cerood-learning-link:nth-last-child(2){border-bottom:0}}
 @media(max-width:600px){.cerood-home{margin:-16px -12px -25px;padding:0 12px 25px}.cerood-home-heading{margin:0 -12px 12px;padding:15px 12px}.cerood-home-heading h1{font-size:17px!important}.cerood-steps{padding:0 5px}.cerood-step{gap:5px;padding:12px 3px;font-size:10px;align-items:flex-start}.cerood-step-mark{width:23px;height:23px;min-width:23px;font-size:11px}.cerood-welcome-panel{grid-template-columns:1fr;gap:15px;padding:15px}.cerood-learning{display:block}.cerood-learning-link:nth-last-child(2){border-bottom:1px solid #e1e6f0}.cerood-home-stats{gap:7px}.cerood-home-stats>div{padding:11px 8px}.cerood-home-stats strong{font-size:19px}.cerood-home-stats span{font-size:10px}}
 </style>
+<style id="cerood-manage-orders-final-polish">
+/* Keep status tabs readable and selected underline aligned on desktop and mobile. */
+.hub-order-tabs{gap:4px;scrollbar-width:thin;scroll-snap-type:x proximity}
+.hub-order-tab{scroll-snap-align:start;min-height:49px;display:inline-flex;align-items:center;gap:5px;justify-content:center;line-height:1.3}
+.hub-order-tab:focus-visible,.hub-order-controls input:focus-visible,.hub-order-controls select:focus-visible{outline:2px solid #4933b9;outline-offset:2px}
+.hub-order-tab.active{background:#faf9ff}
+.hub-order-controls{min-height:63px}
+.seller-order-top strong{overflow-wrap:anywhere;line-height:1.5}
+.seller-order-product{min-width:0}.seller-order-info{line-height:1.5}
+.seller-order-status{white-space:nowrap}
+.seller-order-actions{padding-top:12px;border-top:1px solid #eef0f5}
+@media(max-width:600px){.hub-order-tab{padding:13px 10px}.hub-order-controls{gap:10px}.seller-order-top{align-items:flex-start}.seller-order-status{white-space:normal}}
+</style>
 </head>
 
 <body>
@@ -859,7 +872,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
         <button id="refreshSellerOrders" class="seller-btn seller-btn-outline" type="button">Refresh Orders</button>
       </div>
       <div id="ordersMessage" class="seller-message" role="status" aria-live="polite"></div>
-      <div class="hub-order-toolbar"><div class="hub-order-tabs" role="tablist" aria-label="Order status"><button type="button" class="hub-order-tab active" data-order-filter="all">All <span data-count="all">0</span></button><button type="button" class="hub-order-tab" data-order-filter="new">Pending <span data-count="new">0</span></button><button type="button" class="hub-order-tab" data-order-filter="accepted">Accepted <span data-count="accepted">0</span></button><button type="button" class="hub-order-tab" data-order-filter="packed">Ready to Ship <span data-count="packed">0</span></button><button type="button" class="hub-order-tab" data-order-filter="shipped">Shipped <span data-count="shipped">0</span></button><button type="button" class="hub-order-tab" data-order-filter="rejected">Rejected <span data-count="rejected">0</span></button></div><div class="hub-order-controls"><label>Filter by <select id="hubOrderDate"><option value="all">All dates</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select></label><input id="hubOrderSearch" type="search" placeholder="Search order ID or product" aria-label="Search orders"></div></div><div id="sellerOrdersList" class="seller-orders-list"></div>
+      <div class="hub-order-toolbar"><div class="hub-order-tabs" role="tablist" aria-label="Order status"><button type="button" class="hub-order-tab" data-order-filter="hold">On Hold <span data-count="hold">0</span></button><button type="button" class="hub-order-tab" data-order-filter="new">Pending <span data-count="new">0</span></button><button type="button" class="hub-order-tab" data-order-filter="accepted">Accepted <span data-count="accepted">0</span></button><button type="button" class="hub-order-tab" data-order-filter="packed">Ready to Ship <span data-count="packed">0</span></button><button type="button" class="hub-order-tab" data-order-filter="shipped">Shipped <span data-count="shipped">0</span></button><button type="button" class="hub-order-tab" data-order-filter="rejected">Rejected <span data-count="rejected">0</span></button></div><div class="hub-order-controls"><label>Filter by <select id="hubOrderDate"><option value="all">All dates</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select></label><input id="hubOrderSearch" type="search" placeholder="Search order ID, product or item ID" aria-label="Search orders"></div></div><div id="sellerOrdersList" class="seller-orders-list"></div>
     </section>
 
     <!-- ADD PRODUCT -->
@@ -1934,6 +1947,14 @@ function sellerOrderAddress(address) {
 
 function renderSellerOrders(orders) {
   window.hubSellerOrders = Array.isArray(orders) ? orders : [];
+  if (!window.hubOrdersInitialStageChosen && window.hubSellerOrders.length) {
+    const stages=['new','hold','accepted','packed','shipped','rejected'];
+    const count=stage=>window.hubSellerOrders.filter(o=>stage==='hold'
+      ? ['hold','on_hold','on hold','held'].includes(String(o.seller_order_status||'').toLowerCase()) || o.is_on_hold===true || o.on_hold===true || o.hold_status===true
+      : String(o.seller_order_status||'new').toLowerCase()===stage).length;
+    window.hubOrderFilter=stages.find(stage=>count(stage)>0)||'new';
+    window.hubOrdersInitialStageChosen=true;
+  }
   if(typeof window.hubRefreshOrderCounts === "function") window.hubRefreshOrderCounts();
   orders = window.hubFilterOrders ? window.hubFilterOrders(window.hubSellerOrders) : orders;
   const container = $('sellerOrdersList');
@@ -1962,7 +1983,7 @@ function renderSellerOrders(orders) {
       'product-meta');
     top.appendChild(title);
     sellerOrderText(top, 'span',
-      'Seller: ' + (order.seller_order_status || 'new'),
+      'Seller: ' + ({new:'Pending',accepted:'Accepted',packed:'Ready to Ship',shipped:'Shipped',rejected:'Rejected',hold:'On Hold',on_hold:'On Hold',held:'On Hold'}[String(order.seller_order_status||'new').toLowerCase()] || order.seller_order_status || 'Pending'),
       'seller-order-status');
     card.appendChild(top);
 
@@ -3354,7 +3375,7 @@ initializeDashboard();
  function renderHubData(tab){
   const target=document.getElementById('hub-'+tab+'-data');if(!target)return;
   target.replaceChildren();
-  if(tab==='dispatch'){ const orders=window.hubSellerOrders||[]; const stages=['new','accepted','packed','shipped']; const labels=['Pending','Accepted','Ready to Ship','Shipped'];const grid=document.createElement('div');grid.className='hub-dispatch-grid';stages.forEach((stage,i)=>{const b=document.createElement('button');b.type='button';b.className='hub-dispatch-stat';b.innerHTML='<strong></strong><span></span>';b.querySelector('strong').textContent=orders.filter(o=>String(o.seller_order_status||'new').toLowerCase()===stage).length;b.querySelector('span').textContent=labels[i];b.addEventListener('click',()=>{window.hubOrderFilter=stage;showTab('orders');renderSellerOrders(window.hubSellerOrders||[])});grid.append(b)});target.append(grid);return;}
+  if(tab==='dispatch'){ const orders=window.hubSellerOrders||[]; const stages=['new','accepted','packed','shipped']; const labels=['Pending','Accepted','Ready to Ship','Shipped'];const grid=document.createElement('div');grid.className='hub-dispatch-grid';stages.forEach((stage,i)=>{const b=document.createElement('button');b.type='button';b.className='hub-dispatch-stat';b.innerHTML='<strong></strong><span></span>';b.querySelector('strong').textContent=orders.filter(o=>String(o.seller_order_status||'new').toLowerCase()===stage).length;b.querySelector('span').textContent=labels[i];b.addEventListener('click',()=>{window.hubOrderFilter=stage;window.hubOrdersInitialStageChosen=true;showTab('orders');renderSellerOrders(window.hubSellerOrders||[])});grid.append(b)});target.append(grid);return;}
   if(!products.length){const p=document.createElement('p');p.textContent='No products found.';target.append(p);return;}
   const table=document.createElement('table');table.className='hub-product-table';
   const thead=document.createElement('thead'),tr=document.createElement('tr');
@@ -3373,28 +3394,42 @@ initializeDashboard();
 </script>
 <script id="cerood-meaningful-order-filters">
 (function(){
- window.hubSellerOrders=[];window.hubOrderFilter='all';
- window.hubFilterOrders=function(orders){
-  const search=(document.getElementById('hubOrderSearch')?.value||'').trim().toLowerCase();
-  const days=document.getElementById('hubOrderDate')?.value||'all';
-  return orders.filter(o=>{
-   const stage=String(o.seller_order_status||'new').toLowerCase();
-   if(window.hubOrderFilter!=='all'&&stage!==window.hubOrderFilter)return false;
-   if(search&&!String(o.order_id||'').toLowerCase().includes(search)&&!String(o.product_name||'').toLowerCase().includes(search)&&!String(o.order_item_id||'').toLowerCase().includes(search))return false;
-   if(days!=='all') {const d=new Date(o.ordered_at);if(!Number.isFinite(d.getTime())||d.getTime()<Date.now()-Number(days)*86400000)return false;}
-   return true;
-  });
- };
- window.hubRefreshOrderCounts=function(){
-  const orders=window.hubSellerOrders||[];
-  document.querySelectorAll('[data-order-filter]').forEach(b=>{
-   const f=b.dataset.orderFilter;
-   b.classList.toggle('active',f===window.hubOrderFilter);
-   const count=b.querySelector('[data-count]');if(count)count.textContent= f==='all'?orders.length:orders.filter(o=>String(o.seller_order_status||'new').toLowerCase()===f).length;
-  });
- };
- document.querySelectorAll('[data-order-filter]').forEach(b=>b.addEventListener('click',()=>{window.hubOrderFilter=b.dataset.orderFilter;window.hubRefreshOrderCounts();renderSellerOrders(window.hubSellerOrders||[])}));
- ['hubOrderSearch','hubOrderDate'].forEach(id=>document.getElementById(id)?.addEventListener(id==='hubOrderSearch'?'input':'change',()=>renderSellerOrders(window.hubSellerOrders||[])));
+  window.hubSellerOrders=[];
+  window.hubOrderFilter='new';
+  const stageOf=o=>String(o.seller_order_status||'new').trim().toLowerCase();
+  const isHold=o=>['hold','on_hold','on hold','held'].includes(stageOf(o)) ||
+    (o.is_on_hold===true || o.on_hold===true || o.hold_status===true);
+  const matches=(o,filter)=>filter==='hold'?isHold(o):stageOf(o)===filter && !isHold(o);
+  window.hubFilterOrders=function(orders){
+    const search=(document.getElementById('hubOrderSearch')?.value||'').trim().toLowerCase();
+    const days=document.getElementById('hubOrderDate')?.value||'all';
+    return orders.filter(o=>{
+      if(!matches(o,window.hubOrderFilter))return false;
+      if(search&&![o.order_id,o.product_name,o.order_item_id].some(v=>String(v||'').toLowerCase().includes(search)))return false;
+      if(days!=='all'){
+        const d=new Date(o.ordered_at);
+        if(!Number.isFinite(d.getTime())||d.getTime()<Date.now()-Number(days)*86400000)return false;
+      }
+      return true;
+    });
+  };
+  window.hubRefreshOrderCounts=function(){
+    const orders=window.hubSellerOrders||[];
+    document.querySelectorAll('[data-order-filter]').forEach(b=>{
+      const f=b.dataset.orderFilter;
+      b.classList.toggle('active',f===window.hubOrderFilter);
+      b.setAttribute('aria-selected',String(f===window.hubOrderFilter));
+      const count=b.querySelector('[data-count]');
+      if(count)count.textContent=orders.filter(o=>matches(o,f)).length;
+    });
+  };
+  document.querySelectorAll('[data-order-filter]').forEach(b=>b.addEventListener('click',()=>{
+    window.hubOrderFilter=b.dataset.orderFilter;
+    window.hubOrdersInitialStageChosen=true;
+    renderSellerOrders(window.hubSellerOrders||[]);
+  }));
+  ['hubOrderSearch','hubOrderDate'].forEach(id=>document.getElementById(id)?.addEventListener(id==='hubOrderSearch'?'input':'change',()=>renderSellerOrders(window.hubSellerOrders||[])));
+  window.hubRefreshOrderCounts();
 })();
 </script>
 <script id="cerood-catalog-quality-image-interactions">
