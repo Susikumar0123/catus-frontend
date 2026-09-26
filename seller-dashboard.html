@@ -696,6 +696,43 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #cfBulkModal .cf-v3-rule-copy small{font-size:10px;color:#8b95a7}
 #cfBulkModal .cf-v3-rules>p{font-size:11px;line-height:1.4}
 </style>
+<style id="cerood-catalog-uploads-v4">
+#section-add-product{background:#fff;min-height:calc(100vh - 95px)}
+#section-add-product .ccat-shell{font-size:12.5px;color:#242a38}
+#section-add-product .ccat-intro{padding:5px 0 20px;border-bottom:8px solid #f3f5fb}
+#section-add-product .ccat-intro>p{margin:0 0 8px;font-size:12px;color:#475467}
+#section-add-product .ccat-actions{display:flex;gap:13px;flex-wrap:wrap;margin-bottom:20px}
+#section-add-product .ccat-overview{display:flex;flex-wrap:wrap;max-width:560px}
+#section-add-product .ccat-overview>div{border:1px solid #dfe5f0;flex:1;min-width:145px;padding:12px 17px;display:flex;flex-direction:column;gap:5px}
+#section-add-product .ccat-overview>div+div{border-left:0}
+#section-add-product .ccat-overview small{font-size:11px;color:#667085}
+#section-add-product .ccat-overview strong{font-size:21px}
+#section-add-product .ccat-records{margin:0 -16px}
+#section-add-product .ccat-main-tabs,#section-add-product .ccat-status-tabs{display:flex;gap:0;border-bottom:1px solid #dfe4ef;overflow:auto;scrollbar-width:thin}
+#section-add-product .ccat-main-tabs button,#section-add-product .ccat-status-tabs button{font:600 12.5px Inter,system-ui,sans-serif;white-space:nowrap;background:white;border:0;border-bottom:2px solid transparent;padding:15px 17px;cursor:pointer;color:#344054}
+#section-add-product .ccat-main-tabs button.active,#section-add-product .ccat-status-tabs button.active{color:#4530b5;border-bottom-color:#4530b5}
+#section-add-product .ccat-status-tabs{padding:0 4px}
+#section-add-product .ccat-status-tabs button{font-weight:500;font-size:12px;padding:13px 14px}
+#section-add-product .ccat-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 15px}
+#section-add-product .ccat-controls label{display:flex;align-items:center;gap:10px;font-size:12px}
+#section-add-product .ccat-controls select,#section-add-product .ccat-controls input{border:1px solid #cfd5e2;border-radius:5px;background:#fff;color:#344054;padding:10px 12px;font:12px Inter,system-ui,sans-serif;max-width:100%}
+#section-add-product .ccat-controls input{width:260px}
+#section-add-product .ccat-alert{padding:12px 14px;border:1px solid #f4d883;background:#fff9e8;color:#775600;margin:0 0 8px}
+#section-add-product .ccat-table-scroll{overflow-x:auto;max-width:100%}
+#section-add-product .ccat-table{border-collapse:collapse;width:100%;min-width:790px;font-size:12px}
+#section-add-product .ccat-table th{background:#edf3fb;font-weight:700}
+#section-add-product .ccat-table td,#section-add-product .ccat-table th{padding:12px 13px;border:1px solid #dfe5f0;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+#section-add-product .ccat-table td:nth-child(3){max-width:290px}
+#section-add-product .ccat-empty{text-align:center!important;color:#667085;padding:40px 15px!important}
+#section-add-product .ccat-chip{display:inline-block;border-radius:30px;padding:5px 9px;white-space:nowrap;background:#e8f7ed;color:#16713d;font-size:11px}
+#section-add-product .ccat-chip.error{background:#fff0f0;color:#bd3434}
+#section-add-product .ccat-row-actions{display:flex;flex-direction:column;gap:6px}
+#section-add-product .ccat-row-actions button{padding:7px 9px;border:1px solid #4933b9;border-radius:5px;color:#4933b9;background:#fff;cursor:pointer;font:600 11px Inter,system-ui,sans-serif}
+#section-add-product .ccat-single-note{margin:16px;color:#667085}
+#section-add-product #ccatShowSingle{margin:0 16px 16px}
+#section-add-product #ceroodMarketplacePanel.ccat-form-closed,#section-add-product #renewedProductFormCard.ccat-form-closed{display:none!important}
+@media(max-width:800px){#section-add-product .ccat-records{margin:0 -12px}#section-add-product .ccat-controls input{width:100%}#section-add-product .ccat-overview>div{min-width:105px;padding:10px}#section-add-product .ccat-main-tabs button{padding:13px}}
+</style>
 </head>
 
 <body>
@@ -1005,9 +1042,13 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 
       class="seller-section"
 
-    ><div class="hub-catalog-top"><p>Have a unique product to sell? Choose how you want to upload.</p><div class="hub-catalog-buttons"><button type="button" class="seller-btn hub-go" data-go="image-upload">Add Images in Bulk</button><button type="button" class="seller-btn seller-btn-outline" id="hubSingleCatalog">Add Single Catalog</button></div><div class="hub-catalog-summary"><div><small>Total uploads</small><strong id="hubCatalogTotal">0</strong></div><div><small>Approved</small><strong id="hubCatalogApproved">0</strong></div><div><small>Under review</small><strong id="hubCatalogPending">0</strong></div></div></div>
-
-      <div class="seller-card" id="ceroodMarketplacePanel">
+    ><div class="ccat-shell" id="ceroodCatalogShell">
+  <div class="ccat-intro"><p>Have products to sell? Choose how you want to add them to CEROOD.</p><div class="ccat-actions"><button type="button" class="seller-btn hub-go" data-go="fashion-bulk">Add Catalog in Bulk</button><button type="button" class="seller-btn seller-btn-outline" id="hubSingleCatalog">Add Single Catalog</button></div><div class="ccat-overview"><div><small>Total uploads</small><strong id="hubCatalogTotal">0</strong></div><div><small>Approved products</small><strong id="hubCatalogApproved">0</strong></div><div><small>Under review</small><strong id="hubCatalogPending">0</strong></div></div></div>
+  <div class="ccat-records"><div class="ccat-main-tabs" role="tablist" aria-label="Catalog upload type"><button type="button" class="active" data-ccat-tab="bulk">Bulk Uploads <span id="ccatBulkCount">(0)</span></button><button type="button" data-ccat-tab="single">Single Uploads <span id="ccatSingleCount"></span></button></div>
+  <div id="ccatBulkPanel"><div class="ccat-status-tabs" role="tablist" aria-label="Bulk catalog validation"><button type="button" class="active" data-ccat-status="all">All</button><button type="button" data-ccat-status="action">Action Required <span id="ccatActionCount">(0)</span></button><button type="button" data-ccat-status="valid">Validated Locally <span id="ccatValidCount">(0)</span></button></div><div class="ccat-controls"><label>Filter by: <select id="ccatCategory"><option value="all">Select Category</option></select></label><input type="search" id="ccatSearch" placeholder="Search by file ID or name" aria-label="Search catalog uploads"></div><div class="ccat-alert">ⓘ &nbsp; CSV checks are local previews only. Server-side QC and bulk publishing are not connected yet.</div><div class="ccat-table-scroll"><table class="ccat-table"><thead><tr><th>S.no</th><th>Category</th><th>File ID / name</th><th>Created Date</th><th>Rows</th><th>Validation Status</th><th>Actions</th></tr></thead><tbody id="ccatTableBody"><tr><td colspan="7" class="ccat-empty">No bulk CSV files checked yet. Choose “Add Catalog in Bulk” to begin.</td></tr></tbody></table></div></div>
+  <div id="ccatSinglePanel" hidden><p class="ccat-single-note">Single-product listings are managed below. Select “Add Single Catalog” to open the existing product form.</p><button type="button" class="seller-btn seller-btn-outline" id="ccatShowSingle">Open single-product form</button></div></div>
+</div>
+<div class="seller-card" id="ceroodMarketplacePanel">
         <h2>Choose your marketplace</h2><p>Select the type of product you want to upload. Each product goes to its own CEROOD admin approval queue.</p>
         <div class="market-choice" role="group" aria-label="Marketplace">
           <button type="button" data-market="renewed" aria-pressed="false"><span class="market-symbol">📺</span><strong>Renewed</strong><small>TVs, laptops and refurbished appliances</small></button>
@@ -4055,6 +4096,24 @@ $('cfBulkImages').onchange=e=>{const incoming=Array.from(e.target.files||[]);con
 $('cfBulkLinksDownload').onclick=()=>download('cerood-front-image-links.csv',[['image_url'],['https://example.com/front-image.jpg']]);
 $('cfBulkLinksFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>2e6)throw Error('CSV must be under 2 MB');const rows=parseCSV((await f.text()).replace(/^\uFEFF/,''));if(rows[0]?.[0]?.trim().toLowerCase()!=='image_url')throw Error('First column must be image_url');imageLinks=rows.slice(1).map(r=>r[0]?.trim()).filter(x=>{try{return ['https:','http:'].includes(new URL(x).protocol)}catch{return false}});$('cfBulkLinksName').textContent=f.name+' · '+imageLinks.length+' valid links';refreshGenerate()}catch(err){$('cfBulkLinksName').textContent=err.message;imageLinks=[];refreshGenerate()}};
 $('cfBulkGenerate').onclick=()=>{if(!chosen.every(Boolean))return;const sources=mode==='files'?imageFiles.map(f=>({name:f.name,url:''})):imageLinks.map(u=>({name:'',url:u}));if(!sources.length)return;const rows=[columns,...sources.map(x=>['',chosen[0],chosen[3],'','','','','','','',x.url])];download(filename()+'-prefilled-template.csv',rows);$('cfBulkStatus').textContent=mode==='files'?'Template generated with '+sources.length+' blank product rows. Local image files are NOT uploaded: add permanent image URLs in the CSV before submitting.':'Template generated with '+sources.length+' image URLs. Complete required product details before submitting.';close()};
+})();
+</script>
+<script id="cerood-catalog-uploads-v4-script">
+(function(){'use strict';
+const $=id=>document.getElementById(id),root=$('ceroodCatalogShell');if(!root)return;
+const storeKey='cerood_fashion_bulk_csv_previews_v1';let records=[];try{records=JSON.parse(localStorage.getItem(storeKey)||'[]');if(!Array.isArray(records))records=[]}catch{records=[]}
+let status='all';const market=$('ceroodMarketplacePanel');if(market)market.classList.add('ccat-form-closed');
+function showForm(){if(market){market.classList.remove('ccat-form-closed');market.scrollIntoView({behavior:'smooth',block:'start'})}}
+$('ccatShowSingle').onclick=showForm;
+// Existing hubSingleCatalog listener remains intact; this only opens the initially collapsed form.
+$('hubSingleCatalog').addEventListener('click',showForm);
+function escapeCSV(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function exportErrors(r){const content='row,error\r\n'+(r.errors||[]).map((x,i)=>[i+1,x].map(escapeCSV).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='cerood-catalog-errors-'+r.id+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)}
+function draw(){const cat=$('ccatCategory').value,q=$('ccatSearch').value.trim().toLowerCase();$('ccatBulkCount').textContent='('+records.length+')';$('ccatActionCount').textContent='('+records.filter(x=>!x.valid).length+')';$('ccatValidCount').textContent='('+records.filter(x=>x.valid).length+')';const options=[...new Set(records.map(x=>x.category).filter(Boolean))].sort(),old=cat;const sel=$('ccatCategory');sel.replaceChildren(new Option('Select Category','all'));options.forEach(x=>sel.add(new Option(x,x)));sel.value=options.includes(old)?old:'all';const filtered=records.filter(r=>(status==='all'||(status==='valid'?r.valid:!r.valid))&&(sel.value==='all'||r.category===sel.value)&&(!q||(r.name+' '+r.id+' '+r.category).toLowerCase().includes(q)));const body=$('ccatTableBody');body.replaceChildren();if(!filtered.length){const tr=body.insertRow(),td=tr.insertCell();td.colSpan=7;td.className='ccat-empty';td.textContent=records.length?'No matching catalog previews.':'No bulk CSV files checked yet. Choose “Add Catalog in Bulk” to begin.';return}filtered.forEach((r,i)=>{const tr=body.insertRow();[i+1,r.category||'—',r.name,r.date,r.rows,r.valid?'Validated locally':'Action required'].forEach((v,j)=>{const td=tr.insertCell();td.textContent=v;if(j===5){const span=document.createElement('span');span.className='ccat-chip'+(r.valid?'':' error');span.textContent=v;td.replaceChildren(span)}});const td=tr.insertCell();td.className='ccat-row-actions';if(!r.valid){const btn=document.createElement('button');btn.type='button';btn.textContent='Download Error File';btn.onclick=()=>exportErrors(r);td.append(btn)}const retry=document.createElement('button');retry.type='button';retry.textContent='Upload New File';retry.onclick=()=>{document.querySelector('[data-tab="fashion-bulk"]')?.click();setTimeout(()=>$('cfBulkFile')?.click(),180)};td.append(retry)})}
+function save(r){records.unshift(r);records=records.slice(0,50);try{localStorage.setItem(storeKey,JSON.stringify(records))}catch{}draw()}
+$('cfBulkFile')?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;const category=$('cfBulkPath').textContent.split(' / ')[0]||'Fashion';let rows=0,errors=[];try{const text=await file.text();const lines=text.split(/\r?\n/).filter(x=>x.trim());rows=Math.max(0,lines.length-1)}catch{}setTimeout(()=>{const state=$('cfBulkStatus')?.textContent||'';const match=state.match(/(\d+) validation issue\(s\)/);const valid=!!match&&Number(match[1])===0;const message=$('cfBulkPreview')?.querySelector('.cf-bulk-error')?.textContent;if(message)errors=message.split(' • ');if(!valid&&!errors.length)errors=[state||'CSV could not be validated'];save({id:'CF-'+Date.now().toString(36).toUpperCase(),name:file.name,category,date:new Date().toLocaleString('en-IN'),rows,valid,errors})},250)},false);
+root.querySelectorAll('[data-ccat-tab]').forEach(b=>b.onclick=()=>{root.querySelectorAll('[data-ccat-tab]').forEach(x=>x.classList.toggle('active',x===b));$('ccatBulkPanel').hidden=b.dataset.ccatTab!=='bulk';$('ccatSinglePanel').hidden=b.dataset.ccatTab!=='single'});
+root.querySelectorAll('[data-ccat-status]').forEach(b=>b.onclick=()=>{status=b.dataset.ccatStatus;root.querySelectorAll('[data-ccat-status]').forEach(x=>x.classList.toggle('active',x===b));draw()});$('ccatCategory').onchange=draw;$('ccatSearch').oninput=draw;draw();
 })();
 </script>
 </body>
