@@ -1753,6 +1753,15 @@ async function checkUserAndProceed() {
         });
         const data = await response.json();
 
+        if (authFlowMode === 'forgot') {
+            if (data.success && data.exists === true) {
+                await triggerForgotPassword();
+            } else {
+                alert('No account found for this mobile number. Please register first.');
+            }
+            return;
+        }
+
         if (data.success) {
             // ஒருவேளை டேட்டாபேஸில் இந்த நம்பர் ஏற்கனவே பதிவு செய்யப்பட்டிருந்தால்
             if (data.exists === true) {
@@ -3096,12 +3105,20 @@ window.addEventListener('cerood:auth-action', function (event) {
 
     toggleAuthModal(true);
 
+    const phone = String(event.detail?.phone || '').trim();
+    const phoneInput = document.getElementById('inputPhone');
+    if (phoneInput && /^[6-9]\d{9}$/.test(phone)) {
+        phoneInput.value = phone;
+    }
+
     if (action === 'register') {
-        authFlowMode = 'register';
-        showAuthStep('register');
+        switchToNewUserRegisterDirect();
     } else {
-        // The existing phone step starts the password-recovery flow.
+        authFlowMode = 'forgot';
         showAuthStep('phone');
+        // Reuse existing check-user validation and MSG91 password-reset flow.
+        // User clicks CONTINUE after entering/confirming their mobile number.
+        if (phoneInput) phoneInput.focus();
     }
 });
 </script>

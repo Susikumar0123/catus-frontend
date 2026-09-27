@@ -440,7 +440,7 @@
 
                 event.preventDefault();
 
-                send('register');
+                send('register', { phone: document.getElementById('phone').value.trim() });
 
             });
 
@@ -454,7 +454,7 @@
 
                 event.preventDefault();
 
-                send('forgot');
+                send('forgot', { phone: document.getElementById('phone').value.trim() });
 
             });
 
