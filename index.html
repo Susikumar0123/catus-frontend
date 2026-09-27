@@ -1583,15 +1583,15 @@ function updateHeaderLoginUI() {
   let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
   currentUser=user;
   document.querySelectorAll('[data-cerood-auth-trigger]').forEach(a=>{
-    const label=a.querySelector('span');if(label)label.textContent=user?'Account':(a.closest('.bottom')?'Account':'Login / Account');
-    a.setAttribute('aria-label',user?'Open Cerood account':'Login or register with Cerood');
+    const label=a.querySelector('span');if(label)label.textContent=a.closest('.bottom')?'Login':'Login / Register';
+    a.setAttribute('aria-label','Login or register with Cerood');
   });
 }
 function openCeroodAccountAfterAuth() { window.location.href='/cerood-orders.html#account'; }
 document.addEventListener('click',function(event){
  const a=event.target.closest('[data-cerood-auth-trigger]');if(!a)return;
- let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
- if(user)return;
+ // Account button is the explicit login/register entry point, even when a stale
+ // localStorage user record exists. Dashboard remains accessible in the menu.
  event.preventDefault();
 
 if (window.CeroodAuth) {
