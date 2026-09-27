@@ -8510,6 +8510,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
 @media (min-width:851px) {#cerood-mobile-fixed-header-spacer {display:none!important;}}
 </style>
+<script src="/cerood-auth.js" defer></script>
 </head>
 <body>
 
@@ -10248,7 +10249,11 @@ function logoutUser() {
             clearInterval(orderPollingInterval);
             orderPollingInterval = null;
         }
-        localStorage.removeItem('catus_logged_user');
+        if (window.CeroodAuth) window.CeroodAuth.logout();
+        else {
+            localStorage.removeItem('catus_logged_user');
+            localStorage.removeItem('cerood_renewed_customer_session');
+        }
         currentUser = null;
         closePremiumDashboard();
         updateHeaderLoginUI();
@@ -10449,7 +10454,33 @@ const canUseSavedLocation =
     };
     
     let cartItems = JSON.parse(localStorage.getItem('catus_cart')) || [];
-    let currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || null;
+    // A cached profile is not an authenticated session.
+    let currentUser = localStorage.getItem('cerood_renewed_customer_session')
+        ? (JSON.parse(localStorage.getItem('catus_logged_user') || 'null'))
+        : null;
+
+    function ceroodProductAcceptAuthResponse(data) {
+        // Only the backend may issue this session. Never fabricate a token.
+        if (!data || !data.user || !data.renewed_session) return false;
+        currentUser = data.user;
+        localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+        localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
+        if (window.CeroodAuth) window.CeroodAuth.refresh();
+        return true;
+    }
+
+    function ceroodProductSyncCommonAuth() {
+        const valid = Boolean(localStorage.getItem('cerood_renewed_customer_session'));
+        try {
+            currentUser = valid ? JSON.parse(localStorage.getItem('catus_logged_user') || 'null') : null;
+        } catch (_) { currentUser = null; }
+        updateHeaderLoginUI();
+    }
+    window.addEventListener('cerood:auth-changed', ceroodProductSyncCommonAuth);
+    window.addEventListener('storage', function(event) {
+        if (event.key === 'catus_logged_user' || event.key === 'cerood_renewed_customer_session')
+            ceroodProductSyncCommonAuth();
+    });
     let tempPhone = "";
 
     let activeServiceId = 'tv-repair';
@@ -13174,11 +13205,18 @@ document.addEventListener(
     }
 
    function handleHeaderAuthClick() {
+    ceroodProductSyncCommonAuth();
     if (currentUser) {
-        openPremiumDashboard(); // ஏற்கனவே லாகின் செய்திருந்தால் டேஷ்போர்ட் திறக்கும்
+        openPremiumDashboard();
+    } else if (window.CeroodAuth) {
+        window.CeroodAuth.requireLogin(function () {
+            ceroodProductSyncCommonAuth();
+            if (currentUser) openPremiumDashboard();
+        });
     } else {
+        // Fallback only if the shared JS fails to load.
         showAuthStep('phone');
-        toggleAuthModal(true);  // லாகின் பாப்-அப் ஓபன் ஆகும்
+        toggleAuthModal(true);
     }
 }
 async function submitNewPasswordReset() {
@@ -13271,24 +13309,11 @@ async function submitNewPasswordReset() {
             return;
         }
 
-        currentUser =
-            data.user;
-
-        if (
-            currentUser &&
-            currentUser.wallet === undefined
-        ) {
-            currentUser.wallet = 0;
-        }
-
-        localStorage.setItem(
-            'catus_logged_user',
-            JSON.stringify(currentUser)
-        );
-
+        const signedInAfterReset = ceroodProductAcceptAuthResponse(data);
         updateHeaderLoginUI();
         toggleAuthModal(false);
-        openPremiumDashboard();
+        if (signedInAfterReset) openPremiumDashboard();
+        else if (window.CeroodAuth) window.CeroodAuth.open();
 
         showToast(
             'Password updated successfully!',
@@ -13532,10 +13557,11 @@ async function loginWithPassword() {
         });
         const data = await response.json();
 
-        if (data.success) {
-            currentUser = data.user;
-            if(currentUser.wallet === undefined) currentUser.wallet = 2500;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+        if (response.ok && data.success) {
+            if (!ceroodProductAcceptAuthResponse(data)) {
+                alert('Password accepted, but the backend did not issue a customer session. Please contact support.');
+                return;
+            }
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
@@ -13996,24 +14022,11 @@ async function verifyOtpAndSetPassword() {
                         return;
                     }
 
-                    currentUser =
-                        result.user;
-
-                    if (
-                        currentUser &&
-                        currentUser.wallet === undefined
-                    ) {
-                        currentUser.wallet = 0;
-                    }
-
-                    localStorage.setItem(
-                        'catus_logged_user',
-                        JSON.stringify(currentUser)
-                    );
-
+                    const signedInAfterRegistration = ceroodProductAcceptAuthResponse(result);
                     updateHeaderLoginUI();
                     toggleAuthModal(false);
-                    openPremiumDashboard();
+                    if (signedInAfterRegistration) openPremiumDashboard();
+                    else if (window.CeroodAuth) window.CeroodAuth.open();
 
                     showToast(
                         'Account created successfully!',
