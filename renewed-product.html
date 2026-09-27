@@ -1326,4 +1326,73 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  if(root){new MutationObserver(function(){arrange()}).observe(root,{childList:true,subtree:true})}
 })();
 </script>
+
+<style id="cerood-customer-review-slider-style-20260927">
+/* Product-only UI. The existing Cerood header and purchase handlers are untouched. */
+#product .cr-customer-reviews{grid-column:2;grid-row:2;min-width:0;align-self:start;background:#fff;border:1px solid #e6eafb;border-radius:17px;padding:16px;box-shadow:0 7px 26px rgba(35,58,128,.055);color:#141b30}
+#product .cr-review-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+#product .cr-review-heading h2{font-size:16px;line-height:1.35;margin:0;font-weight:750}
+#product .cr-review-count{font-size:11px;color:#69738b}
+#product .cr-review-empty{border:1px dashed #dce4f5;background:#f9fbff;border-radius:12px;padding:16px 13px;font-size:12px;line-height:1.65;color:#52617b}
+#product .cr-review-slide[hidden],#product .cr-review-controls[hidden]{display:none!important}
+#product .cr-review-photo{width:100%;height:190px;object-fit:cover;border-radius:12px;background:#f5f7fd;display:block}
+#product .cr-review-person{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0 6px;flex-wrap:wrap}
+#product .cr-review-name{font-size:13px;font-weight:750;overflow-wrap:anywhere}
+#product .cr-review-stars{color:#e58b00;font-size:15px;letter-spacing:1px}
+#product .cr-review-verified{font-size:10px;color:#137444;background:#eaf8ef;padding:4px 7px;border-radius:6px}
+#product .cr-review-comment{font-size:12px;line-height:1.65;color:#34425d;margin:6px 0 12px;overflow-wrap:anywhere;white-space:pre-wrap}
+#product .cr-review-controls{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#product .cr-review-controls button{background:#fff;border:1px solid #dfe6f7;border-radius:9px;min-width:34px;min-height:32px;color:#174ad9;font-size:19px}
+#product .cr-review-controls button:disabled{opacity:.4;cursor:default}
+#product .cr-review-index{font-size:11px;color:#64748b}
+@media(min-width:1151px){#product .cr-customer-reviews{margin-top:0}}
+@media(min-width:651px) and (max-width:1150px){#product .cr-customer-reviews{grid-column:2;grid-row:3}}
+@media(max-width:650px){#product .cr-customer-reviews{grid-column:1;grid-row:auto}#product .cr-review-photo{height:210px}}
+</style>
+
+<script id="cerood-customer-review-slider-20260927">
+/* Frontend-only review slot. No fake reviews or speculative API endpoints.
+   When the review backend is ready, pass approved reviews using:
+   window.CeroodRenewedReviews.render(reviews) or dispatch
+   new CustomEvent('cerood:renewed-reviews',{detail:{reviews}}).
+   Supported review fields: product_id, status, image_url/photos/images,
+   customer_name, rating, comment, verified_purchase. */
+(function(){'use strict';
+ function init(){
+  const root=document.querySelector('#product .product-grid');
+  if(!root||root.querySelector('.cr-customer-reviews'))return;
+  const section=document.createElement('section');section.className='cr-customer-reviews';section.setAttribute('aria-label','Customer photos and reviews');
+  section.innerHTML='<div class="cr-review-heading"><h2>Customer photos &amp; reviews</h2><span class="cr-review-count" id="crReviewCount"></span></div><div class="cr-review-empty" id="crReviewEmpty">No customer photos or reviews yet for this product. Reviews from verified orders will appear here after approval.</div><article class="cr-review-slide" id="crReviewSlide" hidden><img class="cr-review-photo" id="crReviewPhoto" alt="Customer-uploaded product photo" loading="lazy"><div class="cr-review-person"><span class="cr-review-name" id="crReviewName"></span><span class="cr-review-stars" id="crReviewStars" aria-label="Customer rating"></span></div><span class="cr-review-verified" id="crReviewVerified" hidden>✓ Verified purchase</span><p class="cr-review-comment" id="crReviewComment"></p></article><div class="cr-review-controls" id="crReviewControls" hidden><button type="button" id="crReviewPrev" aria-label="Previous customer review">‹</button><span class="cr-review-index" id="crReviewIndex"></span><button type="button" id="crReviewNext" aria-label="Next customer review">›</button></div>';
+  const info=root.querySelector('.product-info');if(!info)return;info.after(section);
+  const $=id=>section.querySelector('#'+id);
+  let reviews=[],index=0,startX=null;
+  const productId=new URLSearchParams(location.search).get('id');
+  function safePhoto(url){try{const u=new URL(String(url),location.href);return /^https?:$/.test(u.protocol)?u.href:''}catch{return ''}}
+  function photosOf(review){const raw=review.photos||review.images||review.image_urls||review.image_url||[];return (Array.isArray(raw)?raw:[raw]).map(p=>safePhoto(typeof p==='string'?p:(p&&p.url)||'')).filter(Boolean)}
+  function draw(){const current=reviews[index];if(!current)return;
+   $('crReviewPhoto').src=current.photo;$('crReviewPhoto').alt='Photo uploaded with a review for this product';
+   $('crReviewName').textContent=String(current.customer_name||current.name||'Cerood customer').slice(0,90);
+   const rating=Math.max(1,Math.min(5,Math.round(Number(current.rating)||1)));
+   $('crReviewStars').textContent='★'.repeat(rating)+'☆'.repeat(5-rating);$('crReviewStars').setAttribute('aria-label',rating+' out of 5 stars');
+   $('crReviewComment').textContent=String(current.comment||current.review_text||'').slice(0,2000);
+   $('crReviewVerified').hidden=current.verified_purchase!==true;
+   $('crReviewIndex').textContent=(index+1)+' / '+reviews.length;
+   $('crReviewPrev').disabled=reviews.length<2;$('crReviewNext').disabled=reviews.length<2;
+  }
+  function render(list){
+   reviews=(Array.isArray(list)?list:[]).filter(r=>r&&r.status==='approved'&&String(r.product_id||r.productId||'')===String(productId||''))
+    .flatMap(r=>photosOf(r).map(photo=>({...r,photo})));
+   index=0;$('crReviewEmpty').hidden=reviews.length>0;$('crReviewSlide').hidden=!reviews.length;
+   $('crReviewControls').hidden=reviews.length<2;$('crReviewCount').textContent=reviews.length?reviews.length+' customer photo'+(reviews.length===1?'':'s'):'';
+   if(reviews.length)draw();
+  }
+  function step(n){if(!reviews.length)return;index=(index+n+reviews.length)%reviews.length;draw()}
+  $('crReviewPrev').addEventListener('click',()=>step(-1));$('crReviewNext').addEventListener('click',()=>step(1));
+  $('crReviewSlide').addEventListener('touchstart',e=>{startX=e.touches[0]?.clientX??null},{passive:true});
+  $('crReviewSlide').addEventListener('touchend',e=>{if(startX===null)return;const x=e.changedTouches[0]?.clientX??startX;if(Math.abs(x-startX)>40)step(x<startX?1:-1);startX=null},{passive:true});
+  window.CeroodRenewedReviews={render};window.addEventListener('cerood:renewed-reviews',e=>render(e.detail&&e.detail.reviews));render([]);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
