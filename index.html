@@ -810,7 +810,15 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
 @media(max-width:350px){
  #ceroodMarketplaceGroupList{grid-template-columns:none!important;grid-auto-columns:calc((100% - 6px)/2)!important}
 }
-</style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
+</style>
+<style id="cerood-dynamic-main-categories-css">
+/* Additional admin-created Main Store departments; existing homepage navigation stays intact. */
+.cerood-top-category[data-cerood-dynamic="true"] .cerood-top-category-icon{font-size:24px;font-weight:800}
+.cerood-top-category[data-cerood-dynamic="true"] .cerood-mega-heading{margin:0 0 8px;font-weight:800}
+.cerood-top-category[data-cerood-dynamic="true"] .cerood-mega-column a{display:block;margin:5px 0}
+.cerood-top-category[data-cerood-dynamic="true"] .cerood-mega-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px}
+</style>
+</head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="mobile-location location-trigger crn-mobile-location" id="mobileLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="mobileLocationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -3143,6 +3151,37 @@ window.addEventListener('cerood:auth-action', function (event) {
         showAuthStep('phone');
     }
 });
+</script>
+
+<script id="cerood-dynamic-main-categories-js">
+/* Public read-only category integration; never touches Home Services or checkout. */
+(function(){
+  'use strict';
+  var ENDPOINT='https://catus-backend-d2js.onrender.com/api/shop/categories?marketplace=general';
+  function el(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=String(text);return n;}
+  function searchLink(name){return '/?q='+encodeURIComponent(name);}
+  function start(){
+    var strip=document.querySelector('.cerood-top-category-wrap .cerood-top-category-strip');
+    if(!strip)return;
+    fetch(ENDPOINT,{headers:{Accept:'application/json'}}).then(function(r){if(!r.ok)throw Error('Categories HTTP '+r.status);return r.json();}).then(function(data){
+      if(!data||data.success!==true||!Array.isArray(data.categories))return;
+      var all=data.categories.filter(function(c){return c&&c.is_active!==false&&c.marketplace==='general'&&c.id&&c.name;});
+      var top=all.filter(function(c){return !c.parent_id;});
+      var existing=new Set(Array.from(strip.querySelectorAll('.cerood-top-category-name')).map(function(n){return n.textContent.trim().toLowerCase();}));
+      function descendants(parent){return all.filter(function(c){return c.parent_id===parent.id;});}
+      function addLinks(parent,box,depth,visited){if(depth>8||visited.has(parent.id))return;visited.add(parent.id);var kids=descendants(parent);kids.forEach(function(kid){var nested=descendants(kid);if(nested.length){var section=el('section','cerood-mega-column');section.appendChild(el('div','cerood-mega-heading',kid.name));var link=el('a','', 'All '+kid.name);link.href=searchLink(kid.name);section.appendChild(link);nested.forEach(function(item){var a=el('a','',item.name);a.href=searchLink(item.name);section.appendChild(a);});box.appendChild(section);}else{var section=el('section','cerood-mega-column');var a=el('a','',kid.name);a.href=searchLink(kid.name);section.appendChild(a);box.appendChild(section);}});}
+      top.forEach(function(cat){
+        if(existing.has(String(cat.name).trim().toLowerCase()))return;
+        var details=el('details','cerood-top-category');details.dataset.ceroodDynamic='true';
+        var summary=el('summary');summary.appendChild(el('span','cerood-top-category-icon','▦'));summary.appendChild(el('span','cerood-top-category-name',cat.name));details.appendChild(summary);
+        var panel=el('div','cerood-top-category-panel');var cols=el('div','cerood-mega-columns');addLinks(cat,cols,0,new Set());
+        if(!cols.children.length){var section=el('section','cerood-mega-column');var a=el('a','', 'Explore '+cat.name);a.href=searchLink(cat.name);section.appendChild(a);cols.appendChild(section);}
+        panel.appendChild(cols);details.appendChild(panel);strip.appendChild(details);existing.add(String(cat.name).trim().toLowerCase());
+      });
+    }).catch(function(err){console.warn('Cerood Main Store category API unavailable; original navigation retained.',err);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
 </script>
 </body>
 </html>
