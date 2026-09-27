@@ -176,6 +176,9 @@
             font-weight: 600;
         }
 
+        .password-wrap { position: relative; }
+        .password-wrap .input { padding-right: 74px; }
+        .password-toggle { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); border: 0; background: transparent; color: #6045a0; font: 600 12px Inter,Arial,sans-serif; padding: 10px; cursor: pointer; }
         .forgot-row {
             text-align: right;
             margin-top: 11px;
@@ -299,14 +302,17 @@
                         Password
                     </label>
 
-                    <input
-                        class="input"
-                        id="password"
-                        type="password"
-                        autocomplete="current-password"
-                        required
-                        placeholder="Enter password"
-                    >
+                    <div class="password-wrap">
+                        <input
+                            class="input"
+                            id="password"
+                            type="password"
+                            autocomplete="current-password"
+                            required
+                            placeholder="Enter password"
+                        >
+                        <button type="button" class="password-toggle" id="togglePassword" aria-label="Show password" aria-pressed="false">Show</button>
+                    </div>
 
                     <div class="forgot-row">
 
@@ -392,6 +398,15 @@
                 success ? 'status ok' : 'status';
 
         }
+
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const field = document.getElementById('password');
+            const showing = field.type === 'password';
+            field.type = showing ? 'text' : 'password';
+            this.textContent = showing ? 'Hide' : 'Show';
+            this.setAttribute('aria-label', showing ? 'Hide password' : 'Show password');
+            this.setAttribute('aria-pressed', String(showing));
+        });
 
         // ==========================================
         // CLOSE POPUP
@@ -529,17 +544,17 @@
                         const data =
                             await response.json();
 
-                        if (
-                            !response.ok ||
-                            !data.success ||
-                            !data.renewed_session
-                        ) {
-
+                        if (!response.ok || !data.success) {
                             throw new Error(
-                                data.message ||
-                                'Login could not be completed.'
+                                data.message || data.error ||
+                                'Login failed (HTTP ' + response.status + ').'
                             );
+                        }
 
+                        if (!data.renewed_session) {
+                            throw new Error(
+                                'Password accepted, but customer session was not issued. Check backend RENEWED_SESSION_SECRET configuration.'
+                            );
                         }
 
                         const user = data.user || {};
