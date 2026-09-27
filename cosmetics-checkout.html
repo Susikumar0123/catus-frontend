@@ -2369,7 +2369,23 @@ const REQUEST='cerood_cosmetics_pending_request_v1';
 const states='Andhra Pradesh|Arunachal Pradesh|Assam|Bihar|Chhattisgarh|Goa|Gujarat|Haryana|Himachal Pradesh|Jharkhand|Karnataka|Kerala|Madhya Pradesh|Maharashtra|Manipur|Meghalaya|Mizoram|Nagaland|Odisha|Punjab|Rajasthan|Sikkim|Tamil Nadu|Telangana|Tripura|Uttar Pradesh|Uttarakhand|West Bengal|Andaman and Nicobar Islands|Chandigarh|Dadra and Nagar Haveli and Daman and Diu|Delhi|Jammu and Kashmir|Ladakh|Lakshadweep|Puducherry'.split('|');
 for(const state of states){const o=document.createElement('option');o.value=o.textContent=state;$('state').append(o)}
 let saved=null,requested=[],quote=null,enabled=false,onlineEnabled=false,loading=false,mode='cart';
-function readAddress(){try{return JSON.parse(localStorage.getItem(ADDRESS)||'null')}catch{return null}}
+function shoppingBrowsingLocation(fallbackKey){
+ try{
+  if(localStorage.getItem('cerood_global_location_cleared_v1')==='1')return null;
+  const global=window.CeroodLocation?.get?.() || JSON.parse(localStorage.getItem('cerood_global_location_v1')||'null');
+  if(global&&typeof global==='object'&&!Array.isArray(global)&&/^[1-9]\d{5}$/.test(String(global.pincode||'')))return global;
+  const old=JSON.parse(localStorage.getItem(fallbackKey)||'null');
+  return old&&typeof old==='object'&&/^[1-9]\d{5}$/.test(String(old.pincode||''))?old:null;
+ }catch{return null}
+}
+function browsingPinDiffers(address,location){
+ return !!(address&&location&&String(address.pincode||'')!==String(location.pincode||''));
+}
+function readAddress(){try{
+ const a=JSON.parse(localStorage.getItem(ADDRESS)||'null');
+ const loc=shoppingBrowsingLocation('cerood_cosmetics_delivery_location');
+ return browsingPinDiffers(a,loc)?null:a;
+}catch{return null}}
 function showAddress(a){$('savedAddressView').hidden=!a;$('addressForm').hidden=!!a;if(a)$('savedAddressText').textContent=[a.full_name,a.phone,a.street,a.area,a.city,a.district,a.state,a.pincode].filter(Boolean).join(', ');}
 function fill(a){if(!a)return;for(const [id,k] of Object.entries({fullName:'full_name',phone:'phone',door:'street',area:'area',city:'city',state:'state',district:'district',pincode:'pincode'}))$(id).value=a[k]||''}
 function addressFromForm(){return {full_name:$('fullName').value.trim(),phone:$('phone').value.trim(),street:$('door').value.trim(),area:$('area').value.trim(),city:$('city').value.trim(),state:$('state').value,district:$('district').value.trim(),pincode:$('pincode').value.trim()}}
@@ -2377,7 +2393,22 @@ function validAddress(a){return a&&a.full_name.length>=2&&a.street.length>=5&&a.
 function refreshButton(){const online=paymentMode()==='online';const available=online?onlineEnabled:enabled;const ready=available&&!!quote&&!!saved&&requested.length>0&&!loading;$('confirmBtn').disabled=!ready;$('confirmBtn').textContent=loading?'Processing…':available?(online?'Pay securely · ':'Place COD order · ')+fmt(quote?.total||0):'Checkout coming soon';}
 function paymentMode(){return document.querySelector('input[name=paymentMode]:checked')?.value||'cod';}
 for(const input of document.querySelectorAll('input[name=paymentMode]'))input.addEventListener('change',()=>{for(const card of [$('codCard'),$('onlineCard')])card.classList.toggle('selected',card.querySelector('input').checked);refreshButton()});
-saved=readAddress();fill(saved);showAddress(saved);
+saved=readAddress();
+const browsingLocation=shoppingBrowsingLocation('cerood_cosmetics_delivery_location');
+if(saved){fill(saved)}else{
+ // Keep the old complete address in storage; never silently ship to its old PIN.
+ const oldAddress=(()=>{try{return JSON.parse(localStorage.getItem(ADDRESS)||'null')}catch{return null}})();
+ if(oldAddress)fill(oldAddress);
+ if(browsingLocation){
+  for(const k of ['area','city','district','state','pincode']){
+   if(browsingLocation[k] && $(k))$(k).value=String(browsingLocation[k]);
+  }
+ }
+ if(oldAddress&&browsingPinDiffers(oldAddress,browsingLocation)){
+  $('addressMessage').textContent='Your browsing PIN differs from your saved delivery address. Review and save the address before ordering.';
+ }
+}
+showAddress(saved);
 $('editAddress').onclick=()=>{fill(saved);showAddress(null);refreshButton()};
 $('clearAddress').onclick=()=>{$('addressForm').reset();showAddress(null);refreshButton();$('fullName').focus()};
 $('deleteAddress').onclick=()=>{if(!confirm('Delete saved Beauty delivery address?'))return;localStorage.removeItem(ADDRESS);saved=null;$('addressForm').reset();showAddress(null);quote=null;refreshButton();$('addressMessage').textContent='Address deleted.'};

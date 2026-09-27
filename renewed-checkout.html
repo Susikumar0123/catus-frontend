@@ -2489,7 +2489,19 @@ const fields=['fullName','phone','door','area','city','district','state','pincod
 const pendingPaymentKey='cerood_renewed_pending_payment_v1';
 const savedAddressKey='cerood_renewed_saved_address_v1';
 let savedAddress=null,editingAddress=false;
-function readSavedAddress(){try{const a=JSON.parse(localStorage.getItem(savedAddressKey)||'null');const loc=JSON.parse(localStorage.getItem('cerood_renewed_delivery_location')||'null');return a&&typeof a==='object'&&a.full_name&&a.state&&a.district&&(!loc||!loc.pincode||String(loc.pincode)===String(a.pincode))?a:null}catch{return null}}
+function shoppingBrowsingLocation(fallbackKey){
+ try{
+  if(localStorage.getItem('cerood_global_location_cleared_v1')==='1')return null;
+  const global=window.CeroodLocation?.get?.() || JSON.parse(localStorage.getItem('cerood_global_location_v1')||'null');
+  if(global&&typeof global==='object'&&!Array.isArray(global)&&/^[1-9]\d{5}$/.test(String(global.pincode||'')))return global;
+  const old=JSON.parse(localStorage.getItem(fallbackKey)||'null');
+  return old&&typeof old==='object'&&/^[1-9]\d{5}$/.test(String(old.pincode||''))?old:null;
+ }catch{return null}
+}
+function browsingPinDiffers(address,location){
+ return !!(address&&location&&String(address.pincode||'')!==String(location.pincode||''));
+}
+function readSavedAddress(){try{const a=JSON.parse(localStorage.getItem(savedAddressKey)||'null');const loc=shoppingBrowsingLocation('cerood_renewed_delivery_location');return a&&typeof a==='object'&&a.full_name&&a.state&&a.district&&!browsingPinDiffers(a,loc)?a:null}catch{return null}}
 function showAddressView(){const show=!!savedAddress&&!editingAddress;$('savedAddressView').hidden=!show;$('addressForm').hidden=show;$('clearAddress').textContent=show?'New address':'Cancel';if(show){$('savedAddressText').textContent=[savedAddress.full_name,savedAddress.phone,savedAddress.street,savedAddress.area,savedAddress.city,savedAddress.district,savedAddress.state,savedAddress.pincode].filter(Boolean).join(', ')}else $('clearAddress').textContent=savedAddress?'Cancel':'New address'}
 function populateAddress(a){if(!a)return;const map={fullName:'full_name',phone:'phone',door:'street',area:'area',city:'city',state:'state',district:'district',pincode:'pincode'};for(const [id,key] of Object.entries(map))if(id!=='district')$(id).value=a[key]||'';fillIndiaDistricts(a.district||'')}
 
@@ -2545,13 +2557,15 @@ function saveDraft(){try{sessionStorage.setItem(storageKey,JSON.stringify(Object
 savedAddress=readSavedAddress();
 // A location entered on Renewed or product page follows the customer into checkout.
 try{
- const loc=JSON.parse(localStorage.getItem('cerood_renewed_delivery_location')||'null');
+ const loc=shoppingBrowsingLocation('cerood_renewed_delivery_location');
  if(loc&&typeof loc==='object'&&/^[1-9]\d{5}$/.test(String(loc.pincode||''))){
   if(savedAddress&&String(savedAddress.pincode)!==String(loc.pincode)){
    savedAddress=null; // Keep old address stored, but do not silently ship to a different PIN.
   }
   if(!savedAddress){
    const draft=JSON.parse(sessionStorage.getItem(storageKey)||'{}');
+   const old=JSON.parse(localStorage.getItem(savedAddressKey)||'null');
+   if(old&&typeof old==='object'){for(const [f,k] of Object.entries({fullName:'full_name',phone:'phone',door:'street'}))if(!draft[f])draft[f]=old[k]||'';}
    for(const k of ['area','city','pincode','state','district'])if(loc[k])draft[k]=loc[k];
    sessionStorage.setItem(storageKey,JSON.stringify(draft));
   }
