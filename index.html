@@ -3081,6 +3081,29 @@ window.addEventListener('cerood:login', function () {
         updateHeaderLoginUI();
     }
 });
+
+// The shared login iframe delegates registration and password recovery
+// to the existing homepage authentication flow.
+window.addEventListener('cerood:auth-action', function (event) {
+    const action = event.detail?.action;
+    if (action !== 'register' && action !== 'forgot') return;
+
+    if (typeof toggleAuthModal !== 'function' ||
+        typeof showAuthStep !== 'function') {
+        console.error('Cerood homepage authentication flow is unavailable.');
+        return;
+    }
+
+    toggleAuthModal(true);
+
+    if (action === 'register') {
+        authFlowMode = 'register';
+        showAuthStep('register');
+    } else {
+        // The existing phone step starts the password-recovery flow.
+        showAuthStep('phone');
+    }
+});
 </script>
 </body>
 </html>
