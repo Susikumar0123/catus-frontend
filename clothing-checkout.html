@@ -2364,7 +2364,15 @@ function shoppingBrowsingLocation(fallbackKey){
  }catch{return null}
 }
 function browsingPinDiffers(address,location){
- return !!(address&&location&&String(address.pincode||'')!==String(location.pincode||''));
+ if(!address||!location)return false;
+ if(String(address.pincode||'')!==String(location.pincode||''))return true;
+ // Same PIN may contain multiple towns/areas. Do not silently reuse a different delivery address.
+ for(const field of ['area','city','district','state']){
+  const selected=String(location[field]||'').trim().toLocaleLowerCase('en-IN');
+  const savedValue=String(address[field]||'').trim().toLocaleLowerCase('en-IN');
+  if(selected&&savedValue&&selected!==savedValue)return true;
+ }
+ return false;
 }
 function readAddress(){try{
  const a=JSON.parse(localStorage.getItem(ADDRESS)||'null');
@@ -2390,7 +2398,7 @@ if(saved){fill(saved)}else{
   }
  }
  if(oldAddress&&browsingPinDiffers(oldAddress,browsingLocation)){
-  $('addressMessage').textContent='Your browsing PIN differs from your saved delivery address. Review and save the address before ordering.';
+  $('addressMessage').textContent='Your selected product location differs from your saved delivery address. Review and save the address before ordering.';
  }
 }
 showAddress(saved);

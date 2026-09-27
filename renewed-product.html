@@ -1044,8 +1044,10 @@ async function init(){const id=new URLSearchParams(location.search).get('id');if
       const city=locationShade.querySelector('#rnLocationCity').value.trim();
       const pincode=locationShade.querySelector('#rnLocationPincode').value.trim();
       if(!city||!/^[0-9]{6}$/.test(pincode)){locationShade.querySelector('#rnLocationError').textContent='Enter a city and a valid 6-digit pincode.';return}
-      const value={...readLocation(),area,city,pincode};
-      try{localStorage.setItem('cerood_renewed_delivery_location',JSON.stringify(value));localStorage.setItem(LOCATION_KEY,JSON.stringify(value));window.dispatchEvent(new Event('cerood-renewed-location-changed'));updateLocationLabel(value);closeLocation()}catch{locationShade.querySelector('#rnLocationError').textContent='Unable to save location. Check browser storage settings.'}
+      const previousLocation=readLocation();
+      const value={...previousLocation,area,city,pincode};
+      if(String(previousLocation.pincode||'')!==pincode){value.district='';value.state='';}
+      try{localStorage.setItem('cerood_renewed_delivery_location',JSON.stringify(value));localStorage.setItem(LOCATION_KEY,JSON.stringify(value));if(window.CeroodLocation?.set)window.CeroodLocation.set(value);else{localStorage.removeItem('cerood_global_location_cleared_v1');localStorage.setItem('cerood_global_location_v1',JSON.stringify(value));}window.dispatchEvent(new Event('cerood-renewed-location-changed'));updateLocationLabel(value);closeLocation()}catch{locationShade.querySelector('#rnLocationError').textContent='Unable to save location. Check browser storage settings.'}
     });
     document.addEventListener('keydown',onLocationKey);
     locationShade.querySelector('#rnLocationArea').focus();
