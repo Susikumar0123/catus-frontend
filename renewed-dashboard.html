@@ -631,34 +631,36 @@ $('search').onkeydown=e=>{if(e.key==='Enter')location.href='/renewed.html?search
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});timer=setInterval(()=>{if(!document.hidden)load()},30000);load();
 })();
 </script><script id="renewed-dashboard-location">(function(){
-  const key='cerood_renewed_delivery_location';
-  const fullKey='cerood_renewed_saved_address_v1';
-  const button=document.querySelector('.cr-location');
-  const label=document.getElementById('renewedDeliveryLocation');
-  function show(saved){
-    if(!saved)return;
-    const name=typeof saved==='string'?saved:[saved.area,saved.city,saved.pincode].filter(Boolean).join(', ');
-    if(name)label.textContent=name;
-  }
-  try{show(JSON.parse(localStorage.getItem(key)||'null'));}catch(e){}
-  button.addEventListener('click',()=>{
-    const old=document.getElementById('rn-delivery-dialog');if(old){old.remove();return;}
-    let saved={};try{saved=JSON.parse(localStorage.getItem(key)||localStorage.getItem(fullKey)||'{}')||{};}catch(e){}
-    if(typeof saved!=='object')saved={};
-    const shade=document.createElement('div');shade.id='rn-delivery-dialog';
-    shade.style.cssText='position:fixed;inset:0;z-index:100001;background:#17213388;display:grid;place-items:center;padding:16px';
-    const panel=document.createElement('form');panel.style.cssText='width:min(420px,100%);background:#fff;border-radius:16px;padding:22px;box-shadow:0 20px 60px #0003;display:grid;gap:12px;font-family:Inter,Arial,sans-serif';
-    panel.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:20px;margin:0">Renewed delivery location</h2><button type="button" id="rn-loc-close" aria-label="Close" style="border:0;background:#f1f1f1;border-radius:50%;width:34px;height:34px">×</button></div><p style="font-size:12px;color:#667085;margin:0">Enter your area to display the Renewed delivery location. Delivery availability and fees are confirmed at checkout.</p><label style="font-size:13px">Area / landmark<input name="area" placeholder="Area / landmark" maxlength="100" required style="display:block;width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:8px"></label><label style="font-size:13px">City / town<input name="city" placeholder="City / town" maxlength="80" required style="display:block;width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:8px"></label><label style="font-size:13px">Pincode<input name="pincode" placeholder="6-digit pincode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required style="display:block;width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:8px"></label><button type="submit" style="border:0;border-radius:9px;background:#171717;color:white;padding:13px;font-weight:700">Save location</button>';
-    shade.append(panel);document.body.append(shade);
-    for(const field of ['area','city','pincode'])panel.elements.namedItem(field).value=saved[field]||'';
-    function close(){shade.remove();document.removeEventListener('keydown',onKey)}
-    function onKey(e){if(e.key==='Escape')close()}
-    document.addEventListener('keydown',onKey);
-    shade.addEventListener('click',e=>{if(e.target===shade)close()});
-    panel.querySelector('#rn-loc-close').addEventListener('click',close);
-    panel.addEventListener('submit',e=>{e.preventDefault();const loc={area:panel.elements.namedItem('area').value.trim(),city:panel.elements.namedItem('city').value.trim(),pincode:panel.elements.namedItem('pincode').value.trim()};if(!/^\d{6}$/.test(loc.pincode))return;localStorage.setItem(key,JSON.stringify(loc));window.dispatchEvent(new Event('cerood-renewed-location-changed'));show(loc);close()});
-    panel.elements.namedItem('area').focus();
+ const LOC='cerood_renewed_delivery_location',FULL='cerood_renewed_saved_address_v1',GLOBAL='cerood_global_location_v1';
+ const button=document.querySelector('.cr-location');
+ if(!button)return;
+ function read(key){try{const x=JSON.parse(localStorage.getItem(key)||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}}
+ function current(){if(localStorage.getItem('cerood_global_location_cleared_v1')==='1')return null;return read(GLOBAL)||read(LOC)||read(FULL)}
+ button.addEventListener('click',()=>{
+  const previous=document.getElementById('rn-delivery-dialog');if(previous){previous.remove();return}
+  const saved=current()||{};
+  const shade=document.createElement('div');shade.id='rn-delivery-dialog';shade.style.cssText='position:fixed;inset:0;z-index:100001;background:#17213388;display:grid;place-items:center;padding:16px';
+  const panel=document.createElement('form');panel.style.cssText='width:min(420px,100%);background:#fff;border-radius:16px;padding:22px;box-shadow:0 20px 60px #0003;display:grid;gap:12px;font-family:Inter,Arial,sans-serif';
+  panel.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:20px;margin:0">Renewed delivery location</h2><button type="button" id="rn-loc-close" aria-label="Close" style="border:0;background:#f1f1f1;border-radius:50%;width:34px;height:34px">×</button></div><p style="font-size:12px;color:#667085;margin:0">This location is shared with Cerood shopping pages. Confirm the complete shipping address at checkout.</p><label style="font-size:13px">Area / landmark<input name="area" placeholder="Area / landmark" maxlength="100" required style="display:block;width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:8px"></label><label style="font-size:13px">City / town<input name="city" placeholder="City / town" maxlength="80" required style="display:block;width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:8px"></label><label style="font-size:13px">Pincode<input name="pincode" placeholder="6-digit pincode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required style="display:block;width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:8px"></label><p id="rn-loc-error" role="alert" style="font-size:12px;color:#b91c1c;margin:0" hidden></p><button type="submit" style="border:0;border-radius:9px;background:#171717;color:white;padding:13px;font-weight:700">Save location</button>';
+  shade.append(panel);document.body.append(shade);
+  for(const field of ['area','city','pincode'])panel.elements.namedItem(field).value=saved[field]||'';
+  function close(){shade.remove();document.removeEventListener('keydown',onKey)}
+  function onKey(e){if(e.key==='Escape')close()}
+  document.addEventListener('keydown',onKey);shade.addEventListener('click',e=>{if(e.target===shade)close()});panel.querySelector('#rn-loc-close').addEventListener('click',close);
+  panel.addEventListener('submit',e=>{
+   e.preventDefault();const value={area:panel.elements.namedItem('area').value.trim(),city:panel.elements.namedItem('city').value.trim(),pincode:panel.elements.namedItem('pincode').value.trim()};
+   if(!/^[1-9]\d{5}$/.test(value.pincode))return;
+   const prior=read(GLOBAL)||{};
+   if(String(prior.pincode||'')===value.pincode){for(const k of ['district','state'])if(prior[k])value[k]=prior[k]}
+   try{
+    localStorage.setItem(LOC,JSON.stringify(value));
+    if(window.CeroodLocation?.set){if(!window.CeroodLocation.set(value))throw Error('Location rejected')}
+    else{localStorage.removeItem('cerood_global_location_cleared_v1');localStorage.setItem(GLOBAL,JSON.stringify(value));window.dispatchEvent(new CustomEvent('cerood-global-location-changed',{detail:value}))}
+    window.dispatchEvent(new Event('cerood-renewed-location-changed'));close();
+   }catch(err){const msg=panel.querySelector('#rn-loc-error');msg.textContent='Unable to save location. Please retry.';msg.hidden=false}
   });
+  panel.elements.namedItem('area').focus();
+ });
 })();</script><script id="renewed-cart-preview-script">
 /* Shared Renewed cart preview. Does not place orders or reserve inventory. */
 (()=>{'use strict';
@@ -683,20 +685,18 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});t
  document.querySelectorAll('a.cr-cart, .cr-mobile-nav a[href="/renewed-checkout.html"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();open()}));
  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});window.addEventListener('renewed-cart-updated',()=>{count();if(shade)draw()});window.addEventListener('storage',()=>{count();if(shade)draw()});window.addEventListener('pageshow',count);count();
 })();
-</script><script id="cerood-renewed-shared-location-sync">
-(function(){
- const FULL='cerood_renewed_saved_address_v1',LOC='cerood_renewed_delivery_location',OLD='cerood_selected_location';
+</script><script id="cerood-renewed-shared-location-sync">(function(){
+ const GLOBAL='cerood_global_location_v1',LOC='cerood_renewed_delivery_location',FULL='cerood_renewed_saved_address_v1',OLD='cerood_selected_location';
  const label=document.getElementById('renewedDeliveryLocation');if(!label)return;
- function get(key){try{const x=JSON.parse(localStorage.getItem(key)||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}}
- function refresh(){const full=get(FULL),loc=get(LOC)||get(OLD);
- const x=full&&(!loc||!loc.pincode||String(full.pincode)===String(loc.pincode))?full:loc;
- const place=x?[x.door,x.area,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '):'';
- label.textContent=place||'Select location';label.title=place||'Select delivery location';
+ function read(key){try{const x=JSON.parse(localStorage.getItem(key)||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}}
+ function refresh(){
+  const cleared=localStorage.getItem('cerood_global_location_cleared_v1')==='1';
+  const x=cleared?null:(read(GLOBAL)||read(LOC)||read(OLD)||read(FULL));
+  const place=x?[x.area,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '):'';
+  label.textContent=place||'Select location';label.title=place||'Select delivery location';
  }
- refresh();window.addEventListener('pageshow',refresh);window.addEventListener('storage',refresh);
- window.addEventListener('cerood-renewed-location-changed',refresh);
-})();
-</script><script id="crn-dashboard-menu-handler">
+ refresh();for(const event of ['pageshow','storage','cerood-global-location-changed','cerood-renewed-location-changed','cerood-location-updated'])window.addEventListener(event,refresh);
+})();</script><script id="crn-dashboard-menu-handler">
 (()=>{'use strict';
 const btn=document.querySelector('.crn-menu-button');
 const panel=document.getElementById('crnRenewedMenu');
