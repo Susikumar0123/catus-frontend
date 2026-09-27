@@ -1332,12 +1332,32 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 
-<style id="cerood-review-center-no-gap-scroll-fix-20260927">
-/* Review is part of the middle scroll column, directly after product information. */
-#product .product-info>.cr-customer-reviews{position:relative!important;grid-column:auto!important;grid-row:auto!important;order:initial!important;flex:0 0 auto!important;width:100%!important;max-width:100%!important;margin:0!important;align-self:stretch!important}
+<style id="cerood-review-separate-middle-card-20260927">
+/* Three columns share one bottom edge. Reviews are a separate, non-scrolling card
+   below the independently scrolling product-information card. Header untouched. */
+#product .cr-product-middle-column{min-width:0;display:flex;flex-direction:column;gap:12px;align-self:stretch}
+#product .cr-product-middle-column>.product-info{min-width:0;width:100%;margin:0!important}
+#product .cr-product-middle-column>.cr-customer-reviews{position:relative!important;flex:0 0 auto!important;width:100%!important;max-width:100%!important;margin:0!important;align-self:stretch!important}
 @media(min-width:1151px){
- #product .product-info{display:flex!important;flex-direction:column!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;scrollbar-width:none!important;padding-bottom:18px!important}
- #product .product-info::-webkit-scrollbar{width:0!important;display:none!important}
+ #product .product-grid{align-items:start!important}
+ #product .cr-product-middle-column{grid-column:2!important;grid-row:1!important;height:calc(100dvh - 140px)!important;max-height:calc(100dvh - 140px)!important;min-height:0!important;overflow:visible!important}
+ #product .cr-product-middle-column>.product-info{flex:1 1 0!important;height:auto!important;max-height:none!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;scrollbar-width:none!important;-ms-overflow-style:none!important}
+ #product .cr-product-middle-column>.product-info::-webkit-scrollbar{display:none!important;width:0!important}
+ #product .cr-product-middle-column>.cr-customer-reviews{max-height:45%!important;overflow:hidden!important}
+ #product .cr-product-middle-column .cr-review-photo{height:min(17dvh,135px)!important;object-fit:cover!important}
+ #product .cr-product-middle-column .cr-review-comment{max-height:3.3em;overflow:auto}
+ #product .cerood-purchase-panel{grid-column:3!important;grid-row:1!important;height:calc(100dvh - 140px)!important;min-height:0!important;max-height:calc(100dvh - 140px)!important;overflow-y:auto!important;scrollbar-width:none!important}
+ #product .cerood-purchase-panel::-webkit-scrollbar{display:none!important}
+}
+@media(min-width:851px) and (max-width:1150px){
+ #product .cr-product-middle-column{grid-column:2!important;grid-row:1!important}
+ #product .cr-product-middle-column>.product-info{height:auto!important;max-height:none!important;overflow:visible!important}
+ #product .cerood-purchase-panel{grid-column:2!important}
+}
+@media(max-width:850px){
+ #product .cr-product-middle-column{grid-column:1!important;grid-row:auto!important;height:auto!important;max-height:none!important}
+ #product .cr-product-middle-column>.product-info{height:auto!important;max-height:none!important;overflow:visible!important}
+ #product .cr-product-middle-column>.cr-customer-reviews{max-height:none!important}
 }
 </style>
 <style id="cerood-customer-review-slider-style-20260927">
@@ -1374,7 +1394,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(!root||root.querySelector('.cr-customer-reviews'))return;
   const section=document.createElement('section');section.className='cr-customer-reviews';section.setAttribute('aria-label','Customer photos and reviews');
   section.innerHTML='<div class="cr-review-heading"><h2>Customer photos &amp; reviews</h2><span class="cr-review-count" id="crReviewCount"></span></div><div class="cr-review-empty" id="crReviewEmpty">No customer photos or reviews yet for this product. Reviews from verified orders will appear here after approval.</div><article class="cr-review-slide" id="crReviewSlide" hidden><img class="cr-review-photo" id="crReviewPhoto" alt="Customer-uploaded product photo" loading="lazy"><div class="cr-review-person"><span class="cr-review-name" id="crReviewName"></span><span class="cr-review-stars" id="crReviewStars" aria-label="Customer rating"></span></div><span class="cr-review-verified" id="crReviewVerified" hidden>✓ Verified purchase</span><p class="cr-review-comment" id="crReviewComment"></p></article><div class="cr-review-controls" id="crReviewControls" hidden><button type="button" id="crReviewPrev" aria-label="Previous customer review">‹</button><span class="cr-review-index" id="crReviewIndex"></span><button type="button" id="crReviewNext" aria-label="Next customer review">›</button></div>';
-  const info=root.querySelector('.product-info');if(!info)return;info.appendChild(section);
+  const info=root.querySelector('.product-info');if(!info)return;
+  let middle=root.querySelector('.cr-product-middle-column');
+  if(!middle){middle=document.createElement('div');middle.className='cr-product-middle-column';info.before(middle);middle.appendChild(info)}
+  middle.appendChild(section);
   const $=id=>section.querySelector('#'+id);
   let reviews=[],index=0,startX=null;
   const productId=new URLSearchParams(location.search).get('id');
