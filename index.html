@@ -1657,7 +1657,7 @@ function ceroodOpenAccountMenu(anchor) {
   const rect=anchor.getBoundingClientRect();
   const width=menu.getBoundingClientRect().width;
   menu.style.left=Math.max(12,Math.min(rect.right-width,window.innerWidth-width-12))+'px';
-  menu.style.top=Math.min(rect.bottom+9,window.innerHeight-menu.offsetHeight-12)+'px';
+  menu.style.top=Math.max(12,Math.min(rect.bottom+9,window.innerHeight-menu.offsetHeight-12))+'px';
 }
 function updateHeaderLoginUI() {
   const user=ceroodReadAccount();
@@ -1700,6 +1700,8 @@ window.addEventListener('storage',e=>{
   if(e.key===CEROOD_USER_KEY || e.key===CEROOD_SESSION_KEY)updateHeaderLoginUI();
 });
 window.addEventListener('cerood:auth-changed',updateHeaderLoginUI);
+window.addEventListener('cerood:login',updateHeaderLoginUI);
+window.addEventListener('pageshow',updateHeaderLoginUI);
 window.addEventListener('resize',ceroodCloseAccountMenu);
 window.addEventListener('scroll',ceroodCloseAccountMenu,{passive:true});
 updateHeaderLoginUI();
@@ -2766,6 +2768,12 @@ async function verifyOtpAndSetPassword() {
                         'catus_logged_user',
                         JSON.stringify(currentUser)
                     );
+                    // Registration is authenticated only when the backend issues a session.
+                    if (result.renewed_session) {
+                        localStorage.setItem(CEROOD_SESSION_KEY, result.renewed_session);
+                    } else {
+                        localStorage.removeItem(CEROOD_SESSION_KEY);
+                    }
 
                     updateHeaderLoginUI();
                     toggleAuthModal(false);
