@@ -810,6 +810,16 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
 @media(max-width:350px){
  #ceroodMarketplaceGroupList{grid-template-columns:none!important;grid-auto-columns:calc((100% - 6px)/2)!important}
 }
+</style><style id="cerood-customer-account-dropdown-20260927">
+#cerood-account-dropdown{position:fixed;z-index:2147482900;width:min(310px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;background:#fff;color:#17233d;border:1px solid #e6e7f0;border-radius:16px;box-shadow:0 18px 55px rgba(20,25,48,.22);padding:9px;font-family:Inter,Arial,sans-serif}
+#cerood-account-dropdown .cerood-account-dropdown-head{padding:14px 13px 12px;border-bottom:1px solid #e9e9f3;margin-bottom:5px;overflow-wrap:anywhere}
+#cerood-account-dropdown .cerood-account-dropdown-head strong{display:block;font-size:16px;line-height:1.4}
+#cerood-account-dropdown .cerood-account-dropdown-head small{display:block;margin-top:5px;color:#58647a;font-size:12px}
+#cerood-account-dropdown a,#cerood-account-dropdown button{display:block;width:100%;padding:12px 13px;border:0;border-radius:9px;background:transparent;color:#17233d;text-align:left;text-decoration:none;font:600 13px Inter,Arial,sans-serif;cursor:pointer}
+#cerood-account-dropdown a:hover,#cerood-account-dropdown button:hover{background:#f3f0ff}
+#cerood-account-dropdown .cerood-account-logout{color:#b42318;border-top:1px solid #e9e9f3;border-radius:0;margin-top:5px}
+.crn-account span{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:850px){#cerood-account-dropdown{z-index:2147482900}}
 </style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -1579,35 +1589,119 @@ let currentUser = null;
 let tempPhone = '';
 try { currentUser = JSON.parse(localStorage.getItem('catus_logged_user') || 'null'); } catch (_) {}
 function showToast(message) { const status=document.getElementById('ceroodHomepageAuthStatus'); if(status){status.textContent=message;status.hidden=false;} }
-function updateHeaderLoginUI() {
-  let user = null;
-  try { user = JSON.parse(localStorage.getItem('catus_logged_user') || 'null'); } catch (_) {}
-  currentUser = user;
-  // Login / Register is always the authentication popup entry point.
-  // Dashboard and My Orders remain separate navigation links.
-  document.querySelectorAll('[data-cerood-auth-trigger]').forEach(a => {
-    const label = a.querySelector('span');
-    if (label) label.textContent = a.closest('.bottom') ? 'Login' : 'Login / Register';
-    a.setAttribute('aria-label', 'Open Cerood login or registration');
+// Shared auth: a valid customer session controls the homepage account UI.
+const CEROOD_USER_KEY = 'catus_logged_user';
+const CEROOD_SESSION_KEY = 'cerood_renewed_customer_session';
+let ceroodAccountMenu = null;
+let ceroodAccountAnchor = null;
+function ceroodReadAccount() {
+  try {
+    const token = localStorage.getItem(CEROOD_SESSION_KEY);
+    const user = JSON.parse(localStorage.getItem(CEROOD_USER_KEY) || 'null');
+    return token && user && typeof user === 'object' ? user : null;
+  } catch (_) { return null; }
+}
+function ceroodAccountName(user) {
+  return String(user?.name || user?.full_name || user?.fullName || user?.customer_name || user?.first_name || '').trim();
+}
+function ceroodCloseAccountMenu() {
+  if (ceroodAccountMenu) { ceroodAccountMenu.remove(); ceroodAccountMenu = null; }
+  if (ceroodAccountAnchor) { ceroodAccountAnchor.setAttribute('aria-expanded','false'); ceroodAccountAnchor = null; }
+}
+function ceroodOpenAccountMenu(anchor) {
+  ceroodCloseAccountMenu();
+  const user = ceroodReadAccount();
+  if (!user) return;
+  const menu = document.createElement('section');
+  menu.id = 'cerood-account-dropdown';
+  menu.setAttribute('role','dialog');
+  menu.setAttribute('aria-label','My Cerood account');
+  const name = ceroodAccountName(user) || 'Cerood Customer';
+  const phone = String(user.phone || user.mobile || user.mobile_number || user.phone_number || '').trim();
+  const email = String(user.email || '').trim();
+  const heading = document.createElement('div');
+  heading.className = 'cerood-account-dropdown-head';
+  const title = document.createElement('strong'); title.textContent = name;
+  heading.appendChild(title);
+  if (phone) { const number=document.createElement('small'); number.textContent=phone; heading.appendChild(number); }
+  if (email) { const mail=document.createElement('small'); mail.textContent=email; heading.appendChild(mail); }
+  menu.appendChild(heading);
+  const addLink = (label, href) => {
+    const link=document.createElement('a'); link.href=href; link.textContent=label; menu.appendChild(link);
+  };
+  addLink('My Profile & Dashboard', '/cerood-orders.html#account');
+  addLink('My Orders', '/cerood-orders.html');
+  const address=document.createElement('button');
+  address.type='button'; address.textContent='Delivery Location';
+  address.addEventListener('click', () => {
+    ceroodCloseAccountMenu();
+    document.querySelector('.crn-location, .crn-mobile-location')?.click();
   });
+  menu.appendChild(address);
+  const logout=document.createElement('button');
+  logout.type='button'; logout.className='cerood-account-logout'; logout.textContent='Log out';
+  logout.addEventListener('click', () => {
+    ceroodCloseAccountMenu();
+    if (window.CeroodAuth?.logout) window.CeroodAuth.logout();
+    else {
+      localStorage.removeItem(CEROOD_USER_KEY);
+      localStorage.removeItem(CEROOD_SESSION_KEY);
+      window.dispatchEvent(new Event('cerood:auth-changed'));
+    }
+    updateHeaderLoginUI();
+  });
+  menu.appendChild(logout);
+  document.body.appendChild(menu);
+  ceroodAccountMenu=menu; ceroodAccountAnchor=anchor;
+  anchor.setAttribute('aria-expanded','true');
+  const rect=anchor.getBoundingClientRect();
+  const width=menu.getBoundingClientRect().width;
+  menu.style.left=Math.max(12,Math.min(rect.right-width,window.innerWidth-width-12))+'px';
+  menu.style.top=Math.min(rect.bottom+9,window.innerHeight-menu.offsetHeight-12)+'px';
 }
-function openCeroodAccountAfterAuth() {
-  // Retained for compatibility: never navigate away automatically after login.
-  updateHeaderLoginUI();
+function updateHeaderLoginUI() {
+  const user=ceroodReadAccount();
+  currentUser=user;
+  const name=user ? ceroodAccountName(user) : '';
+  document.querySelectorAll('[data-cerood-auth-trigger]').forEach(a => {
+    const label=a.querySelector('span');
+    const isBottom=!!a.closest('.bottom');
+    const isMenu=!!a.closest('.cerood-unified-menu-list');
+    const text=user ? (isBottom ? 'Account' : isMenu ? 'My Account' : name ? 'Hi, '+name.split(/\s+/)[0] : 'My Account') : (isBottom ? 'Login' : 'Login / Register');
+    if (label) label.textContent=text;
+    else if (isMenu) a.textContent=text;
+    a.setAttribute('aria-label',user ? 'Open Cerood account menu' : 'Open Cerood login or registration');
+    a.setAttribute('aria-haspopup',user ? 'dialog' : 'false');
+    a.setAttribute('aria-expanded','false');
+  });
+  if (!user) ceroodCloseAccountMenu();
 }
+function openCeroodAccountAfterAuth() { updateHeaderLoginUI(); }
 document.addEventListener('click', function(event) {
-  const a = event.target.closest('[data-cerood-auth-trigger]');
-  if (!a) return;
-  event.preventDefault();
-  if (window.CeroodAuth && typeof window.CeroodAuth.open === 'function') {
-    window.CeroodAuth.open();
-  } else {
-    showAuthStep('phone');
-    toggleAuthModal(true);
+  const a=event.target.closest('[data-cerood-auth-trigger]');
+  if (a) {
+    event.preventDefault();
+    if (ceroodReadAccount()) {
+      if (ceroodAccountMenu && ceroodAccountAnchor===a) ceroodCloseAccountMenu();
+      else ceroodOpenAccountMenu(a);
+    } else if (window.CeroodAuth?.open) window.CeroodAuth.open();
+    else { showAuthStep('phone'); toggleAuthModal(true); }
+    return;
+  }
+  if (ceroodAccountMenu && !ceroodAccountMenu.contains(event.target)) ceroodCloseAccountMenu();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') {
+    ceroodCloseAccountMenu();
+    if(document.getElementById('authModal')?.style.display==='flex')toggleAuthModal(false);
   }
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('authModal')?.style.display==='flex')toggleAuthModal(false);});
-window.addEventListener('storage',e=>{if(e.key==='catus_logged_user')updateHeaderLoginUI();});
+window.addEventListener('storage',e=>{
+  if(e.key===CEROOD_USER_KEY || e.key===CEROOD_SESSION_KEY)updateHeaderLoginUI();
+});
+window.addEventListener('cerood:auth-changed',updateHeaderLoginUI);
+window.addEventListener('resize',ceroodCloseAccountMenu);
+window.addEventListener('scroll',ceroodCloseAccountMenu,{passive:true});
 updateHeaderLoginUI();
 
      let twoMinTimer = null;
