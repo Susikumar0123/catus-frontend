@@ -932,6 +932,27 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
  window.ceroodRetrySearchInventory=loadCatalogues;
  loadCatalogues();
 })();
+</script><style id="cerood-all-products-style">
+#ceroodAllProducts{margin:22px auto 45px;padding:0 18px;max-width:1400px;background:#fff}
+#ceroodAllProducts h2{font-size:clamp(18px,2vw,25px);margin:0 0 12px;color:#111827}
+#ceroodAllProductsGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+#ceroodAllProductsGrid .product{min-width:0;border:1px solid #e5e7eb;border-radius:10px;padding:9px;background:#fff;display:flex;flex-direction:column;gap:5px}
+#ceroodAllProductsGrid .product img,#ceroodAllProductsGrid .product-fallback{width:100%;aspect-ratio:1;object-fit:contain}
+#ceroodAllProductsGrid .product b{font-size:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#ceroodAllProductsGrid .product .price{font-size:12px;font-weight:700}
+#ceroodAllProductsGrid .product .cta{display:none}
+#ceroodAllProductsMore{display:block;margin:18px auto;border:1px solid #d7dce7;border-radius:9px;background:white;padding:11px 24px;cursor:pointer}
+#ceroodAllProductsMore[hidden],#ceroodAllProducts[hidden]{display:none!important}
+@media(max-width:850px){#ceroodAllProducts{padding:0 12px}#ceroodAllProductsGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#ceroodAllProductsGrid .product b{font-size:10px}}
+</style><section id="ceroodAllProducts" hidden aria-label="All Cerood products"><h2>All products on Cerood</h2><div id="ceroodAllProductsGrid"></div><button id="ceroodAllProductsMore" type="button" hidden>Load more products</button></section><script id="cerood-all-products-list">
+(function(){'use strict';
+const root=document.getElementById('ceroodAllProducts'),grid=document.getElementById('ceroodAllProductsGrid'),more=document.getElementById('ceroodAllProductsMore');
+const sections={renewed:{name:'Renewed',key:'renewed',page:'/renewed-product.html?id=',store:'/renewed.html'},beauty:{name:'Beauty',key:'beauty',page:'/cosmetics-product.html?id=',store:'/cosmetics.html'},fashion:{name:'Fashion',key:'fashion',page:'/clothing-product.html?id=',store:'/clothing.html'}};
+let items=[],shown=0;const batchSize=20;
+function render(){const batch=items.slice(shown,shown+batchSize);grid.append(...batch.map(p=>window.ceroodMakeProductCard(p,sections[p.marketplace])));shown+=batch.length;more.hidden=shown>=items.length;more.textContent='Load more products ('+(items.length-shown)+' remaining)';root.hidden=!items.length;}
+function ready(){if(!window.ceroodMakeProductCard||!Array.isArray(window.ceroodSearchInventory))return;items=window.ceroodSearchInventory.flatMap(g=>g.products).filter(p=>sections[p.marketplace]);shown=0;grid.replaceChildren();root.hidden=true;if(items.length)render();}
+more.addEventListener('click',render);window.addEventListener('cerood-inventory-ready',ready);ready();
+})();
 </script><script id="cerood-common-search">
 (function(){
  const form=document.getElementById('siteSearch'),input=document.getElementById('searchText');
