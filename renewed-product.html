@@ -1246,4 +1246,84 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  },{passive:false});
 })();
 </script>
+
+<style id="cerood-center-readable-horizontal-highlights-20260927">
+/* Product area only: preserve the existing Cerood header, product APIs and actions. */
+@media(min-width:1151px){
+ #product .product-info{
+   overflow-x:hidden!important;overflow-y:auto!important;
+   overscroll-behavior-y:auto!important;
+   padding:20px 18px 32px!important;
+   scroll-padding-bottom:24px!important;
+   scrollbar-width:none!important;
+ }
+ #product .product-info::-webkit-scrollbar{display:none!important}
+ #product .product-info > .details{
+   display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+   gap:12px!important;overflow:visible!important;
+ }
+ #product .product-info > .details .section{
+   min-width:0!important;height:auto!important;max-height:none!important;
+   overflow:visible!important;padding:17px!important;
+ }
+ #product .product-info > .details .section p,
+ #product .product-info > .details .section li,
+ #product .product-info > .details .section .spec{
+   line-height:1.75!important;overflow-wrap:anywhere!important;
+   white-space:normal!important;
+ }
+}
+/* One heading, followed by a horizontally swipeable highlight rail. */
+#product .product-info .cr-hybrid-highlights{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ gap:12px!important;min-width:0!important;overflow:visible!important;
+}
+#product .product-info .cr-hybrid-highlights h2{
+ grid-column:1!important;margin:0!important;
+}
+#product .product-info .cr-hybrid-highlight-track{
+ display:flex!important;flex-wrap:nowrap!important;gap:10px!important;
+ min-width:0!important;max-width:100%!important;
+ overflow-x:auto!important;overflow-y:hidden!important;
+ scroll-snap-type:x proximity!important;overscroll-behavior-x:contain!important;
+ scrollbar-width:none!important;-ms-overflow-style:none!important;
+ padding:3px 2px 10px!important;
+}
+#product .product-info .cr-hybrid-highlight-track::-webkit-scrollbar{display:none!important}
+#product .product-info .cr-hybrid-highlight-track .cr-hybrid-highlight{
+ flex:0 0 190px!important;min-width:190px!important;max-width:190px!important;
+ scroll-snap-align:start!important;align-items:center!important;
+ border:1px solid #e4eafa!important;border-radius:12px!important;
+ padding:11px!important;background:#fff!important;
+ box-shadow:0 3px 12px rgba(30,55,110,.035)!important;
+}
+#product .product-info .cr-hybrid-highlight-track .cr-hybrid-highlight > div{
+ min-width:0!important;overflow-wrap:anywhere!important;
+}
+#product .product-info .cr-hybrid-highlight-track .cr-hybrid-highlight strong{
+ display:block!important;line-height:1.4!important;
+}
+@media(max-width:1150px){
+ #product .product-info .cr-hybrid-highlight-track .cr-hybrid-highlight{
+   flex-basis:175px!important;min-width:175px!important;max-width:175px!important;
+ }
+}
+</style>
+<script id="cerood-horizontal-highlight-track-20260927">
+(function(){'use strict';
+ function arrange(){
+  document.querySelectorAll('#product .product-info .cr-hybrid-highlights').forEach(function(section){
+   if(section.querySelector('.cr-hybrid-highlight-track'))return;
+   var items=Array.from(section.children).filter(function(el){return el.classList.contains('cr-hybrid-highlight')});
+   if(!items.length)return;
+   var track=document.createElement('div');track.className='cr-hybrid-highlight-track';
+   track.setAttribute('role','region');track.setAttribute('aria-label','Swipe product highlights');
+   track.tabIndex=0;items.forEach(function(el){track.appendChild(el)});section.appendChild(track);
+  });
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',arrange,{once:true});else arrange();
+ var root=document.querySelector('#product');
+ if(root){new MutationObserver(function(){arrange()}).observe(root,{childList:true,subtree:true})}
+})();
+</script>
 </body></html>
