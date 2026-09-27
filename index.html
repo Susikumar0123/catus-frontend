@@ -3231,6 +3231,7 @@ window.addEventListener('cerood:auth-action', function (event) {
     }
 });
 </script>
+<style id="cerood-cart-unified-clean-20260927">#cerood-cart-panel .cc-group{border:0;border-bottom:1px solid #e9e9f3;border-radius:0;margin:0;background:#fff}#cerood-cart-panel .cc-group-head{background:#fff;padding:13px 2px 9px}#cerood-cart-panel .cc-item{border-top:0;border-bottom:1px solid #f0f0f4;padding:15px 2px;grid-template-columns:84px minmax(0,1fr)}#cerood-cart-panel .cc-img{width:84px;height:92px}#cerood-cart-panel .cc-group:last-child{border-bottom:0}#cerood-cart-panel .cc-footer{box-shadow:0 -5px 20px #17233d0b;padding:14px 19px;background:#fff}#cerood-cart-total{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;font-weight:650;margin-bottom:12px}#cerood-cart-total strong{font-size:20px}#cerood-cart-proceed{display:block;width:100%;border:0;border-radius:11px;background:#5135d9;color:#fff;font:700 14px Inter,Arial,sans-serif;padding:15px;cursor:pointer}#cerood-cart-proceed:disabled{background:#b7b3c5;cursor:not-allowed}#cerood-cart-panel .cc-footer small{display:block;margin-top:9px;font-size:10px;color:#667085}#cerood-cart-choices[hidden]{display:none!important}#cerood-cart-choices{padding:10px 0 0;max-height:30vh;overflow:auto}#cerood-cart-choices .cc-choice-note{font-size:11px;line-height:1.55;margin:0 0 8px;color:#64748b}#cerood-cart-choices .cc-choice-link{display:block;border:1px solid #e8e7f1;border-radius:9px;padding:12px;margin:7px 0;color:#5135d9;font-weight:700;font-size:12px;text-decoration:none}@media(max-width:850px){#cerood-cart-panel .cc-footer{padding-bottom:calc(13px + env(safe-area-inset-bottom))}}</style>
 <script id="cerood-unified-cart-drawer-script">
 (function(){
 'use strict';
@@ -3241,9 +3242,9 @@ const groups=[
  {name:'Cosmetics',key:'cerood_cosmetics_cart',api:base+'/api/cosmetics/products',url:'/cosmetics-checkout.html',shop:'/cosmetics.html',event:'beauty-cart-updated'}
 ];
 const overlay=document.createElement('div');overlay.id='cerood-cart-overlay';overlay.hidden=true;
-overlay.innerHTML='<section id="cerood-cart-panel" role="dialog" aria-modal="true" aria-labelledby="cerood-cart-heading"><header><h2 id="cerood-cart-heading">My Cerood Cart</h2><button type="button" id="cerood-cart-close" aria-label="Close cart">×</button></header><div id="cerood-cart-content"></div><div class="cc-footer">Prices and stock are checked against each store. Delivery charges are calculated at checkout. Home Services uses its existing booking cart.</div></section>';
+overlay.innerHTML='<section id="cerood-cart-panel" role="dialog" aria-modal="true" aria-labelledby="cerood-cart-heading"><header><h2 id="cerood-cart-heading">My Cerood Cart</h2><button type="button" id="cerood-cart-close" aria-label="Close cart">×</button></header><div id="cerood-cart-content"></div><div id="cerood-cart-bottom" class="cc-footer"><div id="cerood-cart-total"></div><button type="button" id="cerood-cart-proceed" disabled>Proceed to Checkout →</button><div id="cerood-cart-choices" hidden></div><small>Delivery fees are calculated at checkout.</small></div></section>';
 document.body.appendChild(overlay);
-const content=overlay.querySelector('#cerood-cart-content');let lastFocus=null,renderToken=0;
+const content=overlay.querySelector('#cerood-cart-content');const totalEl=overlay.querySelector('#cerood-cart-total'),proceed=overlay.querySelector('#cerood-cart-proceed'),choices=overlay.querySelector('#cerood-cart-choices');let lastFocus=null,renderToken=0,checkoutState=[];
 const money=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
 function read(key){try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v.filter(x=>x&&x.product_id&&Number(x.quantity)>0):[]}catch(_){return []}}
@@ -3266,12 +3267,12 @@ function itemRow(group,x,p){
  controls.append(qty,remove);info.append(controls);row.append(pic,info);return {row,ok:active&&stock>=q,line:active&&stock>=q?price*q:0};
 }
 async function render(){
- const token=++renderToken;content.replaceChildren();const all=groups.map(g=>({group:g,items:read(g.key)}));
+ const token=++renderToken;content.replaceChildren();checkoutState=[];choices.hidden=true;choices.replaceChildren();proceed.disabled=true;totalEl.textContent='';const all=groups.map(g=>({group:g,items:read(g.key)}));
  if(!all.some(g=>g.items.length))content.append(el('p','cc-empty','Your shopping cart is empty. Browse a store to add products.'));
  for(const {group,items} of all){
+ if(!items.length)continue;
  const section=el('section','cc-group'),head=el('div','cc-group-head'),count=items.reduce((n,x)=>n+Math.max(1,Math.floor(Number(x.quantity)||1)),0);
  head.append(el('b','',group.name),el('span','',count+' item'+(count===1?'':'s')));section.append(head);content.append(section);
- if(!items.length){section.append(el('p','cc-empty','No items in this store cart.'));const shop=el('a','cc-home','Explore '+group.name+' →');shop.href=group.shop;section.append(shop);continue}
  section.append(el('p','cc-loading','Loading product images, names, prices and stock…'));
  (async()=>{
  try{
@@ -3280,14 +3281,30 @@ async function render(){
  if(token!==renderToken||overlay.hidden)return;
  const lookup=new Map(data.products.map(p=>[String(p.id),p]));section.querySelector('.cc-loading')?.remove();let subtotal=0,ready=true;
  for(const x of items){const item=itemRow(group,x,lookup.get(String(x.product_id)));section.append(item.row);subtotal+=item.line;if(!item.ok)ready=false}
- const summary=el('div','cc-summary');summary.append(el('span','','Subtotal'),el('b','',money(subtotal)));section.append(summary);
- section.append(el('p','cc-empty','Delivery fees, if applicable, are added at checkout.'));
- const checkout=el('a','cc-checkout',ready?'Proceed to '+group.name+' Checkout →':'Update cart to continue');checkout.href=group.url;if(!ready){checkout.setAttribute('aria-disabled','true');checkout.tabIndex=-1;checkout.addEventListener('click',e=>e.preventDefault())}section.append(checkout);
- }catch(e){if(token!==renderToken||overlay.hidden)return;section.querySelector('.cc-loading')?.remove();section.append(el('p','cc-empty cc-error','Could not load '+group.name+' product details. Your cart is safe.'));const retry=el('button','cc-retry','Retry');retry.type='button';retry.onclick=render;section.append(retry)}
+ checkoutState.push({group,subtotal,ready});updateCheckout(token);
+ }catch(e){if(token!==renderToken||overlay.hidden)return;section.querySelector('.cc-loading')?.remove();section.append(el('p','cc-empty cc-error','Could not load '+group.name+' product details. Your cart is safe.'));const retry=el('button','cc-retry','Retry');retry.type='button';retry.onclick=render;section.append(retry);checkoutState.push({group,subtotal:0,ready:false});updateCheckout(token)}
  })();
  }
- const home=el('section','cc-group');home.append(el('div','cc-group-head','Home Services'));home.append(el('p','cc-empty','Home Services bookings stay in the existing Home Services cart.'));const link=el('a','cc-home','Open Home Services →');link.href='/home-services.html';home.append(link);content.append(home);
+ updateCheckout(token);
 }
+function updateCheckout(token){
+ if(token!==renderToken)return;
+ const filled=groups.filter(g=>read(g.key).length);
+ const total=checkoutState.reduce((n,x)=>n+x.subtotal,0);
+ totalEl.replaceChildren();
+ if(filled.length){totalEl.append(el('span','','Cart subtotal'),el('strong','',money(total)));}
+ proceed.textContent=filled.length?'Proceed to Checkout →':'Your cart is empty';
+ proceed.disabled=!filled.length||checkoutState.length!==filled.length||checkoutState.some(x=>!x.ready);
+ choices.hidden=true;choices.replaceChildren();
+}
+proceed.addEventListener('click',()=>{
+ if(proceed.disabled)return;
+ const available=checkoutState.filter(x=>x.ready);
+ if(available.length===1){location.href=available[0].group.url;return;}
+ choices.replaceChildren(el('p','cc-choice-note','Your items are saved together here. Each store currently has a separate checkout and payment. Choose which store to check out first:'));
+ for(const x of available){const a=el('a','cc-choice-link',x.group.name+' · '+money(x.subtotal)+' →');a.href=x.group.url;choices.append(a);}
+ choices.hidden=!choices.hidden;
+});
 function open(){lastFocus=document.activeElement;overlay.hidden=false;document.body.classList.add('cerood-cart-open');render();overlay.querySelector('#cerood-cart-close').focus()}
 function close(){renderToken++;overlay.hidden=true;document.body.classList.remove('cerood-cart-open');if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}
 document.addEventListener('click',event=>{const a=event.target.closest('a[data-cerood-cart-open]');if(a){event.preventDefault();open()}});
