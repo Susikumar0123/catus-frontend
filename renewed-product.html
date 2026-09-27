@@ -869,17 +869,18 @@ html body .cr-header .cr-cart b{background:#6844e8!important}
  #product .product-gallery .main-image-container .cr-gallery-arrow{width:30px!important;height:30px!important}
 }
 </style>
-<style id="cerood-sticky-gallery-center-scroll-v3">
-/* Desktop: gallery remains visible; center listing details scroll before the document continues. */
+<style id="cerood-sticky-gallery-center-scroll-v4">
+/* Desktop: equal-height three columns; gallery caption stays visible. */
 #product .product-gallery .cr-hybrid-gallery-label{display:none!important}
 @media(min-width:1151px){
- #product .product-grid{align-items:start!important}
- #product .product-gallery{position:sticky!important;top:90px!important;align-self:start!important;grid-template-rows:minmax(0,1fr) auto!important;max-height:calc(100dvh - 104px)!important}
- #product .product-gallery .thumbnail-row{grid-row:1!important;max-height:calc(100dvh - 112px)!important}
- #product .product-gallery .main-image-container{grid-row:1!important;height:calc(100dvh - 112px)!important;min-height:0!important;max-height:760px!important}
- #product .product-gallery .gallery-caption{grid-row:2!important}
- #product .product-info{height:calc(100dvh - 104px)!important;max-height:calc(100dvh - 104px)!important;overflow-y:auto!important;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent;padding-right:8px!important;align-self:start!important}
- #product .cerood-purchase-panel{position:sticky!important;top:90px!important;align-self:start!important}
+ #product .product-grid{align-items:start!important;min-height:calc(100dvh - 140px)!important}
+ #product .product-gallery{position:sticky!important;top:90px!important;align-self:start!important;display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;height:calc(100dvh - 140px)!important;max-height:none!important;overflow:visible!important}
+ #product .product-gallery .main-image-container{grid-row:1!important;height:100%!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important}
+ #product .product-gallery .thumbnail-row{grid-row:1!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important}
+ #product .product-gallery .gallery-caption{grid-row:2!important;display:block!important;position:static!important;visibility:visible!important;overflow:visible!important;margin:0!important;padding:8px 0 0!important;line-height:1.45!important;min-height:0!important;max-height:none!important;text-align:left!important}
+ #product .product-info{height:calc(100dvh - 140px)!important;max-height:calc(100dvh - 140px)!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;scrollbar-width:none!important;-ms-overflow-style:none!important;padding-right:0!important;align-self:start!important}
+ #product .product-info::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+ #product .cerood-purchase-panel{position:sticky!important;top:90px!important;align-self:start!important;min-height:calc(100dvh - 140px)!important;box-sizing:border-box!important}
 }
 @media(max-width:1150px){#product .product-gallery .cr-hybrid-gallery-label{display:none!important}}
 </style>
