@@ -308,6 +308,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 @media(max-width:360px){.crn-header-main{grid-template-columns:minmax(25px,1fr) minmax(0,41vw) auto!important;column-gap:5px!important;padding-left:8px!important;padding-right:8px!important}.crn-header-main .cerood-unified-tools{gap:4px!important}.crn-header-main .cerood-unified-tools>a,.crn-header-main .cerood-unified-menu summary{width:33px!important;height:35px!important}.crn-header-main .crn-mobile-location{padding-left:5px!important;padding-right:5px!important}}
 </style>
 <script defer="" src="/cerood-location.js"></script>
+<script defer src="/cerood-auth.js"></script>
 <style id="cerood-home-services-smooth-navigation-20260925">
 /* Same-origin cross-document visual transitions only. No link interception, JS or checkout changes. */
 @view-transition { navigation: auto; }
@@ -1591,7 +1592,14 @@ document.addEventListener('click',function(event){
  const a=event.target.closest('[data-cerood-auth-trigger]');if(!a)return;
  let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
  if(user)return;
- event.preventDefault();showAuthStep('phone');toggleAuthModal(true);
+ event.preventDefault();
+
+if (window.CeroodAuth) {
+    window.CeroodAuth.open();
+} else {
+    showAuthStep('phone');
+    toggleAuthModal(true);
+}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('authModal')?.style.display==='flex')toggleAuthModal(false);});
 window.addEventListener('storage',e=>{if(e.key==='catus_logged_user')updateHeaderLoginUI();});
@@ -3066,4 +3074,13 @@ function togglePasswordVisibility(fieldId, iconElement) {
   else setup();
 })();
 </script>
-<script id="cerood-top-category-behavior-20260927">(function(){const nav=document.querySelector('.cerood-top-category-wrap');if(!nav)return;nav.addEventListener('toggle',e=>{if(!e.target.matches?.('.cerood-top-category')||!e.target.open)return;nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>{if(x!==e.target)x.open=false})},true);document.addEventListener('click',e=>{if(!nav.contains(e.target))nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});document.addEventListener('keydown',e=>{if(e.key==='Escape')nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});})();</script></body></html>
+<script id="cerood-top-category-behavior-20260927">(function(){const nav=document.querySelector('.cerood-top-category-wrap');if(!nav)return;nav.addEventListener('toggle',e=>{if(!e.target.matches?.('.cerood-top-category')||!e.target.open)return;nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>{if(x!==e.target)x.open=false})},true);document.addEventListener('click',e=>{if(!nav.contains(e.target))nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});document.addEventListener('keydown',e=>{if(e.key==='Escape')nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});})();</script>
+<script>
+window.addEventListener('cerood:login', function () {
+    if (typeof updateHeaderLoginUI === 'function') {
+        updateHeaderLoginUI();
+    }
+});
+</script>
+</body>
+</html>
