@@ -1583,16 +1583,21 @@ function updateHeaderLoginUI() {
   let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
   currentUser=user;
   document.querySelectorAll('[data-cerood-auth-trigger]').forEach(a=>{
-    const label=a.querySelector('span');if(label)label.textContent=a.closest('.bottom')?'Login':'Login / Register';
-    a.setAttribute('aria-label','Login or register with Cerood');
+    const label=a.querySelector('span');
+    if(label) label.textContent=user?'Account':(a.closest('.bottom')?'Login':'Login / Register');
+    a.setAttribute('aria-label',user?'Open Cerood account':'Login or register with Cerood');
   });
 }
 function openCeroodAccountAfterAuth() { window.location.href='/cerood-orders.html#account'; }
 document.addEventListener('click',function(event){
  const a=event.target.closest('[data-cerood-auth-trigger]');if(!a)return;
- // Account button is the explicit login/register entry point, even when a stale
- // localStorage user record exists. Dashboard remains accessible in the menu.
+ // A successful login stays on the current page. Open the account only
+ // when the customer explicitly clicks Account after logging in.
  event.preventDefault();
+ if (currentUser) {
+     window.location.href = '/cerood-orders.html#account';
+     return;
+ }
 
 if (window.CeroodAuth) {
     window.CeroodAuth.open();
@@ -2281,7 +2286,7 @@ async function loginWithPassword() {
             else localStorage.removeItem('cerood_renewed_customer_session');
             updateHeaderLoginUI();
             toggleAuthModal(false);
-            openCeroodAccountAfterAuth();
+            // Stay on homepage after authentication; account opens on explicit click.
             showToast("Login Successful!", false);
         } else {
             alert(data.message || 'Incorrect password.');
@@ -2670,7 +2675,7 @@ async function verifyOtpAndSetPassword() {
 
                     updateHeaderLoginUI();
                     toggleAuthModal(false);
-                    openCeroodAccountAfterAuth();
+                    // Stay on homepage after authentication; account opens on explicit click.
 
                     showToast(
                         'Account created successfully!',
@@ -2827,7 +2832,7 @@ async function submitNewPasswordReset() {
 
         updateHeaderLoginUI();
         toggleAuthModal(false);
-        openCeroodAccountAfterAuth();
+        // Stay on homepage after authentication; account opens on explicit click.
 
         showToast(
             'Password updated successfully!',
