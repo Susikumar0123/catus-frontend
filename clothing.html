@@ -416,7 +416,7 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_clothing_selected_locati
     document.addEventListener('keydown',onKey);
     shade.addEventListener('click',e=>{if(e.target===shade)close()});
     panel.querySelector('#rn-loc-close').addEventListener('click',close);
-    panel.addEventListener('submit',e=>{e.preventDefault();const loc={area:panel.elements.namedItem('area').value.trim(),city:panel.elements.namedItem('city').value.trim(),pincode:panel.elements.namedItem('pincode').value.trim()};if(!/^\d{6}$/.test(loc.pincode))return;localStorage.setItem(key,JSON.stringify(loc));localStorage.setItem('cerood_clothing_selected_location',JSON.stringify(loc));window.dispatchEvent(new Event('cerood-clothing-location-changed'));show(loc);close()});
+    panel.addEventListener('submit',e=>{e.preventDefault();const loc={area:panel.elements.namedItem('area').value.trim(),city:panel.elements.namedItem('city').value.trim(),pincode:panel.elements.namedItem('pincode').value.trim()};if(!/^\d{6}$/.test(loc.pincode))return;localStorage.setItem(key,JSON.stringify(loc));localStorage.setItem('cerood_clothing_selected_location',JSON.stringify(loc));if(window.CeroodLocation?.set){window.CeroodLocation.set(loc)}else{localStorage.removeItem('cerood_global_location_cleared_v1');localStorage.setItem('cerood_global_location_v1',JSON.stringify(loc));window.dispatchEvent(new CustomEvent('cerood-global-location-changed',{detail:loc}));}window.dispatchEvent(new Event('cerood-clothing-location-changed'));show(loc);close()});
     panel.elements.namedItem('area').focus();
   });
 })();
@@ -456,13 +456,12 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_clothing_selected_locati
  const FULL='cerood_clothing_saved_address_v1',LOC='cerood_clothing_delivery_location',OLD='cerood_clothing_selected_location';
  const label=document.getElementById('fashionDeliveryLocation');if(!label)return;
  function get(key){try{const x=JSON.parse(localStorage.getItem(key)||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}}
- function refresh(){const full=get(FULL),loc=get(LOC)||get(OLD);
- const x=full&&(!loc||!loc.pincode||String(full.pincode)===String(loc.pincode))?full:loc;
+ function refresh(){const cleared=localStorage.getItem('cerood_global_location_cleared_v1')==='1';const x=cleared?null:(get('cerood_global_location_v1')||get(LOC)||get(OLD)||get(FULL));
  const place=x?[x.door,x.area,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '):'';
  label.textContent=place||'Select location';label.title=place||'Select delivery location';
  }
  refresh();window.addEventListener('pageshow',refresh);window.addEventListener('storage',refresh);
- window.addEventListener('cerood-clothing-location-changed',refresh);
+ window.addEventListener('cerood-clothing-location-changed',refresh);window.addEventListener('cerood-global-location-changed',refresh);window.addEventListener('cerood-location-updated',refresh);
 })();
 </script><script id="cerood-glass-touch-nav-script">
 (()=>{'use strict';
