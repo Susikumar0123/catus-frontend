@@ -679,7 +679,8 @@
     if (isHome) return;
 
     const kind =
-      /\/renewed(?:\.html)?$/.test(path)
+      (/\/renewed(?:\.html)?$/.test(path) ||
+       /\/(?:shop-product|renewed-product)(?:\.html)?$/.test(path))
         ? 'renewed'
         : /\/cosmetics(?:\.html)?$/.test(path)
           ? 'cosmetics'

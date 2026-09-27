@@ -325,7 +325,7 @@ nav.crn-mobile-nav>a[aria-current=page],nav.csf-bottom>a.active,nav.cerood-beaut
 body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
 }
 @media(max-width:360px){.cr-header>.cr-header-inner,.uc-homepage-wrapper>.header-main-container{column-gap:5px!important;padding-left:8px!important;padding-right:8px!important}}
-</style><script defer="" src="/cerood-location.js"></script>
+</style><script defer="" src="/cerood-location.js?v=20260927-shopping-location-1"></script>
 <style id="cerood-inner-header-unification">
 /* CEROOD unified inner-page header/mobile dock — scoped to these nine pages. */
 @media(max-width:760px){
@@ -1016,7 +1016,7 @@ async function init(){const id=new URLSearchParams(location.search).get('id');if
  const refresh=()=>{try{const cart=JSON.parse(localStorage.getItem('cerood_renewed_cart')||'[]');count.textContent=Array.isArray(cart)?cart.reduce((sum,x)=>sum+(Number(x.quantity)||0),0):0}catch{count.textContent='0'}};
  refresh();window.addEventListener('pageshow',refresh);window.addEventListener('storage',refresh);window.addEventListener('renewed-cart-updated',refresh);
  const search=document.getElementById('headerProductSearch');
- search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();window.location.href='/renewed.html?search='+encodeURIComponent(search.value.trim())+'#products-section'}});
+ search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();window.location.href='/?search='+encodeURIComponent(search.value.trim())+'#ceroodMarketplaceGroups'}});
  try{const saved=JSON.parse(localStorage.getItem('cerood_selected_location')||'null');if(saved){const name=typeof saved==='string'?saved:[saved.area,saved.city,saved.pincode].filter(Boolean).join(', ');if(name)document.getElementById('renewedDeliveryLocation').textContent=name}}catch{}
  // Renewed delivery location stays on this product page (never redirects to Home Services).
   const locationButton=document.querySelector('.cr-location');
