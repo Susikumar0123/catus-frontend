@@ -3166,8 +3166,12 @@ function getProductFormData() {
 
     warranty_terms:
 
-      value('productWarrantyTerms')
+      value('productWarrantyTerms'),
 
+    category_id: window.__ceroodRenewedDynamic?.categoryId() || '',
+    product_attributes: window.__ceroodRenewedDynamic?.collectAttributes() || {},
+    product_images: window.__ceroodRenewedDynamic?.uploadedImages || {},
+    product_variants: []
   };
 
 }
@@ -3243,6 +3247,12 @@ $('productForm').addEventListener(
       }
 
       // ================================
+
+      // Upload category-specific Renewed images. The first configured slot uses the primary image.
+      if (window.__ceroodRenewedDynamic) {
+        showMessage('productFormMessage','Uploading category product images...');
+        await window.__ceroodRenewedDynamic.uploadImages(savedPhotoUrl);
+      }
 
       // UPLOAD VIDEO
 
@@ -5595,6 +5605,127 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
    clearInterval(sync);window.ceroodRefreshSingleCatalogs();
   }else if(tries>40)clearInterval(sync);
  },250);
+})();
+</script>
+
+
+<script id="cerood-renewed-dynamic-category-step5">
+(()=>{
+ const $=id=>document.getElementById(id);
+ const select=$('productCategory'), form=$('productForm');
+ if(!select||!form)return;
+ let categories=[], current=null, loaded=false, loading=null;
+ const state={uploadedImages:{}};
+
+ function ensureUI(){
+  if($('renewedDynamicAttributes'))return;
+  const categoryField=select.closest('.product-field');
+  const grid=categoryField?.parentElement;
+  if(!grid)return;
+  const attrs=document.createElement('div');
+  attrs.id='renewedDynamicAttributes';
+  attrs.className='market-dynamic-box';
+  attrs.style.gridColumn='1 / -1';
+  attrs.innerHTML='<strong>Product specifications</strong><div class="market-dynamic-empty">Select a category to load product specifications.</div>';
+  grid.insertAdjacentElement('afterend',attrs);
+
+  const images=document.createElement('div');
+  images.id='renewedDynamicImages';
+  images.className='market-image-schema';
+  images.innerHTML='<div class="market-image-schema-head"><div><strong>Category product images</strong><small>Image requirements change automatically for the selected category.</small></div></div><div class="market-dynamic-empty" style="padding:18px">Select a category to load image requirements.</div>';
+  attrs.insertAdjacentElement('afterend',images);
+ }
+
+ const options=a=>Array.isArray(a)?a:(typeof a==='string'?(()=>{try{return JSON.parse(a)}catch{return []}})():[]);
+ async function load(){
+  if(loaded)return categories;
+  if(loading)return loading;
+  loading=(async()=>{
+   const data=await apiRequest('/api/sellers/renewed-categories');
+   categories=Array.isArray(data?.categories)?data.categories:[];
+   loaded=true;
+   const leaves=categories.filter(c=>c.parent_id);
+   const previous=select.dataset.wizardCategoryValue||select.value;
+   select.replaceChildren(new Option('Select Category',''));
+   leaves.forEach(c=>select.add(new Option(c.name,c.id)));
+   if(previous){
+    const oldNorm=String(previous).toLowerCase();
+    const match=leaves.find(c=>String(c.id)===previous||String(c.slug).toLowerCase()===oldNorm||String(c.name).toLowerCase()===oldNorm);
+    if(match)select.value=match.id;
+   }
+   render();
+   return categories;
+  })().catch(e=>{loaded=false;throw e}).finally(()=>loading=null);
+  return loading;
+ }
+
+ function render(){
+  ensureUI(); state.uploadedImages={};
+  current=categories.find(c=>String(c.id)===String(select.value))||null;
+  const ah=$('renewedDynamicAttributes'), ih=$('renewedDynamicImages');
+  if(!current){
+   ah.innerHTML='<strong>Product specifications</strong><div class="market-dynamic-empty">Select a category to load product specifications.</div>';
+   ih.innerHTML='<div class="market-image-schema-head"><div><strong>Category product images</strong><small>Image requirements change automatically for the selected category.</small></div></div><div class="market-dynamic-empty" style="padding:18px">Select a category to load image requirements.</div>';
+   return;
+  }
+  const attrs=Array.isArray(current.attributes)?current.attributes:[];
+  const wrap=document.createElement('div'); wrap.className='market-dynamic-grid';
+  attrs.forEach(a=>{
+   const label=document.createElement('label');
+   label.innerHTML='<span></span>'; label.querySelector('span').textContent=a.label+(a.unit?' ('+a.unit+')':'')+(a.is_required?' *':'');
+   let input; const vals=options(a.options);
+   if(a.input_type==='select'){input=document.createElement('select');input.append(new Option('Select '+a.label,''));vals.forEach(v=>input.append(new Option(String(v),String(v))))}
+   else if(a.input_type==='multiselect'){input=document.createElement('select');input.multiple=true;vals.forEach(v=>input.append(new Option(String(v),String(v))))}
+   else if(a.input_type==='textarea'){input=document.createElement('textarea')}
+   else if(a.input_type==='boolean'){input=document.createElement('select');input.append(new Option('Select',''),new Option('Yes','true'),new Option('No','false'))}
+   else {input=document.createElement('input');input.type=a.input_type==='number'?'number':'text'}
+   input.dataset.renewedAttributeKey=a.attribute_key; input.dataset.inputType=a.input_type||'text';
+   if(a.placeholder)input.placeholder=a.placeholder; if(a.is_required)input.required=true;
+   label.append(input);wrap.append(label);
+  });
+  ah.replaceChildren(); const title=document.createElement('strong');title.textContent='Product specifications · '+current.name;ah.append(title,wrap);
+
+  const slots=Array.isArray(current.image_slots)?current.image_slots:[];
+  ih.innerHTML='<div class="market-image-schema-head"><div><strong></strong><small>First slot uses your main product image. Upload the remaining required views.</small></div><span></span></div><div class="market-image-schema-grid"></div>';
+  ih.querySelector('strong').textContent='Product images · '+current.name; ih.querySelector('.market-image-schema-head>span').textContent=slots.length+' views';
+  const g=ih.querySelector('.market-image-schema-grid');
+  slots.forEach((slot,i)=>{
+   const card=document.createElement('div');card.className='market-image-slot';
+   const badge=slot.is_required?'required':'optional';
+   card.innerHTML='<div class="market-image-slot-title"><strong></strong><span class="'+badge+'">'+(slot.is_required?'Required':'Optional')+'</span></div><div class="market-image-preview"><div class="market-image-placeholder"><span>▧</span><small>'+(i===0?'Main image':'Upload image')+'</small></div></div><p></p>';
+   card.querySelector('strong').textContent=slot.label;card.querySelector('p').textContent=slot.description||'';
+   if(i===0){const b=document.createElement('button');b.type='button';b.className='market-image-upload';b.disabled=true;b.textContent='Uses main product image';card.append(b)}
+   else {const inp=document.createElement('input');inp.type='file';inp.accept='image/jpeg,image/png,image/webp';inp.hidden=true;inp.dataset.slotKey=slot.slot_key;inp.dataset.required=slot.is_required?'1':'0';
+    const b=document.createElement('button');b.type='button';b.className='market-image-upload';b.textContent='Choose image';b.onclick=()=>inp.click();
+    inp.onchange=()=>{const f=inp.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){inp.value='';alert('Choose JPG, PNG or WebP image up to 10 MB.');return}const p=card.querySelector('.market-image-preview');const u=URL.createObjectURL(f);p.innerHTML='<img alt="Product view">';p.querySelector('img').src=u;p.querySelector('img').onload=()=>URL.revokeObjectURL(u);b.textContent='Change image'};
+    card.append(inp,b)}
+   g.append(card);
+  });
+ }
+
+ state.categoryId=()=>current?.id||'';
+ state.collectAttributes=()=>{
+  const out={}; $('renewedDynamicAttributes')?.querySelectorAll('[data-renewed-attribute-key]').forEach(input=>{
+   let v;if(input.multiple)v=[...input.selectedOptions].map(o=>o.value).filter(Boolean);else v=input.value.trim();
+   if(input.dataset.inputType==='number'&&v!=='')v=Number(v);
+   if(input.dataset.inputType==='boolean'&&v!=='')v=v==='true';
+   if((Array.isArray(v)&&v.length)||(!Array.isArray(v)&&v!==''))out[input.dataset.renewedAttributeKey]=v;
+  });return out;
+ };
+ state.uploadImages=async primaryUrl=>{
+  if(!current)throw Error('Select a Renewed product category.');
+  const slots=Array.isArray(current.image_slots)?current.image_slots:[];const out={};
+  if(slots[0])out[slots[0].slot_key]=primaryUrl;
+  const inputs=[...($('renewedDynamicImages')?.querySelectorAll('input[type=file][data-slot-key]')||[])];
+  for(const input of inputs){const slot=slots.find(s=>s.slot_key===input.dataset.slotKey),f=input.files?.[0];if(slot?.is_required&&!f)throw Error(slot.label+' image is required.');if(f){showMessage('productFormMessage','Uploading '+slot.label+'...');out[slot.slot_key]=await uploadMedia(f)}}
+  state.uploadedImages=out;return out;
+ };
+ window.__ceroodRenewedDynamic=state;
+ ensureUI();
+ select.addEventListener('change',render);
+ document.querySelectorAll('[data-market="renewed"]').forEach(b=>b.addEventListener('click',()=>load().catch(e=>showMessage('productFormMessage',e.message,true))));
+ // Preload so the Step-1 wizard can map its selected category to the real DB category.
+ load().catch(e=>console.warn('Renewed categories:',e));
 })();
 </script>
 
