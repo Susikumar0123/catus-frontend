@@ -4074,25 +4074,38 @@ initializeDashboard();
    const title=document.createElement('div');title.className='market-image-slot-title';title.innerHTML='<strong></strong><span></span>';title.querySelector('strong').textContent=slot.label;title.querySelector('span').textContent=slot.required?'Required':'Optional';title.querySelector('span').className=slot.required?'required':'optional';
    const preview=document.createElement('div');preview.className='market-image-preview';preview.innerHTML='<div class="market-image-placeholder">＋<small>Add image</small></div>';
    const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.hidden=true;input.dataset.imageKey=slot.key;input.dataset.imageRequired=slot.required?'1':'0';
-   // The Step-1 image is the first/front image. Keep one source of truth instead of asking twice.
-   const isFront=index===0;
-   if(isFront){input.dataset.usePrimary='1';input.disabled=true;const primary=el('marketImage').files[0];if(primary){const u=URL.createObjectURL(primary);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img)}}
-   const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent=isFront?'Front image selected in Step 1':'Upload image';action.disabled=isFront;action.onclick=()=>input.click();
+   // Step-1 can contain up to 9 images of the same product. Map them into the
+   // category image grid in order: first image -> Front View, second -> next slot, etc.
+   const step1File=(window.__ceroodCatalogGallery?.files||[])[index]||(index===0?el('marketImage').files[0]:null);
+   if(step1File){input.dataset.catalogIndex=String(index);input.disabled=true;const u=URL.createObjectURL(step1File);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img)}
+   const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent=step1File?(index===0?'Front image selected in Step 1':'Image selected in Step 1'):'Upload image';action.disabled=!!step1File;action.onclick=()=>input.click();
    input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}if(preview.dataset.url)URL.revokeObjectURL(preview.dataset.url);const u=URL.createObjectURL(f);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img);action.textContent='Replace image'});
    const note=document.createElement('p');note.textContent=slot.instruction||'Upload a clear image of this product view.';
    card.append(title,preview,action,input,note);grid.append(card);
   });
+  // If Step-1 has more images than this category's named slots, keep the rest
+  // visible in the SAME grid instead of showing a duplicate gallery above.
+  const step1Files=(window.__ceroodCatalogGallery?.files||[]).slice(0,9);
+  for(let i=schema.length;i<step1Files.length;i++){
+   const card=document.createElement('div');card.className='market-image-slot cerood-extra-step1-image';
+   const title=document.createElement('div');title.className='market-image-slot-title';title.innerHTML='<strong>Additional Image '+(i+1)+'</strong><span class="optional">Optional</span>';
+   const preview=document.createElement('div');preview.className='market-image-preview';const u=URL.createObjectURL(step1Files[i]);preview.dataset.url=u;const img=document.createElement('img');img.src=u;img.alt='Additional product image '+(i+1);preview.append(img);
+   const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent='Image selected in Step 1';action.disabled=true;
+   const note=document.createElement('p');note.textContent='Additional image of this same product.';card.append(title,preview,action,note);grid.append(card);
+  }
   shell.append(grid);dynamicImages.append(shell);
  }
- async function collectAndUploadDynamicImages(primaryUrl){
+ window.__ceroodRefreshDynamicImages=renderDynamicImages;
+ async function collectAndUploadDynamicImages(primaryUrl,galleryUrls=[]){
   if(!market||market==='renewed')return {};
   const category=currentCategory();
   const schema=categoryImageSchema(category),out={};
   for(let i=0;i<schema.length;i++){
    const slot=schema[i];if(!slot?.key)continue;
    const input=dynamicImages.querySelector('[data-image-key="'+CSS.escape(slot.key)+'"]');
-   const isPrimary=input?.dataset.usePrimary==='1'||i===0;
-   if(isPrimary){out[slot.key]=primaryUrl;continue}
+   const catalogIndex=input?.dataset.catalogIndex!==undefined?Number(input.dataset.catalogIndex):-1;
+   if(catalogIndex>=0&&galleryUrls[catalogIndex]){out[slot.key]=galleryUrls[catalogIndex];continue}
+   if(i===0){out[slot.key]=primaryUrl;continue}
    const f=input?.files?.[0];
    if(slot.required&&!f)throw Error(slot.label+' image is required.');
    if(f){msg.textContent='Uploading '+slot.label+'...';out[slot.key]=await uploadMedia(f)}
@@ -4118,13 +4131,13 @@ initializeDashboard();
  form.addEventListener('submit',async e=>{e.preventDefault();if(busy||market==='renewed')return;busy=true;const btn=el('marketSubmit');btn.disabled=true;msg.className='marketplace-message';try{
   const f=el('marketImage').files[0];if(!f||!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024)throw Error('Upload JPG, PNG or WebP image up to 10 MB.');
   msg.textContent='Uploading primary product image...';const image_url=await uploadMedia(f);
-  const product_images=await collectAndUploadDynamicImages(image_url);
-  const galleryFiles=(window.__ceroodCatalogGallery?.files||[]).filter(Boolean);
+  const galleryFiles=(window.__ceroodCatalogGallery?.files||[]).filter(Boolean).slice(0,9);
   const galleryUrls=[image_url];
-  for(let gi=1;gi<Math.min(galleryFiles.length,9);gi++){
+  for(let gi=1;gi<galleryFiles.length;gi++){
    msg.textContent='Uploading product image '+(gi+1)+' of '+galleryFiles.length+'...';
    galleryUrls.push(await uploadMedia(galleryFiles[gi]));
   }
+  const product_images=await collectAndUploadDynamicImages(image_url,galleryUrls);
   product_images.gallery=galleryUrls;
   const v=id=>el(id).value.trim();
   const categorySelect=el('marketCategory'),categoryText=categorySelect.options[categorySelect.selectedIndex]?.text||'';
@@ -5626,16 +5639,10 @@ async function finalDetails(){
 }
 // Step 2 single-product gallery: all Step-1 images belong to the SAME product.
 function renderCatalogGallery(){
- if(!modal.classList.contains('cw-final')||!catalogFiles.length)return;
- let strip=single.querySelector('#ceroodCatalogProductStrip');
- if(!strip){strip=document.createElement('div');strip.id='ceroodCatalogProductStrip';strip.className='cerood-catalog-product-strip';const path=single.querySelector('.cerood-step2-path');(path||back).insertAdjacentElement('afterend',strip)}
- strip.replaceChildren();
- const title=document.createElement('div');title.className='cerood-catalog-strip-title';
- title.innerHTML='<strong>Product images</strong><small>'+catalogFiles.length+' / 9 images · All images belong to this one product</small>';
- strip.append(title);
- const list=document.createElement('div');list.className='cerood-catalog-strip-list';
- catalogFiles.forEach((f,i)=>{const box=document.createElement('div');box.className='cerood-catalog-product';box.style.cursor='default';const img=document.createElement('img');const u=URL.createObjectURL(f);img.src=u;img.onload=()=>URL.revokeObjectURL(u);const label=document.createElement('span');label.textContent=i===0?'Primary image':'Image '+(i+1);box.append(img,label);list.append(box)});
- strip.append(list);
+ const strip=single.querySelector('#ceroodCatalogProductStrip');
+ if(strip)strip.remove();
+ // Step-1 images are rendered inside the category Product Images grid only.
+ if(modal.classList.contains('cw-final')&&typeof window.__ceroodRefreshDynamicImages==='function')window.__ceroodRefreshDynamicImages();
 }
 window.__ceroodCatalogSetup=(files)=>{const form=$('ceroodMarketplaceForm');if(form)form.noValidate=false;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;renderCatalogGallery()};
 window.__ceroodCatalogGallery={get files(){return catalogFiles},render:()=>renderCatalogGallery()};
