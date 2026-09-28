@@ -4842,8 +4842,29 @@ async function finalDetails(){
     await new Promise(r=>setTimeout(r,100));
    }
   }else{
-   const best=[...cat.options].find(o=>o.value&&(pathText.includes(String(o.value).toLowerCase())||pathText.includes(String(o.text).toLowerCase())));
-   if(best){cat.value=best.value;cat.dispatchEvent(new Event('change',{bubbles:true}))}
+   // Step 1 already selected the category. Map the wizard path to the hidden legacy select reliably.
+   const aliases={
+    'mens clothing':'mens-clothing','men clothing':'mens-clothing',
+    'womens clothing':'womens-clothing','women clothing':'womens-clothing',
+    'kids clothing':'kids-clothing','footwear':'footwear','accessories':'accessories','bags':'bags',
+    'skincare':'skincare','makeup':'makeup','hair care':'haircare','haircare':'haircare',
+    'fragrance':'fragrance','personal care':'personal-care','beauty tools':'beauty-tools'
+   };
+   const norm=v=>String(v||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+   const pathParts=selected.map(norm);
+   let wanted='';
+   for(const part of pathParts){if(aliases[part])wanted=aliases[part]}
+   const best=[...cat.options].find(o=>o.value&&(
+    (wanted&&String(o.value)===wanted)||
+    pathParts.includes(norm(o.text))||
+    pathParts.includes(norm(o.value))
+   ));
+   if(best){
+    cat.value=best.value;
+    cat.dataset.wizardCategoryValue=best.value;
+    cat.dataset.wizardCategoryText=best.text;
+    cat.dispatchEvent(new Event('change',{bubbles:true}));
+   }
   }
  }
  const input=$(market==='renewed'?'productPhoto':'marketImage');
@@ -4978,8 +4999,10 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
   try{
    multi.save();
    const market=currentMarket(); if(!['cosmetics','clothing','general'].includes(market))throw new Error('Choose a marketplace.');
-   const category=$('marketCategory'),categoryValue=category?.value||'',categoryText=category?.options?.[category.selectedIndex]?.text||'';
-   if(!categoryValue)throw new Error('Select a category.');
+   const category=$('marketCategory');
+   const categoryValue=category?.value||category?.dataset?.wizardCategoryValue||'';
+   const categoryText=category?.options?.[category.selectedIndex]?.text||category?.dataset?.wizardCategoryText||'';
+   if(!categoryValue)throw new Error('Category selection was not carried from Step 1. Please change category and select it again.');
    const schema=snapshotSchema();
    for(let i=0;i<multi.files.length;i++)validateDraft(multi.drafts[i]||{},i,market,schema);
    for(let i=0;i<multi.files.length;i++)await submitOne(multi.files[i],multi.drafts[i]||{},market,schema,categoryValue,categoryText,i,multi.files.length,msg);
