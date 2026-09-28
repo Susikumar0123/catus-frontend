@@ -680,17 +680,18 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 </style><style id="cerood-claims-support-ui">
 #section-claims[hidden],#section-support[hidden]{display:none!important}.cc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.cc-head h2{margin:0;font-size:18px}.cc-tabs{display:flex;gap:4px;overflow:auto;border-bottom:1px solid #dfe4ed;margin:0 0 18px}.cc-tab{border:0;border-bottom:2px solid transparent;background:#fff;padding:13px 16px;color:#344054;font:500 13px Inter,system-ui;cursor:pointer;white-space:nowrap}.cc-tab.active{border-bottom-color:#4933b9;color:#4933b9}.cc-panel[hidden]{display:none!important}.cc-summary{display:flex;align-items:center;gap:13px;margin:8px 0 20px}.cc-summary select,.cc-search{border:1px solid #d4dae6;border-radius:5px;padding:10px;background:#fff;font:12px Inter,system-ui}.cc-hero{border:1px solid #dfe4ed;border-radius:7px;padding:28px;display:grid;grid-template-columns:1.15fr .85fr;gap:25px;align-items:center}.cc-hero h3{font-size:22px;margin:0 0 17px}.cc-benefit{display:flex;align-items:center;gap:12px;margin:15px 0;font-size:13px}.cc-benefit b{color:#16a34a}.cc-illustration{background:linear-gradient(125deg,#3a247f,#8d4bd0);min-height:235px;border-radius:7px;color:#fff;display:grid;place-items:center;text-align:center;padding:20px}.cc-illustration span{font-size:57px}.cc-illustration strong{display:block;font-size:20px}.cc-illustration small{display:block;margin-top:8px;color:#e7ddff}.cc-action{background:#4933b9;color:#fff;border:1px solid #4933b9;border-radius:5px;padding:10px 16px;font:600 12px Inter,system-ui;cursor:pointer}.cc-outline{background:#fff;color:#4933b9}.cc-note{font-size:11px;color:#667085;margin-top:10px}.cc-status-tabs{display:flex;gap:0;overflow:auto;border-bottom:1px solid #e1e5ef}.cc-empty{min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;color:#667085}.cc-empty span{font-size:48px;color:#aab5ca}.cc-empty strong{font-size:14px;color:#202638}.cc-help-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.cc-help-card{border:1px solid #dfe4ed;border-radius:7px;padding:16px;min-width:0}.cc-help-card h3{font-size:13px;margin:0 0 9px}.cc-issue{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;background:#fff;border:0;border-bottom:1px dashed #d7ddeb;text-align:left;padding:12px 0;color:#344054;font:12px Inter,system-ui;cursor:pointer}.cc-issue span:last-child{color:#4933b9;font-size:18px}.cc-help-list{max-width:820px}.cc-breadcrumb{color:#667085;font-size:12px;margin:0 0 20px}.cc-ticket{max-width:740px;border:1px solid #dfe4ed;padding:20px;border-radius:7px}.cc-ticket label{display:block;font-weight:600;margin:12px 0 6px}.cc-ticket input,.cc-ticket textarea,.cc-ticket select{width:100%;padding:11px;border:1px solid #cfd5e2;border-radius:5px;font:inherit}.cc-ticket textarea{min-height:110px}.cc-ticket input[type=file]{padding:8px}.cc-alert{border:1px solid #d9d2ff;background:#f8f6ff;padding:12px;border-radius:6px;color:#4933b9;font-size:12px;margin:12px 0}.cc-ticket button{margin-top:14px}.cc-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.cc-link{background:transparent;border:0;color:#4933b9;font:600 12px Inter,system-ui;cursor:pointer}.cc-help-card button:hover,.cc-link:hover{text-decoration:underline}@media(max-width:800px){.cc-hero{grid-template-columns:1fr}.cc-help-grid{grid-template-columns:1fr 1fr}}@media(max-width:540px){.cc-head{align-items:flex-start}.cc-hero{padding:17px}.cc-hero h3{font-size:18px}.cc-help-grid{grid-template-columns:1fr}.cc-tab{padding:12px 10px}.cc-illustration{min-height:160px}}
 </style>
-<style id="cerood-rto-save-confirmation-v1">
-#section-rto-pricing .rp-save-confirm{
-  display:flex;align-items:flex-start;gap:11px;margin:12px 0 18px;padding:13px 15px;
-  border:1px solid #a7e3b2;background:#f0fdf4;border-radius:7px;color:#166534;
+<style id="cerood-rto-status-fix-v2">
+#section-rto-pricing #rpNotice.rp-success{
+  color:#166534!important;background:#f0fdf4!important;border:1px solid #86d99a!important;
+  padding:13px 15px!important;border-radius:7px!important;font-weight:600;
 }
-#section-rto-pricing .rp-save-confirm .rp-save-icon{
-  width:25px;height:25px;min-width:25px;border-radius:50%;display:grid;place-items:center;
-  background:#22c55e;color:#fff;font-weight:800;font-size:14px;
+#section-rto-pricing #rpNotice.rp-error{
+  color:#b91c1c!important;background:#fef2f2!important;border:1px solid #fecaca!important;
 }
-#section-rto-pricing .rp-save-confirm strong{display:block;font-size:13px;margin-bottom:4px}
-#section-rto-pricing .rp-save-confirm small{display:block;font-size:11.5px;line-height:1.55;color:#28733b}
+#section-rto-pricing .rp-applied-badge{
+  display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;
+  background:#dcfce7;color:#166534;font-size:10px;font-weight:700;
+}
 </style>
 <style id="cerood-rto-pricing-v2">
 #section-rto-pricing{background:#fff;color:#242a38;min-height:calc(100vh - 90px)}.rp-header{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:7px 0 22px;border-bottom:1px solid #e4e7ef}.rp-header small{color:#667085}.rp-header h2{font-size:20px;margin:8px 0 0}.rp-search{display:flex;align-items:center;gap:7px;border:1px solid #cfd5e2;border-radius:6px;padding:10px 12px;width:min(100%,300px)}.rp-search input{border:0;outline:0;width:100%;font:inherit}.rp-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:17px 0 12px}.rp-metric{border:1px solid #dfe4ee;border-radius:8px;padding:19px;min-width:0}.rp-metric h3{font-size:14px;margin:0 0 10px}.rp-metric p,.rp-metric small{font-size:11px;color:#667085;line-height:1.6}.rp-metric-line{display:flex;gap:24px;flex-wrap:wrap;margin:18px 0}.rp-metric-line span{font-size:11px;color:#667085}.rp-metric-line strong{font-size:13px;color:#242a38}.rp-tip{padding:12px;background:#eaf5ff;border:1px solid #c8e1ff;border-radius:5px;font-size:12px;margin-bottom:16px}.rp-tabs{display:flex;border-bottom:1px solid #dfe4ee;gap:10px}.rp-tab{border:0;border-bottom:2px solid transparent;background:white;padding:13px 12px;color:#344054;cursor:pointer;font:600 12px Inter,system-ui}.rp-tab.active{color:#4933b9;border-bottom-color:#4933b9}.rp-notice{margin:15px 0;color:#765500;background:#fff9e8;border:1px solid #f1dfb5;border-radius:5px;padding:11px;font-size:12px}.rp-table-wrap{max-width:100%;overflow-x:auto}.rp-table{border-collapse:collapse;width:100%;min-width:850px;font-size:12px}.rp-table th,.rp-table td{text-align:left;padding:13px;border:1px solid #e1e4ed;vertical-align:middle}.rp-table th{background:#f7f8fc;font-weight:650;color:#475467}.rp-product{display:flex;align-items:center;gap:10px;min-width:180px}.rp-product img{width:43px;height:43px;object-fit:contain;background:#f8fafc;border:1px solid #e1e4ed;border-radius:5px}.rp-product b{font-size:12px}.rp-table input[type=number]{max-width:135px;width:100%;padding:9px;border:1px solid #cfd5e2;border-radius:5px}.rp-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 0;position:sticky;bottom:0;background:#fff;border-top:1px solid #e1e4ed}.rp-footer .seller-btn:disabled{opacity:.45;cursor:not-allowed}@media(max-width:700px){.rp-header{flex-direction:column;align-items:stretch}.rp-search{width:100%}.rp-metrics{grid-template-columns:1fr}.rp-metric{padding:14px}}
@@ -4358,17 +4359,13 @@ claimsRender();supportRender();
     .filter(p=>p.price>0);
   }
 
-  function setNotice(message,error=false,details=''){
+  function setNotice(message,error=false,success=false){
     const el=$('rpNotice');
     if(!el)return;
-    el.classList.remove('rp-save-confirm');
-    el.style.color=error?'#b91c1c':'';
-    if(!error && details){
-      el.classList.add('rp-save-confirm');
-      el.innerHTML=`<span class="rp-save-icon">✓</span><span><strong>${esc(message)}</strong><small>${esc(details)}</small></span>`;
-      return;
-    }
+    el.classList.remove('rp-success','rp-error');
     el.textContent=message;
+    if(error)el.classList.add('rp-error');
+    else if(success)el.classList.add('rp-success');
   }
 
   async function loadSavedDiscounts(){
@@ -4462,7 +4459,7 @@ claimsRender();supportRender();
             <input class="rp-check" type="checkbox" aria-label="Select ${esc(p.name)}"
               ${selected.has(discountKey(p.marketplace,p.id))?'checked':''}>
             <img src="${esc(p.image)}" alt="" onerror="this.style.visibility='hidden'">
-            <b>${esc(p.name)}</b>
+            <b>${esc(p.name)}${tab==='applied'?'<span class="rp-applied-badge">Applied</span>':''}</b>
           </div></td>
           <td>${esc(p.marketplace)}</td>
           <td>₹${p.price.toLocaleString('en-IN')}</td>
@@ -4514,9 +4511,9 @@ claimsRender();supportRender();
 
     $('rpSave').disabled=true;
     $('rpSave').textContent='Saving...';
-    setNotice('Saving discounts to CEROOD database...');
+    setNotice('Saving discount...');
 
-    const savedItems=[];
+    const savedNow=[];
 
     try{
       for(const row of rows){
@@ -4531,7 +4528,6 @@ claimsRender();supportRender();
         if(!Number.isFinite(prepaid)||!Number.isFinite(ret)||prepaid<0||ret<0){
           throw new Error(`Invalid discount amount for ${p.name}.`);
         }
-
         if(prepaid>=p.price||ret>=p.price){
           throw new Error(`Discount must be lower than product price for ${p.name}.`);
         }
@@ -4555,35 +4551,65 @@ claimsRender();supportRender();
           throw new Error(data?.message||`Unable to save ${p.name}.`);
         }
 
-        savedItems.push({
-          name:p.name,
+        // Keep the successfully saved value visible immediately.
+        savedDiscounts[discountKey(p.marketplace,p.id)]={
+          id:data.discount?.id||'',
+          product_id:String(p.id),
           marketplace:p.marketplace,
-          price:p.price,
-          prepaid
-        });
+          prepaid_discount:prepaid,
+          return_prevention_offer:ret,
+          is_active:true
+        };
+        savedNow.push({p,prepaid,ret});
       }
 
       selected.clear();
-      await loadSavedDiscounts();
-
-      // Move seller directly to the confirmation list.
       tab='applied';
       render();
 
-      if(savedItems.length===1){
-        const s=savedItems[0];
-        const prepaidPrice=Math.max(0,s.price-s.prepaid);
+      if(savedNow.length===1){
+        const x=savedNow[0];
+        const prepaidPrice=Math.max(0,x.p.price-x.prepaid);
         setNotice(
-          s.prepaid>0?'Prepaid discount applied successfully':'Discount settings saved successfully',
-          `${s.name} • ${s.marketplace} • Discount ₹${s.prepaid.toLocaleString('en-IN')} • Prepaid price ₹${prepaidPrice.toLocaleString('en-IN')}`
+          `✓ ${x.p.name}: ₹${x.prepaid.toLocaleString('en-IN')} prepaid discount applied. Customer prepaid price ₹${prepaidPrice.toLocaleString('en-IN')}.`,
+          false,true
         );
       }else{
-        const totalDiscount=savedItems.reduce((sum,s)=>sum+s.prepaid,0);
-        setNotice(
-          `${savedItems.length} products updated successfully`,
-          `Saved to your CEROOD seller account • Total prepaid discounts ₹${totalDiscount.toLocaleString('en-IN')}`
-        );
+        setNotice(`✓ ${savedNow.length} product discounts applied successfully.`,false,true);
       }
+
+      // Re-read the database without replacing the clear success message.
+      try{
+        const response=await fetch(apiBase()+'/api/sellers/rto-discounts',{
+          headers:authHeaders(),cache:'no-store'
+        });
+        const data=await response.json().catch(()=>({}));
+        if(response.ok&&data?.success&&Array.isArray(data.discounts)){
+          for(const d of data.discounts){
+            savedDiscounts[discountKey(d.marketplace,d.product_id)]={
+              id:d.id,
+              product_id:String(d.product_id),
+              marketplace:String(d.marketplace||'').toLowerCase(),
+              prepaid_discount:Number(d.prepaid_discount)||0,
+              return_prevention_offer:Number(d.return_prevention_offer)||0,
+              is_active:d.is_active!==false
+            };
+          }
+          render();
+          if(savedNow.length===1){
+            const x=savedNow[0];
+            setNotice(
+              `✓ ${x.p.name}: ₹${x.prepaid.toLocaleString('en-IN')} prepaid discount applied. Customer prepaid price ₹${Math.max(0,x.p.price-x.prepaid).toLocaleString('en-IN')}.`,
+              false,true
+            );
+          }else{
+            setNotice(`✓ ${savedNow.length} product discounts applied successfully.`,false,true);
+          }
+        }
+      }catch(syncError){
+        console.warn('RTO discount refresh:',syncError);
+      }
+
     }catch(error){
       console.error('Save RTO discounts:',error);
       setNotice(error.message||'Unable to save discounts.',true);
