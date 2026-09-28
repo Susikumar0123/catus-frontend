@@ -942,6 +942,22 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #ceroodUploadChooser.cw-final .cerood-multi-option:hover{background:#f6f5ff}
 #ceroodUploadChooser.cw-final .cerood-multi-option input{width:16px!important;height:16px!important;min-height:0!important;margin:0!important;padding:0!important;accent-color:#4933b9;box-shadow:none!important}
 </style>
+
+<style id="cerood-returns-live-style">
+.cr-live-list{display:grid;gap:14px;padding-top:8px}
+.cr-live-card{border:1px solid #e2e5f0;border-radius:10px;background:#fff;padding:16px}
+.cr-live-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;border-bottom:1px solid #eef0f5;padding-bottom:12px}
+.cr-live-top>div{display:grid;gap:4px}.cr-live-top strong{font-size:15px;color:#171717}.cr-live-top small{color:#697386;font-size:12px}
+.cr-live-badge{white-space:nowrap;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:800}
+.cr-live-badge.wait{background:#fff7df;color:#8a5a00}.cr-live-badge.good{background:#eaf8ef;color:#176c3a}.cr-live-badge.bad{background:#fff0f0;color:#b42318}
+.cr-live-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:14px 0}
+.cr-live-grid>div{display:grid;gap:4px}.cr-live-grid small,.cr-live-reason small,.cr-live-note small{font-size:11px;color:#7b8496}.cr-live-grid b{font-size:12px;overflow-wrap:anywhere}
+.cr-live-reason,.cr-live-note{border:1px solid #eef0f5;border-radius:8px;padding:11px 12px;margin-top:8px}.cr-live-reason{display:grid;gap:5px}.cr-live-reason p,.cr-live-note p{margin:4px 0 0;color:#4b5563;font-size:12px;line-height:1.5}
+.cr-live-note.admin{background:#f7f6ff;border-color:#e4e0ff}
+.cr-live-actions{display:flex;gap:8px;margin-top:13px}.cr-live-actions .seller-btn{width:auto}.cr-live-actions .secondary{background:#fff!important;color:#4933b9!important;border:1px solid #cfc8ff!important}
+@media(max-width:760px){.cr-live-grid{grid-template-columns:1fr 1fr}.cr-live-top{align-items:flex-start}.cr-live-actions{flex-direction:column}.cr-live-actions .seller-btn{width:100%}}
+</style>
+
 </head>
 
 <body>
@@ -4431,23 +4447,133 @@ initializeDashboard();
 (function(){
  const root=document.getElementById('section-returns');if(!root)return;
  const $=id=>document.getElementById(id);
- let main='overview',status='transit',claim='all';
- const empty=(msg='No data as of now.')=>'<div class="cr-empty"><div class="cr-empty-art" aria-hidden="true">↶</div><strong>'+msg+'</strong><small class="cr-notice">Returns / RTO live records will appear when the seller returns API is connected.</small></div>';
+ const API=(window.CEROOD_SELLER_CONFIG?.apiBase||'https://catus-backend-d2js.onrender.com').replace(/\/+$/,'');
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const token=()=>window.CeroodSellerAuth?.getToken?.()||'';
+ let main='overview',status='all',claim='all',requests=[],loading=false,errorMessage='';
+
+ function authHeaders(json=false){
+   const t=token(),h={Authorization:'Bearer '+t};
+   if(json)h['Content-Type']='application/json';
+   return h;
+ }
+ const fmtDate=v=>{
+   if(!v)return '—';
+   const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+ };
+ const pretty=v=>String(v||'').replace(/_/g,' ').replace(/\b\w/g,m=>m.toUpperCase());
+ const typeLabel=v=>({return:'Return',exchange:'Exchange',replacement:'Replacement'}[String(v||'').toLowerCase()]||pretty(v));
+ const stateClass=v=>{
+   v=String(v||'').toLowerCase();
+   if(v.includes('reject')||v==='cancelled')return 'cr-live-badge bad';
+   if(['approved','seller_approved','picked_up','received','refunded','replacement_approved','exchange_approved','closed'].includes(v))return 'cr-live-badge good';
+   return 'cr-live-badge wait';
+ };
+ function empty(msg='No return requests yet.'){
+   return '<div class="cr-empty"><div class="cr-empty-art" aria-hidden="true">↶</div><strong>'+esc(msg)+'</strong><small class="cr-notice">Customer Return / Exchange / Replacement requests will appear here automatically.</small></div>';
+ }
+ function filtered(){
+   const q=String($('crSearch')?.value||'').trim().toLowerCase();
+   let list=requests.slice();
+   if(main==='tracking'&&status!=='all'){
+     list=list.filter(r=>{
+       const s=String(r.status||'').toLowerCase();
+       if(status==='transit')return ['approved','pickup_scheduled','picked_up','received'].includes(s);
+       if(status==='delivered')return ['refunded','replacement_approved','exchange_approved','closed'].includes(s);
+       if(status==='cancelled')return ['rejected','seller_rejected','cancelled'].includes(s);
+       return true;
+     });
+   }
+   if(q)list=list.filter(r=>[
+     r.order_id,r.product_id,r.product_name,r.request_type,r.reason,r.status
+   ].some(v=>String(v||'').toLowerCase().includes(q)));
+   return list;
+ }
+ function card(r){
+   const canRespond=['requested','seller_approved','seller_rejected'].includes(String(r.status||'').toLowerCase());
+   return `<article class="cr-live-card" data-return-id="${esc(r.id)}">
+     <div class="cr-live-top">
+       <div><strong>${esc(r.product_name||'Renewed Product')}</strong><small>Order ${esc(r.order_id||'—')}</small></div>
+       <span class="${stateClass(r.status)}">${esc(pretty(r.status||'requested'))}</span>
+     </div>
+     <div class="cr-live-grid">
+       <div><small>Request</small><b>${esc(typeLabel(r.request_type))}</b></div>
+       <div><small>Product ID / SKU</small><b>${esc(r.product_id||'—')}</b></div>
+       <div><small>Quantity</small><b>${esc(r.quantity||1)}</b></div>
+       <div><small>Requested</small><b>${esc(fmtDate(r.created_at))}</b></div>
+     </div>
+     <div class="cr-live-reason"><small>Customer reason</small><strong>${esc(r.reason||'—')}</strong>${r.details?`<p>${esc(r.details)}</p>`:''}</div>
+     ${r.seller_note?`<div class="cr-live-note"><small>Your note</small><p>${esc(r.seller_note)}</p></div>`:''}
+     ${r.admin_note?`<div class="cr-live-note admin"><small>CEROOD Admin note</small><p>${esc(r.admin_note)}</p></div>`:''}
+     ${canRespond?`<div class="cr-live-actions">
+       <button type="button" class="seller-btn cr-return-action" data-decision="approve" data-id="${esc(r.id)}">Accept Request</button>
+       <button type="button" class="seller-btn secondary cr-return-action" data-decision="reject" data-id="${esc(r.id)}">Reject</button>
+     </div>`:''}
+   </article>`;
+ }
  function render(){
-  root.querySelectorAll('[data-cr-panel]').forEach(el=>el.hidden=el.dataset.crPanel!==main);
-  root.querySelectorAll('[data-cr-main]').forEach(el=>el.classList.toggle('active',el.dataset.crMain===main));
-  root.querySelectorAll('[data-cr-status]').forEach(el=>el.classList.toggle('active',el.dataset.crStatus===status));
-  root.querySelectorAll('[data-cr-claim]').forEach(el=>el.classList.toggle('active',el.dataset.crClaim===claim));
-  $('crOverviewResults').innerHTML=empty();$('crTrackingResults').innerHTML=empty();
+   root.querySelectorAll('[data-cr-panel]').forEach(el=>el.hidden=el.dataset.crPanel!==main);
+   root.querySelectorAll('[data-cr-main]').forEach(el=>el.classList.toggle('active',el.dataset.crMain===main));
+   root.querySelectorAll('[data-cr-status]').forEach(el=>el.classList.toggle('active',el.dataset.crStatus===status));
+   root.querySelectorAll('[data-cr-claim]').forEach(el=>el.classList.toggle('active',el.dataset.crClaim===claim));
+
+   const list=filtered();
+   const content=loading?empty('Loading return requests…'):errorMessage?empty(errorMessage):(list.length?`<div class="cr-live-list">${list.map(card).join('')}</div>`:empty());
+   if($('crOverviewResults'))$('crOverviewResults').innerHTML=content;
+   if($('crTrackingResults'))$('crTrackingResults').innerHTML=content;
+   bindActions();
+ }
+ async function load(){
+   if(!token()){errorMessage='Seller login required.';render();return;}
+   loading=true;errorMessage='';render();
+   try{
+     const res=await fetch(API+'/api/sellers/renewed/returns',{headers:authHeaders(),cache:'no-store'});
+     const data=await res.json().catch(()=>({}));
+     if(!res.ok||data.success===false)throw new Error(data.message||'Unable to load return requests.');
+     requests=Array.isArray(data.requests)?data.requests:[];
+   }catch(e){errorMessage=e.message||'Unable to load return requests.'}
+   finally{loading=false;render();}
+ }
+ function bindActions(){
+   root.querySelectorAll('.cr-return-action').forEach(btn=>btn.onclick=async()=>{
+     const decision=btn.dataset.decision,id=btn.dataset.id;
+     const note=window.prompt(decision==='approve'?'Optional note for CEROOD Admin / customer:':'Reason for rejecting this request:','');
+     if(note===null)return;
+     if(decision==='reject'&&!String(note).trim()){window.alert('Please enter the rejection reason.');return;}
+     btn.disabled=true;
+     try{
+       const res=await fetch(API+'/api/sellers/renewed/returns/'+encodeURIComponent(id),{
+         method:'PATCH',headers:authHeaders(true),
+         body:JSON.stringify({decision,seller_note:String(note||'').trim()})
+       });
+       const data=await res.json().catch(()=>({}));
+       if(!res.ok||data.success===false)throw new Error(data.message||'Unable to update request.');
+       await load();
+     }catch(e){window.alert(e.message||'Unable to update request.');btn.disabled=false;}
+   });
  }
  root.querySelectorAll('[data-cr-main]').forEach(el=>el.addEventListener('click',()=>{main=el.dataset.crMain;render()}));
  root.querySelectorAll('[data-cr-status]').forEach(el=>el.addEventListener('click',()=>{status=el.dataset.crStatus;render()}));
  root.querySelectorAll('[data-cr-claim]').forEach(el=>el.addEventListener('click',()=>{claim=el.dataset.crClaim;render()}));
- ['crSearch','crPeriod','crCategory','crPerformance','crSort','crCreated','crExpected','crType'].forEach(id=>$(id).addEventListener(id==='crSearch'?'input':'change',render));
- $('crGoClaims').addEventListener('click',()=>{if(typeof window.showTab==='function')window.showTab('claims')});
- $('crTrend').addEventListener('click',()=>{$('crOverviewResults').innerHTML=empty('No return trend data yet.')});
- $('crExport').addEventListener('click',()=>{const csv='Order ID,SKU,AWB Number,Return Type,Status,Created At\n';const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cerood-returns-empty.csv';a.click();URL.revokeObjectURL(url)});
+ ['crSearch','crPeriod','crCategory','crPerformance','crSort','crCreated','crExpected','crType'].forEach(id=>{
+   const el=$(id);if(el)el.addEventListener(id==='crSearch'?'input':'change',render);
+ });
+ $('crGoClaims')?.addEventListener('click',()=>{if(typeof window.showTab==='function')window.showTab('claims')});
+ $('crTrend')?.addEventListener('click',load);
+ $('crExport')?.addEventListener('click',()=>{
+   const rows=filtered();
+   const csv=[
+     ['Order ID','Product ID','Product','Request Type','Reason','Status','Created At'],
+     ...rows.map(r=>[r.order_id,r.product_id,r.product_name,r.request_type,r.reason,r.status,r.created_at])
+   ].map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');
+   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+   a.href=url;a.download='cerood-renewed-returns.csv';a.click();URL.revokeObjectURL(url);
+ });
+ const returnsNav=document.querySelector('[data-tab="returns"]');
+ if(returnsNav)returnsNav.addEventListener('click',load);
+ window.ceroodLoadSellerReturns=load;
  render();
+ if(!root.classList.contains('seller-hidden')&&!root.hidden)load();
 })();
 </script><script id="cerood-claims-support-interaction">
 (function(){
