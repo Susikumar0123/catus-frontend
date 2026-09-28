@@ -920,6 +920,14 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 }
 </style>
 
+<style id="cerood-step9c3-loading-style">
+#ceroodUploadChooser.cw-single #cwWizard .cw-loading-categories{
+ min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ background:#f5f7ff;color:#344054;text-align:center;padding:32px;box-sizing:border-box
+}
+#ceroodUploadChooser.cw-single #cwWizard .cw-loading-categories strong{font-size:16px;color:#2f249f}
+#ceroodUploadChooser.cw-single #cwWizard .cw-loading-categories p{margin:8px 0 0;color:#667085;font-size:13px}
+</style>
 </head>
 
 <body>
@@ -5443,6 +5451,10 @@ wizard.innerHTML=`<div class="cw-steps"><span class="active"><b>1</b> Select Cat
 async function reset(nextMode){
  mode=nextMode;bulkStep=1;market='clothing';selected=[];search='';file=null;catalogFiles=[];
  if(url){URL.revokeObjectURL(url);url=''}
+ // Switch to the full Step-1 catalog wizard IMMEDIATELY. Do not expose the old
+ // marketplace-card chooser while DB categories are loading.
+ setTitle();
+ wizard.innerHTML='<div class="cw-loading-categories"><strong>Loading categories...</strong><p>Please wait while Cerood loads the product catalog.</p></div>';
  try{
   await loadDbCatalogTrees();
   rebuildRootIndex();
@@ -5552,7 +5564,7 @@ back.addEventListener('click',()=>{
  wizard.hidden=false;
  openProductsPopup();
 });
-window.__ceroodWizardOpen=reset;modal.addEventListener('cerood:chooser-open',e=>reset(e.detail.mode));
+window.__ceroodWizardOpen=reset;
 $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.remove('cw-single','cw-final');panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false});
 })();
 </script>
