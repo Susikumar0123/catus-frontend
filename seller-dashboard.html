@@ -5319,7 +5319,7 @@ body.ccat-view-open{overflow:hidden}
 (()=>{'use strict';
 const $=id=>document.getElementById(id),modal=$('ceroodUploadChooser'),single=$('ceroodSingleChoice'),panel=$('ceroodMarketplacePanel'),renewed=$('renewedProductFormCard'),bulk=$('ceroodBulkChoice');
 if(!modal||!single||!panel)return;
-const trees={
+let trees={
  clothing:{
  'Men Fashion':{
   'Mens Clothing':{
@@ -5355,19 +5355,77 @@ const trees={
  general:{'Electronics':{'TV & Entertainment':{'Smart TVs':['Smart TVs']},'Computers':{'Laptops':['Laptops']},'Accessories':{'Accessories':['Accessories']}}},
  renewed:{'Mobiles & Tablets':{'Mobile Devices':{'Phones':['Smartphone','Feature Phone'],'Tablets':['Tablet']}},'Consumer Electronics':{'Televisions':{'TV':['Smart TV','LED TV','LCD TV']},'Computers':{'Laptops':['Laptop','Gaming Laptop'],'Desktops':['Desktop PC']},'Audio':{'Speakers':['Home Theatre','Bluetooth Speaker']}},'Home Appliances':{'Kitchen':{'Appliances':['Refrigerator','Microwave']},'Laundry':{'Appliances':['Washing Machine']},'Cooling':{'Appliances':['Air Conditioner']}}}
 };
+// Step 9C-2: Clothing, Cosmetics and General category trees come from the SAME DB
+// endpoint used by Step 2. Renewed keeps its existing isolated tree.
+const dbLeafIds=new Map();
+let dbCatalogLoaded=false,dbCatalogPromise=null;
+function pathKey(path){return path.join('\u001f')}
+function extractCategoryRows(data){
+ const rows=Array.isArray(data)?data:(data?.categories||data?.data||data?.products||[]);
+ return Array.isArray(rows)?rows:[];
+}
+function buildDbTree(rows,marketplace){
+ const active=rows.filter(r=>r&&r.id&&r.name&&r.is_active!==false);
+ const byParent=new Map(),byId=new Map(active.map(r=>[String(r.id),r]));
+ for(const r of active){
+  const key=r.parent_id?String(r.parent_id):'';
+  if(!byParent.has(key))byParent.set(key,[]);
+  byParent.get(key).push(r);
+ }
+ for(const arr of byParent.values())arr.sort((a,b)=>(Number(a.sort_order)||0)-(Number(b.sort_order)||0)||String(a.name).localeCompare(String(b.name)));
+ const tree={};
+ function addChildren(target,parentId,path){
+  for(const r of byParent.get(parentId)||[]){
+   const name=String(r.name).trim(),next=[...path,name],children=byParent.get(String(r.id))||[];
+   if(r.is_leaf===true||!children.length){
+    target[name]=[];
+    dbLeafIds.set(marketplace+'|'+pathKey(next),String(r.id));
+   }else{
+    target[name]={};
+    addChildren(target[name],String(r.id),next);
+   }
+  }
+ }
+ addChildren(tree,'',[]);
+ return tree;
+}
+async function loadDbCatalogTrees(){
+ if(dbCatalogLoaded)return;
+ if(dbCatalogPromise)return dbCatalogPromise;
+ dbCatalogPromise=(async()=>{
+  const markets=['clothing','cosmetics','general'];
+  const results=await Promise.all(markets.map(async m=>{
+   const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m));
+   return [m,extractCategoryRows(data)];
+  }));
+  for(const [m,rows] of results){
+   if(!rows.length)throw new Error('No active '+m+' categories returned by catalog API.');
+   trees[m]=buildDbTree(rows,m);
+  }
+  dbCatalogLoaded=true;
+ })().catch(err=>{dbCatalogPromise=null;throw err});
+ return dbCatalogPromise;
+}
+function selectedLeafId(){return dbLeafIds.get(market+'|'+pathKey(selected))||''}
+
 // Each root belongs to exactly one marketplace; do not overwrite a category with another tree.
-const rootMarket={};
+let rootMarket={};
 for(const [m,tree] of Object.entries(trees))for(const root of Object.keys(tree))rootMarket[root]=m;
-const rootOrder=['Men Fashion','Women Fashion','Home & Living','Kids & Toys','Personal Care & Wellness','Beauty & Makeup','Electronics','Mobiles & Tablets','Consumer Electronics','Home Appliances'];
-// The first column selects the marketplace through the category itself, not a top-right dropdown.
-const rootKeys=[...rootOrder.filter(k=>rootMarket[k]),...Object.keys(rootMarket).filter(k=>!rootOrder.includes(k))];
-let market='clothing',selected=['Men Fashion','Mens Clothing','Men Top Wear','Tshirts'],file=null,url='',mode='single',search='',catalogFiles=[];
+const rootOrder=['Men Fashion','Women Fashion','Kids Fashion','Footwear','Bags & Luggage','Watches & Accessories','Beauty & Personal Care','Skin Care','Hair Care','Makeup','Fragrances','Home & Kitchen','Furniture','Home Improvement','Tools & Hardware','Lighting & Electrical','Baby Products','Sports & Fitness','Books & Stationery','Toys & Games','Automotive Accessories','Office Products','Pet Supplies','Musical Instruments','Other Products','Mobiles & Tablets','Consumer Electronics','Home Appliances'];
+let rootKeys=[];
+function rebuildRootIndex(){
+ rootMarket={};
+ for(const [m,tree] of Object.entries(trees))for(const root of Object.keys(tree))rootMarket[root]=m;
+ rootKeys=[...rootOrder.filter(k=>rootMarket[k]),...Object.keys(rootMarket).filter(k=>!rootOrder.includes(k))];
+}
+rebuildRootIndex();
+let market='clothing',selected=[],file=null,url='',mode='single',search='',catalogFiles=[];
 let bulkStep=1,bulkRows=[],bulkFileName='';
 const bulkHeaders=['product_name','category','product_type','brand','size','color','selling_price','mrp','stock','description','image_url'];
 function bulkCsvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
 function bulkSave(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1200)}
-function bulkTemplate(){const category=selected.join(' / '),example=['Example product',category,selected[3],'Example brand','M','Blue',499,999,10,'Describe the actual product','https://example.com/product-front.jpg'];const rows=[bulkHeaders,example];const instructions=[['CEROOD Bulk Catalog - Instructions'],['Category',category],['Marketplace',market],[''],['Fill one product per row in Product Details. Delete the example row before uploading.'],['Required: product_name, category, product_type, selling_price, mrp, stock, image_url.'],['Use the selected category path exactly as shown.'],['Use permanent, publicly accessible front image URLs; local image files are not uploaded by Excel.'],['Prices must be greater than zero; stock must be a non-negative whole number.'],['Each row is a product. Review validation errors before submitting.']];const allowed=[['Field','Expected value'],['category',category],['product_type',selected[3]],['selling_price','Positive number'],['mrp','Positive number >= selling_price'],['stock','Whole number >= 0'],['image_url','https:// publicly accessible image URL']];if(!window.XLSX){bulkSave(new Blob(['\uFEFF'+rows.map(r=>r.map(bulkCsvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),'cerood-'+selected[3].toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-template.csv');alert('Excel library unavailable. CSV template downloaded instead.');return}const x=window.XLSX,wb=x.utils.book_new();for(const [name,data] of [['Product Details',rows],['Instructions',instructions],['Allowed Values',allowed]]){const ws=x.utils.aoa_to_sheet(data);ws['!cols']=data[0].map((h,i)=>({wch:i===0?32:Math.max(18,String(h).length+5)}));x.utils.book_append_sheet(wb,ws,name)}x.writeFile(wb,'cerood-'+selected[3].toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-bulk-template.xlsx')}
-function bulkValidate(rows){const errors=[];if(!rows.length)return ['No product rows found.'];const header=rows[0].map(v=>String(v??'').trim().toLowerCase());for(const key of bulkHeaders)if(!header.includes(key))errors.push('Missing column: '+key);if(errors.length)return errors;const idx=k=>header.indexOf(k);for(let i=1;i<rows.length;i++){const r=rows[i],v=k=>String(r[idx(k)]??'').trim();if(!r.some(c=>String(c??'').trim()))continue;for(const k of ['product_name','category','product_type','selling_price','mrp','stock','image_url'])if(!v(k))errors.push('Row '+(i+1)+': '+k+' missing');if(v('category')&&v('category')!==selected.join(' / '))errors.push('Row '+(i+1)+': category does not match selection');if(v('product_type')&&v('product_type')!==selected[3])errors.push('Row '+(i+1)+': product_type does not match selection');const price=Number(v('selling_price')),mrp=Number(v('mrp')),stock=Number(v('stock'));if(v('selling_price')&&(!Number.isFinite(price)||price<=0))errors.push('Row '+(i+1)+': invalid selling_price');if(v('mrp')&&(!Number.isFinite(mrp)||mrp<=0||mrp<price))errors.push('Row '+(i+1)+': MRP must be >= selling price');if(v('stock')&&(!Number.isInteger(stock)||stock<0))errors.push('Row '+(i+1)+': invalid stock');if(v('image_url')&&!/^https:\/\//i.test(v('image_url')))errors.push('Row '+(i+1)+': image_url must start with https://')}return errors}
+function bulkTemplate(){const category=selected.join(' / '),example=['Example product',category,(selected[selected.length-1]||''),'Example brand','M','Blue',499,999,10,'Describe the actual product','https://example.com/product-front.jpg'];const rows=[bulkHeaders,example];const instructions=[['CEROOD Bulk Catalog - Instructions'],['Category',category],['Marketplace',market],[''],['Fill one product per row in Product Details. Delete the example row before uploading.'],['Required: product_name, category, product_type, selling_price, mrp, stock, image_url.'],['Use the selected category path exactly as shown.'],['Use permanent, publicly accessible front image URLs; local image files are not uploaded by Excel.'],['Prices must be greater than zero; stock must be a non-negative whole number.'],['Each row is a product. Review validation errors before submitting.']];const allowed=[['Field','Expected value'],['category',category],['product_type',selected[selected.length-1]||''],['selling_price','Positive number'],['mrp','Positive number >= selling_price'],['stock','Whole number >= 0'],['image_url','https:// publicly accessible image URL']];if(!window.XLSX){bulkSave(new Blob(['\uFEFF'+rows.map(r=>r.map(bulkCsvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),'cerood-'+(selected[selected.length-1]||'product').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-template.csv');alert('Excel library unavailable. CSV template downloaded instead.');return}const x=window.XLSX,wb=x.utils.book_new();for(const [name,data] of [['Product Details',rows],['Instructions',instructions],['Allowed Values',allowed]]){const ws=x.utils.aoa_to_sheet(data);ws['!cols']=data[0].map((h,i)=>({wch:i===0?32:Math.max(18,String(h).length+5)}));x.utils.book_append_sheet(wb,ws,name)}x.writeFile(wb,'cerood-'+(selected[selected.length-1]||'product').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-bulk-template.xlsx')}
+function bulkValidate(rows){const errors=[];if(!rows.length)return ['No product rows found.'];const header=rows[0].map(v=>String(v??'').trim().toLowerCase());for(const key of bulkHeaders)if(!header.includes(key))errors.push('Missing column: '+key);if(errors.length)return errors;const idx=k=>header.indexOf(k);for(let i=1;i<rows.length;i++){const r=rows[i],v=k=>String(r[idx(k)]??'').trim();if(!r.some(c=>String(c??'').trim()))continue;for(const k of ['product_name','category','product_type','selling_price','mrp','stock','image_url'])if(!v(k))errors.push('Row '+(i+1)+': '+k+' missing');if(v('category')&&v('category')!==selected.join(' / '))errors.push('Row '+(i+1)+': category does not match selection');if(v('product_type')&&v('product_type')!==(selected[selected.length-1]||''))errors.push('Row '+(i+1)+': product_type does not match selection');const price=Number(v('selling_price')),mrp=Number(v('mrp')),stock=Number(v('stock'));if(v('selling_price')&&(!Number.isFinite(price)||price<=0))errors.push('Row '+(i+1)+': invalid selling_price');if(v('mrp')&&(!Number.isFinite(mrp)||mrp<=0||mrp<price))errors.push('Row '+(i+1)+': MRP must be >= selling price');if(v('stock')&&(!Number.isInteger(stock)||stock<0))errors.push('Row '+(i+1)+': invalid stock');if(v('image_url')&&!/^https:\/\//i.test(v('image_url')))errors.push('Row '+(i+1)+': image_url must start with https://')}return errors}
 function bulkStepTwo(){bulkStep=2;setTitle();wizard.innerHTML=`<div class="cw-steps"><span><b>✓</b> Select Category</span><span class="active"><b>2</b> Upload Catalog File</span></div><div class="cb-excel-step"><button type="button" id="cbBack" class="cw-discard">← Change Category</button><p class="cb-selected">${escapeHTML(selected.join(' / '))}</p><h2>Download Excel Template</h2><p>Download this category's template, fill your products and upload the completed file. Each row represents one product.</p><button type="button" id="cbDownload" class="cw-next">↓ Download Excel Template (.xlsx)</button><div class="cb-upload"><h3>Upload completed catalog</h3><label class="cw-upload-btn">↑ Choose Excel / CSV File<input type="file" id="cbFile" accept=".xlsx,.csv" hidden></label><span id="cbFileName"></span><div id="cbValidation" role="status">Select a completed Excel (.xlsx) or CSV file to preview validation results.</div></div><button type="button" id="cbWorkspace" class="cw-discard">Open existing Bulk Upload workspace →</button><p class="cb-safety">Preview only: this step does not submit products to the backend or change QC status.</p></div>`;wizard.querySelector('#cbBack').onclick=()=>{bulkStep=1;render()};wizard.querySelector('#cbDownload').onclick=bulkTemplate;wizard.querySelector('#cbWorkspace').onclick=()=>{const path=selected.slice();modal.querySelector('#ceroodUploadChooserClose')?.click();document.querySelector('[data-tab="fashion-bulk"]')?.click();for(let i=0;i<path.length;i++){const host=$( ['cfBulkRoot','cfBulkLevel1','cfBulkLevel2','cfBulkLevel3'][i]);const b=[...(host?.querySelectorAll('button')||[])].find(x=>x.textContent.trim()===path[i]);if(!b)break;b.click()}};wizard.querySelector('#cbFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;const out=wizard.querySelector('#cbValidation');wizard.querySelector('#cbFileName').textContent=f.name;if(f.size>5e6){out.textContent='File must be under 5 MB';return}try{let rows;if(/\.xlsx$/i.test(f.name)){if(!window.XLSX)throw Error('Excel reader unavailable. Check connection or use CSV.');const x=window.XLSX,book=x.read(await f.arrayBuffer(),{type:'array'}),sheet=book.Sheets['Product Details']||book.Sheets[book.SheetNames[0]];rows=x.utils.sheet_to_json(sheet,{header:1,defval:'',raw:false,blankrows:false})}else if(/\.csv$/i.test(f.name)){const text=(await f.text()).replace(/^\uFEFF/,'');rows=window.XLSX?window.XLSX.utils.sheet_to_json(window.XLSX.read(text,{type:'string'}).Sheets.Sheet1,{header:1,defval:'',raw:false}):text.split(/\r?\n/).filter(Boolean).map(x=>x.split(','))}else throw Error('Only .xlsx or .csv supported');const errors=bulkValidate(rows);const count=Math.max(0,rows.length-1);out.replaceChildren();const summary=document.createElement('strong');summary.textContent=count+' product row(s) · '+errors.length+' validation issue(s)';out.append(summary);if(errors.length){const ul=document.createElement('ul');errors.slice(0,40).forEach(x=>{const li=document.createElement('li');li.textContent=x;ul.append(li)});out.append(ul)}else{const p=document.createElement('p');p.textContent='Template structure and basic fields validated. Images and backend QC have NOT been checked.';out.append(p)}}catch(err){out.textContent=err.message}}}
 
 const wizard=document.createElement('div');wizard.id='cwWizard';single.prepend(wizard);
@@ -5379,10 +5437,21 @@ function options(n){return !n?[]:Array.isArray(n)?n:Object.keys(n)}
 function column(i){const keys=i===0?rootKeys:(selected.length>=i?options(at(selected.slice(0,i))):[]);
 return `<div class="cw-column" role="listbox" aria-label="Category level ${i+1}">${i===0?'<h3>♧ Your Categories</h3>':''}${keys.map(k=>`<button type="button" data-cw-col="${i}" data-cw-key="${escapeHTML(k)}" class="${selected[i]===k?'active':''}" aria-selected="${selected[i]===k}">${escapeHTML(k)}</button>`).join('')}</div>`}
 function setTitle(){const isBulk=mode==='bulk';$('ceroodUploadChooserTitle').textContent=isBulk?'Bulk Catalog Upload':'Add Single Catalog';$('ceroodUploadChooserNote').hidden=true;modal.classList.add('cw-single');modal.classList.remove('cw-final');bulk.hidden=true;single.hidden=false;wizard.hidden=false;back.hidden=true;panel.style.removeProperty('display')}
-function render(){setTitle();const ready=selected.length===4&&options(at(selected)).length===0&&(mode==='bulk'||!!file);const path=selected.length?selected.join(' / '):'Choose a category from the left';
+function render(){setTitle();const leafReady=market==='renewed'?(selected.length>0&&options(at(selected)).length===0):!!selectedLeafId();const ready=leafReady&&(mode==='bulk'||!!file);const path=selected.length?selected.join(' / '):'Choose a category from the left';
 wizard.innerHTML=`<div class="cw-steps"><span class="active"><b>1</b> Select Category</span><span><b>2</b> ${mode==='bulk'?'Upload Catalog File':'Add Product Details'}</span></div><label class="cw-search-label" for="cwSearch">Search Category</label><div class="cw-search-wrap"><input id="cwSearch" class="cw-search" type="search" placeholder="Try Sarees, Toys, Charger, Mugs and more..." value="${escapeHTML(search)}"><div id="cwSearchResults" hidden></div></div><div class="cw-grid">${[0,1,2,3].map(column).join('')}<aside class="cw-image-box"><div class="cw-path">${escapeHTML(path)}</div><div class="cw-photo-stage">${url&&mode==='single'?`<img class="cw-photo-preview" src="${url}" alt="Selected product front image">`:`<div class="cw-photo-icon" aria-hidden="true">${market==='clothing'?'👕':market==='cosmetics'?'✨':market==='general'?'🛍️':'📺'}</div>`}<strong>${mode==='bulk'?'Select the correct category before uploading the catalog file':'Please provide only front image for each product'}</strong>${mode==='single'?`<button type="button" class="cw-upload-btn" id="cwOpenProductsPopup">↑ &nbsp; Add Product Images</button><small>${file?escapeHTML(file.name):'JPG, PNG or WebP · maximum 10 MB'}</small>`:`<p class="cw-bulk-note">${market==='clothing'?'Next: upload your existing CSV / Excel catalog.':'Bulk upload for this marketplace is not connected yet.'}</p>`}</div><div class="cw-guidelines"><div class="cw-warning">ⓘ &nbsp; Follow guidelines to reduce quality check failure</div><strong>General Guidelines</strong><p>① Choose the exact category for the product.</p><p>② Use clear, original product images.</p><p>③ Avoid watermarks or promotional text.</p></div></aside></div><div class="cw-footer"><button type="button" class="cw-discard" id="cwDiscard">Discard Catalog</button><button type="button" class="cw-next" id="cwToDetails" ${!ready||(mode==='bulk'&&market!=='clothing')?'disabled':''}>${mode==='bulk'?'Continue to Bulk Upload':'Continue to Product Details'} →</button></div>`;
 }
-function reset(nextMode){mode=nextMode;bulkStep=1;market='clothing';selected=nextMode==='bulk'?[]:['Men Fashion','Mens Clothing','Men Top Wear','Tshirts'];search='';file=null;catalogFiles=[];if(url){URL.revokeObjectURL(url);url=''}render()}
+async function reset(nextMode){
+ mode=nextMode;bulkStep=1;market='clothing';selected=[];search='';file=null;catalogFiles=[];
+ if(url){URL.revokeObjectURL(url);url=''}
+ try{
+  await loadDbCatalogTrees();
+  rebuildRootIndex();
+  render();
+ }catch(err){
+  setTitle();
+  wizard.innerHTML='<div class="cw-database-error"><strong>Categories could not be loaded.</strong><p>'+escapeHTML(err.message)+'</p><button type="button" class="cw-discard" id="cwDiscard">Close</button></div>';
+ }
+}
 function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;pop=document.createElement('div');pop.id='cwProductsPopup';pop.hidden=true;pop.innerHTML=`<div class="cwp-window" role="dialog" aria-modal="true" aria-labelledby="cwpTitle"><div class="cwp-head"><strong id="cwpTitle">Products in a catalog</strong><button type="button" class="cwp-close" aria-label="Close">×</button></div><div class="cwp-body"><p class="cwp-intro">Add 1 to 9 images of the same product. You can upload front, side, back and other useful angle images.</p><div class="cwp-grid"><div><div class="cwp-limit"><span class="cwp-info">i</span><span>You can add minimum 1 and maximum 9 images for this product</span></div><div class="cwp-products" id="cwpProducts"></div><input type="file" id="cwpFile" accept="image/jpeg,image/png,image/webp" hidden></div><div><div class="cwp-rules-title">⊘ &nbsp; Image types which are not allowed</div><div class="cwp-rules">${[['▧','Watermark image'],['◫','Fake branded/1st copy'],['₹99','Image with price'],['▦','Pixelated image'],['↶','Inverted image'],['◒','Blur/unclear image'],['◩','Incomplete image'],['↕','Stretched/shrunk image'],['♟','Image with props'],['abcd','Image with text']].map(x=>`<div class="cwp-rule"><div class="cwp-rule-art"><span>${x[0]}</span></div><div class="cwp-rule-copy">${x[1]}<small>⊘ NOT ALLOWED</small></div></div>`).join('')}</div></div></div></div><div class="cwp-foot"><button type="button" class="cwp-cancel">Cancel</button><button type="button" class="cwp-continue">Continue</button></div></div>`;document.body.append(pop);const input=pop.querySelector('#cwpFile');const draw=()=>{const host=pop.querySelector('#cwpProducts');host.replaceChildren();catalogFiles.forEach((f,i)=>{const box=document.createElement('div');box.className='cwp-thumb';const img=document.createElement('img');img.src=URL.createObjectURL(f);img.onload=()=>URL.revokeObjectURL(img.src);const rm=document.createElement('button');rm.type='button';rm.className='cwp-remove';rm.textContent='×';rm.onclick=()=>{catalogFiles.splice(i,1);draw()};box.append(img,rm);host.append(box)});if(catalogFiles.length<9){const add=document.createElement('button');add.type='button';add.className='cwp-add';add.innerHTML='<span><b>+</b>Add Image</span>';add.onclick=()=>input.click();host.append(add)}pop.querySelector('.cwp-continue').disabled=!catalogFiles.length};input.onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}if(catalogFiles.length<9)catalogFiles.push(f);draw()};const close=()=>{pop.hidden=true;modal.style.visibility='';};pop.querySelector('.cwp-close').onclick=close;pop.querySelector('.cwp-cancel').onclick=close;pop.addEventListener('click',e=>{if(e.target===pop)close()});pop.querySelector('.cwp-continue').onclick=async()=>{
  if(!catalogFiles.length)return;
  file=catalogFiles[0];
@@ -5401,38 +5470,29 @@ async function finalDetails(){
  panel.querySelector('[data-market="'+market+'"]')?.click();
  const cat=$(market==='renewed'?'productCategory':'marketCategory');
  if(cat){
-  const norm=v=>String(v||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-  const pathParts=selected.map(norm).filter(Boolean);
-  const leaf=pathParts[pathParts.length-1]||'';
-  const fullPath=pathParts.join(' ');
   if(market!=='renewed'){
-   // Clothing, Cosmetics and General now ALL load their final leaf categories asynchronously
-   // from /api/sellers/product-categories. Wait for that load, then match the complete
-   // Step-1 wizard path (falling back to the unique leaf name).
-   let best=null;
-   for(let i=0;i<80&&!best;i++){
-    const opts=[...cat.options].filter(o=>o.value);
-    best=opts.find(o=>norm(o.text)===fullPath);
-    if(!best)best=opts.find(o=>{
-     const t=norm(o.text);
-     return t.endsWith(' '+leaf)||t===leaf;
-    });
-    if(!best){
-     const leafMatches=opts.filter(o=>norm(o.text).split(' ').slice(-leaf.split(' ').length).join(' ')===leaf);
-     if(leafMatches.length===1)best=leafMatches[0];
+   const exactId=selectedLeafId();
+   if(!exactId)throw new Error('Selected DB category ID is missing. Please go back and select the category again.');
+   let matched=false;
+   // Clicking the marketplace starts its own async category load. Wait for the exact UUID option.
+   for(let i=0;i<100;i++){
+    const exact=[...cat.options].find(o=>String(o.value)===String(exactId));
+    if(exact){
+     cat.value=exactId;
+     cat.dataset.wizardCategoryValue=exactId;
+     cat.dataset.wizardCategoryText=exact.text;
+     cat.dispatchEvent(new Event('change',{bubbles:true}));
+     matched=true;
+     break;
     }
-    if(!best)await new Promise(r=>setTimeout(r,100));
+    await new Promise(r=>setTimeout(r,100));
    }
-   if(best){
-    cat.value=best.value;
-    cat.dataset.wizardCategoryValue=best.value;
-    cat.dataset.wizardCategoryText=best.text;
-    cat.dispatchEvent(new Event('change',{bubbles:true}));
-   }else{
-    console.error('CEROOD: could not map Step-1 category to DB leaf category',selected);
-    const m=$('marketplaceMessage');
-    if(m){m.className='marketplace-message error';m.textContent='Selected category could not be loaded. Please go back and select the category again.'}
-   }
+   if(!matched)throw new Error('Selected category UUID was not available in Step 2. Please refresh and try again.');
+  }else{
+   // Renewed remains on its existing independent category flow.
+   const leaf=String(selected[selected.length-1]||'').trim().toLowerCase();
+   const exact=[...cat.options].find(o=>o.value&&String(o.text).trim().toLowerCase()===leaf);
+   if(exact){cat.value=exact.value;cat.dispatchEvent(new Event('change',{bubbles:true}))}
   }
  }
  const input=$(market==='renewed'?'productPhoto':'marketImage');
@@ -5473,7 +5533,7 @@ function renderCatalogGallery(){
 }
 window.__ceroodCatalogSetup=(files)=>{const form=$('ceroodMarketplaceForm');if(form)form.noValidate=false;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;renderCatalogGallery()};
 window.__ceroodCatalogGallery={get files(){return catalogFiles},render:()=>renderCatalogGallery()};
-async function finish(){if(selected.length!==4||options(at(selected)).length)return;if(mode==='single'){if(!file)return;await finalDetails();return}bulkStepTwo()}
+async function finish(){const leafReady=market==='renewed'?(selected.length>0&&options(at(selected)).length===0):!!selectedLeafId();if(!leafReady)return;if(mode==='single'){if(!file)return;await finalDetails();return}bulkStepTwo()}
 wizard.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol);selected=selected.slice(0,i);selected.push(b.dataset.cwKey);if(i===0){market=rootMarket[b.dataset.cwKey]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url=''}search='';render();return}if(b.id==='cwToDetails')finish()});
 wizard.addEventListener('change',e=>{if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
 wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;search=e.target.value;const out=$('cwSearchResults');out.replaceChildren();if(!search.trim()){out.hidden=true;return}let found=[];function walk(n,path){if(Array.isArray(n)){for(const k of n){const p=[...path,k];if(p.join(' ').toLowerCase().includes(search.toLowerCase()))found.push(p)}}else for(const [k,v] of Object.entries(n))walk(v,[...path,k])}for(const [m,tree] of Object.entries(trees))walk(tree,[]);for(const p of found.slice(0,20)){let b=document.createElement('button');b.type='button';b.textContent=p.join(' / ');b.onclick=()=>{selected=p;market=rootMarket[p[0]]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';search='';render()};out.append(b)}out.hidden=false});
