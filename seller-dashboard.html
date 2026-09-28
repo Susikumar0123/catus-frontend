@@ -4032,6 +4032,7 @@ initializeDashboard();
   if(market==='general'){product.category_id=v('marketCategory');product.subcategory=categoryText;product.model=v('marketModel');product.product_attributes=collectDynamicAttributes();} product.product_images=product_images;
   msg.textContent='Submitting to '+marketName()+' admin...';await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
   msg.className='marketplace-message success';msg.textContent='Product added successfully!';form.reset();el('marketPreview').hidden=true;if(market==='general'){renderDynamicAttributes();renderDynamicImages()}await loadQueue();
+   if(typeof window.ceroodRefreshSingleCatalogs==='function'){try{await window.ceroodRefreshSingleCatalogs()}catch(_){}}
    // Successful catalog submission: close the Add Single Catalog popup and open My Products.
    await new Promise(resolve=>setTimeout(resolve,650));
    document.getElementById('ceroodUploadChooserClose')?.click();
@@ -4508,6 +4509,10 @@ async function refresh(){if(loading)return;loading=true;const body=$('ccatSingle
 $('ccatSingleRefresh').onclick=refresh;$('ccatSingleSearch').oninput=render;$('ccatSingleCategory').onchange=render;
 panel.querySelectorAll('[data-ccat-single-status]').forEach(b=>b.onclick=()=>{active=b.dataset.ccatSingleStatus;panel.querySelectorAll('[data-ccat-single-status]').forEach(x=>x.classList.toggle('active',x===b));render()});
 const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"]');tab?.addEventListener('click',()=>{refresh()},false);
+// Keep Single Uploads in sync automatically. A full page load starts on this tab,
+// so do not wait for the seller to press the manual Refresh products button.
+window.ceroodRefreshSingleCatalogs=refresh;
+refresh();
 })();
 </script>
 
