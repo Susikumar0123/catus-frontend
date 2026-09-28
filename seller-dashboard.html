@@ -5472,10 +5472,20 @@ function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;po
  if(url)URL.revokeObjectURL(url);
  url=URL.createObjectURL(file);
  close();
- // Do not return to the category popup after product images are confirmed.
- // Move directly to Step 2. All 1-9 uploaded images belong to this single product.
- await finalDetails();
- window.__ceroodCatalogSetup?.(catalogFiles);
+ // Immediately sync Step 1 after image confirmation so the Continue button can never stay stale/disabled.
+ render();
+ try{
+  // Move directly to Step 2. All 1-9 uploaded images belong to this single product.
+  await finalDetails();
+  window.__ceroodCatalogSetup?.(catalogFiles);
+ }catch(err){
+  console.error('Catalog Step 2 open failed:',err);
+  // Keep the selected category + image and leave the now-enabled Continue button available as a safe retry.
+  render();
+  const next=$('cwToDetails');
+  if(next)next.disabled=false;
+  alert(err?.message||'Could not open Product Details. Please click Continue to Product Details once.');
+ }
 };pop._draw=draw;return pop}
 function openProductsPopup(){const pop=ensureProductsPopup();if(file&&!catalogFiles.length)catalogFiles=[file];pop._draw?.();modal.style.visibility='hidden';pop.hidden=false;}
 async function finalDetails(){
