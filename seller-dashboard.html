@@ -4554,6 +4554,34 @@ const tab=panel.closest('.ccat-records')?.querySelector('[data-ccat-tab="single"
  <button type="button" id="ceroodFashionBulkChoice"><span class="market-symbol">👕</span><strong>Fashion</strong><small>Open existing CSV / Excel bulk catalog</small></button>
  </div><div id="ceroodSingleChoice"></div></div></div>
 </div>
+
+<style id="cerood-step2-advanced-form-v1">
+/* Step 2 only: keep the category selected in Step 1 and present a cleaner seller form. */
+#ceroodUploadChooser.cw-final #ceroodMarketplaceForm.cerood-step2-advanced{max-width:1180px;margin:0 auto;padding:0 0 24px}
+#ceroodUploadChooser.cw-final .cerood-step2-path{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 18px;padding:13px 15px;border:1px solid #dfe5f0;border-radius:12px;background:linear-gradient(180deg,#fbfcff,#f7f9ff);color:#475467;font-size:12px}
+#ceroodUploadChooser.cw-final .cerood-step2-path .path-check{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#e9f8ec;color:#188038;font-weight:800;flex:none}
+#ceroodUploadChooser.cw-final .cerood-step2-path strong{color:#20293a;font-size:12.5px}
+#ceroodUploadChooser.cw-final .cerood-step2-path button{margin-left:auto;border:0;background:transparent;color:#4933b9;font:650 12px Inter,system-ui;cursor:pointer;padding:5px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 20px;background:#fff;border:1px solid #e3e8f1;border-radius:14px;padding:22px;box-shadow:0 10px 32px rgba(31,45,75,.055)}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields>div{min-width:0}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields label{font-size:12px;font-weight:700;color:#273247;margin:0 0 8px;letter-spacing:-.01em}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields input,#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields select,#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields textarea{min-height:46px;border:1px solid #d2d9e6;border-radius:10px;padding:11px 13px;background:#fff;color:#172033;font:500 13px Inter,system-ui;outline:none;transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields textarea{min-height:112px;resize:vertical;line-height:1.55}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields input:hover,#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields select:hover,#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields textarea:hover{border-color:#aeb9cc}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields input:focus,#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields select:focus,#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields textarea:focus{border-color:#5a43d6;box-shadow:0 0 0 4px rgba(90,67,214,.10)}
+#ceroodUploadChooser.cw-final .cerood-step2-section{grid-column:1/-1!important;display:flex;align-items:center;gap:12px;margin:5px 0 -3px;padding-top:7px}
+#ceroodUploadChooser.cw-final .cerood-step2-section:first-child{margin-top:0;padding-top:0}
+#ceroodUploadChooser.cw-final .cerood-step2-section span{font-size:13px;font-weight:800;color:#20293a;white-space:nowrap}
+#ceroodUploadChooser.cw-final .cerood-step2-section i{height:1px;background:#e7ebf2;flex:1}
+#ceroodUploadChooser.cw-final .cerood-step2-hidden{display:none!important}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .market-dynamic-box{border:1px solid #e2e6f0;border-radius:12px;padding:18px;background:#fafbff}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .market-dynamic-box>strong{font-size:13px;color:#20293a;margin-bottom:15px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced .market-dynamic-grid{gap:17px 20px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketSubmit{min-height:44px;border-radius:9px;padding:11px 19px;margin-top:16px;box-shadow:0 7px 18px rgba(73,51,185,.16);transition:transform .16s ease,box-shadow .16s ease}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketSubmit:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(73,51,185,.22)}
+#ceroodUploadChooser.cw-final #cwFinalBack{border:0;background:#f4f2ff;color:#4933b9;border-radius:8px;padding:9px 12px;font:650 12px Inter,system-ui;cursor:pointer;margin:0 0 12px}
+@media(max-width:700px){#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields{grid-template-columns:1fr;padding:15px;gap:15px}#ceroodUploadChooser.cw-final .cerood-step2-section{grid-column:1!important}#ceroodUploadChooser.cw-final .cerood-step2-path button{width:100%;margin-left:34px;text-align:left;padding-left:0}}
+</style>
 <script id="cerood-catalog-alignment-and-chooser-v2-script">
 (()=>{'use strict';
  const $=id=>document.getElementById(id),modal=$('ceroodUploadChooser'),single=$('ceroodSingleChoice'),bulk=$('ceroodBulkChoice'),panel=$('ceroodMarketplacePanel'),renewed=$('renewedProductFormCard');
@@ -4725,8 +4753,8 @@ wizard.innerHTML=`<div class="cw-steps"><span class="active"><b>1</b> Select Cat
 }
 function reset(nextMode){mode=nextMode;bulkStep=1;market='clothing';selected=nextMode==='bulk'?[]:['Men Fashion','Mens Clothing','Men Top Wear','Tshirts'];search='';file=null;if(url){URL.revokeObjectURL(url);url=''}render()}
 async function finalDetails(){
- single.append(panel,renewed);panel.classList.remove('ccat-form-closed');wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details · '+selected.join(' / ');
- // Keep the existing category chooser as Step 1. Step 2 uses the selected leaf category.
+ single.append(panel,renewed);panel.classList.remove('ccat-form-closed');wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details';
+ // Step 1 is the source of truth for category. Step 2 keeps the real select in the DOM for submission, but does not ask the seller again.
  panel.querySelector('[data-market="'+market+'"]')?.click();
  const cat=$(market==='renewed'?'productCategory':'marketCategory');
  if(cat){
@@ -4746,12 +4774,32 @@ async function finalDetails(){
  }
  const input=$(market==='renewed'?'productPhoto':'marketImage');
  if(input&&file&&typeof DataTransfer!=='undefined'){try{const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}))}catch(e){console.warn('Select image in product form',e)}}
+ // Advanced Step 2 presentation. Category and image were already chosen in Step 1.
+ if(market!=='renewed'){
+  const form=$('ceroodMarketplaceForm');
+  form?.classList.add('cerood-step2-advanced');
+  const fields=form?.querySelector('.marketplace-fields');
+  if(fields){
+   fields.querySelectorAll('.cerood-step2-section').forEach(n=>n.remove());
+   const category=$('marketCategory');category?.parentElement?.classList.add('cerood-step2-hidden');
+   const image=$('marketImage');image?.parentElement?.classList.add('cerood-step2-hidden');
+   const addSection=(beforeId,title)=>{const target=$(beforeId)?.parentElement;if(!target||target.parentElement!==fields)return;const h=document.createElement('div');h.className='cerood-step2-section';h.innerHTML='<span>'+escapeHTML(title)+'</span><i></i>';fields.insertBefore(h,target)};
+   addSection('marketName','Basic details');
+   addSection('marketDynamicAttributes','Product specifications');
+   addSection('marketPrice','Pricing & inventory');
+   addSection('marketDescription','Product details');
+  }
+  let pathBox=single.querySelector('.cerood-step2-path');
+  if(!pathBox){pathBox=document.createElement('div');pathBox.className='cerood-step2-path';back.insertAdjacentElement('afterend',pathBox)}
+  pathBox.innerHTML='<span class="path-check">✓</span><div><strong>Selected category</strong><br>'+escapeHTML(selected.join('  ›  '))+'</div><button type="button">Change category</button>';
+  pathBox.querySelector('button').onclick=()=>back.click();
+ }
 }
 async function finish(){if(selected.length!==4||options(at(selected)).length)return;if(mode==='single'){if(!file)return;await finalDetails();return}bulkStepTwo()}
 wizard.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol);selected=selected.slice(0,i);selected.push(b.dataset.cwKey);if(i===0){market=rootMarket[b.dataset.cwKey]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url=''}search='';render();return}if(b.id==='cwToDetails')finish()});
 wizard.addEventListener('change',e=>{if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
 wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;search=e.target.value;const out=$('cwSearchResults');out.replaceChildren();if(!search.trim()){out.hidden=true;return}let found=[];function walk(n,path){if(Array.isArray(n)){for(const k of n){const p=[...path,k];if(p.join(' ').toLowerCase().includes(search.toLowerCase()))found.push(p)}}else for(const [k,v] of Object.entries(n))walk(v,[...path,k])}for(const [m,tree] of Object.entries(trees))walk(tree,[]);for(const p of found.slice(0,20)){let b=document.createElement('button');b.type='button';b.textContent=p.join(' / ');b.onclick=()=>{selected=p;market=rootMarket[p[0]]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';search='';render()};out.append(b)}out.hidden=false});
-back.addEventListener('click',()=>{modal.classList.remove('cw-final');panel.style.setProperty('display','none','important');$('ceroodUploadChooserNote').hidden=true;render()});
+back.addEventListener('click',()=>{modal.classList.remove('cw-final');single.querySelector('.cerood-step2-path')?.remove();$('ceroodMarketplaceForm')?.classList.remove('cerood-step2-advanced');$('marketCategory')?.parentElement?.classList.remove('cerood-step2-hidden');$('marketImage')?.parentElement?.classList.remove('cerood-step2-hidden');panel.style.setProperty('display','none','important');$('ceroodUploadChooserNote').hidden=true;render()});
 window.__ceroodWizardOpen=reset;modal.addEventListener('cerood:chooser-open',e=>reset(e.detail.mode));
 $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.remove('cw-single','cw-final');panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false});
 })();
