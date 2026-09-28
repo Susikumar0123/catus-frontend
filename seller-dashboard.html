@@ -4077,9 +4077,22 @@ initializeDashboard();
    // Step-1 can contain up to 9 images of the same product. Map them into the
    // category image grid in order: first image -> Front View, second -> next slot, etc.
    const step1File=(window.__ceroodCatalogGallery?.files||[])[index]||(index===0?el('marketImage').files[0]:null);
-   if(step1File){input.dataset.catalogIndex=String(index);input.disabled=true;const u=URL.createObjectURL(step1File);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img)}
-   const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent=step1File?(index===0?'Front image selected in Step 1':'Image selected in Step 1'):'Upload image';action.disabled=!!step1File;action.onclick=()=>input.click();
-   input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}if(preview.dataset.url)URL.revokeObjectURL(preview.dataset.url);const u=URL.createObjectURL(f);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img);action.textContent='Replace image'});
+   if(step1File){input.dataset.catalogIndex=String(index);const u=URL.createObjectURL(step1File);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img)}
+   const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent=step1File?'Change image':'Upload image';action.onclick=()=>input.click();
+   input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}
+    const catalogIndex=input.dataset.catalogIndex!==undefined?Number(input.dataset.catalogIndex):-1;
+    if(catalogIndex>=0){
+     const files=window.__ceroodCatalogGallery?.files||[];files[catalogIndex]=f;
+     if(catalogIndex===0){
+      file=f;
+      const primary=el('marketImage');
+      if(primary&&typeof DataTransfer!=='undefined'){try{const dt=new DataTransfer();dt.items.add(f);primary.files=dt.files}catch(e){console.warn('Could not replace primary image',e)}}
+     }
+     renderDynamicImages();
+     return;
+    }
+    if(preview.dataset.url)URL.revokeObjectURL(preview.dataset.url);const u=URL.createObjectURL(f);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img);action.textContent='Change image'
+   });
    const note=document.createElement('p');note.textContent=slot.instruction||'Upload a clear image of this product view.';
    card.append(title,preview,action,input,note);grid.append(card);
   });
@@ -4090,8 +4103,10 @@ initializeDashboard();
    const card=document.createElement('div');card.className='market-image-slot cerood-extra-step1-image';
    const title=document.createElement('div');title.className='market-image-slot-title';title.innerHTML='<strong>Additional Image '+(i+1)+'</strong><span class="optional">Optional</span>';
    const preview=document.createElement('div');preview.className='market-image-preview';const u=URL.createObjectURL(step1Files[i]);preview.dataset.url=u;const img=document.createElement('img');img.src=u;img.alt='Additional product image '+(i+1);preview.append(img);
-   const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent='Image selected in Step 1';action.disabled=true;
-   const note=document.createElement('p');note.textContent='Additional image of this same product.';card.append(title,preview,action,note);grid.append(card);
+   const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.hidden=true;input.dataset.catalogIndex=String(i);
+   const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent='Change image';action.onclick=()=>input.click();
+   input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}const files=window.__ceroodCatalogGallery?.files||[];files[i]=f;renderDynamicImages()});
+   const note=document.createElement('p');note.textContent='Additional image of this same product.';card.append(title,preview,action,input,note);grid.append(card);
   }
   shell.append(grid);dynamicImages.append(shell);
  }
