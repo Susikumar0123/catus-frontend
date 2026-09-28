@@ -1223,7 +1223,10 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
             <div class="full"><label for="marketImage">Actual product image * (uploaded to CEROOD media storage)</label><input id="marketImage" type="file" accept="image/jpeg,image/png,image/webp" required><img id="marketPreview" class="marketplace-preview" alt="Product preview" hidden></div>
           </div>
           <div id="marketplaceMessage" class="marketplace-message" role="status"></div>
-          <button class="seller-btn" id="marketSubmit" type="submit">Submit for admin approval</button>
+          <div class="cerood-draft-submit-actions" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+  <button id="ceroodSaveDraftBtn" class="seller-btn seller-btn-outline" type="button">Save to Draft</button>
+  <button class="seller-btn" id="marketSubmit" type="submit">Submit for admin approval</button>
+</div>
         </form>
         <div id="marketplaceQueue" class="marketplace-queue" hidden></div>
       </div>
@@ -5092,12 +5095,30 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
  window.__ceroodLocalDraftRows=row;
  window.__ceroodClearLocalDraft=clear;
  window.__ceroodResumeLocalDraft=resume;
+ window.__ceroodSaveLocalDraft=()=>{
+  saveNow();
+  const d=read();
+  const msg=$('marketplaceMessage');
+  if(msg){
+   msg.className='marketplace-message '+(d?'success':'');
+   msg.textContent=d ? 'Saved to Draft successfully.' : 'Enter product details before saving the draft.';
+  }
+  window.ceroodRefreshSingleCatalogs?.();
+  return Boolean(d);
+ };
  window.__ceroodDeleteLocalDraft=()=>{
   if(!read()||confirm('Delete this unfinished product draft?')){
    clear();
    window.ceroodRefreshSingleCatalogs?.();
   }
  };
+
+ const draftBtn=$('ceroodSaveDraftBtn');
+ if(draftBtn){
+  draftBtn.addEventListener('click',()=>{
+   window.__ceroodSaveLocalDraft?.();
+  });
+ }
 
  document.addEventListener('input',e=>{
   if(e.target.closest?.('#ceroodMarketplaceForm'))schedule();
