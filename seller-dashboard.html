@@ -3974,6 +3974,26 @@ initializeDashboard();
  };
  const marketName=()=>market==='clothing'?'Fashion':market==='cosmetics'?'Cosmetics':market==='general'?'Cerood Main Store':'Renewed';
  const normalizeSchema=value=>Array.isArray(value)?value:[];
+ // Rich fallback schemas keep every Electronics category useful even when the DB category
+ // has not yet been configured with attribute_schema / image_schema. DB schemas still win.
+ const field=(key,label,type='text',required=false,options=[],placeholder='')=>({key,label,type,required,options,placeholder});
+ const img=(key,label,required,instruction)=>({key,label,required,instruction});
+ function fallbackGeneralSchema(category){
+  const n=String(category?.name||'').toLowerCase();
+  const common=[field('model','Model / model number','text',true),field('condition','Product condition','select',true,['New','Open Box','Like New','Refurbished','Used - Good','Used - Fair']),field('colour','Colour','text',false),field('warranty','Warranty','text',false,[],'e.g. 1 year / 6 months')];
+  const images=[img('front_view','Front View',true,'Upload a clear full front view with the complete product visible.'),img('back_view','Back View',true,'Upload the back side clearly, including labels and ports where applicable.'),img('side_view','Side / Angle View',false,'Show thickness, side controls, ports or overall depth.'),img('accessories_view','Accessories / Box Contents',false,'Show charger, remote, cables, stand, manuals or included accessories.')];
+  if(n.includes('laptop')||n.includes('computer')) return {attributes:[...common,field('processor','Processor','text',true,[],'e.g. Intel Core i5 12th Gen'),field('ram','RAM','select',true,['4 GB','8 GB','16 GB','32 GB','64 GB']),field('storage','Storage','text',true,[],'e.g. 512 GB SSD'),field('display_size','Display size','text',true,[],'e.g. 15.6 inch'),field('graphics','Graphics / GPU'),field('operating_system','Operating system'),field('battery_condition','Battery condition'),field('keyboard_layout','Keyboard / layout'),field('ports','Ports','textarea',false,[],'USB, Type-C, HDMI, audio...')],images:[images[0],img('open_screen','Open Screen View',true,'Show the powered-on display and keyboard clearly.'),img('keyboard_view','Keyboard / Palmrest',true,'Show keyboard, trackpad and palmrest condition.'),img('ports_view','Ports / Side View',true,'Show available ports on both sides.'),img('bottom_view','Bottom / Serial Label',false,'Show bottom condition and model/serial label without exposing private owner data.'),img('charger_view','Charger & Accessories',true,'Show the charger and all included accessories.') ]};
+  if(n.includes('tv')||n.includes('television')) return {attributes:[...common,field('screen_size','Screen size','text',true,[],'e.g. 32 inch'),field('resolution','Resolution','select',true,['HD Ready','Full HD','4K UHD','8K']),field('display_type','Display type','select',false,['LED','QLED','OLED','Mini LED','LCD']),field('smart_os','Smart TV OS','text',false,[],'e.g. Google TV / Tizen / webOS'),field('refresh_rate','Refresh rate'),field('hdmi_ports','HDMI ports','number'),field('usb_ports','USB ports','number'),field('connectivity','Connectivity','textarea',false,[],'Wi-Fi, Bluetooth, HDMI ARC...')],images:[images[0],img('back_ports','Back / Ports View',true,'Upload the back side clearly showing ports and connections.'),images[2],img('remote_accessories','Remote & Accessories',true,'Show remote, stand, cables and other included accessories.') ]};
+  if(n.includes('phone')||n.includes('mobile')) return {attributes:[...common,field('ram','RAM','select',true,['4 GB','6 GB','8 GB','12 GB','16 GB']),field('storage','Storage','select',true,['64 GB','128 GB','256 GB','512 GB','1 TB']),field('screen_size','Screen size'),field('battery','Battery capacity / health'),field('camera','Camera'),field('network','Network','select',false,['4G','5G']),field('sim','SIM type')],images:[images[0],img('back_view','Back View',true,'Show rear panel and cameras clearly.'),img('side_view','Side / Frame View',true,'Show buttons, frame and physical condition.'),img('screen_on','Screen On View',true,'Show the display powered on.'),img('box_accessories','Box & Accessories',false,'Show box, charger, cable and included accessories.') ]};
+  if(n.includes('refrigerator')||n.includes('fridge')) return {attributes:[...common,field('capacity','Capacity','text',true,[],'e.g. 240 L'),field('door_type','Door type','select',true,['Single Door','Double Door','Triple Door','Side by Side','French Door']),field('star_rating','Energy star rating'),field('compressor','Compressor / inverter type'),field('dimensions','Dimensions')],images:[images[0],img('inside_view','Inside View',true,'Show shelves, freezer and interior condition.'),images[1],img('label_view','Model / Energy Label',true,'Show model and energy label clearly.'),images[2]]};
+  if(n.includes('washing')) return {attributes:[...common,field('capacity','Capacity','text',true,[],'e.g. 7 kg'),field('load_type','Load type','select',true,['Front Load','Top Load','Semi Automatic']),field('automation','Automation','select',false,['Fully Automatic','Semi Automatic']),field('rpm','Spin speed / RPM'),field('programs','Wash programs','textarea')],images:[images[0],img('drum_view','Drum / Inside View',true,'Show drum/tub and inside condition.'),img('control_panel','Control Panel',true,'Show buttons/display clearly.'),images[1],images[2]]};
+  if(n.includes('air conditioner')||/^ac$/.test(n)) return {attributes:[...common,field('capacity','Capacity / Ton','select',true,['0.8 Ton','1 Ton','1.2 Ton','1.5 Ton','2 Ton']),field('ac_type','AC type','select',true,['Split AC','Window AC','Portable AC']),field('inverter','Inverter','select',false,['Yes','No']),field('star_rating','Energy star rating'),field('cooling_capacity','Cooling capacity'),field('refrigerant','Refrigerant')],images:[img('indoor_unit','Indoor Unit / Front',true,'Show the complete indoor unit clearly.'),img('outdoor_unit','Outdoor Unit',true,'Show the complete outdoor unit and condition.'),img('label_view','Model / Energy Label',true,'Show model and energy label clearly.'),img('remote_accessories','Remote & Accessories',false,'Show remote, pipes and included accessories.') ]};
+  if(n.includes('speaker')||n.includes('audio')||n.includes('home theatre')) return {attributes:[...common,field('power_output','Power output'),field('channels','Channels','text',false,[],'e.g. 2.1 / 5.1'),field('connectivity','Connectivity','textarea',true,[],'Bluetooth, AUX, HDMI ARC, Optical...'),field('battery','Battery / power type')],images};
+  if(n.includes('accessor')) return {attributes:[...common,field('accessory_type','Accessory type','text',true),field('compatibility','Compatible with','textarea',true),field('material','Material'),field('connectivity','Connectivity / connector'),field('dimensions','Size / dimensions'),field('included_items','Items included','textarea')],images:[images[0],images[1],img('connector_detail','Connector / Detail View',false,'Show connector, controls, label or important detail.'),images[3]]};
+  return {attributes:[...common,field('product_type','Product type','text',true),field('key_features','Key features','textarea',true),field('dimensions','Size / dimensions'),field('included_items','Items included','textarea')],images};
+ }
+ function categoryAttributeSchema(category){const db=normalizeSchema(category?.attribute_schema);return db.length?db:fallbackGeneralSchema(category).attributes}
+ function categoryImageSchema(category){const db=normalizeSchema(category?.image_schema);return db.length?db:fallbackGeneralSchema(category).images}
  function setCategoryOptions(rows){
   const select=el('marketCategory');select.replaceChildren(new Option('Select category',''));
   rows.forEach(row=>select.add(new Option(row.name,row.id)));
@@ -3996,7 +4016,7 @@ initializeDashboard();
  function renderDynamicAttributes(){
   if(market!=='general'){dynamic.replaceChildren();return}
   const category=generalCategories.find(x=>String(x.id)===el('marketCategory').value);
-  const schema=normalizeSchema(category?.attribute_schema);dynamic.replaceChildren();
+  const schema=categoryAttributeSchema(category);dynamic.replaceChildren();
   if(!el('marketCategory').value){dynamic.innerHTML='<div class="market-dynamic-empty">Select a category to load its product specifications.</div>';return}
   if(!schema.length){dynamic.innerHTML='<div class="market-dynamic-empty">No extra specifications are configured for this category yet.</div>';return}
   const box=document.createElement('div'),title=document.createElement('strong'),grid=document.createElement('div');box.className='market-dynamic-box';grid.className='market-dynamic-grid';title.textContent='Product specifications';box.append(title,grid);
@@ -4016,7 +4036,7 @@ initializeDashboard();
   dynamicImages.replaceChildren();
   if(market!=='general')return;
   const category=generalCategories.find(x=>String(x.id)===el('marketCategory').value);
-  const schema=normalizeSchema(category?.image_schema);
+  const schema=categoryImageSchema(category);
   if(!schema.length)return;
   const shell=document.createElement('section');shell.className='market-image-schema';
   const head=document.createElement('div');head.className='market-image-schema-head';head.innerHTML='<div><strong>Product Images</strong><small>Upload clear images for this category. Required views must be added before submission.</small></div><span>Image Guidelines</span>';shell.append(head);
@@ -4040,7 +4060,7 @@ initializeDashboard();
  async function collectAndUploadDynamicImages(primaryUrl){
   if(market!=='general')return {};
   const category=generalCategories.find(x=>String(x.id)===el('marketCategory').value);
-  const schema=normalizeSchema(category?.image_schema),out={};
+  const schema=categoryImageSchema(category),out={};
   for(let i=0;i<schema.length;i++){
    const slot=schema[i];if(!slot?.key)continue;
    const input=dynamicImages.querySelector('[data-image-key="'+CSS.escape(slot.key)+'"]');
