@@ -4812,7 +4812,7 @@ function bulkStepTwo(){bulkStep=2;setTitle();wizard.innerHTML=`<div class="cw-st
 
 const wizard=document.createElement('div');wizard.id='cwWizard';single.prepend(wizard);
 modal.dataset.wizardVersion='v4';
-const back=document.createElement('button');back.type='button';back.id='cwFinalBack';back.hidden=true;back.textContent='← Back to Select Category';single.insertBefore(back,wizard);
+const back=document.createElement('button');back.type='button';back.id='cwFinalBack';back.hidden=true;back.textContent='← Back to Product Images';single.insertBefore(back,wizard);
 const escapeHTML=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function at(path){let n=trees[market];for(const k of path)n=n?.[k];return n}
 function options(n){return !n?[]:Array.isArray(n)?n:Object.keys(n)}
@@ -4918,7 +4918,21 @@ async function finish(){if(selected.length!==4||options(at(selected)).length)ret
 wizard.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol);selected=selected.slice(0,i);selected.push(b.dataset.cwKey);if(i===0){market=rootMarket[b.dataset.cwKey]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url=''}search='';render();return}if(b.id==='cwToDetails')finish()});
 wizard.addEventListener('change',e=>{if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
 wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;search=e.target.value;const out=$('cwSearchResults');out.replaceChildren();if(!search.trim()){out.hidden=true;return}let found=[];function walk(n,path){if(Array.isArray(n)){for(const k of n){const p=[...path,k];if(p.join(' ').toLowerCase().includes(search.toLowerCase()))found.push(p)}}else for(const [k,v] of Object.entries(n))walk(v,[...path,k])}for(const [m,tree] of Object.entries(trees))walk(tree,[]);for(const p of found.slice(0,20)){let b=document.createElement('button');b.type='button';b.textContent=p.join(' / ');b.onclick=()=>{selected=p;market=rootMarket[p[0]]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';search='';render()};out.append(b)}out.hidden=false});
-back.addEventListener('click',()=>{modal.classList.remove('cw-final');single.querySelector('.cerood-step2-path')?.remove();$('ceroodMarketplaceForm')?.classList.remove('cerood-step2-advanced');$('marketCategory')?.parentElement?.classList.remove('cerood-step2-hidden');$('marketImage')?.parentElement?.classList.remove('cerood-step2-hidden');panel.style.setProperty('display','none','important');$('ceroodUploadChooserNote').hidden=true;render()});
+back.addEventListener('click',()=>{
+ // Step 2 Back = return to the SAME product's 1-9 image popup.
+ // Keep selected category and already uploaded images intact.
+ modal.classList.remove('cw-final');
+ single.querySelector('.cerood-step2-path')?.remove();
+ single.querySelector('#ceroodCatalogProductStrip')?.remove();
+ $('ceroodMarketplaceForm')?.classList.remove('cerood-step2-advanced');
+ $('marketCategory')?.parentElement?.classList.remove('cerood-step2-hidden');
+ $('marketImage')?.parentElement?.classList.remove('cerood-step2-hidden');
+ panel.style.setProperty('display','none','important');
+ $('ceroodUploadChooserNote').hidden=true;
+ back.hidden=true;
+ wizard.hidden=false;
+ openProductsPopup();
+});
 window.__ceroodWizardOpen=reset;modal.addEventListener('cerood:chooser-open',e=>reset(e.detail.mode));
 $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.remove('cw-single','cw-final');panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false});
 })();
