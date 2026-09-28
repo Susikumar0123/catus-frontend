@@ -928,6 +928,20 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #ceroodUploadChooser.cw-single #cwWizard .cw-loading-categories strong{font-size:16px;color:#2f249f}
 #ceroodUploadChooser.cw-single #cwWizard .cw-loading-categories p{margin:8px 0 0;color:#667085;font-size:13px}
 </style>
+
+<style id="cerood-step2-multiselect-fix">
+#ceroodUploadChooser.cw-final .cerood-multi{position:relative;margin-top:7px}
+#ceroodUploadChooser.cw-final .cerood-native-multiselect{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;opacity:0!important;pointer-events:none!important;margin:0!important;padding:0!important;border:0!important}
+#ceroodUploadChooser.cw-final .cerood-multi-trigger{width:100%;height:46px;border:1px solid #d5dae5;border-radius:10px;background:#fff;color:#667085;padding:0 13px;display:flex;align-items:center;justify-content:space-between;gap:12px;font:500 13px Inter,system-ui;cursor:pointer;text-align:left}
+#ceroodUploadChooser.cw-final .cerood-multi-trigger:hover{border-color:#b9c0cf;background:#fdfdff}
+#ceroodUploadChooser.cw-final .cerood-multi-trigger.has-value{color:#202638}
+#ceroodUploadChooser.cw-final .cerood-multi-trigger b{font-size:16px;color:#667085;font-weight:600}
+#ceroodUploadChooser.cw-final .cerood-multi-menu{position:absolute;left:0;right:0;top:51px;z-index:80;max-height:230px;overflow:auto;background:#fff;border:1px solid #d5dae5;border-radius:10px;box-shadow:0 12px 28px rgba(16,24,40,.14);padding:6px}
+#ceroodUploadChooser.cw-final .cerood-multi-menu[hidden]{display:none!important}
+#ceroodUploadChooser.cw-final .cerood-multi-option{display:flex!important;align-items:center;gap:9px;padding:9px 10px!important;margin:0!important;border-radius:7px;cursor:pointer;font-size:13px!important;font-weight:500!important;color:#344054!important}
+#ceroodUploadChooser.cw-final .cerood-multi-option:hover{background:#f6f5ff}
+#ceroodUploadChooser.cw-final .cerood-multi-option input{width:16px!important;height:16px!important;min-height:0!important;margin:0!important;padding:0!important;accent-color:#4933b9;box-shadow:none!important}
+</style>
 </head>
 
 <body>
@@ -4029,7 +4043,16 @@ initializeDashboard();
    const wrap=document.createElement('label'),label=document.createElement('span');label.textContent=field.label+(field.required?' *':'');if(field.required)label.className='market-dynamic-label';wrap.append(label);
    let input;
    if(field.type==='select'||field.type==='multiselect'){
-    input=document.createElement('select');if(field.type==='multiselect'){input.multiple=true;input.size=Math.min(Math.max(field.options.length,3),6)}else input.add(new Option('Select '+field.label,''));field.options.forEach(v=>input.add(new Option(String(v),String(v))));
+    input=document.createElement('select');if(field.type==='multiselect'){input.multiple=true;input.size=1;input.classList.add('cerood-native-multiselect');}else input.add(new Option('Select '+field.label,''));field.options.forEach(v=>input.add(new Option(String(v),String(v))));
+    if(field.type==='multiselect'){
+     const multi=document.createElement('div');multi.className='cerood-multi';
+     const trigger=document.createElement('button');trigger.type='button';trigger.className='cerood-multi-trigger';trigger.innerHTML='<span>Select '+field.label+'</span><b>⌄</b>';
+     const menu=document.createElement('div');menu.className='cerood-multi-menu';menu.hidden=true;
+     const sync=()=>{const vals=[...input.selectedOptions].map(o=>o.value);trigger.querySelector('span').textContent=vals.length?(vals.length<=2?vals.join(', '):vals.length+' selected'):'Select '+field.label;trigger.classList.toggle('has-value',!!vals.length);input.dispatchEvent(new Event('change',{bubbles:true}));};
+     field.options.forEach((v,idx)=>{const row=document.createElement('label');row.className='cerood-multi-option';const cb=document.createElement('input');cb.type='checkbox';cb.value=String(v);const txt=document.createElement('span');txt.textContent=String(v);cb.onchange=()=>{const opt=[...input.options].find(o=>o.value===cb.value);if(opt)opt.selected=cb.checked;sync()};row.append(cb,txt);menu.append(row)});
+     trigger.onclick=e=>{e.stopPropagation();document.querySelectorAll('.cerood-multi-menu').forEach(x=>{if(x!==menu)x.hidden=true});menu.hidden=!menu.hidden};
+     multi.append(trigger,menu,input);wrap.append(multi);grid.append(wrap);return;
+    }
    }else if(field.type==='textarea'){input=document.createElement('textarea')}
    else if(field.type==='boolean'){input=document.createElement('select');input.add(new Option('Select '+field.label,''));input.add(new Option('Yes','true'));input.add(new Option('No','false'))}else{input=document.createElement('input');input.type=field.type==='number'?'number':'text';if(field.type==='number')input.step='any'}
    input.dataset.attributeKey=field.key;input.dataset.attributeType=field.type;input.dataset.attributeLabel=field.label;if(field.required)input.required=true;if(field.placeholder)input.placeholder=field.placeholder;wrap.append(input);grid.append(wrap);
