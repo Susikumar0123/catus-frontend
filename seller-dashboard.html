@@ -5433,17 +5433,27 @@ async function resolveSelectedDbId(){
  if(cached)return cached;
  const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(market));
  const rows=extractCategoryRows(data).filter(r=>r&&r.id&&r.name&&r.is_active!==false);
- let parentId='',match=null;
- for(const part of selected){
-  const wanted=String(part).trim().toLowerCase();
-  const candidates=rows.filter(r=>String(r.parent_id||'')===parentId&&String(r.name||'').trim().toLowerCase()===wanted);
-  if(candidates.length!==1)return '';
-  match=candidates[0];
-  parentId=String(match.id);
+ if(!rows.length)return '';
+ const norm=v=>String(v??'').trim().toLowerCase().replace(/\s+/g,' ');
+ const wantedPath=selected.map(norm);
+ const byId=new Map(rows.map(r=>[String(r.id),r]));
+ const leafName=wantedPath[wantedPath.length-1];
+ const candidates=rows.filter(r=>norm(r.name)===leafName);
+ let match=null;
+ // Resolve from the leaf upward. This is safer than assuming the API root parent is an empty string.
+ for(const candidate of candidates){
+  const chain=[];let cur=candidate,guard=0;
+  while(cur&&guard++<12){
+   chain.unshift(norm(cur.name));
+   cur=cur.parent_id?byId.get(String(cur.parent_id)):null;
+  }
+  if(chain.length===wantedPath.length&&chain.every((v,i)=>v===wantedPath[i])){match=candidate;break}
  }
+ // If the leaf name is unique in this marketplace, it is still an exact DB row and is safe to use.
+ if(!match&&candidates.length===1)match=candidates[0];
  if(!match)return '';
  const hasChildren=rows.some(r=>String(r.parent_id||'')===String(match.id));
- if(match.is_leaf!==true&&hasChildren)return '';
+ if(!asBool(match.is_leaf)&&hasChildren)return '';
  lockedLeafId=String(match.id);
  dbLeafIds.set(market+'|'+pathKey(selected),lockedLeafId);
  return lockedLeafId;
@@ -5506,9 +5516,7 @@ function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;po
   console.error('Catalog Step 2 open failed:',err);
   // Keep the selected category + image and leave the now-enabled Continue button available as a safe retry.
   render();
-  const next=$('cwToDetails');
-  if(next)next.disabled=false;
-  alert(err?.message||'Could not open Product Details. Please click Continue to Product Details once.');
+  alert(err?.message||'Could not open Product Details. Please reselect the final category once.');
  }
 };pop._draw=draw;return pop}
 function openProductsPopup(){const pop=ensureProductsPopup();if(file&&!catalogFiles.length)catalogFiles=[file];pop._draw?.();modal.style.visibility='hidden';pop.hidden=false;}
