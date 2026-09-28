@@ -4031,7 +4031,12 @@ initializeDashboard();
   const product={name:v('marketName'),category:market==='general'?categoryText:v('marketCategory'),brand:v('marketBrand'),variant:v('marketVariant'),price:v('marketPrice'),compare_price:v('marketCompare'),stock:v('marketStock'),net_quantity:market==='cosmetics'?v('marketQuantity'):'',batch_number:market==='cosmetics'?v('marketBatch'):'',manufacture_date:market==='cosmetics'?v('marketMfg'):'',expiry_date:market==='cosmetics'?v('marketExpiry'):'',ingredients:market==='cosmetics'?v('marketIngredients'):'',description:v('marketDescription'),image_url};
   if(market==='general'){product.category_id=v('marketCategory');product.subcategory=categoryText;product.model=v('marketModel');product.product_attributes=collectDynamicAttributes();} product.product_images=product_images;
   msg.textContent='Submitting to '+marketName()+' admin...';await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
-  msg.textContent='Submitted! Waiting for '+marketName()+' admin approval.';form.reset();el('marketPreview').hidden=true;if(market==='general'){renderDynamicAttributes();renderDynamicImages()}await loadQueue();
+  msg.className='marketplace-message success';msg.textContent='Product added successfully!';form.reset();el('marketPreview').hidden=true;if(market==='general'){renderDynamicAttributes();renderDynamicImages()}await loadQueue();
+   // Successful catalog submission: close the Add Single Catalog popup and open My Products.
+   await new Promise(resolve=>setTimeout(resolve,650));
+   document.getElementById('ceroodUploadChooserClose')?.click();
+   if(typeof window.showTab==='function')window.showTab('products');
+   if(typeof window.loadProducts==='function'){try{await window.loadProducts()}catch(_){}}
  }catch(err){msg.className='marketplace-message error';msg.textContent=err.message}finally{busy=false;btn.disabled=false}});
  renewed.hidden=true;form.hidden=true;queue.hidden=true;
 })();
