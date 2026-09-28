@@ -5383,6 +5383,7 @@ let trees={
 // Step 9C-2: Clothing, Cosmetics and General category trees come from the SAME DB
 // endpoint used by Step 2. Renewed keeps its existing isolated tree.
 const dbLeafIds=new Map();
+const dbRowsByMarket=new Map();
 let dbCatalogLoaded=false,dbCatalogPromise=null;
 function pathKey(path){return path.join('\u001f')}
 function extractCategoryRows(data){
@@ -5420,10 +5421,32 @@ async function loadDbCatalogTree(m){
  const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m));
  const rows=extractCategoryRows(data);
  if(!rows.length)throw new Error('No active '+m+' categories returned by catalog API.');
+ dbRowsByMarket.set(m,rows);
  trees[m]=buildDbTree(rows,m);
  rebuildRootIndex();
 }
-function selectedLeafId(){return dbLeafIds.get(market+'|'+pathKey(selected))||''}
+function selectedLeafId(){
+ const direct=dbLeafIds.get(market+'|'+pathKey(selected));
+ if(direct)return direct;
+ // Safety fallback: resolve the final selected category against the same DB rows.
+ // This prevents a stale/display-only wizard path from losing the real category UUID.
+ const rows=dbRowsByMarket.get(market)||[];
+ const leafName=String(selected[selected.length-1]||'').trim().toLowerCase();
+ if(!leafName)return '';
+ const leaves=rows.filter(r=>r&&r.id&&r.name&&r.is_active!==false&&(r.is_leaf===true||String(r.is_leaf).toLowerCase()==='true'));
+ const matches=leaves.filter(r=>String(r.name).trim().toLowerCase()===leafName);
+ if(matches.length===1)return String(matches[0].id);
+ // If duplicate leaf names exist, prefer the row whose DB path contains the selected labels.
+ if(matches.length>1){
+  const wanted=selected.map(x=>String(x).trim().toLowerCase()).filter(Boolean);
+  const scored=matches.map(r=>{
+   const hay=String(r.category_path||'').toLowerCase();
+   return {r,score:wanted.reduce((n,x)=>n+(hay.includes(x)?1:0),0)};
+  }).sort((a,b)=>b.score-a.score);
+  if(scored[0]&&(!scored[1]||scored[0].score>scored[1].score))return String(scored[0].r.id);
+ }
+ return '';
+}
 
 // Show root categories immediately; load the selected marketplace taxonomy lazily.
 const rootOrder=['Men Fashion','Women Fashion','Kids Fashion','Footwear','Bags & Luggage','Watches & Accessories','Beauty & Personal Care','Skin Care','Hair Care','Makeup','Fragrances','Home & Kitchen','Furniture','Home Improvement','Tools & Hardware','Lighting & Electrical','Baby Products','Sports & Fitness','Books & Stationery','Toys & Games','Automotive Accessories','Office Products','Pet Supplies','Musical Instruments','Other Products','Mobiles & Tablets','Consumer Electronics','Home Appliances'];
