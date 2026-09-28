@@ -1267,7 +1267,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
             <div data-general-only hidden><label for="marketModel">Model</label><input id="marketModel" maxlength="120" placeholder="e.g. Test 32"></div>
             <div id="marketDynamicAttributes" class="full" hidden></div>
             <div id="marketDynamicImages" class="full" hidden></div>
-            <div><label for="marketVariant">Variant / size / colour</label><input id="marketVariant" maxlength="100" placeholder="e.g. M / Black / 50 ml"></div>
+            <div id="marketVariantWrap"><label for="marketVariant">Variant / size / colour</label><input id="marketVariant" maxlength="100" placeholder="e.g. M / Black / 50 ml"></div>
             <div><label for="marketPrice">Selling price (₹) *</label><input id="marketPrice" type="number" min="1" step="0.01" required></div>
             <div><label for="marketCompare">MRP / compare price (₹)</label><input id="marketCompare" type="number" min="0" step="0.01"></div>
             <div><label for="marketStock">Available stock *</label><input id="marketStock" type="number" min="0" step="1" required></div>
@@ -4009,10 +4009,18 @@ initializeDashboard();
    msg.className='marketplace-message error';msg.textContent='Could not load '+marketName()+' categories: '+err.message;
   }
  }
+ function syncVariantVisibility(schema){
+  const wrap=el('marketVariantWrap');if(!wrap)return;
+  const keys=(schema||[]).map(x=>String(x?.key||'').toLowerCase());
+  const labels=(schema||[]).map(x=>String(x?.label||'').toLowerCase());
+  const hasSize=keys.some(k=>k==='size'||k.includes('size'))||labels.some(x=>x==='size'||x.includes('size'));
+  const hasColour=keys.some(k=>k==='colour'||k==='color'||k.includes('colour')||k.includes('color'))||labels.some(x=>x.includes('colour')||x.includes('color'));
+  wrap.classList.toggle('cerood-variant-duplicate',hasSize||hasColour);
+ }
  function renderDynamicAttributes(){
-  if(!market||market==='renewed'){dynamic.replaceChildren();dynamic.hidden=true;return}dynamic.hidden=false
+  if(!market||market==='renewed'){el('marketVariantWrap')?.classList.remove('cerood-variant-duplicate');dynamic.replaceChildren();dynamic.hidden=true;return}dynamic.hidden=false
   const category=currentCategory();
-  const schema=categoryAttributeSchema(category);dynamic.replaceChildren();
+  const schema=categoryAttributeSchema(category);syncVariantVisibility(schema);dynamic.replaceChildren();
   if(!el('marketCategory').value){dynamic.innerHTML='<div class="market-dynamic-empty">Select a category to load its product specifications.</div>';return}
   if(!schema.length){dynamic.innerHTML='<div class="market-dynamic-empty">No extra specifications are configured for this category yet.</div>';return}
   const box=document.createElement('div'),title=document.createElement('strong'),grid=document.createElement('div');box.className='market-dynamic-box';grid.className='market-dynamic-grid';title.textContent='Product specifications';box.append(title,grid);
@@ -5216,6 +5224,14 @@ refresh();
 #ceroodUploadChooser.cw-final .cerood-step2-advanced #marketSubmit{min-height:44px;border-radius:9px;padding:11px 19px;margin-top:16px;box-shadow:0 7px 18px rgba(73,51,185,.16);transition:transform .16s ease,box-shadow .16s ease}
 #ceroodUploadChooser.cw-final .cerood-step2-advanced #marketSubmit:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(73,51,185,.22)}
 #ceroodUploadChooser.cw-final #cwFinalBack{border:0;background:#f4f2ff;color:#4933b9;border-radius:8px;padding:9px 12px;font:650 12px Inter,system-ui;cursor:pointer;margin:0 0 12px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketDynamicAttributes .market-dynamic-box>strong{display:none}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketDynamicAttributes .market-dynamic-box{padding:16px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketDynamicAttributes select[multiple]{min-height:116px;padding:7px 10px;line-height:1.55}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketDynamicAttributes textarea{min-height:86px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketVariantWrap.cerood-variant-duplicate{display:none!important}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketDynamicImages{margin-top:-2px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketDynamicImages .market-image-schema-grid{padding:14px;gap:12px}
+#ceroodUploadChooser.cw-final .cerood-step2-advanced #marketDynamicImages .market-image-preview{height:132px}
 @media(max-width:700px){#ceroodUploadChooser.cw-final .cerood-step2-advanced .marketplace-fields{grid-template-columns:1fr;padding:15px;gap:15px}#ceroodUploadChooser.cw-final .cerood-step2-section{grid-column:1!important}#ceroodUploadChooser.cw-final .cerood-step2-path button{width:100%;margin-left:34px;text-align:left;padding-left:0}}
 </style>
 
