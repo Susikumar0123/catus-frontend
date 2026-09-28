@@ -4293,34 +4293,363 @@ claimsRender();supportRender();
 })();
 </script><script id="cerood-rto-pricing-drafts">
 (function(){
-const root=document.getElementById('section-rto-pricing');if(!root)return;
-const $=id=>document.getElementById(id),key='cerood_rto_discount_drafts_v1';
-let tab='add',selected=new Set(),drafts={};
-try{drafts=JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(e){drafts={}}
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function productsForSeller(){
- const renewed=typeof products!=='undefined'&&Array.isArray(products)?products:[];
- const other=Array.isArray(window.ceroodMarketplaceProducts)?window.ceroodMarketplaceProducts:[];
- return [...renewed.map(p=>({...p,marketplace:'renewed'})),...other].filter(p=>p.id&&p.approval_status==='approved'&&p.approval_status!=='withdrawn').map(p=>({id:String(p.id),name:p.name||p.product_name||p.title||'Untitled product',marketplace:p.marketplace||'renewed',price:Number(p.price||p.selling_price||p.product_data?.price||0),image:p.image_url||p.product_data?.image_url||'',stock:Number(p.stock??p.product_data?.stock??0)})).filter(p=>p.price>0);
-}
-function render(){
- const all=productsForSeller(),q=$('rpSearch').value.toLowerCase().trim();
- const filtered=all.filter(p=>(tab==='applied'?!!drafts[p.id]:true)&&(`${p.name} ${p.marketplace}`.toLowerCase().includes(q)));
- $('rpAvailableCount').textContent=`(${all.length})`;$('rpDraftCount').textContent=`(${all.filter(p=>drafts[p.id]).length})`;
- $('rpPrepaidCount').textContent=all.filter(p=>Number(drafts[p.id]?.prepaid)>0).length;
- $('rpReturnCount').textContent=all.filter(p=>Number(drafts[p.id]?.returns)>0).length;
- $('rpRows').innerHTML=filtered.length?filtered.map(p=>{const d=drafts[p.id]||{},pre=Number(d.prepaid||0),ret=Number(d.returns||0);return `<tr data-rp-id="${esc(p.id)}"><td><div class="rp-product"><input type="checkbox" class="rp-check" aria-label="Select ${esc(p.name)}" ${selected.has(p.id)?'checked':''}><img src="${esc(p.image)}" alt="" onerror="this.style.visibility='hidden'"><b>${esc(p.name)}</b></div></td><td>${esc(p.marketplace)}</td><td>₹${p.price.toLocaleString('en-IN')}</td><td><input class="rp-prepaid" type="number" min="0" max="${p.price}" step="1" value="${pre}" aria-label="Prepaid discount for ${esc(p.name)}"></td><td><input class="rp-returns" type="number" min="0" max="${p.price}" step="1" value="${ret}" aria-label="Return-prevention offer for ${esc(p.name)}"></td><td class="rp-preview">₹${Math.max(0,p.price-pre).toLocaleString('en-IN')}</td></tr>`}).join(''):'<tr><td colspan="6">No matching approved products or saved drafts. Refresh My Products if you recently received approval.</td></tr>';
- $('rpSelected').textContent=`Selected: ${selected.size}`;$('rpSave').disabled=!selected.size;
- root.querySelectorAll('.rp-check').forEach(c=>c.onchange=()=>{const id=c.closest('tr').dataset.rpId;c.checked?selected.add(id):selected.delete(id);$('rpSelected').textContent=`Selected: ${selected.size}`;$('rpSave').disabled=!selected.size});
- root.querySelectorAll('.rp-prepaid').forEach(input=>input.oninput=()=>{const row=input.closest('tr'),p=all.find(x=>x.id===row.dataset.rpId);row.querySelector('.rp-preview').textContent='₹'+Math.max(0,p.price-Number(input.value||0)).toLocaleString('en-IN')});
-}
-root.querySelectorAll('[data-rp-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.rpTab;root.querySelectorAll('[data-rp-tab]').forEach(x=>x.classList.toggle('active',x===b));render()});
-$('rpSearch').addEventListener('input',render);
-$('rpSave').addEventListener('click',()=>{const all=productsForSeller();let saved=0;for(const row of root.querySelectorAll('tr[data-rp-id]')){const id=row.dataset.rpId;if(!selected.has(id))continue;const p=all.find(x=>x.id===id),pre=Number(row.querySelector('.rp-prepaid').value),ret=Number(row.querySelector('.rp-returns').value);if(!p||!Number.isInteger(pre)||!Number.isInteger(ret)||pre<0||ret<0||pre>=p.price||ret>=p.price){$('rpNotice').textContent='Enter valid whole-rupee discounts smaller than each product price.';return}drafts[id]={prepaid:pre,returns:ret};saved++}if(!saved)return;try{localStorage.setItem(key,JSON.stringify(drafts))}catch(e){$('rpNotice').textContent='Could not save drafts in this browser.';return}selected.clear();$('rpNotice').textContent=`${saved} draft(s) saved in this browser only. Storefront and checkout prices are unchanged.`;render()});
-root.addEventListener('click',()=>{});
-root.querySelectorAll('.rp-tab').forEach(b=>b.addEventListener('click',render));
-const nav=document.querySelector('[data-tab="rto-pricing"]');nav?.addEventListener('click',()=>{if(typeof window.loadProducts==='function')Promise.resolve(window.loadProducts()).then(render).catch(render);else render()});
-render();
+  const root=document.getElementById('section-rto-pricing');
+  if(!root)return;
+
+  const $=id=>document.getElementById(id);
+  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+
+  let tab='add';
+  let selected=new Set();
+  let savedDiscounts={};
+  let loading=false;
+
+  const apiBase=()=>(
+    window.CEROOD_SELLER_CONFIG?.apiBase ||
+    'https://catus-backend-d2js.onrender.com'
+  ).replace(/\/+$/,'');
+
+  const token=()=>window.CeroodSellerAuth?.getToken?.() || '';
+
+  function authHeaders(json=false){
+    const t=token();
+    const h={Authorization:'Bearer '+t};
+    if(json)h['Content-Type']='application/json';
+    return h;
+  }
+
+  function discountKey(marketplace,productId){
+    return String(marketplace||'')+'::'+String(productId||'');
+  }
+
+  function productsForSeller(){
+    const renewed=typeof products!=='undefined'&&Array.isArray(products)?products:[];
+    const other=Array.isArray(window.ceroodMarketplaceProducts)
+      ?window.ceroodMarketplaceProducts:[];
+
+    return [
+      ...renewed.map(p=>({...p,marketplace:'renewed'})),
+      ...other
+    ]
+    .filter(p=>p.id&&p.approval_status==='approved'&&p.approval_status!=='withdrawn')
+    .map(p=>({
+      id:String(p.id),
+      name:p.name||p.product_name||p.title||'Untitled product',
+      marketplace:String(p.marketplace||'renewed').toLowerCase(),
+      price:Number(p.price||p.selling_price||p.product_data?.price||0),
+      image:p.image_url||p.product_data?.image_url||'',
+      stock:Number(p.stock??p.product_data?.stock??0)
+    }))
+    .filter(p=>p.price>0);
+  }
+
+  function setNotice(message,error=false){
+    const el=$('rpNotice');
+    if(!el)return;
+    el.textContent=message;
+    el.style.color=error?'#b91c1c':'';
+  }
+
+  async function loadSavedDiscounts(){
+    if(!token()){
+      setNotice('Seller login required to load saved discounts.',true);
+      return;
+    }
+
+    loading=true;
+    try{
+      const response=await fetch(apiBase()+'/api/sellers/rto-discounts',{
+        headers:authHeaders(),
+        cache:'no-store'
+      });
+      const data=await response.json().catch(()=>({}));
+
+      if(!response.ok||!data?.success){
+        throw new Error(data?.message||'Unable to load saved discounts.');
+      }
+
+      savedDiscounts={};
+      for(const d of (data.discounts||[])){
+        savedDiscounts[discountKey(d.marketplace,d.product_id)]={
+          id:d.id,
+          product_id:String(d.product_id),
+          marketplace:String(d.marketplace||'').toLowerCase(),
+          prepaid_discount:Number(d.prepaid_discount)||0,
+          return_prevention_offer:Number(d.return_prevention_offer)||0,
+          is_active:d.is_active!==false
+        };
+      }
+
+      render();
+    }catch(error){
+      console.error('Load RTO discounts:',error);
+      setNotice(error.message||'Unable to load saved discounts.',true);
+      render();
+    }finally{
+      loading=false;
+    }
+  }
+
+  function visibleProducts(){
+    const q=String($('rpSearch')?.value||'').trim().toLowerCase();
+    const all=productsForSeller();
+
+    return all.filter(p=>{
+      const d=savedDiscounts[discountKey(p.marketplace,p.id)];
+      if(tab==='applied'&&!d)return false;
+      if(tab==='add'&&d)return false;
+      if(!q)return true;
+      return `${p.name} ${p.marketplace}`.toLowerCase().includes(q);
+    });
+  }
+
+  function updateCounts(){
+    const all=productsForSeller();
+    let saved=0,prepaid=0,returns=0;
+
+    for(const p of all){
+      const d=savedDiscounts[discountKey(p.marketplace,p.id)];
+      if(!d)continue;
+      saved++;
+      if(d.prepaid_discount>0)prepaid++;
+      if(d.return_prevention_offer>0)returns++;
+    }
+
+    if($('rpAvailableCount'))$('rpAvailableCount').textContent=`(${Math.max(0,all.length-saved)})`;
+    if($('rpDraftCount'))$('rpDraftCount').textContent=`(${saved})`;
+    if($('rpPrepaidCount'))$('rpPrepaidCount').textContent=String(prepaid);
+    if($('rpReturnCount'))$('rpReturnCount').textContent=String(returns);
+  }
+
+  function render(){
+    updateCounts();
+
+    root.querySelectorAll('[data-rp-tab]').forEach(b=>{
+      b.classList.toggle('active',b.dataset.rpTab===tab);
+    });
+
+    const rows=visibleProducts();
+
+    $('rpRows').innerHTML=rows.length
+      ?rows.map(p=>{
+        const d=savedDiscounts[discountKey(p.marketplace,p.id)]||{};
+        const pre=Number(d.prepaid_discount)||0;
+        const ret=Number(d.return_prevention_offer)||0;
+
+        return `<tr data-rp-id="${esc(p.id)}" data-rp-market="${esc(p.marketplace)}">
+          <td><div class="rp-product">
+            <input class="rp-check" type="checkbox" aria-label="Select ${esc(p.name)}"
+              ${selected.has(discountKey(p.marketplace,p.id))?'checked':''}>
+            <img src="${esc(p.image)}" alt="" onerror="this.style.visibility='hidden'">
+            <b>${esc(p.name)}</b>
+          </div></td>
+          <td>${esc(p.marketplace)}</td>
+          <td>₹${p.price.toLocaleString('en-IN')}</td>
+          <td><input class="rp-prepaid" type="number" min="0" max="${p.price}" step="1"
+            value="${pre}" aria-label="Prepaid discount for ${esc(p.name)}"></td>
+          <td><input class="rp-returns" type="number" min="0" max="${p.price}" step="1"
+            value="${ret}" aria-label="Return-prevention offer for ${esc(p.name)}"></td>
+          <td class="rp-preview">₹${Math.max(0,p.price-pre).toLocaleString('en-IN')}</td>
+        </tr>`;
+      }).join('')
+      :`<tr><td colspan="6">${loading?'Loading saved discounts...':
+        (tab==='applied'?'No saved database discounts found.':'No matching approved products available.')}</td></tr>`;
+
+    $('rpSelected').textContent=`Selected: ${selected.size}`;
+    $('rpSave').disabled=!selected.size;
+    $('rpSave').textContent=tab==='applied'?'Update Selected':'Apply Discount';
+
+    root.querySelectorAll('.rp-check').forEach(c=>{
+      c.onchange=()=>{
+        const row=c.closest('tr');
+        const k=discountKey(row.dataset.rpMarket,row.dataset.rpId);
+        c.checked?selected.add(k):selected.delete(k);
+        $('rpSelected').textContent=`Selected: ${selected.size}`;
+        $('rpSave').disabled=!selected.size;
+      };
+    });
+
+    root.querySelectorAll('.rp-prepaid').forEach(input=>{
+      input.oninput=()=>{
+        const row=input.closest('tr');
+        const p=productsForSeller().find(x=>
+          x.id===row.dataset.rpId&&x.marketplace===row.dataset.rpMarket
+        );
+        if(!p)return;
+        const value=Math.max(0,Number(input.value)||0);
+        row.querySelector('.rp-preview').textContent=
+          `₹${Math.max(0,p.price-value).toLocaleString('en-IN')}`;
+      };
+    });
+  }
+
+  async function saveSelected(){
+    if(!selected.size)return;
+
+    const rows=[...root.querySelectorAll('#rpRows tr[data-rp-id]')]
+      .filter(row=>selected.has(discountKey(row.dataset.rpMarket,row.dataset.rpId)));
+
+    if(!rows.length)return;
+
+    $('rpSave').disabled=true;
+    $('rpSave').textContent='Saving...';
+    setNotice('Saving discounts to CEROOD database...');
+
+    try{
+      for(const row of rows){
+        const p=productsForSeller().find(x=>
+          x.id===row.dataset.rpId&&x.marketplace===row.dataset.rpMarket
+        );
+        if(!p)continue;
+
+        const prepaid=Number(row.querySelector('.rp-prepaid')?.value||0);
+        const ret=Number(row.querySelector('.rp-returns')?.value||0);
+
+        if(!Number.isFinite(prepaid)||!Number.isFinite(ret)||prepaid<0||ret<0){
+          throw new Error(`Invalid discount amount for ${p.name}.`);
+        }
+
+        if(prepaid>=p.price||ret>=p.price){
+          throw new Error(`Discount must be lower than product price for ${p.name}.`);
+        }
+
+        const response=await fetch(
+          apiBase()+'/api/sellers/rto-discounts/'+encodeURIComponent(p.id),
+          {
+            method:'PUT',
+            headers:authHeaders(true),
+            body:JSON.stringify({
+              marketplace:p.marketplace,
+              prepaid_discount:prepaid,
+              return_prevention_offer:ret,
+              is_active:true
+            })
+          }
+        );
+
+        const data=await response.json().catch(()=>({}));
+        if(!response.ok||!data?.success){
+          throw new Error(data?.message||`Unable to save ${p.name}.`);
+        }
+      }
+
+      selected.clear();
+      await loadSavedDiscounts();
+      setNotice('Discount saved successfully in CEROOD database.');
+    }catch(error){
+      console.error('Save RTO discounts:',error);
+      setNotice(error.message||'Unable to save discounts.',true);
+      render();
+    }
+  }
+
+  root.querySelectorAll('[data-rp-tab]').forEach(b=>{
+    b.onclick=()=>{
+      tab=b.dataset.rpTab;
+      selected.clear();
+      render();
+    };
+  });
+
+  if($('rpSearch'))$('rpSearch').oninput=render;
+  if($('rpSave'))$('rpSave').onclick=saveSelected;
+
+  // Change old draft wording because this is now DB-backed.
+  const appliedTab=root.querySelector('[data-rp-tab="applied"]');
+  if(appliedTab)appliedTab.childNodes[0].nodeValue='Discounts Applied ';
+
+  setNotice('Discounts on this page are saved to your CEROOD seller account.');
+  window.ceroodLoadRtoDiscounts=loadSavedDiscounts;
+
+  loadSavedDiscounts();
+})();
+</script>
+<script id="cerood-rto-real-metrics-v1">
+(function(){
+  const $=id=>document.getElementById(id);
+  const root=$('section-rto-pricing');
+  if(!root)return;
+
+  function setMetric(id,value){
+    const el=$(id);
+    if(el)el.textContent=value;
+  }
+
+  function setUnavailable(message){
+    setMetric('rpCodRate','—');
+    setMetric('rpPrepaidRate','—');
+    setMetric('rpReturnRate','—');
+    const notice=$('rpNotice');
+    if(notice && message){
+      notice.textContent=message;
+    }
+  }
+
+  async function loadRtoMetrics(){
+    try{
+      if(!window.CeroodSellerAuth?.getToken){
+        setUnavailable('RTO metrics are unavailable until seller authentication is ready.');
+        return;
+      }
+
+      const token=window.CeroodSellerAuth.getToken();
+      if(!token){
+        setUnavailable('Seller login required to load RTO metrics.');
+        return;
+      }
+
+      const api=(window.CEROOD_SELLER_CONFIG?.apiBase || 'https://catus-backend-d2js.onrender.com')
+        .replace(/\/+$/,'');
+
+      setMetric('rpCodRate','Loading…');
+      setMetric('rpPrepaidRate','Loading…');
+      setMetric('rpReturnRate','Loading…');
+
+      const response=await fetch(api+'/api/sellers/rto-metrics',{
+        method:'GET',
+        headers:{Authorization:'Bearer '+token},
+        cache:'no-store'
+      });
+
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok || !data?.success){
+        throw new Error(data?.message || 'Unable to load RTO metrics.');
+      }
+
+      const m=data.metrics || {};
+      const format=v=>{
+        const n=Number(v);
+        return Number.isFinite(n) ? n.toLocaleString('en-IN',{maximumFractionDigits:2})+'%' : '0%';
+      };
+
+      setMetric('rpCodRate',format(m.cod_rto_rate));
+      setMetric('rpPrepaidRate',format(m.prepaid_rto_rate));
+      setMetric('rpReturnRate',format(m.customer_return_rate));
+
+      root.dataset.rtoMetricsLoaded='true';
+    }catch(error){
+      console.error('CEROOD RTO metrics:',error);
+      setUnavailable('Could not load live RTO metrics. Product discount drafts are still available.');
+    }
+  }
+
+  window.ceroodLoadRtoMetrics=loadRtoMetrics;
+
+  // Load once when dashboard starts.
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',loadRtoMetrics,{once:true});
+  }else{
+    loadRtoMetrics();
+  }
+
+  // Refresh whenever the seller opens Reduce RTO & Returns.
+  document.addEventListener('click',e=>{
+    if(e.target.closest?.('[data-tab="rto-pricing"]')){
+      setTimeout(loadRtoMetrics,0);
+    }
+  });
 })();
 </script><div id="ciModal" class="ci-modal" hidden role="dialog" aria-modal="true" aria-labelledby="ciModalTitle"><div class="ci-modal-panel"><div class="ci-modal-head"><strong id="ciModalTitle">Edit Product</strong><button id="ciModalClose" type="button" aria-label="Close popup">✕</button></div><div id="ciModalBody" class="ci-modal-body"></div></div></div><script id="cerood-inventory-functional">
 (()=>{'use strict';
