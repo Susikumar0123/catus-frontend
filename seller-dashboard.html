@@ -4079,6 +4079,7 @@ initializeDashboard();
   if(m==='renewed'){marketCategories=[];dynamic.hidden=true;dynamicImages.hidden=true}else await loadMarketplaceCategories()
   if(m!=='renewed')loadQueue();
  }
+ window.__ceroodChooseMarketplace=choose;
  panel.querySelectorAll('[data-market]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.market)));
  el('marketCategory').addEventListener('change',()=>{renderDynamicAttributes();renderDynamicImages()});
  el('marketImage').addEventListener('change',()=>{const f=el('marketImage').files[0],img=el('marketPreview');if(img.dataset.url)URL.revokeObjectURL(img.dataset.url);img.hidden=!f;if(f){img.dataset.url=URL.createObjectURL(f);img.src=img.dataset.url}if(market&&market!=='renewed'&&el('marketCategory').value)renderDynamicImages()});
@@ -5477,38 +5478,61 @@ function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;po
 };pop._draw=draw;return pop}
 function openProductsPopup(){const pop=ensureProductsPopup();if(file&&!catalogFiles.length)catalogFiles=[file];pop._draw?.();modal.style.visibility='hidden';pop.hidden=false;}
 async function finalDetails(){
- single.append(panel,renewed);panel.classList.remove('ccat-form-closed');wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('marketplaceQueue').hidden=true;$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details';
- // Step 1 is the source of truth for category. Step 2 keeps the real select in the DOM for submission, but does not ask the seller again.
- panel.querySelector('[data-market="'+market+'"]')?.click();
- const cat=$(market==='renewed'?'productCategory':'marketCategory');
- if(cat){
-  if(market!=='renewed'){
-   const exactId=selectedLeafId();
-   if(!exactId)throw new Error('Selected DB category ID is missing. Please go back and select the category again.');
-   let matched=false;
-   // Clicking the marketplace starts its own async category load. Wait for the exact UUID option.
-   for(let i=0;i<100;i++){
-    const exact=[...cat.options].find(o=>String(o.value)===String(exactId));
-    if(exact){
-     cat.value=exactId;
-     cat.dataset.wizardCategoryValue=exactId;
-     cat.dataset.wizardCategoryText=exact.text;
-     cat.dispatchEvent(new Event('change',{bubbles:true}));
-     matched=true;
-     break;
-    }
-    await new Promise(r=>setTimeout(r,100));
-   }
-   if(!matched)throw new Error('Selected category UUID was not available in Step 2. Please refresh and try again.');
-  }else{
-   // Renewed remains on its existing independent category flow.
-   const leaf=String(selected[selected.length-1]||'').trim().toLowerCase();
-   const exact=[...cat.options].find(o=>o.value&&String(o.text).trim().toLowerCase()===leaf);
-   if(exact){cat.value=exact.value;cat.dispatchEvent(new Event('change',{bubbles:true}))}
-  }
+ const exactId=market!=='renewed'?selectedLeafId():'';
+ if(market!=='renewed'&&!exactId)throw new Error('Selected DB category ID is missing. Please go back and select the category again.');
+
+ // Keep Step 1 visible until the hidden real form is fully initialized.
+ const primaryInput=$(market==='renewed'?'productPhoto':'marketImage');
+ if(primaryInput&&file&&typeof DataTransfer!=='undefined'){
+  try{
+   const dt=new DataTransfer();dt.items.add(file);primaryInput.files=dt.files;
+   primaryInput.dispatchEvent(new Event('change',{bubbles:true}));
+  }catch(e){console.warn('Could not transfer Step-1 image',e)}
  }
- const input=$(market==='renewed'?'productPhoto':'marketImage');
- if(input&&file&&typeof DataTransfer!=='undefined'){try{const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}))}catch(e){console.warn('Select image in product form',e)}}
+
+ // IMPORTANT: await the actual marketplace initializer. A synthetic .click() returns
+ // immediately and was the reason Step 2 opened while categories were still loading.
+ if(market!=='renewed'){
+  if(typeof window.__ceroodChooseMarketplace!=='function')throw new Error('Marketplace initializer is not ready.');
+  await window.__ceroodChooseMarketplace(market);
+ }else{
+  panel.querySelector('[data-market="renewed"]')?.click();
+ }
+
+ const cat=$(market==='renewed'?'productCategory':'marketCategory');
+ if(!cat)throw new Error('Product category control is unavailable.');
+
+ if(market!=='renewed'){
+  const exact=[...cat.options].find(o=>String(o.value)===String(exactId));
+  if(!exact)throw new Error('Selected category UUID was not returned by the Step-2 category API.');
+  cat.value=exactId;
+  cat.dataset.wizardCategoryValue=exactId;
+  cat.dataset.wizardCategoryText=exact.text;
+  cat.dispatchEvent(new Event('change',{bubbles:true}));
+
+  // Confirm schema rendering finished before revealing Step 2.
+  await new Promise(requestAnimationFrame);
+  await new Promise(requestAnimationFrame);
+  const dyn=$('marketDynamicAttributes'), imgs=$('marketDynamicImages');
+  if(dyn?.querySelector('.market-dynamic-loading')||imgs?.querySelector('.market-dynamic-loading')){
+   throw new Error('Category schema is still loading. Please try again.');
+  }
+ }else{
+  const leaf=String(selected[selected.length-1]||'').trim().toLowerCase();
+  const exact=[...cat.options].find(o=>o.value&&String(o.text).trim().toLowerCase()===leaf);
+  if(exact){cat.value=exact.value;cat.dispatchEvent(new Event('change',{bubbles:true}))}
+ }
+
+ // Only NOW reveal Step 2.
+ single.append(panel,renewed);
+ panel.classList.remove('ccat-form-closed');
+ wizard.hidden=true;
+ modal.classList.add('cw-final');
+ back.hidden=false;
+ panel.style.removeProperty('display');
+ $('marketplaceQueue').hidden=true;
+ $('ceroodUploadChooserNote').hidden=false;
+ $('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details';
  // Advanced Step 2 presentation. Category and image were already chosen in Step 1.
  if(market!=='renewed'){
   const form=$('ceroodMarketplaceForm');
