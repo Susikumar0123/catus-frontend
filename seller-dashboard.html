@@ -5921,7 +5921,7 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
    const data=await apiRequest('/api/sellers/renewed-categories');
    categories=Array.isArray(data?.categories)?data.categories:[];
    loaded=true;
-   const leaves=categories.filter(c=>c.parent_id);
+   const leaves=categories.filter(c=>c.is_leaf===true||String(c.is_leaf)==='true');
    const previous=select.dataset.wizardCategoryValue||select.value;
    select.replaceChildren(new Option('Select Category',''));
    leaves.forEach(c=>select.add(new Option(c.name,c.id)));
