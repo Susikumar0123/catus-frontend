@@ -4076,13 +4076,14 @@ initializeDashboard();
    const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.hidden=true;input.dataset.imageKey=slot.key;input.dataset.imageRequired=slot.required?'1':'0';
    // Step-1 can contain up to 9 images of the same product. Map them into the
    // category image grid in order: first image -> Front View, second -> next slot, etc.
-   const step1File=(window.__ceroodCatalogGallery?.files||[])[index]||(index===0?el('marketImage').files[0]:null);
+   const step1Source=Array.isArray(window.__ceroodStep1CatalogFiles)?window.__ceroodStep1CatalogFiles:Array.from(window.__ceroodCatalogGallery?.files||[]);
+   const step1File=step1Source[index]||(index===0?el('marketImage').files[0]:null);
    if(step1File){input.dataset.catalogIndex=String(index);const u=URL.createObjectURL(step1File);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img)}
    const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent=step1File?'Change image':'Upload image';action.onclick=()=>input.click();
    input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}
     const catalogIndex=input.dataset.catalogIndex!==undefined?Number(input.dataset.catalogIndex):-1;
     if(catalogIndex>=0){
-     const files=window.__ceroodCatalogGallery?.files||[];files[catalogIndex]=f;
+     const files=window.__ceroodCatalogGallery?.files||[];files[catalogIndex]=f;if(Array.isArray(window.__ceroodStep1CatalogFiles))window.__ceroodStep1CatalogFiles[catalogIndex]=f;
      if(catalogIndex===0){
       file=f;
       const primary=el('marketImage');
@@ -4101,7 +4102,7 @@ initializeDashboard();
   // Keep every Step-1 catalog image (maximum 9) visible in Step 2 in the
   // exact same order. Named category slots consume images from index 0 onward;
   // any remaining images continue as Additional Image 5, 6... up to 9.
-  const step1Files=Array.from(window.__ceroodCatalogGallery?.files||[]).slice(0,9);
+  const step1Files=(Array.isArray(window.__ceroodStep1CatalogFiles)?window.__ceroodStep1CatalogFiles:Array.from(window.__ceroodCatalogGallery?.files||[])).slice(0,9);
   const namedSlotCount=Math.min(schema.length,9);
   for(let i=namedSlotCount;i<step1Files.length;i++){
    const card=document.createElement('div');card.className='market-image-slot cerood-extra-step1-image';
@@ -4109,7 +4110,7 @@ initializeDashboard();
    const preview=document.createElement('div');preview.className='market-image-preview';const u=URL.createObjectURL(step1Files[i]);preview.dataset.url=u;const img=document.createElement('img');img.src=u;img.alt='Additional product image '+(i+1);preview.append(img);
    const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.hidden=true;input.dataset.catalogIndex=String(i);
    const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent='Change image';action.onclick=()=>input.click();
-   input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}const files=window.__ceroodCatalogGallery?.files||[];files[i]=f;renderDynamicImages()});
+   input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}const files=window.__ceroodCatalogGallery?.files||[];files[i]=f;if(Array.isArray(window.__ceroodStep1CatalogFiles))window.__ceroodStep1CatalogFiles[i]=f;renderDynamicImages()});
    const note=document.createElement('p');note.textContent='Additional image of this same product.';card.append(title,preview,action,input,note);grid.append(card);
   }
   shell.append(grid);dynamicImages.append(shell);
@@ -5565,6 +5566,8 @@ function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;po
  render();
  try{
   // Move directly to Step 2. All 1-9 uploaded images belong to this single product.
+  // Freeze the exact popup selection BEFORE any category/schema render starts.
+  window.__ceroodStep1CatalogFiles=catalogFiles.slice(0,9);
   await finalDetails();
   window.__ceroodCatalogSetup?.(catalogFiles);
  }catch(err){
@@ -5663,7 +5666,7 @@ function renderCatalogGallery(){
  // Step-1 images are rendered inside the category Product Images grid only.
  if(modal.classList.contains('cw-final')&&typeof window.__ceroodRefreshDynamicImages==='function')window.__ceroodRefreshDynamicImages();
 }
-window.__ceroodCatalogSetup=(files)=>{const form=$('ceroodMarketplaceForm');if(form)form.noValidate=false;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;renderCatalogGallery()};
+window.__ceroodCatalogSetup=(files)=>{window.__ceroodStep1CatalogFiles=Array.from(files||[]).slice(0,9);const form=$('ceroodMarketplaceForm');if(form)form.noValidate=false;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;renderCatalogGallery()};
 window.__ceroodCatalogGallery={get files(){return catalogFiles},render:()=>renderCatalogGallery()};
 async function finish(){const leafReady=market==='renewed'?(selected.length>0&&options(at(selected)).length===0):!!selectedLeafId();if(!leafReady)return;if(mode==='single'){if(!file)return;await finalDetails();return}bulkStepTwo()}
 wizard.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol),key=b.dataset.cwKey;if(i===0){market=rootMarket[key]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';if(market!=='renewed'){const oldText=b.textContent;b.disabled=true;b.textContent='Loading…';try{await loadDbCatalogTree(market)}catch(err){b.disabled=false;b.textContent=oldText;alert('Could not load categories: '+err.message);return}finally{b.disabled=false;b.textContent=oldText}}}selected=selected.slice(0,i);selected.push(key);
