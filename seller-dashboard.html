@@ -4827,7 +4827,7 @@ function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;po
 };pop._draw=draw;return pop}
 function openProductsPopup(){const pop=ensureProductsPopup();if(file&&!catalogFiles.length)catalogFiles=[file];pop._draw?.();modal.style.visibility='hidden';pop.hidden=false;}
 async function finalDetails(){
- single.append(panel,renewed);panel.classList.remove('ccat-form-closed');wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details';
+ single.append(panel,renewed);panel.classList.remove('ccat-form-closed');wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('marketplaceQueue').hidden=true;$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details';
  // Step 1 is the source of truth for category. Step 2 keeps the real select in the DOM for submission, but does not ask the seller again.
  panel.querySelector('[data-market="'+market+'"]')?.click();
  const cat=$(market==='renewed'?'productCategory':'marketCategory');
@@ -4888,6 +4888,7 @@ function restoreCatalogDraft(index){
  catalogFieldIds().forEach(id=>{const n=$(id);if(n)n.value=draft.values?.[id]||''});
  document.querySelectorAll('#marketDynamicAttributes [data-attribute-key]').forEach(n=>{n.value=draft.attributes?.[n.dataset.attributeKey]??''});
  document.querySelectorAll('#marketDynamicImages [data-image-key]').forEach(n=>{if(n.dataset.usePrimary==='1')return;n.value='';const saved=draft.extraImages?.[n.dataset.imageKey];if(saved)setFileInput(n,saved)});
+ const queue=$('marketplaceQueue');if(queue)queue.hidden=true;
  renderCatalogStrip();
 }
 function renderCatalogStrip(){
@@ -4899,7 +4900,7 @@ function renderCatalogStrip(){
  const list=document.createElement('div');list.className='cerood-catalog-strip-list';
  catalogFiles.forEach((f,i)=>{const b=document.createElement('button');b.type='button';b.className='cerood-catalog-product'+(i===catalogActiveIndex?' active':'');const img=document.createElement('img');const u=URL.createObjectURL(f);img.src=u;img.onload=()=>URL.revokeObjectURL(u);const label=document.createElement('span');label.textContent='Product '+(i+1);b.append(img,label);b.onclick=()=>{if(i===catalogActiveIndex)return;saveCatalogDraft();catalogActiveIndex=i;restoreCatalogDraft(i)};list.append(b)});strip.append(list);
 }
-window.__ceroodCatalogSetup=(files)=>{catalogActiveIndex=0;catalogDrafts.length=files.length;for(let i=0;i<files.length;i++)catalogDrafts[i] ||= {};restoreCatalogDraft(0)};
+window.__ceroodCatalogSetup=(files)=>{catalogActiveIndex=0;catalogDrafts.length=files.length;for(let i=0;i<files.length;i++)catalogDrafts[i] ||= {};const form=$('ceroodMarketplaceForm');if(form)form.noValidate=files.length>1;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;restoreCatalogDraft(0)};
 window.__ceroodCatalogMulti={
  get files(){return catalogFiles}, get drafts(){return catalogDrafts}, get activeIndex(){return catalogActiveIndex},
  save:()=>saveCatalogDraft(), restore:(i)=>{catalogActiveIndex=i;restoreCatalogDraft(i)}, render:()=>renderCatalogStrip()
