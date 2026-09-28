@@ -864,6 +864,13 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #ceroodUploadChooser.cw-final .marketplace-preview{border-radius:12px;border-color:#e1e5ee;background:#fafbfe;padding:5px}
 @media(max-width:700px){#ceroodUploadChooser.cw-final .cerood-chooser-body{padding:14px 12px 18px}#ceroodUploadChooser.cw-final #ceroodMarketplaceForm{padding:15px;border-radius:12px}#ceroodUploadChooser.cw-final .marketplace-fields,#ceroodUploadChooser.cw-final .market-dynamic-grid{grid-template-columns:1fr;gap:14px}#ceroodUploadChooser.cw-final .marketplace-fields .full{grid-column:auto}#ceroodUploadChooser.cw-final .market-dynamic-box{padding:15px;border-radius:12px}}
 </style>
+<style id="cerood-catalog-multiproduct-v1">
+#ceroodCatalogProductStrip{margin:12px 0 16px;border:1px solid #e1e4ed;border-radius:9px;background:#fff;padding:13px 14px}
+.cerood-catalog-strip-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}.cerood-catalog-strip-title strong{font-size:13px}.cerood-catalog-strip-title small{font-size:11px;color:#667085}
+.cerood-catalog-strip-list{display:flex;gap:9px;overflow-x:auto;padding:2px 1px 7px;scrollbar-width:thin}.cerood-catalog-product{flex:0 0 92px;border:1px solid #d9deea;border-radius:7px;background:#fff;padding:6px;cursor:pointer;color:#344054}.cerood-catalog-product.active{border:2px solid #4933b9;background:#f8f6ff;padding:5px}.cerood-catalog-product img{width:78px;height:66px;display:block;object-fit:contain;background:#f8fafc;border-radius:5px}.cerood-catalog-product span{display:block;font-size:10.5px;font-weight:650;margin-top:5px;text-align:center}
+#cwProductsPopup{z-index:100000!important}#cwProductsPopup .cwp-window{position:relative;z-index:100001!important}
+@media(max-width:600px){.cerood-catalog-strip-title{align-items:flex-start;flex-direction:column}.cerood-catalog-product{flex-basis:82px}.cerood-catalog-product img{width:68px;height:60px}}
+</style>
 </head>
 
 <body>
@@ -4807,8 +4814,18 @@ function render(){setTitle();const ready=selected.length===4&&options(at(selecte
 wizard.innerHTML=`<div class="cw-steps"><span class="active"><b>1</b> Select Category</span><span><b>2</b> ${mode==='bulk'?'Upload Catalog File':'Add Product Details'}</span></div><label class="cw-search-label" for="cwSearch">Search Category</label><div class="cw-search-wrap"><input id="cwSearch" class="cw-search" type="search" placeholder="Try Sarees, Toys, Charger, Mugs and more..." value="${escapeHTML(search)}"><div id="cwSearchResults" hidden></div></div><div class="cw-grid">${[0,1,2,3].map(column).join('')}<aside class="cw-image-box"><div class="cw-path">${escapeHTML(path)}</div><div class="cw-photo-stage">${url&&mode==='single'?`<img class="cw-photo-preview" src="${url}" alt="Selected product front image">`:`<div class="cw-photo-icon" aria-hidden="true">${market==='clothing'?'👕':market==='cosmetics'?'✨':market==='general'?'🛍️':'📺'}</div>`}<strong>${mode==='bulk'?'Select the correct category before uploading the catalog file':'Please provide only front image for each product'}</strong>${mode==='single'?`<button type="button" class="cw-upload-btn" id="cwOpenProductsPopup">↑ &nbsp; Add Product Images</button><small>${file?escapeHTML(file.name):'JPG, PNG or WebP · maximum 10 MB'}</small>`:`<p class="cw-bulk-note">${market==='clothing'?'Next: upload your existing CSV / Excel catalog.':'Bulk upload for this marketplace is not connected yet.'}</p>`}</div><div class="cw-guidelines"><div class="cw-warning">ⓘ &nbsp; Follow guidelines to reduce quality check failure</div><strong>General Guidelines</strong><p>① Choose the exact category for the product.</p><p>② Use clear, original product images.</p><p>③ Avoid watermarks or promotional text.</p></div></aside></div><div class="cw-footer"><button type="button" class="cw-discard" id="cwDiscard">Discard Catalog</button><button type="button" class="cw-next" id="cwToDetails" ${!ready||(mode==='bulk'&&market!=='clothing')?'disabled':''}>${mode==='bulk'?'Continue to Bulk Upload':'Continue to Product Details'} →</button></div>`;
 }
 function reset(nextMode){mode=nextMode;bulkStep=1;market='clothing';selected=nextMode==='bulk'?[]:['Men Fashion','Mens Clothing','Men Top Wear','Tshirts'];search='';file=null;catalogFiles=[];if(url){URL.revokeObjectURL(url);url=''}render()}
-function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;pop=document.createElement('div');pop.id='cwProductsPopup';pop.hidden=true;pop.innerHTML=`<div class="cwp-window" role="dialog" aria-modal="true" aria-labelledby="cwpTitle"><div class="cwp-head"><strong id="cwpTitle">Products in a catalog</strong><button type="button" class="cwp-close" aria-label="Close">×</button></div><div class="cwp-body"><p class="cwp-intro">Please add only front image of your product. If you want to add multiple images for particular product, you can add it in next step.</p><div class="cwp-grid"><div><div class="cwp-limit"><span class="cwp-info">i</span><span>You can add minimum 1 and maximum 9 products to create a catalog</span></div><div class="cwp-products" id="cwpProducts"></div><input type="file" id="cwpFile" accept="image/jpeg,image/png,image/webp" hidden></div><div><div class="cwp-rules-title">⊘ &nbsp; Image types which are not allowed</div><div class="cwp-rules">${[['▧','Watermark image'],['◫','Fake branded/1st copy'],['₹99','Image with price'],['▦','Pixelated image'],['↶','Inverted image'],['◒','Blur/unclear image'],['◩','Incomplete image'],['↕','Stretched/shrunk image'],['♟','Image with props'],['abcd','Image with text']].map(x=>`<div class="cwp-rule"><div class="cwp-rule-art"><span>${x[0]}</span></div><div class="cwp-rule-copy">${x[1]}<small>⊘ NOT ALLOWED</small></div></div>`).join('')}</div></div></div></div><div class="cwp-foot"><button type="button" class="cwp-cancel">Cancel</button><button type="button" class="cwp-continue">Continue</button></div></div>`;document.body.append(pop);const input=pop.querySelector('#cwpFile');const draw=()=>{const host=pop.querySelector('#cwpProducts');host.replaceChildren();catalogFiles.forEach((f,i)=>{const box=document.createElement('div');box.className='cwp-thumb';const img=document.createElement('img');img.src=URL.createObjectURL(f);img.onload=()=>URL.revokeObjectURL(img.src);const rm=document.createElement('button');rm.type='button';rm.className='cwp-remove';rm.textContent='×';rm.onclick=()=>{catalogFiles.splice(i,1);draw()};box.append(img,rm);host.append(box)});if(catalogFiles.length<9){const add=document.createElement('button');add.type='button';add.className='cwp-add';add.innerHTML='<span><b>+</b>Add Product</span>';add.onclick=()=>input.click();host.append(add)}pop.querySelector('.cwp-continue').disabled=!catalogFiles.length};input.onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}if(catalogFiles.length<9)catalogFiles.push(f);draw()};const close=()=>{pop.hidden=true};pop.querySelector('.cwp-close').onclick=close;pop.querySelector('.cwp-cancel').onclick=close;pop.addEventListener('click',e=>{if(e.target===pop)close()});pop.querySelector('.cwp-continue').onclick=()=>{if(!catalogFiles.length)return;file=catalogFiles[0];if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(file);close();render()};pop._draw=draw;return pop}
-function openProductsPopup(){const pop=ensureProductsPopup();if(file&&!catalogFiles.length)catalogFiles=[file];pop._draw?.();pop.hidden=false;}
+function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;pop=document.createElement('div');pop.id='cwProductsPopup';pop.hidden=true;pop.innerHTML=`<div class="cwp-window" role="dialog" aria-modal="true" aria-labelledby="cwpTitle"><div class="cwp-head"><strong id="cwpTitle">Products in a catalog</strong><button type="button" class="cwp-close" aria-label="Close">×</button></div><div class="cwp-body"><p class="cwp-intro">Please add only front image of your product. If you want to add multiple images for particular product, you can add it in next step.</p><div class="cwp-grid"><div><div class="cwp-limit"><span class="cwp-info">i</span><span>You can add minimum 1 and maximum 9 products to create a catalog</span></div><div class="cwp-products" id="cwpProducts"></div><input type="file" id="cwpFile" accept="image/jpeg,image/png,image/webp" hidden></div><div><div class="cwp-rules-title">⊘ &nbsp; Image types which are not allowed</div><div class="cwp-rules">${[['▧','Watermark image'],['◫','Fake branded/1st copy'],['₹99','Image with price'],['▦','Pixelated image'],['↶','Inverted image'],['◒','Blur/unclear image'],['◩','Incomplete image'],['↕','Stretched/shrunk image'],['♟','Image with props'],['abcd','Image with text']].map(x=>`<div class="cwp-rule"><div class="cwp-rule-art"><span>${x[0]}</span></div><div class="cwp-rule-copy">${x[1]}<small>⊘ NOT ALLOWED</small></div></div>`).join('')}</div></div></div></div><div class="cwp-foot"><button type="button" class="cwp-cancel">Cancel</button><button type="button" class="cwp-continue">Continue</button></div></div>`;document.body.append(pop);const input=pop.querySelector('#cwpFile');const draw=()=>{const host=pop.querySelector('#cwpProducts');host.replaceChildren();catalogFiles.forEach((f,i)=>{const box=document.createElement('div');box.className='cwp-thumb';const img=document.createElement('img');img.src=URL.createObjectURL(f);img.onload=()=>URL.revokeObjectURL(img.src);const rm=document.createElement('button');rm.type='button';rm.className='cwp-remove';rm.textContent='×';rm.onclick=()=>{catalogFiles.splice(i,1);draw()};box.append(img,rm);host.append(box)});if(catalogFiles.length<9){const add=document.createElement('button');add.type='button';add.className='cwp-add';add.innerHTML='<span><b>+</b>Add Product</span>';add.onclick=()=>input.click();host.append(add)}pop.querySelector('.cwp-continue').disabled=!catalogFiles.length};input.onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}if(catalogFiles.length<9)catalogFiles.push(f);draw()};const close=()=>{pop.hidden=true;modal.style.visibility='';};pop.querySelector('.cwp-close').onclick=close;pop.querySelector('.cwp-cancel').onclick=close;pop.addEventListener('click',e=>{if(e.target===pop)close()});pop.querySelector('.cwp-continue').onclick=async()=>{
+ if(!catalogFiles.length)return;
+ file=catalogFiles[0];
+ if(url)URL.revokeObjectURL(url);
+ url=URL.createObjectURL(file);
+ close();
+ // Do not return to the category popup after product images are confirmed.
+ // Move directly to Step 2 and keep all 1-9 product front images in catalogFiles.
+ await finalDetails();
+ window.__ceroodCatalogSetup?.(catalogFiles);
+};pop._draw=draw;return pop}
+function openProductsPopup(){const pop=ensureProductsPopup();if(file&&!catalogFiles.length)catalogFiles=[file];pop._draw?.();modal.style.visibility='hidden';pop.hidden=false;}
 async function finalDetails(){
  single.append(panel,renewed);panel.classList.remove('ccat-form-closed');wizard.hidden=true;modal.classList.add('cw-final');back.hidden=false;panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false;$('ceroodUploadChooserNote').textContent='Step 2 of 2 · Add Product Details';
  // Step 1 is the source of truth for category. Step 2 keeps the real select in the DOM for submission, but does not ask the seller again.
@@ -4852,6 +4869,41 @@ async function finalDetails(){
   pathBox.querySelector('button').onclick=()=>back.click();
  }
 }
+// Step 2 multi-product catalog manager: every Step-1 front image is a separate product.
+const catalogDrafts=[];
+let catalogActiveIndex=0;
+function catalogFieldIds(){return ['marketName','marketBrand','marketVariant','marketModel','marketPrice','marketCompare','marketStock','marketQuantity','marketBatch','marketMfg','marketExpiry','marketIngredients','marketDescription']}
+function saveCatalogDraft(index=catalogActiveIndex){
+ if(!catalogFiles.length||index<0||index>=catalogFiles.length)return;
+ const draft=catalogDrafts[index]||(catalogDrafts[index]={});
+ draft.values={};catalogFieldIds().forEach(id=>{const n=$(id);if(n)draft.values[id]=n.value});
+ draft.attributes={};document.querySelectorAll('#marketDynamicAttributes [data-attribute-key]').forEach(n=>draft.attributes[n.dataset.attributeKey]=n.value);
+ draft.extraImages={};document.querySelectorAll('#marketDynamicImages [data-image-key]').forEach(n=>{if(n.dataset.usePrimary!=='1'&&n.files?.[0])draft.extraImages[n.dataset.imageKey]=n.files[0]});
+}
+function setFileInput(input,f){if(!input||!f||typeof DataTransfer==='undefined')return;try{const dt=new DataTransfer();dt.items.add(f);input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}))}catch(e){console.warn('Could not restore file',e)}}
+function restoreCatalogDraft(index){
+ const f=catalogFiles[index];if(!f)return;file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);
+ setFileInput($('marketImage'),f);
+ const draft=catalogDrafts[index]||{};
+ catalogFieldIds().forEach(id=>{const n=$(id);if(n)n.value=draft.values?.[id]||''});
+ document.querySelectorAll('#marketDynamicAttributes [data-attribute-key]').forEach(n=>{n.value=draft.attributes?.[n.dataset.attributeKey]??''});
+ document.querySelectorAll('#marketDynamicImages [data-image-key]').forEach(n=>{if(n.dataset.usePrimary==='1')return;n.value='';const saved=draft.extraImages?.[n.dataset.imageKey];if(saved)setFileInput(n,saved)});
+ renderCatalogStrip();
+}
+function renderCatalogStrip(){
+ if(!modal.classList.contains('cw-final')||catalogFiles.length<1)return;
+ let strip=single.querySelector('#ceroodCatalogProductStrip');
+ if(!strip){strip=document.createElement('div');strip.id='ceroodCatalogProductStrip';strip.className='cerood-catalog-product-strip';const path=single.querySelector('.cerood-step2-path');(path||back).insertAdjacentElement('afterend',strip)}
+ strip.replaceChildren();
+ const title=document.createElement('div');title.className='cerood-catalog-strip-title';title.innerHTML='<strong>Products in this catalog</strong><small>'+catalogFiles.length+' product'+(catalogFiles.length===1?'':'s')+' · Fill details for each product</small>';strip.append(title);
+ const list=document.createElement('div');list.className='cerood-catalog-strip-list';
+ catalogFiles.forEach((f,i)=>{const b=document.createElement('button');b.type='button';b.className='cerood-catalog-product'+(i===catalogActiveIndex?' active':'');const img=document.createElement('img');const u=URL.createObjectURL(f);img.src=u;img.onload=()=>URL.revokeObjectURL(u);const label=document.createElement('span');label.textContent='Product '+(i+1);b.append(img,label);b.onclick=()=>{if(i===catalogActiveIndex)return;saveCatalogDraft();catalogActiveIndex=i;restoreCatalogDraft(i)};list.append(b)});strip.append(list);
+}
+window.__ceroodCatalogSetup=(files)=>{catalogActiveIndex=0;catalogDrafts.length=files.length;for(let i=0;i<files.length;i++)catalogDrafts[i] ||= {};restoreCatalogDraft(0)};
+window.__ceroodCatalogMulti={
+ get files(){return catalogFiles}, get drafts(){return catalogDrafts}, get activeIndex(){return catalogActiveIndex},
+ save:()=>saveCatalogDraft(), restore:(i)=>{catalogActiveIndex=i;restoreCatalogDraft(i)}, render:()=>renderCatalogStrip()
+};
 async function finish(){if(selected.length!==4||options(at(selected)).length)return;if(mode==='single'){if(!file)return;await finalDetails();return}bulkStepTwo()}
 wizard.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol);selected=selected.slice(0,i);selected.push(b.dataset.cwKey);if(i===0){market=rootMarket[b.dataset.cwKey]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url=''}search='';render();return}if(b.id==='cwToDetails')finish()});
 wizard.addEventListener('change',e=>{if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
@@ -4861,6 +4913,83 @@ window.__ceroodWizardOpen=reset;modal.addEventListener('cerood:chooser-open',e=>
 $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.remove('cw-single','cw-final');panel.style.removeProperty('display');$('ceroodUploadChooserNote').hidden=false});
 })();
 </script>
+
+<script id="cerood-catalog-multiproduct-v2-submit">
+(()=>{
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const form=$('ceroodMarketplaceForm'); if(!form)return;
+ const value=id=>($(id)?.value||'').trim();
+ const currentMarket=()=>document.querySelector('#ceroodMarketplacePanel [data-market].selected')?.dataset.market||document.querySelector('#ceroodMarketplacePanel [data-market][aria-pressed="true"]')?.dataset.market||'';
+ function snapshotSchema(){
+  return {
+   attrs:[...document.querySelectorAll('#marketDynamicAttributes [data-attribute-key]')].map(n=>({key:n.dataset.attributeKey,label:n.dataset.attributeLabel||n.dataset.attributeKey,required:n.required,type:n.type})),
+   images:[...document.querySelectorAll('#marketDynamicImages [data-image-key]')].map(n=>({key:n.dataset.imageKey,label:n.closest('.market-image-slot')?.querySelector('.market-image-slot-title strong')?.textContent||n.dataset.imageKey,required:n.dataset.imageRequired==='1',primary:n.dataset.usePrimary==='1'}))
+  };
+ }
+ function validateDraft(draft,index,market,schema){
+  const v=draft.values||{}; const missing=[];
+  if(!String(v.marketName||'').trim())missing.push('Product name');
+  if(!String(v.marketBrand||'').trim())missing.push('Brand');
+  if(!String(v.marketPrice||'').trim())missing.push('Selling price');
+  if(String(v.marketStock??'').trim()==='')missing.push('Available stock');
+  if(market==='cosmetics'){
+   if(!String(v.marketQuantity||'').trim())missing.push('Net quantity');
+   if(!String(v.marketExpiry||'').trim())missing.push('Expiry date');
+  }
+  if(market==='general'){
+   for(const a of schema.attrs)if(a.required&&!String(draft.attributes?.[a.key]??'').trim())missing.push(a.label);
+   for(const im of schema.images)if(im.required&&!im.primary&&!draft.extraImages?.[im.key])missing.push(im.label+' image');
+  }
+  if(missing.length)throw new Error('Product '+(index+1)+': '+missing.join(', ')+' required.');
+ }
+ async function submitOne(frontFile,draft,market,schema,categoryValue,categoryText,index,total,msg){
+  msg.textContent='Product '+(index+1)+' of '+total+': uploading front image...';
+  const image_url=await uploadMedia(frontFile);
+  const v=draft.values||{};
+  const product={
+   name:String(v.marketName||'').trim(), category:market==='general'?categoryText:categoryValue,
+   brand:String(v.marketBrand||'').trim(), variant:String(v.marketVariant||'').trim(),
+   price:String(v.marketPrice||'').trim(), compare_price:String(v.marketCompare||'').trim(), stock:String(v.marketStock||'').trim(),
+   net_quantity:market==='cosmetics'?String(v.marketQuantity||'').trim():'', batch_number:market==='cosmetics'?String(v.marketBatch||'').trim():'',
+   manufacture_date:market==='cosmetics'?String(v.marketMfg||'').trim():'', expiry_date:market==='cosmetics'?String(v.marketExpiry||'').trim():'',
+   ingredients:market==='cosmetics'?String(v.marketIngredients||'').trim():'', description:String(v.marketDescription||'').trim(), image_url
+  };
+  if(market==='general'){
+   product.category_id=categoryValue; product.subcategory=categoryText; product.model=String(v.marketModel||'').trim();
+   product.product_attributes={};
+   for(const a of schema.attrs){let x=draft.attributes?.[a.key];if(x!==undefined&&x!==null&&String(x).trim()!=='')product.product_attributes[a.key]=a.type==='number'?Number(x):x}
+   product.product_images={};
+   for(const im of schema.images){
+    if(im.primary){product.product_images[im.key]=image_url;continue}
+    const f=draft.extraImages?.[im.key];
+    if(f){msg.textContent='Product '+(index+1)+' of '+total+': uploading '+im.label+'...';product.product_images[im.key]=await uploadMedia(f)}
+   }
+  }
+  msg.textContent='Product '+(index+1)+' of '+total+': submitting for admin approval...';
+  await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
+ }
+ form.addEventListener('submit',async e=>{
+  const multi=window.__ceroodCatalogMulti;
+  if(!multi||!Array.isArray(multi.files)||multi.files.length<=1)return; // existing single-product handler remains unchanged
+  e.preventDefault();e.stopImmediatePropagation();
+  const btn=$('marketSubmit'),msg=$('marketplaceMessage');btn.disabled=true;msg.className='marketplace-message';
+  try{
+   multi.save();
+   const market=currentMarket(); if(!['cosmetics','clothing','general'].includes(market))throw new Error('Choose a marketplace.');
+   const category=$('marketCategory'),categoryValue=category?.value||'',categoryText=category?.options?.[category.selectedIndex]?.text||'';
+   if(!categoryValue)throw new Error('Select a category.');
+   const schema=snapshotSchema();
+   for(let i=0;i<multi.files.length;i++)validateDraft(multi.drafts[i]||{},i,market,schema);
+   for(let i=0;i<multi.files.length;i++)await submitOne(multi.files[i],multi.drafts[i]||{},market,schema,categoryValue,categoryText,i,multi.files.length,msg);
+   msg.textContent='All '+multi.files.length+' products submitted for admin approval.';
+   msg.className='marketplace-message';
+   setTimeout(()=>{ $('ceroodUploadChooserClose')?.click(); document.querySelector('[data-tab="add-product"]')?.click(); },900);
+  }catch(err){msg.className='marketplace-message error';msg.textContent=err.message||String(err)}finally{btn.disabled=false}
+ },true);
+})();
+</script>
+
 </body>
 
 </html>
