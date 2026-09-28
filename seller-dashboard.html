@@ -5425,6 +5425,30 @@ async function loadDbCatalogTree(m){
 }
 function selectedLeafId(){return lockedLeafId||dbLeafIds.get(market+'|'+pathKey(selected))||''}
 
+// Resolve the selected Step-1 path directly against fresh DB rows when the in-memory
+// leaf map is unavailable/stale. This keeps the UUID tied to the exact parent chain.
+async function resolveSelectedDbId(){
+ if(market==='renewed'||!selected.length)return '';
+ const cached=selectedLeafId();
+ if(cached)return cached;
+ const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(market));
+ const rows=extractCategoryRows(data).filter(r=>r&&r.id&&r.name&&r.is_active!==false);
+ let parentId='',match=null;
+ for(const part of selected){
+  const wanted=String(part).trim().toLowerCase();
+  const candidates=rows.filter(r=>String(r.parent_id||'')===parentId&&String(r.name||'').trim().toLowerCase()===wanted);
+  if(candidates.length!==1)return '';
+  match=candidates[0];
+  parentId=String(match.id);
+ }
+ if(!match)return '';
+ const hasChildren=rows.some(r=>String(r.parent_id||'')===String(match.id));
+ if(match.is_leaf!==true&&hasChildren)return '';
+ lockedLeafId=String(match.id);
+ dbLeafIds.set(market+'|'+pathKey(selected),lockedLeafId);
+ return lockedLeafId;
+}
+
 // Show root categories immediately; load the selected marketplace taxonomy lazily.
 const rootOrder=['Men Fashion','Women Fashion','Kids Fashion','Footwear','Bags & Luggage','Watches & Accessories','Beauty & Personal Care','Skin Care','Hair Care','Makeup','Fragrances','Home & Kitchen','Furniture','Home Improvement','Tools & Hardware','Lighting & Electrical','Baby Products','Sports & Fitness','Books & Stationery','Toys & Games','Automotive Accessories','Office Products','Pet Supplies','Musical Instruments','Other Products','Mobiles & Tablets','Consumer Electronics','Home Appliances'];
 let rootMarket={};
@@ -5489,13 +5513,12 @@ function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;po
 };pop._draw=draw;return pop}
 function openProductsPopup(){const pop=ensureProductsPopup();if(file&&!catalogFiles.length)catalogFiles=[file];pop._draw?.();modal.style.visibility='hidden';pop.hidden=false;}
 async function finalDetails(){
- let exactId=market!=='renewed'?selectedLeafId():'';
- if(market!=='renewed'&&!exactId){
-  // One safe recovery from the current selected path; never guess by product/category name.
-  exactId=dbLeafIds.get(market+'|'+pathKey(selected))||'';
-  if(exactId)lockedLeafId=exactId;
+ let exactId='';
+ if(market!=='renewed'){
+  exactId=selectedLeafId()||await resolveSelectedDbId();
+  if(!exactId)throw new Error('Selected DB category ID could not be resolved. Please reselect the final category once.');
+  lockedLeafId=exactId;
  }
- if(market!=='renewed'&&!exactId)throw new Error('Selected DB category ID is missing. Please go back and select the final category again.');
 
  // Keep Step 1 visible until the hidden real form is fully initialized.
  const primaryInput=$(market==='renewed'?'productPhoto':'marketImage');
