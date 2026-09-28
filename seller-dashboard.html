@@ -4031,7 +4031,7 @@ initializeDashboard();
   const product={name:v('marketName'),category:market==='general'?categoryText:v('marketCategory'),brand:v('marketBrand'),variant:v('marketVariant'),price:v('marketPrice'),compare_price:v('marketCompare'),stock:v('marketStock'),net_quantity:market==='cosmetics'?v('marketQuantity'):'',batch_number:market==='cosmetics'?v('marketBatch'):'',manufacture_date:market==='cosmetics'?v('marketMfg'):'',expiry_date:market==='cosmetics'?v('marketExpiry'):'',ingredients:market==='cosmetics'?v('marketIngredients'):'',description:v('marketDescription'),image_url};
   if(market==='general'){product.category_id=v('marketCategory');product.subcategory=categoryText;product.model=v('marketModel');product.product_attributes=collectDynamicAttributes();} product.product_images=product_images;
   msg.textContent='Submitting to '+marketName()+' admin...';await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
-  msg.className='marketplace-message success';msg.textContent='Product added successfully!';form.reset();el('marketPreview').hidden=true;if(market==='general'){renderDynamicAttributes();renderDynamicImages()}await loadQueue();
+  msg.className='marketplace-message success';msg.textContent='Product added successfully!';window.__ceroodClearLocalDraft?.();form.reset();el('marketPreview').hidden=true;if(market==='general'){renderDynamicAttributes();renderDynamicImages()}await loadQueue();
    if(typeof window.ceroodRefreshSingleCatalogs==='function'){try{await window.ceroodRefreshSingleCatalogs()}catch(_){}}
    // Successful catalog submission: close the Add Single Catalog popup and open My Products.
    await new Promise(resolve=>setTimeout(resolve,650));
@@ -4492,9 +4492,17 @@ function render(){
   const qc=tr.insertCell(),state=label(p),badge=document.createElement('span');badge.className='ccat-chip ccat-qc-'+state.key;badge.textContent=state.text;qc.append(badge);
   const action=tr.insertCell();action.className='ccat-single-actions';
   const view=document.createElement('button');view.type='button';view.className='ccat-single-view';view.textContent='View Catalog';
-  const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.className='ccat-single-outline';edit.onclick=()=>openEditor(p);
-  const remove=document.createElement('button');remove.type='button';remove.textContent='Withdraw';remove.className='ccat-single-danger';remove.disabled=['withdrawn','blocked'].includes(String(p.approval_status).toLowerCase());remove.onclick=()=>withdraw(p);
-  view.onclick=()=>showCatalogPopup(p,state);
+  const edit=document.createElement('button');edit.type='button';edit.className='ccat-single-outline';
+  const remove=document.createElement('button');remove.type='button';remove.className='ccat-single-danger';
+  if(p.local_draft){
+    view.textContent='Resume Draft';view.onclick=()=>window.__ceroodResumeLocalDraft?.();
+    edit.textContent='Resume';edit.onclick=()=>window.__ceroodResumeLocalDraft?.();
+    remove.textContent='Delete Draft';remove.onclick=()=>window.__ceroodDeleteLocalDraft?.();
+  }else{
+    edit.textContent='Edit';edit.onclick=()=>openEditor(p);
+    remove.textContent='Withdraw';remove.disabled=['withdrawn','blocked'].includes(String(p.approval_status).toLowerCase());remove.onclick=()=>withdraw(p);
+    view.onclick=()=>showCatalogPopup(p,state);
+  }
   action.append(view,edit,remove);
  });
 }
@@ -4503,7 +4511,7 @@ async function refresh(){if(loading)return;loading=true;const body=$('ccatSingle
  if(results.every(r=>r.status==='rejected'))throw Error('Could not load any marketplace listings');
  const renewed=results[0].status==='fulfilled'?(results[0].value.products||[]):[];
  const others=results[1].status==='fulfilled'?(results[1].value.products||[]):[];
- items=[...renewed.map(p=>({...p,marketplace:'renewed',source:p})),...others.map(r=>({...r,marketplace:r.marketplace||'cosmetics',source:r,name:r.product_data?.name||r.name||'Unnamed product',category:r.product_data?.category||r.category||r.marketplace,image_url:r.product_data?.image_url||r.image_url,price:r.product_data?.price??r.price,stock:r.product_data?.stock??r.stock,status:r.status||r.product_data?.status}))];
+ items=[...renewed.map(p=>({...p,marketplace:'renewed',source:p})),...others.map(r=>({...r,marketplace:r.marketplace||'cosmetics',source:r,name:r.product_data?.name||r.name||'Unnamed product',category:r.product_data?.category||r.category||r.marketplace,image_url:r.product_data?.image_url||r.image_url,price:r.product_data?.price??r.price,stock:r.product_data?.stock??r.stock,status:r.status||r.product_data?.status})),...(typeof window.__ceroodLocalDraftRows==='function'?window.__ceroodLocalDraftRows():[])];
  render();if(results.some(r=>r.status==='rejected'))message('Some marketplace listings could not be loaded. Try Refresh products.');
  }catch(e){body.replaceChildren();const r=body.insertRow(),c=r.insertCell();c.colSpan=8;c.className='ccat-empty';c.textContent='Could not load catalogs: '+e.message}finally{loading=false}}
 $('ccatSingleRefresh').onclick=refresh;$('ccatSingleSearch').oninput=render;$('ccatSingleCategory').onchange=render;
@@ -4949,6 +4957,169 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
 </script>
 
 
+
+
+<script id="cerood-single-catalog-autodraft-v1">
+(()=>{
+ 'use strict';
+ const KEY='cerood_single_catalog_autodraft_v1';
+ const $=id=>document.getElementById(id);
+ let timer=null, restoring=false;
+
+ function read(){
+  try{
+   const d=JSON.parse(localStorage.getItem(KEY)||'null');
+   return d&&d.version===1?d:null;
+  }catch(_){return null}
+ }
+ function hasUseful(d){
+  if(!d)return false;
+  const v=d.values||{};
+  return Boolean(d.market||d.category||v.marketName||v.marketBrand||v.marketVariant||
+    v.marketModel||v.marketPrice||v.marketCompare||v.marketStock||v.marketDescription||
+    Object.keys(d.attributes||{}).length);
+ }
+ function collect(){
+  const form=$('ceroodMarketplaceForm');
+  if(!form)return null;
+  const selectedMarket=form.closest('#ceroodMarketplacePanel')?.querySelector('[data-market].selected')?.dataset.market||'';
+  const category=$('marketCategory');
+  const ids=['marketName','marketBrand','marketVariant','marketModel','marketPrice','marketCompare',
+             'marketStock','marketQuantity','marketBatch','marketMfg','marketExpiry',
+             'marketIngredients','marketDescription'];
+  const values={};
+  ids.forEach(id=>{const n=$(id);if(n)values[id]=n.value||''});
+  const attributes={};
+  form.querySelectorAll('[data-attribute-key]').forEach(n=>{attributes[n.dataset.attributeKey]=n.value||''});
+  return {
+   version:1,
+   saved_at:new Date().toISOString(),
+   market:selectedMarket,
+   category:category?.value||'',
+   category_text:category?.options?.[category.selectedIndex]?.text||'',
+   values,attributes,
+   image_note:($('marketImage')?.files?.length||0)>0
+  };
+ }
+ function saveNow(){
+  if(restoring)return;
+  const d=collect();
+  if(!hasUseful(d))return;
+  try{
+   localStorage.setItem(KEY,JSON.stringify(d));
+   window.dispatchEvent(new CustomEvent('cerood:local-draft-saved'));
+  }catch(e){console.warn('CEROOD draft autosave failed',e)}
+ }
+ function schedule(){clearTimeout(timer);timer=setTimeout(saveNow,450)}
+ function clear(){
+  clearTimeout(timer);
+  try{localStorage.removeItem(KEY)}catch(_){}
+  window.dispatchEvent(new CustomEvent('cerood:local-draft-saved'));
+ }
+ function fillWhenReady(d,attempt=0){
+  const form=$('ceroodMarketplaceForm');
+  if(!form||attempt>60)return;
+  const category=$('marketCategory');
+  if(d.market){
+   const b=document.querySelector('#ceroodMarketplacePanel [data-market="'+CSS.escape(d.market)+'"]');
+   if(b&&!b.classList.contains('selected'))b.click();
+  }
+  if(d.category&&category){
+   const opt=[...category.options].find(o=>String(o.value)===String(d.category) ||
+     String(o.text).trim().toLowerCase()===String(d.category_text||'').trim().toLowerCase());
+   if(opt&&category.value!==opt.value){
+    category.value=opt.value;
+    category.dispatchEvent(new Event('change',{bubbles:true}));
+   }
+  }
+  const ids=d.values||{};
+  Object.entries(ids).forEach(([id,val])=>{const n=$(id);if(n&&n.value!==String(val??'')){n.value=val??''}});
+  const attrs=d.attributes||{};
+  form.querySelectorAll('[data-attribute-key]').forEach(n=>{
+   const k=n.dataset.attributeKey;
+   if(Object.prototype.hasOwnProperty.call(attrs,k))n.value=attrs[k]??'';
+  });
+  const categoryReady=!d.category || (category&&category.value);
+  const attrsReady=Object.keys(attrs).every(k=>form.querySelector('[data-attribute-key="'+CSS.escape(k)+'"]'));
+  if(!categoryReady||!attrsReady){
+   setTimeout(()=>fillWhenReady(d,attempt+1),150);
+  }else{
+   restoring=false;
+   const msg=$('marketplaceMessage');
+   if(msg){
+    msg.className='marketplace-message';
+    msg.textContent='Draft restored automatically'+(d.image_note?' · Please re-select product image(s) for browser security.':'')+'.';
+   }
+  }
+ }
+ function resume(){
+  const d=read();if(!hasUseful(d))return;
+  restoring=true;
+  // Open the existing Add Single Catalog flow; values are restored as soon as Step 2 exists.
+  $('ccatShowSingle')?.click();
+  // Seller still confirms category/images in Step 1. Text/specification values remain safe.
+  const note=$('ceroodUploadChooserNote');
+  if(note){note.hidden=false;note.textContent='Saved draft found · Continue with the same category and re-select image(s). Product details will restore automatically.'}
+  const observer=new MutationObserver(()=>{
+   const form=$('ceroodMarketplaceForm');
+   if(form&&!form.hidden && document.querySelector('#ceroodUploadChooser.cw-final')){
+    fillWhenReady(d);observer.disconnect();
+   }
+  });
+  observer.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class','hidden','style']});
+  setTimeout(()=>{if(document.querySelector('#ceroodUploadChooser.cw-final')){fillWhenReady(d);observer.disconnect()}},300);
+  setTimeout(()=>observer.disconnect(),120000);
+ }
+ function row(){
+  const d=read();if(!hasUseful(d))return [];
+  const v=d.values||{};
+  return [{
+   id:'LOCAL-DRAFT',
+   marketplace:d.market||'draft',
+   name:v.marketName||'Unfinished product',
+   category:d.category_text||'Draft',
+   image_url:'',
+   price:v.marketPrice||0,
+   stock:v.marketStock||0,
+   status:'draft',
+   approval_status:'draft',
+   created_at:d.saved_at,
+   local_draft:true,
+   source:{product_data:{...v,category:d.category_text||d.category}}
+  }];
+ }
+
+ window.__ceroodLocalDraftRows=row;
+ window.__ceroodClearLocalDraft=clear;
+ window.__ceroodResumeLocalDraft=resume;
+ window.__ceroodDeleteLocalDraft=()=>{
+  if(!read()||confirm('Delete this unfinished product draft?')){
+   clear();
+   window.ceroodRefreshSingleCatalogs?.();
+  }
+ };
+
+ document.addEventListener('input',e=>{
+  if(e.target.closest?.('#ceroodMarketplaceForm'))schedule();
+ },true);
+ document.addEventListener('change',e=>{
+  if(e.target.closest?.('#ceroodMarketplaceForm'))schedule();
+ },true);
+ window.addEventListener('pagehide',saveNow);
+ window.addEventListener('beforeunload',saveNow);
+ window.addEventListener('offline',saveNow);
+ window.addEventListener('cerood:local-draft-saved',()=>window.ceroodRefreshSingleCatalogs?.());
+
+ // If a saved draft exists, count/show it after the catalog renderer becomes available.
+ let tries=0;
+ const sync=setInterval(()=>{
+  tries++;
+  if(typeof window.ceroodRefreshSingleCatalogs==='function'){
+   clearInterval(sync);window.ceroodRefreshSingleCatalogs();
+  }else if(tries>40)clearInterval(sync);
+ },250);
+})();
+</script>
 
 </body>
 
