@@ -4068,7 +4068,7 @@ initializeDashboard();
   const shell=document.createElement('section');shell.className='market-image-schema';
   const head=document.createElement('div');head.className='market-image-schema-head';head.innerHTML='<div><strong>Product Images</strong><small>Upload clear images for this category. Required views must be added before submission.</small></div><span>Image Guidelines</span>';shell.append(head);
   const grid=document.createElement('div');grid.className='market-image-schema-grid';
-  schema.forEach((slot,index)=>{
+  schema.slice(0,9).forEach((slot,index)=>{
    if(!slot||!slot.key||!slot.label)return;
    const card=document.createElement('div');card.className='market-image-slot';card.dataset.imageSlot=slot.key;
    const title=document.createElement('div');title.className='market-image-slot-title';title.innerHTML='<strong></strong><span></span>';title.querySelector('strong').textContent=slot.label;title.querySelector('span').textContent=slot.required?'Required':'Optional';title.querySelector('span').className=slot.required?'required':'optional';
@@ -4098,8 +4098,12 @@ initializeDashboard();
   });
   // If Step-1 has more images than this category's named slots, keep the rest
   // visible in the SAME grid instead of showing a duplicate gallery above.
-  const step1Files=(window.__ceroodCatalogGallery?.files||[]).slice(0,9);
-  for(let i=schema.length;i<step1Files.length;i++){
+  // Keep every Step-1 catalog image (maximum 9) visible in Step 2 in the
+  // exact same order. Named category slots consume images from index 0 onward;
+  // any remaining images continue as Additional Image 5, 6... up to 9.
+  const step1Files=Array.from(window.__ceroodCatalogGallery?.files||[]).slice(0,9);
+  const namedSlotCount=Math.min(schema.length,9);
+  for(let i=namedSlotCount;i<step1Files.length;i++){
    const card=document.createElement('div');card.className='market-image-slot cerood-extra-step1-image';
    const title=document.createElement('div');title.className='market-image-slot-title';title.innerHTML='<strong>Additional Image '+(i+1)+'</strong><span class="optional">Optional</span>';
    const preview=document.createElement('div');preview.className='market-image-preview';const u=URL.createObjectURL(step1Files[i]);preview.dataset.url=u;const img=document.createElement('img');img.src=u;img.alt='Additional product image '+(i+1);preview.append(img);
