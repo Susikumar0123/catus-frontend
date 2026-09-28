@@ -824,6 +824,36 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #cwWizard .cw-column:not(:nth-child(4)) button.active::after{content:"";position:absolute;right:-1px;top:0;border-top:21px solid transparent;border-bottom:21px solid transparent;border-left:10px solid #4029b9;transform:translateX(100%);z-index:1}
 #cwWizard .cw-grid{column-gap:15px}
 </style>
+
+<style id="cerood-modern-product-form-v1">
+/* Modern Step 2 catalog form only — functionality/backend untouched */
+#ceroodUploadChooser.cw-final .cerood-chooser-box{background:#f7f8fc}
+#ceroodUploadChooser.cw-final .cerood-chooser-head{background:#fff;border-bottom:1px solid #e8ebf2}
+#ceroodUploadChooser.cw-final .cerood-chooser-body{padding:18px 22px 24px}
+#ceroodUploadChooser.cw-final #ceroodUploadChooserNote{margin:0 0 14px;color:#667085;font-size:12px;font-weight:500}
+#ceroodUploadChooser.cw-final #cwFinalBack{height:38px;padding:0 14px;margin:0 0 16px;border:1px solid #d9deea;border-radius:9px;background:#fff;color:#344054;font:600 12px Inter,system-ui;cursor:pointer;transition:.18s ease}
+#ceroodUploadChooser.cw-final #cwFinalBack:hover{border-color:#4933b9;color:#4933b9;background:#faf9ff;transform:translateY(-1px)}
+#ceroodUploadChooser.cw-final #ceroodMarketplacePanel{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important}
+#ceroodUploadChooser.cw-final #ceroodMarketplaceForm{background:#fff;border:1px solid #e5e8f0;border-radius:16px;padding:22px;box-shadow:0 8px 28px rgba(33,43,72,.055)}
+#ceroodUploadChooser.cw-final .marketplace-fields{gap:18px 16px}
+#ceroodUploadChooser.cw-final .marketplace-fields label,#ceroodUploadChooser.cw-final .market-dynamic-grid label{font-size:12px;font-weight:650;color:#344054;margin:0}
+#ceroodUploadChooser.cw-final .marketplace-fields input,#ceroodUploadChooser.cw-final .marketplace-fields select,#ceroodUploadChooser.cw-final .marketplace-fields textarea,#ceroodUploadChooser.cw-final .market-dynamic-grid input,#ceroodUploadChooser.cw-final .market-dynamic-grid select,#ceroodUploadChooser.cw-final .market-dynamic-grid textarea{width:100%;min-height:46px;margin-top:7px;padding:11px 13px;border:1px solid #d5dae5;border-radius:10px;background:#fff;color:#202638;font:500 13px Inter,system-ui;outline:none;box-shadow:0 1px 2px rgba(16,24,40,.02);transition:border-color .18s ease,box-shadow .18s ease,background .18s ease,transform .18s ease}
+#ceroodUploadChooser.cw-final .marketplace-fields textarea,#ceroodUploadChooser.cw-final .market-dynamic-grid textarea{min-height:110px;resize:vertical;line-height:1.55}
+#ceroodUploadChooser.cw-final .marketplace-fields input:hover,#ceroodUploadChooser.cw-final .marketplace-fields select:hover,#ceroodUploadChooser.cw-final .marketplace-fields textarea:hover,#ceroodUploadChooser.cw-final .market-dynamic-grid input:hover,#ceroodUploadChooser.cw-final .market-dynamic-grid select:hover,#ceroodUploadChooser.cw-final .market-dynamic-grid textarea:hover{border-color:#b9c0cf;background:#fdfdff}
+#ceroodUploadChooser.cw-final .marketplace-fields input:focus,#ceroodUploadChooser.cw-final .marketplace-fields select:focus,#ceroodUploadChooser.cw-final .marketplace-fields textarea:focus,#ceroodUploadChooser.cw-final .market-dynamic-grid input:focus,#ceroodUploadChooser.cw-final .market-dynamic-grid select:focus,#ceroodUploadChooser.cw-final .market-dynamic-grid textarea:focus{border-color:#6652d9;background:#fff;box-shadow:0 0 0 4px rgba(73,51,185,.10)}
+#ceroodUploadChooser.cw-final select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#667085 50%),linear-gradient(135deg,#667085 50%,transparent 50%);background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:38px!important;cursor:pointer}
+#ceroodUploadChooser.cw-final input::placeholder,#ceroodUploadChooser.cw-final textarea::placeholder{color:#a0a8b8;font-weight:400}
+#ceroodUploadChooser.cw-final .market-dynamic-box{grid-column:1/-1;border:1px solid #e2e6f0;border-radius:14px;padding:20px;background:linear-gradient(180deg,#fbfbff 0%,#f8f9fd 100%);box-shadow:inset 0 1px 0 #fff}
+#ceroodUploadChooser.cw-final .market-dynamic-box>strong{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:750;color:#242a38;margin:0 0 17px}
+#ceroodUploadChooser.cw-final .market-dynamic-box>strong:before{content:'✦';width:27px;height:27px;border-radius:8px;display:grid;place-items:center;background:#ece9ff;color:#4933b9;font-size:13px}
+#ceroodUploadChooser.cw-final .market-dynamic-grid{gap:17px 16px}
+#ceroodUploadChooser.cw-final .marketplace-message:not(:empty){grid-column:1/-1;margin:3px 0 0;padding:11px 13px;border-radius:9px;background:#f3f1ff;color:#4933b9}
+#ceroodUploadChooser.cw-final #marketSubmit{min-height:44px;border:0;border-radius:10px;padding:0 20px;background:linear-gradient(135deg,#4933b9,#6551d8);box-shadow:0 6px 16px rgba(73,51,185,.18);font-weight:700;transition:.18s ease}
+#ceroodUploadChooser.cw-final #marketSubmit:hover{transform:translateY(-1px);box-shadow:0 9px 20px rgba(73,51,185,.24)}
+#ceroodUploadChooser.cw-final #marketSubmit:active{transform:translateY(0)}
+#ceroodUploadChooser.cw-final .marketplace-preview{border-radius:12px;border-color:#e1e5ee;background:#fafbfe;padding:5px}
+@media(max-width:700px){#ceroodUploadChooser.cw-final .cerood-chooser-body{padding:14px 12px 18px}#ceroodUploadChooser.cw-final #ceroodMarketplaceForm{padding:15px;border-radius:12px}#ceroodUploadChooser.cw-final .marketplace-fields,#ceroodUploadChooser.cw-final .market-dynamic-grid{grid-template-columns:1fr;gap:14px}#ceroodUploadChooser.cw-final .marketplace-fields .full{grid-column:auto}#ceroodUploadChooser.cw-final .market-dynamic-box{padding:15px;border-radius:12px}}
+</style>
 </head>
 
 <body>
