@@ -605,6 +605,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 #ceroodMarketplacePanel{scroll-margin-top:90px}
 
 .market-choice{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0 18px}.market-choice button{border:1px solid #dfe3ee;background:#fff;border-radius:9px;padding:17px 12px;text-align:left;cursor:pointer;font:inherit;color:#293044}.market-choice button strong{display:block;font-size:14px;margin:8px 0 4px}.market-choice button small{font-size:11px;color:#667085}.market-choice button.selected{border:2px solid #4933b9;background:#f8f7ff;padding:16px 11px}.market-choice .market-symbol{font-size:25px}.marketplace-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.marketplace-fields label{display:block;font-weight:650;font-size:12px;margin:0 0 6px}.marketplace-fields input,.marketplace-fields select,.marketplace-fields textarea{width:100%;padding:10px;border:1px solid #cfd5e2;border-radius:6px;font:inherit}.marketplace-fields .full{grid-column:1/-1}.marketplace-fields textarea{min-height:85px}.marketplace-preview{width:120px;height:100px;object-fit:contain;border:1px solid #e1e4ed;border-radius:6px;margin-top:8px}.marketplace-queue{margin-top:17px;display:grid;gap:9px}.marketplace-queue>div{padding:12px;border:1px solid #e1e4ed;border-radius:6px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.marketplace-queue small{color:#667085}.marketplace-message{font-size:12px;margin:12px 0;color:#4933b9}.marketplace-message.error{color:#b91c1c}@media(max-width:650px){.market-choice{grid-template-columns:1fr}.marketplace-fields{grid-template-columns:1fr}.marketplace-fields .full{grid-column:auto}}
+.market-dynamic-box{border:1px solid #e1e4ed;border-radius:8px;padding:14px;background:#fafbff}.market-dynamic-box>strong{display:block;font-size:13px;margin-bottom:12px}.market-dynamic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.market-dynamic-grid label{margin:0}.market-dynamic-grid input,.market-dynamic-grid select,.market-dynamic-grid textarea{margin-top:6px}.market-dynamic-loading,.market-dynamic-empty{font-size:12px;color:#667085}.market-required{color:#b91c1c}@media(max-width:650px){.market-dynamic-grid{grid-template-columns:1fr}}
 </style>
 <style id="cerood-my-products-compact-cards">
 /* My Products only: compact cards; other seller pages are unchanged. */
@@ -1160,6 +1161,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
             <div><label for="marketCategory">Category *</label><select id="marketCategory" required></select></div>
             <div><label for="marketBrand">Brand *</label><input id="marketBrand" maxlength="100" required></div>
             <div data-general-only hidden><label for="marketModel">Model</label><input id="marketModel" maxlength="120" placeholder="e.g. Test 32"></div>
+            <div id="marketDynamicAttributes" class="full" data-general-only hidden></div>
             <div><label for="marketVariant">Variant / size / colour</label><input id="marketVariant" maxlength="100" placeholder="e.g. M / Black / 50 ml"></div>
             <div><label for="marketPrice">Selling price (₹) *</label><input id="marketPrice" type="number" min="1" step="0.01" required></div>
             <div><label for="marketCompare">MRP / compare price (₹)</label><input id="marketCompare" type="number" min="0" step="0.01"></div>
@@ -3860,7 +3862,7 @@ initializeDashboard();
 <script id="cerood-marketplace-selector-script">
 (()=>{
  const el=id=>document.getElementById(id), panel=el('ceroodMarketplacePanel');if(!panel)return;
- const form=el('ceroodMarketplaceForm'),renewed=el('renewedProductFormCard'),queue=el('marketplaceQueue'),msg=el('marketplaceMessage');let market='',busy=false;
+ const form=el('ceroodMarketplaceForm'),renewed=el('renewedProductFormCard'),queue=el('marketplaceQueue'),msg=el('marketplaceMessage'),dynamic=el('marketDynamicAttributes');let market='',busy=false,generalCategories=[];
  const categories={
   cosmetics:[['skincare','Skincare'],['makeup','Makeup'],['haircare','Hair care'],['fragrance','Fragrance'],['personal-care','Personal care'],['beauty-tools','Beauty tools']],
   clothing:[['mens-clothing','Men clothing'],['womens-clothing','Women clothing'],['kids-clothing','Kids clothing'],['footwear','Footwear'],['accessories','Accessories'],['bags','Bags']],
@@ -3871,17 +3873,58 @@ initializeDashboard();
   ]
  };
  const marketName=()=>market==='clothing'?'Fashion':market==='cosmetics'?'Cosmetics':market==='general'?'Cerood Main Store':'Renewed';
- function choose(m){
+ const normalizeSchema=value=>Array.isArray(value)?value:[];
+ function setCategoryOptions(rows){
+  const select=el('marketCategory');select.replaceChildren(new Option('Select category',''));
+  rows.forEach(row=>select.add(new Option(row.name,row.id)));
+ }
+ async function loadGeneralCategories(){
+  dynamic.innerHTML='<div class="market-dynamic-loading">Loading category specifications...</div>';
+  try{
+   const data=await apiRequest('/api/sellers/shop-categories?marketplace=general');
+   const raw=Array.isArray(data)?data:(data.categories||data.products||data.data||[]);
+   generalCategories=raw.filter(x=>x&&x.id&&x.name).map(x=>({...x,attribute_schema:normalizeSchema(x.attribute_schema)}));
+   if(!generalCategories.length)throw Error('No active Main Store categories found.');
+   setCategoryOptions(generalCategories);
+   dynamic.innerHTML='<div class="market-dynamic-empty">Select a category to load its product specifications.</div>';
+  }catch(err){
+   generalCategories=[];setCategoryOptions(categories.general.map(([id,name])=>({id,name})));
+   dynamic.innerHTML='<div class="market-dynamic-empty">Category specifications could not be loaded. Please refresh and try again.</div>';
+   msg.className='marketplace-message error';msg.textContent='Could not load dynamic category fields: '+err.message;
+  }
+ }
+ function renderDynamicAttributes(){
+  if(market!=='general'){dynamic.replaceChildren();return}
+  const category=generalCategories.find(x=>String(x.id)===el('marketCategory').value);
+  const schema=normalizeSchema(category?.attribute_schema);dynamic.replaceChildren();
+  if(!el('marketCategory').value){dynamic.innerHTML='<div class="market-dynamic-empty">Select a category to load its product specifications.</div>';return}
+  if(!schema.length){dynamic.innerHTML='<div class="market-dynamic-empty">No extra specifications are configured for this category yet.</div>';return}
+  const box=document.createElement('div'),title=document.createElement('strong'),grid=document.createElement('div');box.className='market-dynamic-box';grid.className='market-dynamic-grid';title.textContent='Product specifications';box.append(title,grid);
+  schema.forEach(field=>{
+   if(!field||!field.key||!field.label)return;
+   const wrap=document.createElement('label'),label=document.createElement('span');label.textContent=field.label+(field.required?' *':'');if(field.required)label.className='market-dynamic-label';wrap.append(label);
+   let input;
+   if(field.type==='select'){
+    input=document.createElement('select');input.add(new Option('Select '+field.label,''));(Array.isArray(field.options)?field.options:[]).forEach(v=>input.add(new Option(String(v),String(v))));
+   }else if(field.type==='textarea'){input=document.createElement('textarea')}
+   else{input=document.createElement('input');input.type=field.type==='number'?'number':'text';if(field.type==='number')input.step='any'}
+   input.dataset.attributeKey=field.key;input.dataset.attributeLabel=field.label;if(field.required)input.required=true;if(field.placeholder)input.placeholder=field.placeholder;wrap.append(input);grid.append(wrap);
+  });
+  dynamic.append(box);
+ }
+ function collectDynamicAttributes(){
+  const out={};dynamic.querySelectorAll('[data-attribute-key]').forEach(input=>{let value=input.value.trim();if(input.type==='number'&&value!=='')value=Number(value);if(value!==''&&value!==null)out[input.dataset.attributeKey]=value});return out;
+ }
+ async function choose(m){
   market=m;
   panel.querySelectorAll('[data-market]').forEach(b=>{const on=b.dataset.market===m;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on))});
-  renewed.hidden=m!=='renewed';form.hidden=m==='renewed';queue.hidden=m==='renewed';msg.textContent='';
-  el('marketCategory').replaceChildren(new Option('Select category',''),...(categories[m]||[]).map(([v,t])=>new Option(t,v)));
-  panel.querySelectorAll('[data-cosmetics-only]').forEach(n=>n.hidden=m!=='cosmetics');
-  panel.querySelectorAll('[data-general-only]').forEach(n=>n.hidden=m!=='general');
-  el('marketQuantity').required=m==='cosmetics';el('marketExpiry').required=m==='cosmetics';
+  renewed.hidden=m!=='renewed';form.hidden=m==='renewed';queue.hidden=m==='renewed';msg.textContent='';msg.className='marketplace-message';
+  panel.querySelectorAll('[data-cosmetics-only]').forEach(n=>n.hidden=m!=='cosmetics');panel.querySelectorAll('[data-general-only]').forEach(n=>n.hidden=m!=='general');el('marketQuantity').required=m==='cosmetics';el('marketExpiry').required=m==='cosmetics';
+  if(m==='general')await loadGeneralCategories();else{generalCategories=[];dynamic.replaceChildren();el('marketCategory').replaceChildren(new Option('Select category',''),...(categories[m]||[]).map(([v,t])=>new Option(t,v)))}
   if(m!=='renewed')loadQueue();
  }
  panel.querySelectorAll('[data-market]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.market)));
+ el('marketCategory').addEventListener('change',renderDynamicAttributes);
  el('marketImage').addEventListener('change',()=>{const f=el('marketImage').files[0],img=el('marketPreview');if(img.dataset.url)URL.revokeObjectURL(img.dataset.url);img.hidden=!f;if(f){img.dataset.url=URL.createObjectURL(f);img.src=img.dataset.url}});
  async function loadQueue(){try{const data=await apiRequest('/api/sellers/catalog-submissions');queue.replaceChildren();const rows=(data.products||[]).filter(p=>p.marketplace===market);if(!rows.length){queue.textContent='No '+marketName()+' submissions yet.';return}for(const r of rows){const div=document.createElement('div'),title=document.createElement('strong'),state=document.createElement('small');title.textContent=(r.product_data?.name||'Product')+' · '+(r.product_data?.subcategory||r.product_data?.category||'');state.textContent=r.approval_status+(r.rejection_reason?' — '+r.rejection_reason:'');div.append(title,state);queue.append(div)}}catch(e){queue.textContent='Could not load submissions: '+e.message}}
  form.addEventListener('submit',async e=>{e.preventDefault();if(busy||market==='renewed')return;busy=true;const btn=el('marketSubmit');btn.disabled=true;msg.className='marketplace-message';try{
@@ -3889,10 +3932,9 @@ initializeDashboard();
   msg.textContent='Uploading product image...';const image_url=await uploadMedia(f);const v=id=>el(id).value.trim();
   const categorySelect=el('marketCategory'),categoryText=categorySelect.options[categorySelect.selectedIndex]?.text||'';
   const product={name:v('marketName'),category:market==='general'?categoryText:v('marketCategory'),brand:v('marketBrand'),variant:v('marketVariant'),price:v('marketPrice'),compare_price:v('marketCompare'),stock:v('marketStock'),net_quantity:market==='cosmetics'?v('marketQuantity'):'',batch_number:market==='cosmetics'?v('marketBatch'):'',manufacture_date:market==='cosmetics'?v('marketMfg'):'',expiry_date:market==='cosmetics'?v('marketExpiry'):'',ingredients:market==='cosmetics'?v('marketIngredients'):'',description:v('marketDescription'),image_url};
-  if(market==='general'){product.category_id=v('marketCategory');product.subcategory=categoryText;product.model=v('marketModel');product.product_attributes={};}
-  msg.textContent='Submitting to '+marketName()+' admin...';
-  await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
-  msg.textContent='Submitted! Waiting for '+marketName()+' admin approval.';form.reset();el('marketPreview').hidden=true;await loadQueue();
+  if(market==='general'){product.category_id=v('marketCategory');product.subcategory=categoryText;product.model=v('marketModel');product.product_attributes=collectDynamicAttributes();}
+  msg.textContent='Submitting to '+marketName()+' admin...';await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
+  msg.textContent='Submitted! Waiting for '+marketName()+' admin approval.';form.reset();el('marketPreview').hidden=true;if(market==='general'){renderDynamicAttributes()}await loadQueue();
  }catch(err){msg.className='marketplace-message error';msg.textContent=err.message}finally{busy=false;btn.disabled=false}});
  renewed.hidden=true;form.hidden=true;queue.hidden=true;
 })();
