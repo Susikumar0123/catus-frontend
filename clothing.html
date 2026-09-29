@@ -518,6 +518,7 @@ try{const saved=JSON.parse(localStorage.getItem('cerood_clothing_selected_locati
   window.addEventListener('cerood:logout', render);
   window.addEventListener('storage', function (event) {
     if (event.key === 'catus_logged_user' ||
+        event.key === 'cerood_customer_session' ||
         event.key === 'cerood_renewed_customer_session' || event.key === null) render();
   });
   window.addEventListener('pageshow', render);
