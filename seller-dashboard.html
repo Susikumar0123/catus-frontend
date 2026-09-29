@@ -4108,8 +4108,9 @@ initializeDashboard();
    const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.hidden=true;input.dataset.imageKey=slot.key;input.dataset.imageRequired=slot.required?'1':'0';
    // Step-1 can contain up to 9 images of the same product. Map them into the
    // category image grid in order: first image -> Front View, second -> next slot, etc.
-   const step1Source=Array.isArray(window.__ceroodStep1CatalogFiles)?window.__ceroodStep1CatalogFiles:Array.from(window.__ceroodCatalogGallery?.files||[]);
-   const step1File=step1Source[index]||(index===0?el('marketImage').files[0]:null);
+   const hasStep1Bridge=Array.isArray(window.__ceroodStep1CatalogFiles);
+    const step1Source=hasStep1Bridge?window.__ceroodStep1CatalogFiles:Array.from(window.__ceroodCatalogGallery?.files||[]);
+    const step1File=step1Source[index]||(!hasStep1Bridge&&index===0?el('marketImage').files[0]:null);
    if(step1File){input.dataset.catalogIndex=String(index);const u=URL.createObjectURL(step1File);preview.dataset.url=u;preview.innerHTML='';const img=document.createElement('img');img.src=u;img.alt=slot.label;preview.append(img)}
    const action=document.createElement('button');action.type='button';action.className='market-image-upload';action.textContent=step1File?'Change image':'Upload image';action.onclick=()=>input.click();
    input.addEventListener('change',()=>{const f=input.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){input.value='';alert('Choose JPG, PNG or WebP up to 10 MB.');return}
@@ -5731,8 +5732,11 @@ function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;po
   // Move directly to Step 2. All 1-9 uploaded images belong to this single product.
   // Freeze the exact popup selection BEFORE any category/schema render starts.
   window.__ceroodStep1CatalogFiles=catalogFiles.slice(0,9);
-  await finalDetails();
-  window.__ceroodCatalogSetup?.(catalogFiles);
+  // The popup selection is the source of truth. Keep every image in exact order.
+   // Do not allow an older hidden marketImage to become Front View.
+   await finalDetails();
+  window.__ceroodCatalogSetup?.(window.__ceroodStep1CatalogFiles);
+   window.__ceroodRefreshDynamicImages?.();
  }catch(err){
   console.error('Catalog Step 2 open failed:',err);
   // Keep the selected category + image and leave the now-enabled Continue button available as a safe retry.
@@ -5865,7 +5869,9 @@ selected=selected.slice(0,i);selected.push(key);
   if(document.body.contains(b)){b.dataset.busy='0';b.disabled=false;b.textContent=oldText}
  }
 }});
-wizard.addEventListener('change',e=>{if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
+wizard.addEventListener('change',e=>{if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);
+if(catalogFiles.length)catalogFiles[0]=f;else catalogFiles=[f];
+window.__ceroodStep1CatalogFiles=catalogFiles.slice(0,9);render()}});
 wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;search=e.target.value;const out=$('cwSearchResults');out.replaceChildren();if(!search.trim()){out.hidden=true;return}let found=[];function walk(n,path){if(Array.isArray(n)){for(const k of n){const p=[...path,k];if(p.join(' ').toLowerCase().includes(search.toLowerCase()))found.push(p)}}else for(const [k,v] of Object.entries(n))walk(v,[...path,k])}for(const [m,tree] of Object.entries(trees))walk(tree,[]);for(const p of found.slice(0,20)){let b=document.createElement('button');b.type='button';b.textContent=p.join(' / ');b.onclick=()=>{selected=p;market=rootMarket[p[0]]||'clothing';lockedLeafId=dbLeafIds.get(market+'|'+pathKey(selected))||'';file=null;if(url)URL.revokeObjectURL(url);url='';search='';render()};out.append(b)}out.hidden=false});
 back.addEventListener('click',()=>{
  // Step 2 Back = return to the SAME product's 1-9 image popup.
