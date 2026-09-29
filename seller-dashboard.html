@@ -5565,7 +5565,17 @@ let trees={
 // Step 9C-2: Clothing, Cosmetics and General category trees come from the SAME DB
 // endpoint used by Step 2. Renewed keeps its existing isolated tree.
 const dbLeafIds=new Map();
-let dbCatalogLoaded=false,dbCatalogPromise=null;
+const dbCatalogPromises=new Map();
+const DB_CATALOG_CACHE_KEY='cerood_seller_category_cache_v1';
+const DB_CATALOG_CACHE_TTL=15*60*1000;
+function readDbCatalogCache(m){
+ try{const all=JSON.parse(sessionStorage.getItem(DB_CATALOG_CACHE_KEY)||'{}'),hit=all?.[m];
+  return hit&&Date.now()-Number(hit.saved_at||0)<DB_CATALOG_CACHE_TTL&&Array.isArray(hit.rows)?hit.rows:null;
+ }catch{return null}
+}
+function writeDbCatalogCache(m,rows){
+ try{const all=JSON.parse(sessionStorage.getItem(DB_CATALOG_CACHE_KEY)||'{}');all[m]={saved_at:Date.now(),rows};sessionStorage.setItem(DB_CATALOG_CACHE_KEY,JSON.stringify(all));}catch{}
+}
 function pathKey(path){return path.join('\u001f')}
 function extractCategoryRows(data){
  const rows=Array.isArray(data)?data:(data?.categories||data?.data||data?.products||[]);
@@ -5599,11 +5609,22 @@ function buildDbTree(rows,marketplace){
 async function loadDbCatalogTree(m){
  if(m==='renewed')return;
  if(trees[m]&&Object.keys(trees[m]).length&&[...dbLeafIds.keys()].some(k=>k.startsWith(m+'|')))return;
- const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m));
- const rows=extractCategoryRows(data);
- if(!rows.length)throw new Error('No active '+m+' categories returned by catalog API.');
- trees[m]=buildDbTree(rows,m);
- rebuildRootIndex();
+ if(dbCatalogPromises.has(m))return dbCatalogPromises.get(m);
+ const task=(async()=>{
+  let rows=readDbCatalogCache(m);
+  if(!rows){
+   const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m));
+   rows=extractCategoryRows(data);
+   if(rows.length)writeDbCatalogCache(m,rows);
+  }
+  if(!rows?.length)throw new Error('No active '+m+' categories returned by catalog API.');
+  trees[m]=buildDbTree(rows,m);rebuildRootIndex();
+ })();
+ dbCatalogPromises.set(m,task);
+ try{return await task}finally{dbCatalogPromises.delete(m)}
+}
+function preloadSellerCatalogTrees(){
+ return Promise.allSettled(['clothing','cosmetics','general'].map(loadDbCatalogTree));
 }
 function selectedLeafId(){return lockedLeafId||dbLeafIds.get(market+'|'+pathKey(selected))||''}
 
@@ -5653,6 +5674,7 @@ function rebuildRootIndex(){
  for(const [m,tree] of Object.entries(trees))for(const root of Object.keys(tree))rootMarket[root]=m;
  rootKeys=[...rootOrder.filter(k=>rootMarket[k]),...Object.keys(rootMarket).filter(k=>!rootOrder.includes(k))];
 }
+queueMicrotask(()=>preloadSellerCatalogTrees());
 let market='clothing',selected=[],file=null,url='',mode='single',search='',catalogFiles=[],lockedLeafId='';
 let bulkStep=1,bulkRows=[],bulkFileName='';
 const bulkHeaders=['product_name','category','product_type','brand','size','color','selling_price','mrp','stock','description','image_url'];
@@ -5677,10 +5699,9 @@ wizard.innerHTML=`<div class="cw-steps"><span class="active"><b>1</b> Select Cat
 async function reset(nextMode){
  mode=nextMode;bulkStep=1;market='clothing';selected=[];search='';file=null;catalogFiles=[];lockedLeafId='';
  if(url){URL.revokeObjectURL(url);url=''}
- // Open instantly. Only the marketplace selected by the seller is fetched.
- setTitle();
- rebuildRootIndex();
- render();
+ // Open instantly from the root index/cache; refresh all shopping taxonomies in background.
+ setTitle();rebuildRootIndex();render();
+ preloadSellerCatalogTrees().then(()=>{if(!selected.length)render()});
 }
 function ensureProductsPopup(){let pop=$('cwProductsPopup');if(pop)return pop;pop=document.createElement('div');pop.id='cwProductsPopup';pop.hidden=true;pop.innerHTML=`<div class="cwp-window" role="dialog" aria-modal="true" aria-labelledby="cwpTitle"><div class="cwp-head"><strong id="cwpTitle">Products in a catalog</strong><button type="button" class="cwp-close" aria-label="Close">×</button></div><div class="cwp-body"><p class="cwp-intro">Add 1 to 9 images of the same product. You can upload front, side, back and other useful angle images.</p><div class="cwp-grid"><div><div class="cwp-limit"><span class="cwp-info">i</span><span>You can add minimum 1 and maximum 9 images for this product</span></div><div class="cwp-products" id="cwpProducts"></div><input type="file" id="cwpFile" accept="image/jpeg,image/png,image/webp" hidden></div><div><div class="cwp-rules-title">⊘ &nbsp; Image types which are not allowed</div><div class="cwp-rules">${[['▧','Watermark image'],['◫','Fake branded/1st copy'],['₹99','Image with price'],['▦','Pixelated image'],['↶','Inverted image'],['◒','Blur/unclear image'],['◩','Incomplete image'],['↕','Stretched/shrunk image'],['♟','Image with props'],['abcd','Image with text']].map(x=>`<div class="cwp-rule"><div class="cwp-rule-art"><span>${x[0]}</span></div><div class="cwp-rule-copy">${x[1]}<small>⊘ NOT ALLOWED</small></div></div>`).join('')}</div></div></div></div><div class="cwp-foot"><button type="button" class="cwp-cancel">Cancel</button><button type="button" class="cwp-continue">Continue</button></div></div>`;document.body.append(pop);const input=pop.querySelector('#cwpFile');const draw=()=>{const host=pop.querySelector('#cwpProducts');host.replaceChildren();catalogFiles.forEach((f,i)=>{const box=document.createElement('div');box.className='cwp-thumb';const img=document.createElement('img');img.src=URL.createObjectURL(f);img.onload=()=>URL.revokeObjectURL(img.src);const rm=document.createElement('button');rm.type='button';rm.className='cwp-remove';rm.textContent='×';rm.onclick=()=>{catalogFiles.splice(i,1);draw()};box.append(img,rm);host.append(box)});if(catalogFiles.length<9){const add=document.createElement('button');add.type='button';add.className='cwp-add';add.innerHTML='<span><b>+</b>Add Image</span>';add.onclick=()=>input.click();host.append(add)}pop.querySelector('.cwp-continue').disabled=!catalogFiles.length};input.onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}if(catalogFiles.length<9)catalogFiles.push(f);draw()};const close=()=>{pop.hidden=true;modal.style.visibility='';};pop.querySelector('.cwp-close').onclick=close;pop.querySelector('.cwp-cancel').onclick=close;pop.addEventListener('click',e=>{if(e.target===pop)close()});pop.querySelector('.cwp-continue').onclick=async()=>{
  if(!catalogFiles.length)return;
@@ -5795,7 +5816,7 @@ function renderCatalogGallery(){
 window.__ceroodCatalogSetup=(files)=>{window.__ceroodStep1CatalogFiles=Array.from(files||[]).slice(0,9);const form=$('ceroodMarketplaceForm');if(form)form.noValidate=false;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;renderCatalogGallery()};
 window.__ceroodCatalogGallery={get files(){return catalogFiles},render:()=>renderCatalogGallery()};
 async function finish(){const leafReady=market==='renewed'?(selected.length>0&&options(at(selected)).length===0):!!selectedLeafId();if(!leafReady)return;if(mode==='single'){if(!file)return;await finalDetails();return}bulkStepTwo()}
-wizard.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol),key=b.dataset.cwKey;if(i===0){market=rootMarket[key]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';if(market!=='renewed'){const oldText=b.textContent;b.disabled=true;b.textContent='Loading…';try{await loadDbCatalogTree(market)}catch(err){b.disabled=false;b.textContent=oldText;alert('Could not load categories: '+err.message);return}finally{b.disabled=false;b.textContent=oldText}}}selected=selected.slice(0,i);selected.push(key);
+wizard.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol),key=b.dataset.cwKey;if(i===0){market=rootMarket[key]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';if(market!=='renewed'){try{await loadDbCatalogTree(market)}catch(err){alert('Could not load categories: '+err.message);return}}}selected=selected.slice(0,i);selected.push(key);
  // Lock the exact DB UUID at the moment the final/leaf category is clicked.
  // Parent clicks clear the lock; a real leaf click stores its UUID and it survives the image popup.
  const clickedDbId=dbLeafIds.get(market+'|'+pathKey(selected))||'';
