@@ -854,9 +854,10 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
  'use strict';
  const url='https://catus-backend-d2js.onrender.com/api/marketplace/products';
  const sections=[
-  {name:'Renewed',key:'renewed',page:'/shop-product.html?id=',store:'/?division=Renewed#ceroodMarketplaceGroups'},
+  {name:'Renewed',key:'renewed',page:'/renewed-product.html?id=',store:'/?division=Renewed#ceroodMarketplaceGroups'},
   {name:'Beauty',key:'beauty',page:'/cosmetics-product.html?id=',store:'/?division=Beauty#ceroodMarketplaceGroups'},
-  {name:'Fashion',key:'fashion',page:'/clothing-product.html?id=',store:'/?division=Fashion#ceroodMarketplaceGroups'}
+  {name:'Fashion',key:'fashion',page:'/clothing-product.html?id=',store:'/?division=Fashion#ceroodMarketplaceGroups'},
+  {name:'Main Store',key:'general',page:'/shop-product.html?id=',store:'/?division=Main%20Store#ceroodMarketplaceGroups'}
  ];
  const grid=document.getElementById('ceroodTrending');
  const container=document.getElementById('ceroodMarketplaceGroups');
@@ -944,7 +945,40 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
  window.ceroodRetrySearchInventory=loadCatalogues;
  loadCatalogues();
 })();
-</script><style id="cerood-home-shop-filter-style">
+</script>
+<script id="cerood-main-store-feed">
+/* Main Store approved/published products use their own public API. */
+(async()=>{
+ 'use strict';
+ const API='https://catus-backend-d2js.onrender.com/api/shop/products';
+ const grid=document.getElementById('ceroodTrending');
+ if(!grid)return;
+ const safe=v=>typeof v==='string'&&(/^(https?:)\/\//i.test(v)||(v.startsWith('/')&&!v.startsWith('//')));
+ const money=v=>Number(v)>0?'₹'+Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}):'View price';
+ try{
+  const r=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store'});
+  if(!r.ok)return;
+  const d=await r.json();
+  if(!d.success||!Array.isArray(d.products))return;
+  for(const p of d.products){
+   const id=p?.id;
+   if(id==null||id==='')continue;
+   const href='/shop-product.html?id='+encodeURIComponent(String(id));
+   if([...grid.querySelectorAll('a.product')].some(a=>a.getAttribute('href')===href))continue;
+   const a=document.createElement('a');a.className='product';a.dataset.marketplaceDivision='Main Store';a.href=href;
+   const image=p.image_url||p.image||p.thumbnail;
+   if(safe(image)){const img=document.createElement('img');img.src=image;img.alt=String(p.name||'Main Store product');img.loading='lazy';img.onerror=function(){const f=document.createElement('div');f.className='product-fallback';f.textContent='Main Store';this.replaceWith(f)};a.appendChild(img)}
+   else{const f=document.createElement('div');f.className='product-fallback';f.textContent='Main Store';a.appendChild(f)}
+   const tag=document.createElement('span');tag.className='division-tag';tag.textContent='Main Store';a.appendChild(tag);
+   const name=document.createElement('b');name.textContent=String(p.name||'View product');a.appendChild(name);
+   const price=document.createElement('span');price.className='price';price.textContent=money(p.price);a.appendChild(price);
+   const cta=document.createElement('span');cta.className='cta';cta.textContent='View product';a.appendChild(cta);
+   grid.appendChild(a);
+  }
+ }catch(e){console.warn('Main Store feed:',e.message)}
+})();
+</script>
+<style id="cerood-home-shop-filter-style">
 .cerood-marketplace-filterbar{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 18px}
 .cerood-marketplace-filterbar button{background:#fff;border:1px solid #e5e0f4;border-radius:999px;padding:10px 16px;color:#342a51;font-size:12px;font-weight:650;cursor:pointer}
 .cerood-marketplace-filterbar button[aria-pressed="true"]{background:#5135d9;color:#fff;border-color:#5135d9}

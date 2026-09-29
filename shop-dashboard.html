@@ -16,9 +16,9 @@ function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 async function load(){const t=token(),auth=$('auth'),root=$('orders');if(!t){auth.innerHTML='<button id="login">Login to Cerood</button>';root.innerHTML='<div class="order empty muted">Login to view your Main Store order history.</div>';$('login').onclick=()=>window.CeroodAuth?.open();return}
  auth.innerHTML='<span class="muted">Signed in with your Cerood customer account.</span>';root.innerHTML='<div class="order muted">Loading orders…</div>';
- const r=await fetch(API+'/api/shop/customer-orders',{headers:{Authorization:'Bearer '+t,Accept:'application/json'}}),d=await r.json().catch(()=>({}));
+ const r=await fetch(API+'/api/shop/customer-orders',{headers:{Authorization:'Bearer '+t,Accept:'application/json'},cache:'no-store'}),d=await r.json().catch(()=>({}));
  if(r.status===401){localStorage.removeItem('cerood_customer_session');root.innerHTML='<div class="order err">Session expired. Please login again.</div>';return}
- if(!r.ok||!d.success)throw Error(d.message||'Unable to load orders');const orders=d.orders||[];
+ if(!r.ok||!d.success)throw Error(d.message||'Unable to load orders');const orders=(d.orders||[]).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
  if(!orders.length){root.innerHTML='<div class="order empty"><b>No Main Store orders yet.</b><p class="muted">Products you order from the Main Store will appear here.</p></div>';return}
  root.innerHTML=orders.map(o=>`<article class="order"><div class="head"><div><b>Order #${esc(String(o.id).slice(0,8).toUpperCase())}</b><div class="muted">${new Date(o.created_at).toLocaleString('en-IN')}</div></div><span class="badge">${esc(String(o.status||'confirmed').replaceAll('_',' '))}</span></div><div>${(o.items||[]).map(i=>`<div class="item"><span>${esc(i.product_name)} × ${Number(i.quantity)||1}</span><b>${money(i.line_total)}</b></div>`).join('')}</div><div class="total">Total: ${money(o.total)} · ${esc(String(o.payment_method||'cod').toUpperCase())}</div></article>`).join('');
 }

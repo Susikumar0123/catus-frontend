@@ -27,7 +27,7 @@ const $=id=>document.getElementById(id),mode=new URLSearchParams(location.search
 const key='cerood_shop_cart',buyKey='cerood_shop_buy_now';let cart=[],products=[];
 function token(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
 function uuid(){return crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)})}
-function readCart(){try{const raw=mode==='buy'?sessionStorage.getItem(buyKey):localStorage.getItem(key);const x=JSON.parse(raw||'[]');return Array.isArray(x)?x:[]}catch{return[]}}
+function readCart(){try{const raw=mode==='buy'?sessionStorage.getItem(buyKey):localStorage.getItem(key);const x=JSON.parse(raw||'[]');if(!Array.isArray(x))return[];return x.filter(v=>v&&/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(String(v.product_id))&&Number.isSafeInteger(Number(v.quantity))&&Number(v.quantity)>0&&Number(v.quantity)<=10).slice(0,20).map(v=>({product_id:String(v.product_id),quantity:Number(v.quantity)}))}catch{return[]}}
 function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
 function authState(){const t=token();$('loginState').innerHTML=t?'Signed in to your Cerood account. This order will appear in Main Store Orders.':'Guest checkout. <button type="button" id="loginBtn" style="width:auto;margin:0 0 0 8px;padding:7px 10px">Login</button>';if(!t)$('loginBtn').onclick=()=>window.CeroodAuth?.open()}
 async function load(){cart=readCart();if(!cart.length){$('items').textContent='Your Main Store cart is empty.';$('place').disabled=true;return}
