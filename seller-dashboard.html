@@ -4025,8 +4025,23 @@ initializeDashboard();
   dynamic.innerHTML='<div class="market-dynamic-loading">Loading category specifications...</div>';
   dynamicImages.innerHTML='<div class="market-dynamic-loading">Loading category image requirements...</div>';
   try{
-   const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(market));
-   const raw=Array.isArray(data)?data:(data.categories||data.products||data.data||[]);
+   // Reuse the category rows already preloaded by Add Single Catalog.
+   // This removes a second identical API wait when Continue to Product Details is clicked.
+   let raw=[];
+   try{
+    const all=JSON.parse(sessionStorage.getItem('cerood_seller_category_cache_v1')||'{}');
+    const hit=all?.[market];
+    if(hit&&Date.now()-Number(hit.saved_at||0)<15*60*1000&&Array.isArray(hit.rows))raw=hit.rows;
+   }catch(_){}
+   if(!raw.length){
+    const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(market));
+    raw=Array.isArray(data)?data:(data.categories||data.products||data.data||[]);
+    try{
+     const all=JSON.parse(sessionStorage.getItem('cerood_seller_category_cache_v1')||'{}');
+     all[market]={saved_at:Date.now(),rows:raw};
+     sessionStorage.setItem('cerood_seller_category_cache_v1',JSON.stringify(all));
+    }catch(_){}
+   }
    marketCategories=raw.filter(x=>x&&x.id&&x.name&&String(x.marketplace||market)===market);
    if(!marketCategories.some(x=>asBool(x.is_leaf)))throw Error('No active final categories found.');
    setCategoryOptions(marketCategories);
@@ -4037,6 +4052,7 @@ initializeDashboard();
    dynamic.innerHTML='<div class="market-dynamic-empty">Category specifications could not be loaded.</div>';
    dynamicImages.innerHTML='<div class="market-dynamic-empty">Category image requirements could not be loaded.</div>';
    msg.className='marketplace-message error';msg.textContent='Could not load '+marketName()+' categories: '+err.message;
+   throw err;
   }
  }
  function syncVariantVisibility(schema){
@@ -5762,13 +5778,10 @@ async function finalDetails(){
   cat.dataset.wizardCategoryText=exact.text;
   cat.dispatchEvent(new Event('change',{bubbles:true}));
 
-  // Confirm schema rendering finished before revealing Step 2.
+  // Dynamic attributes/images render synchronously on category change.
+  // Give the browser one paint frame, but do not reject a valid category because
+  // a temporary loading placeholder is still being replaced.
   await new Promise(requestAnimationFrame);
-  await new Promise(requestAnimationFrame);
-  const dyn=$('marketDynamicAttributes'), imgs=$('marketDynamicImages');
-  if(dyn?.querySelector('.market-dynamic-loading')||imgs?.querySelector('.market-dynamic-loading')){
-   throw new Error('Category schema is still loading. Please try again.');
-  }
  }else{
   const leaf=String(selected[selected.length-1]||'').trim().toLowerCase();
   const exact=[...cat.options].find(o=>o.value&&String(o.text).trim().toLowerCase()===leaf);
@@ -5842,7 +5855,16 @@ selected=selected.slice(0,i);selected.push(key);
  // Parent clicks clear the lock; a real leaf click stores its UUID and it survives the image popup.
  const clickedDbId=dbLeafIds.get(market+'|'+pathKey(selected))||'';
  lockedLeafId=clickedDbId;
- search='';render();return}if(b.id==='cwToDetails')finish()});
+ search='';render();return}if(b.id==='cwToDetails'){
+ if(b.dataset.busy==='1')return;
+ b.dataset.busy='1';b.disabled=true;
+ const oldText=b.textContent;b.textContent='Opening Product Details…';
+ try{await finish()}
+ catch(err){console.error('Continue to Product Details failed:',err);alert(err?.message||'Could not open Product Details. Please try again.')}
+ finally{
+  if(document.body.contains(b)){b.dataset.busy='0';b.disabled=false;b.textContent=oldText}
+ }
+}});
 wizard.addEventListener('change',e=>{if(e.target.id==='cwFrontImage'){let f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>10*1024*1024){alert('Choose a JPG, PNG or WebP image up to 10 MB.');return}file=f;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);render()}});
 wizard.addEventListener('input',e=>{if(e.target.id!=='cwSearch')return;search=e.target.value;const out=$('cwSearchResults');out.replaceChildren();if(!search.trim()){out.hidden=true;return}let found=[];function walk(n,path){if(Array.isArray(n)){for(const k of n){const p=[...path,k];if(p.join(' ').toLowerCase().includes(search.toLowerCase()))found.push(p)}}else for(const [k,v] of Object.entries(n))walk(v,[...path,k])}for(const [m,tree] of Object.entries(trees))walk(tree,[]);for(const p of found.slice(0,20)){let b=document.createElement('button');b.type='button';b.textContent=p.join(' / ');b.onclick=()=>{selected=p;market=rootMarket[p[0]]||'clothing';lockedLeafId=dbLeafIds.get(market+'|'+pathKey(selected))||'';file=null;if(url)URL.revokeObjectURL(url);url='';search='';render()};out.append(b)}out.hidden=false});
 back.addEventListener('click',()=>{
