@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Main Store Orders | Cerood</title><link rel="icon" href="/fevicon.png"><script defer src="/cerood-auth.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f6f7fb;color:#172133}a{text-decoration:none;color:inherit}
+header{background:linear-gradient(105deg,#aec3d3,#506f90);padding:13px 20px;display:flex;align-items:center;justify-content:space-between}header img{height:48px}header a{background:#fff;padding:10px 15px;border-radius:999px;font-size:13px}
+main{max-width:1000px;margin:24px auto;padding:0 16px 90px}.hero,.order{background:#fff;border:1px solid #e6e9f0;border-radius:16px;padding:20px}.hero{margin-bottom:16px}.hero h1{margin:0 0 6px}.muted{color:#64748b;font-size:13px;line-height:1.6}.order{margin:12px 0}.head{display:flex;justify-content:space-between;gap:12px;align-items:start}.badge{background:#f1edff;color:#5b40ce;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800}.item{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #eee;font-size:13px}.total{font-weight:800;text-align:right;margin-top:10px}button{border:0;background:#171717;color:#fff;padding:11px 15px;border-radius:9px;font-weight:700;cursor:pointer}.empty{text-align:center;padding:35px}.err{color:#b91c1c}
+@media(max-width:650px){header img{height:38px}.head{display:block}.badge{display:inline-block;margin-top:8px}}
+</style></head><body>
+<header><a href="/"><img src="/cerood-logo.webp" alt="Cerood"></a><a href="/#ceroodMarketplaceGroups">Shop Products</a></header>
+<main><section class="hero"><h1>Main Store Orders</h1><p class="muted">Orders placed while signed in to your Cerood account appear here.</p><div id="auth"></div></section><section id="orders"></section></main>
+<script>
+(()=>{'use strict';const API=location.hostname==='localhost'?'http://localhost:3000':'https://catus-backend-d2js.onrender.com',$=id=>document.getElementById(id);
+function token(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
+function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function load(){const t=token(),auth=$('auth'),root=$('orders');if(!t){auth.innerHTML='<button id="login">Login to Cerood</button>';root.innerHTML='<div class="order empty muted">Login to view your Main Store order history.</div>';$('login').onclick=()=>window.CeroodAuth?.open();return}
+ auth.innerHTML='<span class="muted">Signed in with your Cerood customer account.</span>';root.innerHTML='<div class="order muted">Loading orders…</div>';
+ const r=await fetch(API+'/api/shop/customer-orders',{headers:{Authorization:'Bearer '+t,Accept:'application/json'}}),d=await r.json().catch(()=>({}));
+ if(r.status===401){localStorage.removeItem('cerood_customer_session');root.innerHTML='<div class="order err">Session expired. Please login again.</div>';return}
+ if(!r.ok||!d.success)throw Error(d.message||'Unable to load orders');const orders=d.orders||[];
+ if(!orders.length){root.innerHTML='<div class="order empty"><b>No Main Store orders yet.</b><p class="muted">Products you order from the Main Store will appear here.</p></div>';return}
+ root.innerHTML=orders.map(o=>`<article class="order"><div class="head"><div><b>Order #${esc(String(o.id).slice(0,8).toUpperCase())}</b><div class="muted">${new Date(o.created_at).toLocaleString('en-IN')}</div></div><span class="badge">${esc(String(o.status||'confirmed').replaceAll('_',' '))}</span></div><div>${(o.items||[]).map(i=>`<div class="item"><span>${esc(i.product_name)} × ${Number(i.quantity)||1}</span><b>${money(i.line_total)}</b></div>`).join('')}</div><div class="total">Total: ${money(o.total)} · ${esc(String(o.payment_method||'cod').toUpperCase())}</div></article>`).join('');
+}
+window.addEventListener('cerood:login',load);window.addEventListener('cerood:logout',load);window.addEventListener('pageshow',load);load().catch(e=>{$('orders').innerHTML='<div class="order err">'+esc(e.message)+'</div>'});
+})();
+</script></body></html>

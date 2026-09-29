@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Main Store Checkout | Cerood</title><link rel="icon" href="/fevicon.png"><script defer src="/cerood-auth.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:#172133;background:#f6f7fb}a{text-decoration:none;color:inherit}
+header{background:linear-gradient(105deg,#aec3d3,#506f90);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}header img{height:48px}header a{background:#fff;border-radius:999px;padding:10px 15px;font-size:13px}
+main{max-width:1050px;margin:24px auto;padding:0 16px 90px;display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.card{background:#fff;border:1px solid #e6e9f0;border-radius:16px;padding:20px}.card h1,.card h2{margin:0 0 15px}h1{font-size:24px}h2{font-size:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.wide{grid-column:1/-1}label{font-size:12px;font-weight:700}input{width:100%;margin-top:5px;padding:12px;border:1px solid #dce1ea;border-radius:9px;font:inherit}.item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 0;border-bottom:1px solid #eee;font-size:13px}.item strong{display:block}.total{display:flex;justify-content:space-between;padding-top:14px;font-size:18px;font-weight:800}
+button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;color:#fff;font-weight:700;margin-top:16px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.muted{font-size:12px;color:#64748b;line-height:1.6}.status{margin-top:12px;font-size:13px}.ok{color:#15803d}.err{color:#b91c1c}.login{background:#f5f3ff;padding:11px;border-radius:10px;margin-bottom:13px}
+@media(max-width:760px){main{grid-template-columns:1fr;margin-top:13px}.grid{grid-template-columns:1fr}.wide{grid-column:auto}header img{height:38px}}
+</style></head><body>
+<header><a href="/"><img src="/cerood-logo.webp" alt="Cerood"></a><a href="/shop-dashboard.html">My Orders</a></header>
+<main><section class="card"><h1>Main Store Checkout</h1><div class="login" id="loginState"></div>
+<h2>Delivery address</h2><form id="addressForm" class="grid">
+<label>Full name<input name="name" required maxlength="120"></label><label>Mobile number<input name="phone" required inputmode="numeric" maxlength="10"></label>
+<label class="wide">House / building<input name="house" required maxlength="160"></label><label>Street / area<input name="street" maxlength="160"></label>
+<label>Village / city<input name="village" required maxlength="120"></label><label>District<input name="district" required maxlength="120"></label>
+<label>State<input name="state" required maxlength="120" value="Tamil Nadu"></label><label>PIN code<input name="pincode" required inputmode="numeric" maxlength="6"></label>
+<label class="wide">Landmark (optional)<input name="landmark" maxlength="160"></label></form>
+<p class="muted">Payment method: Cash on Delivery. Online payment can be connected later without changing your Main Store cart or account.</p>
+<button id="place">Place COD Order</button><p id="status" class="status" role="status"></p></section>
+<aside class="card"><h2>Order summary</h2><div id="items"></div><div class="total"><span>Total</span><span id="total">—</span></div><p class="muted" id="deliveryNote"></p></aside></main>
+<script>
+(()=>{'use strict';
+const API=location.hostname==='localhost'?'http://localhost:3000':'https://catus-backend-d2js.onrender.com';
+const $=id=>document.getElementById(id),mode=new URLSearchParams(location.search).get('mode');
+const key='cerood_shop_cart',buyKey='cerood_shop_buy_now';let cart=[],products=[];
+function token(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
+function uuid(){return crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)})}
+function readCart(){try{const raw=mode==='buy'?sessionStorage.getItem(buyKey):localStorage.getItem(key);const x=JSON.parse(raw||'[]');return Array.isArray(x)?x:[]}catch{return[]}}
+function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
+function authState(){const t=token();$('loginState').innerHTML=t?'Signed in to your Cerood account. This order will appear in Main Store Orders.':'Guest checkout. <button type="button" id="loginBtn" style="width:auto;margin:0 0 0 8px;padding:7px 10px">Login</button>';if(!t)$('loginBtn').onclick=()=>window.CeroodAuth?.open()}
+async function load(){cart=readCart();if(!cart.length){$('items').textContent='Your Main Store cart is empty.';$('place').disabled=true;return}
+ const r=await fetch(API+'/api/shop/products',{headers:{Accept:'application/json'}}),d=await r.json();products=(d.products||[]).filter(p=>cart.some(x=>x.product_id===p.id));
+ let total=0;$('items').innerHTML=cart.map(x=>{const p=products.find(v=>v.id===x.product_id);if(!p)return '';const q=Number(x.quantity)||1,line=Number(p.price)*q;total+=line;return `<div class="item"><div><strong>${String(p.name).replace(/[<>&"]/g,'')}</strong><span>${q} × ${money(p.price)}</span></div><b>${money(line)}</b></div>`}).join('');
+ $('total').textContent=money(total);$('deliveryNote').textContent='Delivery fee, if configured, is calculated securely by the server.';
+ try{const saved=JSON.parse(localStorage.getItem('cerood_selected_location')||'null');if(saved&&typeof saved==='object'){const f=$('addressForm');['house','street','village','district','state','pincode','landmark'].forEach(k=>{if(saved[k]&&f.elements[k])f.elements[k].value=saved[k]})}}catch{}
+ const u=JSON.parse(localStorage.getItem('catus_logged_user')||'null');if(u){const f=$('addressForm');if(u.name)f.elements.name.value=u.name;if(u.phone)f.elements.phone.value=u.phone}
+}
+$('place').onclick=async()=>{const f=$('addressForm');if(!f.reportValidity())return;const address=Object.fromEntries(new FormData(f).entries());const btn=$('place'),st=$('status');btn.disabled=true;st.className='status';st.textContent='Placing your order…';
+ try{const headers={'Content-Type':'application/json'};const t=token();if(t)headers.Authorization='Bearer '+t;
+ const requestId=sessionStorage.getItem('cerood_shop_cod_request')||uuid();sessionStorage.setItem('cerood_shop_cod_request',requestId);
+ const r=await fetch(API+'/api/shop/place-cod-order',{method:'POST',headers,body:JSON.stringify({request_id:requestId,address,items:cart})});const d=await r.json().catch(()=>({}));
+ if(!r.ok||!d.success)throw Error(d.message||'Order failed');
+ if(mode==='buy')sessionStorage.removeItem(buyKey);else localStorage.removeItem(key);sessionStorage.removeItem('cerood_shop_cod_request');
+ st.className='status ok';st.textContent='Order placed successfully. Order #'+String(d.order.id).slice(0,8).toUpperCase();btn.textContent='Order placed ✓';
+ setTimeout(()=>location.href='/shop-dashboard.html',900);
+ }catch(e){st.className='status err';st.textContent=e.message;btn.disabled=false}}
+window.addEventListener('cerood:login',authState);authState();load().catch(e=>{$('status').textContent=e.message;$('status').className='status err'});
+})();
+</script></body></html>
