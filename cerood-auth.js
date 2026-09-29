@@ -4,7 +4,8 @@
   'use strict';
   if (window.CeroodAuth) return;
 
-  const SESSION_KEY = 'cerood_renewed_customer_session';
+  const SESSION_KEY = 'cerood_customer_session';
+  const LEGACY_SESSION_KEY = 'cerood_renewed_customer_session';
   const USER_KEY = 'catus_logged_user';
   let host = null;
   let previousOverflow = '';
@@ -21,7 +22,8 @@
 
   function isLoggedIn() {
     // The user profile alone is not proof of an authenticated session.
-    return Boolean(localStorage.getItem(SESSION_KEY) && readUser());
+    const token = localStorage.getItem(SESSION_KEY) || localStorage.getItem(LEGACY_SESSION_KEY);
+    return Boolean(token && readUser());
   }
 
   function notify() {
@@ -89,7 +91,7 @@
 
   // Reflect logins and logouts performed in another Cerood tab.
   window.addEventListener('storage', function (event) {
-    if (event.key === SESSION_KEY || event.key === USER_KEY || event.key === null) notify();
+    if (event.key === SESSION_KEY || event.key === LEGACY_SESSION_KEY || event.key === USER_KEY || event.key === null) notify();
   });
   window.addEventListener('pageshow', notify);
 
@@ -108,6 +110,7 @@
     refresh: notify,
     logout() {
       localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(LEGACY_SESSION_KEY);
       localStorage.removeItem(USER_KEY);
       close();
       notify();

@@ -551,7 +551,7 @@
                             );
                         }
 
-                        if (!data.renewed_session) {
+                        if (!data.customer_session && !data.renewed_session) {
                             throw new Error(
                                 'Password accepted, but customer session was not issued. Check backend RENEWED_SESSION_SECRET configuration.'
                             );
@@ -582,9 +582,18 @@
                             JSON.stringify(safeUser)
                         );
 
+                        const customerSession =
+                            data.customer_session || data.renewed_session;
+
+                        localStorage.setItem(
+                            'cerood_customer_session',
+                            customerSession
+                        );
+
+                        // Compatibility until all Renewed pages use the common key.
                         localStorage.setItem(
                             'cerood_renewed_customer_session',
-                            data.renewed_session
+                            customerSession
                         );
 
                         showStatus(

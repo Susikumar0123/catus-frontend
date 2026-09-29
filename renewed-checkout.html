@@ -2684,7 +2684,8 @@ async function refreshPaymentQuote(){
   }
 }
 for(const radio of document.querySelectorAll('input[name=paymentMode]'))radio.addEventListener('change',refreshPaymentQuote);
-async function post(path,body){const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid server response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d}
+function ceroodCustomerToken(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
+async function post(path,body){const token=ceroodCustomerToken();const headers={'Content-Type':'application/json'};if(token)headers.Authorization='Bearer '+token;const r=await fetch(API+path,{method:'POST',headers,body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid server response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d}
 function saveDraft(){try{sessionStorage.setItem(storageKey,JSON.stringify(Object.fromEntries(fields.map(f=>[f,$(f).value.trim()]))))}catch{}}
 savedAddress=readSavedAddress();
 // A location entered on Renewed or product page follows the customer into checkout.
