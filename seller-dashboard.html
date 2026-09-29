@@ -5816,7 +5816,28 @@ function renderCatalogGallery(){
 window.__ceroodCatalogSetup=(files)=>{window.__ceroodStep1CatalogFiles=Array.from(files||[]).slice(0,9);const form=$('ceroodMarketplaceForm');if(form)form.noValidate=false;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;renderCatalogGallery()};
 window.__ceroodCatalogGallery={get files(){return catalogFiles},render:()=>renderCatalogGallery()};
 async function finish(){const leafReady=market==='renewed'?(selected.length>0&&options(at(selected)).length===0):!!selectedLeafId();if(!leafReady)return;if(mode==='single'){if(!file)return;await finalDetails();return}bulkStepTwo()}
-wizard.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol),key=b.dataset.cwKey;if(i===0){market=rootMarket[key]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';if(market!=='renewed'){try{await loadDbCatalogTree(market)}catch(err){alert('Could not load categories: '+err.message);return}}}selected=selected.slice(0,i);selected.push(key);
+wizard.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='cwOpenProductsPopup'){openProductsPopup();return}if(b.id==='cwDiscard'){$('ceroodUploadChooserClose')?.click();return}if(b.hasAttribute('data-cw-col')){let i=Number(b.dataset.cwCol),key=b.dataset.cwKey;if(i===0){
+ market=rootMarket[key]||'clothing';file=null;if(url)URL.revokeObjectURL(url);url='';
+ if(market!=='renewed'){
+  try{
+   // A root shown in column 1 must exist in the loaded tree before selection.
+   // If a stale/partial in-memory tree exists, rebuild this marketplace from
+   // the cached DB rows first, then fall back to a fresh API request.
+   if(!trees[market]||!Object.prototype.hasOwnProperty.call(trees[market],key)){
+    const cachedRows=readDbCatalogCache(market);
+    if(cachedRows?.length){trees[market]=buildDbTree(cachedRows,market);rebuildRootIndex()}
+   }
+   if(!trees[market]||!Object.prototype.hasOwnProperty.call(trees[market],key)){
+    dbCatalogPromises.delete(market);
+    const data=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(market));
+    const rows=extractCategoryRows(data);
+    if(!rows.length)throw new Error('No active '+market+' categories returned by catalog API.');
+    writeDbCatalogCache(market,rows);trees[market]=buildDbTree(rows,market);rebuildRootIndex();
+   }
+  }catch(err){alert('Could not load categories: '+err.message);return}
+ }
+}
+selected=selected.slice(0,i);selected.push(key);
  // Lock the exact DB UUID at the moment the final/leaf category is clicked.
  // Parent clicks clear the lock; a real leaf click stores its UUID and it survives the image popup.
  const clickedDbId=dbLeafIds.get(market+'|'+pathKey(selected))||'';
