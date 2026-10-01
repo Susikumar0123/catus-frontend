@@ -844,6 +844,18 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
   .cerood-amazon-home-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 </style>
+
+<style id="cerood-desktop-fixed-header-20261001">
+/* Desktop only: keep the complete top header visible while page content scrolls. */
+@media (min-width:851px){
+  .header.crn-header{
+    position:sticky!important;
+    top:0!important;
+    z-index:2147481000!important;
+    width:100%!important;
+  }
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
