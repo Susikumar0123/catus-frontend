@@ -207,7 +207,39 @@ async function getOrders(s){
  return {orders,errors,hasSource:!!(safe.length||token)}
 }
 function renderOrder(o,s){const row=el('div','order'),pic=el('img','thumb'),info=el('div'),amount=el('div','amount'),action=el('a','outline','View Details');const items=Array.isArray(o.items)?o.items:[],first=items[0]||{};const rawImg=first.image_url||first.product_image||first.image||o.image_url||'';pic.alt='Product';if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg))pic.src=rawImg;else pic.style.visibility='hidden';const name=items.map(x=>x.product_name||x.name).filter(Boolean).join(', ')||o.product_name||'Order '+String(o.id||'').slice(0,8);info.append(el('strong','',name),el('small','', 'Order ID: '+String(o.id||'—')+'  ·  '+fmt(o.created_at)),el('small','', 'Qty: '+(items.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));const st=o.delivery_status||o.status||'Order placed';info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),st));amount.textContent=money(o.total);action.href=s.orders;action.setAttribute('aria-label','View order details in your store dashboard');row.append(pic,info,amount,action);return row}
-async function load(){const recent=$('recentOrders'),all=$('allOrders');recent.replaceChildren(el('p','muted','Loading your orders…'));all.replaceChildren(el('p','muted','Loading your orders…'));$('refreshBtn').disabled=true;const results=await Promise.all(stores.map(async s=>({s,...await getOrders(s)})));const combined=[],warnings=[];for(const r of results){for(const o of r.orders)combined.push({o,s:r.s});if(r.errors.length)warnings.push('Some order records could not be loaded. Please retry or open your original order dashboard.')}combined.sort((a,b)=>new Date(b.o.created_at||0)-new Date(a.o.created_at||0));txt('orderCount',String(combined.length));recent.replaceChildren();all.replaceChildren();if(!combined.length){const msg=customerToken()?'No account orders or verified orders on this device were found.':'No verified guest orders found on this device. Sign in to view account orders.';recent.append(el('p','message',msg));all.append(el('p','message',msg))}else{combined.slice(0,4).forEach(x=>recent.append(renderOrder(x.o,x.s)));combined.forEach(x=>all.append(renderOrder(x.o,x.s)))}$('orderWarnings').textContent=warnings.length?'Some records could not be verified. Try Refresh or use the original store dashboard.':'';$('refreshBtn').disabled=false}
+async function load(){
+ const recent=$('recentOrders'),all=$('allOrders'),refresh=$('refreshBtn');
+ if(!all)return;
+ if(recent)recent.replaceChildren(el('p','muted','Loading your orders…'));
+ all.replaceChildren(el('p','muted','Loading your orders…'));
+ if(refresh)refresh.disabled=true;
+ try{
+  const results=await Promise.all(stores.map(async s=>({s,...await getOrders(s)})));
+  const combined=[],warnings=[];
+  for(const r of results){
+   for(const o of r.orders)combined.push({o,s:r.s});
+   if(r.errors.length)warnings.push('Some order records could not be loaded.');
+  }
+  combined.sort((a,b)=>new Date(b.o.created_at||0)-new Date(a.o.created_at||0));
+  txt('orderCount',String(combined.length));
+  if(recent)recent.replaceChildren();
+  all.replaceChildren();
+  if(!combined.length){
+   const msg=customerToken()?'No account orders or verified orders on this device were found.':'No verified guest orders found on this device. Sign in to view account orders.';
+   if(recent)recent.append(el('p','message',msg));
+   all.append(el('p','message',msg));
+  }else{
+   if(recent)combined.slice(0,4).forEach(x=>recent.append(renderOrder(x.o,x.s)));
+   combined.forEach(x=>all.append(renderOrder(x.o,x.s)));
+  }
+  const w=$('orderWarnings');if(w)w.textContent=warnings.length?'Some records could not be verified. Try Refresh.':'';
+ }catch(e){
+  console.error('Cerood orders load failed:',e);
+  all.replaceChildren(el('p','message error','Unable to load orders. Please tap Refresh and try again.'));
+ }finally{
+  if(refresh)refresh.disabled=false;
+ }
+}
 let accountAddresses=[];
 function ah(json=false){const x={Accept:'application/json'},t=customerToken();if(json)x['Content-Type']='application/json';if(t)x.Authorization='Bearer '+t;return x}
 function ap(){return {full_name:$('addrFullName').value.trim(),phone:$('addrPhone').value.trim(),address_line1:$('addrLine1').value.trim(),address_line2:$('addrLine2').value.trim(),landmark:$('addrLandmark').value.trim(),city:$('addrCity').value.trim(),district:$('addrDistrict').value.trim(),state:$('addrState').value.trim(),pincode:$('addrPincode').value.trim(),address_type:'HOME'}}
