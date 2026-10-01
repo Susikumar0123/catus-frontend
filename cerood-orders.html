@@ -96,7 +96,61 @@
 .address-fields{grid-template-columns:repeat(2,minmax(0,260px))}.address-fields .profile-input:first-child{grid-column:1/-1}
 .profile-save-wrap{display:flex;align-items:center;gap:14px;margin:18px 0 4px}.profile-save-wrap .btn{min-width:130px}
 @media(max-width:680px){.profile-panel{padding:17px}.profile-fields.two,.profile-fields,.address-fields{grid-template-columns:1fr}.address-fields .profile-input:first-child{grid-column:auto}}
-</style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
+</style>
+<style id="cerood-account-fixed-desktop-layout">
+/* Desktop account layout:
+   header stays fixed, left account rail stays fixed/full height,
+   only the large right content area scrolls. */
+@media (min-width:851px){
+  html,body{height:100%;overflow:hidden!important}
+  body{padding:0!important}
+
+  .header.crn-header{
+    position:fixed!important;
+    top:0!important;left:0!important;right:0!important;
+    width:100%!important;
+    z-index:2147481000!important;
+    background:#fff!important;
+  }
+
+  .layout{
+    position:fixed!important;
+    left:0!important;right:0!important;
+    top:89px!important;bottom:0!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:16px 25px 0!important;
+    display:grid!important;
+    grid-template-columns:285px minmax(0,1fr)!important;
+    gap:23px!important;
+    overflow:hidden!important;
+  }
+
+  .side{
+    position:relative!important;
+    top:auto!important;
+    align-self:stretch!important;
+    height:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    border-radius:15px 15px 0 0!important;
+    overflow:hidden!important;
+    background:#fff!important;
+  }
+
+  .content{
+    height:100%!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    padding:0 2px 45px 0!important;
+    overscroll-behavior:contain;
+    scrollbar-gutter:stable;
+  }
+}
+</style>
+</head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="mobile-location location-trigger crn-mobile-location" id="mobileLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="mobileLocationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
