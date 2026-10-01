@@ -1648,6 +1648,21 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
     const MSG91_WIDGET_ID = '366965657347303138353039';
 const MSG91_WIDGET_TOKEN = '567815T0OZZpNFK06a9ba743P1';
 
+const CEROOD_CUSTOMER_SESSION_KEY = 'cerood_customer_session';
+const CEROOD_LEGACY_SESSION_KEY = 'cerood_renewed_customer_session';
+function saveCeroodCustomerSession(data) {
+    const token = data?.customer_session || data?.renewed_session || '';
+    if (token) {
+        localStorage.setItem(CEROOD_CUSTOMER_SESSION_KEY, token);
+        localStorage.setItem(CEROOD_LEGACY_SESSION_KEY, token);
+    } else {
+        localStorage.removeItem(CEROOD_CUSTOMER_SESSION_KEY);
+        localStorage.removeItem(CEROOD_LEGACY_SESSION_KEY);
+    }
+    if (window.CeroodAuth?.refresh) window.CeroodAuth.refresh();
+}
+
+
 const msg91Configuration = {
     widgetId: MSG91_WIDGET_ID,
     tokenAuth: MSG91_WIDGET_TOKEN,
@@ -2428,8 +2443,7 @@ async function loginWithPassword() {
             currentUser = data.user;
             if(currentUser.wallet === undefined) currentUser.wallet = 0;
             localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-            if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
-            else localStorage.removeItem('cerood_renewed_customer_session');
+            saveCeroodCustomerSession(data);
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openCeroodAccountAfterAuth();
@@ -2818,6 +2832,7 @@ async function verifyOtpAndSetPassword() {
                         'catus_logged_user',
                         JSON.stringify(currentUser)
                     );
+                    saveCeroodCustomerSession(result);
 
                     updateHeaderLoginUI();
                     toggleAuthModal(false);
@@ -2973,8 +2988,7 @@ async function submitNewPasswordReset() {
             'catus_logged_user',
             JSON.stringify(currentUser)
         );
-        if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
-        else localStorage.removeItem('cerood_renewed_customer_session');
+        saveCeroodCustomerSession(data);
 
         updateHeaderLoginUI();
         toggleAuthModal(false);
