@@ -150,6 +150,34 @@
   }
 }
 </style>
+
+<style id="cerood-orders-single-white-grid">
+/* My Orders: keep title, description, filters, search and history inside one white card. */
+#ordersView{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:24px 26px 30px;
+  margin:0 0 18px;
+  box-shadow:0 3px 16px #26325205;
+}
+#ordersView>.viewtitle{margin:0 0 8px}
+#ordersView>.viewintro{margin:0 0 18px}
+#ordersView .orders-filter{
+  box-shadow:none;
+}
+#ordersView .orders-search input,
+#ordersView .panelhead,
+#ordersView #allOrders .order{
+  background:#fff;
+}
+@media(max-width:680px){
+  #ordersView{
+    padding:17px 14px 22px;
+    border-radius:13px;
+  }
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
