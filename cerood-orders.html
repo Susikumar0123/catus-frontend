@@ -182,16 +182,6 @@
 </div>
 </section>
 
-<section class="panel profile-panel">
-<h2>Delivery Address</h2>
-<div class="profile-fields address-fields">
-<label class="profile-input"><span>Full Address</span><textarea id="profileAddressInput" rows="3" placeholder="House / Street / Area"></textarea></label>
-<label class="profile-input"><span>District / City</span><input id="profileCityInput" type="text" placeholder="Enter district or city"></label>
-<label class="profile-input"><span>State</span><input id="profileStateInput" type="text" placeholder="Enter state"></label>
-<label class="profile-input"><span>Pincode</span><input id="profilePincodeInput" type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode"></label>
-</div>
-</section>
-
 <div class="profile-save-wrap"><button class="btn" id="saveProfileBtn" type="button">Save Profile</button><span id="profileSaveMessage" class="muted"></span></div>
 </section><section id="ordersView" hidden><h1 class="viewtitle">My Orders</h1><p class="viewintro">Find and track all your shopping orders easily.</p>
 <div class="orders-easy-layout">
@@ -287,11 +277,10 @@ function loadEditableProfile(){
 function saveEditableProfile(){
  const val=id=>($(id)?.value||'').trim();
  const first=val('profileFirstNameInput'),last=val('profileLastNameInput');
- const phone=val('profilePhoneInput'),email=val('profileEmailInput'),pin=val('profilePincodeInput');
+ const phone=val('profilePhoneInput'),email=val('profileEmailInput');
  const msg=$('profileSaveMessage');
  if(phone && !/^[0-9]{10}$/.test(phone)){if(msg)msg.textContent='Enter a valid 10-digit mobile number.';return}
- if(pin && !/^[0-9]{6}$/.test(pin)){if(msg)msg.textContent='Enter a valid 6-digit pincode.';return}
- const data={first_name:first,last_name:last,name:[first,last].filter(Boolean).join(' '),email,phone,address:{address:val('profileAddressInput'),city:val('profileCityInput'),state:val('profileStateInput'),pincode:pin}};
+ const data={first_name:first,last_name:last,name:[first,last].filter(Boolean).join(' '),email,phone};
  localStorage.setItem('cerood_profile_details_v1',JSON.stringify(data));
  const u=read('catus_logged_user')||{};
  if(data.name)u.name=data.name;if(email)u.email=email;if(phone)u.phone=phone;
