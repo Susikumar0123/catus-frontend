@@ -25,7 +25,15 @@ button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;co
 const API=location.hostname==='localhost'?'http://localhost:3000':'https://catus-backend-d2js.onrender.com';
 const $=id=>document.getElementById(id),mode=new URLSearchParams(location.search).get('mode');
 const key='cerood_shop_cart',buyKey='cerood_shop_buy_now';let cart=[],products=[];
-function token(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
+function ceroodCustomerToken(){
+ const common=localStorage.getItem('cerood_customer_session')||'';
+ const legacy=localStorage.getItem('cerood_renewed_customer_session')||'';
+ const t=common||legacy;
+ if(t&&common!==t)localStorage.setItem('cerood_customer_session',t);
+ if(t&&legacy!==t)localStorage.setItem('cerood_renewed_customer_session',t);
+ return t;
+}
+function token(){return ceroodCustomerToken()}
 
 async function ceroodSaveAccountAddress(a){
  const t=token();
@@ -68,6 +76,17 @@ $('place').onclick=async()=>{const f=$('addressForm');if(!f.reportValidity())ret
  const requestId=sessionStorage.getItem('cerood_shop_cod_request')||uuid();sessionStorage.setItem('cerood_shop_cod_request',requestId);
  const r=await fetch(API+'/api/shop/place-cod-order',{method:'POST',headers,body:JSON.stringify({request_id:requestId,address,items:cart})});const d=await r.json().catch(()=>({}));
  if(!r.ok||!d.success)throw Error(d.message||'Order failed');
+ try{
+   const orderId=d?.order?.id||d?.order_id||'';
+   if(orderId){
+     const receiptKey='cerood_shop_device_receipts';
+     let receipts=JSON.parse(localStorage.getItem(receiptKey)||'[]');
+     if(!Array.isArray(receipts))receipts=[];
+     receipts=receipts.filter(x=>String(x.id)!==String(orderId));
+     receipts.unshift({id:orderId,request_id:requestId,phone:address.phone||''});
+     localStorage.setItem(receiptKey,JSON.stringify(receipts.slice(0,30)));
+   }
+ }catch(e){console.warn('Could not save Main Store order receipt',e)}
   await ceroodSaveAccountAddress(address);
  if(mode==='buy')sessionStorage.removeItem(buyKey);else localStorage.removeItem(key);sessionStorage.removeItem('cerood_shop_cod_request');
  st.className='status ok';st.textContent='Order placed successfully. Order #'+String(d.order.id).slice(0,8).toUpperCase();btn.textContent='Order placed ✓';

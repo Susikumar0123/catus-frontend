@@ -2710,7 +2710,14 @@ async function ceroodSaveAccountAddress(a){
  }catch(e){console.warn('Cerood account address sync skipped',e)}
 }
 
-function ceroodCustomerToken(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
+function ceroodCustomerToken(){
+ const common=localStorage.getItem('cerood_customer_session')||'';
+ const legacy=localStorage.getItem('cerood_renewed_customer_session')||'';
+ const t=common||legacy;
+ if(t&&common!==t)localStorage.setItem('cerood_customer_session',t);
+ if(t&&legacy!==t)localStorage.setItem('cerood_renewed_customer_session',t);
+ return t;
+}
 async function post(path,body){const token=ceroodCustomerToken();const headers={'Content-Type':'application/json'};if(token)headers.Authorization='Bearer '+token;const r=await fetch(API+path,{method:'POST',headers,body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid server response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d}
 function saveDraft(){try{sessionStorage.setItem(storageKey,JSON.stringify(Object.fromEntries(fields.map(f=>[f,$(f).value.trim()]))))}catch{}}
 savedAddress=readSavedAddress();

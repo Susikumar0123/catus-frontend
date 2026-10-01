@@ -2517,7 +2517,14 @@ async function ceroodSaveAccountAddress(a){
  }catch(e){console.warn('Cerood account address sync skipped',e)}
 }
 
-function ceroodCustomerToken(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
+function ceroodCustomerToken(){
+ const common=localStorage.getItem('cerood_customer_session')||'';
+ const legacy=localStorage.getItem('cerood_renewed_customer_session')||'';
+ const t=common||legacy;
+ if(t&&common!==t)localStorage.setItem('cerood_customer_session',t);
+ if(t&&legacy!==t)localStorage.setItem('cerood_renewed_customer_session',t);
+ return t;
+}
 async function requestJson(path,options={}){const token=ceroodCustomerToken();const headers={...(options.headers||{})};if(token)headers.Authorization='Bearer '+token;const response=await fetch(API+path,{cache:'no-store',...options,headers});let data;try{data=await response.json()}catch{throw Error('Server returned an invalid response.')}if(!response.ok||!data.success)throw Error(data.message||'Checkout service unavailable.');return data}
 async function updateQuote(){quote=null;refreshButton();if(!saved||!validAddress(saved)||!requested.length)return;try{const online=paymentMode()==='online';const data=await requestJson('/api/cosmetics/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({address:saved,items:requested,payment_method:online?'online':'cod'})});quote=data;const discount=online?Math.max(0,Number(data.discount)||0):0;$('subtotal').textContent=fmt(data.subtotal);$('deliveryFee').textContent=fmt(data.delivery_fee);$('prepaidDiscount').textContent='−'+fmt(discount);$('prepaidDiscountRow').style.display=discount>0?'flex':'none';$('total').textContent=fmt(data.total);$('paymentMessage').textContent=discount>0?'Seller prepaid discount applied. You save '+fmt(discount)+' by paying online.':(enabled||onlineEnabled?'Prices and stock verified by Cerood.':'Price verified. Checkout is not live yet.')}catch(e){$('paymentMessage').textContent=e.message;$('subtotal').textContent='—';$('deliveryFee').textContent='—';$('prepaidDiscountRow').style.display='none';$('prepaidDiscount').textContent='−₹0';$('total').textContent='—'}refreshButton()}
 async function load(){requested=cartItems();const box=$('products');box.textContent='';if(!requested.length){$('topMessage').textContent='Your Beauty cart is empty. Choose a product to continue.';box.textContent='No products selected.';refreshButton();return}
