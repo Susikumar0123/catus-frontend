@@ -178,6 +178,74 @@
   }
 }
 </style>
+
+<style id="cerood-common-live-tracking-20261002">
+.order-detail-wrap{grid-column:1/-1;margin-top:4px;border-top:1px solid var(--line);padding-top:16px}
+.order-detail-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+.order-detail-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.order-detail-top h3{margin:0;font-size:17px}.order-detail-store{font-size:11px;font-weight:800;color:#5639df;background:#f1edff;border-radius:999px;padding:6px 10px}
+.order-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.order-detail-box{background:#f7f8fb;border-radius:10px;padding:13px}.order-detail-box small{display:block;color:#66748a;font-size:10px;margin-bottom:5px}.order-detail-box strong{display:block;font-size:12px;overflow-wrap:anywhere}
+.tracking-title{font-size:15px;margin:18px 0 14px}.tracking-timeline{position:relative;margin-left:7px}
+.tracking-step{position:relative;display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;min-height:67px}
+.tracking-step:not(:last-child):before{content:"";position:absolute;left:8px;top:17px;bottom:-2px;width:2px;background:#d8e1ef}
+.tracking-dot{position:relative;z-index:1;width:18px;height:18px;border-radius:50%;border:2px solid #c6d3e3;background:#fff;margin-top:1px}
+.tracking-step.done .tracking-dot,.tracking-step.current .tracking-dot{border-color:#3b82f6;background:#3b82f6;box-shadow:0 0 0 6px #e8f1ff}
+.tracking-step.done:not(:last-child):before{background:#3b82f6}.tracking-step.current .tracking-label{color:#174fe0;font-weight:800}
+.tracking-label{font-size:13px;font-weight:650;color:#53627a}.tracking-time{font-size:10px;color:#64748b;margin-top:6px}
+.tracking-extra{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.tracking-extra span,.tracking-extra a{font-size:11px;color:#53627a;background:#f7f8fb;border-radius:8px;padding:8px 10px}.tracking-extra a{color:#315bd6;font-weight:700}
+.order-detail-close{border:1px solid #d8deed;background:#fff;border-radius:8px;padding:8px 11px;font-size:11px;font-weight:700}
+@media(max-width:680px){.order-detail-card{padding:14px}.order-detail-grid{grid-template-columns:1fr}.tracking-step{min-height:63px}}
+</style>
+
+
+<style id="cerood-common-order-reviews-20261002">
+.order-review-section{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.order-review-section h4{margin:0 0 7px;font-size:15px}.order-review-note{font-size:11px;color:#64748b;line-height:1.6;margin:0 0 12px}
+.order-review-list{display:grid;gap:12px}.order-review-card{border:1px solid #e4e9f1;border-radius:11px;padding:14px;background:#fff}
+.order-review-head{display:flex;align-items:center;gap:11px}.order-review-head img{width:58px;height:58px;object-fit:contain;border-radius:8px;background:#f6f7fa}
+.order-review-head strong{display:block;font-size:12px}.order-review-head small{display:block;color:#64748b;font-size:10px;margin-top:4px}
+.order-review-stars{display:flex;gap:2px;margin:11px 0}.order-review-stars button{border:0;background:transparent;color:#aab5c5;font-size:27px;line-height:1;padding:2px 4px;cursor:pointer}.order-review-stars button.chosen{color:#e4a41d}
+.order-review-text{width:100%;min-height:78px;resize:vertical;border:1px solid #dce4ee;border-radius:9px;padding:10px;font:inherit;font-size:12px}
+.order-review-file{display:block;margin-top:10px;font-size:11px;color:#53627a}.order-review-file input{display:block;width:100%;margin-top:6px;font-size:11px}
+.order-review-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.order-review-actions button{margin:0}
+.order-review-status{font-size:11px;color:#526174;line-height:1.6;margin:10px 0 0}.order-review-existing{background:#f7f8fb;border-radius:9px;padding:11px;font-size:11px;line-height:1.7;color:#46556b;margin-top:10px}
+</style>
+
+
+<style id="cerood-common-warranty-receipt-20261002">
+.order-warranty-section{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.order-warranty-section h4{margin:0 0 7px;font-size:15px}
+.order-warranty-note{font-size:11px;color:#64748b;line-height:1.6;margin:0 0 12px}
+.order-warranty-list{display:grid;gap:11px}
+.order-warranty-card{border:1px solid #e4e9f1;border-radius:11px;padding:13px;background:#fff}
+.order-warranty-product{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.order-warranty-product img{width:58px;height:58px;object-fit:contain;border-radius:8px;background:#f6f7fa}
+.order-warranty-product strong{font-size:12px}
+.order-warranty-chip{display:inline-block;border-radius:999px;background:#eaf1f9;color:#203952;font-size:10px;font-weight:700;padding:5px 9px;margin-bottom:8px}
+.order-warranty-chip.active{background:#dcfce7;color:#166534}.order-warranty-chip.expired{background:#fee2e2;color:#991b1b}
+.order-warranty-meta{font-size:11px;color:#526174;line-height:1.75}
+.order-receipt-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+</style>
+
+
+<style id="cerood-common-returns-20261002">
+.order-return-section{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.order-return-section h4{margin:0 0 7px;font-size:15px}.order-return-note{font-size:11px;color:#64748b;line-height:1.6;margin:0 0 12px}
+.order-return-list{display:grid;gap:10px}.order-return-item{border:1px solid #e4e9f1;border-radius:11px;padding:13px;background:#fff}
+.order-return-head{display:flex;align-items:center;gap:11px}.order-return-head img{width:58px;height:58px;object-fit:contain;border-radius:8px;background:#f6f7fa}
+.order-return-head strong{display:block;font-size:12px}.order-return-head small{display:block;color:#64748b;font-size:10px;margin-top:4px}
+.order-return-existing{margin-top:10px;border-radius:9px;background:#f7f8fb;padding:10px;font-size:11px;line-height:1.65;color:#526174}
+.order-return-badge{display:inline-block;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;background:#fff7df;color:#8a5a00;margin-left:5px}.order-return-badge.good{background:#eaf8ef;color:#176c3a}.order-return-badge.bad{background:#fff0f0;color:#b42318}
+.cr-return-modal[hidden]{display:none!important}.cr-return-modal{position:fixed;inset:0;z-index:100005;display:grid;place-items:center;padding:18px}.cr-return-shade{position:absolute;inset:0;background:rgba(17,24,39,.55)}
+.cr-return-dialog{position:relative;width:min(520px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:14px;padding:20px;box-shadow:0 20px 60px #0004}
+.cr-return-dialog-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border-bottom:1px solid #e6eaf0;padding-bottom:14px}.cr-return-dialog-head h2{font-size:18px;margin:4px 0 0}.cr-return-dialog-head small{color:#64748b}
+.cr-return-x{border:0;background:#f3f4f6;width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer}.cr-return-product{margin:14px 0;padding:12px;border-radius:9px;background:#f7f8fb;font-size:12px;line-height:1.6}
+.cr-return-field{display:block;font-size:12px;font-weight:650;margin:13px 0 6px}.cr-return-control{width:100%;border:1px solid #d7dee9;border-radius:9px;padding:12px;background:#fff;font:inherit;font-size:12px}.cr-return-textarea{min-height:100px;resize:vertical}
+.cr-return-help,.cr-return-status{font-size:11px;color:#64748b;line-height:1.6}.cr-return-status.error{color:#b91c1c}.cr-return-status.ok{color:#166534}.cr-return-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+@media(max-width:650px){.cr-return-actions{flex-direction:column-reverse}.cr-return-actions button{width:100%}}
+</style>
+
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -234,7 +302,215 @@ async function getOrders(s){
  for(const o of accountOrders)if(!orders.some(x=>String(x.id)===String(o.id)))orders.push(o);
  return {orders,errors,hasSource:!!(safe.length||token)}
 }
-function renderOrder(o,s){const row=el('div','order'),pic=el('img','thumb'),info=el('div'),amount=el('div','amount'),action=el('a','outline','View Details');const items=Array.isArray(o.items)?o.items:[],first=items[0]||{};const rawImg=first.image_url||first.product_image||first.image||o.image_url||'';pic.alt='Product';if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg))pic.src=rawImg;else pic.style.visibility='hidden';const name=items.map(x=>x.product_name||x.name).filter(Boolean).join(', ')||o.product_name||'Order '+String(o.id||'').slice(0,8);info.append(el('strong','',name),el('small','', 'Order ID: '+String(o.id||'—')+'  ·  '+fmt(o.created_at)),el('small','', 'Qty: '+(items.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));const st=o.delivery_status||o.status||'Order placed';info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),st));amount.textContent=money(o.total);action.href=s.orders;action.setAttribute('aria-label','View order details in your store dashboard');row.append(pic,info,amount,action);return row}
+function trackingStageKey(v){
+ const x=String(v||'').toLowerCase().trim().replace(/[\s-]+/g,'_');
+ if(x==='processing')return 'packing';
+ if(x==='outfordelivery')return 'out_for_delivery';
+ return x||'confirmed';
+}
+function trackingStagesFor(s){
+ return s.id==='renewed'
+  ?[{k:'confirmed',l:'Order confirmed'},{k:'packing',l:'Packing'},{k:'packed',l:'Packed'},{k:'shipped',l:'Shipped'},{k:'out_for_delivery',l:'Out for delivery'},{k:'delivered',l:'Delivered'}]
+  :[{k:'confirmed',l:'Order confirmed'},{k:'processing',l:'Processing'},{k:'packed',l:'Packed'},{k:'shipped',l:'Shipped'},{k:'out_for_delivery',l:'Out for delivery'},{k:'delivered',l:'Delivered'}];
+}
+function trackingDateTime(v){
+ if(!v)return 'Awaiting update';
+ const d=new Date(v);if(isNaN(d))return 'Awaiting update';
+ return d.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'});
+}
+
+
+
+let commonRenewedReturns=null,commonReturnTarget=null;
+function crReturnPretty(v){return String(v||'').replaceAll('_',' ').replace(/\b\w/g,m=>m.toUpperCase())}
+function crReturnBadge(v){v=String(v||'').toLowerCase();if(v.includes('reject')||v==='cancelled')return 'order-return-badge bad';if(['approved','seller_approved','picked_up','received','refunded','replacement_approved','exchange_approved','closed'].includes(v))return 'order-return-badge good';return 'order-return-badge'}
+function crReturnType(v){return ({return:'Return',exchange:'Exchange',replacement:'Replacement'})[String(v||'').toLowerCase()]||crReturnPretty(v)}
+function crReturnDate(v){if(!v)return '—';const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})}
+async function loadCommonRenewedReturns(force=false){
+ if(!force&&Array.isArray(commonRenewedReturns))return commonRenewedReturns;
+ const token=customerToken();if(!token){commonRenewedReturns=[];return commonRenewedReturns}
+ try{const r=await fetch(API+'/api/renewed/customer-returns',{headers:{Authorization:'Bearer '+token},cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to load requests');commonRenewedReturns=Array.isArray(d.requests)?d.requests:[]}catch(e){console.warn('Renewed returns:',e.message);commonRenewedReturns=[]}
+ return commonRenewedReturns;
+}
+function crActiveReturn(orderId,productId){return (commonRenewedReturns||[]).find(r=>String(r.order_id)===String(orderId)&&String(r.product_id)===String(productId)&&!['rejected','cancelled','closed'].includes(String(r.status||'').toLowerCase()))}
+function closeCommonReturn(){const m=document.getElementById('ceroodReturnModal');if(m)m.hidden=true;document.body.style.overflow='';commonReturnTarget=null}
+function openCommonReturn(o,item,refresh){
+ const token=customerToken();if(!token){alert('Please sign in to your Cerood account before creating a return request.');return}
+ const existing=crActiveReturn(o.id,item.product_id);if(existing){refresh();return}
+ commonReturnTarget={order:o,item,refresh};document.getElementById('ceroodReturnProduct').textContent=(item.product_name||'Renewed product')+' · Order #'+String(o.id).slice(0,8).toUpperCase()+' · Qty '+Number(item.quantity||1);
+ document.getElementById('ceroodReturnType').value='return';document.getElementById('ceroodReturnReason').value='';document.getElementById('ceroodReturnDetails').value='';document.getElementById('ceroodReturnStatus').textContent='';document.getElementById('ceroodReturnModal').hidden=false;document.body.style.overflow='hidden';
+}
+async function submitCommonReturn(){
+ const token=customerToken(),target=commonReturnTarget,btn=document.getElementById('ceroodReturnSubmit'),status=document.getElementById('ceroodReturnStatus');
+ if(!token||!target){status.textContent='Customer session or order details are missing.';status.className='cr-return-status error';return}
+ const reason=document.getElementById('ceroodReturnReason').value.trim(),details=document.getElementById('ceroodReturnDetails').value.trim(),request_type=document.getElementById('ceroodReturnType').value;if(!reason){status.textContent='Please select a reason.';status.className='cr-return-status error';return}
+ btn.disabled=true;status.textContent='Submitting request…';status.className='cr-return-status';
+ try{const r=await fetch(API+'/api/renewed/customer-returns',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({order_id:target.order.id,product_id:target.item.product_id,request_type,reason,details,quantity:Number(target.item.quantity||1)})}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to submit request');status.textContent='Request submitted successfully.';status.className='cr-return-status ok';await loadCommonRenewedReturns(true);const refresh=target.refresh;setTimeout(()=>{closeCommonReturn();refresh&&refresh()},450)}
+ catch(e){status.textContent=e.message;status.className='cr-return-status error'}finally{btn.disabled=false}
+}
+async function renderOrderReturns(o,s){
+ const section=el('section','order-return-section'),title=el('h4','','Returns & Replacements'),note=el('p','order-return-note'),list=el('div','order-return-list');section.append(title,note,list);
+ if(s.id!=='renewed'){note.textContent=(s.id==='clothing'?'Fashion':s.id==='cosmetics'?'Beauty':'This store')+' does not currently have a connected customer return/replacement API, so no fake request button is shown.';return section}
+ if(String(o.delivery_status||'').toLowerCase()!=='delivered'){note.textContent='Return / Exchange / Replacement becomes available after this Renewed order is marked Delivered.';return section}
+ const token=customerToken();if(!token){note.textContent='Sign in to your Cerood account to create or view a Return / Exchange / Replacement request.';return section}
+ note.textContent='Delivered Renewed products can use the existing Return / Exchange / Replacement workflow.';
+ await loadCommonRenewedReturns();
+ const items=Array.isArray(o.items)?o.items:[];
+ if(!items.length){list.append(el('p','order-return-note','No product item is available for a return request.'));return section}
+ const refresh=async()=>{const newer=await renderOrderReturns(o,s);section.replaceWith(newer)};
+ items.forEach(item=>{
+  const card=el('article','order-return-item'),head=el('div','order-return-head'),rawImg=item.image_url||item.product_image||item.image||'';
+  if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg)){const img=el('img','');img.src=rawImg;img.alt=item.product_name||'Renewed product';head.append(img)}
+  const info=el('div','');info.append(el('strong','',item.product_name||'Renewed product'),el('small','','Delivered · Qty '+Number(item.quantity||1)));head.append(info);card.append(head);
+  const existing=crActiveReturn(o.id,item.product_id);
+  if(existing){const box=el('div','order-return-existing');box.append(document.createTextNode(crReturnType(existing.request_type)+' · '+(existing.reason||'—')+' · '+crReturnDate(existing.created_at)+' '));box.append(el('span',crReturnBadge(existing.status),crReturnPretty(existing.status||'requested')));if(existing.details)box.append(el('div','',existing.details));if(existing.seller_note)box.append(el('div','','Seller: '+existing.seller_note));if(existing.admin_note)box.append(el('div','','Cerood Admin: '+existing.admin_note));card.append(box)}
+  else{const b=el('button','outline','Return / Exchange / Replacement');b.type='button';b.onclick=()=>openCommonReturn(o,item,refresh);card.append(b)}
+  list.append(card);
+ });return section;
+}
+
+function receiptEscape(value){return String(value===null||value===undefined?'':value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function printCommonOrderReceipt(o,s){
+ if(!o)return;
+ const win=window.open('','_blank');if(!win){alert('Please allow pop-ups for cerood.com to print your order receipt.');return}
+ const esc=receiptEscape,amount=n=>Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),date=v=>v&&!Number.isNaN(new Date(v).getTime())?new Date(v).toLocaleString('en-IN'):'Not recorded';
+ const items=(o.items||[]).map(item=>'<tr><td>'+esc(item.product_name||item.name||'Product')+'</td><td>'+esc(item.quantity||1)+'</td><td class="right">'+amount(item.unit_price||item.price)+'</td><td class="right">'+amount(item.line_total||((Number(item.unit_price||item.price)||0)*(Number(item.quantity)||1)))+'</td></tr>').join('');
+ const payment=o.payment_method==='cod'?'Cash on Delivery — payment collection not verified by this receipt':o.status==='paid'?'Online payment — marked paid in Cerood order system':'Payment status — '+esc(o.status||'pending');
+ const addr=o.delivery_address&&typeof o.delivery_address==='object'?Object.values(o.delivery_address).filter(Boolean).join(', '):'';
+ const doc='<!doctype html><html><head><meta charset="utf-8"><title>Cerood Order Receipt '+esc(o.id)+'</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:12px/1.6 Arial,sans-serif;color:#182235;margin:0}header{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #182235;padding-bottom:12px;margin-bottom:18px}h1{font-size:21px;margin:0}h2{font-size:14px;margin:18px 0 7px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.right{text-align:right}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:14px}.note{margin-top:24px;padding:12px;background:#f5f6f8;font-size:11px}</style></head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script>
+<div class="cr-return-modal" id="ceroodReturnModal" hidden>
+ <div class="cr-return-shade" data-cr-return-close></div>
+ <section class="cr-return-dialog" role="dialog" aria-modal="true" aria-labelledby="ceroodReturnTitle">
+  <div class="cr-return-dialog-head"><div><small>Delivered Renewed product</small><h2 id="ceroodReturnTitle">Return / Exchange / Replacement</h2></div><button type="button" class="cr-return-x" data-cr-return-close aria-label="Close">×</button></div>
+  <div class="cr-return-product" id="ceroodReturnProduct"></div>
+  <label class="cr-return-field" for="ceroodReturnType">What do you need?</label>
+  <select class="cr-return-control" id="ceroodReturnType"><option value="return">Return</option><option value="exchange">Exchange</option><option value="replacement">Replacement</option></select>
+  <label class="cr-return-field" for="ceroodReturnReason">Reason</label>
+  <select class="cr-return-control" id="ceroodReturnReason"><option value="">Select a reason</option><option>Product damaged</option><option>Product not working</option><option>Wrong product received</option><option>Missing accessory / part</option><option>Product condition not as described</option><option>Other</option></select>
+  <label class="cr-return-field" for="ceroodReturnDetails">Describe the issue</label>
+  <textarea class="cr-return-control cr-return-textarea" id="ceroodReturnDetails" maxlength="1500" placeholder="Tell us what happened…"></textarea>
+  <p class="cr-return-help">Cerood Admin will review the request after the seller responds.</p><p class="cr-return-status" id="ceroodReturnStatus" role="status"></p>
+  <div class="cr-return-actions"><button type="button" class="outline" data-cr-return-close>Cancel</button><button type="button" class="btn" id="ceroodReturnSubmit">Submit request</button></div>
+ </section>
+</div>
+
+</body></html>';
+ win.document.open();win.document.write(doc);win.document.close();
+}
+function renderOrderWarranty(o,s){
+ const section=el('section','order-warranty-section'),title=el('h4','','Warranty & Receipt'),note=el('p','order-warranty-note','Warranty starts from the recorded delivery date. The receipt can be printed or saved as PDF; it is not a final GST tax invoice.'),list=el('div','order-warranty-list');
+ section.append(title,note,list);
+ const items=Array.isArray(o.items)?o.items:[];
+ if(!items.length){list.append(el('p','order-warranty-note','No product warranty details are available for this order.'))}
+ items.forEach(item=>{
+  const card=el('article','order-warranty-card'),product=el('div','order-warranty-product'),rawImg=item.image_url||item.product_image||item.image||'';
+  if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg)){const img=el('img','');img.src=rawImg;img.alt=item.product_name||'Product';product.append(img)}
+  product.append(el('strong','',item.product_name||item.name||(s.id==='renewed'?'Renewed product':s.id==='clothing'?'Fashion product':s.id==='cosmetics'?'Beauty product':'Product')));card.append(product);
+  const daysRaw=item.warranty_days_at_purchase,snapshot=daysRaw!==null&&daysRaw!==undefined,days=Number(snapshot?daysRaw:item.warranty_days),valid=Number.isSafeInteger(days)&&days>=0,delivered=String(o.delivery_status||'').toLowerCase()==='delivered',start=delivered&&o.delivered_at?new Date(o.delivered_at):null,dateOK=start&&!Number.isNaN(start.getTime());
+  let state='Not started',end=null;if(!valid)state='Warranty details unavailable';else if(days===0)state='No warranty';else if(delivered&&!dateOK)state='Delivery date needs confirmation';else if(dateOK){end=new Date(start.getTime());end.setUTCDate(end.getUTCDate()+days);state=Date.now()<end.getTime()?'Active':'Expired'}
+  const chip=el('span','order-warranty-chip'+(state==='Active'?' active':state==='Expired'?' expired':''),state);card.append(chip);
+  const meta=el('div','order-warranty-meta');['Warranty: '+(valid?days+' day(s)':'Not available'),'Delivery date: '+(dateOK?start.toLocaleDateString('en-IN'):'Not recorded'),'Warranty end: '+(end?end.toLocaleDateString('en-IN'):'—')].forEach(x=>meta.append(el('div','',x)));
+  if(!snapshot&&valid)meta.append(el('div','','Note: purchase-time warranty was not saved for this older order; showing the available product warranty duration. Confirm with Cerood.'));
+  card.append(meta);list.append(card);
+ });
+ const actions=el('div','order-receipt-actions'),receipt=el('button','outline',s.id==='renewed'?'Print / Save order receipt PDF':'Save receipt');receipt.type='button';receipt.onclick=()=>printCommonOrderReceipt(o,s);actions.append(receipt);section.append(actions);return section;
+}
+
+function reviewDraftKey(s,o,item,index){return 'cerood_'+s.id+'_review_draft_'+o.id+'_'+(item.product_id||index)}
+function reviewDraft(key){try{const v=JSON.parse(localStorage.getItem(key)||'null');return v&&typeof v==='object'?v:{}}catch{return {}}}
+function orderDelivered(o){return String(o.delivery_status||o.status||'').toLowerCase()==='delivered'}
+async function renderOrderReviews(o,s){
+ const section=el('section','order-review-section'),title=el('h4','','Reviews & Ratings'),note=el('p','order-review-note');
+ section.append(title,note);
+ if(!orderDelivered(o)){note.textContent='Review will become available after this order is marked Delivered.';return section}
+ const items=Array.isArray(o.items)?o.items:[],list=el('div','order-review-list');section.append(list);
+ if(!items.length){note.textContent='No product item is available for review in this order.';return section}
+ const token=customerToken();let renewedSubmitted=[];
+ if(s.id==='renewed'&&token){
+  try{const r=await fetch(API+'/api/renewed/my-reviews',{headers:{Authorization:'Bearer '+token},cache:'no-store'}),d=await r.json();if(r.ok&&d.success)renewedSubmitted=Array.isArray(d.reviews)?d.reviews:[]}catch(_){}
+ }
+ note.textContent=s.id==='renewed'?'Delivered products can be reviewed here. Approved reviews appear on the product page.':'Delivered products can be rated here. This keeps the same draft-review behaviour from the '+(s.id==='clothing'?'Fashion':'Beauty')+' dashboard.';
+ items.forEach((item,index)=>{
+  const key=reviewDraftKey(s,o,item,index),draft=reviewDraft(key),card=el('article','order-review-card'),head=el('div','order-review-head');
+  const rawImg=item.image_url||item.product_image||item.image||'';
+  if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg)){const img=el('img','');img.src=rawImg;img.alt=item.product_name||'Product';head.append(img)}
+  const info=el('div','');info.append(el('strong','',item.product_name||item.name||(s.id==='renewed'?'Renewed product':s.id==='clothing'?'Fashion product':'Beauty product')),el('small','','Delivered · Order #'+String(o.id||'').slice(0,8).toUpperCase()));head.append(info);card.append(head);
+  if(s.id==='renewed'){
+   const existing=renewedSubmitted.find(x=>String(x.order_id)===String(o.id)&&String(x.product_id)===String(item.product_id));
+   if(existing){const state=existing.status==='approved'?'Published':existing.status==='rejected'?'Not approved':'Awaiting admin approval';card.append(el('div','order-review-existing','★ '+existing.rating+'/5 · '+(existing.comment||'')+' · '+state));list.append(card);return}
+  }
+  const stars=el('div','order-review-stars');stars.setAttribute('role','group');stars.setAttribute('aria-label','Rate from one to five stars');let chosen=Number(draft.rating)||0,buttons=[];
+  for(let n=1;n<=5;n++){const b=el('button','', '★');b.type='button';b.setAttribute('aria-label',n+' stars');b.classList.toggle('chosen',n<=chosen);b.onclick=()=>{chosen=n;buttons.forEach((x,i)=>x.classList.toggle('chosen',i<n))};buttons.push(b);stars.append(b)}card.append(stars);
+  const textarea=el('textarea','order-review-text');textarea.maxLength=1000;textarea.placeholder='Tell us about product condition, quality and delivery…';textarea.value=draft.text||'';card.append(textarea);
+  let photos=null;
+  if(s.id==='renewed'){const label=el('label','order-review-file','Customer product photos (optional, up to 3 · 5 MB each)');photos=el('input','');photos.type='file';photos.accept='image/jpeg,image/png,image/webp';photos.multiple=true;label.append(photos);card.append(label)}
+  const actions=el('div','order-review-actions'),save=el('button','outline',s.id==='renewed'?'Save draft':'Save rating draft'),status=el('p','order-review-status',s.id==='renewed'?'Only approved reviews appear on the product page.':'Draft only — not published.');
+  save.type='button';save.onclick=()=>{if(!chosen){status.textContent='Choose a star rating first.';return}try{localStorage.setItem(key,JSON.stringify({rating:chosen,text:textarea.value.trim()}));status.textContent='Draft saved on this browser.'}catch{status.textContent='Could not save draft on this browser.'}};
+  actions.append(save);
+  if(s.id==='renewed'){
+   const submit=el('button','btn','Submit review');submit.type='button';actions.append(submit);
+   submit.onclick=async()=>{if(!token){status.textContent='Sign in to your Cerood account before submitting a verified review.';return}if(!chosen||textarea.value.trim().length<10){status.textContent='Select stars and write at least 10 characters.';return}if(!item.product_id){status.textContent='Product reference missing; contact support.';return}if(photos.files.length>3||[...photos.files].some(f=>f.size>5*1024*1024||!['image/jpeg','image/png','image/webp'].includes(f.type))){status.textContent='Choose up to 3 JPG, PNG or WebP images, maximum 5 MB each.';return}
+    submit.disabled=true;status.textContent='Submitting review…';
+    try{const form=new FormData();form.append('order_id',o.id);form.append('product_id',item.product_id);form.append('rating',chosen);form.append('comment',textarea.value.trim());for(const f of photos.files)form.append('photos',f);
+     const r=await fetch(API+'/api/renewed/reviews',{method:'POST',headers:{Authorization:'Bearer '+token},body:form}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Review submission failed');
+     localStorage.removeItem(key);status.textContent='Review submitted · Awaiting admin approval.';submit.remove();save.remove();photos.disabled=true;textarea.disabled=true;buttons.forEach(b=>b.disabled=true)
+    }catch(e){status.textContent=e.message;submit.disabled=false}
+   };
+  }
+  card.append(actions,status);list.append(card);
+ });
+ return section;
+}
+
+function renderTrackingDetails(o,s){
+ const wrap=el('div','order-detail-wrap'),card=el('div','order-detail-card'),top=el('div','order-detail-top');
+ const title=el('h3','','Live Tracking'),store=el('span','order-detail-store',s.id==='renewed'?'Renewed':s.id==='clothing'?'Fashion':s.id==='cosmetics'?'Beauty':'Cerood');
+ const close=el('button','order-detail-close','Close');close.type='button';
+ const topRight=el('div','');topRight.style.display='flex';topRight.style.gap='8px';topRight.style.alignItems='center';topRight.append(store,close);top.append(title,topRight);
+ const grid=el('div','order-detail-grid');
+ const boxes=[['Order ID',String(o.id||'—')],['Order amount',money(o.total)],['Order placed',trackingDateTime(o.created_at)],['Current status',String(o.delivery_status||o.status||'Order placed').replaceAll('_',' ')]];
+ boxes.forEach(([a,b])=>{const box=el('div','order-detail-box'),sm=el('small','',a),st=el('strong','',b);box.append(sm,st);grid.append(box)});
+ card.append(top,grid,el('h4','tracking-title','Delivery progress'));
+ const line=el('div','tracking-timeline'),stages=trackingStagesFor(s),rawCurrent=trackingStageKey(o.delivery_status||o.status);
+ const normalizedCurrent=(s.id!=='renewed'&&rawCurrent==='packing')?'processing':rawCurrent;
+ let currentIndex=stages.findIndex(x=>x.k===normalizedCurrent);
+ if(currentIndex<0)currentIndex=0;
+ const times=(o.status_timestamps&&typeof o.status_timestamps==='object')?o.status_timestamps:{};
+ stages.forEach((stage,i)=>{
+   const step=el('div','tracking-step '+(i<currentIndex?'done':i===currentIndex?'current':''));
+   const dot=el('span','tracking-dot'),body=el('div',''),label=el('div','tracking-label',stage.l);
+   let t=times[stage.k];
+   if(!t&&stage.k==='confirmed')t=o.created_at;
+   if(!t&&stage.k==='processing')t=times.packing;
+   if(!t&&stage.k==='packing')t=times.processing;
+   body.append(label,el('div','tracking-time',trackingDateTime(t)));step.append(dot,body);line.append(step);
+ });
+ card.append(line);
+ const reviewsHolder=el('div','');reviewsHolder.append(el('p','order-review-note','Loading reviews…'));card.append(reviewsHolder);
+ renderOrderReviews(o,s).then(section=>reviewsHolder.replaceChildren(section)).catch(()=>{reviewsHolder.replaceChildren(el('p','order-review-note','Reviews are temporarily unavailable.'))});
+ const warrantyHolder=el('div','');card.append(warrantyHolder);warrantyHolder.replaceChildren(renderOrderWarranty(o,s));
+ const returnsHolder=el('div','');returnsHolder.append(el('p','order-return-note','Loading return options…'));card.append(returnsHolder);
+ renderOrderReturns(o,s).then(section=>returnsHolder.replaceChildren(section)).catch(()=>returnsHolder.replaceChildren(el('p','order-return-note','Return options are temporarily unavailable.')));
+ if(s.id==='clothing'||s.id==='cosmetics'){
+   const extra=el('div','tracking-extra');
+   if(o.courier_name)extra.append(el('span','', 'Courier: '+o.courier_name));
+   if(o.tracking_number)extra.append(el('span','', 'Tracking ID: '+o.tracking_number));
+   if(typeof o.tracking_url==='string'&&/^https:\/\//i.test(o.tracking_url)){const a=el('a','','Track with courier');a.href=o.tracking_url;a.target='_blank';a.rel='noopener noreferrer';extra.append(a)}
+   if(extra.childNodes.length)card.append(extra);
+ }
+ close.addEventListener('click',()=>wrap.remove());wrap.append(card);return wrap;
+}
+function renderOrder(o,s){
+ const row=el('div','order'),pic=el('img','thumb'),info=el('div'),amount=el('div','amount'),action=el('button','outline','View Details');
+ const items=Array.isArray(o.items)?o.items:[],first=items[0]||{},rawImg=first.image_url||first.product_image||first.image||o.image_url||'';
+ pic.alt='Product';if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg))pic.src=rawImg;else pic.style.visibility='hidden';
+ const name=items.map(x=>x.product_name||x.name).filter(Boolean).join(', ')||o.product_name||'Order '+String(o.id||'').slice(0,8);
+ info.append(el('strong','',name),el('small','', 'Order ID: '+String(o.id||'—')+'  ·  '+fmt(o.created_at)),el('small','', 'Qty: '+(items.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));
+ const st=o.delivery_status||o.status||'Order placed';info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),String(st).replaceAll('_',' ')));
+ amount.textContent=money(o.total);action.type='button';action.setAttribute('aria-label','View order live tracking');
+ action.addEventListener('click',()=>{const old=row.querySelector('.order-detail-wrap');if(old){old.remove();return}row.append(renderTrackingDetails(o,s))});
+ row.append(pic,info,amount,action);return row
+}
 async function load(){
  const recent=$('recentOrders'),all=$('allOrders'),refresh=$('refreshBtn');
  if(!all)return;
@@ -312,6 +588,9 @@ async function saveProfileSection(k){const first=$('profileFirstNameInput').valu
 $('editPersonalBtn')?.addEventListener('click',()=>profileEdit('personal',true));$('cancelPersonalBtn')?.addEventListener('click',()=>cancelProfileEdit('personal'));$('savePersonalBtn')?.addEventListener('click',()=>saveProfileSection('personal'));$('editEmailBtn')?.addEventListener('click',()=>profileEdit('email',true));$('cancelEmailBtn')?.addEventListener('click',()=>cancelProfileEdit('email'));$('saveEmailBtn')?.addEventListener('click',()=>saveProfileSection('email'));
 loadEditableProfile();
 try{profile()}catch(e){console.error('Cerood profile init failed:',e)}addresses();view(location.hash.slice(1)==='account'?'dashboard':location.hash.slice(1));$('refreshBtn')?.addEventListener('click',load);load();})();
+
+document.querySelectorAll('[data-cr-return-close]').forEach(x=>x.addEventListener('click',closeCommonReturn));
+const crReturnSubmit=document.getElementById('ceroodReturnSubmit');if(crReturnSubmit)crReturnSubmit.addEventListener('click',submitCommonReturn);
 </script>
 <script id="cerood-orders-common-header-js">
 (function(){
