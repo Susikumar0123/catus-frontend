@@ -377,24 +377,7 @@ function printCommonOrderReceipt(o,s){
  const items=(o.items||[]).map(item=>'<tr><td>'+esc(item.product_name||item.name||'Product')+'</td><td>'+esc(item.quantity||1)+'</td><td class="right">'+amount(item.unit_price||item.price)+'</td><td class="right">'+amount(item.line_total||((Number(item.unit_price||item.price)||0)*(Number(item.quantity)||1)))+'</td></tr>').join('');
  const payment=o.payment_method==='cod'?'Cash on Delivery — payment collection not verified by this receipt':o.status==='paid'?'Online payment — marked paid in Cerood order system':'Payment status — '+esc(o.status||'pending');
  const addr=o.delivery_address&&typeof o.delivery_address==='object'?Object.values(o.delivery_address).filter(Boolean).join(', '):'';
- const doc='<!doctype html><html><head><meta charset="utf-8"><title>Cerood Order Receipt '+esc(o.id)+'</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:12px/1.6 Arial,sans-serif;color:#182235;margin:0}header{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #182235;padding-bottom:12px;margin-bottom:18px}h1{font-size:21px;margin:0}h2{font-size:14px;margin:18px 0 7px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.right{text-align:right}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:14px}.note{margin-top:24px;padding:12px;background:#f5f6f8;font-size:11px}</style></head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script>
-<div class="cr-return-modal" id="ceroodReturnModal" hidden>
- <div class="cr-return-shade" data-cr-return-close></div>
- <section class="cr-return-dialog" role="dialog" aria-modal="true" aria-labelledby="ceroodReturnTitle">
-  <div class="cr-return-dialog-head"><div><small>Delivered Renewed product</small><h2 id="ceroodReturnTitle">Return / Exchange / Replacement</h2></div><button type="button" class="cr-return-x" data-cr-return-close aria-label="Close">×</button></div>
-  <div class="cr-return-product" id="ceroodReturnProduct"></div>
-  <label class="cr-return-field" for="ceroodReturnType">What do you need?</label>
-  <select class="cr-return-control" id="ceroodReturnType"><option value="return">Return</option><option value="exchange">Exchange</option><option value="replacement">Replacement</option></select>
-  <label class="cr-return-field" for="ceroodReturnReason">Reason</label>
-  <select class="cr-return-control" id="ceroodReturnReason"><option value="">Select a reason</option><option>Product damaged</option><option>Product not working</option><option>Wrong product received</option><option>Missing accessory / part</option><option>Product condition not as described</option><option>Other</option></select>
-  <label class="cr-return-field" for="ceroodReturnDetails">Describe the issue</label>
-  <textarea class="cr-return-control cr-return-textarea" id="ceroodReturnDetails" maxlength="1500" placeholder="Tell us what happened…"></textarea>
-  <p class="cr-return-help">Cerood Admin will review the request after the seller responds.</p><p class="cr-return-status" id="ceroodReturnStatus" role="status"></p>
-  <div class="cr-return-actions"><button type="button" class="outline" data-cr-return-close>Cancel</button><button type="button" class="btn" id="ceroodReturnSubmit">Submit request</button></div>
- </section>
-</div>
-
-</body></html>';
+ const doc='<!doctype html><html><head><meta charset="utf-8"><title>Cerood Order Receipt '+esc(o.id)+'</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:12px/1.6 Arial,sans-serif;color:#182235;margin:0}header{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #182235;padding-bottom:12px;margin-bottom:18px}h1{font-size:21px;margin:0}h2{font-size:14px;margin:18px 0 7px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.right{text-align:right}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:14px}.note{margin-top:24px;padding:12px;background:#f5f6f8;font-size:11px}</style></head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script></body></html>';
  win.document.open();win.document.write(doc);win.document.close();
 }
 function renderOrderWarranty(o,s){
@@ -587,10 +570,15 @@ function cancelProfileEdit(k){setProfileInputs(ceroodProfileSnapshot||read('catu
 async function saveProfileSection(k){const first=$('profileFirstNameInput').value.trim(),last=$('profileLastNameInput').value.trim(),email=$('profileEmailInput').value.trim(),name=[first,last].filter(Boolean).join(' '),msg=$('profileSaveMessage');if(!name)return msg.textContent='Name is required.';if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return msg.textContent='Enter a valid email address.';msg.textContent='Saving…';try{const t=customerToken();if(!t)throw Error('Please sign in again.');const r=await fetch(API+'/api/customer/profile',{method:'PUT',headers:{Accept:'application/json','Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify({name,email}),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to save profile.');const u={...(read('catus_logged_user')||{}),...(d.user||{})};localStorage.setItem('catus_logged_user',JSON.stringify(u));setProfileInputs(u);profileEdit(k,false);profile();msg.textContent='Profile updated successfully.'}catch(e){msg.textContent=e.message}}
 $('editPersonalBtn')?.addEventListener('click',()=>profileEdit('personal',true));$('cancelPersonalBtn')?.addEventListener('click',()=>cancelProfileEdit('personal'));$('savePersonalBtn')?.addEventListener('click',()=>saveProfileSection('personal'));$('editEmailBtn')?.addEventListener('click',()=>profileEdit('email',true));$('cancelEmailBtn')?.addEventListener('click',()=>cancelProfileEdit('email'));$('saveEmailBtn')?.addEventListener('click',()=>saveProfileSection('email'));
 loadEditableProfile();
-try{profile()}catch(e){console.error('Cerood profile init failed:',e)}addresses();view(location.hash.slice(1)==='account'?'dashboard':location.hash.slice(1));$('refreshBtn')?.addEventListener('click',load);load();})();
-
 document.querySelectorAll('[data-cr-return-close]').forEach(x=>x.addEventListener('click',closeCommonReturn));
 const crReturnSubmit=document.getElementById('ceroodReturnSubmit');if(crReturnSubmit)crReturnSubmit.addEventListener('click',submitCommonReturn);
+try{profile()}catch(e){console.error('Cerood profile init failed:',e)}
+addresses();
+view(location.hash.slice(1)==='account'?'dashboard':location.hash.slice(1));
+$('refreshBtn')?.addEventListener('click',load);
+load();
+})();
+
 </script>
 <script id="cerood-orders-common-header-js">
 (function(){
@@ -620,4 +608,19 @@ const crReturnSubmit=document.getElementById('ceroodReturnSubmit');if(crReturnSu
   });
 })();
 </script>
+<div class="cr-return-modal" id="ceroodReturnModal" hidden>
+ <div class="cr-return-shade" data-cr-return-close></div>
+ <section class="cr-return-dialog" role="dialog" aria-modal="true" aria-labelledby="ceroodReturnTitle">
+  <div class="cr-return-dialog-head"><div><small>Delivered Renewed product</small><h2 id="ceroodReturnTitle">Return / Exchange / Replacement</h2></div><button type="button" class="cr-return-x" data-cr-return-close aria-label="Close">×</button></div>
+  <div class="cr-return-product" id="ceroodReturnProduct"></div>
+  <label class="cr-return-field" for="ceroodReturnType">What do you need?</label>
+  <select class="cr-return-control" id="ceroodReturnType"><option value="return">Return</option><option value="exchange">Exchange</option><option value="replacement">Replacement</option></select>
+  <label class="cr-return-field" for="ceroodReturnReason">Reason</label>
+  <select class="cr-return-control" id="ceroodReturnReason"><option value="">Select a reason</option><option>Product damaged</option><option>Product not working</option><option>Wrong product received</option><option>Missing accessory / part</option><option>Product condition not as described</option><option>Other</option></select>
+  <label class="cr-return-field" for="ceroodReturnDetails">Describe the issue</label>
+  <textarea class="cr-return-control cr-return-textarea" id="ceroodReturnDetails" maxlength="1500" placeholder="Tell us what happened…"></textarea>
+  <p class="cr-return-help">Cerood Admin will review the request after the seller responds.</p><p class="cr-return-status" id="ceroodReturnStatus" role="status"></p>
+  <div class="cr-return-actions"><button type="button" class="outline" data-cr-return-close>Cancel</button><button type="button" class="btn" id="ceroodReturnSubmit">Submit request</button></div>
+ </section>
+</div>
 </body></html>
