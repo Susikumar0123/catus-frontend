@@ -3284,5 +3284,26 @@ window.addEventListener('cerood:auth-action', function (event) {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 </script>
+
+<script id="cerood-desktop-category-hover-only-20261001">
+(function(){
+  'use strict';
+  const mq=window.matchMedia('(min-width:851px)');
+  const wrap=document.querySelector('.cerood-top-category-wrap');
+  if(!wrap)return;
+  const cats=[...wrap.querySelectorAll('.cerood-top-category')];
+  const closeAll=except=>cats.forEach(cat=>{if(cat!==except)cat.removeAttribute('open')});
+  cats.forEach(cat=>{
+    cat.addEventListener('mouseenter',()=>{if(!mq.matches)return;closeAll(cat);});
+    const summary=cat.querySelector(':scope > summary');
+    if(summary) summary.addEventListener('click',e=>{
+      if(!mq.matches)return;
+      e.preventDefault();
+      closeAll(cat);
+    });
+  });
+  wrap.addEventListener('mouseleave',()=>{if(mq.matches)closeAll(null)});
+})();
+</script>
 </body>
 </html>
