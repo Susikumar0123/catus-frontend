@@ -27,13 +27,15 @@
       margin: 0;
       background: var(--bg-canvas);
       color: var(--ink);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
     }
     a { color: inherit; text-decoration: none; }
     button, input, select { font: inherit; }
     button { cursor: pointer; }
 
-    /* HEADER */
+    /* =========================================================
+       1ST IMAGE EXACT HEADER: SLATE-BLUE GRADIENT & PILLS
+    ========================================================= */
     .crn-header {
       background: linear-gradient(110deg, #adc2d3 0%, #7695b2 55%, #587998 100%) !important;
       padding: 12px 24px;
@@ -54,13 +56,15 @@
       display: flex;
       align-items: center;
       flex-shrink: 0;
-    }
-    .crn-logo img {
-      height: 48px;
-      width: auto;
-      object-fit: contain;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      color: #ffffff;
+      line-height: 1;
+      text-decoration: none;
     }
 
+    /* Location Capsule */
     .crn-location, .crn-mobile-location {
       display: flex;
       align-items: center;
@@ -107,6 +111,7 @@
     }
     .crn-mobile-location { display: none; }
 
+    /* Pill Search Bar */
     .crn-search {
       flex: 1;
       display: flex;
@@ -144,6 +149,7 @@
       cursor: pointer;
     }
 
+    /* Action Capsules */
     .crn-actions {
       display: flex;
       align-items: center;
@@ -175,6 +181,7 @@
       color: #172133;
     }
 
+    /* Mobile Quick tools */
     .cerood-unified-tools { display: none; }
     .cerood-unified-menu { position: relative; }
     .cerood-unified-menu summary { list-style: none; cursor: pointer; }
@@ -188,7 +195,9 @@
     .cerood-unified-menu-list a { display: block; padding: 12px 13px; border-radius: 8px; font-size: 13px; color: #26364d; }
     .cerood-unified-menu-list a:hover { background: #f3f0ff; }
 
-    /* CATEGORIES BAR */
+    /* =========================================================
+       TOP CATEGORIES WITH CUTOUT ICONS & MEGA MENU (IMAGE 1)
+    ========================================================= */
     .cerood-top-category-wrap {
       position: relative;
       z-index: 100;
@@ -264,6 +273,7 @@
       color: var(--purple);
     }
 
+    /* Flat Full-Width Mega Menu Panel */
     .cerood-top-category-panel {
       display: none;
       position: absolute;
@@ -273,11 +283,11 @@
       z-index: 101;
       max-height: min(65vh, 520px);
       overflow-y: auto;
-      padding: 0;
-      border: 1px solid #e4e7ef;
-      border-top: 0;
+      padding: 24px 32px;
+      border-top: 1px solid #e7eaf0;
+      border-bottom: 1px solid #e4e7ef;
       background: #ffffff;
-      box-shadow: 0 16px 30px rgba(0,0,0,0.14);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.1);
     }
     .cerood-top-category[open] > .cerood-top-category-panel,
     .cerood-top-category:hover > .cerood-top-category-panel {
@@ -286,40 +296,40 @@
     .cerood-mega-columns {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      align-items: stretch;
+      gap: 24px;
+      align-items: flex-start;
       max-width: 1540px;
       margin: 0 auto;
     }
     .cerood-mega-column {
       min-width: 0;
-      padding: 16px 20px 20px;
-      background: #fff;
+      background: #ffffff;
     }
-    .cerood-mega-column:nth-child(even) { background: #f8f9fb; }
     .cerood-mega-heading {
       font-size: 13px;
       font-weight: 800;
-      color: #111;
-      margin: 4px 0 10px;
-      border-bottom: 2px solid var(--purple);
-      padding-bottom: 4px;
-      display: inline-block;
+      color: #111111;
+      margin: 0 0 14px 0;
+      line-height: 1.2;
     }
     .cerood-mega-column a {
       display: block;
       width: 100%;
-      padding: 6px 0;
-      font-size: 12px;
+      padding: 4px 0;
+      font-size: 13px;
       font-weight: 500;
-      color: #333;
-      line-height: 1.4;
+      color: #2b303a;
+      line-height: 1.5;
+      text-decoration: none;
     }
     .cerood-mega-column a:hover {
       color: var(--purple);
       text-decoration: underline;
     }
 
-    /* AMAZON 2x2 QUAD-CARDS SHOWCASES */
+    /* =========================================================
+       MAIN BODY & AMAZON 2x2 QUAD-CARDS
+    ========================================================= */
     main.shell {
       max-width: 1540px;
       margin: 0 auto;
@@ -431,7 +441,22 @@
       display: none !important;
     }
 
-    /* Card Themes */
+    .quad-card-footer {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+    .quad-card-footer a {
+      font-size: 13px;
+      color: var(--link-blue);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .quad-card-footer a:hover {
+      text-decoration: underline;
+      color: #c7511f;
+    }
+
+    /* Pod backgrounds matching screenshot */
     .pod-orange { background: linear-gradient(135deg, #ff512f, #dd2476) !important; }
     .pod-dark-teal { background: linear-gradient(135deg, #134e5e, #71b280) !important; }
     .pod-warm { background: #fdfaf6 !important; border: 1px solid #f1eae2 !important; }
@@ -497,6 +522,145 @@
     .bottom.crn-mobile-nav a .crn-icon { width: 18px; height: 18px; }
     .bottom.crn-mobile-nav a[aria-current="page"] { color: var(--purple); }
 
+    /* =========================================================
+       AUTH MODAL FIX: DISPLAY: NONE !IMPORTANT
+    ========================================================= */
+    .auth-modal-wrapper {
+      display: none !important;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(10, 17, 31, 0.62);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 9999999;
+      justify-content: center;
+      align-items: center;
+    }
+    .auth-modal-wrapper.is-open {
+      display: flex !important;
+    }
+    .auth-modal-container {
+      display: flex;
+      width: 810px;
+      max-width: calc(100vw - 36px);
+      height: min(570px, calc(100dvh - 42px));
+      background: #fff;
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 30px 100px rgba(15,23,42,0.27);
+      position: relative;
+    }
+    .auth-left-panel {
+      width: 37%;
+      background: linear-gradient(155deg,#191c35 0%,#3b3267 65%,#755d96 100%);
+      color: #fff;
+      padding: 44px 33px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .auth-left-panel h2 { font-size: 32px; font-weight: 750; margin: 0 0 12px 0; line-height: 1.17; }
+    .auth-left-panel p { font-size: 14px; color: #e7e2ff; margin: 0; line-height: 1.7; }
+    .auth-right-panel {
+      width: 63%;
+      padding: 52px 43px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+      background: #fff;
+      overflow-y: auto;
+    }
+    .auth-close-btn {
+      position: absolute;
+      top: 16px; right: 18px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #f3f4f6;
+      border: 0;
+      font-size: 18px;
+      color: #334155;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .auth-input-field {
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 16px;
+      font-size: 15px;
+      border: 1.5px solid #e5e7ef;
+      border-radius: 13px;
+      outline: none;
+      color: #111;
+      margin-top: 17px;
+      background: #f8f9fc;
+    }
+    .auth-input-field:focus {
+      background: #fff;
+      border-color: #7154bb;
+      box-shadow: 0 0 0 4px rgba(113,84,187,0.12);
+    }
+    .auth-primary-btn {
+      width: 100%;
+      min-height: 52px;
+      background: #24203c;
+      color: #fff;
+      border: none;
+      padding: 13px 18px;
+      border-radius: 13px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 22px;
+    }
+    .auth-primary-btn:hover { background: #47366e; }
+    .auth-terms-text { font-size: 11px; color: #64748b; margin-top: 20px; line-height: 1.4; }
+    .auth-bottom-link {
+      margin-top: auto;
+      text-align: center;
+      font-size: 12px;
+      color: #6750a4;
+      font-weight: 650;
+      cursor: pointer;
+      padding-top: 20px;
+    }
+
+    /* LOCATION DIALOG CSS */
+    .cerood-location-overlay[hidden] { display: none !important; }
+    .cerood-location-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 99999;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+    .cerood-location-panel {
+      width: min(100%, 480px);
+      max-height: 90vh;
+      overflow: auto;
+      background: white;
+      border-radius: 16px;
+      padding: 23px;
+      box-shadow: 0 15px 65px rgba(16,16,38,0.25);
+    }
+    .cerood-location-panel h2 { margin: 0 0 6px; font-size: 21px; font-weight: 700; }
+    .cerood-location-panel p { font-size: 12px; color: #58647a; line-height: 1.6; margin-bottom: 12px; }
+    .cerood-location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .cerood-location-grid .wide { grid-column: 1 / -1; }
+    .cerood-location-grid label { font-size: 12px; font-weight: 600; display: block; }
+    .cerood-location-grid input {
+      display: block; margin-top: 5px; width: 100%; height: 41px;
+      border: 1px solid #d9d9e8; border-radius: 8px; padding: 8px; font-size: 13px;
+    }
+    .cerood-location-controls { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+    .cerood-location-controls button { border: 1px solid #d9d9e8; border-radius: 8px; padding: 10px 16px; background: white; font-weight: 600; }
+    .cerood-location-controls button[type=submit] { background: var(--purple); color: white; border-color: var(--purple); }
+    .cerood-location-error { color: #b91c1c !important; min-height: 1.4em; }
+
     /* RESPONSIVE */
     @media (max-width: 1200px) {
       #ceroodMarketplaceGroupList { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -522,16 +686,28 @@
       .cerood-marketplace-group-head h3 { font-size: 13px; min-height: 32px; }
       .cerood-marketplace-grid .product b { font-size: 11px; }
       .search-results .trending { grid-template-columns: repeat(2, 1fr); }
+      .auth-modal-wrapper { align-items: flex-end; }
+      .auth-modal-container { width: 100%; max-width: 100%; height: auto; max-height: 94dvh; border-radius: 24px 24px 0 0; }
+      .auth-left-panel { display: none; }
+      .auth-right-panel { width: 100%; padding: 44px 24px max(24px, env(safe-area-inset-bottom)); }
     }
   </style>
+
+  <script defer src="/cerood-location.js?v=20260927-shopping-location-1"></script>
+  <script defer src="/cerood-auth.js"></script>
+  <script defer src="/cerood-notify.js"></script>
+  <script data-division="all" defer src="/cerood-notify-ui.js"></script>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- =========================================================
+       1ST IMAGE HEADER (SLATE-BLUE GRADIENT & ROUNDED PILLS)
+  ========================================================= -->
   <header class="crn-header">
     <div class="header-main crn-header-main">
+      <!-- 1st Image Text Logo: cerood. -->
       <a class="crn-logo logo" href="/index.html" aria-label="Cerood home">
-        <img src="/cerood-logo.webp" alt="Cerood" onerror="this.src='/fevicon.png'"/>
+        cerood.
       </a>
 
       <!-- Desktop Location Capsule -->
@@ -554,7 +730,7 @@
         <svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
       </button>
 
-      <!-- Search Bar -->
+      <!-- Pill Search Bar -->
       <form class="search crn-search" id="siteSearch">
         <svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
         <input aria-label="Search Cerood" id="searchText" placeholder="Search products, brands &amp; categories..." type="search"/>
@@ -563,7 +739,7 @@
         </button>
       </form>
 
-      <!-- Header Actions -->
+      <!-- Capsule Actions -->
       <div class="actions crn-actions">
         <a class="crn-service-pill" href="/home-services.html">Home Services</a>
         <a aria-label="Cart" class="crn-pill crn-cart" href="/cerood-cart.html">
@@ -572,7 +748,7 @@
         </a>
         <a aria-label="Login or account" class="crn-pill crn-account" data-cerood-auth-trigger="" href="/cerood-orders.html#account">
           <svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="7.5" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg>
-          <span>Login / Account</span>
+          <span>Account</span>
         </a>
       </div>
 
@@ -597,7 +773,9 @@
     </div>
   </header>
 
-  <!-- CATEGORY CUTOUT ROW -->
+  <!-- =========================================================
+       1ST IMAGE STYLE TOP CATEGORIES WITH REAL PRODUCT CUTOUTS
+  ========================================================= -->
   <nav aria-label="Explore shopping categories" class="cerood-top-category-wrap" id="all-departments">
     <div class="cerood-top-category-strip">
       <!-- 1. Mobiles & Tablets -->
@@ -615,27 +793,37 @@
               <a href="/?q=Android%20Phones">Android Phones</a>
               <a href="/?q=5G%20Mobiles">5G Mobiles</a>
               <a href="/?q=Budget%20Mobiles">Budget Mobiles</a>
+              <a href="/?q=Premium%20Mobiles">Premium Mobiles</a>
+              <a href="/?q=Feature%20Phones">Feature Phones</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Tablets</div>
               <a href="/?q=Android%20Tablets">Android Tablets</a>
               <a href="/?q=Kids%20Tablets">Kids Tablets</a>
+              <a href="/?q=Tablet%20Covers">Tablet Covers</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Accessories</div>
+              <div class="cerood-mega-heading">Mobile Accessories</div>
               <a href="/?q=Chargers">Chargers</a>
               <a href="/?q=USB%20Cables">USB Cables</a>
               <a href="/?q=Power%20Banks">Power Banks</a>
+              <a href="/?q=Phone%20Cases">Phone Cases</a>
+              <a href="/?q=Screen%20Protectors">Screen Protectors</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Brands</div>
+              <div class="cerood-mega-heading">Audio &amp; Wearables</div>
+              <a href="/?q=Bluetooth%20Earphones">Bluetooth Earphones</a>
+              <a href="/?q=Headphones">Headphones</a>
+              <a href="/?q=Smart%20Watches">Smart Watches</a>
+              <a href="/?q=Speakers">Speakers</a>
+            </section>
+            <section class="cerood-mega-column">
+              <div class="cerood-mega-heading">Shop by Brand</div>
               <a href="/?q=Samsung">Samsung</a>
               <a href="/?q=Apple">Apple</a>
+              <a href="/?q=Vivo">Vivo</a>
+              <a href="/?q=Oppo">Oppo</a>
               <a href="/?q=Realme">Realme</a>
-            </section>
-            <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Explore</div>
-              <a href="/?q=Mobiles">All Mobiles</a>
             </section>
           </div>
         </div>
@@ -655,24 +843,30 @@
               <div class="cerood-mega-heading">Televisions</div>
               <a href="/?q=Smart%20TV">Smart TV</a>
               <a href="/?q=LED%20TV">LED TV</a>
+              <a href="/?q=TV%20Accessories">TV Accessories</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Computers</div>
               <a href="/?q=Laptops">Laptops</a>
+              <a href="/?q=Desktops">Desktops</a>
               <a href="/?q=Monitors">Monitors</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Audio</div>
               <a href="/?q=Bluetooth%20Speakers">Speakers</a>
+              <a href="/?q=Home%20Theatre">Home Theatre</a>
               <a href="/?q=Soundbars">Soundbars</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Wearables</div>
+              <div class="cerood-mega-heading">Gadgets</div>
+              <a href="/?q=Cameras">Cameras</a>
               <a href="/?q=Smart%20Watches">Smart Watches</a>
+              <a href="/?q=Gaming">Gaming</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Explore</div>
-              <a href="/?q=Electronics">All Electronics</a>
+              <div class="cerood-mega-heading">Renewed</div>
+              <a href="/?q=Renewed%20Laptop">Renewed Laptops</a>
+              <a href="/?q=Renewed%20TV">Renewed TVs</a>
             </section>
           </div>
         </div>
@@ -689,27 +883,33 @@
         <div class="cerood-top-category-panel">
           <div class="cerood-mega-columns">
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Women</div>
+              <div class="cerood-mega-heading">Women Clothing</div>
               <a href="/?q=Sarees">Sarees</a>
               <a href="/?q=Kurtas">Kurtas</a>
+              <a href="/?q=Western%20Wear">Western Wear</a>
+              <a href="/?q=Ethnic%20Wear">Ethnic Wear</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Men</div>
-              <a href="/?q=T-Shirts">T-Shirts</a>
+              <div class="cerood-mega-heading">Men Clothing</div>
               <a href="/?q=Shirts">Shirts</a>
+              <a href="/?q=T-Shirts">T-Shirts</a>
+              <a href="/?q=Jeans">Jeans</a>
+              <a href="/?q=Trousers">Trousers</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Footwear</div>
               <a href="/?q=Casual%20Shoes">Casual Shoes</a>
               <a href="/?q=Sports%20Shoes">Sports Shoes</a>
+              <a href="/?q=Sandals">Sandals</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Kids</div>
+              <div class="cerood-mega-heading">Kids Clothing</div>
               <a href="/?q=Girls%20Dresses">Girls Dresses</a>
+              <a href="/?q=Boys%20Wear">Boys Wear</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Explore</div>
-              <a href="/?division=Fashion#ceroodMarketplaceGroups">Fashion Store</a>
+              <a href="/?division=Fashion#ceroodMarketplaceGroups">Explore Fashion Store</a>
             </section>
           </div>
         </div>
@@ -729,24 +929,28 @@
               <div class="cerood-mega-heading">Skin Care</div>
               <a href="/?q=Face%20Wash">Face Wash</a>
               <a href="/?q=Moisturizers">Moisturizers</a>
+              <a href="/?q=Sunscreen">Sunscreen</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Makeup</div>
               <a href="/?q=Lipstick">Lipstick</a>
               <a href="/?q=Foundation">Foundation</a>
+              <a href="/?q=Kajal">Kajal</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Hair Care</div>
               <a href="/?q=Shampoo">Shampoo</a>
+              <a href="/?q=Conditioner">Conditioner</a>
               <a href="/?q=Hair%20Oil">Hair Oil</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Fragrance</div>
               <a href="/?q=Perfume">Perfume</a>
+              <a href="/?q=Deodorant">Deodorant</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Explore</div>
-              <a href="/?division=Beauty#ceroodMarketplaceGroups">Beauty Store</a>
+              <a href="/?division=Beauty#ceroodMarketplaceGroups">Explore Beauty Store</a>
             </section>
           </div>
         </div>
@@ -768,7 +972,7 @@
               <a href="/?q=Kitchen%20Tools">Kitchen Tools</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Decor</div>
+              <div class="cerood-mega-heading">Home Decor</div>
               <a href="/?q=Wall%20Art">Wall Art</a>
               <a href="/?q=Clocks">Clocks</a>
             </section>
@@ -780,6 +984,7 @@
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Storage</div>
               <a href="/?q=Containers">Containers</a>
+              <a href="/?q=Organizers">Organizers</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Explore</div>
@@ -800,22 +1005,24 @@
         <div class="cerood-top-category-panel">
           <div class="cerood-mega-columns">
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Large</div>
+              <div class="cerood-mega-heading">Large Appliances</div>
               <a href="/?q=Washing%20Machines">Washing Machines</a>
               <a href="/?q=Refrigerators">Refrigerators</a>
+              <a href="/?q=Air%20Conditioners">Air Conditioners</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Kitchen</div>
-              <a href="/?q=Mixer%20Grinders">Mixers</a>
+              <div class="cerood-mega-heading">Kitchen Appliances</div>
+              <a href="/?q=Mixer%20Grinders">Mixer Grinders</a>
               <a href="/?q=Microwaves">Microwaves</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Cooling</div>
-              <a href="/?q=AC">Air Conditioners</a>
+              <div class="cerood-mega-heading">Small Appliances</div>
+              <a href="/?q=Irons">Irons</a>
+              <a href="/?q=Purifiers">Water Purifiers</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Purifiers</div>
-              <a href="/?q=Purifiers">Water Purifiers</a>
+              <div class="cerood-mega-heading">Accessories</div>
+              <a href="/?q=Appliance%20Covers">Covers &amp; Stands</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Renewed</div>
@@ -838,21 +1045,24 @@
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Living Room</div>
               <a href="/?q=Sofas">Sofas</a>
-              <a href="/?q=Tables">Tables</a>
+              <a href="/?q=Coffee%20Tables">Coffee Tables</a>
+              <a href="/?q=TV%20Units">TV Units</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Bedroom</div>
               <a href="/?q=Beds">Beds</a>
               <a href="/?q=Wardrobes">Wardrobes</a>
+              <a href="/?q=Mattresses">Mattresses</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Office</div>
-              <a href="/?q=Chairs">Chairs</a>
-              <a href="/?q=Study%20Tables">Study Desks</a>
+              <div class="cerood-mega-heading">Office &amp; Study</div>
+              <a href="/?q=Study%20Tables">Study Tables</a>
+              <a href="/?q=Office%20Chairs">Office Chairs</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Dining</div>
-              <a href="/?q=Dining%20Tables">Dining Sets</a>
+              <a href="/?q=Dining%20Tables">Dining Tables</a>
+              <a href="/?q=Dining%20Chairs">Dining Chairs</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Explore</div>
@@ -876,20 +1086,24 @@
               <div class="cerood-mega-heading">Staples</div>
               <a href="/?q=Rice">Rice</a>
               <a href="/?q=Atta">Atta</a>
+              <a href="/?q=Pulses">Pulses</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Cooking</div>
-              <a href="/?q=Oil">Cooking Oil</a>
+              <div class="cerood-mega-heading">Cooking Essentials</div>
+              <a href="/?q=Edible%20Oil">Edible Oil</a>
               <a href="/?q=Spices">Spices</a>
+              <a href="/?q=Ghee">Ghee</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Snacks</div>
+              <div class="cerood-mega-heading">Snacks &amp; Drinks</div>
               <a href="/?q=Biscuits">Biscuits</a>
               <a href="/?q=Tea">Tea</a>
+              <a href="/?q=Coffee">Coffee</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Cleaning</div>
+              <div class="cerood-mega-heading">Household</div>
               <a href="/?q=Detergent">Detergent</a>
+              <a href="/?q=Floor%20Cleaner">Cleaners</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Explore</div>
@@ -912,18 +1126,19 @@
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Books</div>
               <a href="/?q=Fiction">Fiction</a>
-              <a href="/?q=Exams">Exams</a>
+              <a href="/?q=Exams">Exams Prep</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Stationery</div>
               <a href="/?q=Pens">Pens &amp; Notebooks</a>
+              <a href="/?q=Art">Art &amp; Craft</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Office</div>
+              <div class="cerood-mega-heading">Office Supplies</div>
               <a href="/?q=Files">Files &amp; Folders</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">School</div>
+              <div class="cerood-mega-heading">School Essentials</div>
               <a href="/?q=Bags">Bags &amp; Bottles</a>
             </section>
             <section class="cerood-mega-column">
@@ -983,18 +1198,21 @@
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Baby Care</div>
               <a href="/?q=Diapers">Diapers</a>
+              <a href="/?q=Baby%20Wipes">Baby Wipes</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Toys</div>
               <a href="/?q=Soft%20Toys">Soft Toys</a>
+              <a href="/?q=Building%20Blocks">Building Blocks</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Learning</div>
               <a href="/?q=Puzzles">Puzzles</a>
+              <a href="/?q=Activity%20Books">Activity Books</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Outdoor</div>
-              <a href="/?q=Ride%20On">Ride On</a>
+              <a href="/?q=Ride%20On">Ride On Toys</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Explore</div>
@@ -1015,16 +1233,18 @@
         <div class="cerood-top-category-panel">
           <div class="cerood-mega-columns">
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Car</div>
-              <a href="/?q=Car%20Covers">Covers</a>
+              <div class="cerood-mega-heading">Car Accessories</div>
+              <a href="/?q=Car%20Covers">Car Covers</a>
+              <a href="/?q=Car%20Mats">Car Mats</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Bike</div>
+              <div class="cerood-mega-heading">Bike Accessories</div>
               <a href="/?q=Helmets">Helmets</a>
+              <a href="/?q=Bike%20Covers">Bike Covers</a>
             </section>
             <section class="cerood-mega-column">
-              <div class="cerood-mega-heading">Cleaning</div>
-              <a href="/?q=Car%20Shampoo">Shampoo</a>
+              <div class="cerood-mega-heading">Care</div>
+              <a href="/?q=Car%20Shampoo">Shampoo &amp; Polish</a>
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Electronics</div>
@@ -1032,7 +1252,7 @@
             </section>
             <section class="cerood-mega-column">
               <div class="cerood-mega-heading">Explore</div>
-              <a href="/?q=Automotive">All Auto</a>
+              <a href="/?q=Automotive">All Auto Care</a>
             </section>
           </div>
         </div>
@@ -1501,7 +1721,7 @@
         visible=0;grid.replaceChildren();
         if(matches.length){
           const batch=matches.slice(0,PAGE_SIZE).map(x=>window.ceroodMakeProductCard(x.item,x.division));
-          grid.append(...batch);visible=batch.length;
+          grid.append(...batch);visible+=batch.length;
           more.hidden=visible>=matches.length;
           meta.textContent='Showing '+visible+' of '+matches.length+' results for “'+term+'”';
         } else {
@@ -1577,12 +1797,18 @@
 
   <script>
     function toggleAuthModal(open){
-      const modal=document.getElementById('authModal');
-      if(modal)modal.style.display=open?'flex':'none';
+      const modal = document.getElementById('authModal');
+      if (modal) {
+        if(open) {
+          modal.classList.add('is-open');
+        } else {
+          modal.classList.remove('is-open');
+        }
+      }
     }
     function checkCloseAuthModal(e){
-      const drawer=document.getElementById('authDrawer');
-      if(drawer&&!drawer.contains(e.target))toggleAuthModal(false);
+      const drawer = document.getElementById('authDrawer');
+      if(drawer && !drawer.contains(e.target)) toggleAuthModal(false);
     }
     document.addEventListener('click',function(e){
       const btn=e.target.closest('[data-cerood-auth-trigger]');
