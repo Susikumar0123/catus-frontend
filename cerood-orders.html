@@ -6,27 +6,14 @@ const LEGACY_RENEWED_SESSION='cerood_renewed_customer_session';
 const stores=[{id:'renewed',receipt:'cerood_renewed_device_receipts',dashboard:'/renewed-dashboard.html',orders:'/renewed-dashboard.html?pane=purchases'},{id:'clothing',receipt:'cerood_clothing_device_receipts',dashboard:'/clothing-dashboard.html?fashionPane=overview',orders:'/clothing-dashboard.html?fashionPane=purchases'},{id:'cosmetics',receipt:'cerood_cosmetics_device_receipts',dashboard:'/cosmetics-dashboard.html',orders:'/cosmetics-dashboard.html'}];
 function customerToken(){return localStorage.getItem(CUSTOMER_SESSION)||localStorage.getItem(LEGACY_RENEWED_SESSION)||''}const $=id=>document.getElementById(id);const money=n=>'₹'+Number(n||0).toLocaleString('en-IN');const fmt=v=>{if(!v)return '';const d=new Date(v);return isNaN(d)?'':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})};function read(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}}function txt(id,v){$(id).textContent=v||'—'}function profile(){const u=read('catus_logged_user')||{};const loc=read('cerood_selected_location')||read('catus_user_location')||localStorage.getItem('catus_location_name')||'';const name=u.name||u.full_name||u.fullName||u.customer_name||'Cerood Customer',phone=u.phone||u.mobile||u.mobile_number||u.phone_number||'',email=u.email||'';txt('customerName',name);txt('customerPhone',phone);txt('customerEmail',email);txt('sideName',name);$('sidePhone').textContent=phone;$('sideEmail').textContent=email;$('avatar').textContent=name[0].toUpperCase();$('welcomeName').textContent=name.split(' ')[0].toUpperCase()+'!';txt('customerLocation',typeof loc==='string'?loc:(loc.display_name||loc.name||loc.address||[loc.village,loc.district,loc.state].filter(Boolean).join(', ')));$('summaryProfile').textContent=[name,phone,email].filter(Boolean).join(' · ')}function view(v){const allowed=['dashboard','orders','addresses','settings','support'];if(!allowed.includes(v))v='dashboard';allowed.forEach(x=>$(x+'View').hidden=x!==v);document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));document.title=(v==='dashboard'?'My Account':v==='orders'?'My Orders':v==='addresses'?'Addresses':v==='settings'?'Account Settings':'Help & Support')+' | Cerood';if(location.hash!=='#'+v)history.replaceState(null,'','#'+v);window.scrollTo(0,0)}document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>view(b.dataset.view)));window.addEventListener('hashchange',()=>view(location.hash.slice(1)));$('logoutBtn').addEventListener('click',()=>{if(window.CeroodAuth?.logout)window.CeroodAuth.logout();else{localStorage.removeItem('catus_logged_user');localStorage.removeItem('cerood_customer_session');localStorage.removeItem('cerood_renewed_customer_session')}location.href='/'});$('loginSettings').addEventListener('click',()=>window.CeroodAuth?.open?.());function el(tag,cls,content){const n=document.createElement(tag);if(cls)n.className=cls;if(content!==undefined)n.textContent=content;return n}
 async function getOrders(s){
- const token=customerToken();
- const receipts=read(s.receipt);
+ const token=customerToken(),receipts=read(s.receipt);
  const safe=Array.isArray(receipts)?receipts.filter(x=>x&&x.id&&x.request_id).slice(0,30):[];
- let orders=[],errors=[];
- if(safe.length){
-  try{
-   const r=await fetch(API+'/api/'+s.id+'/device-orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({receipts:safe}),cache:'no-store'});
-   const d=await r.json();
-   if(!r.ok||!d.success)throw Error(d.message||'Unable to load device orders');
-   orders=Array.isArray(d.orders)?d.orders:[];
-  }catch(e){errors.push(s.id+' device order history unavailable')}
- }
- if(token){
-  try{
-   const r=await fetch(API+'/api/'+s.id+'/customer-orders',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
-   const d=await r.json();
-   if(r.status===401)throw Error('Customer session expired');
-   if(!r.ok||!d.success)throw Error(d.message||'Account orders unavailable');
-   for(const o of d.orders||[])if(!orders.some(x=>String(x.id)===String(o.id)))orders.push(o);
-  }catch(e){errors.push(s.id+' account order history unavailable')}
- }
+ const errors=[];
+ const devicePromise=safe.length?fetch(API+'/api/'+s.id+'/device-orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({receipts:safe}),cache:'no-store'}).then(async r=>{const d=await r.json();if(!r.ok||!d.success)throw Error();return Array.isArray(d.orders)?d.orders:[]}).catch(()=>{errors.push(s.id+' device order history unavailable');return []}):Promise.resolve([]);
+ const accountPromise=token?fetch(API+'/api/'+s.id+'/customer-orders',{headers:{Authorization:'Bearer '+token},cache:'no-store'}).then(async r=>{const d=await r.json();if(!r.ok||!d.success)throw Error();return Array.isArray(d.orders)?d.orders:[]}).catch(()=>{errors.push(s.id+' account order history unavailable');return []}):Promise.resolve([]);
+ const [deviceOrders,accountOrders]=await Promise.all([devicePromise,accountPromise]);
+ const orders=[...deviceOrders];
+ for(const o of accountOrders)if(!orders.some(x=>String(x.id)===String(o.id)))orders.push(o);
  return {orders,errors,hasSource:!!(safe.length||token)}
 }
 function renderOrder(o,s){const row=el('div','order'),pic=el('img','thumb'),info=el('div'),amount=el('div','amount'),action=el('a','outline','View Details');const items=Array.isArray(o.items)?o.items:[],first=items[0]||{};const rawImg=first.image_url||first.product_image||first.image||o.image_url||'';pic.alt='Product';if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg))pic.src=rawImg;else pic.style.visibility='hidden';const name=items.map(x=>x.product_name||x.name).filter(Boolean).join(', ')||o.product_name||'Order '+String(o.id||'').slice(0,8);info.append(el('strong','',name),el('small','', 'Order ID: '+String(o.id||'—')+'  ·  '+fmt(o.created_at)),el('small','', 'Qty: '+(items.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));const st=o.delivery_status||o.status||'Order placed';info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),st));amount.textContent=money(o.total);action.href=s.orders;action.setAttribute('aria-label','View order details in your store dashboard');row.append(pic,info,amount,action);return row}
