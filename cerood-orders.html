@@ -246,6 +246,29 @@
 @media(max-width:650px){.cr-return-actions{flex-direction:column-reverse}.cr-return-actions button{width:100%}}
 </style>
 
+
+<style id="cerood-order-details-popup-20261002">
+.cerood-order-popup[hidden]{display:none!important}
+.cerood-order-popup{position:fixed;inset:0;z-index:100004;display:grid;place-items:center;padding:18px}
+.cerood-order-popup-shade{position:absolute;inset:0;background:rgba(15,23,42,.58);backdrop-filter:blur(2px)}
+.cerood-order-popup-dialog{position:relative;width:min(920px,100%);max-height:92vh;background:#fff;border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.28);overflow:hidden;display:flex;flex-direction:column}
+.cerood-order-popup-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 20px;border-bottom:1px solid #e5eaf1;background:#fff}
+.cerood-order-popup-head h2{margin:0;font-size:18px;color:#17223a}
+.cerood-order-popup-head small{display:block;margin-top:4px;color:#6a7890;font-size:10px}
+.cerood-order-popup-x{flex:0 0 auto;width:36px;height:36px;border:1px solid #dce3ed;border-radius:50%;background:#fff;font-size:23px;line-height:1;cursor:pointer;color:#27354a}
+.cerood-order-popup-body{overflow:auto;padding:18px 20px 24px;overscroll-behavior:contain}
+.cerood-order-popup-body>.order-detail-card{border:0;padding:0;box-shadow:none}
+.cerood-order-popup-body .order-detail-top{display:none}
+.cerood-order-popup-body .order-detail-wrap{margin:0;padding:0;border:0}
+body.cerood-order-popup-open{overflow:hidden}
+@media(max-width:680px){
+ .cerood-order-popup{padding:0;place-items:stretch}
+ .cerood-order-popup-dialog{width:100%;height:100dvh;max-height:none;border-radius:0}
+ .cerood-order-popup-head{padding:14px 15px}
+ .cerood-order-popup-body{padding:14px 13px 24px}
+}
+</style>
+
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -483,6 +506,22 @@ function renderTrackingDetails(o,s){
  }
  close.addEventListener('click',()=>wrap.remove());wrap.append(card);return wrap;
 }
+
+function closeOrderDetailsPopup(){
+ const popup=document.getElementById('ceroodOrderPopup'),body=document.getElementById('ceroodOrderPopupBody');
+ if(popup)popup.hidden=true;if(body)body.replaceChildren();document.body.classList.remove('cerood-order-popup-open');
+}
+function openOrderDetailsPopup(o,s){
+ const popup=document.getElementById('ceroodOrderPopup'),body=document.getElementById('ceroodOrderPopupBody'),title=document.getElementById('ceroodOrderPopupTitle'),sub=document.getElementById('ceroodOrderPopupSub');
+ if(!popup||!body)return;
+ const items=Array.isArray(o.items)?o.items:[],first=items[0]||{};
+ title.textContent=first.product_name||first.name||'Order Details';
+ sub.textContent=(s.id==='renewed'?'Renewed':s.id==='clothing'?'Fashion':s.id==='cosmetics'?'Beauty':'Cerood')+' · Order #'+String(o.id||'').slice(0,8).toUpperCase();
+ body.replaceChildren(renderTrackingDetails(o,s));
+ popup.hidden=false;document.body.classList.add('cerood-order-popup-open');
+ const focusable=popup.querySelector('.cerood-order-popup-x');if(focusable)focusable.focus();
+}
+
 function renderOrder(o,s){
  const row=el('div','order'),pic=el('img','thumb'),info=el('div'),amount=el('div','amount'),action=el('button','outline','View Details');
  const items=Array.isArray(o.items)?o.items:[],first=items[0]||{},rawImg=first.image_url||first.product_image||first.image||o.image_url||'';
@@ -491,7 +530,7 @@ function renderOrder(o,s){
  info.append(el('strong','',name),el('small','', 'Order ID: '+String(o.id||'—')+'  ·  '+fmt(o.created_at)),el('small','', 'Qty: '+(items.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));
  const st=o.delivery_status||o.status||'Order placed';info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),String(st).replaceAll('_',' ')));
  amount.textContent=money(o.total);action.type='button';action.setAttribute('aria-label','View order live tracking');
- action.addEventListener('click',()=>{const old=row.querySelector('.order-detail-wrap');if(old){old.remove();return}row.append(renderTrackingDetails(o,s))});
+ action.addEventListener('click',()=>openOrderDetailsPopup(o,s));
  row.append(pic,info,amount,action);return row
 }
 async function load(){
@@ -570,6 +609,8 @@ function cancelProfileEdit(k){setProfileInputs(ceroodProfileSnapshot||read('catu
 async function saveProfileSection(k){const first=$('profileFirstNameInput').value.trim(),last=$('profileLastNameInput').value.trim(),email=$('profileEmailInput').value.trim(),name=[first,last].filter(Boolean).join(' '),msg=$('profileSaveMessage');if(!name)return msg.textContent='Name is required.';if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return msg.textContent='Enter a valid email address.';msg.textContent='Saving…';try{const t=customerToken();if(!t)throw Error('Please sign in again.');const r=await fetch(API+'/api/customer/profile',{method:'PUT',headers:{Accept:'application/json','Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify({name,email}),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to save profile.');const u={...(read('catus_logged_user')||{}),...(d.user||{})};localStorage.setItem('catus_logged_user',JSON.stringify(u));setProfileInputs(u);profileEdit(k,false);profile();msg.textContent='Profile updated successfully.'}catch(e){msg.textContent=e.message}}
 $('editPersonalBtn')?.addEventListener('click',()=>profileEdit('personal',true));$('cancelPersonalBtn')?.addEventListener('click',()=>cancelProfileEdit('personal'));$('savePersonalBtn')?.addEventListener('click',()=>saveProfileSection('personal'));$('editEmailBtn')?.addEventListener('click',()=>profileEdit('email',true));$('cancelEmailBtn')?.addEventListener('click',()=>cancelProfileEdit('email'));$('saveEmailBtn')?.addEventListener('click',()=>saveProfileSection('email'));
 loadEditableProfile();
+document.querySelectorAll('[data-order-popup-close]').forEach(x=>x.addEventListener('click',closeOrderDetailsPopup));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('ceroodOrderPopup')?.hidden)closeOrderDetailsPopup()});
 document.querySelectorAll('[data-cr-return-close]').forEach(x=>x.addEventListener('click',closeCommonReturn));
 const crReturnSubmit=document.getElementById('ceroodReturnSubmit');if(crReturnSubmit)crReturnSubmit.addEventListener('click',submitCommonReturn);
 try{profile()}catch(e){console.error('Cerood profile init failed:',e)}
@@ -608,6 +649,18 @@ load();
   });
 })();
 </script>
+
+<div class="cerood-order-popup" id="ceroodOrderPopup" hidden>
+ <div class="cerood-order-popup-shade" data-order-popup-close></div>
+ <section class="cerood-order-popup-dialog" role="dialog" aria-modal="true" aria-labelledby="ceroodOrderPopupTitle">
+  <header class="cerood-order-popup-head">
+   <div><h2 id="ceroodOrderPopupTitle">Order Details</h2><small id="ceroodOrderPopupSub"></small></div>
+   <button type="button" class="cerood-order-popup-x" data-order-popup-close aria-label="Close order details">×</button>
+  </header>
+  <div class="cerood-order-popup-body" id="ceroodOrderPopupBody"></div>
+ </section>
+</div>
+
 <div class="cr-return-modal" id="ceroodReturnModal" hidden>
  <div class="cr-return-shade" data-cr-return-close></div>
  <section class="cr-return-dialog" role="dialog" aria-modal="true" aria-labelledby="ceroodReturnTitle">
