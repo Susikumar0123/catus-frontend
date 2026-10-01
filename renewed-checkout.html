@@ -2684,6 +2684,32 @@ async function refreshPaymentQuote(){
   }
 }
 for(const radio of document.querySelectorAll('input[name=paymentMode]'))radio.addEventListener('change',refreshPaymentQuote);
+
+async function ceroodSaveAccountAddress(a){
+ const t=ceroodCustomerToken ? ceroodCustomerToken() : '';
+ if(!t||!a)return;
+ const payload={
+  full_name:a.full_name||a.name||'',
+  phone:a.phone||'',
+  address_line1:a.address_line1||a.house||a.street||'',
+  address_line2:a.address_line2||a.area||'',
+  landmark:a.landmark||'',
+  city:a.city||a.village||'',
+  district:a.district||'',
+  state:a.state||'',
+  pincode:a.pincode||'',
+  address_type:'HOME'
+ };
+ try{
+  await fetch(API+'/api/customer/addresses',{
+   method:'POST',
+   headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},
+   body:JSON.stringify(payload),
+   cache:'no-store'
+  });
+ }catch(e){console.warn('Cerood account address sync skipped',e)}
+}
+
 function ceroodCustomerToken(){return localStorage.getItem('cerood_customer_session')||localStorage.getItem('cerood_renewed_customer_session')||''}
 async function post(path,body){const token=ceroodCustomerToken();const headers={'Content-Type':'application/json'};if(token)headers.Authorization='Bearer '+token;const r=await fetch(API+path,{method:'POST',headers,body:JSON.stringify(body),cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Invalid server response')};if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d}
 function saveDraft(){try{sessionStorage.setItem(storageKey,JSON.stringify(Object.fromEntries(fields.map(f=>[f,$(f).value.trim()]))))}catch{}}
@@ -2745,7 +2771,7 @@ function paymentPopup(type,data={}){const modal=$('ceroodPaymentModal');if(!moda
 function closePaymentPopup(){$('ceroodPaymentModal')?.classList.remove('show')}
 async function recordPaymentEvent(payload){try{return await post('/api/renewed/payment-event',payload)}catch(e){console.warn('Payment event audit save failed:',e.message);return null}}
 $('ceroodPaymentClose')?.addEventListener('click',closePaymentPopup);$('ceroodPaymentDismiss')?.addEventListener('click',closePaymentPopup);$('ceroodPaymentModal')?.addEventListener('click',e=>{if(e.target===$('ceroodPaymentModal'))closePaymentPopup()});
-function receipt(id,total,method,a){orderId=id;$('checkoutView').style.display='none';$('successPageView').style.display='block';$('receiptId').textContent=id;$('receiptTotal').textContent=money(total);$('receiptMethod').textContent=method==='cod'?'Cash on Delivery':'Online Payment — verified';$('receiptAddress').textContent=[a.street,a.area,a.city,a.district,a.state,a.pincode].filter(Boolean).join(', ');window.scrollTo({top:0,behavior:'smooth'});if(mode==='buy')sessionStorage.removeItem('cerood_renewed_buy_now');else localStorage.removeItem('cerood_renewed_cart')}
+function receipt(id,total,method,a){ceroodSaveAccountAddress(arguments[3]||lastDeliveryAddress||savedAddress);orderId=id;$('checkoutView').style.display='none';$('successPageView').style.display='block';$('receiptId').textContent=id;$('receiptTotal').textContent=money(total);$('receiptMethod').textContent=method==='cod'?'Cash on Delivery':'Online Payment — verified';$('receiptAddress').textContent=[a.street,a.area,a.city,a.district,a.state,a.pincode].filter(Boolean).join(', ');window.scrollTo({top:0,behavior:'smooth'});if(mode==='buy')sessionStorage.removeItem('cerood_renewed_buy_now');else localStorage.removeItem('cerood_renewed_cart')}
 // Fresh navigation (for example a new Buy Now click) must not be locked by an
 // abandoned older Razorpay order. A browser reload still restores the current
 // pending payment so accidental duplicate payment attempts remain blocked.
