@@ -961,6 +961,35 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
   }
 }
 </style>
+
+<style id="cerood-location-flat-header-style-20261002">
+@media (min-width:851px){
+  /* Location should look like the flat header actions, not a white pill/button. */
+  .crn-header .crn-location{
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    color:#fff!important;
+    padding:5px 7px!important;
+  }
+  .crn-header .crn-location:hover,
+  .crn-header .crn-location:focus-visible{
+    background:transparent!important;
+    outline:none!important;
+  }
+  .crn-header .crn-location .crn-icon,
+  .crn-header .crn-location .crn-chevron{
+    color:#fff!important;
+  }
+  .crn-header .crn-location span{
+    color:#fff!important;
+  }
+  .crn-header .crn-location b{
+    color:#fff!important;
+  }
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img class="cerood-original-c-logo" src="/cerood-logo.webp" alt="Cerood"><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
