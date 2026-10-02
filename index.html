@@ -1878,7 +1878,10 @@ function updateHeaderLoginUI() {
   let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
   currentUser=user;
   document.querySelectorAll('[data-cerood-auth-trigger]').forEach(a=>{
-    const label=a.querySelector('span');if(label)label.textContent=user?'Account':(a.closest('.bottom')?'Account':'Login / Account');
+    const label=a.querySelector('span');if(label){
+      const rawName=String(user?.name||user?.full_name||user?.fullName||user?.customer_name||user?.first_name||user?.firstName||'').trim();
+      label.textContent=user?(rawName||'Account'):'Login';
+    }
     a.setAttribute('aria-label',user?'Open Cerood account':'Login or register with Cerood');
   });
 }
@@ -3608,6 +3611,66 @@ document.addEventListener('DOMContentLoaded', function () {
   input.placeholder = '';
   tick();
 });
+</script>
+
+
+<script id="cerood-header-auth-name-sync-20261002">
+(function(){
+  'use strict';
+
+  function readUser(){
+    try { return JSON.parse(localStorage.getItem('catus_logged_user') || 'null'); }
+    catch (_) { return null; }
+  }
+
+  function userDisplayName(user){
+    if (!user) return '';
+    var raw = String(
+      user.name ||
+      user.full_name ||
+      user.fullName ||
+      user.customer_name ||
+      user.first_name ||
+      user.firstName ||
+      ''
+    ).trim();
+    return raw || '';
+  }
+
+  function syncCeroodHeaderAuthName(){
+    var user = readUser();
+    var name = userDisplayName(user);
+    document.querySelectorAll('[data-cerood-auth-trigger]').forEach(function(a){
+      var label = a.querySelector('span');
+      if (label) label.textContent = user ? (name || 'Account') : 'Login';
+      a.setAttribute('aria-label', user ? 'Open Cerood account' : 'Login to Cerood');
+    });
+  }
+
+  window.CeroodSyncHeaderAuthName = syncCeroodHeaderAuthName;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncCeroodHeaderAuthName, {once:true});
+  } else {
+    syncCeroodHeaderAuthName();
+  }
+
+  window.addEventListener('storage', function(e){
+    if (e.key === 'catus_logged_user') syncCeroodHeaderAuthName();
+  });
+  window.addEventListener('pageshow', syncCeroodHeaderAuthName);
+  window.addEventListener('focus', syncCeroodHeaderAuthName);
+
+  /* Same-tab login/logout changes do not fire the storage event. */
+  var last = localStorage.getItem('catus_logged_user') || '';
+  setInterval(function(){
+    var now = localStorage.getItem('catus_logged_user') || '';
+    if (now !== last) {
+      last = now;
+      syncCeroodHeaderAuthName();
+    }
+  }, 500);
+})();
 </script>
 
 </body>
