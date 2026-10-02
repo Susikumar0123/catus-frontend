@@ -680,15 +680,34 @@ load();
     location.href='/?q='+encodeURIComponent(q);
   });
   function savedLocation(){
+    const name=(localStorage.getItem('catus_location_name')||'').trim();
+    const district=(localStorage.getItem('catus_district_name')||'').trim();
+    const state=(localStorage.getItem('catus_state_name')||'').trim();
+    const pincode=(localStorage.getItem('catus_pincode')||'').trim();
+    if(name){
+      const base=name;
+      if(pincode && !base.includes(pincode)) return base+' - '+pincode;
+      return base;
+    }
     try{
       const x=JSON.parse(localStorage.getItem('cerood_selected_location')||localStorage.getItem('catus_user_location')||'null');
-      if(x) return x.display_name||x.name||x.address||[x.village,x.district,x.state].filter(Boolean).join(', ');
+      if(x){
+        const base=x.display_name||x.name||x.address||[x.village,x.district,x.state].filter(Boolean).join(', ');
+        const pin=String(x.pincode||x.postcode||pincode||'').trim();
+        return pin && base && !String(base).includes(pin) ? base+' - '+pin : (base||'Select Location');
+      }
     }catch(e){}
-    return localStorage.getItem('catus_location_name')||'Select Location';
+    return [district,state].filter(Boolean).join(', ')||'Select Location';
   }
-  const loc=savedLocation();
-  const d=document.getElementById('locationText'),m=document.getElementById('mobileLocationText');
-  if(d)d.textContent=loc;if(m)m.textContent=loc;
+  function syncHeaderLocation(){
+    const loc=savedLocation();
+    const d=document.getElementById('locationText'),m=document.getElementById('mobileLocationText');
+    if(d)d.textContent=loc;if(m)m.textContent=loc;
+  }
+  syncHeaderLocation();
+  window.addEventListener('storage',syncHeaderLocation);
+  window.addEventListener('pageshow',syncHeaderLocation);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncHeaderLocation()});
   ['desktopLocationButton','mobileLocationButton'].forEach(id=>{
     document.getElementById(id)?.addEventListener('click',()=>location.href='/?openLocation=1');
   });
