@@ -1508,8 +1508,6 @@ html body .header.crn-header .crn-header-main::after{
 }
 
 </style>
-<script defer src="/cerood-location.js?v=20261002-location-clean-final"></script>
-
 <style id="cerood-product-hide-legacy-location-fragments">
 body > .cerood-location-controls,
 body > .cerood-location-error {
@@ -1517,6 +1515,7 @@ body > .cerood-location-error {
 }
 </style>
 
+<script defer src="/cerood-location.js?v=20260927-shopping-location-1"></script>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -2128,4 +2127,51 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     if(q) window.location.href='/?q='+encodeURIComponent(q)+'#ceroodSearchResults';
   });
 })();
-</script></body></html>
+</script>
+<script id="cerood-shop-product-index-location-bridge">
+(function () {
+  'use strict';
+
+  function openIndexLocation(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (window.CeroodLocation &&
+        typeof window.CeroodLocation.open === 'function') {
+      window.CeroodLocation.open();
+      return;
+    }
+
+    /* The shared script is defer-loaded. Retry briefly only if the user clicks
+       before it has finished initializing. */
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries++;
+      if (window.CeroodLocation &&
+          typeof window.CeroodLocation.open === 'function') {
+        clearInterval(timer);
+        window.CeroodLocation.open();
+      } else if (tries >= 20) {
+        clearInterval(timer);
+      }
+    }, 50);
+  }
+
+  function bind() {
+    ['desktopLocationButton', 'mobileLocationButton'].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (!btn || btn.dataset.ceroodIndexLocationBridge === '1') return;
+      btn.dataset.ceroodIndexLocationBridge = '1';
+      btn.addEventListener('click', openIndexLocation, false);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind, { once: true });
+  } else {
+    bind();
+  }
+})();
+</script>
+
+</body></html>
