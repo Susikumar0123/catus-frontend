@@ -12227,7 +12227,6 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
   .home-index-header .crn-actions{gap:12px!important}
 }
 </style>
-
 <style id="home-services-index-header-fullwidth-v3">
 /* Final desktop visual alignment with latest Index screenshot */
 @media (min-width:851px){
@@ -12376,6 +12375,96 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
     flex-basis:165px!important;width:165px!important;min-width:165px!important;max-width:165px!important;
   }
   .home-index-header .crn-actions{gap:12px!important}
+}
+</style>
+
+<style id="home-services-index-header-final-match-v4">
+@media (min-width:851px){
+
+  /* Remove the remaining Home Services page top gap */
+  html,body{
+    margin-top:0!important;
+    padding-top:0!important;
+  }
+  .master-app-container{
+    padding-top:0!important;
+    margin-top:0!important;
+  }
+  .home-index-header{
+    margin-top:0!important;
+    top:0!important;
+  }
+
+  /* Match Index cart icon: force every SVG part white */
+  .home-index-header .crn-cart,
+  .home-index-header .crn-cart .cart-icon-wrapper,
+  .home-index-header .crn-cart .nav-text{
+    color:#fff!important;
+  }
+  .home-index-header .crn-cart svg{
+    color:#fff!important;
+    stroke:#fff!important;
+    fill:none!important;
+  }
+  .home-index-header .crn-cart svg path,
+  .home-index-header .crn-cart svg circle,
+  .home-index-header .crn-cart svg line,
+  .home-index-header .crn-cart svg polyline{
+    stroke:#fff!important;
+    fill:none!important;
+  }
+
+  /* Match Index user icon + text: white */
+  .home-index-header .crn-account,
+  .home-index-header .crn-account .nav-text{
+    color:#fff!important;
+  }
+  .home-index-header .crn-account svg{
+    color:#fff!important;
+    stroke:#fff!important;
+    fill:none!important;
+  }
+  .home-index-header .crn-account svg path,
+  .home-index-header .crn-account svg circle,
+  .home-index-header .crn-account svg line{
+    stroke:#fff!important;
+    fill:none!important;
+  }
+
+  /* Cart geometry closer to Index */
+  .home-index-header .crn-cart{
+    gap:6px!important;
+    padding:6px 2px!important;
+  }
+  .home-index-header .crn-cart .crn-icon{
+    width:19px!important;
+    height:19px!important;
+  }
+  .home-index-header .cart-badge{
+    top:-6px!important;
+    right:-9px!important;
+    width:16px!important;
+    min-width:16px!important;
+    max-width:16px!important;
+    height:16px!important;
+    min-height:16px!important;
+    max-height:16px!important;
+    border-radius:50%!important;
+    background:#16b94e!important;
+    color:#fff!important;
+    font-size:9px!important;
+    font-weight:800!important;
+    line-height:16px!important;
+  }
+
+  .home-index-header .crn-account{
+    gap:7px!important;
+    padding:6px 2px!important;
+  }
+  .home-index-header .crn-account .crn-icon{
+    width:19px!important;
+    height:19px!important;
+  }
 }
 </style>
 </head>
