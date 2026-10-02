@@ -980,54 +980,56 @@ body{background:#f9fbff!important}
 
 
 
-<style id="cerood-header-exact-index-match-v2">
+
+
+<style id="cerood-product-header-index-exact-v3">
 @media (min-width:851px){
-  .cr-header,.header.crn-header{width:100%!important;background:#fff!important;border:0!important;box-shadow:none!important;padding:0!important}
-  .cr-header-inner,.crn-header-main{
-    width:100%!important;max-width:none!important;
-    margin:0!important;padding:11px 22px!important;
-    height:86px!important;min-height:86px!important;
-    border-radius:0!important;
+  .cr-header{width:100%!important;margin:0!important;padding:0!important;background:#fff!important;border:0!important;box-shadow:none!important}
+  .cr-header-inner{
+    width:100%!important;max-width:none!important;height:86px!important;min-height:86px!important;
+    margin:0!important;padding:11px 21px!important;border-radius:0!important;
     background:linear-gradient(110deg,#adc2d3 0%,#507091 100%)!important;
     display:flex!important;align-items:center!important;gap:13px!important;box-sizing:border-box!important;
   }
-  .cr-brand,.crn-logo{order:1!important;flex:0 0 64px!important;width:64px!important;min-width:64px!important;margin:0!important}
-  .cr-brand img,.crn-logo img{height:60px!important;width:64px!important;max-width:64px!important;object-fit:contain!important}
-  .cr-brand span,.crn-logo-fallback{display:none!important}
-
-  .cr-location,.crn-location{
+  .cr-brand{order:1!important;flex:0 0 64px!important;width:64px!important;min-width:64px!important;margin:0!important}
+  .cr-brand img{display:block!important;width:64px!important;height:60px!important;max-width:64px!important;object-fit:contain!important}
+  .cr-brand span{display:none!important}
+  .cr-location{
     order:2!important;flex:0 0 205px!important;width:205px!important;min-width:205px!important;max-width:205px!important;
     height:43px!important;min-height:43px!important;margin:0!important;padding:5px 12px!important;
-    border:1px solid #d9e1eb!important;border-radius:999px!important;background:#fff!important;
+    border:1px solid #d9e1eb!important;border-radius:999px!important;background:#fff!important;color:#172133!important;
   }
-  .cr-location strong,.crn-location b{max-width:155px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-
-  .cr-search,.crn-search{
+  .cr-location strong{display:block!important;max-width:155px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#563cdb!important}
+  .cr-search{
     order:3!important;flex:1 1 auto!important;width:auto!important;max-width:none!important;min-width:180px!important;
     height:45px!important;min-height:45px!important;margin:0!important;padding:0 14px!important;
     border:0!important;border-radius:17px!important;background:#fff!important;box-shadow:none!important;
   }
-  .cr-search input,.crn-search input{height:43px!important;padding:0!important;font-size:13px!important}
-
-  .cr-actions,.crn-actions{
-    order:4!important;display:flex!important;align-items:center!important;gap:8px!important;
-    margin:0!important;flex:0 0 auto!important;
+  .cr-search input{height:43px!important;padding:0!important;font-size:13px!important}
+  .cr-actions{order:4!important;display:flex!important;align-items:center!important;gap:8px!important;margin:0!important;flex:0 0 auto!important}
+  .cr-service,.cr-cart,.cr-account{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+    height:43px!important;min-height:43px!important;margin:0!important;padding:0 14px!important;
+    border:1px solid #d9e1eb!important;border-radius:999px!important;background:#fff!important;color:#172133!important;
+    font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
   }
-  .cr-service,.crn-home-service{
-    display:inline-flex!important;align-items:center!important;justify-content:center!important;
-    height:43px!important;min-height:43px!important;padding:0 14px!important;
-    border:1px solid #d9e1eb!important;border-radius:999px!important;background:#fff!important;
-    color:#172133!important;font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
-  }
-  .cr-cart,.cr-account,.crn-actions a{
-    height:43px!important;min-height:43px!important;padding:0 14px!important;
-    border:1px solid #d9e1eb!important;border-radius:999px!important;background:#fff!important;
-    color:#172133!important;font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
-  }
+  .cr-service{min-width:110px!important}
+  .cr-cart{min-width:78px!important}.cr-account{min-width:99px!important}
+  .cr-cart b{background:#6844e8!important}
+  .crn-mobile-cart,.crn-header-menu{display:none!important}
 }
-</style>
-</head><body>
-<header class="cr-header"><div class="cr-header-inner"><a aria-label="Cerood Main Store home" class="cr-brand" href="/#ceroodMarketplaceGroups"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>SHOP</span></a><div class="cr-search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search products" autocomplete="off" id="headerProductSearch" placeholder="Search products, brands and categories..." type="search"/></div><nav aria-label="Main Store navigation" class="cr-actions"><button class="cr-location" title="Delivery address" type="button"><span class="crn-pin"><svg aria-hidden="true" fill="none" height="12" stroke="#6146f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span><span>Delivery to<strong id="renewedDeliveryLocation">Select location</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><a class="cr-service" href="/home-services.html">Home Services</a><a aria-label="Cart" class="cr-cart" href="#" data-cerood-cart-open aria-haspopup="dialog" aria-controls="ceroodCommonCartPopup"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg><span class="cr-cart-label">Cart</span><b id="renewedCartCount">0</b></a><a aria-label="My Cerood account" class="cr-account" href="/cerood-orders.html"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="7.5" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg><span class="rn-account-label">My Orders</span></a><a aria-label="Cart" class="crn-mobile-cart" href="#" data-cerood-cart-open aria-haspopup="dialog" aria-controls="ceroodCommonCartPopup"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg><span class="crn-cart-count" hidden="" id="crnHeaderCartCount">0</span></a><div class="crn-header-menu"><button aria-controls="crnRenewedMenu" aria-expanded="false" aria-label="Open orders and dashboard menu" class="crn-menu-button" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button><div class="crn-menu-panel" hidden="" id="crnRenewedMenu"><a href="/">My Orders</a><a href="/">Customer Dashboard</a><a href="/#ceroodMarketplaceGroups">Shop Products</a><a aria-label="My Cerood account" href="/"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg><span>My Account</span></a></div></div></nav></div></header>
+</style></head><body>
+<header class="cr-header"><div class="cr-header-inner">
+<a aria-label="Cerood Main Store home" class="cr-brand" href="/#ceroodMarketplaceGroups"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>SHOP</span></a>
+<button class="cr-location" title="Delivery address" type="button"><span class="crn-pin"><svg aria-hidden="true" fill="none" height="12" stroke="#6146f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span><span>Delivery to<strong id="renewedDeliveryLocation">Select location</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
+<div class="cr-search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><input aria-label="Search products" autocomplete="off" id="headerProductSearch" placeholder="Search products, brands and categories..." type="search"/></div>
+<nav aria-label="Main Store navigation" class="cr-actions">
+<a class="cr-service" href="/home-services.html">Home Services</a>
+<a aria-label="Cart" class="cr-cart" href="#" data-cerood-cart-open aria-haspopup="dialog" aria-controls="ceroodCommonCartPopup"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg><span class="cr-cart-label">Cart</span><b id="renewedCartCount">0</b></a>
+<a aria-label="My Cerood account" class="cr-account" href="/cerood-orders.html"><svg aria-hidden="true" class="rn-head-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="7.5" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg><span class="rn-account-label">Account</span></a>
+<a aria-label="Cart" class="crn-mobile-cart" href="#" data-cerood-cart-open aria-haspopup="dialog" aria-controls="ceroodCommonCartPopup"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.5 14h12l2.5-10H6"></path></svg><span class="crn-cart-count" hidden="" id="crnHeaderCartCount">0</span></a><div class="crn-header-menu"><button aria-controls="crnRenewedMenu" aria-expanded="false" aria-label="Open orders and dashboard menu" class="crn-menu-button" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button><div class="crn-menu-panel" hidden="" id="crnRenewedMenu"><a href="/">My Orders</a><a href="/">Customer Dashboard</a><a href="/#ceroodMarketplaceGroups">Shop Products</a><a aria-label="My Cerood account" href="/"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg><span>My Account</span></a></div></div>
+</nav>
+</div></header>
 <main class="wrap"><div class="crumb"><a href="/">Home</a> › <a href="/#ceroodMarketplaceGroups">Cerood Shop</a> › <span id="crumbName">Product details</span></div>
 <div class="state" id="state" role="status"><div class="icon">◌</div><h1 id="stateTitle">Preparing product details</h1><p id="stateMessage">Loading product information…</p><a href="/#ceroodMarketplaceGroups">Browse Cerood Shop →</a></div>
 <div hidden="" id="product"><div class="product-grid"><div class="product-gallery"><div aria-live="polite" class="main-image-container" id="gallery"><span class="media-placeholder">📷<small>Loading actual product photo…</small></span></div><div aria-label="Product photos and videos" class="thumbnail-row" id="thumbs"></div><p class="gallery-caption">View the product photos and video provided for this listing.</p></div>
