@@ -1281,6 +1281,101 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
   <div class="ccat-single-footer"><button type="button" class="seller-btn seller-btn-outline" id="ccatSingleRefresh">Refresh products</button><button type="button" class="seller-btn" id="ccatShowSingle">Add Single Catalog</button></div>
 </div></div>
 </div>
+
+<div class="seller-card" id="ceroodLatchCatalogPanel">
+  <div class="cerood-latch-head">
+    <div>
+      <h2>Sell an existing CEROOD product</h2>
+      <p>Search the CEROOD Renewed catalog first. If the exact product already exists, attach your seller offer instead of creating a duplicate product.</p>
+    </div>
+    <span class="cerood-latch-badge">Catalog Latch</span>
+  </div>
+
+  <div class="cerood-latch-search">
+    <input id="ceroodLatchSearchInput" type="search" maxlength="120"
+      placeholder="Search product, brand or model — e.g. vivo V60"
+      autocomplete="off" aria-label="Search CEROOD catalog">
+    <button id="ceroodLatchSearchBtn" class="seller-btn" type="button">Search Catalog</button>
+  </div>
+
+  <div id="ceroodLatchMessage" class="seller-message" role="status" aria-live="polite"></div>
+  <div id="ceroodLatchResults" class="cerood-latch-results"></div>
+
+  <div id="ceroodLatchOfferBox" class="cerood-latch-offer" hidden>
+    <div class="cerood-latch-selected">
+      <img id="ceroodLatchSelectedImage" alt="" hidden>
+      <div>
+        <small>Selected catalog product</small>
+        <strong id="ceroodLatchSelectedName">—</strong>
+        <span id="ceroodLatchSelectedMeta"></span>
+      </div>
+      <button id="ceroodLatchChangeBtn" type="button" class="seller-btn seller-btn-outline">Change</button>
+    </div>
+
+    <form id="ceroodLatchOfferForm">
+      <div class="product-form-grid">
+        <div class="product-field">
+          <label for="ceroodLatchPrice">Your Selling Price (₹) *</label>
+          <input id="ceroodLatchPrice" type="number" min="1" max="100000000" step="0.01" required>
+        </div>
+        <div class="product-field">
+          <label for="ceroodLatchComparePrice">MRP / Compare Price (₹)</label>
+          <input id="ceroodLatchComparePrice" type="number" min="0" max="100000000" step="0.01">
+        </div>
+        <div class="product-field">
+          <label for="ceroodLatchStock">Available Stock *</label>
+          <input id="ceroodLatchStock" type="number" min="0" max="99999" step="1" required>
+        </div>
+        <div class="product-field">
+          <label for="ceroodLatchWarranty">Warranty Days</label>
+          <input id="ceroodLatchWarranty" type="number" min="0" max="3650" step="1">
+        </div>
+        <div class="product-field">
+          <label for="ceroodLatchDispatch">Dispatch Days</label>
+          <input id="ceroodLatchDispatch" type="number" min="0" max="60" step="1" value="1">
+        </div>
+        <div class="product-field">
+          <label for="ceroodLatchSku">Seller SKU</label>
+          <input id="ceroodLatchSku" maxlength="120" placeholder="Your internal SKU (optional)">
+        </div>
+        <div class="product-field">
+          <label for="ceroodLatchCondition">Condition</label>
+          <select id="ceroodLatchCondition">
+            <option value="Refurbished">Refurbished</option>
+            <option value="Pre-owned">Pre-owned</option>
+            <option value="Open box">Open Box</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button id="ceroodLatchSubmitBtn" class="seller-btn" type="submit">Sell This Product</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="cerood-latch-divider"><span>OR</span></div>
+  <p class="cerood-latch-new-note">Can't find the exact product? Use <strong>Add Single Catalog</strong> below to submit a new product for CEROOD admin approval.</p>
+</div>
+
+<style id="cerood-latch-ui-style">
+#ceroodLatchCatalogPanel{border:1px solid #dfe5f0!important}
+.cerood-latch-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.cerood-latch-head h2{margin:0 0 6px}.cerood-latch-head p{margin:0;color:#64748b;max-width:760px;font-size:13px;line-height:1.55}
+.cerood-latch-badge{white-space:nowrap;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:800}
+.cerood-latch-search{display:flex;gap:10px;margin-top:18px}.cerood-latch-search input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:10px;padding:12px 13px;font:inherit}
+.cerood-latch-results{display:grid;gap:10px;margin-top:12px}
+.cerood-latch-result{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:13px;align-items:center;border:1px solid #e2e8f0;border-radius:12px;padding:11px;background:#fff}
+.cerood-latch-result img,.cerood-latch-img-empty{width:76px;height:70px;object-fit:contain;background:#f8fafc;border-radius:9px;border:1px solid #eef2f7;display:grid;place-items:center;color:#94a3b8;font-size:11px}
+.cerood-latch-result strong{display:block;font-size:14px}.cerood-latch-result small{display:block;color:#64748b;margin-top:5px;overflow-wrap:anywhere}
+.cerood-latch-offer{margin-top:16px;border:1px solid #c7d2fe;background:#fafaff;border-radius:13px;padding:16px}
+.cerood-latch-selected{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:12px;align-items:center;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e0e7ff}
+.cerood-latch-selected img{width:62px;height:58px;object-fit:contain;background:#fff;border:1px solid #e2e8f0;border-radius:8px}.cerood-latch-selected img[hidden]{display:none}
+.cerood-latch-selected small,.cerood-latch-selected span{display:block;color:#64748b;font-size:11px}.cerood-latch-selected strong{display:block;margin:3px 0;font-size:14px}
+.cerood-latch-divider{display:flex;align-items:center;gap:12px;color:#94a3b8;font-size:11px;font-weight:800;margin:20px 0 10px}.cerood-latch-divider:before,.cerood-latch-divider:after{content:"";height:1px;background:#e2e8f0;flex:1}
+.cerood-latch-new-note{margin:0;color:#64748b;font-size:12px;text-align:center}
+@media(max-width:650px){.cerood-latch-head{display:block}.cerood-latch-badge{display:inline-block;margin-top:10px}.cerood-latch-search{display:grid}.cerood-latch-result{grid-template-columns:62px minmax(0,1fr)}.cerood-latch-result img,.cerood-latch-img-empty{width:62px;height:60px}.cerood-latch-result .seller-btn{grid-column:1/-1}.cerood-latch-selected{grid-template-columns:52px minmax(0,1fr)}.cerood-latch-selected img{width:52px;height:50px}.cerood-latch-selected .seller-btn{grid-column:1/-1}}
+</style>
+
 <div class="seller-card" id="ceroodMarketplacePanel">
         <h2>Choose your marketplace</h2><p>Select the type of product you want to upload. Each product goes to its own CEROOD admin approval queue.</p>
         <div class="market-choice" role="group" aria-label="Marketplace">
@@ -6211,6 +6306,113 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
  document.querySelectorAll('[data-market="renewed"]').forEach(b=>b.addEventListener('click',()=>load().catch(e=>showMessage('productFormMessage',e.message,true))));
  // Preload so the Step-1 wizard can map its selected category to the real DB category.
  load().catch(e=>console.warn('Renewed categories:',e));
+})();
+</script>
+
+
+<script id="cerood-catalog-latch-ui">
+(function(){
+  const $ = id => document.getElementById(id);
+  const input = $('ceroodLatchSearchInput');
+  const button = $('ceroodLatchSearchBtn');
+  const results = $('ceroodLatchResults');
+  const message = $('ceroodLatchMessage');
+  const offerBox = $('ceroodLatchOfferBox');
+  const form = $('ceroodLatchOfferForm');
+  if(!input || !button || !results || !offerBox || !form) return;
+
+  let selected = null;
+  let busy = false;
+
+  function esc(v){
+    return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function setMessage(text,type=''){
+    message.textContent=text||'';
+    message.className='seller-message '+type;
+  }
+  function meta(p){
+    return [p.brand,p.model,p.category,p.condition].filter(Boolean).join(' · ');
+  }
+  function render(rows){
+    results.innerHTML='';
+    if(!rows.length){
+      results.innerHTML='<div class="seller-message">No exact catalog product found. You can create a new product using Add Single Catalog below.</div>';
+      return;
+    }
+    rows.forEach(p=>{
+      const card=document.createElement('div');
+      card.className='cerood-latch-result';
+      const media=p.image_url
+        ? '<img src="'+esc(p.image_url)+'" alt="'+esc(p.name||'Product')+'">'
+        : '<div class="cerood-latch-img-empty">No image</div>';
+      card.innerHTML=media+
+        '<div><strong>'+esc(p.name||'Product')+'</strong><small>'+esc(meta(p)||'CEROOD catalog product')+'</small></div>'+
+        '<button type="button" class="seller-btn seller-btn-outline">Sell This Product</button>';
+      card.querySelector('button').addEventListener('click',()=>selectProduct(p));
+      results.appendChild(card);
+    });
+  }
+  function selectProduct(p){
+    selected=p;
+    $('ceroodLatchSelectedName').textContent=p.name||'Product';
+    $('ceroodLatchSelectedMeta').textContent=meta(p);
+    const img=$('ceroodLatchSelectedImage');
+    if(p.image_url){img.src=p.image_url;img.alt=p.name||'Product';img.hidden=false}else{img.hidden=true;img.removeAttribute('src')}
+    $('ceroodLatchWarranty').value=Number(p.warranty_days||0);
+    $('ceroodLatchCondition').value=['Refurbished','Pre-owned','Open box'].includes(p.condition)?p.condition:'Refurbished';
+    offerBox.hidden=false;
+    results.hidden=true;
+    input.disabled=true;
+    button.disabled=true;
+    setMessage('');
+    offerBox.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function clearSelection(){
+    selected=null;offerBox.hidden=true;results.hidden=false;input.disabled=false;button.disabled=false;
+    $('ceroodLatchOfferForm').reset();$('ceroodLatchDispatch').value='1';input.focus();
+  }
+  async function search(){
+    const q=input.value.trim();
+    if(q.length<2){setMessage('Enter at least 2 characters to search.','error');return}
+    if(busy)return;busy=true;button.disabled=true;setMessage('Searching CEROOD catalog...');
+    try{
+      const data=await apiRequest('/api/sellers/catalog-search?q='+encodeURIComponent(q));
+      render(Array.isArray(data.products)?data.products:[]);
+      setMessage(data.products?.length ? data.products.length+' matching catalog product(s) found.' : '');
+    }catch(e){results.innerHTML='';setMessage(e.message,'error')}
+    finally{busy=false;if(!selected)button.disabled=false}
+  }
+
+  button.addEventListener('click',search);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search()}});
+  $('ceroodLatchChangeBtn').addEventListener('click',clearSelection);
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!selected || busy)return;
+    busy=true;
+    const submit=$('ceroodLatchSubmitBtn');submit.disabled=true;
+    setMessage('Submitting your seller offer for CEROOD approval...');
+    try{
+      const payload={
+        seller_sku:$('ceroodLatchSku').value.trim(),
+        price:Number($('ceroodLatchPrice').value),
+        compare_price:$('ceroodLatchComparePrice').value===''?null:Number($('ceroodLatchComparePrice').value),
+        stock:Number($('ceroodLatchStock').value),
+        warranty_days:$('ceroodLatchWarranty').value===''?Number(selected.warranty_days||0):Number($('ceroodLatchWarranty').value),
+        dispatch_days:$('ceroodLatchDispatch').value===''?1:Number($('ceroodLatchDispatch').value),
+        condition:$('ceroodLatchCondition').value
+      };
+      const data=await apiRequest('/api/sellers/products/'+encodeURIComponent(selected.id)+'/latch',{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
+      });
+      setMessage(data.message||'Product latched successfully. Waiting for CEROOD admin approval.','success');
+      form.reset();$('ceroodLatchDispatch').value='1';offerBox.hidden=true;results.hidden=false;input.disabled=false;button.disabled=false;selected=null;
+      if(typeof loadProducts==='function'){try{await loadProducts()}catch(_){}}
+    }catch(err){setMessage(err.message,'error')}
+    finally{busy=false;submit.disabled=false}
+  });
 })();
 </script>
 
