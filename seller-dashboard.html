@@ -958,6 +958,21 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 @media(max-width:760px){.cr-live-grid{grid-template-columns:1fr 1fr}.cr-live-top{align-items:flex-start}.cr-live-actions{flex-direction:column}.cr-live-actions .seller-btn{width:100%}}
 </style>
 
+
+<style id="cerood-latched-products-management-style">
+#ceroodLatchedProductsCard{border:1px solid #e1e5ef}
+.cerood-latched-products-list{display:grid;gap:10px}
+.cerood-latched-row{display:grid;grid-template-columns:72px minmax(180px,1.5fr) repeat(4,minmax(90px,.55fr)) minmax(125px,.65fr);gap:12px;align-items:center;border:1px solid #e4e7ee;border-radius:7px;padding:12px;background:#fff}
+.cerood-latched-row img,.cerood-latched-img-empty{width:72px;height:72px;border:1px solid #e5e7eb;border-radius:6px;background:#f8fafc;object-fit:contain;display:grid;place-items:center;color:#98a2b3;font-size:10px;text-align:center}
+.cerood-latched-main{min-width:0}.cerood-latched-main strong{display:block;font-size:12.5px;line-height:1.45;overflow-wrap:anywhere}.cerood-latched-main small{display:block;color:#667085;font-size:10.5px;margin-top:4px;overflow-wrap:anywhere}
+.cerood-latched-stat small{display:block;color:#667085;font-size:10px;margin-bottom:3px}.cerood-latched-stat strong{font-size:12px;overflow-wrap:anywhere}
+.cerood-latched-status{display:inline-block;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:700;text-transform:capitalize;background:#fff7d6;color:#8a5b00}.cerood-latched-status.approved{background:#e7f8e7;color:#19752b}.cerood-latched-status.rejected,.cerood-latched-status.suspended{background:#feeceb;color:#b42318}
+.cerood-latched-actions{display:flex;gap:6px;flex-wrap:wrap}.cerood-latched-actions button{padding:7px 9px;font-size:10.5px}
+.cerood-latched-editor{grid-column:1/-1;border-top:1px solid #edf0f5;padding-top:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.cerood-latched-editor[hidden]{display:none!important}.cerood-latched-editor label{font-size:10px;color:#667085}.cerood-latched-editor input,.cerood-latched-editor select{display:block;width:100%;margin-top:5px;height:34px;border:1px solid #cfd5e2;border-radius:5px;padding:0 8px;font:11px Inter,system-ui}.cerood-latched-editor .cerood-latched-edit-actions{grid-column:1/-1;display:flex;gap:8px}
+@media(max-width:1050px){.cerood-latched-row{grid-template-columns:72px minmax(180px,1fr) repeat(2,minmax(90px,.5fr));}.cerood-latched-actions{grid-column:2/-1}.cerood-latched-editor{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.cerood-latched-row{grid-template-columns:62px minmax(0,1fr);gap:9px}.cerood-latched-row img,.cerood-latched-img-empty{width:62px;height:62px}.cerood-latched-stat{grid-column:2}.cerood-latched-actions{grid-column:1/-1}.cerood-latched-editor{grid-template-columns:1fr}}
+</style>
+
 </head>
 
 <body>
@@ -1232,6 +1247,16 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
         class="product-list"
 
       ></div>
+
+      <div class="seller-card" id="ceroodLatchedProductsCard" style="margin-top:18px">
+        <div class="hub-section-toolbar">
+          <strong>🔗 My Existing-Product Offers</strong>
+          <button type="button" class="seller-btn seller-btn-outline" id="ceroodRefreshLatchedProducts">Refresh</button>
+        </div>
+        <p class="hub-muted">Offers you attached to an existing CEROOD Renewed catalog product. Product details stay shared; your price, stock, warranty and dispatch details are managed separately.</p>
+        <div id="ceroodLatchedProductsMessage" class="seller-message" role="status" aria-live="polite"></div>
+        <div id="ceroodLatchedProductsList" class="cerood-latched-products-list"></div>
+      </div>
       <div class="seller-card" id="ceroodCosmeticsProducts" style="margin-top:18px">
         <div class="hub-section-toolbar"><strong>✨ Cosmetics &amp; Beauty Products</strong><button type="button" class="seller-btn seller-btn-outline" id="ceroodRefreshOtherProducts">Refresh</button></div>
         <p class="hub-muted">Beauty products and their admin approval status.</p>
@@ -6413,6 +6438,83 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
     }catch(err){setMessage(err.message,'error')}
     finally{busy=false;submit.disabled=false}
   });
+})();
+</script>
+
+
+<script id="cerood-latched-products-management-script">
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const list=$('ceroodLatchedProductsList'),msg=$('ceroodLatchedProductsMessage'),refresh=$('ceroodRefreshLatchedProducts');
+if(!list||!msg||!refresh)return;
+let rows=[],busy=false;
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=v=>'₹'+Number(v||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+function message(t,type=''){msg.textContent=t||'';msg.className='seller-message'+(type?' '+type:'')}
+function productOf(r){return r.product&&typeof r.product==='object'?r.product:r}
+function val(r,...keys){for(const k of keys)if(r?.[k]!==undefined&&r?.[k]!==null)return r[k];return null}
+function render(){
+ list.replaceChildren();
+ if(!rows.length){list.innerHTML='<div class="hub-muted" style="padding:14px 0">No existing-product seller offers yet. Use Catalog Uploads → Sell an existing CEROOD product.</div>';return}
+ rows.forEach((r,index)=>{
+  const p=productOf(r),id=val(r,'id','listing_id','seller_listing_id'),status=String(val(r,'approval_status')||'pending').toLowerCase();
+  const row=document.createElement('article');row.className='cerood-latched-row';
+  const img=val(p,'image_url','product_image');
+  row.innerHTML=(img?'<img src="'+esc(img)+'" alt="'+esc(val(p,'name','product_name')||'Product')+'">':'<div class="cerood-latched-img-empty">No image</div>')+
+   '<div class="cerood-latched-main"><strong>'+esc(val(p,'name','product_name')||val(r,'product_name')||'CEROOD product')+'</strong><small>'+esc([val(p,'brand'),val(p,'model'),val(r,'seller_sku')?'SKU: '+val(r,'seller_sku'):null].filter(Boolean).join(' · '))+'</small></div>'+
+   '<div class="cerood-latched-stat"><small>Your price</small><strong>'+money(val(r,'price'))+'</strong></div>'+
+   '<div class="cerood-latched-stat"><small>Stock</small><strong>'+esc(val(r,'stock')??0)+'</strong></div>'+
+   '<div class="cerood-latched-stat"><small>Warranty</small><strong>'+esc(val(r,'warranty_days')??0)+' days</strong></div>'+
+   '<div class="cerood-latched-stat"><small>Dispatch</small><strong>'+esc(val(r,'dispatch_days')??1)+' day(s)</strong></div>'+
+   '<div class="cerood-latched-actions"><span class="cerood-latched-status '+esc(status)+'">'+esc(status)+'</span><button type="button" class="seller-btn seller-btn-outline" data-edit="'+index+'">Edit Offer</button></div>'+
+   '<form class="cerood-latched-editor" data-editor="'+index+'" hidden>'+
+    '<label>Selling price<input name="price" type="number" min="1" step="0.01" required value="'+esc(val(r,'price')??'')+'"></label>'+
+    '<label>MRP / Compare price<input name="compare_price" type="number" min="0" step="0.01" value="'+esc(val(r,'compare_price')??'')+'"></label>'+
+    '<label>Stock<input name="stock" type="number" min="0" step="1" required value="'+esc(val(r,'stock')??0)+'"></label>'+
+    '<label>Warranty days<input name="warranty_days" type="number" min="0" step="1" value="'+esc(val(r,'warranty_days')??0)+'"></label>'+
+    '<label>Dispatch days<input name="dispatch_days" type="number" min="0" step="1" value="'+esc(val(r,'dispatch_days')??1)+'"></label>'+
+    '<label>Seller SKU<input name="seller_sku" maxlength="120" value="'+esc(val(r,'seller_sku')??'')+'"></label>'+
+    '<label>Condition<select name="condition">'+['Refurbished','Pre-owned','Open box'].map(x=>'<option'+(String(val(r,'condition')||'Refurbished')===x?' selected':'')+'>'+x+'</option>').join('')+'</select></label>'+
+    '<div class="cerood-latched-edit-actions"><button class="seller-btn" type="submit">Save Offer</button><button class="seller-btn seller-btn-outline" type="button" data-cancel="'+index+'">Cancel</button></div>'+
+   '</form>';
+  list.append(row);
+  const edit=row.querySelector('[data-edit]'),editor=row.querySelector('[data-editor]');
+  edit.onclick=()=>{editor.hidden=!editor.hidden;edit.textContent=editor.hidden?'Edit Offer':'Close'};
+  row.querySelector('[data-cancel]').onclick=()=>{editor.hidden=true;edit.textContent='Edit Offer'};
+  editor.onsubmit=async e=>{
+   e.preventDefault();if(!id){message('Seller listing ID is missing. Refresh and try again.','error');return}
+   const f=new FormData(editor),payload={
+    price:Number(f.get('price')),compare_price:f.get('compare_price')===''?null:Number(f.get('compare_price')),
+    stock:Number(f.get('stock')),warranty_days:Number(f.get('warranty_days')||0),
+    dispatch_days:Number(f.get('dispatch_days')||1),seller_sku:String(f.get('seller_sku')||'').trim(),
+    condition:String(f.get('condition')||'Refurbished')
+   };
+   const save=editor.querySelector('button[type=submit]');save.disabled=true;message('Saving seller offer...');
+   try{
+    // Backend may expose PATCH or PUT for listing management. Try PATCH first, then PUT.
+    let data;
+    try{data=await apiRequest('/api/sellers/latched-products/'+encodeURIComponent(id),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})}
+    catch(first){data=await apiRequest('/api/sellers/latched-products/'+encodeURIComponent(id),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})}
+    message(data.message||'Seller offer updated.','success');await load();
+   }catch(err){message(err.message,'error')}finally{save.disabled=false}
+  };
+ });
+}
+async function load(){
+ if(busy)return;busy=true;refresh.disabled=true;message('Loading your existing-product offers...');
+ try{
+  const data=await apiRequest('/api/sellers/latched-products');
+  rows=Array.isArray(data.listings)?data.listings:Array.isArray(data.products)?data.products:Array.isArray(data.items)?data.items:[];
+  render();message(rows.length?rows.length+' seller offer(s) loaded.':'');
+ }catch(e){rows=[];render();message(e.message,'error')}
+ finally{busy=false;refresh.disabled=false}
+}
+refresh.addEventListener('click',load);
+document.querySelectorAll('[data-tab="products"]').forEach(b=>b.addEventListener('click',()=>setTimeout(load,0)));
+const originalShowTab=window.showTab;
+if(typeof originalShowTab==='function')window.showTab=function(name){const r=originalShowTab.apply(this,arguments);if(name==='products')setTimeout(load,0);return r};
+window.ceroodLoadLatchedProducts=load;
 })();
 </script>
 

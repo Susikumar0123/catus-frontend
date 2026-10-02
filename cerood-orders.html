@@ -874,15 +874,15 @@ function renderTrackingDetails(o,s){
  if(typeof heroImgRaw==='string'&&/^https?:\/\//.test(heroImgRaw)){const heroImg=el('img','popup-order-image');heroImg.src=heroImgRaw;heroImg.alt=heroItem.product_name||heroItem.name||'Product';hero.append(heroImg)}
  else hero.append(el('div','popup-order-image placeholder','▣'));
  const heroInfo=el('div','popup-order-info');heroInfo.append(el('strong','',heroItem.product_name||heroItem.name||o.product_name||'Cerood order'),el('small','','Order ID: '+String(o.id||'—')+' · Qty: '+(orderItems.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));
- const heroPrice=el('div','popup-order-price',money(o.total));heroPrice.append(el('span','',String(o.delivery_status||o.status||'Order placed').replaceAll('_',' ')));hero.append(heroInfo,heroPrice);card.append(hero);
+ const heroPrice=el('div','popup-order-price',money(o.total));heroPrice.append(el('span','',String(s.id==='renewed'?(o.delivery_status||'confirmed'):(o.delivery_status||o.status||'Order placed')).replaceAll('_',' ')));hero.append(heroInfo,heroPrice);card.append(hero);
  const title=el('h3','','Live Tracking'),store=el('span','order-detail-store',s.id==='renewed'?'Renewed':s.id==='clothing'?'Fashion':s.id==='cosmetics'?'Beauty':'Cerood');
  const close=el('button','order-detail-close','Close');close.type='button';
  const topRight=el('div','');topRight.style.display='flex';topRight.style.gap='8px';topRight.style.alignItems='center';topRight.append(store,close);top.append(title,topRight);
  const grid=el('div','order-detail-grid');
- const boxes=[['Order ID',String(o.id||'—')],['Order amount',money(o.total)],['Order placed',trackingDateTime(o.created_at)],['Current status',String(o.delivery_status||o.status||'Order placed').replaceAll('_',' ')]];
+ const boxes=[['Order ID',String(o.id||'—')],['Order amount',money(o.total)],['Order placed',trackingDateTime(o.created_at)],['Current status',String(s.id==='renewed'?(o.delivery_status||'confirmed'):(o.delivery_status||o.status||'Order placed')).replaceAll('_',' ')]];
  boxes.forEach(([a,b])=>{const box=el('div','order-detail-box'),sm=el('small','',a),st=el('strong','',b);box.append(sm,st);grid.append(box)});
  card.append(top,grid,el('h4','tracking-title','Delivery progress'));
- const line=el('div','tracking-timeline'),stages=trackingStagesFor(s),rawCurrent=trackingStageKey(o.delivery_status||o.status);
+ const line=el('div','tracking-timeline'),stages=trackingStagesFor(s),rawCurrent=trackingStageKey(s.id==='renewed'?(o.delivery_status||'confirmed'):(o.delivery_status||o.status));
  const normalizedCurrent=(s.id!=='renewed'&&rawCurrent==='packing')?'processing':rawCurrent;
  let currentIndex=stages.findIndex(x=>x.k===normalizedCurrent);
  if(currentIndex<0)currentIndex=0;
@@ -933,7 +933,7 @@ function renderOrder(o,s){
  pic.alt='Product';if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg))pic.src=rawImg;else pic.style.visibility='hidden';
  const name=items.map(x=>x.product_name||x.name).filter(Boolean).join(', ')||o.product_name||'Order '+String(o.id||'').slice(0,8);
  info.append(el('strong','',name),el('small','', 'Order ID: '+String(o.id||'—')+'  ·  '+fmt(o.created_at)),el('small','', 'Qty: '+(items.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));
- const st=o.delivery_status||o.status||'Order placed';info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),String(st).replaceAll('_',' ')));
+ const st=s.id==='renewed'?(o.delivery_status||'confirmed'):(o.delivery_status||o.status||'Order placed');info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),String(st).replaceAll('_',' ')));
  amount.textContent=money(o.total);action.type='button';action.setAttribute('aria-label','View order live tracking');
  action.addEventListener('click',()=>openOrderDetailsPopup(o,s));
  row.append(pic,info,amount,action);return row
