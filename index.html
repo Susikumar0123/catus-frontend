@@ -883,6 +883,51 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
  .crn-header-main .crn-logo .cerood-wordmark-erood{font-size:18px!important}
 }
 </style>
+
+<style id="cerood-desktop-header-flat-actions-20261002">
+@media (min-width:851px){
+  /* Keep the original C logo; lower only the real HTML "erood" word slightly. */
+  .crn-logo .cerood-wordmark-erood{
+    position:relative!important;
+    top:3px!important;
+    color:#fff!important;
+  }
+
+  /* There are two lenses visually; keep the left icon and hide only the right search button/lens. */
+  .crn-header .crn-search > button{
+    display:none!important;
+  }
+
+  /* Flat header actions: no white pill/background/border. */
+  .crn-header .crn-actions{
+    gap:20px!important;
+  }
+  .crn-header .crn-actions a{
+    min-height:41px!important;
+    padding:6px 2px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    color:#fff!important;
+  }
+  .crn-header .crn-actions a:hover,
+  .crn-header .crn-actions a:focus-visible{
+    background:transparent!important;
+    color:#fff!important;
+  }
+  .crn-header .crn-actions a svg,
+  .crn-header .crn-actions a .crn-icon{
+    color:#fff!important;
+    stroke:currentColor!important;
+  }
+  .crn-header .crn-actions a .cart-count,
+  .crn-header .crn-actions a [class*="count"],
+  .crn-header .crn-actions a [class*="badge"]{
+    color:#fff!important;
+  }
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img class="cerood-original-c-logo" src="/cerood-logo.webp" alt="Cerood"><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
