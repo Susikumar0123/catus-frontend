@@ -3177,7 +3177,25 @@ function togglePasswordVisibility(fieldId, iconElement) {
   else setup();
 })();
 </script>
-<script id="cerood-top-category-behavior-20260927">(function(){const nav=document.querySelector('.cerood-top-category-wrap');if(!nav)return;nav.addEventListener('toggle',e=>{if(!e.target.matches?.('.cerood-top-category')||!e.target.open)return;nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>{if(x!==e.target)x.open=false})},true);document.addEventListener('click',e=>{if(!nav.contains(e.target))nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});document.addEventListener('keydown',e=>{if(e.key==='Escape')nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});})();</script>
+<script id="cerood-top-category-behavior-20260927">(function(){
+ const nav=document.querySelector('.cerood-top-category-wrap');if(!nav)return;
+ const desktop=()=>window.matchMedia('(min-width:851px) and (hover:hover) and (pointer:fine)').matches;
+ const closeOthers=current=>nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>{if(x!==current)x.open=false});
+ function bindHover(root){
+  root.querySelectorAll('.cerood-top-category').forEach(item=>{
+   if(item.dataset.ceroodHoverBound==='1')return;
+   item.dataset.ceroodHoverBound='1';
+   item.addEventListener('mouseenter',()=>{if(!desktop())return;closeOthers(item);item.open=true});
+   item.addEventListener('mouseleave',()=>{if(!desktop())return;item.open=false});
+  });
+ }
+ bindHover(nav);
+ new MutationObserver(()=>bindHover(nav)).observe(nav,{childList:true,subtree:true});
+ nav.addEventListener('toggle',e=>{if(!e.target.matches?.('.cerood-top-category')||!e.target.open)return;closeOthers(e.target)},true);
+ nav.addEventListener('click',e=>{const summary=e.target.closest?.('.cerood-top-category>summary');if(summary&&desktop()){e.preventDefault();const item=summary.parentElement;closeOthers(item);item.open=true}});
+ document.addEventListener('click',e=>{if(!nav.contains(e.target))nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')nav.querySelectorAll('.cerood-top-category[open]').forEach(x=>x.open=false)});
+})();</script>
 <script>
 window.addEventListener('cerood:login', function () {
     if (typeof updateHeaderLoginUI === 'function') {
