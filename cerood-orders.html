@@ -269,6 +269,15 @@ body.cerood-order-popup-open{overflow:hidden}
 }
 </style>
 
+<style id="popup-ui-fix">
+.cerood-order-popup{padding:24px}.cerood-order-popup-dialog{width:min(900px,calc(100vw - 48px));max-height:88vh;border:1px solid #e1e7ef}
+.cerood-order-popup-head{position:sticky;top:0;z-index:20;padding:16px 18px;background:#fff}.cerood-order-popup-x{display:grid;place-items:center;width:40px;height:40px;border:1px solid #ccd6e3;background:#f7f9fc;border-radius:50%;font-size:25px;cursor:pointer}
+.cerood-order-popup-body{padding:18px}.popup-order-hero{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:16px;align-items:center;border:1px solid #e2e8f0;border-radius:13px;padding:14px;margin-bottom:18px}
+.popup-order-image{width:96px;height:96px;object-fit:contain;border-radius:10px;background:#f7f8fb;border:1px solid #edf0f5}.popup-order-image.placeholder{display:grid;place-items:center;font-size:28px;color:#9aa8bb}
+.popup-order-info strong{display:block;font-size:14px;line-height:1.45}.popup-order-info small{display:block;margin-top:6px;color:#65748b;font-size:10px}.popup-order-price{text-align:right;font-size:16px;font-weight:800}.popup-order-price span{display:block;margin-top:7px;font-size:10px;color:#315bd6;background:#eef3ff;padding:5px 9px;border-radius:999px;text-transform:capitalize}
+.popup-close-footer{padding:12px 18px;border-top:1px solid #e5eaf1;background:#fff;text-align:right}
+@media(max-width:680px){.cerood-order-popup{padding:0}.cerood-order-popup-dialog{width:100%;height:100dvh;max-height:none;border:0}.cerood-order-popup-head{padding:13px 14px}.cerood-order-popup-body{padding:13px}.popup-order-hero{grid-template-columns:76px minmax(0,1fr);gap:11px;padding:11px}.popup-order-image{width:76px;height:76px}.popup-order-price{grid-column:2;text-align:left;font-size:14px}.popup-order-price span{display:inline-block;margin-left:7px;margin-top:0}}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -470,6 +479,12 @@ async function renderOrderReviews(o,s){
 
 function renderTrackingDetails(o,s){
  const wrap=el('div','order-detail-wrap'),card=el('div','order-detail-card'),top=el('div','order-detail-top');
+ const orderItems=Array.isArray(o.items)?o.items:[],heroItem=orderItems[0]||{},hero=el('div','popup-order-hero');
+ const heroImgRaw=heroItem.image_url||heroItem.product_image||heroItem.image||o.image_url||'';
+ if(typeof heroImgRaw==='string'&&/^https?:\/\//.test(heroImgRaw)){const heroImg=el('img','popup-order-image');heroImg.src=heroImgRaw;heroImg.alt=heroItem.product_name||heroItem.name||'Product';hero.append(heroImg)}
+ else hero.append(el('div','popup-order-image placeholder','▣'));
+ const heroInfo=el('div','popup-order-info');heroInfo.append(el('strong','',heroItem.product_name||heroItem.name||o.product_name||'Cerood order'),el('small','','Order ID: '+String(o.id||'—')+' · Qty: '+(orderItems.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));
+ const heroPrice=el('div','popup-order-price',money(o.total));heroPrice.append(el('span','',String(o.delivery_status||o.status||'Order placed').replaceAll('_',' ')));hero.append(heroInfo,heroPrice);card.append(hero);
  const title=el('h3','','Live Tracking'),store=el('span','order-detail-store',s.id==='renewed'?'Renewed':s.id==='clothing'?'Fashion':s.id==='cosmetics'?'Beauty':'Cerood');
  const close=el('button','order-detail-close','Close');close.type='button';
  const topRight=el('div','');topRight.style.display='flex';topRight.style.gap='8px';topRight.style.alignItems='center';topRight.append(store,close);top.append(title,topRight);
@@ -657,7 +672,7 @@ load();
    <div><h2 id="ceroodOrderPopupTitle">Order Details</h2><small id="ceroodOrderPopupSub"></small></div>
    <button type="button" class="cerood-order-popup-x" data-order-popup-close aria-label="Close order details">×</button>
   </header>
-  <div class="cerood-order-popup-body" id="ceroodOrderPopupBody"></div>
+  <div class="cerood-order-popup-body" id="ceroodOrderPopupBody"></div><div class="popup-close-footer"><button type="button" class="outline" data-order-popup-close>Close</button></div>
  </section>
 </div>
 
