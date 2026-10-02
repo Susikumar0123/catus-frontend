@@ -1284,4 +1284,38 @@ document.addEventListener('DOMContentLoaded', function () {
   setTimeout(paint,250);
 })();
 </script>
+
+<style id="cerood-orders-cart-count-final-color-fix">
+.crn-cart [data-cerood-cart-count]{
+  color:#fff!important;
+  background:#e53935!important;
+}
+.crn-cart [data-cerood-cart-count][data-cart-has-items="true"]{
+  background:#16a34a!important;
+}
+</style>
+<script id="cerood-orders-cart-count-final-color-script">
+(()=>{
+  'use strict';
+  function recolor(){
+    document.querySelectorAll('.crn-cart [data-cerood-cart-count]').forEach(b=>{
+      const n=parseInt((b.textContent||'0').trim(),10)||0;
+      b.dataset.cartHasItems=n>0?'true':'false';
+      b.style.setProperty('background', n>0 ? '#16a34a' : '#e53935', 'important');
+      b.style.setProperty('color','#fff','important');
+    });
+  }
+  document.addEventListener('DOMContentLoaded',()=>{
+    recolor();
+    const observer=new MutationObserver(recolor);
+    document.querySelectorAll('.crn-cart [data-cerood-cart-count]').forEach(b=>{
+      observer.observe(b,{childList:true,characterData:true,subtree:true});
+    });
+    setTimeout(recolor,100);
+    setTimeout(recolor,500);
+  });
+  window.addEventListener('storage',recolor);
+  document.addEventListener('cerood:cart-updated',recolor);
+})();
+</script>
 </body></html>
