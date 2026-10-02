@@ -781,6 +781,34 @@ function printCommonOrderReceipt(o,s){
 }
 .crn-cart [data-cerood-cart-count][data-cart-has-items="true"]{background:#16a34a!important}
 </style>
+
+<style id="cerood-orders-cart-round-badge-final">
+.crn-cart [data-cerood-cart-count]{
+  width:17px!important;
+  min-width:17px!important;
+  max-width:17px!important;
+  height:17px!important;
+  min-height:17px!important;
+  max-height:17px!important;
+  padding:0!important;
+  margin-left:2px!important;
+  border-radius:50%!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 17px!important;
+  line-height:17px!important;
+  font-size:9px!important;
+  font-weight:800!important;
+  color:#fff!important;
+  background:#e53935!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.crn-cart [data-cerood-cart-count][data-cart-has-items="true"]{
+  background:#16a34a!important;
+}
+</style>
 </head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script></body></html>';
  win.document.open();win.document.write(doc);win.document.close();
 }
