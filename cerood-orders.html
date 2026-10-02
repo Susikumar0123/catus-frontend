@@ -771,67 +771,7 @@ function printCommonOrderReceipt(o,s){
  const items=(o.items||[]).map(item=>'<tr><td>'+esc(item.product_name||item.name||'Product')+'</td><td>'+esc(item.quantity||1)+'</td><td class="right">'+amount(item.unit_price||item.price)+'</td><td class="right">'+amount(item.line_total||((Number(item.unit_price||item.price)||0)*(Number(item.quantity)||1)))+'</td></tr>').join('');
  const payment=o.payment_method==='cod'?'Cash on Delivery — payment collection not verified by this receipt':o.status==='paid'?'Online payment — marked paid in Cerood order system':'Payment status — '+esc(o.status||'pending');
  const addr=o.delivery_address&&typeof o.delivery_address==='object'?Object.values(o.delivery_address).filter(Boolean).join(', '):'';
- const doc='<!doctype html><html><head><meta charset="utf-8"><title>Cerood Order Receipt '+esc(o.id)+'</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:12px/1.6 Arial,sans-serif;color:#182235;margin:0}header{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #182235;padding-bottom:12px;margin-bottom:18px}h1{font-size:21px;margin:0}h2{font-size:14px;margin:18px 0 7px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.right{text-align:right}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:14px}.note{margin-top:24px;padding:12px;background:#f5f6f8;font-size:11px}</style></head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script>
-<script id="cerood-header-auth-name-sync-20261002">
-(function(){
-  'use strict';
-
-  function readUser(){
-    try { return JSON.parse(localStorage.getItem('catus_logged_user') || 'null'); }
-    catch (_) { return null; }
-  }
-
-  function userDisplayName(user){
-    if (!user) return '';
-    var raw = String(
-      user.name ||
-      user.full_name ||
-      user.fullName ||
-      user.customer_name ||
-      user.first_name ||
-      user.firstName ||
-      ''
-    ).trim();
-    return raw || '';
-  }
-
-  function syncCeroodHeaderAuthName(){
-    var user = readUser();
-    var name = userDisplayName(user);
-    document.querySelectorAll('[data-cerood-auth-trigger]').forEach(function(a){
-      var label = a.querySelector('span');
-      if (label) label.textContent = user ? (name || 'Account') : 'Login';
-      a.setAttribute('aria-label', user ? 'Open Cerood account' : 'Login to Cerood');
-    });
-  }
-
-  window.CeroodSyncHeaderAuthName = syncCeroodHeaderAuthName;
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', syncCeroodHeaderAuthName, {once:true});
-  } else {
-    syncCeroodHeaderAuthName();
-  }
-
-  window.addEventListener('storage', function(e){
-    if (e.key === 'catus_logged_user') syncCeroodHeaderAuthName();
-  });
-  window.addEventListener('pageshow', syncCeroodHeaderAuthName);
-  window.addEventListener('focus', syncCeroodHeaderAuthName);
-
-  /* Same-tab login/logout changes do not fire the storage event. */
-  var last = localStorage.getItem('catus_logged_user') || '';
-  setInterval(function(){
-    var now = localStorage.getItem('catus_logged_user') || '';
-    if (now !== last) {
-      last = now;
-      syncCeroodHeaderAuthName();
-    }
-  }, 500);
-})();
-</script>
-
-</body></html>';
+ const doc='<!doctype html><html><head><meta charset="utf-8"><title>Cerood Order Receipt '+esc(o.id)+'</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:12px/1.6 Arial,sans-serif;color:#182235;margin:0}header{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #182235;padding-bottom:12px;margin-bottom:18px}h1{font-size:21px;margin:0}h2{font-size:14px;margin:18px 0 7px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.right{text-align:right}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:14px}.note{margin-top:24px;padding:12px;background:#f5f6f8;font-size:11px}</style></head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script></body></html>';
  win.document.open();win.document.write(doc);win.document.close();
 }
 function renderOrderWarranty(o,s){
@@ -1185,4 +1125,40 @@ load();
 <div class="cr-return-actions"><button class="outline" data-cr-return-close="" type="button">Cancel</button><button class="btn" id="ceroodReturnSubmit" type="button">Submit request</button></div>
 </section>
 </div>
+
+<script id="cerood-orders-header-auth-name-safe">
+(function(){
+  'use strict';
+  function readUser(){
+    try{return JSON.parse(localStorage.getItem('catus_logged_user')||'null');}
+    catch(_){return null;}
+  }
+  function syncHeaderName(){
+    var user=readUser();
+    var name=user ? String(
+      user.name||user.full_name||user.fullName||user.customer_name||
+      user.first_name||user.firstName||''
+    ).trim() : '';
+    document.querySelectorAll('[data-cerood-auth-trigger]').forEach(function(a){
+      var label=a.querySelector('span');
+      if(label) label.textContent=user?(name||'Account'):'Login';
+      a.setAttribute('aria-label',user?'Open Cerood account':'Login to Cerood');
+    });
+  }
+  window.CeroodSyncHeaderAuthName=syncHeaderName;
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',syncHeaderName,{once:true});
+  }else syncHeaderName();
+  window.addEventListener('pageshow',syncHeaderName);
+  window.addEventListener('storage',function(e){
+    if(e.key==='catus_logged_user')syncHeaderName();
+  });
+  var last=localStorage.getItem('catus_logged_user')||'';
+  setInterval(function(){
+    var now=localStorage.getItem('catus_logged_user')||'';
+    if(now!==last){last=now;syncHeaderName();}
+  },500);
+})();
+</script>
+
 </body></html>
