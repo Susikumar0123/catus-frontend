@@ -65,7 +65,19 @@ const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:
 const uuid=()=>crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
 function token(){const a=localStorage.getItem('cerood_customer_session')||'',b=localStorage.getItem('cerood_renewed_customer_session')||'',t=a||b;if(t&&!a)localStorage.setItem('cerood_customer_session',t);if(t&&!b)localStorage.setItem('cerood_renewed_customer_session',t);return t}
 async function json(path,opt={}){const h={Accept:'application/json',...(opt.headers||{})},t=token();if(t)h.Authorization='Bearer '+t;const r=await fetch(API+path,{cache:'no-store',...opt,headers:h});let d={};try{d=await r.json()}catch{}if(!r.ok||d.success===false)throw Error(d.message||'Checkout service unavailable.');return d}
-function readItems(){try{const raw=JSON.parse((mode==='buy'?sessionStorage.getItem(cfg.buy):localStorage.getItem(cfg.cart))||'[]'),m=new Map();if(!Array.isArray(raw))return[];for(const x of raw){const id=String(x?.product_id||''),n=Number(x?.quantity);if(/^[\w-]{1,100}$/.test(id)&&Number.isSafeInteger(n)&&n>0)m.set(id,Math.min(99,(m.get(id)||0)+n))}return [...m].slice(0,20).map(([product_id,quantity])=>({product_id,quantity}))}catch{return[]}}
+function readItems(){try{
+ const raw=JSON.parse((mode==='buy'?sessionStorage.getItem(cfg.buy):localStorage.getItem(cfg.cart))||'[]'),m=new Map();
+ if(!Array.isArray(raw))return[];
+ for(const x of raw){
+  const id=String(x?.product_id||''),n=Number(x?.quantity),listing=String(x?.seller_listing_id||'').trim();
+  if(!/^[\w-]{1,100}$/.test(id)||!Number.isSafeInteger(n)||n<1)continue;
+  if(listing&&!/^[0-9a-f-]{36}$/i.test(listing))continue;
+  const key=id+'::'+(store==='renewed'?listing:'');
+  const prev=m.get(key);
+  m.set(key,{product_id:id,quantity:Math.min(99,(prev?.quantity||0)+n),...(store==='renewed'&&listing?{seller_listing_id:listing}:{})});
+ }
+ return [...m.values()].slice(0,20);
+}catch{return[]}}
 function address(){const f=$('addressForm'),x=Object.fromEntries(new FormData(f).entries());return {full_name:x.name.trim(),name:x.name.trim(),phone:x.phone.trim(),street:[x.house,x.street].filter(Boolean).join(', '),house:x.house.trim(),area:x.street.trim(),address_line1:x.house.trim(),address_line2:x.street.trim(),city:x.village.trim(),village:x.village.trim(),district:x.district.trim(),state:x.state.trim(),pincode:x.pincode.trim(),landmark:x.landmark.trim()}}
 function valid(a){return a.full_name.length>=2&&/^[6-9]\d{9}$/.test(a.phone)&&a.house.length>=2&&a.city.length>=2&&a.district.length>=2&&a.state.length>=2&&/^[1-9]\d{5}$/.test(a.pincode)}
 function payment(){return document.querySelector('input[name=paymentMode]:checked')?.value||'cod'}
@@ -82,7 +94,7 @@ async function loadProducts(){
    const d=await json(cfg.products),arr=d.products||d.items||[];
    products=arr.filter(p=>items.some(x=>String(x.product_id)===String(p.id)));
  }
- let subtotal=0;$('items').innerHTML=items.map(x=>{const p=products.find(v=>String(v.id||v.product_id)===x.product_id)||{};const price=Number(p.price??p.unit_price??0),line=Number(p.line_total??price*x.quantity);subtotal+=line;const warranty=store==='renewed'&&Number(p.warranty_days)>0?' · '+Number(p.warranty_days)+' days warranty':'';return `<div class="item"><div><strong>${String(p.name||'Product').replace(/[<>&"]/g,'')}</strong><span>${x.quantity} × ${money(price)}${warranty}</span></div><b>${money(line)}</b></div>`}).join('');
+ let subtotal=0;$('items').innerHTML=items.map((x,i)=>{const p=(store==='renewed'&&products[i])||products.find(v=>String(v.id||v.product_id)===x.product_id)||{};const price=Number(p.price??p.unit_price??0),line=Number(p.line_total??price*x.quantity);subtotal+=line;const warranty=store==='renewed'&&Number(p.warranty_days)>0?' · '+Number(p.warranty_days)+' days warranty':'';return `<div class="item"><div><strong>${String(p.name||'Product').replace(/[<>&"]/g,'')}</strong><span>${x.quantity} × ${money(price)}${warranty}</span></div><b>${money(line)}</b></div>`}).join('');
  if(store!=='renewed')$('subtotal').textContent=money(subtotal);
  if(store==='general'){$('delivery').textContent='Server calculated';$('total').textContent=money(subtotal);quote={subtotal,total:subtotal}}
 }
