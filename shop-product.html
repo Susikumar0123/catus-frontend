@@ -1084,6 +1084,60 @@ body{background:#f9fbff!important}
   }
 }
 </style>
+
+<style id="cerood-product-location-text-fix-final">
+@media (min-width:851px){
+  /* Product markup has an extra .crn-pin span; do not let it consume/truncate the text span. */
+  html body .cr-header .cr-location>.crn-pin{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 15px!important;
+    width:15px!important;
+    min-width:15px!important;
+    height:15px!important;
+    overflow:visible!important;
+  }
+  html body .cr-header .cr-location>.crn-pin svg{
+    width:15px!important;
+    height:15px!important;
+    flex:none!important;
+  }
+  html body .cr-header .cr-location>span:not(.crn-pin){
+    display:block!important;
+    flex:1 1 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    color:#172133!important;
+    font-size:10px!important;
+    font-weight:600!important;
+    line-height:14px!important;
+    text-align:left!important;
+  }
+  html body .cr-header .cr-location>span:not(.crn-pin)>strong{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    color:#563cdb!important;
+    font-size:11px!important;
+    line-height:15px!important;
+    font-weight:700!important;
+  }
+  html body .cr-header .cr-location>svg{
+    flex:0 0 13px!important;
+    width:13px!important;
+    min-width:13px!important;
+    height:13px!important;
+  }
+}
+</style>
 </head><body>
 <header class="cr-header"><div class="cr-header-inner">
 <a aria-label="Cerood Main Store home" class="cr-brand" href="/#ceroodMarketplaceGroups"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>SHOP</span></a>
