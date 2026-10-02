@@ -1109,6 +1109,29 @@ html body .header.crn-header .crn-header-main::after{
   }
 }
 </style>
+
+<style id="cerood-category-background-blend-fix-20261002">
+/* Category strip + product-image canvas use one continuous soft background. */
+@media (min-width:851px){
+  .cerood-top-category-wrap,
+  .cerood-top-category-strip,
+  .cerood-top-category>summary,
+  .cerood-top-category-icon{
+    background:#f5f5f7!important;
+  }
+  .cerood-top-category-icon{overflow:hidden!important;}
+  .cerood-top-category-icon img{
+    background:#f5f5f7!important;
+    mix-blend-mode:multiply!important;
+    object-fit:contain!important;
+  }
+  .cerood-top-category:hover>summary,
+  .cerood-top-category[open]>summary,
+  .cerood-top-category>summary:focus-visible{
+    background:#f5f5f7!important;
+  }
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
