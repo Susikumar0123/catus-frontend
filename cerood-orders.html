@@ -376,6 +376,55 @@ body.cerood-order-popup-open{overflow:hidden}
   .cerood-cart-body{padding:0 14px!important}
 }
 </style>
+
+<style id="cerood-header-visual-match-20261002">
+/* Common desktop header visual geometry — matched to index.html reference. */
+@media (min-width:851px){
+  .cr-header,.header.crn-header{background:#fff!important;border:0!important;box-shadow:none!important;padding:0!important}
+  .cr-header-inner,.crn-header-main{
+    width:auto!important;max-width:1460px!important;
+    margin:16px auto 0!important;padding:13px 22px!important;
+    min-height:86px!important;height:86px!important;
+    border-radius:15px!important;
+    background:linear-gradient(110deg,#adc2d3 0%,#507091 100%)!important;
+    display:flex!important;align-items:center!important;gap:13px!important;flex-wrap:nowrap!important;
+    box-sizing:border-box!important;
+  }
+  .cr-brand,.crn-logo{display:flex!important;align-items:center!important;flex:0 0 auto!important;min-width:65px!important}
+  .cr-brand img,.crn-logo img{display:block!important;width:auto!important;height:60px!important;max-width:82px!important;object-fit:contain!important}
+  .cr-brand span,.crn-logo-fallback{display:none!important}
+  .cr-search,.crn-search{
+    order:0!important;display:flex!important;align-items:center!important;
+    flex:1 1 auto!important;min-width:100px!important;max-width:none!important;
+    height:45px!important;min-height:45px!important;
+    gap:10px!important;padding:0 13px!important;
+    border:0!important;border-radius:16px!important;background:#fff!important;box-shadow:none!important;
+  }
+  .cr-search input,.crn-search input{flex:1 1 auto!important;width:100%!important;min-width:0!important;height:100%!important;padding:0!important;border:0!important;background:transparent!important;font-size:13px!important}
+  .cr-location,.crn-location{
+    order:0!important;position:static!important;display:flex!important;align-items:center!important;justify-content:space-between!important;
+    flex:0 1 205px!important;width:205px!important;min-width:125px!important;max-width:205px!important;
+    height:41px!important;min-height:41px!important;padding:5px 11px!important;
+    border:1px solid #d9e1eb!important;border-radius:999px!important;background:#fff!important;color:#172133!important;
+    font-size:10px!important;line-height:14px!important;overflow:hidden!important;
+  }
+  .cr-location strong,.crn-location b{display:block!important;width:100%!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;color:#563cdb!important;font-size:11px!important;line-height:15px!important}
+  .cr-actions,.crn-actions{display:flex!important;align-items:center!important;gap:8px!important;margin-left:0!important;flex:0 0 auto!important}
+  .cr-cart,.cr-account,.crn-actions a{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+    min-width:0!important;min-height:41px!important;height:41px!important;padding:8px 13px!important;
+    border:1px solid #d9e1eb!important;border-radius:999px!important;background:#fff!important;color:#172133!important;
+    font-size:12px!important;font-weight:600!important;white-space:nowrap!important;text-align:center!important;
+  }
+  .cr-cart:hover,.cr-account:hover,.crn-actions a:hover,.cr-location:hover,.crn-location:hover{background:#f8faff!important}
+  .cr-cart b{background:#6844e8!important}
+}
+@media (max-width:850px){
+  /* Preserve each page's current mobile structure, but use the same blue shell. */
+  .cr-header,.header.crn-header{background:#fff!important;border:0!important}
+  .cr-header-inner,.crn-header-main{background:linear-gradient(110deg,#adc2d3 0%,#507091 100%)!important}
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
