@@ -278,6 +278,41 @@ body.cerood-order-popup-open{overflow:hidden}
 .popup-close-footer{padding:12px 18px;border-top:1px solid #e5eaf1;background:#fff;text-align:right}
 @media(max-width:680px){.cerood-order-popup{padding:0}.cerood-order-popup-dialog{width:100%;height:100dvh;max-height:none;border:0}.cerood-order-popup-head{padding:13px 14px}.cerood-order-popup-body{padding:13px}.popup-order-hero{grid-template-columns:76px minmax(0,1fr);gap:11px;padding:11px}.popup-order-image{width:76px;height:76px}.popup-order-price{grid-column:2;text-align:left;font-size:14px}.popup-order-price span{display:inline-block;margin-left:7px;margin-top:0}}
 </style>
+
+<style id="cerood-popup-header-clearance-fix">
+@media(min-width:681px){
+ .cerood-order-popup{
+   top:88px !important;
+   bottom:0 !important;
+   height:auto !important;
+   padding:16px 24px 22px !important;
+   align-items:start !important;
+ }
+ .cerood-order-popup-shade{
+   top:0 !important;
+ }
+ .cerood-order-popup-dialog{
+   max-height:calc(100vh - 126px) !important;
+   margin:0 auto !important;
+ }
+ .cerood-order-popup-head{
+   position:sticky !important;
+   top:0 !important;
+   z-index:50 !important;
+ }
+}
+@media(max-width:680px){
+ .cerood-order-popup{
+   top:78px !important;
+   bottom:0 !important;
+   height:auto !important;
+ }
+ .cerood-order-popup-dialog{
+   height:calc(100dvh - 78px) !important;
+ }
+}
+</style>
+
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" onerror="this.style.display='none';this.nextElementSibling.hidden=false" src="/cerood-logo.webp"/><span class="crn-logo-fallback" hidden="">cerood.</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
