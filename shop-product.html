@@ -1018,7 +1018,29 @@ body{background:#f9fbff!important}
   .cr-cart b{background:#6844e8!important}
   .crn-mobile-cart,.crn-header-menu{display:none!important}
 }
-</style></head><body>
+</style>
+<style id="cerood-product-header-fullscreen-v4">
+@media (min-width:851px){
+  html,body{max-width:none!important}
+  .cr-header{
+    width:100vw!important;
+    max-width:none!important;
+    margin-left:calc(50% - 50vw)!important;
+    margin-right:calc(50% - 50vw)!important;
+    padding:0!important;
+    background:linear-gradient(110deg,#adc2d3 0%,#507091 100%)!important;
+  }
+  .cr-header-inner{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:11px 21px!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+}
+</style>
+</head><body>
 <header class="cr-header"><div class="cr-header-inner">
 <a aria-label="Cerood Main Store home" class="cr-brand" href="/#ceroodMarketplaceGroups"><img alt="Cerood logo" src="/cerood-logo.webp"/><span>SHOP</span></a>
 <button class="cr-location" title="Delivery address" type="button"><span class="crn-pin"><svg aria-hidden="true" fill="none" height="12" stroke="#6146f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span><span>Delivery to<strong id="renewedDeliveryLocation">Select location</strong></span><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
