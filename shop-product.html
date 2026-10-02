@@ -1509,6 +1509,29 @@ html body .header.crn-header .crn-header-main::after{
 }
 
 </style>
+<style id="cerood-location-style">
+.location-trigger{border:0;background:transparent;text-align:left;cursor:pointer;padding:5px 7px;border-radius:8px}
+.location-trigger:hover,.location-trigger:focus-visible{background:#f2efff;outline:2px solid #e5dcff}
+.mobile-location.location-trigger{text-align:left;padding:5px 0}
+.cerood-location-overlay[hidden]{display:none!important}
+.cerood-location-overlay{position:fixed;inset:0;background:#111827a6;z-index:99999;display:grid;place-items:center;padding:16px}
+.cerood-location-panel{width:min(100%,480px);max-height:90vh;overflow:auto;background:white;border-radius:16px;padding:23px;box-shadow:0 15px 65px #10102644}
+.cerood-location-panel h2{margin:0 0 6px;font-size:21px}
+.cerood-location-panel p{font-size:12px;color:#58647a;line-height:1.6}
+.cerood-location-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cerood-location-grid label{font-size:12px;font-weight:600;display:block}
+.cerood-location-grid input{display:block;margin-top:5px;width:100%;height:41px;border:1px solid #d9d9e8;border-radius:8px;padding:8px;font-size:13px}
+.cerood-location-grid .wide{grid-column:1/-1}
+.cerood-location-controls{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.cerood-location-controls button{border:1px solid #d9d9e8;border-radius:8px;padding:10px 16px;background:white}
+.cerood-location-controls button[type=submit]{background:#5135d9;color:white;border-color:#5135d9}
+.cerood-location-error{color:#b91c1c!important;min-height:1.4em}
+@media(max-width:390px){
+  .cerood-location-grid{grid-template-columns:1fr}
+  .cerood-location-grid .wide{grid-column:auto}
+}
+</style>
+
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
