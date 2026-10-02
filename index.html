@@ -1061,6 +1061,16 @@ html body .header.crn-header .crn-header-main::after{
   }
 }
 </style>
+
+<style id="cerood-cart-count-red-green-20261002">
+.crn-cart [data-cerood-cart-count]{
+  min-width:17px!important;height:17px!important;padding:0 4px!important;
+  border-radius:999px!important;color:#fff!important;display:inline-grid!important;
+  place-items:center!important;font-size:9px!important;font-weight:800!important;
+  line-height:1!important;background:#e53935!important;
+}
+.crn-cart [data-cerood-cart-count][data-cart-has-items="true"]{background:#16a34a!important}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img class="cerood-original-c-logo" src="/cerood-logo.webp" alt="Cerood"><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -3685,5 +3695,50 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 </script>
 
+
+<script id="cerood-cart-count-red-green-script-20261002">
+(()=>{
+  'use strict';
+  const STORAGE_KEYS=['cerood_shop_cart','cerood_renewed_cart','cerood_beauty_cart','cerood_fashion_cart'];
+  function readCount(){
+    let total=0;
+    for(const key of STORAGE_KEYS){
+      try{
+        const raw=JSON.parse(localStorage.getItem(key)||'[]');
+        if(Array.isArray(raw)){
+          total+=raw.reduce((sum,item)=>sum+Math.max(0,Number(item?.quantity ?? item?.qty ?? 1)||0),0);
+        }
+      }catch(_){}
+    }
+    return total;
+  }
+  function ensureBadges(){
+    document.querySelectorAll('.crn-cart').forEach(cart=>{
+      let badge=cart.querySelector('[data-cerood-cart-count]');
+      if(!badge){
+        badge=document.createElement('b');
+        badge.setAttribute('data-cerood-cart-count','');
+        cart.appendChild(badge);
+      }
+    });
+  }
+  function paint(){
+    ensureBadges();
+    const total=readCount();
+    document.querySelectorAll('[data-cerood-cart-count]').forEach(badge=>{
+      badge.textContent=String(total);
+      badge.dataset.cartHasItems=total>0?'true':'false';
+      badge.hidden=false;
+    });
+  }
+  window.ceroodRefreshCartCount=paint;
+  document.addEventListener('DOMContentLoaded',paint);
+  window.addEventListener('load',paint);
+  window.addEventListener('storage',paint);
+  document.addEventListener('click',()=>setTimeout(paint,50));
+  document.addEventListener('cerood:cart-updated',paint);
+  setTimeout(paint,250);
+})();
+</script>
 </body>
 </html>

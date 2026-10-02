@@ -771,7 +771,17 @@ function printCommonOrderReceipt(o,s){
  const items=(o.items||[]).map(item=>'<tr><td>'+esc(item.product_name||item.name||'Product')+'</td><td>'+esc(item.quantity||1)+'</td><td class="right">'+amount(item.unit_price||item.price)+'</td><td class="right">'+amount(item.line_total||((Number(item.unit_price||item.price)||0)*(Number(item.quantity)||1)))+'</td></tr>').join('');
  const payment=o.payment_method==='cod'?'Cash on Delivery — payment collection not verified by this receipt':o.status==='paid'?'Online payment — marked paid in Cerood order system':'Payment status — '+esc(o.status||'pending');
  const addr=o.delivery_address&&typeof o.delivery_address==='object'?Object.values(o.delivery_address).filter(Boolean).join(', '):'';
- const doc='<!doctype html><html><head><meta charset="utf-8"><title>Cerood Order Receipt '+esc(o.id)+'</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:12px/1.6 Arial,sans-serif;color:#182235;margin:0}header{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #182235;padding-bottom:12px;margin-bottom:18px}h1{font-size:21px;margin:0}h2{font-size:14px;margin:18px 0 7px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.right{text-align:right}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:14px}.note{margin-top:24px;padding:12px;background:#f5f6f8;font-size:11px}</style></head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script></body></html>';
+ const doc='<!doctype html><html><head><meta charset="utf-8"><title>Cerood Order Receipt '+esc(o.id)+'</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:12px/1.6 Arial,sans-serif;color:#182235;margin:0}header{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #182235;padding-bottom:12px;margin-bottom:18px}h1{font-size:21px;margin:0}h2{font-size:14px;margin:18px 0 7px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.right{text-align:right}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:14px}.note{margin-top:24px;padding:12px;background:#f5f6f8;font-size:11px}</style>
+<style id="cerood-cart-count-red-green-20261002">
+.crn-cart [data-cerood-cart-count]{
+  min-width:17px!important;height:17px!important;padding:0 4px!important;
+  border-radius:999px!important;color:#fff!important;display:inline-grid!important;
+  place-items:center!important;font-size:9px!important;font-weight:800!important;
+  line-height:1!important;background:#e53935!important;
+}
+.crn-cart [data-cerood-cart-count][data-cart-has-items="true"]{background:#16a34a!important}
+</style>
+</head><body><header><div><h1>Cerood Order Receipt</h1><div>'+esc(s.label)+' purchase</div></div><div><b>Order #</b> '+esc(o.id)+'<br><b>Placed:</b> '+date(o.created_at)+'</div></header><h2>Customer</h2><div>'+esc(o.customer_name||'')+' '+esc(o.customer_phone||'')+'</div><div>'+esc(addr)+'</div><h2>Items</h2><table><thead><tr><th>Product</th><th>Qty</th><th class="right">Unit price</th><th class="right">Amount</th></tr></thead><tbody>'+items+'</tbody></table><div class="total">Order total: ₹'+amount(o.total)+'</div><h2>Payment</h2><div>'+payment+'</div><div class="note">This is a printable order receipt, not a GST tax invoice. For COD orders, this receipt does not prove cash collection.</div><script>window.onload=()=>window.print()<\/script></body></html>';
  win.document.open();win.document.write(doc);win.document.close();
 }
 function renderOrderWarranty(o,s){
@@ -1228,5 +1238,50 @@ document.addEventListener('DOMContentLoaded', function () {
   input.placeholder = '';
   tick();
 });
+</script>
+
+<script id="cerood-cart-count-red-green-script-20261002">
+(()=>{
+  'use strict';
+  const STORAGE_KEYS=['cerood_shop_cart','cerood_renewed_cart','cerood_beauty_cart','cerood_fashion_cart'];
+  function readCount(){
+    let total=0;
+    for(const key of STORAGE_KEYS){
+      try{
+        const raw=JSON.parse(localStorage.getItem(key)||'[]');
+        if(Array.isArray(raw)){
+          total+=raw.reduce((sum,item)=>sum+Math.max(0,Number(item?.quantity ?? item?.qty ?? 1)||0),0);
+        }
+      }catch(_){}
+    }
+    return total;
+  }
+  function ensureBadges(){
+    document.querySelectorAll('.crn-cart').forEach(cart=>{
+      let badge=cart.querySelector('[data-cerood-cart-count]');
+      if(!badge){
+        badge=document.createElement('b');
+        badge.setAttribute('data-cerood-cart-count','');
+        cart.appendChild(badge);
+      }
+    });
+  }
+  function paint(){
+    ensureBadges();
+    const total=readCount();
+    document.querySelectorAll('[data-cerood-cart-count]').forEach(badge=>{
+      badge.textContent=String(total);
+      badge.dataset.cartHasItems=total>0?'true':'false';
+      badge.hidden=false;
+    });
+  }
+  window.ceroodRefreshCartCount=paint;
+  document.addEventListener('DOMContentLoaded',paint);
+  window.addEventListener('load',paint);
+  window.addEventListener('storage',paint);
+  document.addEventListener('click',()=>setTimeout(paint,50));
+  document.addEventListener('cerood:cart-updated',paint);
+  setTimeout(paint,250);
+})();
 </script>
 </body></html>
