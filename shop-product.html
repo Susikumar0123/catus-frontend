@@ -1508,30 +1508,15 @@ html body .header.crn-header .crn-header-main::after{
 }
 
 </style>
-<style id="cerood-location-style">
-.location-trigger{border:0;background:transparent;text-align:left;cursor:pointer;padding:5px 7px;border-radius:8px}
-.location-trigger:hover,.location-trigger:focus-visible{background:#f2efff;outline:2px solid #e5dcff}
-.mobile-location.location-trigger{text-align:left;padding:5px 0}
-.cerood-location-overlay[hidden]{display:none!important}
-.cerood-location-overlay{position:fixed;inset:0;background:#111827a6;z-index:99999;display:grid;place-items:center;padding:16px}
-.cerood-location-panel{width:min(100%,480px);max-height:90vh;overflow:auto;background:white;border-radius:16px;padding:23px;box-shadow:0 15px 65px #10102644}
-.cerood-location-panel h2{margin:0 0 6px;font-size:21px}
-.cerood-location-panel p{font-size:12px;color:#58647a;line-height:1.6}
-.cerood-location-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.cerood-location-grid label{font-size:12px;font-weight:600;display:block}
-.cerood-location-grid input{display:block;margin-top:5px;width:100%;height:41px;border:1px solid #d9d9e8;border-radius:8px;padding:8px;font-size:13px}
-.cerood-location-grid .wide{grid-column:1/-1}
-.cerood-location-controls{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
-.cerood-location-controls button{border:1px solid #d9d9e8;border-radius:8px;padding:10px 16px;background:white}
-.cerood-location-controls button[type=submit]{background:#5135d9;color:white;border-color:#5135d9}
-.cerood-location-error{color:#b91c1c!important;min-height:1.4em}
-@media(max-width:390px){
-  .cerood-location-grid{grid-template-columns:1fr}
-  .cerood-location-grid .wide{grid-column:auto}
+<script defer src="/cerood-location.js?v=20261002-location-clean-final"></script>
+
+<style id="cerood-product-hide-legacy-location-fragments">
+body > .cerood-location-controls,
+body > .cerood-location-error {
+  display:none !important;
 }
 </style>
 
-<script defer src="/cerood-location.js?v=20261002-product-location-fix-2"></script>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -2132,16 +2117,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  updateBadges();
 })();
 </script>
-<p class="cerood-location-error" id="ceroodLocationError" role="alert"></p><div class="cerood-location-controls"><button id="ceroodLocationCancel" type="button">Cancel</button><button type="submit">Save location</button></div></form></section></div><script>try{const v=localStorage.getItem('cerood_selected_location')||localStorage.getItem('catus_location_name')||localStorage.getItem('catus_user_location')||localStorage.getItem('selectedLocation');if(v){let l;try{l=JSON.parse(v)}catch(_){l=v;}const t=typeof l==='string'?l:(l?.display_name||l?.name||l?.address||'Tamil Nadu');document.getElementById('locationText').textContent=t;document.getElementById('mobileLocationText').textContent=t;}}catch(e){}</script><script id="cerood-common-location">(function(){'use strict';
- const dialog=document.getElementById('ceroodLocationDialog'),form=document.getElementById('ceroodLocationForm'),error=document.getElementById('ceroodLocationError');
- const fields=['house','village','district','state','pincode','landmark'];let previousFocus=null;
- function display(){let name=localStorage.getItem('catus_location_name')||'';let district=localStorage.getItem('catus_district_name')||'';let pin=localStorage.getItem('catus_pincode')||'';let text=[name,district].filter(Boolean).join(', ');if(pin)text+=' - '+pin;if(!text)text='Select Location';['locationText','mobileLocationText'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text;});}
- function open(){previousFocus=document.activeElement;error.textContent='';let address={};try{address=JSON.parse(localStorage.getItem('cerood_manual_service_address_data')||'{}')||{}}catch(_){};for(const key of fields){form.elements[key].value=address[key]|| (key==='village'?localStorage.getItem('catus_location_name'):key==='district'?localStorage.getItem('catus_district_name'):key==='state'?localStorage.getItem('catus_state_name'):key==='pincode'?localStorage.getItem('catus_pincode'):'')||(key==='state'?'Tamil Nadu':'');}dialog.hidden=false;document.body.style.overflow='hidden';form.elements.house.focus();}
- function close(){dialog.hidden=true;document.body.style.overflow='';if(previousFocus?.focus)previousFocus.focus();}
- document.getElementById('desktopLocationButton').addEventListener('click',open);document.getElementById('mobileLocationButton').addEventListener('click',open);document.getElementById('ceroodLocationCancel').addEventListener('click',close);dialog.addEventListener('click',e=>{if(e.target===dialog)close()});document.addEventListener('keydown',e=>{if(dialog.hidden)return;if(e.key==='Escape')close();if(e.key==='Tab'){const focusable=[...dialog.querySelectorAll('input,button')].filter(el=>!el.disabled);const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
- form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;const a={};for(const key of fields)a[key]=form.elements[key].value.trim();if(!/^\d{6}$/.test(a.pincode)){error.textContent='Enter a valid 6-digit PIN code.';return;}const full=[a.house,a.village,a.district,a.state,a.pincode,a.landmark].filter(Boolean).join(', ');const slug=v=>v.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');try{localStorage.setItem('cerood_manual_service_address_data',JSON.stringify(a));localStorage.setItem('catus_user_location',full);localStorage.setItem('catus_location_name',a.village);localStorage.setItem('catus_district_name',a.district);localStorage.setItem('catus_state_name',a.state);localStorage.setItem('catus_pincode',a.pincode);localStorage.setItem('catus_location_slug',slug(a.village));localStorage.setItem('catus_district_slug',slug(a.district));localStorage.setItem('catus_state_slug',slug(a.state));localStorage.removeItem('catus_location_id');localStorage.setItem('cerood_manual_service_address',full);localStorage.setItem('cerood_selected_location',a.village+', '+a.district+' - '+a.pincode);display();close();window.dispatchEvent(new Event('cerood-location-updated'));}catch(_){error.textContent='Unable to save location in this browser. Check storage permissions.';}});
- window.addEventListener('storage',e=>{if(e.key?.startsWith('catus_')||e.key==='cerood_selected_location')display()});display();
-})();</script><script id="cerood-product-index-header-search">
+<script id="cerood-product-index-header-search">
 (function(){
   const form=document.getElementById('siteSearch');
   const input=document.getElementById('searchText');
@@ -2152,14 +2128,4 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     if(q) window.location.href='/?q='+encodeURIComponent(q)+'#ceroodSearchResults';
   });
 })();
-</script><p class="cerood-location-error" id="ceroodLocationError" role="alert"></p><div class="cerood-location-controls"><button id="ceroodLocationCancel" type="button">Cancel</button><button type="submit">Save location</button></div></form></section></div><script>try{const v=localStorage.getItem('cerood_selected_location')||localStorage.getItem('catus_location_name')||localStorage.getItem('catus_user_location')||localStorage.getItem('selectedLocation');if(v){let l;try{l=JSON.parse(v)}catch(_){l=v;}const t=typeof l==='string'?l:(l?.display_name||l?.name||l?.address||'Tamil Nadu');document.getElementById('locationText').textContent=t;document.getElementById('mobileLocationText').textContent=t;}}catch(e){}</script><script id="cerood-common-location">(function(){'use strict';
- const dialog=document.getElementById('ceroodLocationDialog'),form=document.getElementById('ceroodLocationForm'),error=document.getElementById('ceroodLocationError');
- const fields=['house','village','district','state','pincode','landmark'];let previousFocus=null;
- function display(){let name=localStorage.getItem('catus_location_name')||'';let district=localStorage.getItem('catus_district_name')||'';let pin=localStorage.getItem('catus_pincode')||'';let text=[name,district].filter(Boolean).join(', ');if(pin)text+=' - '+pin;if(!text)text='Select Location';['locationText','mobileLocationText'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text;});}
- function open(){previousFocus=document.activeElement;error.textContent='';let address={};try{address=JSON.parse(localStorage.getItem('cerood_manual_service_address_data')||'{}')||{}}catch(_){};for(const key of fields){form.elements[key].value=address[key]|| (key==='village'?localStorage.getItem('catus_location_name'):key==='district'?localStorage.getItem('catus_district_name'):key==='state'?localStorage.getItem('catus_state_name'):key==='pincode'?localStorage.getItem('catus_pincode'):'')||(key==='state'?'Tamil Nadu':'');}dialog.hidden=false;document.body.style.overflow='hidden';form.elements.house.focus();}
- function close(){dialog.hidden=true;document.body.style.overflow='';if(previousFocus?.focus)previousFocus.focus();}
- document.getElementById('desktopLocationButton').addEventListener('click',open);document.getElementById('mobileLocationButton').addEventListener('click',open);document.getElementById('ceroodLocationCancel').addEventListener('click',close);dialog.addEventListener('click',e=>{if(e.target===dialog)close()});document.addEventListener('keydown',e=>{if(dialog.hidden)return;if(e.key==='Escape')close();if(e.key==='Tab'){const focusable=[...dialog.querySelectorAll('input,button')].filter(el=>!el.disabled);const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
- form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;const a={};for(const key of fields)a[key]=form.elements[key].value.trim();if(!/^\d{6}$/.test(a.pincode)){error.textContent='Enter a valid 6-digit PIN code.';return;}const full=[a.house,a.village,a.district,a.state,a.pincode,a.landmark].filter(Boolean).join(', ');const slug=v=>v.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');try{localStorage.setItem('cerood_manual_service_address_data',JSON.stringify(a));localStorage.setItem('catus_user_location',full);localStorage.setItem('catus_location_name',a.village);localStorage.setItem('catus_district_name',a.district);localStorage.setItem('catus_state_name',a.state);localStorage.setItem('catus_pincode',a.pincode);localStorage.setItem('catus_location_slug',slug(a.village));localStorage.setItem('catus_district_slug',slug(a.district));localStorage.setItem('catus_state_slug',slug(a.state));localStorage.removeItem('catus_location_id');localStorage.setItem('cerood_manual_service_address',full);localStorage.setItem('cerood_selected_location',a.village+', '+a.district+' - '+a.pincode);display();close();window.dispatchEvent(new Event('cerood-location-updated'));}catch(_){error.textContent='Unable to save location in this browser. Check storage permissions.';}});
- window.addEventListener('storage',e=>{if(e.key?.startsWith('catus_')||e.key==='cerood_selected_location')display()});display();
-})();</script>
-</body></html>
+</script></body></html>
