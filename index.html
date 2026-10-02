@@ -3256,6 +3256,34 @@ window.addEventListener('cerood:auth-action', function (event) {
 })();
 </script>
 
+
+<style id="cerood-cart-flat-layout-fix">
+/* Cart popup: no nested cart/card grid inside the cart drawer. */
+.cerood-cart-body{padding:0 18px!important}
+.cerood-cart-store{
+  border:0!important;
+  border-radius:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.cerood-cart-store-head{
+  margin:0!important;
+  padding:15px 0 11px!important;
+  border-bottom:1px solid #e8eaf0!important;
+}
+.cerood-cart-row{padding:14px 0!important}
+.cerood-cart-store-summary{
+  padding:13px 0 4px!important;
+  border-top:0!important;
+}
+.cerood-cart-store-actions{margin:10px 0 16px!important}
+@media(max-width:650px){
+  .cerood-cart-body{padding:0 14px!important}
+}
+</style>
+
 <div class="cerood-cart-popup" id="ceroodCommonCartPopup" hidden aria-hidden="true">
  <div class="cerood-cart-shade" data-cerood-cart-close></div>
  <aside class="cerood-cart-panel" role="dialog" aria-modal="true" aria-labelledby="ceroodCartTitle">
