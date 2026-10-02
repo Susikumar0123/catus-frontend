@@ -928,6 +928,39 @@ main.shell .hero .primary:hover,main.shell .hero .primary:focus-visible {
   }
 }
 </style>
+
+<style id="cerood-desktop-header-spacing-search-width-20261002">
+@media (min-width:851px){
+  /* Do not alter the logo or the "erood" wordmark. */
+
+  /* Give a little more breathing room between brand and delivery location. */
+  .crn-header .crn-location{
+    margin-left:10px!important;
+  }
+
+  /* Search was stretching too far; keep it comfortably shorter on desktop. */
+  .crn-header .crn-search{
+    flex:0 1 680px!important;
+    width:min(680px,100%)!important;
+    max-width:680px!important;
+  }
+
+  /* Let the action links naturally occupy the remaining right-side space. */
+  .crn-header .crn-actions{
+    margin-left:auto!important;
+  }
+}
+@media (min-width:851px) and (max-width:1200px){
+  .crn-header .crn-search{
+    flex:1 1 auto!important;
+    width:auto!important;
+    max-width:none!important;
+  }
+  .crn-header .crn-location{
+    margin-left:6px!important;
+  }
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img class="cerood-original-c-logo" src="/cerood-logo.webp" alt="Cerood"><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
