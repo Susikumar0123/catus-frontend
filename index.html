@@ -1272,6 +1272,26 @@ html body .header.crn-header .crn-header-main::after{
    window.ceroodSearchInventoryStatus={loaded:sections.length-unavailable.length,total:sections.length};
    // Trending is a separate editorial image strip, never populated from product inventory.
    // The live inventory below remains available to search and marketplace product groups.
+   // Banner-below live products: use the same approved/in-stock marketplace feed.
+   // Existing makeCard() keeps the correct product/store destination URL.
+   if(grid){
+    const existing=new Set([...grid.querySelectorAll('a.product')].map(a=>a.getAttribute('href')||''));
+    const mixedTrending=[];
+    const maxTrending=Math.max(0,...groups.map(group=>group.products.length));
+    for(let i=0;i<maxTrending;i++){
+     for(const group of groups){
+      if(group.products[i])mixedTrending.push({product:group.products[i],section:group.section});
+     }
+    }
+    for(const item of mixedTrending){
+     const card=makeCard(item.product,item.section);
+     const href=card.getAttribute('href')||'';
+     if(href&&existing.has(href))continue;
+     if(href)existing.add(href);
+     grid.appendChild(card);
+    }
+   }
+
    if(container&&groupList){
     groupList.replaceChildren();
     // Mix available listings across stores; keep each product’s own destination URL.
