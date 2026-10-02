@@ -1161,4 +1161,72 @@ load();
 })();
 </script>
 
+
+<script id="cerood-search-placeholder-typing-20261002">
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.querySelector('.crn-header .crn-search input');
+  if (!input) return;
+
+  const phrases = [
+    'Search mobiles, electronics & more...',
+    'Search fashion & clothing...',
+    'Search beauty & personal care...',
+    'Search home & kitchen products...',
+    'Search renewed products...'
+  ];
+
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+  let timer = null;
+
+  function tick() {
+    if (input.value || document.activeElement === input) {
+      timer = setTimeout(tick, 500);
+      return;
+    }
+
+    const phrase = phrases[phraseIndex];
+    input.placeholder = phrase.slice(0, charIndex);
+
+    if (!deleting) {
+      if (charIndex < phrase.length) {
+        charIndex++;
+        timer = setTimeout(tick, 55);
+      } else {
+        deleting = true;
+        timer = setTimeout(tick, 1400);
+      }
+    } else {
+      if (charIndex > 0) {
+        charIndex--;
+        timer = setTimeout(tick, 28);
+      } else {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        timer = setTimeout(tick, 280);
+      }
+    }
+  }
+
+  input.addEventListener('focus', function () {
+    if (!input.value) input.placeholder = 'Search products, brands & categories...';
+  });
+
+  input.addEventListener('blur', function () {
+    if (!input.value) {
+      charIndex = 0;
+      deleting = false;
+    }
+  });
+
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    input.placeholder = 'Search products, brands & categories...';
+    return;
+  }
+
+  input.placeholder = '';
+  tick();
+});
+</script>
 </body></html>
