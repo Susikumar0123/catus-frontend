@@ -11756,7 +11756,7 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
         window.location.href = '/index.html';
         return false;
      ">
-              <img src="cerood-logo.webp" alt="Cerood Logo">
+              <img src="cerood-logo.webp" alt="Cerood Logo" class="cerood-original-c-logo"><span class="cerood-wordmark-erood">erood</span>
           </div>
 
           <div class="mobile-location-widget"
@@ -11781,6 +11781,7 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
 
               <!-- Catus-Style Header Location Widget -->
               <div class="header-location-widget" onclick="openLocationModal()" style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+    <svg class="home-index-location-pin" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
     <div class="loc-text-box" style="display: flex; flex-direction: column; font-size: 11px; line-height: 1.2;">
         <span class="loc-label" style="color: #64748b;">Delivery to</span>
         <strong id="headerLocationDisplay" style="color: #0f172a; font-size: 12px;">Select Location</strong>
@@ -13865,171 +13866,149 @@ async function openServiceProduct(serviceId) {
 
 
 
-<style id="cerood-home-index-header-exact-v2">
+
+
+<style id="cerood-home-index-header-exact-final">
+/* Desktop design-only override based directly on the supplied latest Index header. */
 @media (min-width:851px){
-  /* Full-bleed Index-style header */
-  .master-app-container{padding-top:0!important;}
+  .master-app-container{padding-top:0!important}
+
+  /* Index is edge-to-edge: no floating rounded outer card. */
   .uc-homepage-wrapper{
-    width:calc(100% + 80px)!important;
-    max-width:none!important;
-    margin-left:-40px!important;
-    margin-right:-40px!important;
-    margin-top:0!important;
-    margin-bottom:20px!important;
-    padding:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    background:#577696!important;
-    position:sticky!important;
-    top:0!important;
-    z-index:2147481000!important;
+    position:sticky!important;top:0!important;z-index:2147481000!important;
+    width:calc(100% + 80px)!important;max-width:none!important;
+    margin:0 -40px 20px!important;padding:0!important;
+    background:#577696!important;border:0!important;border-radius:0!important;box-shadow:none!important;
   }
+
   .header-main-container{
-    width:100%!important;
-    max-width:none!important;
-    min-height:86px!important;
-    height:86px!important;
-    margin:0!important;
-    padding:10px 22px!important;
-    box-sizing:border-box!important;
-    background:#577696!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    display:grid!important;
-    grid-template-columns:148px 180px minmax(320px,680px) auto auto auto!important;
-    align-items:center!important;
-    column-gap:13px!important;
+    width:100%!important;max-width:none!important;height:86px!important;min-height:86px!important;
+    margin:0!important;padding:10px 22px!important;box-sizing:border-box!important;
+    display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:nowrap!important;
+    gap:13px!important;background:#577696!important;background-image:none!important;
+    border:0!important;border-radius:0!important;box-shadow:none!important;
   }
-  .header-nav-right{display:contents!important;}
 
-  /* Cerood brand */
+  /* Logo = original C + white "erood", exactly like Index composition. */
   .brand-logo{
-    grid-column:1!important;
-    width:148px!important;
-    min-width:148px!important;
-    max-width:148px!important;
-    height:60px!important;
-    margin:0!important;
-    padding:0!important;
-    display:flex!important;
-    align-items:center!important;
-    overflow:visible!important;
+    order:0!important;flex:0 0 auto!important;min-width:148px!important;
+    margin:0!important;padding:0!important;display:inline-flex!important;align-items:center!important;gap:2px!important;
+    background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important;
   }
-  .brand-logo img{
-    width:148px!important;
-    max-width:148px!important;
-    height:60px!important;
-    object-fit:contain!important;
-    object-position:left center!important;
+  .brand-logo .cerood-original-c-logo{
+    display:block!important;width:auto!important;height:54px!important;max-width:74px!important;
+    object-fit:contain!important;background:transparent!important;border:0!important;box-shadow:none!important;
+  }
+  .brand-logo .cerood-wordmark-erood{
+    display:inline-block!important;position:relative!important;top:3px!important;
+    color:#fff!important;font-family:Inter,Arial,sans-serif!important;font-size:30px!important;
+    line-height:1!important;font-weight:400!important;letter-spacing:-1.5px!important;white-space:nowrap!important;
   }
 
-  /* Delivery location – flat like Index */
-  .header-location-widget{
-    grid-column:2!important;
-    width:180px!important;
-    min-width:180px!important;
-    max-width:180px!important;
-    min-height:41px!important;
-    margin:0!important;
-    padding:5px 7px!important;
-    display:flex!important;
-    align-items:center!important;
-    gap:7px!important;
-    background:transparent!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    color:#fff!important;
+  /* Existing right wrapper becomes part of the same Index row. */
+  .header-nav-right{
+    order:0!important;display:contents!important;
   }
-  .header-location-widget::before{
-    content:"⌖";
-    width:18px!important;height:18px!important;flex:0 0 18px!important;
-    display:inline-flex!important;align-items:center!important;justify-content:center!important;
-    color:#fff!important;font-size:19px!important;line-height:1!important;
+
+  /* Delivery location: no white button/pill. */
+  .header-location-widget{
+    order:0!important;flex:0 1 205px!important;width:205px!important;min-width:155px!important;max-width:205px!important;
+    height:41px!important;min-height:41px!important;margin-left:10px!important;padding:5px 7px!important;
+    display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;
+    background:transparent!important;background-image:none!important;border:0!important;border-radius:0!important;
+    box-shadow:none!important;color:#fff!important;text-align:left!important;overflow:hidden!important;
+  }
+  .header-location-widget:hover,.header-location-widget:focus-visible{
+    background:transparent!important;outline:none!important;
+  }
+  .home-index-location-pin{
+    display:block!important;width:19px!important;height:19px!important;flex:0 0 19px!important;
+    color:#fff!important;stroke:#fff!important;
+  }
+  .header-location-widget .loc-text-box{
+    flex:1 1 auto!important;width:0!important;min-width:0!important;
+    display:flex!important;flex-direction:column!important;line-height:1.2!important;overflow:hidden!important;
   }
   .header-location-widget .loc-label{
-    color:#fff!important;font-size:10px!important;font-weight:600!important;
+    color:#fff!important;font-size:10px!important;font-weight:600!important;white-space:nowrap!important;
   }
-  .header-location-widget #headerLocationDisplay{
-    display:block!important;max-width:132px!important;overflow:hidden!important;
-    text-overflow:ellipsis!important;white-space:nowrap!important;
+  #headerLocationDisplay{
+    display:block!important;width:100%!important;max-width:100%!important;
     color:#fff!important;font-size:11px!important;font-weight:700!important;
+    overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
   }
-  .header-location-widget > i{color:#fff!important;font-size:9px!important;}
+  .header-location-widget>i{
+    flex:0 0 auto!important;color:#fff!important;font-size:9px!important;margin-left:0!important;
+  }
 
-  /* Search */
+  /* Put the location immediately after logo, then search. */
+  .header-location-widget{order:1!important}
   .search-container{
-    grid-column:3!important;
-    width:100%!important;
-    max-width:680px!important;
-    height:45px!important;
-    min-height:45px!important;
-    margin:0!important;
-    padding:0 14px!important;
-    border:0!important;
-    border-radius:16px!important;
-    background:#fff!important;
+    order:2!important;flex:0 1 680px!important;width:min(680px,100%)!important;max-width:680px!important;
+    height:45px!important;min-height:45px!important;margin:0!important;padding:0 13px!important;
+    display:flex!important;align-items:center!important;gap:10px!important;
+    background:#fff!important;border:0!important;border-radius:16px!important;box-shadow:none!important;overflow:visible!important;
+  }
+  .search-container:focus-within{border:0!important;box-shadow:none!important}
+  .search-container .search-icon{
+    width:19px!important;height:19px!important;flex:0 0 19px!important;margin-right:0!important;
+    stroke:#64748b!important;stroke-width:1.8!important;
+  }
+  .search-container #searchInput{
+    flex:1 1 auto!important;width:100%!important;min-width:0!important;height:100%!important;
+    padding:0!important;border:0!important;outline:0!important;background:transparent!important;
+    color:#172133!important;font-family:Inter,Arial,sans-serif!important;font-size:13px!important;font-weight:400!important;
+  }
+
+  /* Same flat Index action typography. */
+  .cerood-index-home-link{
+    order:3!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    min-height:41px!important;margin-left:auto!important;padding:6px 2px!important;
+    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+    color:#fff!important;text-decoration:none!important;font-family:Inter,Arial,sans-serif!important;
+    font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
+  }
+  .cart-item{
+    order:4!important;display:flex!important;align-items:center!important;gap:6px!important;
+    min-height:41px!important;margin:0 0 0 20px!important;padding:6px 2px!important;
+    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+    color:#fff!important;font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
+  }
+  .cart-item:hover{color:#fff!important}
+  .cart-item svg{width:19px!important;height:19px!important;stroke:#fff!important}
+  .cart-item .nav-text{color:#fff!important;font-size:12px!important;font-weight:600!important}
+  .cart-icon-wrapper{position:relative!important}
+  .cart-badge{
+    top:-6px!important;right:-9px!important;width:17px!important;min-width:17px!important;height:17px!important;
+    padding:0!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;
+    color:#fff!important;background:#16a34a!important;font-size:9px!important;font-weight:800!important;line-height:1!important;
     box-shadow:none!important;
   }
-  .search-container:focus-within{border:0!important;box-shadow:none!important;}
-  .search-container .search-icon{
-    width:18px!important;height:18px!important;margin-right:10px!important;stroke:#64748b!important;
-  }
-  .search-container input,.search-container #searchInput{
-    height:100%!important;padding:0!important;border:0!important;background:transparent!important;
-    font-size:13px!important;color:#334155!important;
-  }
 
-  /* Home / Cart / Account – flat white actions like Index */
-  .cerood-index-home-link{
-    grid-column:4!important;
-    min-height:41px!important;
-    padding:6px 2px!important;
-    display:flex!important;align-items:center!important;justify-content:center!important;
-    color:#fff!important;text-decoration:none!important;background:transparent!important;
-    border:0!important;border-radius:0!important;box-shadow:none!important;
-    font-size:12px!important;font-weight:700!important;white-space:nowrap!important;
+  .login-btn{
+    order:5!important;min-height:41px!important;max-width:150px!important;margin:0 0 0 20px!important;padding:6px 2px!important;
+    display:flex!important;align-items:center!important;gap:7px!important;
+    background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+    color:#fff!important;font-family:Inter,Arial,sans-serif!important;font-size:12px!important;font-weight:600!important;
+    white-space:nowrap!important;
   }
-  .header-nav-right .cart-item{
-    grid-column:5!important;
-    min-height:41px!important;margin:0!important;padding:6px 2px!important;
-    display:flex!important;align-items:center!important;gap:6px!important;
-    color:#fff!important;background:transparent!important;border:0!important;
-    border-radius:0!important;box-shadow:none!important;white-space:nowrap!important;
-  }
-  .header-nav-right .cart-item svg{width:19px!important;height:19px!important;stroke:#fff!important;}
-  .header-nav-right .cart-item .nav-text{color:#fff!important;font-size:12px!important;font-weight:700!important;}
-  .header-nav-right .cart-badge{
-    width:17px!important;min-width:17px!important;height:17px!important;padding:0!important;
-    border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;
-    font-size:9px!important;line-height:1!important;
-  }
-  .header-nav-right .login-btn{
-    grid-column:6!important;
-    min-height:41px!important;margin:0!important;padding:6px 2px!important;
-    display:flex!important;align-items:center!important;gap:6px!important;
-    color:#fff!important;background:transparent!important;border:0!important;
-    border-radius:0!important;box-shadow:none!important;white-space:nowrap!important;
-  }
-  .header-nav-right .login-btn:hover{background:transparent!important;}
-  .header-nav-right .login-btn svg{width:18px!important;height:18px!important;stroke:#fff!important;}
-  .header-nav-right .login-btn .nav-text{
+  .login-btn:hover{background:transparent!important;color:#fff!important}
+  .login-btn svg{width:19px!important;height:19px!important;stroke:#fff!important}
+  .login-btn .nav-text{
     max-width:105px!important;overflow:hidden!important;text-overflow:ellipsis!important;
-    color:#fff!important;font-size:12px!important;font-weight:700!important;
+    color:#fff!important;font-size:12px!important;font-weight:600!important;
   }
 
-  .mobile-location-widget,.csf-home-tools,.cerood-unified-tools{display:none!important;}
+  /* Desktop only: hide mobile tools. */
+  .mobile-location-widget,.csf-home-tools,.cerood-unified-tools{display:none!important}
 }
+
 @media (min-width:851px) and (max-width:1200px){
-  .header-main-container{
-    grid-template-columns:140px 155px minmax(220px,1fr) auto auto auto!important;
-    column-gap:10px!important;
-  }
-  .brand-logo{width:140px!important;min-width:140px!important;max-width:140px!important;}
-  .brand-logo img{width:140px!important;max-width:140px!important;}
-  .header-location-widget{width:155px!important;min-width:155px!important;max-width:155px!important;}
-  .search-container{max-width:none!important;}
+  .header-main-container{gap:8px!important;padding-left:16px!important;padding-right:16px!important}
+  .brand-logo{min-width:140px!important}
+  .header-location-widget{flex-basis:155px!important;width:155px!important;max-width:155px!important;margin-left:6px!important}
+  .search-container{flex:1 1 auto!important;width:auto!important;max-width:none!important}
+  .cart-item,.login-btn{margin-left:10px!important}
 }
 </style>
 
