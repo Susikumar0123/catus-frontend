@@ -973,6 +973,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 @media(max-width:600px){.cerood-latched-row{grid-template-columns:62px minmax(0,1fr);gap:9px}.cerood-latched-row img,.cerood-latched-img-empty{width:62px;height:62px}.cerood-latched-stat{grid-column:2}.cerood-latched-actions{grid-column:1/-1}.cerood-latched-editor{grid-template-columns:1fr}}
 </style>
 
+<style id="cerood-dynamic-variant-builder-step">.cerood-variant-builder{border:1px solid #e2e6f0;border-radius:12px;background:#fff;overflow:hidden}.cerood-variant-head{padding:15px 16px;border-bottom:1px solid #e8ebf2}.cerood-variant-head strong{display:block;font-size:13px}.cerood-variant-head small{display:block;margin-top:4px;color:#667085;font-size:11px}.cerood-variant-table{overflow-x:auto}.cerood-variant-row{display:grid;grid-template-columns:minmax(150px,1.4fr) minmax(110px,1fr) 105px 105px 90px;gap:9px;align-items:center;padding:9px 12px;border-bottom:1px solid #eef1f5;min-width:650px}.cerood-variant-row-head{background:#f8f9fc;color:#667085;font-size:11px;font-weight:700}.cerood-variant-name{font-size:12px;font-weight:650}.cerood-variant-row input{width:100%;min-height:38px!important;padding:8px!important}.cerood-variant-builder>.market-dynamic-empty{padding:15px;margin:0}.cerood-native-multiselect{display:none!important}@media(max-width:700px){.cerood-variant-row{min-width:570px;grid-template-columns:minmax(130px,1.3fr) 110px 95px 95px 80px}}</style>
 </head>
 
 <body>
@@ -1416,6 +1417,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
             <div><label for="marketBrand">Brand *</label><input id="marketBrand" maxlength="100" required></div>
             <div data-general-only hidden><label for="marketModel">Model</label><input id="marketModel" maxlength="120" placeholder="e.g. Test 32"></div>
             <div id="marketDynamicAttributes" class="full" hidden></div>
+            <div id="marketVariantBuilder" class="full" hidden></div>
             <div id="marketDynamicImages" class="full" hidden></div>
             <div id="marketVariantWrap"><label for="marketVariant">Variant / size / colour</label><input id="marketVariant" maxlength="100" placeholder="e.g. M / Black / 50 ml"></div>
             <div><label for="marketPrice">Selling price (₹) *</label><input id="marketPrice" type="number" min="1" step="0.01" required></div>
@@ -4134,7 +4136,7 @@ initializeDashboard();
  const marketName=()=>market==='clothing'?'Fashion':market==='cosmetics'?'Cosmetics':market==='general'?'Cerood Main Store':'Renewed';
  const normalizeArray=v=>Array.isArray(v)?v:[];
  const asBool=v=>v===true||v===1||v==='1'||v==='true';
- function normalizeAttribute(a){return {key:String(a?.attribute_key??a?.key??'').trim(),label:String(a?.label??a?.attribute_key??a?.key??'').trim(),type:String(a?.input_type??a?.type??'text').toLowerCase(),required:asBool(a?.is_required??a?.required),options:normalizeArray(a?.options),placeholder:String(a?.placeholder??''),unit:String(a?.unit??'')}}
+ function normalizeAttribute(a){return {key:String(a?.attribute_key??a?.key??'').trim(),label:String(a?.label??a?.attribute_key??a?.key??'').trim(),type:String(a?.input_type??a?.type??'text').toLowerCase(),required:asBool(a?.is_required??a?.required),variant:asBool(a?.is_variant??a?.variant),options:normalizeArray(a?.options),placeholder:String(a?.placeholder??''),unit:String(a?.unit??'')}}
  function normalizeImageSlot(x){return {key:String(x?.slot_key??x?.key??'').trim(),label:String(x?.label??x?.slot_key??x?.key??'').trim(),required:asBool(x?.is_required??x?.required),instruction:String(x?.description??x?.instruction??'')}}
  function categoryAttributeSchema(c){return normalizeArray(c?.attributes??c?.attribute_schema).map(normalizeAttribute).filter(x=>x.key&&x.label)}
  function categoryImageSchema(c){return normalizeArray(c?.image_slots??c?.image_schema).map(normalizeImageSlot).filter(x=>x.key&&x.label)}
@@ -4203,14 +4205,17 @@ initializeDashboard();
      const sync=()=>{const vals=[...input.selectedOptions].map(o=>o.value);trigger.querySelector('span').textContent=vals.length?(vals.length<=2?vals.join(', '):vals.length+' selected'):'Select '+field.label;trigger.classList.toggle('has-value',!!vals.length);input.dispatchEvent(new Event('change',{bubbles:true}));};
      field.options.forEach((v,idx)=>{const row=document.createElement('label');row.className='cerood-multi-option';const cb=document.createElement('input');cb.type='checkbox';cb.value=String(v);const txt=document.createElement('span');txt.textContent=String(v);cb.onchange=()=>{const opt=[...input.options].find(o=>o.value===cb.value);if(opt)opt.selected=cb.checked;sync()};row.append(cb,txt);menu.append(row)});
      trigger.onclick=e=>{e.stopPropagation();document.querySelectorAll('.cerood-multi-menu').forEach(x=>{if(x!==menu)x.hidden=true});menu.hidden=!menu.hidden};
-     multi.append(trigger,menu,input);wrap.append(multi);grid.append(wrap);return;
+     input.dataset.attributeKey=field.key;input.dataset.attributeType=field.type;input.dataset.attributeLabel=field.label;input.dataset.attributeVariant=field.variant?'1':'0';if(field.required)input.required=true;input.addEventListener('change',renderVariantBuilder);multi.append(trigger,menu,input);wrap.append(multi);grid.append(wrap);return;
     }
    }else if(field.type==='textarea'){input=document.createElement('textarea')}
    else if(field.type==='boolean'){input=document.createElement('select');input.add(new Option('Select '+field.label,''));input.add(new Option('Yes','true'));input.add(new Option('No','false'))}else{input=document.createElement('input');input.type=field.type==='number'?'number':'text';if(field.type==='number')input.step='any'}
-   input.dataset.attributeKey=field.key;input.dataset.attributeType=field.type;input.dataset.attributeLabel=field.label;if(field.required)input.required=true;if(field.placeholder)input.placeholder=field.placeholder;wrap.append(input);grid.append(wrap);
+   input.dataset.attributeKey=field.key;input.dataset.attributeType=field.type;input.dataset.attributeLabel=field.label;input.dataset.attributeVariant=field.variant?'1':'0';if(field.required)input.required=true;if(field.placeholder)input.placeholder=field.placeholder;input.addEventListener('change',renderVariantBuilder);wrap.append(input);grid.append(wrap);
   });
-  dynamic.append(box);
+  dynamic.append(box);renderVariantBuilder();
  }
+ function variantCombinations(groups){return groups.reduce((acc,g)=>acc.flatMap(base=>g.values.map(v=>({...base,[g.key]:v}))),[{}])}
+ function renderVariantBuilder(){const host=el('marketVariantBuilder');if(!host)return;host.replaceChildren();const schema=categoryAttributeSchema(currentCategory());const vf=schema.filter(x=>x.variant);if(!vf.length){host.hidden=true;return}host.hidden=false;const groups=[];for(const f of vf){const input=dynamic.querySelector('[data-attribute-key="'+CSS.escape(f.key)+'"]');if(!input)continue;const values=input.multiple?[...input.selectedOptions].map(o=>o.value).filter(Boolean):(input.value?[input.value]:[]);if(values.length)groups.push({key:f.key,label:f.label,values})}const box=document.createElement('div');box.className='cerood-variant-builder';box.innerHTML='<div class="cerood-variant-head"><strong>Variants & Inventory</strong><small>Select Size / Color values above. Each combination can have its own SKU, price and stock.</small></div>';if(groups.length!==vf.length){const p=document.createElement('p');p.className='market-dynamic-empty';p.textContent='Select at least one value for '+vf.filter(f=>!groups.some(g=>g.key===f.key)).map(f=>f.label).join(', ')+'.';box.append(p);host.append(box);return}const combos=variantCombinations(groups);if(combos.length>100){const p=document.createElement('p');p.className='market-dynamic-empty';p.textContent='Too many combinations ('+combos.length+'). Select 100 or fewer.';box.append(p);host.append(box);return}const table=document.createElement('div');table.className='cerood-variant-table';const hr=document.createElement('div');hr.className='cerood-variant-row cerood-variant-row-head';hr.innerHTML='<span>Variant</span><span>Seller SKU</span><span>Price ₹</span><span>MRP ₹</span><span>Stock</span>';table.append(hr);const bp=el('marketPrice')?.value||'',bm=el('marketCompare')?.value||'',bs=el('marketStock')?.value||'';for(const vals of combos){const row=document.createElement('div');row.className='cerood-variant-row';row.dataset.variantValues=JSON.stringify(vals);const name=document.createElement('span');name.className='cerood-variant-name';name.textContent=groups.map(g=>vals[g.key]).join(' / ');const sku=document.createElement('input');sku.placeholder='SKU';sku.dataset.variantField='sku';const price=document.createElement('input');price.type='number';price.min='1';price.step='0.01';price.value=bp;price.required=true;price.dataset.variantField='price';const mrp=document.createElement('input');mrp.type='number';mrp.min='0';mrp.step='0.01';mrp.value=bm;mrp.dataset.variantField='compare_price';const stock=document.createElement('input');stock.type='number';stock.min='0';stock.step='1';stock.value=bs;stock.required=true;stock.dataset.variantField='stock';row.append(name,sku,price,mrp,stock);table.append(row)}box.append(table);host.append(box)}
+ function collectVariants(){const host=el('marketVariantBuilder');if(!host||host.hidden)return [];return [...host.querySelectorAll('.cerood-variant-row[data-variant-values]')].map(row=>{const get=k=>row.querySelector('[data-variant-field="'+k+'"]')?.value?.trim()||'';return {variant_values:JSON.parse(row.dataset.variantValues||'{}'),sku:get('sku'),price:Number(get('price')||0),compare_price:get('compare_price')===''?null:Number(get('compare_price')),stock:Number(get('stock')||0)}})}
  function renderDynamicImages(){
   dynamicImages.replaceChildren();
   if(!market||market==='renewed'){dynamicImages.hidden=true;return;}dynamicImages.hidden=false;
@@ -4315,7 +4320,7 @@ initializeDashboard();
   const v=id=>el(id).value.trim();
   const categorySelect=el('marketCategory'),categoryText=categorySelect.options[categorySelect.selectedIndex]?.text||'';
   const category=currentCategory();if(!category||!asBool(category.is_leaf))throw Error('Select a final product category.');
-  const product={name:v('marketName'),category:category.name||categoryText,category_id:String(category.id),brand:v('marketBrand'),variant:v('marketVariant'),price:v('marketPrice'),compare_price:v('marketCompare'),stock:v('marketStock'),net_quantity:market==='cosmetics'?v('marketQuantity'):'',batch_number:market==='cosmetics'?v('marketBatch'):'',manufacture_date:market==='cosmetics'?v('marketMfg'):'',expiry_date:market==='cosmetics'?v('marketExpiry'):'',ingredients:market==='cosmetics'?v('marketIngredients'):'',description:v('marketDescription'),image_url,product_attributes:collectDynamicAttributes(),product_images};
+  const product={name:v('marketName'),category:category.name||categoryText,category_id:String(category.id),brand:v('marketBrand'),variant:v('marketVariant'),price:v('marketPrice'),compare_price:v('marketCompare'),stock:v('marketStock'),net_quantity:market==='cosmetics'?v('marketQuantity'):'',batch_number:market==='cosmetics'?v('marketBatch'):'',manufacture_date:market==='cosmetics'?v('marketMfg'):'',expiry_date:market==='cosmetics'?v('marketExpiry'):'',ingredients:market==='cosmetics'?v('marketIngredients'):'',description:v('marketDescription'),image_url,product_attributes:collectDynamicAttributes(),product_images,variants:collectVariants()};
   if(market==='general'){product.subcategory=category.name||categoryText;product.model=v('marketModel');}
   msg.textContent='Submitting to '+marketName()+' admin...';await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
   msg.className='marketplace-message success';msg.textContent='Product added successfully!';window.__ceroodClearLocalDraft?.();form.reset();el('marketPreview').hidden=true;renderDynamicAttributes();renderDynamicImages();await loadQueue();
@@ -5934,7 +5939,8 @@ async function finalDetails(){
    const addSection=(beforeId,title)=>{const target=$(beforeId)?.parentElement;if(!target||target.parentElement!==fields)return;const h=document.createElement('div');h.className='cerood-step2-section';h.innerHTML='<span>'+escapeHTML(title)+'</span><i></i>';fields.insertBefore(h,target)};
    addSection('marketName','Basic details');
    addSection('marketDynamicAttributes','Product specifications');
-   addSection('marketPrice','Pricing & inventory');
+   addSection('marketVariantBuilder','Variants & inventory');
+    addSection('marketPrice','Base pricing & inventory');
    addSection('marketDescription','Product details');
   }
   let pathBox=single.querySelector('.cerood-step2-path');
