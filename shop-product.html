@@ -1615,6 +1615,41 @@ body > .cerood-location-error {
   #product .product-gallery .main-image-container{aspect-ratio:1/1!important}
 }
 </style>
+
+<style id="cerood-product-header-match-index-final">
+/* Mobile product header: match the accepted index.html header exactly. */
+@media (max-width:850px){
+  html body .cr-header>.cr-header-inner{
+    grid-template-columns:88px minmax(0,1fr) 36px 36px!important;
+    grid-template-rows:40px 44px!important;
+    column-gap:7px!important;row-gap:8px!important;
+    padding:12px 10px 13px!important;
+  }
+  html body .cr-header .cr-brand{
+    grid-column:1!important;grid-row:1!important;
+    width:88px!important;min-width:88px!important;max-width:88px!important;
+    height:40px!important;overflow:visible!important;justify-content:flex-start!important;
+  }
+  html body .cr-header .cr-brand img{
+    width:88px!important;max-width:88px!important;height:38px!important;
+    object-fit:contain!important;object-position:left center!important;
+  }
+  html body .cr-header .cr-location{
+    grid-column:2!important;grid-row:1!important;width:100%!important;min-width:0!important;max-width:none!important;
+    height:36px!important;min-height:36px!important;padding:3px 7px!important;
+  }
+  html body .cr-header .cr-actions>.cr-cart{grid-column:3!important;grid-row:1!important;width:36px!important;height:36px!important;min-width:36px!important;background:#fff!important;border-radius:11px!important}
+  html body .cr-header .crn-header-menu{grid-column:4!important;grid-row:1!important;width:36px!important;height:36px!important;min-width:36px!important}
+  html body .cr-header .crn-menu-button{width:36px!important;height:36px!important;min-width:36px!important;background:#fff!important;border-radius:11px!important}
+  html body .cr-header .cr-search{grid-column:1/-1!important;grid-row:2!important;width:100%!important;height:44px!important;min-height:44px!important;margin:0!important;border-radius:12px!important}
+}
+@media (max-width:370px){
+  html body .cr-header>.cr-header-inner{grid-template-columns:82px minmax(0,1fr) 34px 34px!important;column-gap:5px!important;padding-left:8px!important;padding-right:8px!important}
+  html body .cr-header .cr-brand{width:82px!important;min-width:82px!important;max-width:82px!important}
+  html body .cr-header .cr-brand img{width:82px!important;max-width:82px!important}
+  html body .cr-header .cr-actions>.cr-cart,html body .cr-header .crn-header-menu,html body .cr-header .crn-menu-button{width:34px!important;min-width:34px!important;height:36px!important}
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
