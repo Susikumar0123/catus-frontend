@@ -1229,6 +1229,41 @@ html body .header.crn-header .crn-header-main::after{
 }
 </style>
 
+
+<style id="cerood-index-mobile-logo-location-balance-20261003">
+/* Mobile only: reserve enough room for the complete Cerood wordmark by reducing the location pill. */
+@media (max-width:850px){
+  .crn-header-main{
+    grid-template-columns:98px minmax(0,1fr) 76px!important;
+    column-gap:5px!important;
+  }
+  .crn-header-main .crn-logo{
+    width:98px!important;max-width:98px!important;min-width:98px!important;
+    overflow:visible!important;white-space:nowrap!important;
+  }
+  .crn-header-main .crn-logo .cerood-original-c-logo{
+    width:auto!important;max-width:42px!important;height:34px!important;min-width:0!important;
+  }
+  .crn-header-main .crn-logo .cerood-wordmark-erood{
+    display:inline-block!important;font-size:20px!important;line-height:1!important;
+    white-space:nowrap!important;
+  }
+  .crn-header-main .crn-mobile-location{
+    width:100%!important;max-width:100%!important;min-width:0!important;
+    padding-left:5px!important;padding-right:5px!important;
+  }
+  .crn-header-main .crn-mobile-location>.crn-icon{width:13px!important;height:13px!important;}
+  .crn-header-main .crn-mobile-location>.crn-chevron{width:10px!important;height:10px!important;}
+  .crn-header-main .crn-mobile-location span{font-size:8px!important;line-height:11px!important;}
+  .crn-header-main .crn-mobile-location b{font-size:9px!important;line-height:11px!important;}
+}
+@media (max-width:380px){
+  .crn-header-main{grid-template-columns:91px minmax(0,1fr) 70px!important;column-gap:4px!important;}
+  .crn-header-main .crn-logo{width:91px!important;max-width:91px!important;min-width:91px!important;}
+  .crn-header-main .crn-logo .cerood-original-c-logo{max-width:39px!important;height:32px!important;}
+  .crn-header-main .crn-logo .cerood-wordmark-erood{font-size:18px!important;}
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
