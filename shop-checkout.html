@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Main Store Checkout | Cerood</title><link rel="icon" href="/fevicon.png"><script defer src="/cerood-auth.js"></script>
+<title>Main Store Checkout | Cerood</title><link rel="icon" href="/fevicon.png"><script defer src="/cerood-auth.js"></script><script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:#172133;background:#f6f7fb}a{text-decoration:none;color:inherit}
 header{background:linear-gradient(105deg,#aec3d3,#506f90);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}header img{height:48px}header a{background:#fff;border-radius:999px;padding:10px 15px;font-size:13px}
@@ -131,8 +131,40 @@ async function placeCod(){
  setStatus('Order placed successfully. Order #'+String(id).slice(0,8).toUpperCase());$('place').textContent='Order placed ✓';$('place').disabled=true;
  setTimeout(()=>location.href='/cerood-orders.html',900);
 }
+async function placeRenewedOnline(){
+ const a=address();
+ if(store!=='renewed'||!valid(a)||!quote)throw Error('Save a valid delivery address and check delivery first.');
+ if(typeof Razorpay!=='function')throw Error('Razorpay checkout could not be loaded.');
+ setStatus('Preparing secure payment…');
+ const d=await json('/api/renewed/prepare-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({address:a,items})});
+ if(!d.razorpay_order_id||!d.key_id||!d.amount)throw Error('Secure payment details are incomplete.');
+ await new Promise((resolve,reject)=>{
+  let done=false;
+  const rzp=new Razorpay({
+   key:d.key_id,amount:d.amount,currency:d.currency||'INR',name:'Cerood',
+   description:'Cerood Renewed Order',order_id:d.razorpay_order_id,
+   prefill:{name:a.full_name,contact:a.phone},theme:{color:'#171717'},
+   modal:{ondismiss:()=>{if(!done){done=true;reject(Error('Payment was cancelled.'))}}},
+   handler:async r=>{
+    if(done)return;
+    try{
+     const v=await json('/api/renewed/verify-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      razorpay_order_id:r.razorpay_order_id,razorpay_payment_id:r.razorpay_payment_id,razorpay_signature:r.razorpay_signature
+     })});
+     if(!v.success)throw Error(v.message||'Payment verification is pending.');
+     done=true;saveReceipt(d.order_id,'ONLINE_'+(d.transaction_id||''),a);await saveAccountAddress(a);
+     if(mode==='buy')sessionStorage.removeItem(cfg.buy);else localStorage.removeItem(cfg.cart);
+     setStatus('Payment verified. Order placed successfully.');$('place').textContent='Payment successful ✓';$('place').disabled=true;
+     setTimeout(()=>location.href='/cerood-orders.html',900);resolve(v);
+    }catch(e){done=true;reject(e)}
+   }
+  });
+  rzp.on('payment.failed',r=>{if(!done){done=true;reject(Error(r?.error?.description||'Payment failed.'))}});
+  rzp.open();
+ });
+}
 function legacyOnline(){
- const old={renewed:'/renewed-checkout.html?mode='+mode,fashion:'/clothing-checkout.html?mode='+mode,beauty:'/cosmetics-checkout.html?mode='+mode};
+ const old={fashion:'/clothing-checkout.html?mode='+mode,beauty:'/cosmetics-checkout.html?mode='+mode};
  if(old[store])location.href=old[store];
 }
 async function init(){
@@ -142,7 +174,7 @@ async function init(){
 }
 $('checkDelivery').onclick=checkQuote;
 for(const x of document.querySelectorAll('input[name=paymentMode]'))x.onchange=async()=>{quote=null;if(store!=='general'&&valid(address()))await checkQuote();refresh()};
-$('place').onclick=async()=>{if(busy)return;busy=true;refresh();try{if(payment()==='online'){legacyOnline();return}await placeCod()}catch(e){setStatus(e.message,true)}finally{busy=false;refresh()}};
+$('place').onclick=async()=>{if(busy)return;busy=true;refresh();try{if(payment()==='online'){if(store==='renewed')await placeRenewedOnline();else legacyOnline();return}await placeCod()}catch(e){setStatus(e.message,true)}finally{busy=false;refresh()}};
 window.addEventListener('cerood:login',authState);
 init().catch(e=>setStatus(e.message,true));
 })();
