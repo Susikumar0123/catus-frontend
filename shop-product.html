@@ -1526,7 +1526,7 @@ body > .cerood-location-error {
 <main class="wrap"><div class="crumb"><a href="/">Home</a> › <a href="/#ceroodMarketplaceGroups">Cerood Shop</a> › <span id="crumbName">Product details</span></div>
 <div class="state" id="state" role="status"><div class="icon">◌</div><h1 id="stateTitle">Preparing product details</h1><p id="stateMessage">Loading product information…</p><a href="/#ceroodMarketplaceGroups">Browse Cerood Shop →</a></div>
 <div hidden="" id="product"><div class="product-grid"><div class="product-gallery"><div aria-live="polite" class="main-image-container" id="gallery"><span class="media-placeholder">📷<small>Loading actual product photo…</small></span></div><div aria-label="Product photos and videos" class="thumbnail-row" id="thumbs"></div><p class="gallery-caption">View the product photos and video provided for this listing.</p></div>
-<div class="product-info"><div class="eyebrow">CEROOD MAIN STORE · <span id="category">PRODUCT</span></div><h1 class="product-title" id="name">Product</h1><div><span class="badge" id="conditionBadge">Brand</span></div><div class="price-section"><span class="current-price" id="price">—</span><span class="original-price" id="comparePrice"></span><span class="discount-pct" id="discount"></span></div><p class="sub" id="model">—</p><hr class="line"/><div class="facts"><div class="fact"><span>Availability</span><strong id="stock">—</strong></div><div class="fact"><span>Category</span><strong id="warranty">—</strong></div><div class="fact"><span>Brand</span><strong id="location">—</strong></div><div class="fact"><span>Model</span><strong id="delivery">—</strong></div></div><div class="details"><section class="section"><h2>Description</h2><p id="conditionText">—</p><p hidden="" id="defects">—</p></section><section class="section"><h2>Product information</h2><ul id="accessories"></ul></section><section class="section"><h2>Category information</h2><p id="warrantyTerms">—</p></section><section class="section"><h2>Product specifications</h2><div class="spec" id="specifications">—</div></section></div><section class="cr-seller-box" id="ceroodSellerBox" hidden>
+<div class="product-info"><div class="eyebrow">CEROOD MAIN STORE · <span id="category">PRODUCT</span></div><h1 class="product-title" id="name">Product</h1><div><span class="badge" id="conditionBadge">Brand</span></div><div class="price-section"><span class="current-price" id="price">—</span><span class="original-price" id="comparePrice"></span><span class="discount-pct" id="discount"></span></div><p class="sub" id="model">—</p><hr class="line"/><div class="facts"><div class="fact"><span>Availability</span><strong id="stock">—</strong></div><div class="fact"><span>Category</span><strong id="warranty">—</strong></div><div class="fact"><span>Brand</span><strong id="location">—</strong></div><div class="fact"><span>Model</span><strong id="delivery">—</strong></div></div><div class="details"><section class="section"><h2>Description</h2><p id="conditionText">—</p><p hidden="" id="defects">—</p></section><section class="section"><h2>Product information</h2><ul id="accessories"></ul></section><section class="section"><h2>Category information</h2><p id="warrantyTerms">—</p></section><section class="section"><h2>Product specifications</h2><div class="spec" id="specifications">—</div></section></div><section class="cr-variant-box" id="ceroodVariantBox" hidden><h2>Choose options</h2><div id="ceroodVariantOptions"></div><p id="ceroodVariantMessage" class="cr-variant-message"></p></section><section class="cr-seller-box" id="ceroodSellerBox" hidden>
 <h2>Sold by</h2>
 <div id="ceroodSelectedSeller" class="cr-selected-seller"></div>
 <button type="button" id="ceroodOtherSellersBtn" class="cr-other-sellers-btn" hidden>Other Sellers</button>
@@ -1544,6 +1544,13 @@ body > .cerood-location-error {
 .cr-seller-offer:last-child{border-bottom:0}.cr-seller-offer b{display:block;font-size:13px}.cr-seller-offer span{font-weight:800;font-size:14px}
 .cr-seller-offer button{border:1px solid #171717;background:#fff;border-radius:7px;padding:7px 10px;font-weight:700;cursor:pointer}
 .cr-seller-offer button.active{background:#171717;color:#fff}
+
+.cr-variant-box{margin:18px 0 14px;border-top:1px solid #eceff3;border-bottom:1px solid #eceff3;padding:15px 0}
+.cr-variant-box h2{font-size:14px;margin:0 0 12px}.cr-variant-group{margin:0 0 13px}.cr-variant-group:last-child{margin-bottom:0}
+.cr-variant-label{display:block;font-size:12px;font-weight:800;margin-bottom:7px;color:#344054}.cr-variant-values{display:flex;flex-wrap:wrap;gap:8px}
+.cr-variant-value{min-width:44px;border:1px solid #cfd4dc;background:#fff;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:700;color:#1d2939;cursor:pointer}
+.cr-variant-value:hover{border-color:#667085}.cr-variant-value.active{border:2px solid #111827;padding:7px 10px;background:#f9fafb}.cr-variant-value:disabled{opacity:.38;text-decoration:line-through;cursor:not-allowed;background:#f5f5f5}
+.cr-variant-message{font-size:12px;color:#667085;margin:8px 0 0}.cr-variant-message strong{color:#111827}
 @media(max-width:600px){.cr-seller-offer{grid-template-columns:minmax(0,1fr) auto}.cr-seller-offer button{grid-column:1/-1;width:100%}}
 </style>
 <script id="cerood-common-product-engine-v1">
@@ -1560,6 +1567,8 @@ const aliases={shop:'general',main:'general',clothing:'fashion',cosmetics:'beaut
 const $=id=>document.getElementById(id);
 let ceroodSelectedOffer=null;
 let ceroodBaseProduct=null;
+let ceroodSelectedVariant=null;
+let ceroodVariantSelection={};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeUrl=value=>{try{const u=new URL(String(value),location.origin);return ['https:','http:'].includes(u.protocol)?u.href:null}catch{return null}};
 const obj=v=>{if(!v)return{};if(typeof v==='string'){try{const x=JSON.parse(v);return x&&typeof x==='object'&&!Array.isArray(x)?x:{}}catch{return{}}}return typeof v==='object'&&!Array.isArray(v)?v:{}};
@@ -1645,15 +1654,79 @@ function warrantyData(p){
  const terms=String(p.warranty_terms||'').trim();
  return {days:Number.isFinite(days)&&days>0?days:0,terms,has:(Number.isFinite(days)&&days>0)||!!terms};
 }
+function ceroodVariantPayload(){
+ if(!ceroodSelectedVariant)return{};
+ return {variant_id:ceroodSelectedVariant.id||null,variant_sku:ceroodSelectedVariant.sku||'',variant_values:{...(ceroodSelectedVariant.variant_values||{})}};
+}
+function ceroodEffectivePurchase(p){
+ const v=ceroodSelectedVariant,o=ceroodSelectedOffer;
+ const price=Number(v?.price ?? o?.price ?? p.price),compare=Number(v?.compare_price ?? o?.compare_price ?? p.compare_price);
+ const variantStock=v?Number(v.stock):Infinity,offerStock=o?Number(o.stock):Infinity,baseStock=Number(p.stock);
+ const stock=Math.max(0,Math.min(Number.isFinite(variantStock)?variantStock:Infinity,Number.isFinite(offerStock)?offerStock:Infinity,Number.isFinite(baseStock)&&baseStock>=0?baseStock:Infinity));
+ return {price,compare,stock:Number.isFinite(stock)?stock:0};
+}
 function saveCart(cfg,id,p){
  let cart=[];try{cart=JSON.parse(localStorage.getItem(cfg.cart)||'[]');if(!Array.isArray(cart))cart=[]}catch{}
+ if(Array.isArray(p.product_variants)&&p.product_variants.length&&!ceroodSelectedVariant){alert('Please choose the product options first.');return}
  const listingId=cfg.key==='renewed'&&ceroodSelectedOffer?String(ceroodSelectedOffer.seller_listing_id||''):'';
- const stock=cfg.key==='renewed'&&ceroodSelectedOffer?Number(ceroodSelectedOffer.stock):Number(p.stock);
- const existing=cart.find(x=>String(x.product_id)===String(id)&&String(x.seller_listing_id||'')===listingId);
- if(existing){if(existing.quantity>=stock){alert('Only '+stock+' available from this seller.');return}existing.quantity++}
- else cart.push({product_id:id,quantity:1,store:cfg.key,...(listingId?{seller_listing_id:listingId}:{})});
+ const purchase=ceroodEffectivePurchase(p),vp=ceroodVariantPayload(),variantKey=JSON.stringify(vp.variant_values||{});
+ const existing=cart.find(x=>String(x.product_id)===String(id)&&String(x.seller_listing_id||'')===listingId&&JSON.stringify(x.variant_values||{})===variantKey);
+ if(existing){if(existing.quantity>=purchase.stock){alert('Only '+purchase.stock+' available for this option.');return}existing.quantity++}
+ else cart.push({product_id:id,quantity:1,store:cfg.key,...(listingId?{seller_listing_id:listingId}:{}),...vp});
  localStorage.setItem(cfg.cart,JSON.stringify(cart));window.dispatchEvent(new Event(cfg.event));
  $('cartFeedback').textContent=`Added to ${cfg.label} cart.`;$('cart').textContent='Added ✓';setTimeout(()=>{$('cart').textContent='Add to Cart'},1800);
+}
+
+function ceroodVariantList(p){
+ const raw=Array.isArray(p.product_variants)?p.product_variants:(Array.isArray(p.variants)?p.variants:[]);
+ return raw.map((v,i)=>{let values=obj(v.variant_values);return {...v,id:v.id||v.variant_id||'',_i:i,variant_values:values,stock:Number(v.stock||0),price:Number(v.price||0),compare_price:v.compare_price==null?null:Number(v.compare_price)}}).filter(v=>Object.keys(v.variant_values).length);
+}
+function ceroodVariantMatch(variants,selection,requireAll=false){
+ const keys=Object.keys(selection);return variants.filter(v=>keys.every(k=>String(v.variant_values?.[k]??'')===String(selection[k]))&&(requireAll?Object.keys(v.variant_values||{}).every(k=>selection[k]!=null):true));
+}
+function ceroodRenderVariants(p){
+ const box=$('ceroodVariantBox'),root=$('ceroodVariantOptions'),msg=$('ceroodVariantMessage'),variants=ceroodVariantList(p);
+ ceroodSelectedVariant=null;ceroodVariantSelection={};root.replaceChildren();
+ if(!variants.length){box.hidden=true;return}
+ box.hidden=false;
+ const keys=[];variants.forEach(v=>Object.keys(v.variant_values).forEach(k=>{if(!keys.includes(k))keys.push(k)}));
+ const groups={};
+ keys.forEach(key=>{
+   const group=document.createElement('div');group.className='cr-variant-group';
+   const label=document.createElement('span');label.className='cr-variant-label';label.textContent='Select '+human(key);
+   const values=document.createElement('div');values.className='cr-variant-values';group.append(label,values);root.append(group);groups[key]=values;
+   [...new Set(variants.map(v=>v.variant_values[key]).filter(v=>v!=null&&String(v)!==''))].forEach(value=>{
+     const b=document.createElement('button');b.type='button';b.className='cr-variant-value';b.textContent=String(value);b.dataset.value=String(value);
+     b.onclick=()=>{ceroodVariantSelection[key]=String(value);ceroodRefreshVariantUI(p,variants,keys,groups);};values.append(b);
+   });
+ });
+ msg.textContent='Choose '+keys.map(human).join(' and ')+' to continue.';
+ ceroodRefreshVariantUI(p,variants,keys,groups);
+}
+function ceroodRefreshVariantUI(p,variants,keys,groups){
+ keys.forEach(key=>{
+   groups[key].querySelectorAll('button').forEach(btn=>{
+     const trial={...ceroodVariantSelection,[key]:btn.dataset.value};
+     const possible=ceroodVariantMatch(variants,trial).some(v=>Number(v.stock)>0);
+     btn.disabled=!possible;btn.classList.toggle('active',String(ceroodVariantSelection[key]??'')===btn.dataset.value);
+   });
+ });
+ const complete=keys.every(k=>ceroodVariantSelection[k]!=null),matches=complete?ceroodVariantMatch(variants,ceroodVariantSelection,true):[];
+ ceroodSelectedVariant=matches.find(v=>Number(v.stock)>0)||matches[0]||null;
+ const msg=$('ceroodVariantMessage');
+ if(!complete){msg.textContent='Choose '+keys.filter(k=>ceroodVariantSelection[k]==null).map(human).join(' and ')+' to continue.';}
+ else if(!ceroodSelectedVariant||Number(ceroodSelectedVariant.stock)<=0){msg.textContent='This option is currently out of stock.';}
+ else{msg.innerHTML='<strong>'+esc(keys.map(k=>human(k)+': '+ceroodVariantSelection[k]).join(' · '))+'</strong>'+(ceroodSelectedVariant.sku?' · SKU '+esc(ceroodSelectedVariant.sku):'');}
+ ceroodRefreshPurchaseDisplay(p);
+}
+function ceroodRefreshPurchaseDisplay(p){
+ const purchase=ceroodEffectivePurchase(p),hasVariants=ceroodVariantList(p).length>0,ready=!hasVariants||!!ceroodSelectedVariant;
+ $('price').textContent=Number.isFinite(purchase.price)&&purchase.price>0?'₹'+purchase.price.toLocaleString('en-IN'):'Price to be confirmed';
+ $('comparePrice').textContent=purchase.compare>purchase.price?'₹'+purchase.compare.toLocaleString('en-IN'):'';
+ $('discount').textContent=purchase.compare>purchase.price&&purchase.price>0?Math.round((purchase.compare-purchase.price)*100/purchase.compare)+'% off':'';
+ $('stock').textContent=!ready?'Choose options':purchase.stock>0?`${purchase.stock} available`:'Sold out';
+ const available=ready&&purchase.stock>0&&purchase.price>0;$('cart').disabled=!available;$('buy').disabled=!available;
+ $('purchaseNote').textContent=!ready?'Select the available product options before purchasing.':available?'This product option is ready to purchase.':'This product option is currently out of stock.';
 }
 
 function ceroodApplyOffer(p,offer){
@@ -1668,7 +1741,8 @@ function ceroodApplyOffer(p,offer){
    const seller=$('ceroodSelectedSeller');
    seller.innerHTML='<div><strong>'+esc(offer.shop_name||offer.owner_name||'Cerood Seller')+'</strong><small>'+esc(offer.condition||'')+(offer.warranty_days?' · '+esc(offer.warranty_days)+' day(s) warranty':'')+(offer.dispatch_days?' · Dispatch in '+esc(offer.dispatch_days)+' day(s)':'')+'</small></div><b>₹'+Number(offer.price||0).toLocaleString('en-IN')+'</b>';
  }
- const available=stock>0&&price>0;$('cart').disabled=!available;$('buy').disabled=!available;
+ if(ceroodBaseProduct&&ceroodVariantList(ceroodBaseProduct).length)ceroodRefreshPurchaseDisplay(ceroodBaseProduct);
+ else {const available=stock>0&&price>0;$('cart').disabled=!available;$('buy').disabled=!available;}
 }
 
 async function ceroodLoadSellerOffers(p,id){
@@ -1727,11 +1801,13 @@ function render(p,store){
  const available=Number(p.stock)>0&&price>0;$('cart').disabled=!available;$('buy').disabled=!available;
  const id=new URLSearchParams(location.search).get('id');
  ceroodBaseProduct=p;
+ ceroodRenderVariants(p);
  $('cart').onclick=()=>id&&saveCart(cfg,id,p);
  $('buy').onclick=()=>{
    if(!id||$('buy').disabled)return;
+   if(ceroodVariantList(p).length&&!ceroodSelectedVariant){alert('Please choose the product options first.');return}
    const listingId=store==='renewed'&&ceroodSelectedOffer?String(ceroodSelectedOffer.seller_listing_id||''):'';
-   sessionStorage.setItem(cfg.buy,JSON.stringify([{product_id:id,quantity:1,store:cfg.key,...(listingId?{seller_listing_id:listingId}:{})}]));
+   sessionStorage.setItem(cfg.buy,JSON.stringify([{product_id:id,quantity:1,store:cfg.key,...(listingId?{seller_listing_id:listingId}:{}),...ceroodVariantPayload()}]));
    location.href=cfg.checkout;
  };
  if(store==='renewed')ceroodLoadSellerOffers(p,id);
