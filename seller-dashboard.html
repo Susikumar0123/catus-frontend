@@ -974,6 +974,14 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 </style>
 
 <style id="cerood-dynamic-variant-builder-step">.cerood-variant-builder{border:1px solid #e2e6f0;border-radius:12px;background:#fff;overflow:hidden}.cerood-variant-head{padding:15px 16px;border-bottom:1px solid #e8ebf2}.cerood-variant-head strong{display:block;font-size:13px}.cerood-variant-head small{display:block;margin-top:4px;color:#667085;font-size:11px}.cerood-variant-table{overflow-x:auto}.cerood-variant-row{display:grid;grid-template-columns:minmax(150px,1.4fr) minmax(110px,1fr) 105px 105px 90px;gap:9px;align-items:center;padding:9px 12px;border-bottom:1px solid #eef1f5;min-width:650px}.cerood-variant-row-head{background:#f8f9fc;color:#667085;font-size:11px;font-weight:700}.cerood-variant-name{font-size:12px;font-weight:650}.cerood-variant-row input{width:100%;min-height:38px!important;padding:8px!important}.cerood-variant-builder>.market-dynamic-empty{padding:15px;margin:0}.cerood-native-multiselect{display:none!important}@media(max-width:700px){.cerood-variant-row{min-width:570px;grid-template-columns:minmax(130px,1.3fr) 110px 95px 95px 80px}}</style>
+
+<style id="cerood-seller-pickup-locations-v1">
+.pickup-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:0 0 14px}.pickup-head h2{margin:0!important}.pickup-note{font-size:12px;color:#667085;margin:0 0 16px;line-height:1.6}.pickup-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px;border:1px solid #e1e4ed;border-radius:7px;background:#fafbff;margin-bottom:16px}.pickup-form[hidden]{display:none!important}.pickup-field{min-width:0}.pickup-field.full{grid-column:1/-1}.pickup-field label{display:block;font-size:12px;font-weight:650;margin:0 0 6px}.pickup-field input,.pickup-field select{width:100%;height:40px;border:1px solid #cfd5e2;border-radius:6px;background:#fff;padding:0 10px;font:12px Inter,system-ui;color:#344054}.pickup-actions{grid-column:1/-1;display:flex;gap:9px;flex-wrap:wrap}.pickup-list{display:grid;gap:10px}.pickup-card{border:1px solid #e1e4ed;border-radius:7px;padding:14px;background:#fff;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.pickup-card strong{font-size:13px}.pickup-card p{margin:5px 0 0;font-size:11.5px;color:#667085;line-height:1.55}.pickup-badge{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;background:#e8f7e8;color:#19732a;font-size:10px;font-weight:700}.pickup-empty{padding:18px;border:1px dashed #cfd5e2;border-radius:7px;text-align:center;color:#667085;font-size:12px}.pickup-card-actions{display:flex;gap:7px;flex-shrink:0}.pickup-card-actions button{white-space:nowrap}.pickup-message{font-size:12px;margin:8px 0}.pickup-message.error{color:#b91c1c}.pickup-message.success{color:#166534}@media(max-width:650px){.pickup-form{grid-template-columns:1fr}.pickup-field.full,.pickup-actions{grid-column:auto}.pickup-card{flex-direction:column}.pickup-card-actions{width:100%}.pickup-card-actions button{flex:1}}
+</style>
+
+<style id="cerood-serviceability-ui-v1">
+.serviceability-box{margin-top:18px;border-top:1px solid #e1e4ed;padding-top:18px}.serviceability-box h3{margin:0 0 5px;font-size:15px}.serviceability-toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:14px 0}.serviceability-toolbar label{font-size:12px;font-weight:650;min-width:260px}.serviceability-toolbar select{display:block;width:100%;height:40px;margin-top:6px;border:1px solid #cfd5e2;border-radius:6px;background:#fff;padding:0 10px}.serviceability-form{display:grid;grid-template-columns:1.3fr .8fr .8fr .9fr;gap:10px;padding:14px;border:1px solid #e1e4ed;border-radius:7px;background:#fafbff}.serviceability-form label{font-size:12px;font-weight:650}.serviceability-form input{width:100%;height:40px;margin-top:6px;border:1px solid #cfd5e2;border-radius:6px;padding:0 10px}.serviceability-checks{grid-column:1/-1;display:flex;gap:18px;flex-wrap:wrap}.serviceability-checks label{font-weight:500}.serviceability-checks input{width:auto;height:auto;margin:0 6px 0 0}.serviceability-actions{grid-column:1/-1;display:flex;gap:8px}.serviceability-list{display:grid;gap:8px;margin-top:12px}.serviceability-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;border:1px solid #e1e4ed;border-radius:7px;padding:11px 12px}.serviceability-row strong{font-size:13px}.serviceability-row small{display:block;color:#667085;margin-top:3px}.serviceability-row-actions{display:flex;gap:6px}.serviceability-msg{font-size:12px;margin:9px 0}.serviceability-msg.error{color:#b91c1c}.serviceability-msg.success{color:#166534}@media(max-width:700px){.serviceability-form{grid-template-columns:1fr 1fr}.serviceability-form label:first-child,.serviceability-actions,.serviceability-checks{grid-column:1/-1}.serviceability-row{grid-template-columns:1fr}.serviceability-row-actions{width:100%}.serviceability-row-actions button{flex:1}}
+</style>
 </head>
 
 <body>
@@ -1371,6 +1379,13 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
             <option value="Pre-owned">Pre-owned</option>
             <option value="Open box">Open Box</option>
           </select>
+        </div>
+        <div class="product-field">
+          <label for="ceroodLatchFulfilmentLocation">Dispatch From *</label>
+          <select id="ceroodLatchFulfilmentLocation" required>
+            <option value="">Loading pickup locations…</option>
+          </select>
+          <small>Select a saved Pickup / Fulfilment Location from My Account.</small>
         </div>
       </div>
       <div class="form-actions">
@@ -2011,6 +2026,40 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 
         <div id="accountDetails"></div>
 
+      </div>
+
+      <div class="seller-card" id="pickupLocationsCard">
+        <div class="pickup-head"><h2>Pickup / Fulfilment Locations</h2><button type="button" class="seller-btn" id="pickupAddBtn">+ Add Location</button></div>
+        <p class="pickup-note">Add the pickup location from which CEROOD orders will be dispatched. The default location is used first for delivery-promise ranking.</p>
+        <form id="pickupLocationForm" class="pickup-form" hidden>
+          <div class="pickup-field"><label for="pickupName">Location name</label><input id="pickupName" maxlength="100" value="Main Location" required></div>
+          <div class="pickup-field"><label for="pickupPincode">Pincode</label><input id="pickupPincode" inputmode="numeric" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="6-digit pincode" required></div>
+          <div class="pickup-field full"><label for="pickupAddress1">Address line 1</label><input id="pickupAddress1" maxlength="200" placeholder="Building / street / area"></div>
+          <div class="pickup-field full"><label for="pickupAddress2">Address line 2 (optional)</label><input id="pickupAddress2" maxlength="200"></div>
+          <div class="pickup-field"><label for="pickupCity">City / Town</label><input id="pickupCity" maxlength="100"></div>
+          <div class="pickup-field"><label for="pickupDistrict">District</label><input id="pickupDistrict" maxlength="100" required></div>
+          <div class="pickup-field"><label for="pickupState">State / UT</label><select id="pickupState" required><option value="">Select State / UT</option></select></div>
+          <div class="pickup-field"><label><input id="pickupDefault" type="checkbox" style="width:auto;height:auto;margin-right:7px">Make this the default pickup location</label></div>
+          <div class="pickup-actions"><button class="seller-btn" type="submit" id="pickupSaveBtn">Save Location</button><button class="seller-btn seller-btn-outline" type="button" id="pickupCancelBtn">Cancel</button></div>
+        </form>
+        <div id="pickupLocationMessage" class="pickup-message" role="status" aria-live="polite"></div>
+        <div id="pickupLocationsList" class="pickup-list"><div class="pickup-empty">Loading pickup locations…</div></div>
+
+        <div class="serviceability-box" id="serviceabilityManager">
+          <h3>Delivery Pincodes & ETA</h3>
+          <p class="pickup-note">Choose a pickup location and add the customer pincodes you can actually deliver to. These rules control product-page availability, ETA and final seller allocation.</p>
+          <div class="serviceability-toolbar"><label>Pickup / fulfilment location<select id="svcLocation"><option value="">Select pickup location</option></select></label></div>
+          <form id="svcForm" class="serviceability-form">
+            <label>Destination pincode<input id="svcPincode" inputmode="numeric" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="635301" required></label>
+            <label>Min days<input id="svcMinDays" type="number" min="0" max="60" value="2" required></label>
+            <label>Max days<input id="svcMaxDays" type="number" min="0" max="90" value="5" required></label>
+            <label>Delivery fee<input id="svcFee" type="number" min="0" step="0.01" value="0" required></label>
+            <div class="serviceability-checks"><label><input id="svcCod" type="checkbox" checked>COD available</label><label><input id="svcPrepaid" type="checkbox" checked>Prepaid available</label></div>
+            <div class="serviceability-actions"><button class="seller-btn" id="svcSave" type="submit">Add / Update Pincode</button></div>
+          </form>
+          <div id="svcMessage" class="serviceability-msg" role="status" aria-live="polite"></div>
+          <div id="svcList" class="serviceability-list"><div class="pickup-empty">Choose a pickup location to manage delivery pincodes.</div></div>
+        </div>
       </div>
 
     </section>
@@ -6354,6 +6403,24 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
 
   let selected = null;
   let busy = false;
+  let fulfilmentLocations = [];
+
+  async function loadFulfilmentLocations(){
+    const select=$('ceroodLatchFulfilmentLocation');
+    if(!select)return [];
+    try{
+      const data=await apiRequest('/api/sellers/locations');
+      fulfilmentLocations=(Array.isArray(data.locations)?data.locations:[]).filter(x=>x&&x.is_active!==false);
+      select.innerHTML='<option value="">Select dispatch location</option>'+fulfilmentLocations.map(x=>
+        '<option value="'+esc(x.id)+'"'+(x.is_default?' selected':'')+'>'+esc((x.location_name||'Pickup Location')+' — '+[x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '))+'</option>'
+      ).join('');
+      if(fulfilmentLocations.length===1)select.value=fulfilmentLocations[0].id;
+      if(!fulfilmentLocations.length){select.innerHTML='<option value="">Add a pickup location in My Account first</option>';select.disabled=true;}
+      else select.disabled=false;
+      window.CeroodSellerFulfilmentLocations=fulfilmentLocations;
+      return fulfilmentLocations;
+    }catch(e){select.innerHTML='<option value="">Unable to load pickup locations</option>';select.disabled=true;return []}
+  }
 
   function esc(v){
     return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -6418,6 +6485,8 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
   button.addEventListener('click',search);
   input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search()}});
   $('ceroodLatchChangeBtn').addEventListener('click',clearSelection);
+  loadFulfilmentLocations();
+  window.addEventListener('cerood:seller-locations-changed',loadFulfilmentLocations);
 
   form.addEventListener('submit',async e=>{
     e.preventDefault();
@@ -6433,8 +6502,10 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
         stock:Number($('ceroodLatchStock').value),
         warranty_days:$('ceroodLatchWarranty').value===''?Number(selected.warranty_days||0):Number($('ceroodLatchWarranty').value),
         dispatch_days:$('ceroodLatchDispatch').value===''?1:Number($('ceroodLatchDispatch').value),
-        condition:$('ceroodLatchCondition').value
+        condition:$('ceroodLatchCondition').value,
+        fulfilment_location_id:$('ceroodLatchFulfilmentLocation').value
       };
+      if(!payload.fulfilment_location_id)throw Error('Choose a Dispatch From pickup location.');
       const data=await apiRequest('/api/sellers/products/'+encodeURIComponent(selected.id)+'/latch',{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
       });
@@ -6482,10 +6553,15 @@ function render(){
     '<label>Dispatch days<input name="dispatch_days" type="number" min="0" step="1" value="'+esc(val(r,'dispatch_days')??1)+'"></label>'+
     '<label>Seller SKU<input name="seller_sku" maxlength="120" value="'+esc(val(r,'seller_sku')??'')+'"></label>'+
     '<label>Condition<select name="condition">'+['Refurbished','Pre-owned','Open box'].map(x=>'<option'+(String(val(r,'condition')||'Refurbished')===x?' selected':'')+'>'+x+'</option>').join('')+'</select></label>'+
+    '<label>Dispatch from<select name="fulfilment_location_id" required data-fulfilment-select></select></label>'+
     '<div class="cerood-latched-edit-actions"><button class="seller-btn" type="submit">Save Offer</button><button class="seller-btn seller-btn-outline" type="button" data-cancel="'+index+'">Cancel</button></div>'+
    '</form>';
   list.append(row);
   const edit=row.querySelector('[data-edit]'),editor=row.querySelector('[data-editor]');
+  const locationSelect=editor.querySelector('[data-fulfilment-select]');
+  const locationRows=Array.isArray(window.CeroodSellerFulfilmentLocations)?window.CeroodSellerFulfilmentLocations:[];
+  locationSelect.innerHTML='<option value="">Select dispatch location</option>'+locationRows.map(x=>'<option value="'+esc(x.id)+'"'+(String(val(r,'fulfilment_location_id')||'')===String(x.id)?' selected':'')+'>'+esc((x.location_name||'Pickup Location')+' — '+[x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '))+'</option>').join('');
+  if(!locationSelect.value){const d=locationRows.find(x=>x.is_default)||locationRows[0];if(d)locationSelect.value=d.id;}
   edit.onclick=()=>{editor.hidden=!editor.hidden;edit.textContent=editor.hidden?'Edit Offer':'Close'};
   row.querySelector('[data-cancel]').onclick=()=>{editor.hidden=true;edit.textContent='Edit Offer'};
   editor.onsubmit=async e=>{
@@ -6494,8 +6570,10 @@ function render(){
     price:Number(f.get('price')),compare_price:f.get('compare_price')===''?null:Number(f.get('compare_price')),
     stock:Number(f.get('stock')),warranty_days:Number(f.get('warranty_days')||0),
     dispatch_days:Number(f.get('dispatch_days')||1),seller_sku:String(f.get('seller_sku')||'').trim(),
-    condition:String(f.get('condition')||'Refurbished')
+    condition:String(f.get('condition')||'Refurbished'),
+    fulfilment_location_id:String(f.get('fulfilment_location_id')||'').trim()
    };
+   if(!payload.fulfilment_location_id){message('Choose a Dispatch From pickup location.','error');return}
    const save=editor.querySelector('button[type=submit]');save.disabled=true;message('Saving seller offer...');
    try{
     // Backend may expose PATCH or PUT for listing management. Try PATCH first, then PUT.
@@ -6510,6 +6588,9 @@ function render(){
 async function load(){
  if(busy)return;busy=true;refresh.disabled=true;message('Loading your existing-product offers...');
  try{
+  if(!Array.isArray(window.CeroodSellerFulfilmentLocations)||!window.CeroodSellerFulfilmentLocations.length){
+   try{const ld=await apiRequest('/api/sellers/locations');window.CeroodSellerFulfilmentLocations=(Array.isArray(ld.locations)?ld.locations:[]).filter(x=>x&&x.is_active!==false)}catch(_){window.CeroodSellerFulfilmentLocations=[]}
+  }
   const data=await apiRequest('/api/sellers/latched-products');
   rows=Array.isArray(data.listings)?data.listings:Array.isArray(data.products)?data.products:Array.isArray(data.items)?data.items:[];
   render();message(rows.length?rows.length+' seller offer(s) loaded.':'');
@@ -6524,6 +6605,52 @@ window.ceroodLoadLatchedProducts=load;
 })();
 </script>
 
+
+<script id="cerood-seller-pickup-locations-v1">
+(()=>{'use strict';
+ const states=['Andaman and Nicobar Islands','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh','Dadra and Nagar Haveli and Daman and Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu and Kashmir','Jharkhand','Karnataka','Kerala','Ladakh','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Puducherry','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'];
+ const byId=id=>document.getElementById(id);
+ const form=byId('pickupLocationForm'),list=byId('pickupLocationsList'),msg=byId('pickupLocationMessage'),state=byId('pickupState');
+ if(!form||!list||!state)return;
+ states.forEach(v=>state.add(new Option(v,v)));
+ function message(t,type=''){msg.textContent=t||'';msg.className='pickup-message'+(type?' '+type:'');}
+ function showForm(show){form.hidden=!show;if(show){message('');setTimeout(()=>byId('pickupName')?.focus(),0)}}
+ byId('pickupAddBtn').addEventListener('click',()=>showForm(true));
+ byId('pickupCancelBtn').addEventListener('click',()=>{form.reset();byId('pickupName').value='Main Location';showForm(false)});
+ function make(tag,text,cls){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+ async function load(){
+  list.innerHTML='<div class="pickup-empty">Loading pickup locations…</div>';
+  try{const d=await apiRequest('/api/sellers/locations');render(d.locations||[])}catch(e){list.innerHTML='<div class="pickup-empty">Unable to load pickup locations.</div>';message(e.message,'error')}
+ }
+ function render(rows){list.replaceChildren();if(!rows.length){list.append(make('div','No pickup location added yet. Add your first fulfilment location.','pickup-empty'));return}
+  rows.forEach(x=>{const card=make('div',null,'pickup-card'),info=make('div'),title=make('strong',x.location_name||'Pickup Location');if(x.is_default)title.append(make('span','Default','pickup-badge'));info.append(title);const address=[x.address_line1,x.address_line2,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', ');info.append(make('p',address||'—'));const actions=make('div',null,'pickup-card-actions');if(!x.is_default){const b=make('button','Make default','seller-btn seller-btn-outline');b.type='button';b.onclick=async()=>{b.disabled=true;try{await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/default',{method:'PATCH'});message('Default pickup location updated.','success');await load();window.dispatchEvent(new Event('cerood:seller-locations-changed'))}catch(e){message(e.message,'error');b.disabled=false}};actions.append(b)}card.append(info,actions);list.append(card)})
+ }
+ form.addEventListener('submit',async e=>{e.preventDefault();const pin=byId('pickupPincode').value.trim();if(!/^[1-9]\d{5}$/.test(pin)){message('Enter a valid 6-digit pincode.','error');return}const b=byId('pickupSaveBtn');b.disabled=true;try{await apiRequest('/api/sellers/locations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location_name:byId('pickupName').value.trim(),address_line1:byId('pickupAddress1').value.trim(),address_line2:byId('pickupAddress2').value.trim(),city:byId('pickupCity').value.trim(),district:byId('pickupDistrict').value.trim(),state:state.value,pincode:pin,is_default:byId('pickupDefault').checked})});form.reset();byId('pickupName').value='Main Location';showForm(false);message('Pickup location saved successfully.','success');await load();window.dispatchEvent(new Event('cerood:seller-locations-changed'))}catch(err){message(err.message,'error')}finally{b.disabled=false}});
+ const original=window.renderAccount;if(typeof original==='function')window.renderAccount=function(){original.apply(this,arguments);load()};
+ if(window.seller)load();
+})();
+</script>
+
+<script id="cerood-seller-serviceability-v1">
+(()=>{'use strict';
+ const $=id=>document.getElementById(id),location=$('svcLocation'),form=$('svcForm'),list=$('svcList'),msg=$('svcMessage');
+ if(!location||!form||!list)return;
+ let locations=[],rows=[];
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function message(t,type=''){msg.textContent=t||'';msg.className='serviceability-msg'+(type?' '+type:'')}
+ async function loadLocations(keep=true){
+  try{const d=await apiRequest('/api/sellers/locations');locations=(d.locations||[]).filter(x=>x&&x.is_active!==false);const old=keep?location.value:'';location.innerHTML='<option value="">Select pickup location</option>'+locations.map(x=>'<option value="'+esc(x.id)+'">'+esc((x.location_name||'Pickup Location')+' — '+[x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '))+'</option>').join('');if(old&&locations.some(x=>String(x.id)===old))location.value=old;else{const def=locations.find(x=>x.is_default)||locations[0];if(def)location.value=def.id}await loadRows()}catch(e){message(e.message||'Unable to load pickup locations.','error')}
+ }
+ async function loadRows(){if(!location.value){rows=[];render();return}list.innerHTML='<div class="pickup-empty">Loading delivery pincodes…</div>';try{const d=await apiRequest('/api/sellers/serviceability?fulfilment_location_id='+encodeURIComponent(location.value));rows=d.serviceability||[];render()}catch(e){rows=[];render();message(e.message,'error')}}
+ function render(){list.replaceChildren();if(!location.value){list.innerHTML='<div class="pickup-empty">Choose a pickup location to manage delivery pincodes.</div>';return}if(!rows.length){list.innerHTML='<div class="pickup-empty">No delivery pincodes added for this pickup location yet.</div>';return}rows.forEach(r=>{const row=document.createElement('div');row.className='serviceability-row';row.innerHTML='<div><strong>'+esc(r.destination_pincode)+'</strong><small>ETA '+esc(r.min_delivery_days)+'–'+esc(r.max_delivery_days)+' days · Fee ₹'+Number(r.delivery_fee||0).toLocaleString('en-IN')+' · '+(r.cod_available?'COD':'No COD')+' · '+(r.prepaid_available?'Prepaid':'No prepaid')+'</small></div><span class="cerood-latched-status '+(r.is_active?'approved':'rejected')+'">'+(r.is_active?'Active':'Inactive')+'</span><div class="serviceability-row-actions"><button type="button" class="seller-btn seller-btn-outline" data-edit>Edit</button><button type="button" class="seller-btn seller-btn-outline" data-delete>Delete</button></div>';row.querySelector('[data-edit]').onclick=()=>{$('svcPincode').value=r.destination_pincode;$('svcPincode').disabled=true;$('svcMinDays').value=r.min_delivery_days;$('svcMaxDays').value=r.max_delivery_days;$('svcFee').value=r.delivery_fee||0;$('svcCod').checked=!!r.cod_available;$('svcPrepaid').checked=!!r.prepaid_available;form.dataset.editId=r.id;$('svcSave').textContent='Save Changes';form.scrollIntoView({behavior:'smooth',block:'center'})};row.querySelector('[data-delete]').onclick=async()=>{if(!confirm('Remove delivery to '+r.destination_pincode+' from this pickup location?'))return;try{await apiRequest('/api/sellers/serviceability/'+encodeURIComponent(r.id),{method:'DELETE'});message('Delivery pincode removed.','success');await loadRows()}catch(e){message(e.message,'error')}};list.append(row)})}
+ function resetForm(){form.reset();$('svcMinDays').value=2;$('svcMaxDays').value=5;$('svcFee').value=0;$('svcCod').checked=true;$('svcPrepaid').checked=true;$('svcPincode').disabled=false;delete form.dataset.editId;$('svcSave').textContent='Add / Update Pincode'}
+ location.addEventListener('change',()=>{resetForm();loadRows()});
+ form.addEventListener('submit',async e=>{e.preventDefault();if(!location.value){message('Choose a pickup location first.','error');return}const pin=$('svcPincode').value.trim(),min=Number($('svcMinDays').value),max=Number($('svcMaxDays').value),fee=Number($('svcFee').value||0);if(!/^[1-9]\d{5}$/.test(pin)){message('Enter a valid 6-digit destination pincode.','error');return}if(!Number.isInteger(min)||!Number.isInteger(max)||min<0||max<min){message('Max delivery days must be equal to or greater than min days.','error');return}const payload={fulfilment_location_id:location.value,destination_pincode:pin,min_delivery_days:min,max_delivery_days:max,delivery_fee:fee,cod_available:$('svcCod').checked,prepaid_available:$('svcPrepaid').checked,is_active:true};const b=$('svcSave');b.disabled=true;try{const edit=form.dataset.editId;if(edit)await apiRequest('/api/sellers/serviceability/'+encodeURIComponent(edit),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});else await apiRequest('/api/sellers/serviceability',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});message(edit?'Delivery pincode updated.':'Delivery pincode added.','success');resetForm();await loadRows()}catch(err){message(err.message,'error')}finally{b.disabled=false}});
+ window.addEventListener('cerood:seller-locations-changed',()=>loadLocations(true));
+ const original=window.renderAccount;if(typeof original==='function')window.renderAccount=function(){const r=original.apply(this,arguments);setTimeout(()=>loadLocations(true),0);return r};
+ if(window.seller)loadLocations(false);
+})();
+</script>
 </body>
 
 </html>

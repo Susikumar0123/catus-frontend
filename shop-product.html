@@ -1783,12 +1783,7 @@ body > .cerood-location-error {
 <main class="wrap"><div class="crumb"><a href="/">Home</a> › <a href="/#ceroodMarketplaceGroups">Cerood Shop</a> › <span id="crumbName">Product details</span></div>
 <div class="state" id="state" role="status"><div class="icon">◌</div><h1 id="stateTitle">Preparing product details</h1><p id="stateMessage">Loading product information…</p><a href="/#ceroodMarketplaceGroups">Browse Cerood Shop →</a></div>
 <div hidden="" id="product"><div class="product-grid"><div class="product-gallery"><div aria-live="polite" class="main-image-container" id="gallery"><span class="media-placeholder">📷<small>Loading actual product photo…</small></span></div><div aria-label="Product photos and videos" class="thumbnail-row" id="thumbs"></div><p class="gallery-caption">View the product photos and video provided for this listing.</p></div>
-<div class="product-info"><div class="eyebrow">CEROOD MAIN STORE · <span id="category">PRODUCT</span></div><h1 class="product-title" id="name">Product</h1><div><span class="badge" id="conditionBadge">Brand</span></div><div class="price-section"><span class="current-price" id="price">—</span><span class="original-price" id="comparePrice"></span><span class="discount-pct" id="discount"></span></div><p class="sub" id="model">—</p><hr class="line"/><div class="facts"><div class="fact"><span>Availability</span><strong id="stock">—</strong></div><div class="fact"><span>Category</span><strong id="warranty">—</strong></div><div class="fact"><span>Brand</span><strong id="location">—</strong></div><div class="fact"><span>Model</span><strong id="delivery">—</strong></div></div><div class="details"><section class="section"><h2>Description</h2><p id="conditionText">—</p><p hidden="" id="defects">—</p></section><section class="section"><h2>Product information</h2><ul id="accessories"></ul></section><section class="section"><h2>Category information</h2><p id="warrantyTerms">—</p></section><section class="section"><h2>Product specifications</h2><div class="spec" id="specifications">—</div></section></div><section class="cr-variant-box" id="ceroodVariantBox" hidden><h2>Choose options</h2><div id="ceroodVariantOptions"></div><p id="ceroodVariantMessage" class="cr-variant-message"></p></section><section class="cr-seller-box" id="ceroodSellerBox" hidden>
-<h2>Sold by</h2>
-<div id="ceroodSelectedSeller" class="cr-selected-seller"></div>
-<button type="button" id="ceroodOtherSellersBtn" class="cr-other-sellers-btn" hidden>Other Sellers</button>
-<div id="ceroodSellerOffers" class="cr-seller-offers" hidden></div>
-</section><section class="cr-bank-offer" id="ceroodBankOffer" hidden aria-label="Bank offer"><div class="cr-bank-offer-icon">%</div><div class="cr-bank-offer-body"><div class="cr-bank-offer-head"><span class="cr-bank-offer-title">Bank Offer</span><span class="cr-bank-offer-badge">ICICI Bank Credit Card</span></div><div class="cr-bank-offer-main">10% instant discount up to ₹10</div><div class="cr-bank-offer-sub" id="ceroodBankOfferText">Minimum order ₹5,000 · Applied at Razorpay checkout on eligible ICICI Bank credit cards.</div></div></section><div class="actions"><button class="btn secondary" disabled="" id="cart">Add to Cart</button><button class="btn" disabled="" id="buy">Buy Now</button></div><div aria-live="polite" class="rn-cart-feedback" id="cartFeedback" role="status"></div><div class="note" id="purchaseNote">Product availability and price are verified from the Cerood Main Store catalog.</div></div></div>
+<div class="product-info"><div class="eyebrow">CEROOD MAIN STORE · <span id="category">PRODUCT</span></div><h1 class="product-title" id="name">Product</h1><div><span class="badge" id="conditionBadge">Brand</span></div><div class="price-section"><span class="current-price" id="price">—</span><span class="original-price" id="comparePrice"></span><span class="discount-pct" id="discount"></span></div><p class="sub" id="model">—</p><hr class="line"/><div class="facts"><div class="fact"><span>Availability</span><strong id="stock">—</strong></div><div class="fact"><span>Category</span><strong id="warranty">—</strong></div><div class="fact"><span>Brand</span><strong id="location">—</strong></div><div class="fact"><span>Model</span><strong id="delivery">—</strong></div></div><div class="details"><section class="section"><h2>Description</h2><p id="conditionText">—</p><p hidden="" id="defects">—</p></section><section class="section"><h2>Product information</h2><ul id="accessories"></ul></section><section class="section"><h2>Category information</h2><p id="warrantyTerms">—</p></section><section class="section"><h2>Product specifications</h2><div class="spec" id="specifications">—</div></section></div><section class="cr-variant-box" id="ceroodVariantBox" hidden><h2>Choose options</h2><div id="ceroodVariantOptions"></div><p id="ceroodVariantMessage" class="cr-variant-message"></p></section><section class="cr-bank-offer" id="ceroodBankOffer" hidden aria-label="Bank offer"><div class="cr-bank-offer-icon">%</div><div class="cr-bank-offer-body"><div class="cr-bank-offer-head"><span class="cr-bank-offer-title">Bank Offer</span><span class="cr-bank-offer-badge">ICICI Bank Credit Card</span></div><div class="cr-bank-offer-main">10% instant discount up to ₹10</div><div class="cr-bank-offer-sub" id="ceroodBankOfferText">Minimum order ₹5,000 · Applied at Razorpay checkout on eligible ICICI Bank credit cards.</div></div></section><div class="actions"><button class="btn secondary" disabled="" id="cart">Add to Cart</button><button class="btn" disabled="" id="buy">Buy Now</button></div><div aria-live="polite" class="rn-cart-feedback" id="cartFeedback" role="status"></div><div class="note" id="purchaseNote">Product availability and price are verified from the Cerood Main Store catalog.</div></div></div>
 <section class="rn-related" hidden="" id="relatedSection"><h2>More products you may like</h2><div class="rn-related-grid" id="relatedProducts"></div></section><section aria-label="Cerood order tracking" class="rn-track"><div><h2>📦 My Orders</h2><p>Already ordered? Open My Orders to check the latest order status.</p></div><a href="/cerood-orders.html">Track My Order →</a></section></div></main>
 <footer class="footer"><div class="wrap footrow"><span>© Cerood</span><a href="/">Doorstep Services →</a></div></footer>
 <style id="cerood-latch-seller-ui-style">
@@ -1823,6 +1818,7 @@ const STORES={
 const aliases={shop:'general',main:'general',clothing:'fashion',cosmetics:'beauty'};
 const $=id=>document.getElementById(id);
 let ceroodSelectedOffer=null;
+let ceroodRecommendedOffer=null;
 let ceroodBaseProduct=null;
 let ceroodSelectedVariant=null;
 let ceroodVariantSelection={};
@@ -1916,9 +1912,9 @@ function ceroodVariantPayload(){
  return {variant_id:ceroodSelectedVariant.id||null,variant_sku:ceroodSelectedVariant.sku||'',variant_values:{...(ceroodSelectedVariant.variant_values||{})}};
 }
 function ceroodEffectivePurchase(p){
- const v=ceroodSelectedVariant,o=ceroodSelectedOffer;
- const price=Number(v?.price ?? o?.price ?? p.price),compare=Number(v?.compare_price ?? o?.compare_price ?? p.compare_price);
- const variantStock=v?Number(v.stock):Infinity,offerStock=o?Number(o.stock):Infinity,baseStock=Number(p.stock);
+ const v=ceroodSelectedVariant,o=ceroodSelectedOffer,r=ceroodRecommendedOffer;
+ const price=Number(v?.price ?? o?.price ?? r?.price ?? p.price),compare=Number(v?.compare_price ?? o?.compare_price ?? r?.compare_price ?? p.compare_price);
+ const variantStock=v?Number(v.stock):Infinity,offerStock=o?Number(o.stock):(r?Number(r.stock):Infinity),baseStock=r?Infinity:Number(p.stock);
  const stock=Math.max(0,Math.min(Number.isFinite(variantStock)?variantStock:Infinity,Number.isFinite(offerStock)?offerStock:Infinity,Number.isFinite(baseStock)&&baseStock>=0?baseStock:Infinity));
  return {price,compare,stock:Number.isFinite(stock)?stock:0};
 }
@@ -2011,31 +2007,86 @@ function ceroodApplyOffer(p,offer){
  else {const available=stock>0&&price>0;$('cart').disabled=!available;$('buy').disabled=!available;}
 }
 
-async function ceroodLoadSellerOffers(p,id){
- const box=$('ceroodSellerBox'),other=$('ceroodOtherSellersBtn'),root=$('ceroodSellerOffers');
- if(!box||!id)return;
- try{
-   const r=await fetch(API_BASE+'/api/renewed/products/'+encodeURIComponent(id)+'/seller-offers',{headers:{Accept:'application/json'},cache:'no-store'});
-   if(!r.ok)throw Error();
-   const d=await r.json(),offers=Array.isArray(d.offers)?d.offers:[];
-   if(!offers.length){box.hidden=true;ceroodApplyOffer(p,null);return}
-   box.hidden=false;
-   // Lowest-price approved offer is the default seller offer.
-   ceroodApplyOffer(p,offers[0]);
-   other.hidden=offers.length<2;
-   root.replaceChildren();
-   offers.forEach((o,i)=>{
-     const row=document.createElement('div');row.className='cr-seller-offer';
-     const info=document.createElement('div');info.innerHTML='<b>'+esc(o.shop_name||o.owner_name||'Cerood Seller')+'</b><small>'+esc(o.condition||'')+(o.dispatch_days?' · '+esc(o.dispatch_days)+' day dispatch':'')+(o.warranty_days?' · '+esc(o.warranty_days)+' day warranty':'')+'</small>';
-     const price=document.createElement('span');price.textContent='₹'+Number(o.price||0).toLocaleString('en-IN');
-     const btn=document.createElement('button');btn.type='button';btn.textContent=i===0?'Selected':'Choose';
-     if(i===0)btn.classList.add('active');
-     btn.onclick=()=>{ceroodApplyOffer(p,o);root.querySelectorAll('button').forEach(b=>{b.classList.remove('active');b.textContent='Choose'});btn.classList.add('active');btn.textContent='Selected';};
-     row.append(info,price,btn);root.append(row);
-   });
-   other.onclick=()=>{root.hidden=!root.hidden;other.textContent=root.hidden?'Other Sellers':'Hide Other Sellers'};
- }catch{box.hidden=true;ceroodApplyOffer(p,null)}
+// Seller choice is intentionally not exposed on the customer product page.
+// Renewed checkout sends no seller_listing_id by default; the backend allocates
+// the best eligible seller and locks that exact listing during checkout.
+
+function ceroodReadDeliveryPincode(){
+ const keys=['cerood_selected_location','cerood_renewed_delivery_location','cerood_renewed_saved_address_v1','cerood_delivery_location','cerood_saved_address'];
+ for(const key of keys){
+   try{
+     const raw=localStorage.getItem(key);if(!raw)continue;
+     const value=JSON.parse(raw);
+     const candidates=[value?.pincode,value?.postal_code,value?.postalCode,value?.zip,value?.address?.pincode,value?.delivery_address?.pincode];
+     for(const candidate of candidates){const pin=String(candidate||'').replace(/\D/g,'').slice(0,6);if(/^[1-9]\d{5}$/.test(pin))return pin;}
+   }catch{}
+ }
+ const labels=[$('locationText')?.textContent,$('mobileLocationText')?.textContent];
+ for(const label of labels){const m=String(label||'').match(/\b([1-9]\d{5})\b/);if(m)return m[1];}
+ return '';
 }
+
+let ceroodRecommendedOfferRequest=0;
+async function ceroodLoadRecommendedOffer(productId,p){
+ const requestId=++ceroodRecommendedOfferRequest;
+ try{
+   const pincode=ceroodReadDeliveryPincode();
+   const qs=new URLSearchParams({quantity:'1'});if(pincode)qs.set('pincode',pincode);
+   const r=await fetch(API_BASE+'/api/renewed/products/'+encodeURIComponent(productId)+'/recommended-offer?'+qs.toString(),{headers:{Accept:'application/json'},cache:'no-store'});
+   if(!r.ok)throw Error('Recommended offer unavailable');
+   const d=await r.json();
+   if(requestId!==ceroodRecommendedOfferRequest||!d||d.success!==true)return;
+   ceroodRecommendedOffer={
+     price:Number(d.price||0),
+     compare_price:d.compare_price==null?null:Number(d.compare_price),
+     stock:Number(d.stock||0),
+     warranty_days:Number(d.warranty_days||0),
+     dispatch_days:d.dispatch_days==null?null:Number(d.dispatch_days),
+     delivery_pincode:String(d.delivery_pincode||pincode||''),
+     min_delivery_days:d.min_delivery_days==null?null:Number(d.min_delivery_days),
+     max_delivery_days:d.max_delivery_days==null?null:Number(d.max_delivery_days),
+     estimated_delivery_days:d.estimated_delivery_days==null?null:Number(d.estimated_delivery_days),
+     serviceable:d.serviceable!==false,
+     available:d.available===true
+   };
+   ceroodRefreshPurchaseDisplay(p);
+   ceroodRefreshBankOffer(ceroodEffectivePurchase(p).price);
+   if(ceroodRecommendedOffer.warranty_days>0)$('warranty').textContent=ceroodRecommendedOffer.warranty_days+' day(s) warranty';
+   const note=$('purchaseNote');
+   if(note){
+     if(ceroodRecommendedOffer.delivery_pincode&&!ceroodRecommendedOffer.serviceable)
+       note.textContent='Delivery is not available to '+ceroodRecommendedOffer.delivery_pincode+' for this product.';
+     else if(!ceroodRecommendedOffer.available) note.textContent='This product is currently out of stock.';
+     else if(ceroodRecommendedOffer.delivery_pincode&&ceroodRecommendedOffer.min_delivery_days!=null&&ceroodRecommendedOffer.max_delivery_days!=null)
+       note.textContent='Delivery to '+ceroodRecommendedOffer.delivery_pincode+' · Estimated '+ceroodRecommendedOffer.min_delivery_days+'–'+ceroodRecommendedOffer.max_delivery_days+' day(s). Final seller is locked securely at checkout.';
+     else if(ceroodRecommendedOffer.delivery_pincode&&ceroodRecommendedOffer.estimated_delivery_days>0)
+       note.textContent='Delivery to '+ceroodRecommendedOffer.delivery_pincode+' · Estimated in '+ceroodRecommendedOffer.estimated_delivery_days+' day(s). Final seller is locked securely at checkout.';
+     else if(ceroodRecommendedOffer.dispatch_days>0)
+       note.textContent='Ready to purchase · Dispatch in '+ceroodRecommendedOffer.dispatch_days+' day(s). Select delivery location for an estimated delivery time.';
+     else note.textContent='This product is ready to purchase. Select delivery location for an estimated delivery time.';
+   }
+ }catch(e){
+   if(requestId===ceroodRecommendedOfferRequest)console.warn('Cerood recommended offer unavailable; using product fallback.',e);
+ }
+}
+
+function ceroodRefreshRecommendedOfferForLocation(){
+ if(document.documentElement.dataset.crStore!=='renewed'||!ceroodBaseProduct)return;
+ const id=new URLSearchParams(location.search).get('id')||ceroodBaseProduct.id;
+ if(id)ceroodLoadRecommendedOffer(String(id),ceroodBaseProduct);
+}
+let ceroodLastDeliveryPincode='';
+function ceroodWatchDeliveryLocation(){
+ const refresh=()=>{const pin=ceroodReadDeliveryPincode();if(pin!==ceroodLastDeliveryPincode){ceroodLastDeliveryPincode=pin;ceroodRefreshRecommendedOfferForLocation();}};
+ ceroodLastDeliveryPincode=ceroodReadDeliveryPincode();
+ window.addEventListener('storage',refresh);
+ window.addEventListener('focus',refresh);
+ ['cerood-location-updated','cerood-location-changed','cerood-delivery-location-updated','cerood-address-updated'].forEach(name=>window.addEventListener(name,refresh));
+ document.addEventListener('click',e=>{if(e.target.closest('#desktopLocationButton,#mobileLocationButton'))setTimeout(refresh,400)});
+ setInterval(refresh,1200);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ceroodWatchDeliveryLocation,{once:true});else ceroodWatchDeliveryLocation();
+
 function render(p,store){
  const cfg=STORES[store];$('state').hidden=true;$('product').hidden=false;
  document.documentElement.dataset.crStore=store;
@@ -2068,7 +2119,9 @@ function render(p,store){
  const available=Number(p.stock)>0&&price>0;$('cart').disabled=!available;$('buy').disabled=!available;
  const id=new URLSearchParams(location.search).get('id');
  ceroodBaseProduct=p;
+ ceroodRecommendedOffer=null;
  ceroodRenderVariants(p);
+ if(store==='renewed'&&id)ceroodLoadRecommendedOffer(id,p);
  $('cart').onclick=()=>id&&saveCart(cfg,id,p);
  $('buy').onclick=()=>{
    if(!id||$('buy').disabled)return;
@@ -2077,7 +2130,7 @@ function render(p,store){
    sessionStorage.setItem(cfg.buy,JSON.stringify([{product_id:id,quantity:1,store:cfg.key,...(listingId?{seller_listing_id:listingId}:{}),...ceroodVariantPayload()}]));
    location.href=cfg.checkout;
  };
- if(store==='renewed')ceroodLoadSellerOffers(p,id);
+ // Renewed seller allocation is handled securely by the backend at checkout.
  $('purchaseNote').textContent=available?`This ${cfg.label} product is ready to purchase.`:'This product is currently out of stock.';
  loadRelated(p,store);
 }
