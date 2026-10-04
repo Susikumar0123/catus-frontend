@@ -2058,9 +2058,9 @@ async function ceroodLoadRecommendedOffer(productId,p){
        note.textContent='Delivery is not available to '+ceroodRecommendedOffer.delivery_pincode+' for this product.';
      else if(!ceroodRecommendedOffer.available) note.textContent='This product is currently out of stock.';
      else if(ceroodRecommendedOffer.delivery_pincode&&ceroodRecommendedOffer.min_delivery_days!=null&&ceroodRecommendedOffer.max_delivery_days!=null)
-       note.textContent='Delivery to '+ceroodRecommendedOffer.delivery_pincode+' · Estimated '+ceroodRecommendedOffer.min_delivery_days+'–'+ceroodRecommendedOffer.max_delivery_days+' day(s). Final seller is locked securely at checkout.';
+       note.textContent='Delivery available to '+ceroodRecommendedOffer.delivery_pincode+' · Estimated '+ceroodRecommendedOffer.min_delivery_days+'–'+ceroodRecommendedOffer.max_delivery_days+' day(s). India-wide delivery. Final seller is locked securely at checkout.';
      else if(ceroodRecommendedOffer.delivery_pincode&&ceroodRecommendedOffer.estimated_delivery_days>0)
-       note.textContent='Delivery to '+ceroodRecommendedOffer.delivery_pincode+' · Estimated in '+ceroodRecommendedOffer.estimated_delivery_days+' day(s). Final seller is locked securely at checkout.';
+       note.textContent='Delivery available to '+ceroodRecommendedOffer.delivery_pincode+' · Estimated in '+ceroodRecommendedOffer.estimated_delivery_days+' day(s). India-wide delivery. Final seller is locked securely at checkout.';
      else if(ceroodRecommendedOffer.dispatch_days>0)
        note.textContent='Ready to purchase · Dispatch in '+ceroodRecommendedOffer.dispatch_days+' day(s). Select delivery location for an estimated delivery time.';
      else note.textContent='This product is ready to purchase. Select delivery location for an estimated delivery time.';
