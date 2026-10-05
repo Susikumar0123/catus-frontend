@@ -238,24 +238,8 @@ const description =
         const descriptionTag =
             `<meta name="description" content="${escapeHtml(description)}">`;
 
-        if (
-            /<meta\s+name=["']description["'][^>]*>/i
-                .test(html)
-        ) {
-
-            html = html.replace(
-                /<meta\s+name=["']description["'][^>]*>/i,
-                descriptionTag
-            );
-
-        } else {
-
-            html = html.replace(
-                '</head>',
-                `    ${descriptionTag}\n</head>`
-            );
-        }
-
+        html = html.replace(/<meta\b(?=[^>]*\bname=["']description["'])[^>]*>/gi, '');
+        html = html.replace('</head>', `${descriptionTag}\n</head>`);
 
         // ==========================================
         // CANONICAL
@@ -335,36 +319,27 @@ html = html.replace(
 // SERVER-RENDER LOCAL SEO CONTENT
 // ==========================================
 
-const localSeoTitle =
-    `${page.service_name} in ${page.location_name}`;
+const isGasRefill = service === 'ac-gas-refill';
+const detailsHtml = isGasRefill ? `
+<section aria-labelledby="ceroodLocalSeoTitle" style="margin:24px 0;padding:24px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;color:#111;line-height:1.65">
+<h2 id="ceroodLocalSeoTitle">AC gas refill: inspection and next steps in ${escapeHtml(seoLocation)}</h2>
+<p id="ceroodLocalSeoDescription">An AC that is not cooling may need inspection before deciding whether refrigerant refill or another repair is required. Tell Cerood about the cooling problem when booking.</p>
+<h3>Inspection charge: ₹299</h3>
+<p>The ₹299 charge is for inspection. Gas refill, leak repair and spare parts are not included. After inspection, a quote will be provided; additional work will proceed only with your approval.</p>
+<h3>Booking and availability</h3>
+<p>Confirm your full address and technician availability with Cerood before the visit. The location shown on this page does not guarantee an available technician or a visit time.</p>
+<h3>Frequently asked questions</h3>
+<details><summary>Does ₹299 include gas refill?</summary><p>No. ₹299 covers inspection only. Refill, repairs and parts are quoted separately.</p></details>
+<details><summary>Will every cooling problem require a refill?</summary><p>No. The problem must be assessed before recommending the next step.</p></details>
+<details><summary>How do I confirm the visit?</summary><p>Use the booking form or <a href="/contact">contact Cerood</a> to confirm your address and availability.</p></details>
+<p><a href="/services">Explore services</a> · <a href="/${encodePathSegment(state)}/${encodePathSegment(district)}/location/${encodePathSegment(location)}">Services in ${escapeHtml(page.location_name || page.district)}</a></p>
+</section>` : '';
+html = html.replace('<!-- CEROOD_SERVICE_DETAILS -->', detailsHtml);
+if (isGasRefill) {
+ html = html.replace(/<span class="starts-from-label">[\s\S]*?<\/span>/i, '<span class="starts-from-label">Inspection charge</span>');
+}
 
-const localSeoDescription =
-    `Looking for ${page.service_name.toLowerCase()} in ` +
-    `${seoLocation}? ` +
-    `Cerood helps you book doorstep appliance service with ` +
-    `easy online booking and local service support.`;
-
-html = html.replace(
-    /<h2([^>]*?)id=["']ceroodLocalSeoTitle["']([^>]*)>[\s\S]*?<\/h2>/i,
-    `<h2$1id="ceroodLocalSeoTitle"$2>${escapeHtml(localSeoTitle)}</h2>`
-);
-
-html = html.replace(
-    /<p([^>]*?)id=["']ceroodLocalSeoDescription["']([^>]*)>[\s\S]*?<\/p>/i,
-    `<p$1id="ceroodLocalSeoDescription"$2>${escapeHtml(localSeoDescription)}</p>`
-);
-
-html = html.replace(
-    /<strong([^>]*?)id=["']ceroodLocalSeoService["']([^>]*)>[\s\S]*?<\/strong>/i,
-    `<strong$1id="ceroodLocalSeoService"$2>${escapeHtml(page.service_name)}</strong>`
-);
-
-html = html.replace(
-    /<strong([^>]*?)id=["']ceroodLocalSeoLocation["']([^>]*)>[\s\S]*?<\/strong>/i,
-    `<strong$1id="ceroodLocalSeoLocation"$2>${escapeHtml(seoLocation)}</strong>`
-);
-
-        // ==========================================
+// ==========================================
 // SERVER-RENDER RELATED SERVICE LINKS
 // ==========================================
 
@@ -450,7 +425,7 @@ const serverSchema = {
 
 const schemaTag =
     `<script type="application/ld+json" id="ceroodServerSeoSchema">` +
-    `${JSON.stringify(serverSchema)}` +
+    `${JSON.stringify(serverSchema).replace(/</g, '\\u003c')}` +
     `</script>`;
 
 html = html.replace(

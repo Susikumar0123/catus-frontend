@@ -8840,6 +8840,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
             background:#ffffff;
         "/>
 </div>
+<!-- CEROOD_SERVICE_DETAILS -->
 <div class="uc-category-box" id="relatedServicesBox">
 <div class="uc-cat-header">
 <h3>More Relevant Services</h3>
@@ -11432,7 +11433,11 @@ try {
                 'prodTitle'
             );
             
-productTitle.textContent = page.service_name;
+productTitle.textContent = page.service_name + " in " + (page.location_name || page.district);
+if (/ac-gas-refill/.test(window.location.pathname)) {
+ const label = document.querySelector(".starts-from-label");
+ if (label) label.textContent = "Inspection charge";
+}
         
 
     
