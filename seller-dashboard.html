@@ -975,7 +975,7 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 
 <style id="cerood-dynamic-variant-builder-step">.cerood-variant-builder{border:1px solid #e2e6f0;border-radius:12px;background:#fff;overflow:hidden}.cerood-variant-head{padding:15px 16px;border-bottom:1px solid #e8ebf2}.cerood-variant-head strong{display:block;font-size:13px}.cerood-variant-head small{display:block;margin-top:4px;color:#667085;font-size:11px}.cerood-variant-table{overflow-x:auto}.cerood-variant-row{display:grid;grid-template-columns:minmax(150px,1.4fr) minmax(110px,1fr) 105px 105px 90px;gap:9px;align-items:center;padding:9px 12px;border-bottom:1px solid #eef1f5;min-width:650px}.cerood-variant-row-head{background:#f8f9fc;color:#667085;font-size:11px;font-weight:700}.cerood-variant-name{font-size:12px;font-weight:650}.cerood-variant-row input{width:100%;min-height:38px!important;padding:8px!important}.cerood-variant-builder>.market-dynamic-empty{padding:15px;margin:0}.cerood-native-multiselect{display:none!important}@media(max-width:700px){.cerood-variant-row{min-width:570px;grid-template-columns:minmax(130px,1.3fr) 110px 95px 95px 80px}}</style>
 
-<style id="cerood-seller-pickup-locations-v1-style">
+<style id="cerood-seller-pickup-locations-v1">
 .pickup-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:0 0 14px}.pickup-head h2{margin:0!important}.pickup-note{font-size:12px;color:#667085;margin:0 0 16px;line-height:1.6}.pickup-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px;border:1px solid #e1e4ed;border-radius:7px;background:#fafbff;margin-bottom:16px}.pickup-form[hidden]{display:none!important}.pickup-field{min-width:0}.pickup-field.full{grid-column:1/-1}.pickup-field label{display:block;font-size:12px;font-weight:650;margin:0 0 6px}.pickup-field input,.pickup-field select{width:100%;height:40px;border:1px solid #cfd5e2;border-radius:6px;background:#fff;padding:0 10px;font:12px Inter,system-ui;color:#344054}.pickup-actions{grid-column:1/-1;display:flex;gap:9px;flex-wrap:wrap}.pickup-list{display:grid;gap:10px}.pickup-card{border:1px solid #e1e4ed;border-radius:7px;padding:14px;background:#fff;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.pickup-card strong{font-size:13px}.pickup-card p{margin:5px 0 0;font-size:11.5px;color:#667085;line-height:1.55}.pickup-badge{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;background:#e8f7e8;color:#19732a;font-size:10px;font-weight:700}.pickup-empty{padding:18px;border:1px dashed #cfd5e2;border-radius:7px;text-align:center;color:#667085;font-size:12px}.pickup-card-actions{display:flex;gap:7px;flex-shrink:0}.pickup-card-actions button{white-space:nowrap}.pickup-message{font-size:12px;margin:8px 0}.pickup-message.error{color:#b91c1c}.pickup-message.success{color:#166534}@media(max-width:650px){.pickup-form{grid-template-columns:1fr}.pickup-field.full,.pickup-actions{grid-column:auto}.pickup-card{flex-direction:column}.pickup-card-actions{width:100%}.pickup-card-actions button{flex:1}}
 </style>
 
@@ -1388,7 +1388,7 @@ body.cerood-studio{margin:0!important;background:var(--studio-bg)!important;colo
   <div id="ccatSinglePanel">
   <div id="ccatCatalogEditor" hidden></div>
   <div id="ccatCatalogMessage" role="status" aria-live="polite"></div>
-  <div class="ccat-status-tabs" role="tablist" aria-label="Single catalog QC status"><button type="button" data-ccat-single-status="action">Action Required <span id="ccatSingleAction">(0)</span></button><button type="button" data-ccat-single-status="pending">QC in Progress <span id="ccatSinglePending">(0)</span></button><button type="button" data-ccat-single-status="rejected">QC Error <span id="ccatSingleRejected">(0)</span></button><button type="button" data-ccat-single-status="approved">QC Pass <span id="ccatSingleApproved">(0)</span></button><button type="button" data-ccat-single-status="draft">Draft <span id="ccatSingleDraft">(0)</span></button></div>
+  <div class="ccat-status-tabs" role="tablist" aria-label="Single catalog QC status"><button type="button" class="active" data-ccat-single-status="all">All listings</button><button type="button" data-ccat-single-status="action">Action Required <span id="ccatSingleAction">(0)</span></button><button type="button" data-ccat-single-status="pending">QC in Progress <span id="ccatSinglePending">(0)</span></button><button type="button" data-ccat-single-status="rejected">QC Error <span id="ccatSingleRejected">(0)</span></button><button type="button" data-ccat-single-status="approved">QC Pass <span id="ccatSingleApproved">(0)</span></button><button type="button" data-ccat-single-status="draft">Draft <span id="ccatSingleDraft">(0)</span></button></div>
   <div class="ccat-controls"><label>Filter by: <select id="ccatSingleCategory"><option value="all">Select Category</option></select></label><input type="search" id="ccatSingleSearch" placeholder="Search product name or ID" aria-label="Search single catalogs"></div>
   <div class="ccat-alert">ⓘ &nbsp; QC labels reflect the product approval status returned by CEROOD. This page does not perform or change QC approval.</div>
   <div class="ccat-table-scroll"><table class="ccat-table ccat-single-table"><thead><tr><th>S.no</th><th>Catalog Image</th><th>Category</th><th>Product / File ID</th><th>Created Date</th><th>Products</th><th>QC Status</th><th>Actions</th></tr></thead><tbody id="ccatSingleBody"><tr><td colspan="8" class="ccat-empty">Open Single Uploads to load your products.</td></tr></tbody></table></div>
@@ -2770,6 +2770,7 @@ function renderSellerOrders(orders) {
               body: JSON.stringify({ decision })
             }
           );
+          window.hubOrderFilter=decision;
           await loadSellerOrders();
           showMessage('ordersMessage', result.message || 'Order updated.', 'success');
         } catch (error) {
@@ -2814,6 +2815,7 @@ function renderSellerOrders(orders) {
               body: JSON.stringify({ status: nextStatus })
             }
           );
+          window.hubOrderFilter=nextStatus;
           await loadSellerOrders();
           showMessage(
             'ordersMessage',
@@ -3645,15 +3647,13 @@ $('productForm').addEventListener(
 
       );
 
+      const studioReturnTab = window.ceroodStudioProductSaveReturn?.() || 'products';
       resetProductForm();
-
+      window.ceroodStudioCloseAfterProductSave?.();
       await loadProducts();
-
-      showTab(
-
-        'products'
-
-      );
+      await window.ceroodRefreshSingleCatalogs?.();
+      showTab(studioReturnTab);
+      showMessage('dashboardMessage','Product submitted successfully. Waiting for CEROOD admin approval.','success');
 
     } catch (error) {
 
@@ -3861,6 +3861,7 @@ function editProduct(id) {
 
   );
 
+  if(window.__ceroodRenewedDynamic?.restoreProduct){$('saveProductBtn').disabled=true;Promise.resolve(window.__ceroodRenewedDynamic.restoreProduct(product)).then(()=>{$('saveProductBtn').disabled=false}).catch(error=>{$('saveProductBtn').disabled=false;showMessage('productFormMessage','Could not load product specifications: '+error.message,'error')});}
   // Edit within My Products: move the EXISTING form, keeping all inputs and handlers.
   showTab('add-product');
   const inlineHost = $('ceroodInlineRenewedEditor');
@@ -4665,7 +4666,7 @@ initializeDashboard();
         if(file){if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>10*1024*1024)throw Error('Image must be JPG, PNG or WebP, maximum 10 MB.');updated.image_url=await uploadMedia(file)}
         updated.product_images=pi;
         const video=videoInput.files[0];if(video){if(!['video/mp4','video/webm'].includes(video.type)||video.size>30*1024*1024)throw Error('Video must be MP4 or WebM, maximum 30 MB.');updated.video_url=await uploadMedia(video)}
-        if(r.approval_status==='approved'&&!confirm('This approved product will be unpublished until admin approves the changes. Continue?'))return;
+        if(r.approval_status==='approved'&&!await window.ceroodStudioConfirm({title:'Submit listing changes?',message:'This approved product will be unpublished until CEROOD admin approves your changes.',label:'Submit changes'}))return;
         const requestedStock=Number(updated.stock);if(!Number.isSafeInteger(requestedStock)||requestedStock<0)throw Error('Enter a valid whole-number stock quantity.');updated.stock=requestedStock;
         const saved=await apiRequest('/api/sellers/catalog-submissions/'+encodeURIComponent(r.id),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:updated})});
         if(saved.success===false)throw Error(saved.message||'Product changes were not saved.');
@@ -4683,8 +4684,8 @@ initializeDashboard();
     });
   }
   async function withdrawMarketplaceProduct(r){
-    if(r.approval_status==='withdrawn'||!confirm('Withdraw this product from sale?'))return;
-    try{await apiRequest('/api/sellers/catalog-submissions/'+encodeURIComponent(r.id),{method:'DELETE'});await refresh();alert('Product withdrawn.')}catch(e){alert('Withdraw failed: '+e.message)}
+    if(r.approval_status==='withdrawn'||!await window.ceroodStudioConfirm({title:'Withdraw this product?',message:'This removes your listing from sale.',label:'Withdraw product',danger:true}))return;
+    try{await apiRequest('/api/sellers/catalog-submissions/'+encodeURIComponent(r.id),{method:'DELETE'});await refresh();window.ceroodStudioNotify('Product withdrawn.','success')}catch(e){window.ceroodStudioNotify('Withdraw failed: '+e.message,'error')}
   }
   async function refresh(){
     if(busy)return;busy=true;const msg=$('ceroodOtherProductMessage');if(msg)msg.textContent='Loading Cosmetics & Fashion listings...';
@@ -5306,19 +5307,7 @@ const status=r=>{const a=String(r.approval_status||'pending').toLowerCase(),s=St
 const marketplace=r=>r.marketplace==='clothing'?'Fashion':r.marketplace==='cosmetics'?'Cosmetics':r.marketplace==='general'?'Main store':'Renewed';
 const title=r=>r.name||r.product_data?.name||'Product';
 const make=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e};
-async function refresh(){
- if(busy)return;busy=true;$('ciNotice').textContent='Loading inventory…';
- try{
-  if(typeof window.loadProducts==='function')await window.loadProducts();
-  const renewed=typeof products!=='undefined'&&Array.isArray(products)?products:[];
-  let other=[],notice='';
-  try{const data=await apiRequest('/api/sellers/catalog-submissions?inventory='+Date.now());if(data.success===false)throw Error(data.message||'Inventory API failed');other=Array.isArray(data.products)?data.products:[];}
-  catch(e){notice='Additional marketplace inventory could not load: '+e.message;}
-  rows=[...renewed.map(p=>({...p,marketplace:'renewed'})),...other.map(r=>({...r,...(r.product_data||{}),id:r.id,marketplace:r.marketplace,approval_status:r.approval_status,stock:Number(r.product_data?.stock??0),status:r.approval_status==='approved'?'published':r.approval_status}))];
-  $('ciNotice').textContent=notice;draw();
- }catch(e){$('ciNotice').textContent='Unable to load inventory: '+e.message;draw();}
- finally{busy=false;}
-}
+async function refresh(){if(busy)return;busy=true;$('ciNotice').textContent='Loading...';try{let renewed=typeof products!=='undefined'&&Array.isArray(products)?products:[];if(typeof window.loadProducts==='function'){await window.loadProducts();renewed=typeof products!=='undefined'&&Array.isArray(products)?products:renewed}const data=await apiRequest('/api/sellers/catalog-submissions?inventory='+Date.now());if(data.success===false)throw Error(data.message||'Inventory API failed');const other=Array.isArray(data.products)?data.products:[];rows=[...renewed.map(p=>({...p,marketplace:'renewed'})),...other.map(r=>({...r,...(r.product_data||{}),id:r.id,marketplace:r.marketplace,approval_status:r.approval_status,stock:Number(r.product_data?.stock??0),status:r.approval_status==='approved'?'published':r.approval_status}))];$('ciNotice').textContent='';draw()}catch(e){$('ciNotice').textContent='Unable to load inventory: '+e.message;draw()}finally{busy=false}}
 function draw(){const search=$('ciSearch').value.trim().toLowerCase(),market=$('ciCategory').value;for(const b of $('ciTabs').querySelectorAll('button')){const st=b.dataset.ciStatus;b.querySelector('span').textContent='('+rows.filter(r=>status(r)===st).length+')';b.classList.toggle('active',st===tab)}const filtered=rows.filter(r=>status(r)===tab&&(market==='all'||r.marketplace===market)&&[title(r),r.id,r.category,r.variant,r.model,r.brand].some(x=>String(x||'').toLowerCase().includes(search)));const list=$('ciCatalogs');list.replaceChildren();if(!filtered.length){list.append(make('div','ci-empty','No '+tab+' products found.'));$('ciDetails').replaceChildren(make('div','ci-empty','No matching inventory in this category.'));return}if(!filtered.some(r=>r.marketplace+':'+r.id===selected))selected=filtered[0].marketplace+':'+filtered[0].id;for(const r of filtered){const b=make('button','ci-catalog'+(selected===r.marketplace+':'+r.id?' active':''));b.type='button';const img=make('img');img.alt='';const url=r.image_url||r.product_data?.image_url;if(/^https:\/\//.test(url||''))img.src=url;const text=make('span');text.append(make('strong','',title(r)),make('small','','Catalog ID: '+String(r.id).slice(0,13)),make('small','',marketplace(r)+' · '+(r.category||'Uncategorized')));b.append(img,text);b.addEventListener('click',()=>{selected=r.marketplace+':'+r.id;draw()});list.append(b)}const r=filtered.find(x=>x.marketplace+':'+x.id===selected)||filtered[0],details=$('ciDetails');details.replaceChildren();const head=make('div','ci-details-head');head.append(make('strong','',title(r)),make('small','','Catalog ID: '+r.id+' | Category: '+(r.category||'—')+' | Marketplace: '+marketplace(r)));details.append(head);const wrap=make('div','ci-table-wrap'),table=make('table','ci-table'),thead=make('thead'),tr=make('tr');['SKU / Product','Variation','Remarks','Stock','Action'].forEach(t=>tr.append(make('th','',t)));thead.append(tr);const tbody=make('tbody'),row=make('tr'),name=make('td'),item=make('div','ci-item'),img=make('img');img.alt='';if(/^https:\/\//.test(r.image_url||''))img.src=r.image_url;const copy=make('div');copy.append(make('strong','',title(r)),make('small','','Style ID: '+String(r.id).slice(0,12)),make('small','','Price: ₹'+Number(r.price||0).toLocaleString('en-IN')));item.append(img,copy);name.append(item);row.append(name,make('td','',r.variant||r.model||r.condition||'Standard'));const remark=make('td');remark.append(make('span','ci-badge '+status(r),status(r)==='paused'?'Out of stock / paused':status(r)==='pending'?'Saved · Awaiting approval':status(r)==='blocked'?'Not available for sale':'Available for sale'));if(r.rejection_reason)remark.append(make('small','',r.rejection_reason));row.append(remark);const stock=make('td'),field=make('div','ci-stock');field.append(make('span','',String(r.stock??0)));const edit=make('button','','✎');edit.type='button';edit.title='Edit product stock in existing product editor';edit.addEventListener('click',()=>openEditor(r));field.append(edit);stock.append(field);row.append(stock);const action=make('td'),btn=make('button','hub-table-link','Edit Listing');btn.type='button';btn.addEventListener('click',()=>openEditor(r));action.append(btn);row.append(action);tbody.append(row);table.append(thead,tbody);wrap.append(table);details.append(wrap)}
 function openEditor(r){
   const body=$('ciModalBody');
@@ -6409,7 +6398,7 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
  }
 
  function render(){
-  ensureUI(); state.uploadedImages={};
+  ensureUI(); state.uploadedImages={}; state.existingImages={};
   current=categories.find(c=>String(c.id)===String(select.value))||null;
   const ah=$('renewedDynamicAttributes'), ih=$('renewedDynamicImages');
   if(!current){
@@ -6466,10 +6455,24 @@ $('ceroodUploadChooserClose')?.addEventListener('click',()=>{modal.classList.rem
   const slots=Array.isArray(current.image_slots)?current.image_slots:[];const out={};
   if(slots[0])out[slots[0].slot_key]=primaryUrl;
   const inputs=[...($('renewedDynamicImages')?.querySelectorAll('input[type=file][data-slot-key]')||[])];
-  for(const input of inputs){const slot=slots.find(s=>s.slot_key===input.dataset.slotKey),f=input.files?.[0];if(slot?.is_required&&!f)throw Error(slot.label+' image is required.');if(f){showMessage('productFormMessage','Uploading '+slot.label+'...');out[slot.slot_key]=await uploadMedia(f)}}
+  for(const input of inputs){const slot=slots.find(s=>s.slot_key===input.dataset.slotKey),f=input.files?.[0];if(slot?.is_required&&!f&&!state.existingImages?.[input.dataset.slotKey])throw Error(slot.label+' image is required.');if(!f&&state.existingImages?.[input.dataset.slotKey])out[input.dataset.slotKey]=state.existingImages[input.dataset.slotKey];if(f){showMessage('productFormMessage','Uploading '+slot.label+'...');out[slot.slot_key]=await uploadMedia(f)}}
   state.uploadedImages=out;return out;
  };
- window.__ceroodRenewedDynamic=state;
+ state.restoreProduct=async product=>{
+  await load();
+  if(typeof editingProductId!=='undefined'&&editingProductId!==product.id)return;
+  const match=categories.find(c=>String(c.id)===String(product.category_id||product.category)||String(c.slug).toLowerCase()===String(product.category||'').toLowerCase()||String(c.name).toLowerCase()===String(product.category||'').toLowerCase());
+  select.value=match?match.id:'';render();
+  const values=product.product_attributes||{};
+  $('renewedDynamicAttributes').querySelectorAll('[data-renewed-attribute-key]').forEach(input=>{
+    const value=values[input.dataset.renewedAttributeKey];if(value==null)return;
+    if(input.multiple){for(const option of input.options)option.selected=Array.isArray(value)&&value.map(String).includes(option.value)}else input.value=String(value);
+  });
+  state.existingImages={...(product.product_images||{})};state.uploadedImages={...state.existingImages};
+  const slots=Array.isArray(current?.image_slots)?current.image_slots:[];
+  $('renewedDynamicImages').querySelectorAll('.market-image-slot').forEach((card,i)=>{const url=state.existingImages[slots[i]?.slot_key]||(i===0?product.image_url:'');if(!url)return;const preview=card.querySelector('.market-image-preview');const image=document.createElement('img');image.alt=slots[i]?.label||'Saved product view';image.src=url;preview.replaceChildren(image);const b=card.querySelector('.market-image-upload');if(b&&!b.disabled)b.textContent='Replace image';});
+};
+window.__ceroodRenewedDynamic=state;
  ensureUI();
  select.addEventListener('change',render);
  document.querySelectorAll('[data-market="renewed"]').forEach(b=>b.addEventListener('click',()=>load().catch(e=>showMessage('productFormMessage',e.message,true))));
@@ -6716,7 +6719,8 @@ window.ceroodLoadLatchedProducts=load;
  }
  form.addEventListener('submit',async e=>{e.preventDefault();const pin=byId('pickupPincode').value.trim();if(!/^[1-9]\d{5}$/.test(pin)){message('Enter a valid 6-digit pincode.','error');return}const b=byId('pickupSaveBtn');b.disabled=true;try{await apiRequest('/api/sellers/locations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location_name:byId('pickupName').value.trim(),address_line1:byId('pickupAddress1').value.trim(),address_line2:byId('pickupAddress2').value.trim(),city:byId('pickupCity').value.trim(),district:byId('pickupDistrict').value.trim(),state:state.value,pincode:pin,is_default:byId('pickupDefault').checked})});form.reset();byId('pickupName').value='Main Location';showForm(false);message('Pickup location saved successfully.','success');await load();window.dispatchEvent(new Event('cerood:seller-locations-changed'))}catch(err){message(err.message,'error')}finally{b.disabled=false}});
  const original=window.renderAccount;if(typeof original==='function')window.renderAccount=function(){original.apply(this,arguments);load()};
- if(window.seller)load();
+ window.ceroodLoadPickupLocations=load;
+if(typeof seller!=='undefined'&&seller)load();
 })();
 </script>
 
@@ -6737,7 +6741,8 @@ window.ceroodLoadLatchedProducts=load;
  form.addEventListener('submit',async e=>{e.preventDefault();if(!location.value){message('Choose a pickup location first.','error');return}const pin=$('svcPincode').value.trim(),min=Number($('svcMinDays').value),max=Number($('svcMaxDays').value),fee=Number($('svcFee').value||0);if(!/^[1-9]\d{5}$/.test(pin)){message('Enter a valid 6-digit destination pincode.','error');return}if(!Number.isInteger(min)||!Number.isInteger(max)||min<0||max<min){message('Max delivery days must be equal to or greater than min days.','error');return}const payload={fulfilment_location_id:location.value,destination_pincode:pin,min_delivery_days:min,max_delivery_days:max,delivery_fee:fee,cod_available:$('svcCod').checked,prepaid_available:$('svcPrepaid').checked,is_active:true};const b=$('svcSave');b.disabled=true;try{const edit=form.dataset.editId;if(edit)await apiRequest('/api/sellers/serviceability/'+encodeURIComponent(edit),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});else await apiRequest('/api/sellers/serviceability',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});message(edit?'Delivery pincode updated.':'Delivery pincode added.','success');resetForm();await loadRows()}catch(err){message(err.message,'error')}finally{b.disabled=false}});
  window.addEventListener('cerood:seller-locations-changed',()=>loadLocations(true));
  const original=window.renderAccount;if(typeof original==='function')window.renderAccount=function(){const r=original.apply(this,arguments);setTimeout(()=>loadLocations(true),0);return r};
- if(window.seller)loadLocations(false);
+ window.ceroodLoadServiceability=loadLocations;
+if(typeof seller!=='undefined'&&seller)loadLocations(false);
 })();
 </script>
 <script id="cerood-seller-studio-ui-adapter">
@@ -6850,6 +6855,7 @@ body.cerood-studio .studio-sidebar-foot{font-size:9px;padding:5px 0 0;color:#829
 /* The brand note lives AFTER the menu in the scrolling area, never above it. */
 body.cerood-studio .hub-menu-scroll .studio-renewed-note{display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:center;padding:12px;margin:18px 7px 4px;border:1px solid #e3eae6;background:#f4f8f5;border-radius:9px}
 body.cerood-studio .studio-renewed-note strong{font-size:11px;line-height:1.6;margin:0;color:#506f5c;font-weight:550}
+body.cerood-studio .studio-renewed-note strong br{display:none}
 body.cerood-studio .studio-renewed-note p{display:none}
 body.cerood-studio .seller-workspace{margin-left:var(--studio-sidebar)!important;padding:24px 32px 32px!important;min-width:0!important}
 body.cerood-studio .hub-topbar{margin:0 0 22px!important}
@@ -6974,12 +6980,14 @@ body.cerood-studio .studio-modal-root #renewedProductFormCard>h1{display:none}
 body.cerood-studio .studio-modal-root .seller-section:not(.active).ci-modal-section{display:block!important}
 body.cerood-studio #studioDecisionModal .studio-dialog-window{width:min(100%,480px)!important}
 body.cerood-studio .studio-decision-copy{font-size:14px;line-height:1.75;color:#687a91;margin:0 0 18px}
-body.cerood-studio .studio-decision-note{width:100%;min-height:110px;border:1px solid #d9e1ed;border-radius:8px;padding:12px;font:14px/1.5 inherit;resize:vertical}
+body.cerood-studio .studio-decision-note{width:100%;min-height:110px;border:1px solid #d9e1ed;border-radius:8px;padding:12px;font:inherit;resize:vertical}
 body.cerood-studio .studio-decision-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:22px}
 @media(max-width:1200px) and (min-width:801px){body.cerood-studio .seller-workspace{padding:24px!important}body.cerood-studio .studio-page-header{align-items:flex-start}body.cerood-studio .studio-page-actions{max-width:230px}body.cerood-studio .studio-welcome{gap:24px}}
 @media(max-width:800px){:root{--studio-header:64px}body.cerood-studio .seller-header-inner{padding:0 16px!important;gap:12px!important}body.cerood-studio .studio-brand{width:auto;gap:11px}body.cerood-studio .studio-brand .seller-logo{font-size:26px!important}body.cerood-studio .studio-brand-sub b{font-size:10px}body.cerood-studio .studio-brand-sub{font-size:7px}body.cerood-studio .hub-sidebar{width:280px!important;max-width:calc(100vw - 40px)!important;padding:16px 13px 10px!important}body.cerood-studio .hub-mobile-overlay{inset:var(--studio-header) 0 0!important}body.cerood-studio .seller-workspace{margin-left:0!important;padding:20px 16px!important}body.cerood-studio .studio-footer{margin-left:0!important}body.cerood-studio .studio-page-header{flex-direction:column;align-items:stretch;gap:16px;margin-bottom:20px}body.cerood-studio .studio-page-header h1{font-size:25px}body.cerood-studio .studio-page-actions{max-width:none;gap:8px}body.cerood-studio .studio-page-actions .seller-btn{flex:1;font-size:12px!important;padding:10px 12px!important}body.cerood-studio .seller-card,body.cerood-studio .hub-content-card,body.cerood-studio .hub-quality-card,body.cerood-studio .seller-order-card{padding:17px!important}body.cerood-studio .studio-heading{flex-wrap:wrap}body.cerood-studio .studio-heading h1{font-size:26px!important}body.cerood-studio .hub-order-controls input,body.cerood-studio .ccat-controls input{width:100%!important;max-width:100%;min-width:0;flex:1 1 100%}body.cerood-studio .ccat-intro{padding:18px!important}body.cerood-studio .ccat-controls{padding:14px 16px!important}body.cerood-studio .ccat-alert{margin:0 16px 14px!important}body.cerood-studio .cc-help-grid{grid-template-columns:1fr}body.cerood-studio .seller-order-product img{width:72px!important;height:72px!important}body.cerood-studio .pickup-head{flex-wrap:wrap}body.cerood-studio .serviceability-toolbar{align-items:stretch}body.cerood-studio .serviceability-toolbar>button{width:100%}body.cerood-studio .seller-detail{grid-template-columns:1fr;gap:5px;padding:12px 0!important}body.cerood-studio .studio-modal-root:not([hidden]){padding:10px!important}body.cerood-studio .studio-modal-root>[role=dialog],body.cerood-studio .studio-modal-root>.cerood-chooser-box,body.cerood-studio .studio-modal-root>.cwp-window,body.cerood-studio .studio-modal-root>.ci-modal-panel,body.cerood-studio .studio-modal-root>.ccat-edit-modal-box,body.cerood-studio .studio-modal-root>.ccat-view-window,body.cerood-studio .studio-modal-root>.cf-v3-modal,body.cerood-studio .studio-dialog-window{max-height:calc(100dvh - 20px)!important;border-radius:12px!important}body.cerood-studio .studio-dialog-head,body.cerood-studio .studio-modal-root .cerood-chooser-head,body.cerood-studio .studio-modal-root .cwp-head,body.cerood-studio .studio-modal-root .ci-modal-head,body.cerood-studio .studio-modal-root .ccat-edit-modal-head{padding:16px!important}body.cerood-studio .studio-dialog-body,body.cerood-studio .studio-modal-root .ccat-edit-modal-body,body.cerood-studio .studio-modal-root .ci-modal-body,body.cerood-studio .studio-modal-root .cerood-chooser-body,body.cerood-studio .studio-modal-root .cwp-body{padding:16px!important}body.cerood-studio .studio-modal-root #cwWizard .cw-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;overflow:visible}body.cerood-studio .studio-modal-root #cwWizard .cw-image-box{grid-column:1/-1!important}body.cerood-studio .studio-modal-root .cwp-grid{grid-template-columns:1fr!important}body.cerood-studio .studio-modal-root .cwp-rules{grid-template-columns:repeat(2,minmax(0,1fr))!important}body.cerood-studio .studio-modal-root .cw-footer{display:flex;gap:8px}body.cerood-studio .studio-modal-root .cw-footer button{font-size:12px!important;padding:10px!important;min-width:0}body.cerood-studio .studio-dialog-body .serviceability-form{grid-template-columns:1fr}body.cerood-studio .studio-dialog-body .serviceability-form label{grid-column:auto}body.cerood-studio .studio-modal-root .product-form-grid,body.cerood-studio .studio-modal-root .marketplace-fields{grid-template-columns:1fr!important}body.cerood-studio .studio-modal-root .cerood-variant-table{overflow:auto}}
 @media(max-height:680px){body.cerood-studio .hub-brand{margin-bottom:10px}body.cerood-studio .studio-workspace-pill{display:none}body.cerood-studio .hub-store{margin-bottom:2px}body.cerood-studio .studio-sidebar-foot{display:none}}
 @media(prefers-reduced-motion:reduce){body.cerood-studio *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+body.cerood-studio.studio-drawer-open{overflow:hidden!important}
 
 </style>
 <script id="cerood-studio-clean-interactions">
@@ -6988,7 +6996,7 @@ body.cerood-studio .studio-decision-actions{display:flex;gap:9px;justify-content
 const $=id=>document.getElementById(id);
 const element=(tag,cls,copy)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(copy!==undefined)e.textContent=copy;return e};
 const scroll=$('hubSidebar')?.querySelector('.hub-menu-scroll'),note=document.querySelector('.studio-renewed-note');
-if(scroll&&note)scroll.append(note);
+if(scroll&&note){scroll.append(note);const title=note.querySelector('strong');if(title)title.textContent='Good products. Another beginning.'}
 document.querySelectorAll('.hub-expand').forEach(b=>{b.setAttribute('aria-expanded','false');b.nextElementSibling?.classList.add('is-collapsed');const arrow=b.querySelector('i');if(arrow)arrow.textContent='›'});
 const screenInfo={
  products:['Your products','Manage listings across all your CEROOD marketplaces.'],
@@ -7016,7 +7024,7 @@ headingCopy.append(kicker,heading,description);header.append(headingCopy,actions
 function action(label,run,secondary=false){const b=element('button','seller-btn'+(secondary?' seller-btn-outline':''),label);b.type='button';b.onclick=async()=>{b.disabled=true;try{await run()}catch(err){showMessage('dashboardMessage',err.message,'error')}finally{b.disabled=false}};actions.append(b)}
 function goCatalog(query=''){
  window.showTab('add-product');document.querySelector('[data-ccat-tab="single"]')?.click();
- const search=$('ccatSingleSearch');if(search){search.value=query;search.dispatchEvent(new Event('input',{bubbles:true}))}
+ const category=$('ccatSingleCategory');if(category){category.value='all';category.dispatchEvent(new Event('change',{bubbles:true}))}const search=$('ccatSingleSearch');if(search){search.value=query;search.dispatchEvent(new Event('input',{bubbles:true}))}
  document.querySelector('[data-ccat-single-status="all"]')?.click();
 }
 function openSingle(){window.showTab('add-product');$('hubSingleCatalog')?.click()}
@@ -7025,12 +7033,12 @@ const state=p=>String(p.approval_status||'pending').toLowerCase();
 const pending=['pending','under_review','in_review','submitted','review','pending_approval'];
 let current='overview';
 function updateHeader(tab){
- current=tab;const info=screenInfo[tab];header.hidden=!info;if(!info)return;
+ current=tab;const info=screenInfo[tab];header.hidden=!info;document.querySelectorAll('.hub-sidebar .seller-tab').forEach(b=>{if(b.dataset.tab===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});if(!info)return;
  heading.textContent=info[0];description.textContent=info[1];actions.replaceChildren();$('hubPageTitle').textContent=info[0];
  document.querySelectorAll('.hub-sidebar .seller-tab').forEach(b=>{if(b.dataset.tab===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
  if(['add-product','products','inventory'].includes(tab)){action('+ Add product',openSingle);action('Refresh',()=>tab==='inventory'?window.ceroodRefreshInventory?.():tab==='products'?window.loadProducts?.():window.ceroodRefreshSingleCatalogs?.(),true)}
  if(tab==='orders')action('Refresh orders',()=>window.loadSellerOrders?.(),true);
- if(tab==='shipping')action('+ Add pickup location',()=>$('pickupAddBtn')?.click());
+ if(tab==='shipping'){action('+ Add pickup location',()=>$('pickupAddBtn')?.click());action('Refresh',()=>Promise.allSettled([window.ceroodLoadPickupLocations?.(),window.ceroodLoadServiceability?.()]),true)}
  if(tab==='quality'){action('View catalogs',()=>goCatalog());action('Refresh',()=>window.loadProducts?.(),true)}
  if(tab==='pricing'){action('View catalogs',()=>goCatalog());action('Refresh',()=>window.loadProducts?.(),true)}
  if(tab==='dispatch')action('Manage orders',()=>window.showTab('orders'));
@@ -7064,7 +7072,7 @@ function drawPanels(tab){
  });target.append(table);
 }
 const previousShow=window.showTab;
-window.showTab=function(tab){const result=previousShow.apply(this,arguments);updateHeader(tab);if(tab==='inventory')window.ceroodRefreshInventory?.();if(tab==='returns')window.ceroodLoadSellerReturns?.();return result};
+window.showTab=function(tab){const result=previousShow.apply(this,arguments);updateHeader(tab);if(tab==='inventory')window.ceroodRefreshInventory?.();if(tab==='shipping'){window.ceroodLoadPickupLocations?.();window.ceroodLoadServiceability?.()}if(tab==='returns')window.ceroodLoadSellerReturns?.();return result};
 const previousLoad=window.loadProducts;
 window.loadProducts=async function(){const result=await previousLoad.apply(this,arguments);drawPanels(current);return result};
 window.ceroodStudioEditRenewed=function(id){
@@ -7072,6 +7080,8 @@ window.ceroodStudioEditRenewed=function(id){
  editProduct(id);const modal=$('ccatEditModal'),form=$('renewedProductFormCard');if(!modal||!form)return;
  $('ccatEditModalBody').append(form);form.hidden=false;$('ccatEditModalTitle').textContent='Edit Renewed product';modal.dataset.returnTab=returnTab;modal.hidden=false;window.showTab(returnTab);$('ccatEditModalClose').focus();
 };
+window.ceroodStudioProductSaveReturn=()=>!$('ciModal').hidden?'inventory':$('ccatEditModal').dataset.returnTab||'add-product';
+window.ceroodStudioCloseAfterProductSave=()=>{if(!$('ceroodUploadChooser').hidden&&$('ceroodUploadChooser').contains($('productForm')))$('ceroodUploadChooserClose').click();};
 // Reuse each original shipping form in a popup; never clone its event handlers.
 const formModal=element('div');formModal.id='studioFormModal';formModal.hidden=true;
 formModal.innerHTML='<div class="studio-dialog-window" role="dialog" aria-modal="true" aria-labelledby="studioFormTitle"><div class="studio-dialog-head"><div><small>SELLER WORKSPACE</small><h2 id="studioFormTitle">Manage shipping</h2></div><button type="button" class="studio-dialog-close" aria-label="Close form">×</button></div><div class="studio-dialog-body" id="studioFormBody"></div></div>';
@@ -7094,16 +7104,7 @@ new MutationObserver(()=>{if(mounted?.node.id==='pickupLocationForm'&&mounted.no
 new MutationObserver(()=>{if(mounted?.node.id==='pickupLocationForm'&&mounted.node.hidden)closeForm(false);if(mounted?.node.id==='svcForm'&&$('svcMessage').classList.contains('success'))closeForm(false)}).observe($('studioFormBody'),{subtree:true,attributes:true,attributeFilter:['hidden','class']});
 // Preserve the existing support preview, making its action explicit and tidy.
 const support=$('section-support');
-new MutationObserver(()=>{
- const form=support.querySelector('#ccTicketForm');if(!form)return;
- const ticket=form.closest('.cc-ticket');if(!ticket||ticket.dataset.studioMounted)return;
- ticket.dataset.studioMounted='true';
- const submit=form.querySelector('[type=submit]');if(submit)submit.textContent='Check ticket details';
- // The original handler searches inside Support. Use the mounted form while it is in the popup.
- form.onsubmit=e=>{e.preventDefault();const notice=form.querySelector('#ccFormNotice');if(notice){notice.className='cc-alert';notice.textContent='Details checked. This preview does not submit a ticket. CEROOD support will be available when connected.';}};
- const reopen=element('button','seller-btn','Prepare support details');reopen.type='button';reopen.onclick=()=>openForm(ticket,'Prepare support details');ticket.before(reopen);
- openForm(ticket,'Prepare support details');
-}).observe(support,{childList:true,subtree:true});
+new MutationObserver(()=>{const form=support.querySelector('#ccTicketForm');if(!form)return;const ticket=form.closest('.cc-ticket');if(!ticket||ticket.dataset.studioMounted)return;ticket.dataset.studioMounted='true';const submit=form.querySelector('[type=submit]');if(submit)submit.textContent='Check ticket details';openForm(ticket,'Prepare support details');}).observe(support,{childList:true,subtree:true});
 // An async decision popup replaces blocking browser confirmations for order actions.
 const decision=element('div');decision.id='studioDecisionModal';decision.hidden=true;
 decision.innerHTML='<div class="studio-dialog-window" role="dialog" aria-modal="true" aria-labelledby="studioDecisionTitle"><div class="studio-dialog-head"><div><small>REVIEW ACTION</small><h2 id="studioDecisionTitle">Confirm action</h2></div><button type="button" class="studio-dialog-close" aria-label="Close confirmation">×</button></div><form class="studio-dialog-body" id="studioDecisionForm"><p class="studio-decision-copy" id="studioDecisionCopy"></p><label id="studioDecisionLabel" for="studioDecisionNote" hidden>Your note</label><textarea class="studio-decision-note" id="studioDecisionNote" maxlength="2000" hidden></textarea><div class="studio-decision-actions"><button type="button" class="seller-btn seller-btn-outline" id="studioDecisionCancel">Cancel</button><button type="submit" class="seller-btn" id="studioDecisionAccept">Confirm</button></div></form></div>';
@@ -7114,14 +7115,12 @@ window.ceroodStudioConfirm=options=>ask(options,false);window.ceroodStudioAskNot
 $('studioDecisionCancel').onclick=()=>finishDecision(askNote?null:false);decision.querySelector('.studio-dialog-close').onclick=()=>finishDecision(askNote?null:false);decision.addEventListener('click',e=>{if(e.target===decision)finishDecision(askNote?null:false)});$('studioDecisionForm').onsubmit=e=>{e.preventDefault();if(askNote&&$('studioDecisionNote').required&&!$('studioDecisionNote').value.trim()){$('studioDecisionNote').setCustomValidity('Please enter a reason.');$('studioDecisionNote').reportValidity();return}finishDecision(askNote?$('studioDecisionNote').value.trim():true)};$('studioDecisionNote').oninput=()=>{$('studioDecisionNote').setCustomValidity('')};
 // Popup stacking, one Escape target, keyboard focus, and background scroll lock.
 const closeSelectors={ceroodUploadChooser:'#ceroodUploadChooserClose',cwProductsPopup:'.cwp-close',ccatEditModal:'#ccatEditModalClose',ccatViewPopup:'#ccatViewPopupClose',ciModal:'#ciModalClose',cfBulkModal:'#cfBulkCancel',studioFormModal:'.studio-dialog-close',studioDecisionModal:'.studio-dialog-close',ceroodTutorialModal:'.cerood-video-close'};
-const dialogs=new Map();let order=0,active=null,scheduled=false;const inertState=new Map();let lastOpener=null,lastOpenerAt=0;
-document.addEventListener('pointerdown',e=>{lastOpener=e.target.closest('button,a[href],input,select,textarea')||document.activeElement;lastOpenerAt=Date.now()},true);
-document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){lastOpener=document.activeElement;lastOpenerAt=Date.now()}},true);
+const dialogs=new Map();let order=0,active=null,scheduled=false,lastActivator=null;document.addEventListener('click',e=>{const button=e.target.closest('button,a,input');if(button)lastActivator=button},true);const inertState=new Map();
 const shown=e=>!!e&&e.isConnected&&e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden';
 const focusables=root=>[...root.querySelectorAll('button,a[href],input:not([type=hidden]),select,textarea,video[controls],[tabindex]')].filter(e=>!e.disabled&&!e.hidden&&e.tabIndex>=0&&shown(e));
 function syncDialogs(){scheduled=false;let closed=[];
- for(const [id,selector] of Object.entries(closeSelectors)){const root=$(id);if(!root)continue;let item=dialogs.get(id);if(!item){item={root,selector,opened:false,order:0,focus:null};dialogs.set(id,item);root.classList.add('studio-modal-root');if(root.parentNode!==document.body)document.body.append(root);const panel=root.querySelector('[role=dialog]')||root.firstElementChild;if(panel){panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');const label=root.getAttribute('aria-labelledby');if(label&&!panel.hasAttribute('aria-labelledby'))panel.setAttribute('aria-labelledby',label);if(!panel.hasAttribute('tabindex'))panel.tabIndex=-1}if(root.getAttribute('role')==='dialog'&&panel!==root)root.removeAttribute('role')}
-  const isOpen=!root.hidden&&getComputedStyle(root).display!=='none';if(isOpen&&!item.opened){item.order=++order;item.focus=lastOpener&&Date.now()-lastOpenerAt<800&&!root.contains(lastOpener)?lastOpener:document.activeElement}if(!isOpen&&item.opened)closed.push(item);item.opened=isOpen;
+ for(const [id,selector] of Object.entries(closeSelectors)){const root=$(id);if(!root)continue;let item=dialogs.get(id);if(!item){item={root,selector,opened:false,order:0,focus:null};dialogs.set(id,item);root.classList.add('studio-modal-root');if(root.parentNode!==document.body)document.body.append(root);const panel=root.querySelector('[role=dialog]')||root.firstElementChild;if(panel){panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');for(const name of ['aria-labelledby','aria-describedby'])if(root.hasAttribute(name)&&!panel.hasAttribute(name))panel.setAttribute(name,root.getAttribute(name));if(!panel.hasAttribute('tabindex'))panel.tabIndex=-1}if(root.getAttribute('role')==='dialog'&&panel!==root)root.removeAttribute('role')}
+  const isOpen=!root.hidden&&getComputedStyle(root).display!=='none';if(isOpen&&!item.opened){item.order=++order;item.focus=root.contains(document.activeElement)?lastActivator:document.activeElement}if(!isOpen&&item.opened)closed.push(item);item.opened=isOpen;
  }
  const open=[...dialogs.values()].filter(d=>d.opened).sort((a,b)=>a.order-b.order);open.forEach((d,i)=>{const z=String(200000+i*10);if(d.root.style.getPropertyValue('z-index')!==z)d.root.style.setProperty('z-index',z,'important')});
  const top=open.filter(d=>getComputedStyle(d.root).visibility!=='hidden').at(-1)?.root||null;const changed=active!==top;active=top;document.body.classList.toggle('studio-modal-open',!!top);
@@ -7133,8 +7132,10 @@ function queueDialogs(){if(scheduled)return;scheduled=true;queueMicrotask(syncDi
 new MutationObserver(queueDialogs).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class','style']});
 document.addEventListener('keydown',e=>{if(!active)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();const item=[...dialogs.values()].find(d=>d.root===active);active.querySelector(item?.selector)?.click();queueDialogs();return}if(e.key==='Tab'){const nodes=focusables(active);if(!nodes.length){e.preventDefault();active.firstElementChild?.focus();return}const first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&(document.activeElement===first||!active.contains(document.activeElement))){e.preventDefault();last.focus()}else if(!e.shiftKey&&(document.activeElement===last||!active.contains(document.activeElement))){e.preventDefault();first.focus()}}},true);
 document.addEventListener('focusin',e=>{if(active&&!active.contains(e.target))(focusables(active)[0]||active.firstElementChild)?.focus()},true);
-function updateDrawer(){const sidebar=$('hubSidebar'),menu=$('hubMenu');if(!sidebar||!menu)return;const mobile=matchMedia('(max-width:800px)').matches,open=sidebar.classList.contains('hub-open');menu.setAttribute('aria-expanded',String(open));sidebar.setAttribute('aria-hidden',String(mobile&&!open));if(!active)sidebar.inert=mobile&&!open;}
+function updateDrawer(){const sidebar=$('hubSidebar'),menu=$('hubMenu');if(!sidebar||!menu)return;const mobile=matchMedia('(max-width:800px)').matches,open=sidebar.classList.contains('hub-open');menu.setAttribute('aria-expanded',String(open));document.body.classList.toggle('studio-drawer-open',mobile&&open);sidebar.setAttribute('aria-hidden',String(mobile&&!open));if(!active)sidebar.inert=mobile&&!open;}
 new MutationObserver(updateDrawer).observe($('hubSidebar'),{attributes:true,attributeFilter:['class']});window.addEventListener('resize',updateDrawer);
+document.addEventListener('keydown',e=>{if(active||!matchMedia('(max-width:800px)').matches||!$('hubSidebar').classList.contains('hub-open'))return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();$('hubClose').click();$('hubMenu').focus()}else if(e.key==='Tab'){const nodes=focusables($('hubSidebar'));if(!nodes.length)return;const first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&(document.activeElement===first||!$('hubSidebar').contains(document.activeElement))){e.preventDefault();last.focus()}else if(!e.shiftKey&&(document.activeElement===last||!$('hubSidebar').contains(document.activeElement))){e.preventDefault();first.focus()}}},true);
+$('hubMenu').addEventListener('click',()=>{if(matchMedia('(max-width:800px)').matches)$('hubClose').focus()});
 document.addEventListener('keydown',e=>{if(active||e.key!=='Escape')return;if($('hubSidebar').classList.contains('hub-open')){$('hubClose').click();$('hubMenu').focus()}});
 updateDrawer();updateHeader(document.querySelector('.seller-section.active')?.id.replace('section-','')||'overview');queueDialogs();
 })();
