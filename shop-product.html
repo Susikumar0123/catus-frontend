@@ -1767,6 +1767,18 @@ body > .cerood-location-error {
 .cr-bank-offer-main{font-size:12px;font-weight:650;line-height:1.5}.cr-bank-offer-sub{font-size:10.5px;line-height:1.55;color:#5f6b7a;margin-top:3px}.cr-bank-offer[hidden]{display:none!important}
 @media(max-width:430px){.cr-bank-offer{padding:11px 12px}.cr-bank-offer-icon{width:33px;height:33px;flex-basis:33px}.cr-bank-offer-head{align-items:flex-start}.cr-bank-offer-badge{font-size:9px}}
 </style>
+
+<style id="cerood-product-desktop-header-index-match-20261005">
+/* Desktop product header: match index.html — Home Services | Cart | signed-in account name only. */
+@media (min-width:851px){
+  html body .crn-header-main .crn-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:12px!important;flex:0 0 auto!important;min-width:max-content!important;}
+  html body .crn-header-main .crn-actions>.crn-service-pill,
+  html body .crn-header-main .crn-actions>.crn-cart,
+  html body .crn-header-main .crn-actions>.crn-account{display:inline-flex!important;visibility:visible!important;align-items:center!important;justify-content:center!important;}
+  html body .crn-header-main .cerood-unified-tools{display:none!important;visibility:hidden!important;}
+  html body .crn-header-main .crn-account{white-space:nowrap!important;}
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -2966,6 +2978,33 @@ body{background:#fff!important}
  }
  function boot(){restoreDetails();requestAnimationFrame(restoreDetails);setTimeout(restoreDetails,80);setTimeout(restoreDetails,350)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
+
+<script id="cerood-product-header-auth-name-sync-20261005">
+(function(){
+  'use strict';
+  function readUser(){
+    try{return JSON.parse(localStorage.getItem('catus_logged_user')||'null');}
+    catch(_){return null;}
+  }
+  function displayName(user){
+    if(!user)return '';
+    return String(user.name||user.full_name||user.fullName||user.customer_name||user.first_name||user.firstName||'').trim();
+  }
+  function sync(){
+    var user=readUser(), name=displayName(user);
+    document.querySelectorAll('[data-cerood-auth-trigger]').forEach(function(a){
+      var label=a.querySelector('span');
+      if(label)label.textContent=user?(name||'Account'):'Login';
+      a.setAttribute('aria-label',user?'Open Cerood account':'Login to Cerood');
+    });
+  }
+  window.CeroodSyncHeaderAuthName=sync;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});else sync();
+  window.addEventListener('storage',function(e){if(e.key==='catus_logged_user')sync();});
+  window.addEventListener('pageshow',sync);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)sync();});
 })();
 </script>
 </body></html>
