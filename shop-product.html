@@ -2872,4 +2872,99 @@ body{background:#fff!important}
  }
  function boot(){arrange();requestAnimationFrame(arrange);setTimeout(arrange,60);setTimeout(arrange,300)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-})();</script></body></html>
+})();</script>
+<style id="cerood-center-column-scroll-final-20261005">
+/* Desktop marketplace layout: only the middle product-information column scrolls. */
+@media (min-width:1151px){
+  #product .product-grid{
+    align-items:start!important;
+    height:calc(100dvh - 140px)!important;
+    min-height:560px!important;
+    max-height:calc(100dvh - 140px)!important;
+    overflow:hidden!important;
+  }
+  #product .product-gallery{
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+    position:sticky!important;
+    top:88px!important;
+    align-self:start!important;
+  }
+  #product .cr-product-middle-column{
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+    align-self:stretch!important;
+  }
+  #product .cr-product-middle-column>.product-info,
+  #product .product-info{
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior:contain!important;
+    scrollbar-width:thin!important;
+    scrollbar-color:#c7ccd6 transparent!important;
+    padding-right:10px!important;
+  }
+  #product .cr-product-middle-column>.product-info::-webkit-scrollbar,
+  #product .product-info::-webkit-scrollbar{width:7px!important;display:block!important}
+  #product .cr-product-middle-column>.product-info::-webkit-scrollbar-track,
+  #product .product-info::-webkit-scrollbar-track{background:transparent!important}
+  #product .cr-product-middle-column>.product-info::-webkit-scrollbar-thumb,
+  #product .product-info::-webkit-scrollbar-thumb{background:#c7ccd6!important;border-radius:999px!important}
+  #product .cerood-purchase-panel{
+    height:auto!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:visible!important;
+    position:sticky!important;
+    top:88px!important;
+    align-self:start!important;
+  }
+  #product .product-info>.details{
+    display:block!important;
+    margin:12px 0 0!important;
+  }
+  #product .product-info>.details>.section{
+    display:block!important;
+    margin:0!important;
+    padding:18px 0!important;
+    border:0!important;
+    border-top:1px solid #e5e7eb!important;
+    border-radius:0!important;
+    background:#fff!important;
+    box-shadow:none!important;
+  }
+  #product .product-info>.details>.section h2{font-size:18px!important;margin:0 0 12px!important}
+}
+/* Tablet/mobile keep the normal page flow. */
+@media (max-width:1150px){
+  #product .product-grid,#product .cr-product-middle-column,#product .product-info,#product .cerood-purchase-panel{
+    height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;
+  }
+}
+/* The old full-width details island must never remain visible. */
+#product>.cr-marketplace-details{display:none!important}
+</style>
+<script id="cerood-center-column-scroll-final-script-20261005">
+(function(){'use strict';
+ function restoreDetails(){
+   const root=document.getElementById('product');
+   if(!root)return;
+   const info=root.querySelector('.product-info');
+   const flow=root.querySelector(':scope > .cr-marketplace-details');
+   if(!info)return;
+   let details=info.querySelector(':scope > .details');
+   if(!details){details=document.createElement('div');details.className='details';info.appendChild(details)}
+   if(flow){while(flow.firstChild)details.appendChild(flow.firstChild);flow.remove()}
+ }
+ function boot(){restoreDetails();requestAnimationFrame(restoreDetails);setTimeout(restoreDetails,80);setTimeout(restoreDetails,350)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
+</body></html>
