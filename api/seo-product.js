@@ -320,21 +320,7 @@ html = html.replace(
 // ==========================================
 
 const isGasRefill = service === 'ac-gas-refill';
-const detailsHtml = isGasRefill ? `
-<section aria-labelledby="ceroodLocalSeoTitle" style="margin:24px 0;padding:24px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;color:#111;line-height:1.65">
-<h2 id="ceroodLocalSeoTitle">AC gas refill: inspection and next steps in ${escapeHtml(seoLocation)}</h2>
-<p id="ceroodLocalSeoDescription">An AC that is not cooling may need inspection before deciding whether refrigerant refill or another repair is required. Tell Cerood about the cooling problem when booking.</p>
-<h3>Inspection charge: ₹299</h3>
-<p>The ₹299 charge is for inspection. Gas refill, leak repair and spare parts are not included. After inspection, a quote will be provided; additional work will proceed only with your approval.</p>
-<h3>Booking and availability</h3>
-<p>Confirm your full address and technician availability with Cerood before the visit. The location shown on this page does not guarantee an available technician or a visit time.</p>
-<h3>Frequently asked questions</h3>
-<details><summary>Does ₹299 include gas refill?</summary><p>No. ₹299 covers inspection only. Refill, repairs and parts are quoted separately.</p></details>
-<details><summary>Will every cooling problem require a refill?</summary><p>No. The problem must be assessed before recommending the next step.</p></details>
-<details><summary>How do I confirm the visit?</summary><p>Use the booking form or <a href="/contact">contact Cerood</a> to confirm your address and availability.</p></details>
-<p><a href="/services">Explore services</a> · <a href="/${encodePathSegment(state)}/${encodePathSegment(district)}/location/${encodePathSegment(location)}">Services in ${escapeHtml(page.location_name || page.district)}</a></p>
-</section>` : '';
-html = html.replace('<!-- CEROOD_SERVICE_DETAILS -->', detailsHtml);
+// Service information and FAQs are accessed through the existing footer /faq link.
 if (isGasRefill) {
  html = html.replace(/<span class="starts-from-label">[\s\S]*?<\/span>/i, '<span class="starts-from-label">Inspection charge</span>');
 }
