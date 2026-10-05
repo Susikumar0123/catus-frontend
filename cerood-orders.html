@@ -669,6 +669,14 @@ html body .header.crn-header .crn-header-main::after{
 }
 </style>
 
+<style id="cerood-orders-desktop-nav-guard-20261005">
+/* Keep the Index-style bottom dock and mobile-only tools completely out of desktop layout. */
+@media (min-width:851px){
+  html body .bottom.crn-mobile-nav{display:none!important;}
+  html body .cerood-unified-tools{display:none!important;}
+  html body .crn-mobile-location{display:none!important;}
+}
+</style>
 <style id="cerood-orders-mobile-index-exact-20261005">
 .cerood-unified-tools{display:none}.cerood-unified-menu{position:relative}.cerood-unified-menu summary{list-style:none;cursor:pointer}.cerood-unified-menu summary::-webkit-details-marker{display:none}.cerood-unified-menu-list{position:absolute;right:0;top:calc(100% + 8px);width:min(280px,calc(100vw - 30px));max-height:65vh;overflow:auto;background:#fff;border:1px solid #e5e7eb;border-radius:13px;box-shadow:0 12px 30px #17233d30;padding:7px;z-index:2147483000}.cerood-unified-menu-list a{display:block;padding:12px 13px;border-radius:8px;font-size:13px;color:#26364d}.cerood-unified-menu-list a:hover{background:#f3f0ff}
 @media(max-width:850px){
