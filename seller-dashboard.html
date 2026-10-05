@@ -6791,8 +6791,9 @@ if(typeof seller!=='undefined'&&seller)loadLocations(false);
   const active=allOrders.filter(o=>!['delivered','cancelled','canceled'].includes(String(o.delivery_status||'').toLowerCase()));
   const profile=typeof seller!=='undefined'?seller:null;
   text('totalProducts',records.length);text('approvedProducts',approved.length);text('studioPendingProducts',pending.length);text('studioActiveOrders',active.length);text('studioRecentCount',records.length);text('studioProductNavCount',records.length);text('studioOrderNavCount',allOrders.filter(o=>String(o.seller_order_status||'new').toLowerCase()==='new').length);
+  byId('section-overview')?.classList.toggle('studio-has-products',records.length>0);
   if(profile){const name=String(profile.owner_name||profile.shop_name||'Seller');text('studioAvatar',name.slice(0,1).toUpperCase());byId('studioAvatar')?.setAttribute('aria-label','Seller account: '+name);text('studioHeaderStatus',profile.status==='approved'?'Verified seller':String(profile.status||'Seller account'));}
-  const feedbackButton=byId('studioApprovalFocus');if(feedbackButton){feedbackButton.classList.toggle('approval-empty',!feedback.length);text('studioApprovalFocusText',feedback.length?feedback.length+' listing'+(feedback.length===1?' needs':'s need')+' your attention':pending.length?pending.length+' listing'+(pending.length===1?' is':'s are')+' under review':'View your approval status');}
+  const feedbackButton=byId('studioApprovalFocus');if(feedbackButton){feedbackButton.classList.toggle('approval-empty',!(feedback.length||pending.length));text('studioApprovalFocusText',feedback.length?feedback.length+' listing'+(feedback.length===1?' needs':'s need')+' your attention':pending.length?pending.length+' listing'+(pending.length===1?' is':'s are')+' under review':'View your approval status');}
   const footer=byId('studioFooter');if(footer)footer.hidden=!!byId('dashboardContent')?.classList.contains('seller-hidden');
   const menu=byId('hubMenu');if(menu)menu.setAttribute('aria-expanded',String(!!byId('hubSidebar')?.classList.contains('hub-open')));
   renderRecent(records);
@@ -7158,6 +7159,377 @@ body.cerood-studio .seller-workspace :is(input,select,textarea){background-color
 body.cerood-studio .studio-modal-root :is(.studio-dialog-window,.studio-dialog-body,.cerood-chooser-box,.cerood-chooser-body,.cwp-window,.cwp-body,.ci-modal-panel,.ci-modal-body,.ccat-edit-modal-box,.ccat-edit-modal-body,.ccat-view-window,.ccat-view-content,.pickup-form,.serviceability-form,.marketplace-fields,.cb-excel-step,.cf-v3-modal,.cf-v3-modal-main,.cf-v3-rules){background:#ffffff!important;background-image:none!important}
 
 </style>
+
+<style id="cerood-seller-dashboard-clean-alignment-20261005">
+/*
+  Final seller-dashboard cleanup:
+  - removes repeated navigation/actions
+  - keeps one clear primary action per purpose
+  - aligns cards, text, grids and table rows to a common rhythm
+  - presentation only; existing API/auth/order/product handlers remain unchanged
+*/
+:root{
+  --studio-sidebar:252px;
+  --studio-content-max:1240px;
+  --studio-space:20px;
+}
+
+/* ---------- Remove repeated controls ---------- */
+/* Product creation already has one primary button in the Overview heading. */
+body.cerood-studio #section-overview .studio-welcome-actions{
+  display:none!important;
+}
+/* The same slogan is already shown in the main welcome area. */
+body.cerood-studio .studio-renewed-note{
+  display:none!important;
+}
+/* These links repeat sidebar navigation (catalog/help/pricing/orders). */
+body.cerood-studio #section-overview .studio-learning-area{
+  display:none!important;
+}
+/* Once products exist, the first-time seller journey is no longer needed. */
+body.cerood-studio #section-overview.studio-has-products .studio-journey{
+  display:none!important;
+}
+/* Do not show an empty approval shortcut. It reappears automatically for pending/changes-needed listings. */
+body.cerood-studio #studioApprovalFocus.approval-empty{
+  display:none!important;
+}
+/* Keep Help and Notices in the left navigation, and Sign out in the top header. */
+body.cerood-studio .hub-top-actions,
+body.cerood-studio .studio-top-actions .studio-icon-button[data-tab="notices"],
+body.cerood-studio #hubLogout{
+  display:none!important;
+}
+
+/* ---------- One common content line ---------- */
+body.cerood-studio .seller-workspace > .hub-topbar,
+body.cerood-studio .seller-workspace > #studioPageHeader,
+body.cerood-studio .seller-workspace > #dashboardMessage,
+body.cerood-studio .seller-workspace > .seller-section{
+  width:min(100%,var(--studio-content-max))!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+body.cerood-studio .seller-workspace > .hub-topbar{
+  margin-top:0!important;
+  margin-bottom:22px!important;
+}
+body.cerood-studio .seller-workspace > #studioPageHeader{
+  margin-top:0!important;
+  margin-bottom:24px!important;
+}
+body.cerood-studio .seller-workspace > #dashboardMessage{
+  margin-top:0!important;
+}
+
+/* ---------- Sidebar: one straight icon/text/count line ---------- */
+body.cerood-studio .hub-menu-scroll .hub-nav{
+  display:grid!important;
+  grid-template-columns:20px minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  width:100%!important;
+}
+body.cerood-studio .hub-menu-scroll .hub-nav > .hub-modern-icon{
+  grid-column:1!important;
+  justify-self:center!important;
+}
+body.cerood-studio .hub-menu-scroll .hub-nav > .studio-nav-count,
+body.cerood-studio .hub-menu-scroll .hub-nav > i{
+  grid-column:3!important;
+  justify-self:end!important;
+  margin-left:0!important;
+}
+body.cerood-studio .hub-menu-scroll .hub-sub{
+  display:flex!important;
+  align-items:center!important;
+  width:100%!important;
+}
+body.cerood-studio .hub-menu-caption{
+  padding-left:11px!important;
+  padding-right:11px!important;
+}
+body.cerood-studio .studio-sidebar-bottom{
+  padding-top:8px!important;
+}
+
+/* ---------- Overview alignment ---------- */
+body.cerood-studio #section-overview .studio-heading{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:end!important;
+  gap:24px!important;
+  margin:0 0 24px!important;
+}
+body.cerood-studio #section-overview .studio-heading > div{
+  min-width:0;
+}
+body.cerood-studio #section-overview .studio-heading .seller-btn{
+  align-self:end!important;
+  margin:0!important;
+  white-space:nowrap!important;
+}
+body.cerood-studio #section-overview .studio-heading h1{
+  margin:7px 0 7px!important;
+  line-height:1.18!important;
+}
+body.cerood-studio #section-overview .studio-heading p{
+  margin:0!important;
+  max-width:720px!important;
+  line-height:1.65!important;
+}
+
+body.cerood-studio #section-overview .studio-welcome{
+  grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr)!important;
+  align-items:stretch!important;
+  gap:28px!important;
+  margin:0 0 22px!important;
+}
+body.cerood-studio #section-overview .studio-welcome-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  min-width:0!important;
+  padding:24px 0!important;
+}
+body.cerood-studio #section-overview .studio-welcome h2{
+  margin:14px 0 15px!important;
+  max-width:620px!important;
+}
+body.cerood-studio #section-overview .studio-welcome-copy > p{
+  margin:0!important;
+  max-width:620px!important;
+}
+body.cerood-studio #section-overview .studio-welcome-checks{
+  margin-top:20px!important;
+  gap:8px!important;
+}
+body.cerood-studio #section-overview .studio-welcome-checks > span{
+  display:flex!important;
+  align-items:center!important;
+  min-height:22px!important;
+}
+body.cerood-studio #section-overview .studio-welcome-art{
+  height:auto!important;
+  min-height:310px!important;
+  align-self:stretch!important;
+}
+
+/* Equal, straight statistic cards. */
+body.cerood-studio #section-overview .studio-stats{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:14px!important;
+  align-items:stretch!important;
+  margin:0 0 22px!important;
+}
+body.cerood-studio #section-overview .studio-stat{
+  height:100%!important;
+  min-height:146px!important;
+  display:grid!important;
+  grid-template-rows:auto auto 1fr!important;
+  align-content:start!important;
+  padding:18px!important;
+  margin:0!important;
+}
+body.cerood-studio #section-overview .studio-stat-top{
+  min-height:32px!important;
+  align-items:center!important;
+}
+body.cerood-studio #section-overview .studio-stat > strong{
+  margin:12px 0 8px!important;
+}
+body.cerood-studio #section-overview .studio-stat > small{
+  align-self:end!important;
+  line-height:1.45!important;
+}
+
+/* Main content + right rail share a clean top line. */
+body.cerood-studio #section-overview .studio-overview-grid{
+  grid-template-columns:minmax(0,2fr) minmax(260px,.72fr)!important;
+  align-items:start!important;
+  gap:18px!important;
+}
+body.cerood-studio #section-overview .studio-overview-left,
+body.cerood-studio #section-overview .studio-overview-right{
+  min-width:0!important;
+}
+body.cerood-studio #section-overview .studio-overview-right{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:16px!important;
+  align-items:start!important;
+}
+body.cerood-studio #section-overview .studio-overview-left > .studio-panel,
+body.cerood-studio #section-overview .studio-overview-right > .studio-panel{
+  margin:0!important;
+}
+body.cerood-studio #section-overview .studio-next-card{
+  margin:0!important;
+}
+body.cerood-studio #section-overview .studio-workflow-note{
+  margin:0!important;
+  padding:14px 4px!important;
+  align-items:flex-start!important;
+}
+body.cerood-studio #section-overview .studio-workflow-note p{
+  margin:0!important;
+  line-height:1.65!important;
+}
+
+/* ---------- Global card / grid alignment ---------- */
+body.cerood-studio :is(
+  .seller-grid,
+  .product-list,
+  .hub-dispatch-grid,
+  .hub-quality-grid,
+  .cc-help-grid,
+  .market-choice,
+  .marketplace-fields,
+  .product-form-grid
+){
+  align-items:stretch!important;
+}
+body.cerood-studio :is(
+  .seller-card,
+  .hub-content-card,
+  .hub-quality-card,
+  .seller-order-card,
+  .studio-panel,
+  .product-card,
+  .cc-help-card,
+  .hub-dispatch-stat
+){
+  min-width:0!important;
+}
+body.cerood-studio .seller-card > :first-child,
+body.cerood-studio .hub-content-card > :first-child,
+body.cerood-studio .hub-quality-card > :first-child{
+  margin-top:0!important;
+}
+body.cerood-studio .seller-card > :last-child,
+body.cerood-studio .hub-content-card > :last-child,
+body.cerood-studio .hub-quality-card > :last-child{
+  margin-bottom:0!important;
+}
+
+/* Form fields sit on the same vertical rhythm. */
+body.cerood-studio .product-form-grid,
+body.cerood-studio .marketplace-fields,
+body.cerood-studio .market-dynamic-grid{
+  row-gap:16px!important;
+  column-gap:16px!important;
+}
+body.cerood-studio .product-field{
+  margin:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  min-width:0!important;
+}
+body.cerood-studio .product-field label{
+  min-height:20px!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  margin:0 0 7px!important;
+}
+body.cerood-studio .product-field small{
+  margin-top:7px!important;
+}
+
+/* Tables: text and controls share the same baseline. */
+body.cerood-studio table th,
+body.cerood-studio table td{
+  vertical-align:middle!important;
+}
+body.cerood-studio .studio-recent-table th,
+body.cerood-studio .studio-recent-table td{
+  padding-top:14px!important;
+  padding-bottom:14px!important;
+}
+body.cerood-studio .studio-recent-product{
+  min-width:0!important;
+}
+body.cerood-studio .studio-recent-product > span:last-child{
+  min-width:0!important;
+}
+
+/* Order cards stay straight even when content length differs. */
+body.cerood-studio .seller-order-top{
+  align-items:center!important;
+}
+body.cerood-studio .seller-order-product{
+  min-width:0!important;
+  flex:1 1 520px!important;
+}
+body.cerood-studio .seller-order-actions{
+  align-items:center!important;
+}
+
+/* ---------- Responsive alignment ---------- */
+@media(max-width:1100px) and (min-width:801px){
+  body.cerood-studio #section-overview .studio-welcome{
+    grid-template-columns:minmax(0,1fr) minmax(300px,.85fr)!important;
+    gap:20px!important;
+  }
+  body.cerood-studio #section-overview .studio-stats{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  body.cerood-studio #section-overview .studio-overview-grid{
+    grid-template-columns:minmax(0,1.6fr) minmax(235px,.7fr)!important;
+  }
+}
+
+@media(max-width:800px){
+  body.cerood-studio .seller-workspace > .hub-topbar,
+  body.cerood-studio .seller-workspace > #studioPageHeader,
+  body.cerood-studio .seller-workspace > #dashboardMessage,
+  body.cerood-studio .seller-workspace > .seller-section{
+    width:100%!important;
+  }
+
+  body.cerood-studio #section-overview .studio-heading{
+    grid-template-columns:1fr!important;
+    align-items:start!important;
+    gap:14px!important;
+  }
+  body.cerood-studio #section-overview .studio-heading .seller-btn{
+    justify-self:start!important;
+    margin:0!important;
+  }
+  body.cerood-studio #section-overview .studio-welcome{
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+  }
+  body.cerood-studio #section-overview .studio-welcome-copy{
+    padding:0!important;
+  }
+  body.cerood-studio #section-overview .studio-welcome-art{
+    min-height:260px!important;
+  }
+  body.cerood-studio #section-overview .studio-stats{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+  body.cerood-studio #section-overview .studio-stat{
+    min-height:132px!important;
+    padding:14px!important;
+  }
+  body.cerood-studio #section-overview .studio-overview-grid{
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+  }
+}
+
+@media(max-width:480px){
+  body.cerood-studio #section-overview .studio-stats{
+    grid-template-columns:1fr!important;
+  }
+  body.cerood-studio #section-overview .studio-welcome-art{
+    min-height:235px!important;
+  }
+}
+</style>
+
 </body>
 
 </html>
