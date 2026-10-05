@@ -2838,4 +2838,33 @@ body{background:#fff!important}
  #product .cerood-purchase-panel .actions{display:grid!important;grid-template-columns:1fr 1fr!important;position:static!important}
 }
 </style>
+
+<style id="cerood-product-collapse-repair-20261005">
+/* Repair: older equal-height/scroll rules were still constraining the middle column.
+   Keep the desktop product area natural-height and let the page itself scroll. */
+@media (min-width:1151px){
+  #product .product-grid{
+    height:auto!important;min-height:0!important;max-height:none!important;
+    overflow:visible!important;align-items:start!important;
+  }
+  #product .cr-product-middle-column{
+    height:auto!important;min-height:0!important;max-height:none!important;
+    overflow:visible!important;align-self:start!important;
+  }
+  #product .cr-product-middle-column>.product-info{
+    flex:none!important;height:auto!important;min-height:0!important;max-height:none!important;
+    overflow:visible!important;
+  }
+  #product .product-gallery{
+    height:auto!important;min-height:0!important;max-height:none!important;
+    overflow:visible!important;align-self:start!important;
+  }
+  #product .cerood-purchase-panel{
+    height:auto!important;min-height:0!important;max-height:none!important;
+    overflow:visible!important;align-self:start!important;
+  }
+}
+/* The review content belongs only in its popup, never as a layout card. */
+#product .cr-product-middle-column>.cr-customer-reviews{display:none!important}
+</style>
 </body></html>
