@@ -1097,6 +1097,32 @@ body{background:#fff!important;color:#242a38!important;font-family:Inter,system-
 }
 </style>
 
+
+<style id="cerood-orders-list-modal-20261005">
+@media (min-width:801px){
+  #section-orders .seller-orders-list{gap:0!important;border:1px solid #dfe6ee;border-radius:4px;background:#fff;overflow:hidden}
+  #section-orders .seller-order-card{position:relative!important;display:grid!important;grid-template-columns:minmax(250px,1.35fr) minmax(210px,.9fr) 150px 92px;align-items:center;gap:14px;margin:0!important;padding:12px 14px!important;border:0!important;border-bottom:1px solid #e8edf3!important;border-radius:0!important;background:#fff!important;min-height:76px;cursor:pointer}
+  #section-orders .seller-order-card:last-child{border-bottom:0!important}
+  #section-orders .seller-order-card:hover{background:#f8fbfe!important}
+  #section-orders .seller-order-top{display:block!important;margin:0!important;padding:0!important;border:0!important;min-width:0}
+  #section-orders .seller-order-top>div>strong{display:block;font-size:12px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #section-orders .seller-order-top .product-meta{font-size:11px!important;margin-top:5px!important;color:#667085}
+  #section-orders .seller-order-top>.seller-order-status{position:absolute;right:116px;top:50%;transform:translateY(-50%);font-size:10px!important;padding:5px 8px!important}
+  #section-orders .seller-order-product{display:contents!important}
+  #section-orders .seller-order-product>img{width:48px!important;height:48px!important;border-radius:4px!important;grid-column:2;justify-self:start}
+  #section-orders .seller-order-info{grid-column:2;min-width:0;padding-left:60px;margin-left:-60px;pointer-events:none}
+  #section-orders .seller-order-info h3{font-size:12px!important;margin:0 0 4px 60px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #section-orders .seller-order-info p{display:none!important}
+  #section-orders .seller-order-info p:first-of-type{display:block!important;margin:0 0 0 60px!important;font-size:11px!important;color:#667085}
+  #section-orders .seller-order-actions{grid-column:3;margin:0!important;padding:0!important;border:0!important;display:none!important}
+  #section-orders .seller-order-card>.product-meta{display:none!important}
+  #section-orders .cerood-order-view{grid-column:4;justify-self:end;border:1px solid #b9c7d8;background:#fff;color:#175cd3;border-radius:4px;padding:7px 13px;font:600 11px Inter,system-ui;cursor:pointer;z-index:2}
+  #section-orders .cerood-order-view:hover{background:#eef6ff}
+}
+.cerood-order-modal[hidden]{display:none!important}.cerood-order-modal{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:22px;background:#0f172a73}.cerood-order-dialog{width:min(760px,96vw);max-height:88vh;overflow:auto;background:#fff;border-radius:7px;box-shadow:0 24px 70px #0f172a38}.cerood-order-modal-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;background:#fff;border-bottom:1px solid #e4e9f0}.cerood-order-modal-head strong{font-size:15px}.cerood-order-close{border:0;background:#f1f5f9;width:32px;height:32px;border-radius:50%;font-size:20px;cursor:pointer}.cerood-order-modal-body{padding:18px}.cerood-order-modal-body .seller-order-card{border:0!important;padding:0!important;box-shadow:none!important}.cerood-order-modal-body .seller-order-top{padding-bottom:13px!important}.cerood-order-modal-body .seller-order-product{display:flex!important}.cerood-order-modal-body .seller-order-info p{display:block!important}.cerood-order-modal-body .seller-order-actions{display:flex!important}.cerood-order-modal-body .cerood-order-view{display:none!important}
+@media(max-width:800px){.cerood-order-view{border:1px solid #cbd5e1;background:#fff;color:#175cd3;border-radius:5px;padding:8px 12px;font-weight:600;margin-top:10px}.cerood-order-dialog{width:min(96vw,680px)}.cerood-order-modal-body{padding:14px}}
+</style>
+
 </head>
 
 <body>
@@ -2697,6 +2723,31 @@ function sellerOrderAddress(address) {
     .join(', ') || '—';
 }
 
+function openCeroodSellerOrderModal(card, order) {
+  let modal = document.getElementById('ceroodSellerOrderModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'ceroodSellerOrderModal';
+    modal.className = 'cerood-order-modal';
+    modal.hidden = true;
+    modal.innerHTML = '<div class="cerood-order-dialog" role="dialog" aria-modal="true" aria-labelledby="ceroodOrderModalTitle"><div class="cerood-order-modal-head"><strong id="ceroodOrderModalTitle">Order details</strong><button type="button" class="cerood-order-close" aria-label="Close">×</button></div><div class="cerood-order-modal-body"></div></div>';
+    document.body.appendChild(modal);
+    modal.querySelector('.cerood-order-close').addEventListener('click', () => { modal.hidden = true; });
+    modal.addEventListener('click', e => { if (e.target === modal) modal.hidden = true; });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) modal.hidden = true; });
+  }
+  const body = modal.querySelector('.cerood-order-modal-body');
+  body.replaceChildren();
+  const clone = card.cloneNode(true);
+  clone.querySelectorAll('.cerood-order-view').forEach(el => el.remove());
+  // Modal is a detail viewer. Fulfilment actions remain on the live order row so existing handlers stay intact.
+  clone.querySelectorAll('.seller-order-actions').forEach(el => el.remove());
+  body.appendChild(clone);
+  modal.querySelector('#ceroodOrderModalTitle').textContent = 'Order #' + (order.order_id || 'Details');
+  modal.hidden = false;
+  modal.querySelector('.cerood-order-close').focus();
+}
+
 function renderSellerOrders(orders) {
   window.hubSellerOrders = Array.isArray(orders) ? orders : [];
   if (!window.hubOrdersInitialStageChosen && window.hubSellerOrders.length) {
@@ -2876,6 +2927,21 @@ function renderSellerOrders(orders) {
           'Shipped: ' + formatDate(order.seller_shipped_at), 'product-meta');
       }
     }
+
+    const viewButton = document.createElement('button');
+    viewButton.type = 'button';
+    viewButton.className = 'cerood-order-view';
+    viewButton.textContent = 'View';
+    viewButton.setAttribute('aria-label', 'View full order details');
+    viewButton.addEventListener('click', event => {
+      event.stopPropagation();
+      openCeroodSellerOrderModal(card, order);
+    });
+    card.appendChild(viewButton);
+    card.addEventListener('click', event => {
+      if (event.target.closest('button, a, input, select, textarea')) return;
+      openCeroodSellerOrderModal(card, order);
+    });
 
     container.appendChild(card);
   });
