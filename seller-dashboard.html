@@ -7530,6 +7530,227 @@ body.cerood-studio .seller-order-actions{
 }
 </style>
 
+
+<style id="cerood-ekart-clean-minimal-20261005">
+/* Ekart-inspired cleanup: cleaner, flatter, less boxed UI across the seller dashboard. */
+body.cerood-studio{
+  --ek-line:#e6eaef;
+  --ek-soft:#f7f9fb;
+  --ek-text:#223042;
+  --ek-muted:#6d7c90;
+  --ek-blue:#1f6fbb;
+  background:#f8fafc!important;
+}
+body.cerood-studio .seller-header,
+body.cerood-studio .hub-topbar,
+body.cerood-studio .seller-workspace,
+body.cerood-studio .hub-sidebar,
+body.cerood-studio .studio-footer{background:#fff!important}
+body.cerood-studio .hub-sidebar{border-right:1px solid var(--ek-line)!important}
+body.cerood-studio .seller-workspace{padding-top:18px!important;padding-bottom:28px!important}
+
+/* Main surfaces: subtle line only, no strong box feeling. */
+body.cerood-studio .seller-workspace :is(
+  .seller-card,.hub-content-card,.hub-quality-card,.seller-order-card,.studio-panel,.studio-stat,
+  .studio-next-card,.studio-learning-area,.studio-workflow-note,.hub-order-toolbar,.cc-help-card,
+  .cc-hero,.cr-performance,.cr-summary,.cr-live-card,.cf-v3-col,.cf-v3-detail,.cf-v3-review,
+  .pickup-card,.pickup-form,.serviceability-box,.serviceability-form,.serviceability-row,
+  .ccat-shell,.ccat-intro,.ccat-records,.ccat-overview,.ci-layout,.ci-catalog,.ci-details,
+  .hub-info-banner,.hub-image-rules,.hub-dropzone,.hub-quality-note,.cerood-latch-offer
+){
+  border:1px solid var(--ek-line)!important;
+  border-radius:6px!important;
+  box-shadow:none!important;
+  background:#fff!important;
+}
+body.cerood-studio .studio-workflow-note{padding:14px 16px!important}
+body.cerood-studio .studio-panel-head,
+body.cerood-studio .seller-card,
+body.cerood-studio .hub-content-card,
+body.cerood-studio .hub-quality-card,
+body.cerood-studio .seller-order-card,
+body.cerood-studio .studio-next-card,
+body.cerood-studio .studio-learning-area{padding-left:18px!important;padding-right:18px!important}
+
+/* Simplify overview hero and stats to look more like a clean report screen. */
+body.cerood-studio #section-overview .studio-welcome,
+body.cerood-studio #section-overview .studio-hero{
+  background:#fff!important;
+  border:1px solid var(--ek-line)!important;
+  border-radius:6px!important;
+}
+body.cerood-studio #section-overview .studio-welcome-art,
+body.cerood-studio #section-overview .studio-hero-art:before,
+body.cerood-studio #section-overview .studio-hero-sticker{background:#f8fafc!important;border-color:var(--ek-line)!important}
+body.cerood-studio #section-overview .studio-stat{
+  background:#fff!important;
+  border:1px solid var(--ek-line)!important;
+  min-height:132px!important;
+}
+body.cerood-studio #section-overview .studio-stat-icon,
+body.cerood-studio #section-overview .studio-mini-icon,
+body.cerood-studio .hub-placeholder-icon,
+body.cerood-studio .studio-store-mark,
+body.cerood-studio .hub-sidebar .hub-modern-icon{
+  background:#f4f7fb!important;
+  border:1px solid var(--ek-line)!important;
+  box-shadow:none!important;
+}
+
+/* Tabs and section controls should look like text tabs, not boxed buttons. */
+body.cerood-studio :is(.seller-tabs,.hub-order-tabs,.cr-tabs,.cc-tabs,.cc-status-tabs,.hub-quality-tabs){
+  gap:0!important;
+  border-bottom:1px solid var(--ek-line)!important;
+  padding:0!important;
+}
+body.cerood-studio :is(.seller-tab,.hub-order-tab,.cr-tab,.cc-tab,.hub-quality-tab){
+  border:0!important;
+  border-bottom:2px solid transparent!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--ek-muted)!important;
+  padding:13px 14px 12px!important;
+  font-weight:500!important;
+  box-shadow:none!important;
+}
+body.cerood-studio :is(.seller-tab.active,.hub-order-tab.active,.cr-tab.active,.cc-tab.active,.hub-quality-tab.active){
+  color:var(--ek-blue)!important;
+  border-bottom-color:var(--ek-blue)!important;
+  background:transparent!important;
+}
+body.cerood-studio :is(.seller-tab:hover,.hub-order-tab:hover,.cr-tab:hover,.cc-tab:hover,.hub-quality-tab:hover){
+  color:#304f73!important;
+  background:transparent!important;
+}
+
+/* Buttons: only primary actions should look like buttons. Other actions become subtle. */
+body.cerood-studio .seller-btn{
+  border-radius:6px!important;
+  box-shadow:none!important;
+}
+body.cerood-studio .seller-btn-outline,
+body.cerood-studio .hub-table-link,
+body.cerood-studio .hub-help,
+body.cerood-studio .studio-learning-actions button,
+body.cerood-studio .studio-journey-note button,
+body.cerood-studio .studio-text-link,
+body.cerood-studio .cc-link,
+body.cerood-studio .cr-link,
+body.cerood-studio .hub-side-tool,
+body.cerood-studio .seller-tabs .seller-tab{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body.cerood-studio .studio-learning-actions button,
+body.cerood-studio .studio-journey-note button,
+body.cerood-studio .cc-link,
+body.cerood-studio .cr-link,
+body.cerood-studio .studio-text-link{
+  border:0!important;
+  color:var(--ek-blue)!important;
+  padding:0!important;
+  border-radius:0!important;
+}
+body.cerood-studio .hub-help,
+body.cerood-studio .hub-table-link{
+  border:1px solid var(--ek-line)!important;
+  color:#41556e!important;
+  background:#fff!important;
+}
+
+/* Filters and forms: thin line, same height, no over-styled edges. */
+body.cerood-studio :is(
+  .product-field input,.product-field select,.product-field textarea,
+  .hub-order-controls input,.hub-order-controls select,
+  .cc-summary select,.cc-search,.cr-search input,.cr-filters select,.cr-sort select,
+  .marketplace-fields input,.marketplace-fields select,.marketplace-fields textarea,
+  .market-dynamic-grid input,.market-dynamic-grid select,.market-dynamic-grid textarea,
+  .cc-ticket input,.cc-ticket textarea,.cc-ticket select,.serviceability-form input,.serviceability-form select,.serviceability-form textarea
+){
+  border:1px solid #d7dde6!important;
+  border-radius:4px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+body.cerood-studio .product-field label,
+body.cerood-studio .marketplace-fields label,
+body.cerood-studio .market-dynamic-grid label,
+body.cerood-studio .cc-ticket label{color:#35465c!important}
+
+/* Tables and lists become clean report rows. */
+body.cerood-studio :is(.studio-recent-table,.hub-product-table){border-collapse:collapse!important}
+body.cerood-studio :is(.studio-recent-table th,.hub-product-table th){
+  background:#fafbfd!important;
+  color:#55657b!important;
+  font-weight:600!important;
+}
+body.cerood-studio :is(.studio-recent-table th,.studio-recent-table td,.hub-product-table th,.hub-product-table td){
+  border-bottom:1px solid var(--ek-line)!important;
+}
+body.cerood-studio .seller-order-top,
+body.cerood-studio .seller-order-actions{border-color:var(--ek-line)!important}
+body.cerood-studio .seller-order-status,
+body.cerood-studio .studio-status,
+body.cerood-studio .approval-badge{
+  border-radius:999px!important;
+  border:1px solid var(--ek-line)!important;
+}
+
+/* Product area: cleaner compact cards without loud tiles. */
+body.cerood-studio #section-products .product-card,
+body.cerood-studio .product-card{
+  border:1px solid var(--ek-line)!important;
+  border-radius:6px!important;
+  box-shadow:none!important;
+}
+body.cerood-studio #section-products .product-card>img,
+body.cerood-studio .product-card img{background:#fbfcfd!important}
+body.cerood-studio .product-actions button{
+  border-radius:4px!important;
+  box-shadow:none!important;
+}
+
+/* Reduce extra decorative blocks. */
+body.cerood-studio .studio-workspace-pill,
+body.cerood-studio .hub-side-tools,
+body.cerood-studio .studio-welcome-checks{
+  border-color:var(--ek-line)!important;
+}
+body.cerood-studio .studio-page-header,
+body.cerood-studio .seller-dashboard-heading,
+body.cerood-studio .hub-section-toolbar,
+body.cerood-studio .cc-head,
+body.cerood-studio .cr-heading{
+  align-items:center!important;
+}
+body.cerood-studio .studio-page-header h1,
+body.cerood-studio .seller-dashboard-heading h1,
+body.cerood-studio .studio-heading h1,
+body.cerood-studio .hub-page-title{color:var(--ek-text)!important}
+body.cerood-studio .seller-dashboard-heading p,
+body.cerood-studio .studio-heading p,
+body.cerood-studio .hub-top-status,
+body.cerood-studio .product-meta,
+body.cerood-studio .seller-order-info p,
+body.cerood-studio .seller-card p,
+body.cerood-studio .hub-content-card>p,
+body.cerood-studio .studio-next-card>p,
+body.cerood-studio .studio-workflow-note p{color:var(--ek-muted)!important}
+
+/* Mobile. */
+@media(max-width:800px){
+  body.cerood-studio .seller-workspace{padding:16px 12px 22px!important}
+  body.cerood-studio .studio-panel-head,
+  body.cerood-studio .seller-card,
+  body.cerood-studio .hub-content-card,
+  body.cerood-studio .hub-quality-card,
+  body.cerood-studio .seller-order-card,
+  body.cerood-studio .studio-next-card,
+  body.cerood-studio .studio-learning-area{padding-left:14px!important;padding-right:14px!important}
+  body.cerood-studio :is(.seller-tab,.hub-order-tab,.cr-tab,.cc-tab,.hub-quality-tab){padding:12px 10px!important}
+}
+</style>
+
 </body>
 
 </html>
