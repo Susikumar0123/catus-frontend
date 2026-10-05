@@ -2922,4 +2922,64 @@ body{background:#fff!important}
 })();
 </script>
 
+
+<style id="cerood-compact-hero-full-overview-20261005">
+/* Final structure: compact 3-column hero; long seller/product information continues below in normal page flow. */
+#product .cr-full-overview{width:100%;margin:18px 0 0;background:#fff;border-top:1px solid #e5e7eb}
+#product .cr-full-overview-head{padding:20px 4px 10px}
+#product .cr-full-overview-head h2{margin:0;font-size:20px;line-height:1.3;color:#111827}
+#product .cr-full-overview-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid #e5e7eb;background:#fff}
+#product .cr-full-overview-body>*{min-width:0;margin:0!important;padding:18px 20px!important;border:0!important;border-bottom:1px solid #e5e7eb!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#product .cr-full-overview-body>*:nth-child(odd){border-right:1px solid #e5e7eb!important}
+#product .cr-full-overview-body>*:nth-last-child(-n+2){border-bottom:0!important}
+#product .cr-full-overview-body .cr-product-section-nav{display:flex!important;flex-wrap:wrap!important;align-content:flex-start!important;gap:8px 16px!important}
+#product .cr-full-overview-body .cr-product-section-nav strong{width:100%;font-size:15px!important}
+#product .cr-full-overview-body .cr-hybrid-highlights{display:block!important}
+#product .cr-full-overview-body .cr-hybrid-highlight-track{display:flex!important;gap:10px!important;overflow-x:auto!important;padding:2px 0 4px!important}
+#product .cr-full-overview-body .cr-hybrid-benefits{display:grid!important;gap:9px!important}
+/* Never reintroduce an inner desktop scrollbar in the middle or purchase column. */
+@media(min-width:851px){
+ #product .cr-product-middle-column,#product .cr-product-middle-column>.product-info,#product .cerood-purchase-panel{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+ #product .cr-product-middle-column>.product-info{flex:none!important}
+ #product .cerood-purchase-panel .actions{position:static!important}
+}
+@media(max-width:850px){
+ #product .cr-full-overview{margin-top:10px}
+ #product .cr-full-overview-head{padding:16px 2px 10px}
+ #product .cr-full-overview-body{grid-template-columns:1fr;border-left:0;border-right:0}
+ #product .cr-full-overview-body>*{padding:16px 2px!important;border-right:0!important;border-bottom:1px solid #e5e7eb!important}
+ #product .cr-full-overview-body>*:last-child{border-bottom:0!important}
+}
+</style>
+<script id="cerood-move-long-overview-below-hero-20261005">
+(function(){'use strict';
+ const selectors=['.cr-product-section-nav','.cr-hybrid-highlights','.cr-hybrid-benefits','.cr-product-promo','.cr-product-links'];
+ function ensureOverview(root){
+   let block=root.querySelector(':scope > .cr-full-overview');
+   if(block)return block;
+   const grid=root.querySelector(':scope > .product-grid');
+   if(!grid)return null;
+   block=document.createElement('section');block.className='cr-full-overview';block.setAttribute('aria-labelledby','crFullOverviewTitle');
+   block.innerHTML='<div class="cr-full-overview-head"><h2 id="crFullOverviewTitle">Product overview</h2></div><div class="cr-full-overview-body"></div>';
+   const details=root.querySelector(':scope > .cr-full-details');
+   if(details)details.before(block);else grid.insertAdjacentElement('afterend',block);
+   return block;
+ }
+ function arrange(){
+   const root=document.getElementById('product');if(!root)return;
+   const info=root.querySelector('.cr-product-middle-column > .product-info, .product-info');if(!info)return;
+   const nodes=[];
+   selectors.forEach(sel=>info.querySelectorAll(':scope > '+sel).forEach(el=>nodes.push(el)));
+   if(!nodes.length)return;
+   const block=ensureOverview(root);if(!block)return;
+   const body=block.querySelector('.cr-full-overview-body');
+   nodes.forEach(el=>body.appendChild(el));
+   block.hidden=!body.children.length;
+ }
+ function boot(){arrange();requestAnimationFrame(arrange);setTimeout(arrange,50);setTimeout(arrange,250)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+ const root=document.getElementById('product');if(root)new MutationObserver(arrange).observe(root,{childList:true,subtree:true});
+})();
+</script>
+
 </body></html>
