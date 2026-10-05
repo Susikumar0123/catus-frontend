@@ -2639,4 +2639,47 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+
+<style id="cerood-review-popup-redesign-20261005">
+/* Reviews live in a modal so the middle product-information column gets the full height. */
+#product .cr-product-middle-column>.cr-customer-reviews{display:none!important}
+#product .cr-product-middle-column{gap:0!important}
+@media(min-width:1151px){
+ #product .cr-product-middle-column>.product-info{flex:1 1 auto!important;height:calc(100dvh - 140px)!important;max-height:calc(100dvh - 140px)!important;overflow-y:auto!important}
+}
+.cr-review-link-btn{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:#0b43e6;padding:0;font-size:12px;font-weight:650;line-height:1.5;cursor:pointer;text-decoration:none}
+.cr-review-link-btn:hover{text-decoration:underline;transform:none!important}
+.cr-review-link-btn .cr-review-mini-star{color:#e58b00;font-size:14px;letter-spacing:.5px}
+.cr-review-modal[hidden]{display:none!important}.cr-review-modal{position:fixed;inset:0;z-index:2147483600;display:grid;place-items:center;padding:18px;font-family:Inter,Arial,sans-serif}.cr-review-modal-shade{position:absolute;inset:0;background:rgba(15,23,42,.58);backdrop-filter:blur(2px)}
+.cr-review-modal-card{position:relative;width:min(760px,100%);max-height:min(760px,calc(100dvh - 36px));overflow:auto;background:#fff;border-radius:20px;box-shadow:0 28px 90px rgba(15,23,42,.28);padding:22px;color:#171717}
+.cr-review-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:15px;border-bottom:1px solid #e8ebf1}.cr-review-modal-head h2{font-size:20px;margin:0 0 5px}.cr-review-modal-head p{font-size:12px;color:#64748b;margin:0}.cr-review-modal-close{width:38px;height:38px;border:0;border-radius:50%;background:#f3f4f6;color:#111827;font-size:24px;line-height:1;flex:none}
+.cr-review-modal-body{padding-top:16px}.cr-review-modal .cr-customer-reviews{display:block!important;width:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#fff!important;max-height:none!important;overflow:visible!important}.cr-review-modal .cr-review-heading{display:none!important}.cr-review-modal .cr-review-empty{padding:24px 18px;text-align:center;background:#f8fafc;border:1px dashed #d8deea;border-radius:14px}.cr-review-modal .cr-review-photo{height:min(48dvh,390px)!important;object-fit:contain!important;background:#f8fafc!important}.cr-review-modal .cr-review-comment{max-height:none!important;overflow:visible!important}
+body.cr-review-modal-open{overflow:hidden!important}
+@media(max-width:650px){.cr-review-modal{padding:10px}.cr-review-modal-card{max-height:calc(100dvh - 20px);border-radius:17px;padding:17px}.cr-review-modal-head h2{font-size:18px}.cr-review-modal .cr-review-photo{height:330px!important}}
+</style>
+<script id="cerood-review-popup-redesign-script-20261005">
+(function(){'use strict';
+ function boot(){
+  const root=document.querySelector('#product'); if(!root)return;
+  let tries=0;
+  const timer=setInterval(()=>{tries++; const reviews=root.querySelector('.cr-customer-reviews'); if(reviews){clearInterval(timer);setup(reviews)} else if(tries>80)clearInterval(timer)},50);
+ }
+ function setup(reviews){
+  if(document.getElementById('crReviewModal'))return;
+  const modal=document.createElement('div');modal.id='crReviewModal';modal.className='cr-review-modal';modal.hidden=true;modal.setAttribute('aria-hidden','true');
+  modal.innerHTML='<div class="cr-review-modal-shade" data-cr-review-close></div><section class="cr-review-modal-card" role="dialog" aria-modal="true" aria-labelledby="crReviewModalTitle"><header class="cr-review-modal-head"><div><h2 id="crReviewModalTitle">Customer reviews &amp; ratings</h2><p>Ratings, review photos and feedback from Cerood customers.</p></div><button class="cr-review-modal-close" type="button" aria-label="Close reviews" data-cr-review-close>×</button></header><div class="cr-review-modal-body"></div></section>';
+  document.body.appendChild(modal);modal.querySelector('.cr-review-modal-body').appendChild(reviews);
+  const open=()=>{modal.hidden=false;modal.setAttribute('aria-hidden','false');document.body.classList.add('cr-review-modal-open');modal.querySelector('.cr-review-modal-close').focus()};
+  const close=()=>{modal.hidden=true;modal.setAttribute('aria-hidden','true');document.body.classList.remove('cr-review-modal-open')};
+  modal.querySelectorAll('[data-cr-review-close]').forEach(x=>x.addEventListener('click',close));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
+  const nav=root.querySelector('.cr-product-section-nav');
+  const purchaseLinks=root.querySelector('.cr-product-links.cr-product-purchase-link');
+  function makeLink(){const b=document.createElement('button');b.type='button';b.className='cr-review-link-btn';b.innerHTML='<span class="cr-review-mini-star">★</span><span>Customer reviews &amp; ratings ›</span>';b.addEventListener('click',open);return b}
+  if(nav)nav.appendChild(makeLink());
+  if(purchaseLinks)purchaseLinks.appendChild(makeLink());
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
 </body></html>
