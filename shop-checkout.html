@@ -8,19 +8,50 @@ main{max-width:1050px;margin:24px auto;padding:0 16px 90px;display:grid;grid-tem
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.wide{grid-column:1/-1}label{font-size:12px;font-weight:700}input{width:100%;margin-top:5px;padding:12px;border:1px solid #dce1ea;border-radius:9px;font:inherit}.item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 0;border-bottom:1px solid #eee;font-size:13px}.item strong{display:block}.total{display:flex;justify-content:space-between;padding-top:14px;font-size:18px;font-weight:800}
 button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;color:#fff;font-weight:700;margin-top:16px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.muted{font-size:12px;color:#64748b;line-height:1.6}.status{margin-top:12px;font-size:13px}.ok{color:#15803d}.err{color:#b91c1c}.login{background:#f5f3ff;padding:11px;border-radius:10px;margin-bottom:13px}
 @media(max-width:760px){main{grid-template-columns:1fr;margin-top:13px}.grid{grid-template-columns:1fr}.wide{grid-column:auto}header img{height:38px}}
-</style></head><body>
+</style>
+<style id="cerood-checkout-desktop-reference-20261005">
+@media (min-width: 761px){
+  body{background:#f5f7fb!important;}
+  header{max-width:1256px!important;margin:12px auto 0!important;border-radius:14px!important;padding:13px 28px!important;min-height:72px!important;box-shadow:0 16px 32px rgba(50,73,99,.10)!important;}
+  header img{height:48px!important;}
+  header a:last-child{background:rgba(255,255,255,.10)!important;color:#fff!important;border:1px solid rgba(255,255,255,.45)!important;font-weight:700!important;padding:9px 16px!important;}
+  header a:last-child::before{content:'◈ ';}
+  header a:last-child{font-size:0!important;}
+  header a:last-child::after{content:'Secure Checkout';font-size:13px!important;}
+  main{max-width:1138px!important;margin:26px auto!important;padding:0 0 90px!important;grid-template-columns:minmax(0,1.45fr) minmax(360px,.95fr)!important;gap:18px!important;align-items:start!important;}
+  main::before{content:'Complete your booking\A Confirm your delivery address, review the bill and choose how to pay.';white-space:pre-line;grid-column:1/-1;font-size:14px;line-height:1.55;color:#64748b;font-weight:400;margin:0 0 -4px!important;}
+  main::after{content:'';position:absolute;}
+  .card{border:0!important;border-radius:18px!important;padding:20px!important;box-shadow:0 1px 0 rgba(15,23,42,.02)!important;}
+  main>.card:first-of-type{grid-column:1!important;}
+  main>aside.card{grid-column:2!important;grid-row:2!important;}
+  #checkoutTitle{position:absolute!important;top:201px!important;left:max(calc((100vw - 1138px)/2),16px)!important;font-size:23px!important;color:#10213b!important;z-index:2!important;}
+  #storeNotice{grid-column:1/-1;background:#f3f0ff!important;color:#52617a!important;padding:11px 14px!important;border-radius:3px!important;margin:0 0 12px!important;}
+  .login{background:transparent!important;padding:0!important;margin:0 0 12px!important;color:#64748b!important;}
+  .grid{gap:12px 15px!important;}
+  label{font-size:12px!important;color:#34425a!important;}
+  input{background:#f8fafc!important;border:1px solid #d9e1ec!important;border-radius:10px!important;padding:14px!important;}
+  #checkDelivery{width:auto!important;background:#f5f8fc!important;color:#31517b!important;border:1px solid #d7e0ec!important;padding:10px 14px!important;margin:0 0 10px auto!important;display:block!important;}
+  #paymentBox{border-top:1px solid #e8edf4!important;padding-top:15px!important;}
+  #paymentBox label{border:1px solid #6b4eff!important;border-radius:12px!important;padding:13px 16px!important;background:#fbfaff!important;}
+  #paymentBox input[type=radio]{width:auto!important;margin:0!important;padding:0!important;}
+  #place{background:#171717!important;}
+  aside.card h2{font-size:18px!important;font-weight:500!important;}
+  .total{border-top:1px solid #edf0f4!important;margin-top:0!important;padding:14px 0!important;}
+}
+</style>
+</head><body>
 <header><a href="/"><img src="/cerood-logo.webp" alt="Cerood"></a><a href="/cerood-orders.html">My Orders</a></header>
 <main>
 <section class="card">
   <h1 id="checkoutTitle">Cerood Checkout</h1>
   <div class="login" id="loginState"></div>
   <p class="muted" id="storeNotice">Loading your selected products…</p>
-  <h2>Delivery address</h2>
+  <h2>📍 Delivery Address Details</h2>
   <form id="addressForm" class="grid">
     <label>Full name<input name="name" required maxlength="120" autocomplete="name"></label>
     <label>Mobile number<input name="phone" required inputmode="numeric" maxlength="10" autocomplete="tel-national"></label>
-    <label class="wide">House / building<input name="house" required maxlength="160"></label>
-    <label>Street / area<input name="street" maxlength="160"></label>
+    <label class="wide">Door / flat / street<input name="house" required maxlength="160"></label>
+    <label>Area / landmark<input name="street" maxlength="160"></label>
     <label>Village / city<input name="village" required maxlength="120"></label>
     <label>District<input name="district" required maxlength="120"></label>
     <label>State<input name="state" required maxlength="120"></label>
@@ -38,7 +69,7 @@ button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;co
   <p id="status" class="status" role="status"></p>
 </section>
 <aside class="card">
-  <h2>Order summary</h2>
+  <h2>▣ Order Summary</h2>
   <div id="items"></div>
   <div class="total"><span>Subtotal</span><span id="subtotal">—</span></div>
   <div class="total" style="font-size:14px"><span>Delivery</span><span id="delivery">—</span></div>
