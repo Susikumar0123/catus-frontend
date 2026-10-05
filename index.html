@@ -1350,6 +1350,15 @@ html body .header.crn-header .crn-header-main::after{
   main.shell > section.cerood-mobile-hide-trending{display:none!important;margin:0!important;padding:0!important;}
 }
 </style>
+
+<style id="cerood-temporary-product-hide-20261005">
+/* TEMPORARY: hide homepage product inventory until seller products are ready.
+   Search functionality and all product/order logic remain untouched. */
+#ceroodTrending,
+#ceroodMarketplaceGroups {
+  display:none !important;
+}
+</style>
 </head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
