@@ -2202,8 +2202,8 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
     <!-- Header -->
     <div class="checkout-header">
         <img src="/cerood-logo.webp" alt="Cerood Logo"
-         onclick="window.location.href='/home-services.html'">
-        <div class="cerood-unified-tools"><a href="/cerood-cart.html" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg></a><details class="cerood-unified-menu"><summary aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-unified-menu-list"><a href="/home-services.html">Home</a><a href="/#divisions">Explore</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed Store</a><a href="/cosmetics.html">Beauty Store</a><a href="/clothing.html">Fashion Store</a><a href="/home-services.html#cerood-dashboard-home">Dashboard</a><a href="/home-services.html#cerood-dashboard-bookings">My Orders</a><a href="/home-services.html#cerood-dashboard-profile">Account</a><a href="/cerood-cart.html">Cart</a><a href="/contact.html">Help</a></div></details></div><div class="secure-badge">
+         onclick="window.location.href='/'">
+        <div class="cerood-unified-tools"><a href="/cerood-cart.html" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg></a><details class="cerood-unified-menu"><summary aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-unified-menu-list"><a href="/">Home</a><a href="/#divisions">Explore</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed Store</a><a href="/cosmetics.html">Beauty Store</a><a href="/clothing.html">Fashion Store</a><a href="/home-services.html#cerood-dashboard-home">Dashboard</a><a href="/home-services.html#cerood-dashboard-bookings">My Orders</a><a href="/home-services.html#cerood-dashboard-profile">Account</a><a href="/cerood-cart.html">Cart</a><a href="/contact.html">Help</a></div></details></div><div class="secure-badge">
     <i class="fa-solid fa-lock"></i>
     Secure Checkout
 </div><form class="csf-checkout-search" role="search" action="/home-services.html" method="get"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input name="search" aria-label="Search home services" placeholder="Search TV repair, AC service, RO..." type="search"></form>
@@ -2473,7 +2473,7 @@ Please check all required fields, mobile number, and pincode.
             </div>
         </div>
 
-        <button onclick="window.location.href='/home-services.html'" class="confirm-btn" style="max-width: 300px; margin: 30px auto;">
+        <button onclick="window.location.href='/'" class="confirm-btn" style="max-width: 300px; margin: 30px auto;">
             Back to Home
         </button>
     </div>
@@ -2574,7 +2574,7 @@ Please check all required fields, mobile number, and pincode.
     <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
 
         <li>
-            <a href="/home-services.html"
+            <a href="/"
                style="color: #52525b; text-decoration: none; transition: 0.2s;">
                 Home
             </a>
@@ -2786,13 +2786,10 @@ Please check all required fields, mobile number, and pincode.
             await fetchAllCountries();
             loadStates();
 
-            const homeServiceSession = localStorage.getItem('cerood_home_service_session');
-            const currentUser = homeServiceSession
-                ? JSON.parse(localStorage.getItem('cerood_home_service_user') || 'null')
-                : null;
+            const currentUser = JSON.parse(localStorage.getItem('catus_logged_user'));
             if (!currentUser) {
-                alert("Please login to Cerood Home Services first!");
-                window.location.href = '/home-services.html';
+                alert("Please login first!");
+                window.location.href = '/';
                 return;
             }
 
@@ -2885,7 +2882,7 @@ document.getElementById('fieldDistrict').innerHTML =
     if (!confirmed) return;
 
     const currentUser =
-        JSON.parse(localStorage.getItem('cerood_home_service_user')) || {};
+        JSON.parse(localStorage.getItem('catus_logged_user')) || {};
 
     if (!currentUser.phone) {
         alert("Please login again.");
@@ -2895,14 +2892,15 @@ document.getElementById('fieldDistrict').innerHTML =
     try {
 
         const response = await fetch(
-            `${API_BASE_URL}/api/home-services/customer/remove-address`,
+            `${API_BASE_URL}/api/users/remove-address`,
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + (localStorage.getItem('cerood_home_service_session') || '')
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({})
+                body: JSON.stringify({
+                    phone: currentUser.phone
+                })
             }
         );
 
@@ -2921,7 +2919,7 @@ document.getElementById('fieldDistrict').innerHTML =
         };
 
         localStorage.setItem(
-            'cerood_home_service_user',
+            'catus_logged_user',
             JSON.stringify(updatedUser)
         );
 
@@ -3043,19 +3041,19 @@ const newAddressStr =
     `${addressParts.join(', ')} - ${pincode}, ${country}`;
             
             const currentUser =
-    JSON.parse(localStorage.getItem('cerood_home_service_user')) || {};
+    JSON.parse(localStorage.getItem('catus_logged_user')) || {};
 
 try {
 
     const response = await fetch(
-        `${API_BASE_URL}/api/home-services/customer/update-address`,
+        `${API_BASE_URL}/api/users/update-address`,
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + (localStorage.getItem('cerood_home_service_session') || '')
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                phone: currentUser.phone,
                 address: newAddressStr,
                 pincode: pincode
             })
@@ -3077,7 +3075,7 @@ try {
     };
 
     localStorage.setItem(
-        'cerood_home_service_user',
+        'catus_logged_user',
         JSON.stringify(updatedUser)
     );
 
@@ -3968,9 +3966,9 @@ parts.forEach(part => { p[part.type] = part.value; });
 
 const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}`;
             
-            const currentUser = JSON.parse(localStorage.getItem('cerood_home_service_user')) || {};
+            const currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || {};
             currentUser.address = addressStr;
-            localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
+            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
 
             let phoneDigits = String(mobile || currentUser.phone || '40001').replace(/[^0-9]/g, '');
             let permanentCustId = 40000 + parseInt(phoneDigits.slice(-4)); 
@@ -4182,7 +4180,7 @@ document.getElementById('dispTotal').textContent =
 
     <!-- HOME -->
     <button class="bot-nav-item"
-            onclick="window.location.href='/home-services.html'">
+            onclick="window.location.href='/'">
         <span class="checkout-nav-ring nav-home-ring">
             <svg viewBox="0 0 24 24">
                 <path d="M3 10.5L12 3l9 7.5"></path>
@@ -4247,7 +4245,7 @@ document.getElementById('dispTotal').textContent =
     </button>
 
 </div>
-<nav class="csf-bottom" aria-label="Cerood mobile navigation"><a href="/home-services.html"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"/></svg><span>Home</span></a><a href="/home-services.html" class="active"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"/></svg><span>Explore</span></a><a href="/home-services.html#cerood-dashboard-home" data-cerood-dashboard-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></a><a href="/home-services.html#cerood-dashboard-bookings" data-cerood-dashboard-tab="bookings"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>Orders</span></a><a href="/home-services.html#cerood-dashboard-profile" data-cerood-dashboard-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"/></svg><span>Account</span></a></nav>
+<nav class="csf-bottom" aria-label="Cerood mobile navigation"><a href="/"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"/></svg><span>Home</span></a><a href="/home-services.html" class="active"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"/></svg><span>Explore</span></a><a href="/home-services.html#cerood-dashboard-home" data-cerood-dashboard-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></a><a href="/home-services.html#cerood-dashboard-bookings" data-cerood-dashboard-tab="bookings"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>Orders</span></a><a href="/home-services.html#cerood-dashboard-profile" data-cerood-dashboard-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"/></svg><span>Account</span></a></nav>
 
 <script id="cerood-mobile-fixed-header-measure-20260925">
 (function () {
