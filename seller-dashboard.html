@@ -7088,22 +7088,61 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  }
  function persistMap(){const all=readJSON('cerood_import_column_maps_v1',{});all[signature()]={...state.mapping};const keys=Object.keys(all);while(keys.length>20)delete all[keys.shift()];saveJSON('cerood_import_column_maps_v1',all)}
  function cell(row,field){const h=state.mapping[field];if(!h)return '';const i=state.headers.indexOf(h);return i<0?'':String(row[i]??'').trim()}
- async function loadCategories(){
-  if(state.categoriesReady&&state.categories.length)return state.categories;
-  const markets=['general','clothing','cosmetics'],all=[];
-  const withTimeout=(promise,ms=8000)=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(Error('Category request timed out')),ms))]);
-  const jobs=await Promise.allSettled(markets.map(async m=>{
+ function cicCategoryRowsToLeaves(rows,marketplace){
+  const clean=(Array.isArray(rows)?rows:[]).filter(x=>x&&x.id&&x.name&&x.is_active!==false);
+  const byId=new Map(clean.map(r=>[String(r.id),r]));
+  const child=new Set(clean.map(r=>String(r.parent_id||'')).filter(Boolean));
+  const out=[];
+  for(const r of clean){
+    const leaf=r.is_leaf===true||String(r.is_leaf).toLowerCase()==='true'||!child.has(String(r.id));
+    if(!leaf)continue;
+    const names=[];let cur=r,guard=0;
+    while(cur&&guard++<20){names.unshift(String(cur.name||'').trim());cur=cur.parent_id?byId.get(String(cur.parent_id)):null}
+    const path=String(r.category_path||'').trim()||names.filter(Boolean).join(' / ');
+    out.push({marketplace,id:String(r.id),leaf:String(r.name||'').trim(),path:path||String(r.name||'').trim()});
+  }
+  return out
+ }
+ function cicCachedCategoryRows(marketplace){
+  try{
+    const cache=JSON.parse(sessionStorage.getItem('cerood_seller_category_cache_v1')||'{}');
+    const hit=cache?.[marketplace];
+    return Array.isArray(hit?.rows)?hit.rows:[];
+  }catch{return []}
+ }
+ async function loadCategories(force=false){
+  if(!force&&state.categoriesReady&&state.categories.length)return state.categories;
+  const markets=['general','clothing','cosmetics'],all=[],loadedMarkets=new Set();
+  const add=(m,rows)=>{const leaves=cicCategoryRowsToLeaves(rows,m);if(leaves.length){all.push(...leaves);loadedMarkets.add(m)}};
+
+  // Reuse the same category cache already used by the dashboard/category wizard.
+  // This makes mapping available even when one live API call is slow or temporarily fails.
+  for(const m of markets)add(m,cicCachedCategoryRows(m));
+
+  const withTimeout=(promise,ms=15000)=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(Error('Category request timed out')),ms))]);
+  const missing=markets.filter(m=>force||!loadedMarkets.has(m));
+  const jobs=await Promise.allSettled(missing.map(async m=>{
     const d=await withTimeout(apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m)));
     return {m,d};
   }));
   for(const job of jobs){
     if(job.status!=='fulfilled'){console.warn('Category load failed',job.reason);continue}
     const {m,d}=job.value;
-    const rows=(d.categories||d.data||d.rows||[]).filter(x=>x&&x.id&&x.name&&x.is_active!==false),byId=new Map(rows.map(r=>[String(r.id),r])),child=new Set(rows.map(r=>String(r.parent_id||'')).filter(Boolean));
-    for(const r of rows){const leaf=r.is_leaf===true||String(r.is_leaf).toLowerCase()==='true'||!child.has(String(r.id));if(!leaf)continue;const names=[];let cur=r,guard=0;while(cur&&guard++<15){names.unshift(String(cur.name||'').trim());cur=cur.parent_id?byId.get(String(cur.parent_id)):null}all.push({marketplace:m,id:String(r.id),leaf:String(r.name||'').trim(),path:names.filter(Boolean).join(' / ')})}
+    const rows=Array.isArray(d)?d:(d?.categories||d?.products||d?.data||d?.rows||[]);
+    if(rows.length){
+      add(m,rows);
+      try{
+        const cache=JSON.parse(sessionStorage.getItem('cerood_seller_category_cache_v1')||'{}');
+        cache[m]={saved_at:Date.now(),rows};
+        sessionStorage.setItem('cerood_seller_category_cache_v1',JSON.stringify(cache));
+      }catch{}
+    }
   }
-  state.categories=all;state.categoriesReady=all.length>0;
-  return all
+  const uniq=new Map();
+  for(const c of all)uniq.set(c.marketplace+'|'+c.id,c);
+  state.categories=[...uniq.values()].sort((a,b)=>a.marketplace.localeCompare(b.marketplace)||a.path.localeCompare(b.path));
+  state.categoriesReady=state.categories.length>0;
+  return state.categories
  }
  function marketHint(v){const n=norm(v);if(['general','main store','cerood main store','shop'].includes(n))return'general';if(['clothing','fashion','apparel'].includes(n))return'clothing';if(['cosmetics','beauty','makeup'].includes(n))return'cosmetics';return''}
  function categoryKey(rawCat,rawType,market){return[marketHint(market),norm(rawCat),norm(rawType)].join('|')}
@@ -7114,7 +7153,36 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  function normalizeRow(row,index,seen,requireImage=false){const o={_row:index+2,_errors:[]};for(const [field] of MODE_FIELDS[state.mode])o[field]=cell(row,field);const sku=String(o.supplier_sku||'').trim();if(!sku)o._errors.push('supplier_sku missing');else{const k=sku.toLowerCase();if(seen.has(k))o._errors.push('duplicate supplier_sku in file');seen.add(k)}if(state.mode==='new'){if(!o.product_name)o._errors.push('product name missing');if(!o.category&&!o.product_type)o._errors.push('category missing');if(!o.brand)o._errors.push('brand missing');const p=num(o.selling_price);if(!Number.isFinite(p)||p<=0)o._errors.push('invalid selling price');else o.selling_price=p;const mrp=o.mrp===''?null:num(o.mrp);if(mrp!==null&&(!Number.isFinite(mrp)||mrp<p))o._errors.push('invalid MRP');else o.mrp=mrp;const q=num(o.stock);if(!Number.isInteger(q)||q<0)o._errors.push('invalid stock');else o.stock=q;const image=sku?state.images.get(skuKey(sku)):null;o._imageFile=image||null;if(requireImage&&!image)o._errors.push('product image required');const match=matchCategory(o.category,o.product_type,o.marketplace);o._category=match;if(!match)o._errors.push('category mapping required');else{o.category=match.path;o.product_type=match.leaf;o.marketplace=match.marketplace}if(match?.marketplace==='cosmetics'){if(!o.net_quantity)o._errors.push('net quantity required for cosmetics');if(!/^\d{4}-\d{2}-\d{2}$/.test(o.expiry_date)||o.expiry_date<new Date().toISOString().slice(0,10))o._errors.push('future expiry date required for cosmetics')}}else{if(state.mode==='price'||state.mode==='price_stock'){const p=num(o.selling_price);if(!Number.isFinite(p)||p<=0)o._errors.push('invalid selling price');else o.selling_price=p;const mrp=o.mrp===''?null:num(o.mrp);if(mrp!==null&&(!Number.isFinite(mrp)||mrp<p))o._errors.push('invalid MRP');else o.mrp=mrp}if(state.mode==='stock'||state.mode==='price_stock'){const q=num(o.stock);if(!Number.isInteger(q)||q<0)o._errors.push('invalid stock');else o.stock=q}}return o}
  function validate(){const missing=mappedRequiredMissing();if(missing.length){message('Map required fields first: '+missing.join(', '),'error');return}persistMap();const seen=new Set();state.validation=state.rows.map((r,i)=>normalizeRow(r,i,seen,false));renderCategoryMappings();if(state.mode==='new'){state.reviewed=false;$('cicPreviewPanel').hidden=true;renderImageAssignments();message('Columns and categories are ready. Upload product images, then review all products.','good');requestAnimationFrame(()=>$('cicImagePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}else{state.reviewed=true;renderValidation();requestAnimationFrame(()=>$('cicPreviewPanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}}
  function unresolvedCategoryKeys(){const map=new Map();for(const r of state.validation){if(state.mode!=='new'||r._category)continue;const key=categoryKey(r.category,r.product_type,r.marketplace);if(!map.has(key))map.set(key,{key,label:[r.category,r.product_type].filter(Boolean).join(' · ')||'Unknown category'})}return[...map.values()]}
- function renderCategoryMappings(){const items=unresolvedCategoryKeys(),panel=$('cicCategoryPanel'),root=$('cicCategoryMappings');root.replaceChildren();panel.hidden=!items.length;if(!items.length)return;for(const item of items){const row=document.createElement('div');row.className='cic-cat-row';const label=document.createElement('b');label.textContent=item.label;const sel=document.createElement('select');sel.append(new Option('Choose Cerood category…',''));for(const c of state.categories)sel.append(new Option((c.marketplace==='general'?'Main Store':c.marketplace==='clothing'?'Fashion':'Beauty')+' · '+c.path,c.marketplace+'|'+c.id));const current=state.categoryMap[item.key];if(current)sel.value=current.marketplace+'|'+current.id;sel.onchange=()=>{if(!sel.value)delete state.categoryMap[item.key];else{const [m,id]=sel.value.split('|'),c=state.categories.find(x=>x.marketplace===m&&x.id===id);if(c)state.categoryMap[item.key]=c}saveJSON('cerood_supplier_category_map_v1',state.categoryMap);validate()};row.append(label,sel);root.append(row)}}
+ function renderCategoryMappings(){
+  const items=unresolvedCategoryKeys(),panel=$('cicCategoryPanel'),root=$('cicCategoryMappings');
+  root.replaceChildren();panel.hidden=!items.length;if(!items.length)return;
+  const buildRows=()=>{
+    root.replaceChildren();
+    if(!state.categories.length){
+      const warn=document.createElement('div');warn.className='cic-cat-row';
+      const copy=document.createElement('div');copy.innerHTML='<b>Cerood categories are not loaded yet.</b><small style="display:block;margin-top:5px;color:#64748b">Reload the live category master, then choose the exact final category.</small>';
+      const retry=document.createElement('button');retry.type='button';retry.className='seller-btn seller-btn-outline';retry.textContent='Reload categories';
+      retry.onclick=async()=>{retry.disabled=true;retry.textContent='Loading…';message('Reloading Cerood categories…');try{const cats=await loadCategories(true);if(!cats.length)throw Error('No active Cerood categories were returned.');message(cats.length+' Cerood leaf categories loaded.','good');buildRows()}catch(e){message(e.message||'Could not load categories.','error');retry.disabled=false;retry.textContent='Retry categories'}};
+      warn.append(copy,retry);root.append(warn);return;
+    }
+    for(const item of items){
+      const row=document.createElement('div');row.className='cic-cat-row';
+      const label=document.createElement('b');label.textContent=item.label;
+      const sel=document.createElement('select');sel.append(new Option('Choose Cerood category…',''));
+      let lastMarket='';
+      for(const c of state.categories){
+        const marketLabel=c.marketplace==='general'?'Main Store':c.marketplace==='clothing'?'Fashion':'Beauty';
+        if(c.marketplace!==lastMarket){const group=document.createElement('optgroup');group.label=marketLabel;sel.append(group);lastMarket=c.marketplace}
+        const group=sel.lastElementChild;group.append(new Option(c.path,c.marketplace+'|'+c.id));
+      }
+      const current=state.categoryMap[item.key];if(current)sel.value=current.marketplace+'|'+current.id;
+      sel.onchange=()=>{if(!sel.value)delete state.categoryMap[item.key];else{const [m,id]=sel.value.split('|'),c=state.categories.find(x=>x.marketplace===m&&x.id===id);if(c)state.categoryMap[item.key]=c}saveJSON('cerood_supplier_category_map_v1',state.categoryMap);validate()};
+      row.append(label,sel);root.append(row)
+    }
+  };
+  buildRows();
+  if(!state.categories.length){loadCategories().then(cats=>{if(cats.length)buildRows()}).catch(e=>console.warn('Category reload failed',e))}
+ }
  function imageFileValid(file){return !!file&&['image/jpeg','image/png','image/webp'].includes(file.type)&&file.size<=10*1024*1024}
  function imagePreview(img,file){if(!img||!file)return;const u=URL.createObjectURL(file);img.src=u;img.onload=()=>URL.revokeObjectURL(u);img.onerror=()=>URL.revokeObjectURL(u)}
  function stem(name){return String(name||'').replace(/\.[^.]+$/,'').trim().toLowerCase()}
