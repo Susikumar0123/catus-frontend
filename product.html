@@ -8483,7 +8483,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
 @media (min-width:851px) {#cerood-mobile-fixed-header-spacer {display:none!important;}}
 </style>
-<script defer="" src="/cerood-auth.js"></script>
+<!-- Home Services uses its own independent login/registration flow. -->
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -8507,7 +8507,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 <!-- HEADER & SEARCH BAR SECTION -->
 <div class="uc-homepage-wrapper product-index-header">
 <div class="header-main-container crn-header-main product-crn-header-main">
-<a aria-label="Cerood home" class="brand-logo crn-logo" href="/index.html">
+<a aria-label="Cerood home" class="brand-logo crn-logo" href="/home-services.html">
 <img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/>
 <span class="cerood-wordmark-erood">erood</span>
 </a>
@@ -8533,7 +8533,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 <div id="suggestionsBox"></div>
 </div>
 <div class="header-nav-right crn-actions">
-<a class="cerood-index-home-services-visual crn-service-pill" href="/index.html">Home</a>
+<a class="cerood-index-home-services-visual crn-service-pill" href="/home-services.html">Home</a>
 <div aria-label="Cart" class="nav-item cart-item crn-pill crn-cart" onclick="toggleCartModal(true)" role="button" tabindex="0">
 <div class="cart-icon-wrapper">
 <svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
@@ -8562,7 +8562,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 </div>
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
-<a href="/">Home</a>
+<a href="/home-services.html">Home</a>
 <span>›</span>
 <a href="#" id="bcDistrict">
         District
@@ -8922,7 +8922,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
                             font-weight: 600;
                             color: #111111;
                         ">
-                        Welcome to Cerood
+                        Welcome to Cerood Home Services
                     </h3>
 <p style="
                             font-size: 13px;
@@ -9611,11 +9611,8 @@ function logoutUser() {
             clearInterval(orderPollingInterval);
             orderPollingInterval = null;
         }
-        if (window.CeroodAuth) window.CeroodAuth.logout();
-        else {
-            localStorage.removeItem('catus_logged_user');
-            localStorage.removeItem('cerood_renewed_customer_session');
-        }
+        localStorage.removeItem('cerood_home_service_user');
+        localStorage.removeItem('cerood_home_service_session');
         currentUser = null;
         closePremiumDashboard();
         updateHeaderLoginUI();
@@ -9817,30 +9814,29 @@ const canUseSavedLocation =
     
     let cartItems = JSON.parse(localStorage.getItem('catus_cart')) || [];
     // A cached profile is not an authenticated session.
-    let currentUser = localStorage.getItem('cerood_renewed_customer_session')
-        ? (JSON.parse(localStorage.getItem('catus_logged_user') || 'null'))
+    let currentUser = localStorage.getItem('cerood_home_service_session')
+        ? (JSON.parse(localStorage.getItem('cerood_home_service_user') || 'null'))
         : null;
 
     function ceroodProductAcceptAuthResponse(data) {
         // Only the backend may issue this session. Never fabricate a token.
-        if (!data || !data.user || !data.renewed_session) return false;
+        if (!data || !data.user || !(data.home_service_session || data.session)) return false;
         currentUser = data.user;
-        localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-        localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
-        if (window.CeroodAuth) window.CeroodAuth.refresh();
+        localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
+        localStorage.setItem('cerood_home_service_session', (data.home_service_session || data.session));
         return true;
     }
 
     function ceroodProductSyncCommonAuth() {
-        const valid = Boolean(localStorage.getItem('cerood_renewed_customer_session'));
+        const valid = Boolean(localStorage.getItem('cerood_home_service_session'));
         try {
-            currentUser = valid ? JSON.parse(localStorage.getItem('catus_logged_user') || 'null') : null;
+            currentUser = valid ? JSON.parse(localStorage.getItem('cerood_home_service_user') || 'null') : null;
         } catch (_) { currentUser = null; }
         updateHeaderLoginUI();
     }
     window.addEventListener('cerood:auth-changed', ceroodProductSyncCommonAuth);
     window.addEventListener('storage', function(event) {
-        if (event.key === 'catus_logged_user' || event.key === 'cerood_renewed_customer_session')
+        if (event.key === 'cerood_home_service_user' || event.key === 'cerood_home_service_session')
             ceroodProductSyncCommonAuth();
     });
     let tempPhone = "";
@@ -12574,13 +12570,7 @@ document.addEventListener(
     ceroodProductSyncCommonAuth();
     if (currentUser) {
         openPremiumDashboard();
-    } else if (window.CeroodAuth) {
-        window.CeroodAuth.requireLogin(function () {
-            ceroodProductSyncCommonAuth();
-            if (currentUser) openPremiumDashboard();
-        });
     } else {
-        // Fallback only if the shared JS fails to load.
         showAuthStep('phone');
         toggleAuthModal(true);
     }
@@ -12643,7 +12633,7 @@ async function submitNewPasswordReset() {
     try {
 
         const response = await fetch(
-            `${API_BASE_URL}/api/msg91/reset-password`,
+            `${API_BASE_URL}/api/home-services/auth/reset-password`,
             {
                 method: 'POST',
                 headers: {
@@ -12679,7 +12669,7 @@ async function submitNewPasswordReset() {
         updateHeaderLoginUI();
         toggleAuthModal(false);
         if (signedInAfterReset) openPremiumDashboard();
-        else if (window.CeroodAuth) window.CeroodAuth.open();
+        else { showAuthStep('phone'); toggleAuthModal(true); }
 
         showToast(
             'Password updated successfully!',
@@ -12852,7 +12842,7 @@ async function checkUserAndProceed() {
     tempPhone = phone;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/check-user`, {
+        const response = await fetch(`${API_BASE_URL}/api/home-services/auth/check-user`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: tempPhone })
@@ -12916,7 +12906,7 @@ async function loginWithPassword() {
     if (!password) { alert('Please enter your password.'); return; }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/login-password`, {
+        const response = await fetch(`${API_BASE_URL}/api/home-services/auth/login-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: tempPhone, password: password })
@@ -13345,7 +13335,7 @@ async function verifyOtpAndSetPassword() {
                 try {
 
                     const response = await fetch(
-                        `${API_BASE_URL}/api/msg91/complete-registration`,
+                        `${API_BASE_URL}/api/home-services/auth/complete-registration`,
                         {
                             method: 'POST',
                             headers: {
@@ -13392,7 +13382,7 @@ async function verifyOtpAndSetPassword() {
                     updateHeaderLoginUI();
                     toggleAuthModal(false);
                     if (signedInAfterRegistration) openPremiumDashboard();
-                    else if (window.CeroodAuth) window.CeroodAuth.open();
+                    else { showAuthStep('phone'); toggleAuthModal(true); }
 
                     showToast(
                         'Account created successfully!',
@@ -13521,7 +13511,7 @@ function showAuthStep(step) {
     switch (step) {
 
         case 'phone':
-            titleEl.textContent = 'Welcome to Cerood';
+            titleEl.textContent = 'Cerood Home Services';
             descEl.textContent =
                 'Enter your mobile number to continue';
             break;
@@ -13529,13 +13519,13 @@ function showAuthStep(step) {
         case 'password':
             titleEl.textContent = 'Welcome Back';
             descEl.textContent =
-                'Login to your Cerood account';
+                'Login to your Home Services account';
             break;
 
         case 'register':
             titleEl.textContent = "Looks like you're new here!";
             descEl.textContent =
-                'Create your Cerood account';
+                'Create your Home Services account';
             break;
 
         case 'captcha':
@@ -14844,7 +14834,7 @@ serviceStr =
                     }
                     if(field === 'Address') currentUser.address = newVal;
                     if(field === 'Email') currentUser.email = newVal;
-                    localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+                    localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
                     updateHeaderLoginUI();
                 }
             } else if (!newVal) { displayEl.innerText = oldVal; }
@@ -14876,7 +14866,7 @@ serviceStr =
         if (newAddress !== oldAddress) {
             trackProfileChange('Delivery Address', oldAddress, newAddress);
             document.getElementById('premProfileAddressDisplay').innerText = newAddress;
-            if(currentUser) { currentUser.address = newAddress; localStorage.setItem('catus_logged_user', JSON.stringify(currentUser)); }
+            if(currentUser) { currentUser.address = newAddress; localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser)); }
         }
         toggleProfileAddressEdit();
         showToast("Delivery Address updated successfully!", false);
@@ -14949,7 +14939,7 @@ function ceroodMobileNavigate(tab, button) {
     /* HOME */
     if (tab === 'home') {
 
-        window.location.href = '/';
+        window.location.href = '/home-services.html';
         return;
     }
 
@@ -16111,11 +16101,11 @@ function togglePasswordVisibility(fieldId, iconElement) {
 <div>
 <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Links</h4>
 <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
-<li><a href="/" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
+<li><a href="/home-services.html" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
 <li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">My Cart</a></li>
 <li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
 <li>
-<a href="/" id="ceroodFooterAreaLink" style="color: #52525b; text-decoration: none; transition: 0.2s;">
+<a href="/home-services.html" id="ceroodFooterAreaLink" style="color: #52525b; text-decoration: none; transition: 0.2s;">
         Service Areas
     </a>
 </li>
@@ -16608,7 +16598,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 </script>
-<nav aria-label="Cerood mobile navigation" class="csf-bottom"><a href="/"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"></path></svg><span>Home</span></a><a class="active" href="/home-services.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"></path></svg><span>Explore</span></a><a data-cerood-dashboard-tab="home" href="#" onclick="return ceroodOpenExistingDashboard(event, 'home')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></svg><span>Dashboard</span></a><a data-cerood-dashboard-tab="bookings" href="#" onclick="return ceroodOpenExistingDashboard(event, 'bookings')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="18" rx="2" width="14" x="5" y="3"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg><span>Orders</span></a><a data-cerood-dashboard-tab="profile" href="#" onclick="return ceroodOpenExistingDashboard(event, 'profile')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"></path></svg><span>Account</span></a></nav>
+<nav aria-label="Cerood mobile navigation" class="csf-bottom"><a href="/home-services.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"></path></svg><span>Home</span></a><a class="active" href="/home-services.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"></path></svg><span>Explore</span></a><a data-cerood-dashboard-tab="home" href="#" onclick="return ceroodOpenExistingDashboard(event, 'home')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></svg><span>Dashboard</span></a><a data-cerood-dashboard-tab="bookings" href="#" onclick="return ceroodOpenExistingDashboard(event, 'bookings')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="18" rx="2" width="14" x="5" y="3"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg><span>Orders</span></a><a data-cerood-dashboard-tab="profile" href="#" onclick="return ceroodOpenExistingDashboard(event, 'profile')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"></path></svg><span>Account</span></a></nav>
 <script id="cerood-existing-dashboard-navigation-fix">
 /* Keep customer in the existing Home Services dashboard and its live booking/profile tabs. */
 function ceroodOpenExistingDashboard(event, tab) {
