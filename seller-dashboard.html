@@ -7007,7 +7007,23 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  function renderMapping(){const body=$('cicMappingBody');body.replaceChildren();for(const [field,label,required] of MODE_FIELDS[state.mode]){const tr=document.createElement('tr'),a=document.createElement('td'),b=document.createElement('td'),c=document.createElement('td');a.innerHTML='<b>'+escapeHTML(label)+'</b><span class="'+(required?'cic-required':'cic-optional')+'">'+(required?'Required':'Optional')+'</span>';const sel=document.createElement('select');sel.dataset.field=field;sel.append(new Option('— Not mapped —',''));state.headers.forEach(h=>sel.append(new Option(h,h)));sel.value=state.mapping[field]||'';sel.onchange=()=>{state.mapping[field]=sel.value;persistMap()};b.append(sel);c.textContent=field;tr.append(a,b,c);body.append(tr)}$('cicMappingPanel').hidden=false;$('cicFileSummary').textContent=state.file.name+' · '+state.rows.length+' data row(s) · '+state.headers.length+' detected column(s)'}
  function persistMap(){const all=readJSON('cerood_import_column_maps_v1',{});all[signature()]={...state.mapping};const keys=Object.keys(all);while(keys.length>20)delete all[keys.shift()];saveJSON('cerood_import_column_maps_v1',all)}
  function cell(row,field){const h=state.mapping[field];if(!h)return '';const i=state.headers.indexOf(h);return i<0?'':String(row[i]??'').trim()}
- async function loadCategories(){if(state.categoriesReady)return state.categories;message('Loading Cerood category master…');const markets=['general','clothing','cosmetics'],all=[];for(const m of markets){try{const d=await apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m));const rows=(d.categories||d.data||d.rows||[]).filter(x=>x&&x.id&&x.name&&x.is_active!==false),byId=new Map(rows.map(r=>[String(r.id),r])),child=new Set(rows.map(r=>String(r.parent_id||'')).filter(Boolean));for(const r of rows){const leaf=r.is_leaf===true||String(r.is_leaf).toLowerCase()==='true'||!child.has(String(r.id));if(!leaf)continue;const names=[];let cur=r,guard=0;while(cur&&guard++<15){names.unshift(String(cur.name||'').trim());cur=cur.parent_id?byId.get(String(cur.parent_id)):null}all.push({marketplace:m,id:String(r.id),leaf:String(r.name||'').trim(),path:names.filter(Boolean).join(' / ')})}}catch(e){console.warn('Category load failed for',m,e)}}state.categories=all;state.categoriesReady=true;message(all.length?'Loaded '+all.length+' Cerood leaf categories.':'Could not load Cerood category master.',all.length?'good':'error');return all}
+ async function loadCategories(){
+  if(state.categoriesReady&&state.categories.length)return state.categories;
+  const markets=['general','clothing','cosmetics'],all=[];
+  const withTimeout=(promise,ms=8000)=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(Error('Category request timed out')),ms))]);
+  const jobs=await Promise.allSettled(markets.map(async m=>{
+    const d=await withTimeout(apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m)));
+    return {m,d};
+  }));
+  for(const job of jobs){
+    if(job.status!=='fulfilled'){console.warn('Category load failed',job.reason);continue}
+    const {m,d}=job.value;
+    const rows=(d.categories||d.data||d.rows||[]).filter(x=>x&&x.id&&x.name&&x.is_active!==false),byId=new Map(rows.map(r=>[String(r.id),r])),child=new Set(rows.map(r=>String(r.parent_id||'')).filter(Boolean));
+    for(const r of rows){const leaf=r.is_leaf===true||String(r.is_leaf).toLowerCase()==='true'||!child.has(String(r.id));if(!leaf)continue;const names=[];let cur=r,guard=0;while(cur&&guard++<15){names.unshift(String(cur.name||'').trim());cur=cur.parent_id?byId.get(String(cur.parent_id)):null}all.push({marketplace:m,id:String(r.id),leaf:String(r.name||'').trim(),path:names.filter(Boolean).join(' / ')})}
+  }
+  state.categories=all;state.categoriesReady=all.length>0;
+  return all
+ }
  function marketHint(v){const n=norm(v);if(['general','main store','cerood main store','shop'].includes(n))return'general';if(['clothing','fashion','apparel'].includes(n))return'clothing';if(['cosmetics','beauty','makeup'].includes(n))return'cosmetics';return''}
  function categoryKey(rawCat,rawType,market){return[marketHint(market),norm(rawCat),norm(rawType)].join('|')}
  function matchCategory(rawCat,rawType,market){const key=categoryKey(rawCat,rawType,market),manual=state.categoryMap[key];if(manual){const live=state.categories.find(x=>x.marketplace===manual.marketplace&&x.id===manual.id);if(live)return live}const hint=marketHint(market),pool=hint?state.categories.filter(x=>x.marketplace===hint):state.categories,cat=norm(rawCat),typ=norm(rawType);let matches=pool.filter(x=>norm(x.path)===cat);if(matches.length===1)return matches[0];if(cat){const last=cat.split(/\s+(?:\/|>|\|)\s+/).filter(Boolean).pop()||cat;matches=pool.filter(x=>norm(x.path).endsWith(cat)||norm(x.leaf)===cat||norm(x.leaf)===last);if(matches.length===1)return matches[0]}if(typ){matches=pool.filter(x=>norm(x.leaf)===typ);if(matches.length===1)return matches[0]}return null}
@@ -7025,7 +7041,44 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  async function loadHistory(){const root=$('cicHistory');root.innerHTML='<p class="hub-muted" style="padding:14px 17px">Loading recent imports…</p>';const jobs=await Promise.allSettled([apiRequest('/api/sellers/bulk-catalog/imports'),apiRequest('/api/sellers/bulk-catalog/update-imports')]),items=[];if(jobs[0].status==='fulfilled')for(const x of jobs[0].value.imports||[])items.push({...x,_kind:'New catalog'});if(jobs[1].status==='fulfilled')for(const x of jobs[1].value.imports||[])items.push({...x,_kind:x.mode==='price'?'Price update':x.mode==='stock'?'Stock update':'Price + stock'});items.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));if(!items.length){root.innerHTML='<p class="hub-muted" style="padding:14px 17px">No supplier imports yet.</p>';return}const table=document.createElement('table');table.innerHTML='<thead><tr><th>Type</th><th>File</th><th>Category</th><th>Rows</th><th>Updated / staged</th><th>Issues</th><th>Status</th><th>Date</th></tr></thead>';const tb=document.createElement('tbody');items.slice(0,25).forEach(x=>{const tr=document.createElement('tr'),good=x.accepted_rows??x.updated_rows??0,issues=Number(x.skipped_rows||0)+Number(x.rejected_rows||0);[x._kind,x.file_name||'—',x.category_path||'—',x.total_rows||0,good,issues,x.status||'—',x.created_at?new Date(x.created_at).toLocaleString('en-IN'):'—'].forEach(v=>{const td=document.createElement('td');td.textContent=String(v);tr.append(td)});tb.append(tr)});table.append(tb);root.replaceChildren(table)}
  function templateHeaders(){return MODE_FIELDS[state.mode].map(x=>x[0]).filter(f=>state.mode!=='new'||f!=='marketplace')}
  function downloadTemplate(){const headers=templateHeaders(),instructions=[['CEROOD Product Import Center'],['Import type',state.mode],[''],['New product catalogs may contain multiple Cerood categories in one file.'],['Use category or category path in every product row. Cerood will auto-match known categories and ask only for unmatched categories.'],['supplier_sku must be stable and unique for this seller.'],['Routine update files need only SKU plus the fields being changed.'],['Prices are INR numeric values; stock is a whole number.'],['Use permanent HTTPS image URLs you are authorised to use.']];if(window.XLSX){const x=window.XLSX,wb=x.utils.book_new(),ws=x.utils.aoa_to_sheet([headers]);ws['!cols']=headers.map(h=>({wch:Math.max(16,h.length+4)}));x.utils.book_append_sheet(wb,ws,'Product Data');x.utils.book_append_sheet(wb,x.utils.aoa_to_sheet(instructions),'Instructions');x.writeFile(wb,'cerood-'+state.mode.replace('_','-')+'-import-template.xlsx')}else{const csv='\uFEFF'+headers.map(h=>'"'+h+'"').join(',')+'\r\n',blob=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='cerood-'+state.mode+'-template.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}}
- async function choose(file){if(!file)return;resetFile();state.file=file;message('Reading '+file.name+'…');try{const rows=await readFile(file);if(rows.length<2)throw Error('File needs a header row and at least one data row.');state.headers=rows[0].map(v=>String(v??'').trim());if(!state.headers.some(Boolean))throw Error('No column headers detected.');state.rows=rows.slice(1).filter(r=>r.some(v=>String(v??'').trim()));if(!state.rows.length)throw Error('No product rows found.');if(state.mode==='new')await loadCategories();autoMap();message('File loaded. Review the column mapping, then validate.','good')}catch(e){message(e.message||'Could not read file.','error')}}
+ async function choose(file){
+  if(!file)return;
+  resetFile();state.file=file;
+  $('cicDropTitle').textContent='Reading '+file.name+'…';
+  $('cicDropHelp').textContent='Please wait while Cerood reads the spreadsheet.';
+  message('Reading '+file.name+'…');
+  try{
+    const rows=await readFile(file);
+    if(rows.length<2)throw Error('File needs a header row and at least one data row.');
+    state.headers=rows[0].map(v=>String(v??'').trim());
+    if(!state.headers.some(Boolean))throw Error('No column headers detected.');
+    state.rows=rows.slice(1).filter(r=>r.some(v=>String(v??'').trim()));
+    if(!state.rows.length)throw Error('No product rows found.');
+
+    // Show the seller immediately that the file was accepted. Category matching can finish in the background.
+    autoMap();
+    $('cicDropTitle').textContent=file.name;
+    $('cicDropHelp').textContent=state.rows.length+' data row(s) detected · '+state.headers.length+' column(s)';
+    message('File loaded successfully. '+state.rows.length+' row(s) detected.','good');
+    requestAnimationFrame(()=>$('cicMappingPanel')?.scrollIntoView({behavior:'smooth',block:'start'}));
+
+    if(state.mode==='new'){
+      message('File loaded. Loading Cerood categories for automatic matching…');
+      const cats=await loadCategories();
+      if(cats.length){
+        message('File loaded. '+cats.length+' Cerood leaf categories available. Review mapping, then validate.','good');
+      }else{
+        message('File loaded, but Cerood categories did not load. You can review columns now; refresh and retry category matching before submit.','error');
+      }
+    }else{
+      message('File loaded. Review the column mapping, then validate.','good');
+    }
+  }catch(e){
+    $('cicDropTitle').textContent='Drop supplier Excel / CSV file here';
+    $('cicDropHelp').textContent='or choose a file · maximum 20 MB';
+    message(e.message||'Could not read file.','error')
+  }
+ }
  document.querySelectorAll('[data-cic-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.cicMode));$('cicChooseFile').onclick=e=>{e.stopPropagation();$('cicFile').click()};$('cicFile').onchange=e=>choose(e.target.files?.[0]);const dz=$('cicDropzone');dz.onclick=e=>{if(e.target.closest('button'))return;$('cicFile').click()};dz.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('cicFile').click()}};['dragenter','dragover'].forEach(n=>dz.addEventListener(n,e=>{e.preventDefault();dz.classList.add('drag')}));['dragleave','drop'].forEach(n=>dz.addEventListener(n,e=>{e.preventDefault();dz.classList.remove('drag')}));dz.addEventListener('drop',e=>choose(e.dataTransfer?.files?.[0]));$('cicAutoMap').onclick=()=>autoMap(true);$('cicValidate').onclick=validate;$('cicSubmit').onclick=submit;$('cicDownloadTemplate').onclick=downloadTemplate;$('cicRefreshHistory').onclick=loadHistory;$('cicApiSupport').onclick=()=>window.showTab?.('support');$('cicCategoryTemplate').onclick=()=>{window.showTab?.('add-product');setTimeout(()=>document.getElementById('ccatBulkOpenChooser')?.click(),0)};document.querySelector('[data-tab="catalog-sync"]')?.addEventListener('click',()=>loadHistory());setMode('new');
 })();
 </script>
