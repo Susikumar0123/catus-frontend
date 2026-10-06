@@ -6255,17 +6255,29 @@ window.ceroodLoadLatchedProducts=load;
  byId('pickupCancelBtn').addEventListener('click',()=>{form.reset();byId('pickupName').value='Main Location';showForm(false)});
  function make(tag,text,cls){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
  async function load(){
-  list.innerHTML='<div class="pickup-empty">Loading pickup locations and Ekart availability…</div>';
+  list.innerHTML='<div class="pickup-empty">Loading pickup locations and courier availability…</div>';
   try{
    let d;
    try{d=await apiRequest('/api/sellers/ekart/locations')}
    catch(_){d=await apiRequest('/api/sellers/locations')}
    const rows=(d.locations||[]).filter(x=>x&&x.is_active!==false);
+   let delhiveryConfigured=false,delhiveryMap=new Map();
+   try{
+    const [statusData,locationData]=await Promise.all([
+      apiRequest('/api/sellers/delhivery/status'),
+      apiRequest('/api/sellers/delhivery/locations')
+    ]);
+    delhiveryConfigured=!!statusData.configured;
+    delhiveryMap=new Map((locationData.locations||[]).map(x=>[String(x.id),x.delhivery||{}]));
+   }catch(_){delhiveryConfigured=false}
+   rows.forEach(x=>{x.delhivery=delhiveryMap.get(String(x.id))||x.delhivery||{};x._delhivery_configured=delhiveryConfigured});
    window.CeroodEkartLocations=rows;
+   window.CeroodCourierLocations=rows;
    render(rows);
   }catch(e){list.innerHTML='<div class="pickup-empty">Unable to load pickup locations.</div>';message(e.message,'error')}
  }
  function ekartInfo(x){const e=x.ekart||{};const pickup=e.seller_pickup!==undefined?e.seller_pickup:x.ekart_pickup_serviceable;const status=pickup===true?'available':pickup===false?'unavailable':'unknown';return{...e,seller_pickup:pickup,status}}
+ function delhiveryInfo(x){const d=x.delhivery||{};const pickup=d.seller_pickup!==undefined?d.seller_pickup:x.delhivery_pickup_serviceable;const configured=!!x._delhivery_configured;const status=!configured?'setup':pickup===true?'available':pickup===false?'unavailable':'unknown';return{...d,seller_pickup:pickup,configured,status}}
  function render(rows){list.replaceChildren();if(!rows.length){list.append(make('div','No pickup location added yet. Add your first fulfilment location.','pickup-empty'));return}
   rows.forEach(x=>{
    const card=make('div',null,'pickup-card'),info=make('div'),title=make('strong',x.location_name||'Pickup Location');
@@ -6273,17 +6285,27 @@ window.ceroodLoadLatchedProducts=load;
    info.append(title);
    const address=[x.address_line1,x.address_line2,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', ');
    info.append(make('p',address||'—'));
-   const ek=ekartInfo(x),statusWrap=make('div',null,'pickup-ekart-status'),pill=make('span',ek.status==='available'?'Ekart pickup available':ek.status==='unavailable'?'Ekart pickup unavailable':'Ekart pickup not verified','pickup-ekart-pill '+ek.status);
-   statusWrap.append(pill);info.append(statusWrap);
+   const ek=ekartInfo(x),dl=delhiveryInfo(x),statusWrap=make('div',null,'pickup-ekart-status');
+   const ekPill=make('span',ek.status==='available'?'Ekart pickup available':ek.status==='unavailable'?'Ekart pickup unavailable':'Ekart pickup not verified','pickup-ekart-pill '+ek.status);
+   const dlPill=make('span',dl.status==='setup'?'Delhivery setup required':dl.status==='available'?'Delhivery pickup available':dl.status==='unavailable'?'Delhivery pickup unavailable':'Delhivery pickup not verified','pickup-ekart-pill '+(dl.status==='setup'?'unknown':dl.status));
+   statusWrap.append(ekPill,dlPill);info.append(statusWrap);
    const facts=[];
-   if(ek.customer_delivery!==null&&ek.customer_delivery!==undefined)facts.push('Delivery '+(ek.customer_delivery?'available':'unavailable'));
-   if(ek.cod_available!==null&&ek.cod_available!==undefined)facts.push(ek.cod_available?'COD available':'No COD');
-   if(ek.customer_reverse_pickup!==null&&ek.customer_reverse_pickup!==undefined)facts.push(ek.customer_reverse_pickup?'Reverse pickup available':'No reverse pickup');
-   if(ek.checked_at)facts.push('Checked '+new Date(ek.checked_at).toLocaleString('en-IN'));
+   if(ek.customer_delivery!==null&&ek.customer_delivery!==undefined)facts.push('Ekart delivery '+(ek.customer_delivery?'available':'unavailable'));
+   if(ek.cod_available!==null&&ek.cod_available!==undefined)facts.push(ek.cod_available?'Ekart COD available':'No Ekart COD');
+   if(ek.customer_reverse_pickup!==null&&ek.customer_reverse_pickup!==undefined)facts.push(ek.customer_reverse_pickup?'Ekart reverse pickup available':'No Ekart reverse pickup');
+   if(ek.checked_at)facts.push('Ekart checked '+new Date(ek.checked_at).toLocaleString('en-IN'));
    if(facts.length)info.append(make('small',facts.join(' · '),'pickup-ekart-meta'));
    if(ek.error)info.append(make('small',ek.error,'pickup-ekart-meta error'));
+   const dFacts=[];
+   if(dl.customer_delivery!==null&&dl.customer_delivery!==undefined)dFacts.push('Delhivery delivery '+(dl.customer_delivery?'available':'unavailable'));
+   if(dl.prepaid_available!==null&&dl.prepaid_available!==undefined)dFacts.push(dl.prepaid_available?'Prepaid available':'No prepaid');
+   if(dl.cod_available!==null&&dl.cod_available!==undefined)dFacts.push(dl.cod_available?'COD available':'No COD');
+   if(dl.checked_at)dFacts.push('Checked '+new Date(dl.checked_at).toLocaleString('en-IN'));
+   if(dFacts.length)info.append(make('small',dFacts.join(' · '),'pickup-ekart-meta'));
+   if(dl.error)info.append(make('small','Delhivery: '+dl.error,'pickup-ekart-meta error'));
    const actions=make('div',null,'pickup-card-actions');
    const check=make('button','Check Ekart','seller-btn seller-btn-outline');check.type='button';check.onclick=async()=>{check.disabled=true;check.textContent='Checking…';try{const d=await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/ekart-serviceability',{method:'POST'});message(d.message||'Ekart pickup availability refreshed.',d.serviceability?.seller_pickup?'success':'error');await load()}catch(e){message(e.message,'error')}finally{check.disabled=false;check.textContent='Check Ekart'}};actions.append(check);
+   const checkDel=make('button',dl.configured?'Check Delhivery':'Delhivery setup required','seller-btn seller-btn-outline');checkDel.type='button';checkDel.disabled=!dl.configured;checkDel.title=dl.configured?'Check this exact seller pickup pincode with Delhivery.':'Add DELHIVERY_API_TOKEN on the backend first.';checkDel.onclick=async()=>{checkDel.disabled=true;checkDel.textContent='Checking…';try{const d=await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/delhivery-serviceability',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({force:true})});message(d.message||'Delhivery pickup availability refreshed.',d.serviceability?.seller_pickup?'success':'error');await load()}catch(e){message(e.message,'error')}finally{checkDel.disabled=false;checkDel.textContent='Check Delhivery'}};actions.append(checkDel);
    if(ek.status==='available'&&!x.ekart_alias){const reg=make('button','Register Ekart','seller-btn seller-btn-outline');reg.type='button';reg.onclick=async()=>{reg.disabled=true;try{const d=await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/ekart-register',{method:'POST'});message(d.message||'Pickup address registered with Ekart.',d.serviceability?.seller_pickup===false?'error':'success');await load()}catch(e){message(e.message,'error');reg.disabled=false}};actions.append(reg)}
    if(x.ekart_alias)actions.append(make('span','Ekart registered','pickup-badge'));
    if(!x.is_default){const b=make('button','Make default','seller-btn seller-btn-outline');b.type='button';b.onclick=async()=>{b.disabled=true;try{await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/default',{method:'PATCH'});message('Default pickup location updated.','success');await load();window.dispatchEvent(new Event('cerood:seller-locations-changed'))}catch(e){message(e.message,'error');b.disabled=false}};actions.append(b)}
