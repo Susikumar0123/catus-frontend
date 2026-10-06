@@ -8484,6 +8484,19 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 @media (min-width:851px) {#cerood-mobile-fixed-header-spacer {display:none!important;}}
 </style>
 <!-- Home Services uses its own independent login/registration flow. -->
+
+<style id="cerood-product-search-overlay-safe-fix-20261006">
+@media (min-width:851px){
+  .product-index-header{position:relative!important;z-index:2147482000!important;overflow:visible!important;}
+}
+@media (max-width:850px){
+  .product-index-header{z-index:2147482000!important;overflow:visible!important;}
+}
+.product-index-header .product-crn-header-main,
+.product-index-header .crn-search{position:relative!important;overflow:visible!important;}
+.product-index-header .crn-search{z-index:2147483000!important;}
+.product-index-header #suggestionsBox{z-index:2147483647!important;background:#fff!important;opacity:1!important;isolation:isolate!important;}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -8922,7 +8935,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
                             font-weight: 600;
                             color: #111111;
                         ">
-                        Welcome to Cerood Home Services
+                        Welcome to Cerood
                     </h3>
 <p style="
                             font-size: 13px;
