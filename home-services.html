@@ -12467,27 +12467,6 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
   }
 }
 </style>
-
-<style id="cerood-home-search-overlay-safe-fix-20261006">
-/* Overlay-only fix: do not resize/reflow the original desktop or mobile design. */
-@media (min-width:851px){
-  .home-index-header{position:relative!important;z-index:2147482000!important;overflow:visible!important;}
-}
-@media (max-width:850px){
-  /* Original file already makes this header fixed; keep that exact positioning. */
-  .home-index-header{z-index:2147482000!important;overflow:visible!important;}
-}
-.home-index-header .home-crn-header-main,
-.home-index-header .crn-search{position:relative!important;overflow:visible!important;}
-.home-index-header .crn-search{z-index:2147483000!important;}
-.home-index-header #suggestionsBox{
-  z-index:2147483647!important;
-  background:#fff!important;
-  opacity:1!important;
-  isolation:isolate!important;
-}
-.quick-services-bar,.services-track,.service-chip{z-index:0!important;}
-</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -12589,7 +12568,21 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
 <div class="mobile-banner-dots" id="mobileBannerDots">
 </div>
 </div>
-<!-- Renewed / Beauty / Fashion commerce promotion removed from Home Services. -->
+<!-- CEROOD RENEWED — responsive premium shopping banner; links to existing store -->
+<section aria-label="Shop pre-owned and refurbished appliances" class="cr-renewed-premium">
+<a aria-label="Explore Cerood Renewed Store: pre-owned and refurbished appliances" class="cr-renewed-premium-link" href="/renewed.html">
+<picture class="cr-renewed-desktop-art">
+<img alt="Cerood Renewed: Great appliances. Second chances. Shop TVs, refrigerators, washing machines, microwaves and water purifiers." decoding="async" height="724" loading="lazy" src="/cerood-renewed-banner-desktop.webp" width="2172"/>
+</picture>
+<div class="cr-renewed-mobile-content">
+<span class="cr-renewed-mobile-kicker">CEROOD RENEWED</span>
+<h2>Great appliances.<br/><span>Second chances.</span></h2>
+<p>Explore quality pre-owned and refurbished appliances for a new home.</p>
+<img alt="Refurbished TV, fridge, washing machine, microwave and water purifier" decoding="async" height="545" loading="lazy" src="/cerood-renewed-banner-mobile.webp" width="1050"/>
+<span class="cr-renewed-mobile-cta">Explore Renewed Store <span aria-hidden="true">→</span></span>
+</div>
+</a>
+</section>
 <!-- 5. Product Categories & Grids (இதைக் கட்டாயம் சேர்க்கவும்) -->
 <div id="productGridContainer"></div>
 <!-- Toast Notification Pop-up -->
@@ -12665,7 +12658,7 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
                             font-weight: 600;
                             color: #111111;
                         ">
-                        Welcome to Cerood
+                        Welcome to Cerood Home Services
                     </h3>
 <p style="
                             font-size: 13px;
@@ -15935,7 +15928,6 @@ async function verifyOtpAndSetPassword() {
                         'cerood_home_service_user',
                         JSON.stringify(currentUser)
                     );
-
                     const homeServiceSession = result.home_service_session || result.session;
                     if (homeServiceSession) {
                         localStorage.setItem('cerood_home_service_session', homeServiceSession);
@@ -16658,97 +16650,176 @@ else if (bookingStatus === 'completed') {
     async function loadHomeServiceGroups() {
 
     const track = document.getElementById('servicesTrack');
+
     if (!track) return;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/service-groups`);
-        const data = await response.json();
 
-        if (!data.success || !Array.isArray(data.groups)) {
+        const response =
+            await fetch(`${API_BASE_URL}/api/service-groups`);
+
+        const data =
+            await response.json();
+
+        if (
+            !data.success ||
+            !Array.isArray(data.groups)
+        ) {
             console.error('Home service groups not available');
             return;
         }
 
         track.innerHTML = '';
 
-        data.groups.forEach((group) => {
-            const groupName = String(group.group_name || '').trim();
-            const isAllServices = /^all\s+services$/i.test(groupName);
-            const button = document.createElement('button');
-            button.className = 'service-chip';
-            button.setAttribute('data-group-id', isAllServices ? '' : String(group.group_id || ''));
-            button.setAttribute('data-group-name', groupName);
+        data.groups.forEach((group, index) => {
 
-            if (isAllServices && !currentHomeGroupId) {
-                button.classList.add('active');
-            }
+            const button =
+                document.createElement('button');
+
+            button.className = 'service-chip';
+
+            button.setAttribute(
+                'data-group-id',
+                group.group_id
+            );
+
+            
 
             button.innerHTML = `
                 <div class="chip-icon-bg">
-                    ${group.icon_url
-                        ? `<img src="${group.icon_url}" alt="${groupName}" onerror="this.style.display='none'">`
-                        : `<i class="fa-solid fa-screwdriver-wrench"></i>`}
+                    ${
+                        group.icon_url
+                            ? `<img
+                                src="${group.icon_url}"
+                                alt="${group.group_name}"
+                                onerror="this.style.display='none'"
+                               >`
+                            : `<i class="fa-solid fa-screwdriver-wrench"></i>`
+                    }
                 </div>
-                <span>${groupName}</span>
+
+                <span>${group.group_name}</span>
             `;
 
-            button.addEventListener('click', function () {
-                selectServiceGroup(this);
-            });
+            button.addEventListener(
+                'click',
+                function () {
+                    selectServiceGroup(this);
+                }
+            );
 
             track.appendChild(button);
         });
 
     } catch (error) {
-        console.error('Home service groups load error:', error);
+
+        console.error(
+            'Home service groups load error:',
+            error
+        );
     }
 }
 
-function selectServiceGroup(element) {
-    const groupId = String(element.getAttribute('data-group-id') || '').trim();
+    function selectServiceGroup(element) {
 
-    document.querySelectorAll('.service-chip').forEach(c => c.classList.remove('active'));
+    const groupId =
+        element.getAttribute('data-group-id') || '';
+
+    // Same icon-ai second time click panna → back to full homepage
+    if (element.classList.contains('active')) {
+
+        element.classList.remove('active');
+
+        currentHomeGroupId = '';
+
+        filterProductsByGroup('');
+
+        return;
+    }
+
+    // Previous active icon remove
+    document
+        .querySelectorAll('.service-chip')
+        .forEach(c => c.classList.remove('active'));
+
+    // Current icon active
     element.classList.add('active');
 
     currentHomeGroupId = groupId;
+
     filterProductsByGroup(groupId);
 }
 
+
 function filterProductsByGroup(groupId) {
-    groupId = String(groupId || '').trim();
-    const filtering = Boolean(groupId);
+// Show offer banners only on the full homepage.
+// Hide MP4/image offers when a category is selected.
+document.querySelectorAll(
+    '.cerood-offer-banner, .cerood-offer-slider'
+)
+    .forEach(banner => {
+        banner.style.display = groupId ? 'none' : '';
+    });
 
-    document.querySelectorAll('.cerood-offer-banner, .cerood-offer-slider')
-        .forEach(banner => { banner.style.display = filtering ? 'none' : ''; });
+    const bannerContainer =
+        document.querySelector('.scroll-wrapper');
 
-    const bannerContainer = document.querySelector('.scroll-wrapper');
-    const titleContainer = document.querySelector('.section-title-container');
-    if (bannerContainer) bannerContainer.style.display = filtering ? 'none' : '';
-    if (titleContainer) titleContainer.style.display = filtering ? 'none' : '';
+    const titleContainer =
+        document.querySelector('.section-title-container');
 
-    document.querySelectorAll('#productGridContainer .uc-category-box').forEach(categoryBox => {
-        let visibleCount = 0;
+    
 
-        categoryBox.querySelectorAll('.uc-card').forEach(card => {
-            const cardGroupId = String(card.getAttribute('data-group-id') || '').trim();
-            const show = !filtering || cardGroupId === groupId;
-            card.style.display = show ? '' : 'none';
-            if (show) visibleCount++;
+    if (groupId) {
+
+        if (bannerContainer)
+            bannerContainer.style.display = 'none';
+
+        if (titleContainer)
+            titleContainer.style.display = 'none';
+
+        
+
+    } else {
+
+        if (bannerContainer)
+            bannerContainer.style.display = '';
+
+        if (titleContainer)
+            titleContainer.style.display = '';
+
+    
+    }
+
+    document
+        .querySelectorAll('.uc-category-box')
+        .forEach(categoryBox => {
+
+            let hasVisibleItems = false;
+
+            categoryBox
+                .querySelectorAll('.uc-card')
+                .forEach(card => {
+
+                    const cardGroupId =
+                        card.getAttribute('data-group-id') || '';
+
+                    if (
+                        !groupId ||
+                        cardGroupId === groupId
+                    ) {
+
+                        card.style.display = 'flex';
+                        hasVisibleItems = true;
+
+                    } else {
+
+                        card.style.display = 'none';
+                    }
+                });
+
+            categoryBox.style.display =
+                hasVisibleItems ? 'block' : 'none';
         });
-
-        categoryBox.style.display = (!filtering || visibleCount > 0) ? '' : 'none';
-    });
-
-    /* Mobile wrapper stays exactly as original; hide only wrappers that have zero visible categories. */
-    document.querySelectorAll('#productGridContainer .mobile-category-track').forEach(track => {
-        if (!filtering) {
-            track.style.display = '';
-            return;
-        }
-        const hasVisible = [...track.querySelectorAll(':scope > .uc-category-box')]
-            .some(box => box.style.display !== 'none');
-        track.style.display = hasVisible ? '' : 'none';
-    });
 }
 
 function getSmallProductImageUrl(imageUrl) {
@@ -16912,13 +16983,9 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.onkeydown = function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                const firstSuggestion = suggestionsBox.querySelector('.suggestion-item');
-                if (firstSuggestion) {
-                    firstSuggestion.click();
-                    return;
-                }
                 const query = searchInput.value.trim();
                 if (!query) return;
+                window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
             }
         };
     }
@@ -17123,9 +17190,7 @@ function startCatusBannerFlow() {
         showToast("Delivery Address updated successfully!", false);
     }
 
-    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v5';
-    localStorage.removeItem('catus_home_html_cache_v3');
-    localStorage.removeItem('catus_home_html_cache_v4');
+    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v3';
 
     localStorage.removeItem('catus_home_html_cache');
 
@@ -19733,7 +19798,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 </script>
-<!-- Individual Beauty / Renewed / Fashion division tabs removed; ecommerce is unified separately. -->
+<script id="csf-insert-divisions">document.addEventListener("DOMContentLoaded",function(){var h=document.querySelector(".uc-homepage-wrapper .header-main-container");if(h&&!document.querySelector(".csf-divisions"))h.insertAdjacentHTML("afterend",'<nav class="csf-divisions" aria-label="Cerood divisions"><a href="/cosmetics.html">Beauty</a><a class="active" aria-current="page" href="/home-services.html">Services</a><a href="/renewed.html">Renewed</a><a href="/clothing.html">Fashion</a></nav>');});</script>
 <nav aria-label="Cerood mobile navigation" class="csf-bottom"><a href="/home-services.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"></path></svg><span>Home</span></a><a class="active" href="/home-services.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"></path></svg><span>Explore</span></a><a data-cerood-dashboard-tab="home" href="#" onclick="return ceroodOpenExistingDashboard(event, 'home')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></svg><span>Dashboard</span></a><a data-cerood-dashboard-tab="bookings" href="#" onclick="return ceroodOpenExistingDashboard(event, 'bookings')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="18" rx="2" width="14" x="5" y="3"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg><span>Orders</span></a><a data-cerood-dashboard-tab="profile" href="#" onclick="return ceroodOpenExistingDashboard(event, 'profile')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"></path></svg><span>Account</span></a></nav>
 <script id="cerood-existing-dashboard-navigation-fix">
 /* Keep customer in the existing Home Services dashboard and its live booking/profile tabs. */
