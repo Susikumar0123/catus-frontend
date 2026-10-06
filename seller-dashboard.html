@@ -1215,6 +1215,7 @@ body.cerood-studio{margin:0!important;background:var(--studio-bg)!important;colo
   <div class="cic-quick-actions"><button class="seller-btn seller-btn-outline" id="cicDownloadTemplate" type="button">Download sample template</button><button class="cic-link" id="cicCategoryTemplate" type="button">Use category-specific template</button><button class="cic-link" id="cicRefreshHistory" type="button">Refresh import history</button></div><div class="cic-message" id="cicMessage" role="status"></div>
   <section class="cic-panel" id="cicMappingPanel" hidden><div class="cic-panel-head"><div><h2>1. Map supplier columns</h2><p id="cicFileSummary"></p></div><button class="cic-link" id="cicAutoMap" type="button">Auto-map again</button></div><div class="cic-map-table-wrap"><table class="cic-map-table"><thead><tr><th>Cerood field</th><th>Supplier column</th><th>Use</th></tr></thead><tbody id="cicMappingBody"></tbody></table></div><div class="cic-panel-actions"><button class="seller-btn" id="cicValidate" type="button">Validate &amp; Preview</button></div></section>
   <section class="cic-panel" id="cicCategoryPanel" hidden><div class="cic-panel-head"><div><h2>2. Map unmatched categories</h2><p>Choose the correct Cerood category step by step. No long category dropdown. Your choice is remembered for the next supplier file.</p></div></div><div id="cicCategoryMappings" class="cic-category-mappings"></div></section>
+  <section class="cic-panel" id="cicSpecPanel" hidden><div class="cic-panel-head"><div><h2>2B. Map category specifications</h2><p>Required fields for the selected Cerood category must be supplied before products can pass Admin QC. Map a supplier column or enter one fixed value for this category.</p></div></div><div id="cicSpecMappings" class="cic-category-mappings"></div></section>
   <section class="cic-panel" id="cicImagePanel" hidden><div class="cic-panel-head"><div><h2>3. Upload product images</h2><p>No image URL is needed in Excel. Upload clear JPG, PNG or WebP product photos here. For fast matching, name each image file with the Supplier SKU, for example <b>ABC-123.jpg</b>.</p></div><div class="cic-image-summary" id="cicImageSummary">0 / 0 images ready</div></div><div class="cic-image-toolbar"><button class="seller-btn seller-btn-outline" id="cicChooseImages" type="button">Upload multiple images</button><input id="cicBulkImages" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden><span>Files are matched to products by Supplier SKU. You can also upload/change an image product-by-product below.</span></div><div class="cic-image-list" id="cicImageList"></div><div class="cic-preview-pager" id="cicImagePager" hidden><button class="seller-btn seller-btn-outline" id="cicImagePrev" type="button">← Previous</button><span id="cicImagePagerText"></span><button class="seller-btn seller-btn-outline" id="cicImageNext" type="button">Next →</button></div><div class="cic-panel-actions"><button class="seller-btn" id="cicReviewProducts" type="button">Review all products</button><span id="cicImageHint">Upload images, then review every product before submitting.</span></div></section>
   <section class="cic-panel" id="cicPreviewPanel" hidden><div class="cic-panel-head"><div><h2 id="cicPreviewTitle">4. Review all products</h2><p>Review images, product details, category, price and stock before submitting. Invalid rows are never submitted.</p></div><div class="cic-preview-page" id="cicPreviewPageLabel"></div></div><div class="cic-stats"><div><small>Rows</small><strong id="cicRows">0</strong></div><div><small>Ready</small><strong id="cicReady">0</strong></div><div><small>Needs action</small><strong id="cicIssues">0</strong></div><div><small>Categories matched</small><strong id="cicMatched">0</strong></div></div><div id="cicIssueBox" class="cic-issues" hidden></div><div class="cic-preview-wrap"><table class="cic-preview"><thead id="cicPreviewHead"></thead><tbody id="cicPreviewBody"></tbody></table></div><div class="cic-preview-pager" id="cicPreviewPager" hidden><button class="seller-btn seller-btn-outline" id="cicPreviewPrev" type="button">← Previous</button><span id="cicPreviewPagerText"></span><button class="seller-btn seller-btn-outline" id="cicPreviewNext" type="button">Next →</button></div><div class="cic-panel-actions"><button class="seller-btn" id="cicSubmit" type="button" disabled>Submit valid rows</button><span id="cicSubmitHint"></span></div></section>
   <section class="cic-panel cic-history-panel"><div class="cic-panel-head"><div><h2>Import History</h2><p>New catalog batches wait for admin QC. Routine price/stock feeds update only approved seller SKUs.</p></div></div><div class="cic-history" id="cicHistory"><p class="hub-muted">Open Catalog Sync to load recent imports.</p></div></section>
@@ -6992,7 +6993,7 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
   price_stock:[['supplier_sku','Supplier SKU',1],['selling_price','Selling price',1],['mrp','MRP / compare price',0],['stock','Stock quantity',1]]
  };
  const ALIASES={supplier_sku:['supplier sku','supplier_sku','seller sku','sku','item code','itemcode','product code','code'],product_name:['product name','product_name','title','item name','item description','product title'],category:['category','category path','product category','categories','department'],product_type:['product type','product_type','subcategory','sub category','item type'],marketplace:['marketplace','market','store','division'],brand:['brand','brand name','make'],model:['model','mpn','manufacturer part number','part number'],selling_price:['selling price','selling_price','price','dealer rate','sale price','net price','rate'],mrp:['mrp','compare price','compare_price','list price','retail price','msrp'],stock:['stock','quantity','qty','available qty','available quantity','inventory','stock qty','stock quantity'],description:['description','product description','content description','details'],image_url:['image url','image_url','image','main image','photo','photo url','image link'],video_url:['video url','video_url','video','video link'],size:['size','v size'],color:['color','colour','v color','v_color'],variant:['variant','style','v style','v_style'],shade:['shade'],net_quantity:['net quantity','net_quantity','volume','v volume','v_volume'],batch_number:['batch number','batch_number','batch'],manufacture_date:['manufacture date','manufacture_date','mfg date','mfg'],expiry_date:['expiry date','expiry_date','expiry','exp date'],ingredients:['ingredients'],directions:['directions','usage'],warnings:['warnings','warning'],manufacturer:['manufacturer','maker'],importer:['importer']};
- const state={mode:'new',file:null,headers:[],rows:[],mapping:{},validation:[],categories:[],categoryMap:readJSON('cerood_supplier_category_map_v1',{}),categoriesReady:false,images:new Map(),imageUrls:new Map(),imagePage:0,previewPage:0,reviewed:false};
+ const state={mode:'new',file:null,headers:[],rows:[],mapping:{},validation:[],categories:[],categoryMap:readJSON('cerood_supplier_category_map_v1',{}),specMap:readJSON('cerood_supplier_spec_map_v1',{}),categoriesReady:false,images:new Map(),imageUrls:new Map(),imagePage:0,previewPage:0,reviewed:false};
  function norm(v){return String(v??'').trim().toLowerCase().replace(/[_-]+/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
  function readJSON(k,d){try{const v=JSON.parse(localStorage.getItem(k)||'null');return v&&typeof v==='object'?v:d}catch{return d}}
  function saveJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
@@ -7099,7 +7100,7 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
     const names=[];let cur=r,guard=0;
     while(cur&&guard++<20){names.unshift(String(cur.name||'').trim());cur=cur.parent_id?byId.get(String(cur.parent_id)):null}
     const path=String(r.category_path||'').trim()||names.filter(Boolean).join(' / ');
-    out.push({marketplace,id:String(r.id),leaf:String(r.name||'').trim(),path:path||String(r.name||'').trim()});
+    out.push({marketplace,id:String(r.id),leaf:String(r.name||'').trim(),path:path||String(r.name||'').trim(),attributes:Array.isArray(r.attributes)?r.attributes:(Array.isArray(r.attribute_schema)?r.attribute_schema:[]),image_slots:Array.isArray(r.image_slots)?r.image_slots:(Array.isArray(r.image_schema)?r.image_schema:[])});
   }
   return out
  }
@@ -7120,7 +7121,7 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
   for(const m of markets)add(m,cicCachedCategoryRows(m));
 
   const withTimeout=(promise,ms=15000)=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(Error('Category request timed out')),ms))]);
-  const missing=markets.filter(m=>force||!loadedMarkets.has(m));
+  const missing=markets; // Always refresh live schema so required category fields are available.
   const jobs=await Promise.allSettled(missing.map(async m=>{
     const d=await withTimeout(apiRequest('/api/sellers/product-categories?marketplace='+encodeURIComponent(m)));
     return {m,d};
@@ -7147,11 +7148,103 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  function marketHint(v){const n=norm(v);if(['general','main store','cerood main store','shop'].includes(n))return'general';if(['clothing','fashion','apparel'].includes(n))return'clothing';if(['cosmetics','beauty','makeup'].includes(n))return'cosmetics';return''}
  function categoryKey(rawCat,rawType,market){return[marketHint(market),norm(rawCat),norm(rawType)].join('|')}
  function matchCategory(rawCat,rawType,market){const key=categoryKey(rawCat,rawType,market),manual=state.categoryMap[key];if(manual){const live=state.categories.find(x=>x.marketplace===manual.marketplace&&x.id===manual.id);if(live)return live}const hint=marketHint(market),pool=hint?state.categories.filter(x=>x.marketplace===hint):state.categories,cat=norm(rawCat),typ=norm(rawType);let matches=pool.filter(x=>norm(x.path)===cat);if(matches.length===1)return matches[0];if(cat){const last=cat.split(/\s+(?:\/|>|\|)\s+/).filter(Boolean).pop()||cat;matches=pool.filter(x=>norm(x.path).endsWith(cat)||norm(x.leaf)===cat||norm(x.leaf)===last);if(matches.length===1)return matches[0]}if(typ){matches=pool.filter(x=>norm(x.leaf)===typ);if(matches.length===1)return matches[0]}return null}
+
+ function attrOptions(a){
+  const v=a?.options;
+  if(Array.isArray(v))return v.map(x=>typeof x==='object'?(x.value??x.label??''):x).map(String).filter(Boolean);
+  if(typeof v==='string'){try{const x=JSON.parse(v);if(Array.isArray(x))return x.map(y=>typeof y==='object'?(y.value??y.label??''):y).map(String).filter(Boolean)}catch{}}
+  return []
+ }
+ function requiredAttrs(c){return (Array.isArray(c?.attributes)?c.attributes:[]).filter(a=>a&&(a.is_required===true||String(a.is_required).toLowerCase()==='true')&&a.attribute_key)}
+ function specKey(c,a){return [c.marketplace,c.id,String(a.attribute_key)].join('|')}
+ function headerValue(row,header){const i=state.headers.indexOf(header);return i<0?'':String(row[i]??'').trim()}
+ function compatibleSpecHeaders(a){
+  const keys=[norm(a?.attribute_key),norm(a?.label)].filter(Boolean);
+  const tokens=new Set(keys.flatMap(x=>x.split(' ')).filter(x=>x.length>=3));
+  return state.headers.filter(h=>{
+    const n=norm(h);if(!n)return false;
+    if(keys.some(k=>n===k||k===n||k.endsWith(' '+n)||n.endsWith(' '+k)))return true;
+    const ht=n.split(' ').filter(x=>x.length>=3);return ht.some(t=>tokens.has(t))
+  })
+ }
+ function specValue(row,c,a){
+  const cfg=state.specMap[specKey(c,a)]||{};
+  let v=cfg.column?headerValue(row,cfg.column):'';
+  if(!String(v||'').trim())v=cfg.default??'';
+  return String(v??'').trim()
+ }
+ function specAttributesForRow(row,c,errors){
+  const out={};
+  for(const a of requiredAttrs(c)){
+    const value=specValue(row,c,a),label=String(a.label||a.attribute_key);
+    if(!value){errors.push(label+' is required');continue}
+    const opts=attrOptions(a);
+    if(opts.length&&!opts.some(x=>norm(x)===norm(value))){errors.push(label+' must match an allowed option');continue}
+    out[String(a.attribute_key)]=value
+  }
+  return out
+ }
+ function renderSpecMappings(){
+  const panel=$('cicSpecPanel'),root=$('cicSpecMappings');if(!panel||!root)return;
+  root.replaceChildren();
+  if(state.mode!=='new'){panel.hidden=true;return}
+  const cats=new Map();
+  for(const r of state.validation){const c=r._category;if(c&&requiredAttrs(c).length)cats.set(c.marketplace+'|'+c.id,c)}
+  if(!cats.size){panel.hidden=true;return}
+  panel.hidden=false;
+  for(const c of cats.values()){
+    const wrap=document.createElement('div');wrap.className='cic-cat-row';wrap.style.cssText='display:block;padding:16px 0';
+    const title=document.createElement('div');
+    const strong=document.createElement('b');strong.textContent=marketLabel(c.marketplace)+' · '+c.path;
+    const small=document.createElement('small');small.style.cssText='display:block;margin-top:5px;color:#64748b';small.textContent='Required category specifications';
+    title.append(strong,small);wrap.append(title);
+    for(const a of requiredAttrs(c)){
+      const k=specKey(c,a),cfg=state.specMap[k]||{},line=document.createElement('div');
+      line.style.cssText='display:grid;grid-template-columns:minmax(150px,.8fr) minmax(210px,1fr) minmax(210px,1fr);gap:10px;align-items:center;margin-top:12px';
+      const lab=document.createElement('label');lab.style.fontWeight='700';lab.textContent=String(a.label||a.attribute_key)+' *';
+      const sel=document.createElement('select');sel.append(new Option('Use fixed value',''));
+      const compatible=compatibleSpecHeaders(a);
+      for(const h of compatible)sel.append(new Option(h,h));
+      if(cfg.column&&compatible.includes(cfg.column))sel.value=cfg.column;
+      else if(!cfg.column&&compatible.length===1){cfg.column=compatible[0];sel.value=compatible[0];state.specMap[k]=cfg;saveJSON('cerood_supplier_spec_map_v1',state.specMap)}
+      let fixed;const opts=attrOptions(a);
+      if(opts.length){fixed=document.createElement('select');fixed.append(new Option('Choose fixed value…',''));for(const o of opts)fixed.append(new Option(o,o));fixed.value=cfg.default||''}
+      else{fixed=document.createElement('input');fixed.type='text';fixed.placeholder='Or enter one value for all products';fixed.value=cfg.default||''}
+      const sync=()=>{state.specMap[k]={column:sel.value||'',default:String(fixed.value||'').trim()};saveJSON('cerood_supplier_spec_map_v1',state.specMap);validate()};
+      sel.onchange=sync;fixed.onchange=sync;
+      line.append(lab,sel,fixed);wrap.append(line)
+    }
+    root.append(wrap)
+  }
+ }
+
  function mappedRequiredMissing(){return MODE_FIELDS[state.mode].filter(x=>x[2]&&!state.mapping[x[0]]).map(x=>x[1])}
  function num(v){return Number(String(v??'').replace(/,/g,'').replace(/[₹$£€]/g,''))}
  function skuKey(v){return String(v||'').trim().toLowerCase()}
- function normalizeRow(row,index,seen,requireImage=false){const o={_row:index+2,_errors:[]};for(const [field] of MODE_FIELDS[state.mode])o[field]=cell(row,field);const sku=String(o.supplier_sku||'').trim();if(!sku)o._errors.push('supplier_sku missing');else{const k=sku.toLowerCase();if(seen.has(k))o._errors.push('duplicate supplier_sku in file');seen.add(k)}if(state.mode==='new'){if(!o.product_name)o._errors.push('product name missing');if(!o.category&&!o.product_type)o._errors.push('category missing');if(!o.brand)o._errors.push('brand missing');const p=num(o.selling_price);if(!Number.isFinite(p)||p<=0)o._errors.push('invalid selling price');else o.selling_price=p;const mrp=o.mrp===''?null:num(o.mrp);if(mrp!==null&&(!Number.isFinite(mrp)||mrp<p))o._errors.push('invalid MRP');else o.mrp=mrp;const q=num(o.stock);if(!Number.isInteger(q)||q<0)o._errors.push('invalid stock');else o.stock=q;const image=sku?state.images.get(skuKey(sku)):null;o._imageFile=image||null;if(requireImage&&!image)o._errors.push('product image required');const match=matchCategory(o.category,o.product_type,o.marketplace);o._category=match;if(!match)o._errors.push('category mapping required');else{o.category=match.path;o.product_type=match.leaf;o.marketplace=match.marketplace}if(match?.marketplace==='cosmetics'){if(!o.net_quantity)o._errors.push('net quantity required for cosmetics');if(!/^\d{4}-\d{2}-\d{2}$/.test(o.expiry_date)||o.expiry_date<new Date().toISOString().slice(0,10))o._errors.push('future expiry date required for cosmetics')}}else{if(state.mode==='price'||state.mode==='price_stock'){const p=num(o.selling_price);if(!Number.isFinite(p)||p<=0)o._errors.push('invalid selling price');else o.selling_price=p;const mrp=o.mrp===''?null:num(o.mrp);if(mrp!==null&&(!Number.isFinite(mrp)||mrp<p))o._errors.push('invalid MRP');else o.mrp=mrp}if(state.mode==='stock'||state.mode==='price_stock'){const q=num(o.stock);if(!Number.isInteger(q)||q<0)o._errors.push('invalid stock');else o.stock=q}}return o}
- function validate(){const missing=mappedRequiredMissing();if(missing.length){message('Map required fields first: '+missing.join(', '),'error');return}persistMap();const seen=new Set();state.validation=state.rows.map((r,i)=>normalizeRow(r,i,seen,false));renderCategoryMappings();if(state.mode==='new'){state.reviewed=false;$('cicPreviewPanel').hidden=true;renderImageAssignments();message('Columns and categories are ready. Upload product images, then review all products.','good');requestAnimationFrame(()=>$('cicImagePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}else{state.reviewed=true;renderValidation();requestAnimationFrame(()=>$('cicPreviewPanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}}
+ function normalizeRow(row,index,seen,requireImage=false){
+  const o={_row:index+2,_errors:[]};
+  for(const [field] of MODE_FIELDS[state.mode])o[field]=cell(row,field);
+  const sku=String(o.supplier_sku||'').trim();
+  if(!sku)o._errors.push('supplier_sku missing');else{const k=sku.toLowerCase();if(seen.has(k))o._errors.push('duplicate supplier_sku in file');seen.add(k)}
+  if(state.mode==='new'){
+   if(!o.product_name)o._errors.push('product name missing');
+   if(!o.category&&!o.product_type)o._errors.push('category missing');
+   if(!o.brand)o._errors.push('brand missing');
+   const p=num(o.selling_price);if(!Number.isFinite(p)||p<=0)o._errors.push('invalid selling price');else o.selling_price=p;
+   const mrp=o.mrp===''?null:num(o.mrp);if(mrp!==null&&(!Number.isFinite(mrp)||mrp<p))o._errors.push('invalid MRP');else o.mrp=mrp;
+   const q=num(o.stock);if(!Number.isInteger(q)||q<0)o._errors.push('invalid stock');else o.stock=q;
+   const image=sku?state.images.get(skuKey(sku)):null;o._imageFile=image||null;if(requireImage&&!image)o._errors.push('product image required');
+   const match=matchCategory(o.category,o.product_type,o.marketplace);o._category=match;o.product_attributes={};
+   if(!match)o._errors.push('category mapping required');
+   else{o.category=match.path;o.product_type=match.leaf;o.marketplace=match.marketplace;o.product_attributes=specAttributesForRow(row,match,o._errors)}
+   if(match?.marketplace==='cosmetics'){if(!o.net_quantity)o._errors.push('net quantity required for cosmetics');if(!/^\d{4}-\d{2}-\d{2}$/.test(o.expiry_date)||o.expiry_date<new Date().toISOString().slice(0,10))o._errors.push('future expiry date required for cosmetics')}
+  }else{
+   if(state.mode==='price'||state.mode==='price_stock'){const p=num(o.selling_price);if(!Number.isFinite(p)||p<=0)o._errors.push('invalid selling price');else o.selling_price=p;const mrp=o.mrp===''?null:num(o.mrp);if(mrp!==null&&(!Number.isFinite(mrp)||mrp<p))o._errors.push('invalid MRP');else o.mrp=mrp}
+   if(state.mode==='stock'||state.mode==='price_stock'){const q=num(o.stock);if(!Number.isInteger(q)||q<0)o._errors.push('invalid stock');else o.stock=q}
+  }
+  return o
+ }
+ function validate(){const missing=mappedRequiredMissing();if(missing.length){message('Map required fields first: '+missing.join(', '),'error');return}persistMap();const seen=new Set();state.validation=state.rows.map((r,i)=>normalizeRow(r,i,seen,false));renderCategoryMappings();renderSpecMappings();if(state.mode==='new'){state.reviewed=false;$('cicPreviewPanel').hidden=true;renderImageAssignments();message('Columns and categories are ready. Upload product images, then review all products.','good');requestAnimationFrame(()=>$('cicImagePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}else{state.reviewed=true;renderValidation();requestAnimationFrame(()=>$('cicPreviewPanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}}
  function unresolvedCategoryKeys(){const map=new Map();for(const r of state.validation){if(state.mode!=='new'||r._category)continue;const key=categoryKey(r.category,r.product_type,r.marketplace);if(!map.has(key))map.set(key,{key,label:[r.category,r.product_type].filter(Boolean).join(' · ')||'Unknown category'})}return[...map.values()]}
  function ensureCategoryStepPicker(){
   let shade=$('cicCatPickerShade');
@@ -7292,10 +7385,10 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  function reviewProducts(){if(state.mode!=='new')return;const seen=new Set();state.validation=state.rows.map((r,i)=>normalizeRow(r,i,seen,true));state.reviewed=true;state.previewPage=0;renderValidation();requestAnimationFrame(()=>$('cicPreviewPanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}
  function setPreviewHead(){const head=$('cicPreviewHead');if(state.mode==='new')head.innerHTML='<tr><th>Image</th><th>SKU</th><th>Product</th><th>Category</th><th>Brand</th><th>Price / MRP</th><th>Stock</th><th>Description</th><th>Status</th></tr>';else head.innerHTML='<tr><th>SKU</th><th>Price</th><th>MRP</th><th>Stock</th><th>Target</th><th>Status</th></tr>'}
  function renderValidation(){renderCategoryMappings();const valid=state.validation.filter(x=>!x._errors.length),bad=state.validation.length-valid.length,matched=state.mode==='new'?state.validation.filter(x=>x._category).length:state.validation.length;$('cicRows').textContent=state.validation.length;$('cicReady').textContent=valid.length;$('cicIssues').textContent=bad;$('cicMatched').textContent=matched;$('cicPreviewTitle').textContent=state.mode==='new'?'4. Review all products':'2. Validate & Preview';const issues=state.validation.filter(x=>x._errors.length).slice(0,120),box=$('cicIssueBox');box.hidden=!issues.length;box.innerHTML=issues.map(x=>'Row '+x._row+' · '+escapeHTML(x.supplier_sku||'No SKU')+': '+escapeHTML(x._errors.join(', '))).join('<br>');setPreviewHead();const body=$('cicPreviewBody');body.replaceChildren();const pageSize=25,pages=Math.max(1,Math.ceil(state.validation.length/pageSize));state.previewPage=Math.min(Math.max(0,state.previewPage),pages-1);const slice=state.validation.slice(state.previewPage*pageSize,(state.previewPage+1)*pageSize);for(const x of slice){const tr=document.createElement('tr');if(state.mode==='new'){const imageTd=document.createElement('td'),file=x.supplier_sku?state.images.get(skuKey(x.supplier_sku)):null;if(file){const img=document.createElement('img');img.className='cic-preview-thumb';img.alt=x.product_name||'Product';imagePreview(img,file);imageTd.append(img)}else imageTd.textContent='No image';tr.append(imageTd);const target=x._category?.path||x.category||x.product_type||'—';const values=[x.supplier_sku||'—',x.product_name||'—',target,x.brand||'—',(x.selling_price===''?'—':'₹'+Number(x.selling_price).toLocaleString('en-IN'))+(x.mrp!=null?' / ₹'+Number(x.mrp).toLocaleString('en-IN'):''),x.stock===''?'—':x.stock,x.description||'—',x._errors.length?'Needs action':'Ready'];values.forEach((v,i)=>{const td=document.createElement('td');td.textContent=String(v??'—');if(i===6)td.className='cic-preview-desc';if(i===7)td.className=x._errors.length?'cic-bad':'cic-ok';tr.append(td)})}else{const values=[x.supplier_sku||'—',x.selling_price===''?'—':x.selling_price,x.mrp==null?'—':x.mrp,x.stock===''?'—':x.stock,'Approved SKU match at server',x._errors.length?'Needs action':'Ready'];values.forEach((v,i)=>{const td=document.createElement('td');td.textContent=String(v??'—');if(i===5)td.className=x._errors.length?'cic-bad':'cic-ok';tr.append(td)})}body.append(tr)}$('cicPreviewPanel').hidden=false;const pager=$('cicPreviewPager');pager.hidden=pages<=1;$('cicPreviewPagerText').textContent='Page '+(state.previewPage+1)+' of '+pages;$('cicPreviewPageLabel').textContent=state.validation.length?'Showing '+(state.previewPage*pageSize+1)+'–'+Math.min((state.previewPage+1)*pageSize,state.validation.length)+' of '+state.validation.length:'';$('cicPreviewPrev').disabled=state.previewPage<=0;$('cicPreviewNext').disabled=state.previewPage>=pages-1;const submit=$('cicSubmit');submit.disabled=!valid.length||(state.mode==='new'&&!state.reviewed);submit.textContent=state.mode==='new'?'Submit '+valid.length+' valid product(s) to QC':'Apply '+valid.length+' valid update(s)';$('cicSubmitHint').textContent=bad?bad+' row(s) will stay unsubmitted.':'All rows are ready.'}
- function cleanForSend(r){const out={};for(const [field] of MODE_FIELDS[state.mode])if(field!=='marketplace'&&r[field]!==''&&r[field]!=null)out[field]=r[field];if(state.mode==='new'&&r.image_url)out.image_url=r.image_url;return out}
+ function cleanForSend(r){const out={};for(const [field] of MODE_FIELDS[state.mode])if(field!=='marketplace'&&r[field]!==''&&r[field]!=null)out[field]=r[field];if(state.mode==='new'&&r.image_url)out.image_url=r.image_url;if(state.mode==='new'&&r.product_attributes&&typeof r.product_attributes==='object')out.product_attributes=r.product_attributes;return out}
  async function uploadImagesForRows(rows){if(state.mode!=='new')return;let completed=0;const queue=[...rows];const workers=Array.from({length:Math.min(3,queue.length)},async()=>{while(queue.length){const r=queue.shift(),key=skuKey(r.supplier_sku);let url=state.imageUrls.get(key);if(!url){const file=state.images.get(key);if(!imageFileValid(file))throw Error('Product image missing for SKU '+r.supplier_sku);message('Uploading product images '+completed+' / '+rows.length+'…');url=await uploadMedia(file);state.imageUrls.set(key,url)}r.image_url=url;completed++;message('Uploading product images '+completed+' / '+rows.length+'…')}});await Promise.all(workers)}
  async function submit(){const valid=state.validation.filter(x=>!x._errors.length);if(!valid.length)return;if(state.mode==='new'&&!state.reviewed){message('Review all products before submitting.','error');return}const b=$('cicSubmit');b.disabled=true;message('Preparing '+valid.length+' valid row(s)…');try{if(state.mode==='new'){await uploadImagesForRows(valid);message('Images uploaded. Submitting products to Cerood QC…');await submitNew(valid)}else await submitUpdate(valid);message('Import completed. Refreshing history…','good');await loadHistory();b.textContent='Submitted'}catch(e){message(e.message||'Import failed.','error');b.disabled=false}}
- async function submitNew(rows){const groups=new Map();for(const r of rows){const c=r._category,key=[c.marketplace,c.id,c.path].join('|');if(!groups.has(key))groups.set(key,{c,rows:[]});groups.get(key).rows.push(cleanForSend(r))}let done=0;for(const g of groups.values()){const batch=uuid(),size=100,total=Math.ceil(g.rows.length/size);for(let i=0;i<total;i++){const chunk=g.rows.slice(i*size,(i+1)*size);await apiRequest('/api/sellers/bulk-catalog/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({batch_id:batch,file_name:state.file.name,marketplace:g.c.marketplace,category_id:g.c.marketplace==='general'?g.c.id:null,category_path:g.c.path,category_leaf:g.c.leaf,final_chunk:i===total-1,row_offset:i*size,rows:chunk})});done+=chunk.length;message('Submitted '+done+' / '+rows.length+' products…')}}}
+ async function submitNew(rows){const groups=new Map();for(const r of rows){const c=r._category,key=[c.marketplace,c.id,c.path].join('|');if(!groups.has(key))groups.set(key,{c,rows:[]});groups.get(key).rows.push(cleanForSend(r))}let done=0;for(const g of groups.values()){const batch=uuid(),size=100,total=Math.ceil(g.rows.length/size);for(let i=0;i<total;i++){const chunk=g.rows.slice(i*size,(i+1)*size);await apiRequest('/api/sellers/bulk-catalog/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({batch_id:batch,file_name:state.file.name,marketplace:g.c.marketplace,category_id:g.c.id,category_path:g.c.path,category_leaf:g.c.leaf,final_chunk:i===total-1,row_offset:i*size,rows:chunk})});done+=chunk.length;message('Submitted '+done+' / '+rows.length+' products…')}}}
  async function submitUpdate(rows){const batch=uuid(),size=250,total=Math.ceil(rows.length/size);for(let i=0;i<total;i++){const chunk=rows.slice(i*size,(i+1)*size).map(cleanForSend);await apiRequest('/api/sellers/bulk-catalog/inventory-update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({batch_id:batch,file_name:state.file.name,mode:state.mode,final_chunk:i===total-1,row_offset:i*size,rows:chunk})});message('Applied '+Math.min((i+1)*size,rows.length)+' / '+rows.length+' updates…')}}
  async function loadHistory(){const root=$('cicHistory');root.innerHTML='<p class="hub-muted" style="padding:14px 17px">Loading recent imports…</p>';const jobs=await Promise.allSettled([apiRequest('/api/sellers/bulk-catalog/imports'),apiRequest('/api/sellers/bulk-catalog/update-imports')]),items=[];if(jobs[0].status==='fulfilled')for(const x of jobs[0].value.imports||[])items.push({...x,_kind:'New catalog'});if(jobs[1].status==='fulfilled')for(const x of jobs[1].value.imports||[])items.push({...x,_kind:x.mode==='price'?'Price update':x.mode==='stock'?'Stock update':'Price + stock'});items.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));if(!items.length){root.innerHTML='<p class="hub-muted" style="padding:14px 17px">No supplier imports yet.</p>';return}const table=document.createElement('table');table.innerHTML='<thead><tr><th>Type</th><th>File</th><th>Category</th><th>Rows</th><th>Updated / staged</th><th>Issues</th><th>Status</th><th>Date</th></tr></thead>';const tb=document.createElement('tbody');items.slice(0,25).forEach(x=>{const tr=document.createElement('tr'),good=x.accepted_rows??x.updated_rows??0,issues=Number(x.skipped_rows||0)+Number(x.rejected_rows||0);[x._kind,x.file_name||'—',x.category_path||'—',x.total_rows||0,good,issues,x.status||'—',x.created_at?new Date(x.created_at).toLocaleString('en-IN'):'—'].forEach(v=>{const td=document.createElement('td');td.textContent=String(v);tr.append(td)});tb.append(tr)});table.append(tb);root.replaceChildren(table)}
  function templateHeaders(){return MODE_FIELDS[state.mode].map(x=>x[0]).filter(f=>state.mode!=='new'||f!=='marketplace')}
