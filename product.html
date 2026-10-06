@@ -1,32 +1,54 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<link href="/manifest.json" rel="manifest"/>
-<meta content="#ffffff" name="theme-color"/>
-<meta content="yes" name="mobile-web-app-capable"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
-<meta content="Cerood" name="apple-mobile-web-app-title"/>
-<title id="pageTitle">Product Details - Cerood</title>
-<meta content="Book trusted home appliance repair and doorstep service near you with Cerood." name="description"/>
-<meta content="index, follow, max-image-preview:large" name="robots"/>
-<!-- Google Fonts - Roboto -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'" rel="preload"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="manifest" href="/manifest.json">
+
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<meta name="apple-mobile-web-app-title" content="Cerood">
+    <title id="pageTitle">Product Details - Cerood</title>
+
+    <meta name="description"
+      content="Book trusted home appliance repair and doorstep service near you with Cerood.">
+
+    <meta name="robots"
+      content="index, follow, max-image-preview:large">
+    
+    <!-- Google Fonts - Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'">
+
 <noscript>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
 </noscript>
-<!-- FontAwesome Icons -->
-<link as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'" rel="preload"/>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="preload"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'">
+
 <noscript>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </noscript>
-<script defer="" src="https://unpkg.com/lucide@latest"></script>
-<style>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <style>
         @media (max-width: 850px) {
     /* 1. More Relevant Services மற்றும் ஹோம் பேஜ் கிரிட்களை 2x2 வடிவத்திற்கு மாற்ற */
     .uc-grid {
@@ -8285,6 +8307,7 @@ body.cerood-auth-open .cerood-global-mobile-nav, body.cerood-auth-open .mobile-b
 }
 
 </style>
+
 <!-- CEROOD MOBILE NAV: VISUAL DESIGN ONLY — existing options and handlers untouched -->
 <style id="cerood-mobile-nav-visual-only">
 @media (max-width:850px) {
@@ -8430,6 +8453,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
 @media(max-width:360px){.csf-bottom a{font-size:9px}.csf-divisions a{font-size:10px}.uc-homepage-wrapper .header-main-container{column-gap:5px!important}.csf-home-cart,.csf-menu summary{width:35px;height:35px}}
 </style>
+
 <style id="cerood-service-fullbleed-mobile-header-fix">
 /* Only mobile header geometry. Preserve existing cart, menu, search and bottom navigation. */
 @media (max-width:850px){
@@ -8448,7 +8472,9 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
  .checkout-header>.secure-badge{display:none!important}
 }
 </style>
-<script defer="" src="/cerood-location.js"></script>
+
+<script src="/cerood-location.js" defer></script>
+
 <style id="cerood-home-services-smooth-navigation-20260925">
 /* Same-origin cross-document visual transitions only. No link interception, JS or checkout changes. */
 @view-transition { navigation: auto; }
@@ -8469,6 +8495,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
   ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01s !important; }
 }
 </style>
+
 <style id="cerood-mobile-fixed-header-20260925">
 /* Mobile-only fixed header. A measured spacer retains normal document flow. */
 @media (max-width:850px) {
@@ -8483,171 +8510,241 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
 @media (min-width:851px) {#cerood-mobile-fixed-header-spacer {display:none!important;}}
 </style>
-<script defer="" src="/cerood-auth.js"></script>
+<script src="/cerood-auth.js" defer></script>
 </head>
 <body>
-<!-- CEROOD PWA INSTALL BANNER -->
+
+    <!-- CEROOD PWA INSTALL BANNER -->
 <div id="ceroodInstallBanner" style="display:none;">
-<div class="cerood-install-content">
-<img alt="Cerood" src="/icon-192.png"/>
-<div class="cerood-install-text">
-<strong>Get the Cerood App</strong>
-<span>Faster booking &amp; easy access</span>
-</div>
-<button id="ceroodInstallBtn">
+    <div class="cerood-install-content">
+
+        <img src="/icon-192.png" alt="Cerood">
+
+        <div class="cerood-install-text">
+            <strong>Get the Cerood App</strong>
+            <span>Faster booking & easy access</span>
+        </div>
+
+        <button id="ceroodInstallBtn">
             Install
         </button>
-<button aria-label="Close" class="cerood-install-close" onclick="closeCeroodInstallBanner()">
+
+        <button
+            class="cerood-install-close"
+            onclick="closeCeroodInstallBanner()"
+            aria-label="Close"
+        >
             ×
         </button>
+
+    </div>
 </div>
+
+  <!-- Master Single Container -->
+  <div class="master-app-container">
+    
+    <!-- HEADER & SEARCH BAR SECTION -->
+    <div class="uc-homepage-wrapper">
+      <div class="header-main-container">
+          <div class="brand-logo" onclick="window.location.href='/'">
+              <img src="/cerood-logo.webp" alt="Cerood Logo">
+          </div>
+          <div class="mobile-location-widget"
+     onclick="openLocationModal()">
+    <i class="fa-solid fa-location-dot"></i>
+    <span id="mobileHeaderLocationDisplay">Select Location</span>
+    <i class="fa-solid fa-chevron-down"></i>
 </div>
-<!-- Master Single Container -->
-<div class="master-app-container">
-<!-- HEADER & SEARCH BAR SECTION -->
-<div class="uc-homepage-wrapper product-index-header">
-<div class="header-main-container crn-header-main product-crn-header-main">
-<a aria-label="Cerood home" class="brand-logo crn-logo" href="/index.html">
-<img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/>
-<span class="cerood-wordmark-erood">erood</span>
-</a>
-<button aria-label="Delivery location" class="header-location-widget crn-location product-location-trigger" onclick="openLocationModal()" type="button">
-<svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
-<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path>
-<circle cx="12" cy="10" r="2.5"></circle>
-</svg>
-<span class="loc-text-box">
-<span class="loc-label">Delivery location</span>
-<b id="headerLocationDisplay">Select Location</b>
-</span>
-<svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
-<path d="m6 9 6 6 6-6"></path>
-</svg>
-</button>
-<div class="search-container crn-search">
-<svg aria-hidden="true" class="search-icon crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
-<circle cx="11" cy="11" r="8"></circle>
-<path d="m21 21-4.35-4.35"></path>
-</svg>
-<input autocomplete="off" id="searchInput" placeholder="Search products, brands &amp; categories..." type="text"/>
-<div id="suggestionsBox"></div>
+          
+          <div class="search-container">
+              <svg class="search-icon" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="searchInput" placeholder="Search for Fan, Laptop, TV, Painting, Sofa..." autocomplete="off">
+              <div id="suggestionsBox"></div>
+          </div>
+
+          <div class="cerood-unified-tools"><button type="button" aria-label="Cart" onclick="toggleCartModal(true)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg></button><details class="cerood-unified-menu"><summary aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-unified-menu-list"><a href="/">Home</a><a href="/#divisions">Explore</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed Store</a><a href="/cosmetics.html">Beauty Store</a><a href="/clothing.html">Fashion Store</a><a href="#" onclick="return ceroodOpenExistingDashboard(event, 'home')">Dashboard</a><a href="#" onclick="return ceroodOpenExistingDashboard(event, 'bookings')">My Orders</a><a href="#" onclick="return ceroodOpenExistingDashboard(event, 'profile')">Account</a><a href="/cerood-cart.html">Cart</a><a href="/contact.html">Help</a></div></details></div><div class="header-nav-right">
+
+              <!-- Catus-Style Header Location Widget -->
+              <div class="header-location-widget" onclick="openLocationModal()" style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+    <div class="loc-text-box" style="display: flex; flex-direction: column; font-size: 11px; line-height: 1.2;">
+        <span class="loc-label" style="color: #64748b;">Delivery to</span>
+        <strong id="headerLocationDisplay" style="color: #0f172a; font-size: 12px;">Select Location</strong>
+    </div>
+    <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #64748b; margin-left: 2px;"></i>
 </div>
-<div class="header-nav-right crn-actions">
-<a class="cerood-index-home-services-visual crn-service-pill" href="/index.html">Home</a>
-<div aria-label="Cart" class="nav-item cart-item crn-pill crn-cart" onclick="toggleCartModal(true)" role="button" tabindex="0">
-<div class="cart-icon-wrapper">
-<svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
-<circle cx="9" cy="20" r="1"></circle>
-<circle cx="19" cy="20" r="1"></circle>
-<path d="M2 3h2l2.5 12h12.5l2-9H5"></path>
-</svg>
-<span class="cart-badge">0</span>
-</div>
-<span class="nav-text">Cart</span>
-</div>
-<button class="login-btn crn-pill crn-account" id="loginNavBtn" onclick="handleHeaderAuthClick()" type="button">
-<svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
-<circle cx="12" cy="7.5" r="4"></circle>
-<path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
-</svg>
-<span class="nav-text" id="loginBtnText">Login</span>
-</button>
-</div>
-<div class="mobile-location-widget" onclick="openLocationModal()">
-<i class="fa-solid fa-location-dot"></i>
-<span id="mobileHeaderLocationDisplay">Select Location</span>
-<i class="fa-solid fa-chevron-down"></i>
-</div>
-</div>
-</div>
+              
+              <div class="nav-item cart-item" onclick="toggleCartModal(true)">
+                  <div class="cart-icon-wrapper">
+                      <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#1e293b;stroke-width:2;fill:none;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                      <span class="cart-badge">0</span>
+                  </div>
+                  <span class="nav-text">Cart</span>
+              </div>
+
+              <button class="login-btn" id="loginNavBtn" onclick="handleHeaderAuthClick()">
+                  <svg style="width:16px;height:16px;stroke:#fff;stroke-width:2;fill:none;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  <span class="nav-text" id="loginBtnText">Login</span>
+              </button>
+          </div>
+      </div>
+    </div>
 <!-- BREADCRUMB -->
-<div class="breadcrumb">
-<a href="/">Home</a>
-<span>›</span>
-<a href="#" id="bcDistrict">
+    <div class="breadcrumb">
+    <a href="/">Home</a>
+
+    <span>›</span>
+
+    <a id="bcDistrict" href="#">
         District
     </a>
-<span id="bcLocationSeparator">›</span>
-<a href="#" id="bcLocation">
+
+    <span id="bcLocationSeparator">›</span>
+
+    <a id="bcLocation" href="#">
         Location
     </a>
-<span>›</span>
-<span class="active" id="bcTitle">
+
+    <span>›</span>
+
+    <span class="active" id="bcTitle">
         Loading...
     </span>
 </div>
-<!-- MAIN PRODUCT GRID -->
+
+    <!-- MAIN PRODUCT GRID -->
 <div class="product-grid" id="productGridMain">
-<!-- LEFT : PRODUCT GALLERY -->
-<div class="product-gallery">
-<div class="main-image-container">
-<img alt="Product" fetchpriority="high" id="mainProductImage" loading="eager" src=""/>
-</div>
-<div class="thumbnail-row" id="thumbnailContainer"></div>
-</div>
-<!-- CENTER : PRODUCT DETAILS -->
-<div class="product-info">
-<h1 class="product-title" id="prodTitle">
-            Smart TV Repair &amp; Service
+
+    <!-- LEFT : PRODUCT GALLERY -->
+    <div class="product-gallery">
+
+        <div class="main-image-container">
+            <img
+                id="mainProductImage"
+                src=""
+                alt="Product"
+                fetchpriority="high"
+                loading="eager"
+            >
+        </div>
+
+        <div
+            class="thumbnail-row"
+            id="thumbnailContainer"
+        ></div>
+
+    </div>
+
+
+    <!-- CENTER : PRODUCT DETAILS -->
+    <div class="product-info">
+
+        <h1
+            class="product-title"
+            id="prodTitle"
+        >
+            Smart TV Repair & Service
         </h1>
-<div class="rating-row" onclick="openReviewsPopup()" style="cursor:pointer;">
-<span class="rating-badge">
-<span id="prodRating">0.0</span>
-<i class="fa-solid fa-star" style="font-size:10px;"></i>
-</span>
-<span class="rating-text" id="prodReviewsCount">
+
+        <div
+            class="rating-row"
+            onclick="openReviewsPopup()"
+            style="cursor:pointer;"
+        >
+            <span class="rating-badge">
+                <span id="prodRating">0.0</span>
+                <i
+                    class="fa-solid fa-star"
+                    style="font-size:10px;"
+                ></i>
+            </span>
+
+            <span
+                class="rating-text"
+                id="prodReviewsCount"
+            >
                 No ratings yet
             </span>
-</div>
-<div class="price-section">
-<div class="starting-price-wrap">
-<span class="starts-from-label">Starts from</span>
-<span class="current-price" id="displayPrice">
+        </div>
+
+        <div class="price-section">
+
+    <div class="starting-price-wrap">
+        <span class="starts-from-label">Starts from</span>
+
+        <span
+            class="current-price"
+            id="displayPrice"
+        >
             ₹349
         </span>
-</div>
-<span class="original-price" id="displayMrp">
+    </div>
+
+    <span
+        class="original-price"
+        id="displayMrp"
+    >
         ₹699
     </span>
-<span class="discount-pct" id="displayDiscount">
+
+    <span
+        class="discount-pct"
+        id="displayDiscount"
+    >
         50% off
     </span>
+
 </div>
-<div id="productNoteContainer" style="
+
+        <div
+            id="productNoteContainer"
+            style="
                 font-size:13px;
                 color:#64748b;
                 line-height:1.5;
                 display:none;
-            "></div>
-<div class="product-trust-row">
-<div class="product-trust-item">
-<i class="fa-solid fa-shield-halved"></i>
-<span>Verified Service</span>
-</div>
-<div class="product-trust-item">
-<i class="fa-solid fa-house"></i>
-<span>Doorstep Service</span>
-</div>
-<div class="product-trust-item">
-<i class="fa-solid fa-circle-check"></i>
-<span>Trusted Support</span>
-</div>
-</div>
-<!-- REAL CEROOD WORK PROOF -->
-<section id="ceroodWorkProofSection" style="
+            "
+        ></div>
+
+        <div class="product-trust-row">
+
+            <div class="product-trust-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Verified Service</span>
+            </div>
+
+            <div class="product-trust-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Doorstep Service</span>
+            </div>
+
+            <div class="product-trust-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Trusted Support</span>
+            </div>
+
+        </div>
+
+        <!-- REAL CEROOD WORK PROOF -->
+<section
+    id="ceroodWorkProofSection"
+    style="
         display:none;
         margin-top:12px;
         padding:0;
         border:0;
-    ">
-<div style="
+    "
+>
+    <div style="
         display:flex;
         align-items:center;
         justify-content:space-between;
         gap:10px;
         margin-bottom:10px;
     ">
-<h3 style="
+        <h3 style="
             margin:0;
             font-size:15px;
             line-height:1.2;
@@ -8656,7 +8753,11 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
         ">
             Real Work by Cerood
         </h3>
-<button onclick="openCeroodWorkGallery()" style="
+
+        <button
+            type="button"
+            onclick="openCeroodWorkGallery()"
+            style="
                 border:0;
                 background:transparent;
                 padding:4px 0 4px 8px;
@@ -8666,88 +8767,169 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
                 font-weight:600;
                 cursor:pointer;
                 white-space:nowrap;
-            " type="button">
+            "
+        >
             View More ›
         </button>
-</div>
-<div id="ceroodWorkProofContainer" style="
+    </div>
+
+    <div
+        id="ceroodWorkProofContainer"
+        style="
             display:block;
             width:100%;
-        "></div>
+        "
+    ></div>
 </section>
-<!-- EXISTING OPTION SYSTEM -->
-<div id="productVariantArea" style="margin-top:4px;">
-<div class="variant-title">
+
+        <!-- EXISTING OPTION SYSTEM -->
+        <div
+            id="productVariantArea"
+            style="margin-top:4px;"
+        >
+            <div class="variant-title">
                 Select Option
             </div>
-<div class="variant-group" id="variantContainer">
-<button class="variant-btn active">
+
+            <div
+                class="variant-group"
+                id="variantContainer"
+            >
+                <button
+                    class="variant-btn active"
+                >
                     Standard Service
                 </button>
-</div>
-</div>
-</div>
-<!-- RIGHT : BOOKING PANEL -->
-<div class="cerood-booking-panel">
-<h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT : BOOKING PANEL -->
+    <div class="cerood-booking-panel">
+
+        <h2>
             Book Your Service
         </h2>
-<div class="cerood-booking-label">
+
+        <div class="cerood-booking-label">
             Select Date
         </div>
-<div class="cerood-date-row" id="ceroodDateOptions">
-<button class="cerood-date-btn active" type="button">
+
+        <div
+            class="cerood-date-row"
+            id="ceroodDateOptions"
+        >
+            <button
+                type="button"
+                class="cerood-date-btn active"
+            >
                 Today
             </button>
-<button class="cerood-date-btn" type="button">
+
+            <button
+                type="button"
+                class="cerood-date-btn"
+            >
                 Tomorrow
             </button>
-<button class="cerood-date-btn" type="button">
+
+            <button
+                type="button"
+                class="cerood-date-btn"
+            >
                 +2 Days
             </button>
-<button class="cerood-date-btn" type="button">
+
+            <button
+                type="button"
+                class="cerood-date-btn"
+            >
                 +3 Days
             </button>
-</div>
-<div class="cerood-booking-label">
+        </div>
+
+        <div class="cerood-booking-label">
             Select Time
         </div>
-<div class="cerood-time-row" id="ceroodTimeOptions">
-<button class="cerood-time-btn" type="button">
+
+        <div
+            class="cerood-time-row"
+            id="ceroodTimeOptions"
+        >
+            <button
+                type="button"
+                class="cerood-time-btn"
+            >
                 10:00 AM
             </button>
-<button class="cerood-time-btn active" type="button">
+
+            <button
+                type="button"
+                class="cerood-time-btn active"
+            >
                 12:00 PM
             </button>
-<button class="cerood-time-btn" type="button">
+
+            <button
+                type="button"
+                class="cerood-time-btn"
+            >
                 2:00 PM
             </button>
-<button class="cerood-time-btn" type="button">
+
+            <button
+                type="button"
+                class="cerood-time-btn"
+            >
                 4:00 PM
             </button>
-</div>
-<div class="cerood-location-mini">
-<i class="fa-solid fa-location-dot"></i>
-<div>
-<span>Service at your home</span>
-<strong id="productBookingLocation">
+        </div>
+
+        <div class="cerood-location-mini">
+
+            <i class="fa-solid fa-location-dot"></i>
+
+            <div>
+                <span>Service at your home</span>
+
+                <strong id="productBookingLocation">
                     Select Location
                 </strong>
-</div>
-</div>
-<div class="action-buttons">
-<button class="btn btn-cart" id="addToCartBtn" onclick="addToCartCurrentProduct()">
-<i class="fa-solid fa-cart-shopping"></i>
+            </div>
+
+        </div>
+
+        <div class="action-buttons">
+
+            <button
+                class="btn btn-cart"
+                id="addToCartBtn"
+                onclick="addToCartCurrentProduct()"
+            >
+                <i class="fa-solid fa-cart-shopping"></i>
                 Add to Cart
             </button>
-<button class="btn btn-buy" onclick="proceedToCheckoutCurrentProduct()">
+
+            <button
+                class="btn btn-buy"
+                onclick="proceedToCheckoutCurrentProduct()"
+            >
                 Get Service
             </button>
+
+        </div>
+
+    </div>
+
 </div>
-</div>
-</div>
+
 <!-- ALL REAL WORK GALLERY POPUP -->
-<div id="ceroodWorkGalleryPopup" onclick="closeCeroodWorkGallery(event)" style="
+<div
+    id="ceroodWorkGalleryPopup"
+    onclick="closeCeroodWorkGallery(event)"
+    style="
         display:none;
         position:fixed;
         inset:0;
@@ -8756,8 +8938,11 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
         align-items:center;
         justify-content:center;
         padding:20px;
-    ">
-<div onclick="event.stopPropagation()" style="
+    "
+>
+    <div
+        onclick="event.stopPropagation()"
+        style="
             width:min(980px, 96vw);
             max-height:90vh;
             overflow:hidden;
@@ -8766,23 +8951,32 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
             box-shadow:0 24px 70px rgba(0,0,0,.22);
             display:flex;
             flex-direction:column;
-        ">
-<div style="
+        "
+    >
+        <div
+            style="
                 display:flex;
                 align-items:center;
                 justify-content:space-between;
                 padding:18px 20px;
                 border-bottom:1px solid #eef0f4;
-            ">
-<h3 style="
+            "
+        >
+            <h3
+                style="
                     margin:0;
                     font-size:20px;
                     font-weight:650;
                     color:#111318;
-                ">
+                "
+            >
                 Real Work by Cerood
             </h3>
-<button onclick="closeCeroodWorkGallery()" style="
+
+            <button
+                type="button"
+                onclick="closeCeroodWorkGallery()"
+                style="
                     width:36px;
                     height:36px;
                     border:0;
@@ -8791,21 +8985,30 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
                     color:#6541f5;
                     font-size:22px;
                     cursor:pointer;
-                " type="button">
+                "
+            >
                 ×
             </button>
-</div>
-<div id="ceroodWorkGalleryContainer" style="
+        </div>
+
+        <div
+            id="ceroodWorkGalleryContainer"
+            style="
                 padding:18px;
                 overflow-y:auto;
                 display:grid;
                 grid-template-columns:repeat(2, minmax(0, 1fr));
                 gap:16px;
-            "></div>
+            "
+        ></div>
+    </div>
 </div>
-</div>
-<!-- WORK PROOF IMAGE POPUP -->
-<div id="workProofImagePopup" onclick="closeWorkProofImage(event)" style="
+
+    <!-- WORK PROOF IMAGE POPUP -->
+<div
+    id="workProofImagePopup"
+    onclick="closeWorkProofImage(event)"
+    style="
         display:none;
         position:fixed;
         inset:0;
@@ -8814,8 +9017,12 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
         align-items:center;
         justify-content:center;
         padding:20px;
-    ">
-<button onclick="closeWorkProofImage()" style="
+    "
+>
+    <button
+        type="button"
+        onclick="closeWorkProofImage()"
+        style="
             position:absolute;
             top:18px;
             right:20px;
@@ -8827,10 +9034,17 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
             color:#111827;
             font-size:24px;
             cursor:pointer;
-        " type="button">
+        "
+    >
         ×
     </button>
-<img alt="Cerood completed service work" id="workProofPopupImage" onclick="event.stopPropagation()" src="" style="
+
+    <img
+        id="workProofPopupImage"
+        src=""
+        alt="Cerood completed service work"
+        onclick="event.stopPropagation()"
+        style="
             max-width:92vw;
             max-height:88vh;
             width:auto;
@@ -8838,695 +9052,1119 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
             object-fit:contain;
             border-radius:12px;
             background:#ffffff;
-        "/>
+        "
+    >
 </div>
-<div class="uc-category-box" id="relatedServicesBox">
-<div class="uc-cat-header">
-<h3>More Relevant Services</h3>
-</div>
-<div class="cerood-related-slider-wrap">
-<button aria-label="Previous related services" class="cerood-related-arrow cerood-related-prev" onclick="scrollCeroodRelated(-1)" type="button">❮</button>
-<div aria-label="Related services, scroll horizontally" class="uc-grid" id="relatedContainer" tabindex="0"></div>
-<button aria-label="Next related services" class="cerood-related-arrow cerood-related-next" onclick="scrollCeroodRelated(1)" type="button">❯</button>
-</div>
-</div>
-</div>
-<!-- Toast Notification Pop-up -->
-<div id="toastNotification">
-<i class="fa-solid fa-circle-check" id="toastIcon"></i> <span id="toastMsg">Added Successfully!</span>
-</div>
-<!-- Cart Modal Drawer -->
-<div class="cart-modal-overlay" id="cartModal" onclick="checkCloseModal(event, 'cartDrawer', 'cartModal')" style="display:none;">
-<div class="cart-drawer" id="cartDrawer">
-<div class="cart-header">
-<h3>Your Shopping Cart</h3>
-<div style="display: flex; align-items: center; gap: 15px;">
-<span onclick="clearCart()" style="color: #ef4444; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;">Clear Cart</span>
-<button class="close-cart" onclick="toggleCartModal(false)"><i class="fa-solid fa-xmark"></i></button>
-</div>
-</div>
-<div class="cart-items-list" id="cartItemsList"></div>
-<div class="cart-footer">
-<div class="cart-total">
-<span>Total Amount:</span>
-<span id="cartTotalPrice">₹0</span>
-</div>
-<button class="checkout-btn" onclick="openCheckoutCart()">Proceed to Checkout</button>
-</div>
-</div>
-</div>
+
+
+   
+
+    <div class="uc-category-box" id="relatedServicesBox">
+        <div class="uc-cat-header">
+            <h3>More Relevant Services</h3>
+            
+        </div>
+        <div class="cerood-related-slider-wrap">
+            <button class="cerood-related-arrow cerood-related-prev" type="button" aria-label="Previous related services" onclick="scrollCeroodRelated(-1)">&#10094;</button>
+            <div class="uc-grid" id="relatedContainer" tabindex="0" aria-label="Related services, scroll horizontally"></div>
+            <button class="cerood-related-arrow cerood-related-next" type="button" aria-label="Next related services" onclick="scrollCeroodRelated(1)">&#10095;</button>
+        </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification Pop-up -->
+  <div id="toastNotification">
+      <i class="fa-solid fa-circle-check" id="toastIcon"></i> <span id="toastMsg">Added Successfully!</span>
+  </div>
+
+  <!-- Cart Modal Drawer -->
+  <div class="cart-modal-overlay"
+     id="cartModal"
+     style="display:none;"
+     onclick="checkCloseModal(event, 'cartDrawer', 'cartModal')">
+      <div class="cart-drawer" id="cartDrawer">
+          <div class="cart-header">
+              <h3>Your Shopping Cart</h3>
+              <div style="display: flex; align-items: center; gap: 15px;">
+                  <span onclick="clearCart()" style="color: #ef4444; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;">Clear Cart</span>
+                  <button class="close-cart" onclick="toggleCartModal(false)"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+          </div>
+          <div class="cart-items-list" id="cartItemsList"></div>
+          <div class="cart-footer">
+              <div class="cart-total">
+                  <span>Total Amount:</span>
+                  <span id="cartTotalPrice">₹0</span>
+              </div>
+              <button class="checkout-btn" onclick="openCheckoutCart()">Proceed to Checkout</button>
+          </div>
+      </div>
+  </div>
+
 <!-- =========================================================
      PREMIUM Catus STYLE AUTHENTICATION MODAL
 ========================================================= -->
-<div class="auth-modal-wrapper" id="authModal" onclick="checkCloseAuthModal(event)">
-<div class="auth-modal-container" id="authDrawer" style="position: relative;">
-<!-- =================================================
+
+<div
+    class="auth-modal-wrapper"
+    id="authModal"
+    onclick="checkCloseAuthModal(event)"
+>
+
+    <div
+        class="auth-modal-container"
+        id="authDrawer"
+        style="position: relative;"
+    >
+
+        <!-- =================================================
              LEFT PANEL
         ================================================== -->
-<div class="auth-left-panel" style="position: relative;">
-<div>
-<h2 id="leftPanelTitle">
+        <div
+            class="auth-left-panel"
+            style="position: relative;"
+        >
+            <div>
+
+                <h2 id="leftPanelTitle">
                     Looks like you're new here!
                 </h2>
-<p id="leftPanelDesc">
+
+                <p id="leftPanelDesc">
                     Sign up with your mobile number to get started
                 </p>
-</div>
-</div>
-<!-- =================================================
+
+            </div>
+        </div>
+
+
+        <!-- =================================================
              RIGHT PANEL
         ================================================== -->
-<div class="auth-right-panel">
-<!-- CLOSE BUTTON -->
-<button aria-label="Close" class="desktop-header-close auth-close-btn" onclick="toggleAuthModal(false)" type="button">
-<i class="fa-solid fa-xmark"></i>
-</button>
-<!-- CEROOD AUTH V2: visual-only progress; existing auth inputs/functions retained -->
-<div aria-label="Account verification progress" class="cerood-auth-progress" id="ceroodAuthProgress">
-<span class="auth-progress-label is-current">Mobile</span>
-<span class="auth-progress-label">Security</span>
-<span class="auth-progress-label">OTP</span>
-</div>
-<!-- =================================================
+        <div class="auth-right-panel">
+
+            <!-- CLOSE BUTTON -->
+            <button
+                type="button"
+                class="desktop-header-close auth-close-btn"
+                onclick="toggleAuthModal(false)"
+                aria-label="Close"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+
+            <!-- CEROOD AUTH V2: visual-only progress; existing auth inputs/functions retained -->
+            <div class="cerood-auth-progress" id="ceroodAuthProgress" aria-label="Account verification progress">
+                <span class="auth-progress-label is-current">Mobile</span>
+                <span class="auth-progress-label">Security</span>
+                <span class="auth-progress-label">OTP</span>
+            </div>
+
+            <!-- =================================================
                  STEP 1 : MOBILE NUMBER
             ================================================== -->
-<div id="authStepPhone" style="
+            <div
+                id="authStepPhone"
+                style="
                     display: flex;
                     flex-direction: column;
                     height: 100%;
-                ">
-<div style="margin-top: 10px;">
-<h3 style="
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        style="
                             margin: 0 0 10px 0;
                             font-size: 20px;
                             font-weight: 600;
                             color: #111111;
-                        ">
+                        "
+                    >
                         Welcome to Cerood
                     </h3>
-<p style="
+
+                    <p
+                        style="
                             font-size: 13px;
                             color: #64748b;
                             margin: 0 0 20px 0;
                             line-height: 1.5;
-                        ">
+                        "
+                    >
                         Enter your mobile number to continue
                     </p>
-<input autocomplete="tel" class="auth-input-field" id="inputPhone" inputmode="numeric" maxlength="10" placeholder="Enter Mobile number" type="tel"/>
-<p class="auth-terms-text">
+
+                    <input
+                        type="tel"
+                        id="inputPhone"
+                        class="auth-input-field"
+                        placeholder="Enter Mobile number"
+                        maxlength="10"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                    >
+
+                    <p class="auth-terms-text">
                         By continuing, you agree to Cerood's
                         <a href="#">Terms of Use</a>
                         and
                         <a href="#">Privacy Policy</a>.
                     </p>
-</div>
-<button class="auth-primary-btn" onclick="checkUserAndProceed()" type="button">
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="checkUserAndProceed()"
+                >
                     CONTINUE
                 </button>
-<div class="auth-bottom-link" onclick="switchToNewUserRegisterDirect()">
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="switchToNewUserRegisterDirect()"
+                >
                     New to Cerood? Create an account
                 </div>
-</div>
-<!-- =================================================
+
+            </div>
+
+
+            <!-- =================================================
                  STEP 2 : EXISTING USER PASSWORD LOGIN
             ================================================== -->
-<div id="authStepPassword" style="
+            <div
+                id="authStepPassword"
+                style="
                     display: none;
                     flex-direction: column;
                     height: 100%;
-                ">
-<div style="margin-top: 10px;">
-<h3 style="
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        style="
                             margin: 0 0 10px 0;
                             font-size: 20px;
                             font-weight: 600;
                             color: #111111;
-                        ">
+                        "
+                    >
                         Welcome Back
                     </h3>
-<p id="passInfoText" style="
+
+                    <p
+                        id="passInfoText"
+                        style="
                             font-size: 13px;
                             color: #64748b;
                             margin: 0 0 18px 0;
                             line-height: 1.5;
-                        ">
+                        "
+                    >
                         Enter your password to login.
                     </p>
-<!-- PASSWORD -->
-<div class="password-field-wrapper" style="position: relative;">
-<input autocomplete="current-password" class="auth-input-field" id="inputPassword" placeholder="Enter your password" type="password"/>
-<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+
+
+                    <!-- PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="position: relative;"
+                    >
+
+                        <input
+                            type="password"
+                            id="inputPassword"
+                            class="auth-input-field"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
                                 'inputPassword',
                                 this
-                            )"></i>
-</div>
-<!-- FORGOT -->
-<div style="
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- FORGOT -->
+                    <div
+                        style="
                             text-align: right;
                             margin-top: 10px;
-                        ">
-<span onclick="triggerForgotPassword()" style="
+                        "
+                    >
+
+                        <span
+                            style="
                                 color: #2874f0;
                                 font-size: 13px;
                                 font-weight: 600;
                                 cursor: pointer;
-                            ">
+                            "
+                            onclick="triggerForgotPassword()"
+                        >
                             Forgot?
                         </span>
-</div>
-</div>
-<button class="auth-primary-btn" onclick="loginWithPassword()" type="button">
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="loginWithPassword()"
+                >
                     LOGIN
                 </button>
-<div class="auth-bottom-link" onclick="backToPhoneStep()">
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="backToPhoneStep()"
+                >
                     ← Change Mobile Number
                 </div>
-</div>
-<!-- =================================================
+
+            </div>
+
+
+            <!-- =================================================
                  STEP 3 : NEW USER REGISTRATION
             ================================================== -->
-<div id="authStepRegister" style="
+            <div
+                id="authStepRegister"
+                style="
                     display: none;
                     flex-direction: column;
                     height: 100%;
-                ">
-<div style="margin-top: 10px;">
-<h3 style="
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        style="
                             margin: 0 0 8px 0;
                             font-size: 20px;
                             font-weight: 600;
                             color: #111111;
-                        ">
+                        "
+                    >
                         Looks like you're new here!
                     </h3>
-<p style="
+
+                    <p
+                        style="
                             font-size: 13px;
                             color: #64748b;
                             margin: 0 0 18px 0;
                             line-height: 1.5;
-                        ">
+                        "
+                    >
                         Create your Cerood account to get started.
                     </p>
-<!-- MOBILE NUMBER -->
-<input autocomplete="tel" class="auth-input-field" id="regMobile" inputmode="numeric" maxlength="10" placeholder="Mobile Number" type="tel"/>
+
+
+                    <!-- MOBILE NUMBER -->
+<input
+    type="tel"
+    id="regMobile"
+    class="auth-input-field"
+    placeholder="Mobile Number"
+    maxlength="10"
+    inputmode="numeric"
+    autocomplete="tel"
+>
+
 <!-- FULL NAME -->
-<input autocomplete="name" class="auth-input-field" id="regName" placeholder="Full Name" type="text"/>
+<input
+    type="text"
+    id="regName"
+    class="auth-input-field"
+    placeholder="Full Name"
+    autocomplete="name"
+>
+
 <!-- OPTIONAL EMAIL -->
-<input autocomplete="email" class="auth-input-field" id="regEmail" placeholder="Gmail ID (Optional)" type="email"/>
-<!-- PINCODE -->
-<input autocomplete="postal-code" class="auth-input-field" id="regPincode" inputmode="numeric" maxlength="6" placeholder="6-digit Pincode" type="text"/>
-<!-- CREATE PASSWORD -->
-<div class="password-field-wrapper" style="position: relative;">
-<input autocomplete="new-password" class="auth-input-field" id="regPassword" minlength="4" placeholder="Create Password (min 4 chars)" type="password"/>
-<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+<input
+    type="email"
+    id="regEmail"
+    class="auth-input-field"
+    placeholder="Gmail ID (Optional)"
+    autocomplete="email"
+>
+
+
+                    <!-- PINCODE -->
+                    <input
+                        type="text"
+                        id="regPincode"
+                        class="auth-input-field"
+                        placeholder="6-digit Pincode"
+                        maxlength="6"
+                        inputmode="numeric"
+                        autocomplete="postal-code"
+                    >
+
+
+                    <!-- CREATE PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="position: relative;"
+                    >
+
+                        <input
+                            type="password"
+                            id="regPassword"
+                            class="auth-input-field"
+                            placeholder="Create Password (min 4 chars)"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
                                 'regPassword',
                                 this
-                            )"></i>
-</div>
-<!-- CONFIRM PASSWORD -->
-<div class="password-field-wrapper" style="
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="
                             position: relative;
                             margin-top: 8px;
-                        ">
-<input autocomplete="new-password" class="auth-input-field" id="regConfirmPassword" minlength="4" placeholder="Confirm Password" type="password"/>
-<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+                        "
+                    >
+
+                        <input
+                            type="password"
+                            id="regConfirmPassword"
+                            class="auth-input-field"
+                            placeholder="Confirm Password"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
                                 'regConfirmPassword',
                                 this
-                            )"></i>
-</div>
-<!-- PASSWORD ERROR -->
-<span id="passwordErrorMsg" style="
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- PASSWORD ERROR -->
+                    <span
+                        id="passwordErrorMsg"
+                        style="
                             color: #ef4444;
                             font-size: 12px;
                             display: none;
                             margin-top: 7px;
-                        ">
+                        "
+                    >
                         Passwords do not match!
                     </span>
-</div>
-<button class="auth-primary-btn" onclick="proceedToOtpFromRegister()" type="button">
-                    GET OTP &amp; REGISTER
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="proceedToOtpFromRegister()"
+                >
+                    GET OTP & REGISTER
                 </button>
-<div class="auth-bottom-link" onclick="backToPhoneStep()">
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="backToPhoneStep()"
+                >
                     Existing User? Log in
                 </div>
-</div>
-<!-- =================================================
+
+            </div>
+
+            <!-- =================================================
      STEP 4 : SECURITY VERIFICATION
 ================================================== -->
-<div id="authStepCaptcha" style="
+<div
+    id="authStepCaptcha"
+    style="
         display: none;
         flex-direction: column;
         height: 100%;
-    ">
-<div style="margin-top: 10px;">
-<h3 style="
+    "
+>
+
+    <div style="margin-top: 10px;">
+
+        <h3
+            style="
                 margin: 0 0 8px 0;
                 font-size: 20px;
                 font-weight: 600;
                 color: #111111;
-            ">
+            "
+        >
             Security Verification
         </h3>
-<p id="captchaInfo" style="
+
+        <p
+            id="captchaInfo"
+            style="
                 font-size: 13px;
                 color: #64748b;
                 margin: 0 0 22px 0;
                 line-height: 1.5;
-            ">
+            "
+        >
             Complete the security check below to receive your OTP.
         </p>
-<div id="msg91Captcha" style="
+
+        <div
+            id="msg91Captcha"
+            style="
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 min-height: 80px;
                 margin: 15px 0 20px 0;
-            "></div>
-</div>
-<div class="auth-bottom-link" onclick="backToPhoneStep()">
+            "
+        ></div>
+
+    </div>
+
+    <div
+        class="auth-bottom-link"
+        onclick="backToPhoneStep()"
+    >
         ← Change Mobile Number
     </div>
+
 </div>
-<!-- =================================================
+
+
+            <!-- =================================================
                  STEP 4 : OTP VERIFICATION
                  COMMON FOR REGISTER + FORGOT PASSWORD
             ================================================== -->
-<div id="authStepOTP" style="
+            <div
+                id="authStepOTP"
+                style="
                     display: none;
                     flex-direction: column;
                     height: 100%;
-                ">
-<div style="margin-top: 10px;">
-<h3 id="otpTitle" style="
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        id="otpTitle"
+                        style="
                             margin: 0 0 8px 0;
                             font-size: 20px;
                             font-weight: 600;
                             color: #111111;
-                        ">
+                        "
+                    >
                         Verify OTP
                     </h3>
-<p id="setPasswordInfo" style="
+
+
+                    <p
+                        id="setPasswordInfo"
+                        style="
                             font-size: 13px;
                             color: #64748b;
                             margin: 0 0 22px 0;
                             line-height: 1.5;
-                        ">
+                        "
+                    >
                         Please enter the OTP sent to your mobile.
                     </p>
-<!-- OTP -->
-<input autocomplete="one-time-code" class="auth-input-field" id="inputRegOTP" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit OTP" style="
+
+                    
+
+
+                    <!-- OTP -->
+                    <input
+                        type="text"
+                        id="inputRegOTP"
+                        class="auth-input-field"
+                        placeholder="Enter 4-digit OTP"
+                        maxlength="4"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        style="
                             text-align: center;
                             font-size: 22px;
                             font-weight: 600;
                             letter-spacing: 8px;
-                        " type="text"/>
-<!-- RESEND -->
-<div style="
+                        "
+                    >
+
+
+                    <!-- RESEND -->
+                    <div
+                        style="
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
                             font-size: 12px;
                             margin: 12px 0 15px 0;
-                        ">
-<span style="color: #878787;">
+                        "
+                    >
+
+                        <span style="color: #878787;">
                             Resend code in
-                            <b id="timerCount" style="color: #212121;">
+                            <b
+                                id="timerCount"
+                                style="color: #212121;"
+                            >
                                 2:00
                             </b>
-</span>
-<span id="resendOtpBtn" onclick="resendCurrentOtp()" style="
+                        </span>
+
+
+                        <span
+                            id="resendOtpBtn"
+                            style="
                                 color: #2874f0;
                                 font-weight: 600;
                                 cursor: pointer;
                                 display: none;
-                            ">
+                            "
+                            onclick="resendCurrentOtp()"
+                        >
                             Resend OTP
                         </span>
-</div>
-<!-- OTP INFO -->
-<div id="otpErrorMsg" style="
+
+                    </div>
+
+
+                    <!-- OTP INFO -->
+                    <div
+                        id="otpErrorMsg"
+                        style="
                             display: none;
                             color: #ef4444;
                             font-size: 12px;
                             margin-top: 5px;
-                        "></div>
-</div>
-<button class="auth-primary-btn" id="otpContinueBtn" onclick="verifyOtpAndSetPassword()" type="button">
-                    VERIFY &amp; CONTINUE
+                        "
+                    ></div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    id="otpContinueBtn"
+                    onclick="verifyOtpAndSetPassword()"
+                >
+                    VERIFY & CONTINUE
                 </button>
-<div class="auth-bottom-link" onclick="backToPhoneStep()">
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="backToPhoneStep()"
+                >
                     ← Change Mobile Number
                 </div>
-</div>
-<!-- =================================================
+
+            </div>
+
+
+            <!-- =================================================
                  STEP 5 : FORGOT PASSWORD - CREATE NEW PASSWORD
             ================================================== -->
-<div id="authStepNewPassword" style="
+            <div
+                id="authStepNewPassword"
+                style="
                     display: none;
                     flex-direction: column;
                     height: 100%;
-                ">
-<div style="margin-top: 10px;">
-<h3 style="
+                "
+            >
+
+                <div style="margin-top: 10px;">
+
+                    <h3
+                        style="
                             margin: 0 0 8px 0;
                             font-size: 20px;
                             font-weight: 600;
                             color: #111111;
-                        ">
+                        "
+                    >
                         Create New Password
                     </h3>
-<p style="
+
+
+                    <p
+                        style="
                             font-size: 13px;
                             color: #64748b;
                             margin: 0 0 20px 0;
                             line-height: 1.5;
-                        ">
+                        "
+                    >
                         Your OTP has been verified.
                         Please create a new password for your account.
                     </p>
-<!-- NEW PASSWORD -->
-<div class="password-field-wrapper" style="position: relative;">
-<input autocomplete="new-password" class="auth-input-field" id="newResetPassword" minlength="4" placeholder="New Password (min 4 chars)" type="password"/>
-<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+
+
+                    <!-- NEW PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="position: relative;"
+                    >
+
+                        <input
+                            type="password"
+                            id="newResetPassword"
+                            class="auth-input-field"
+                            placeholder="New Password (min 4 chars)"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
                                 'newResetPassword',
                                 this
-                            )"></i>
-</div>
-<!-- CONFIRM NEW PASSWORD -->
-<div class="password-field-wrapper" style="
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- CONFIRM NEW PASSWORD -->
+                    <div
+                        class="password-field-wrapper"
+                        style="
                             position: relative;
                             margin-top: 8px;
-                        ">
-<input autocomplete="new-password" class="auth-input-field" id="newResetConfirmPassword" minlength="4" placeholder="Confirm New Password" type="password"/>
-<i class="fa-solid fa-eye toggle-password-icon" onclick="togglePasswordVisibility(
+                        "
+                    >
+
+                        <input
+                            type="password"
+                            id="newResetConfirmPassword"
+                            class="auth-input-field"
+                            placeholder="Confirm New Password"
+                            minlength="4"
+                            autocomplete="new-password"
+                        >
+
+                        <i
+                            class="fa-solid fa-eye toggle-password-icon"
+                            onclick="togglePasswordVisibility(
                                 'newResetConfirmPassword',
                                 this
-                            )"></i>
-</div>
-<!-- PASSWORD ERROR -->
-<span id="resetPasswordErrorMsg" style="
+                            )"
+                        ></i>
+
+                    </div>
+
+
+                    <!-- PASSWORD ERROR -->
+                    <span
+                        id="resetPasswordErrorMsg"
+                        style="
                             color: #ef4444;
                             font-size: 12px;
                             display: none;
                             margin-top: 7px;
-                        ">
+                        "
+                    >
                         Passwords do not match!
                     </span>
-<!-- PASSWORD SUCCESS INFO -->
-<div id="resetPasswordInfoMsg" style="
+
+
+                    <!-- PASSWORD SUCCESS INFO -->
+                    <div
+                        id="resetPasswordInfoMsg"
+                        style="
                             display: none;
                             color: #16a34a;
                             font-size: 12px;
                             margin-top: 8px;
-                        "></div>
-</div>
-<button class="auth-primary-btn" onclick="submitNewPasswordReset()" type="button">
-                    UPDATE PASSWORD &amp; LOGIN
+                        "
+                    ></div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="auth-primary-btn"
+                    onclick="submitNewPasswordReset()"
+                >
+                    UPDATE PASSWORD & LOGIN
                 </button>
-<div class="auth-bottom-link" onclick="showAuthStep('otp')">
+
+
+                <div
+                    class="auth-bottom-link"
+                    onclick="showAuthStep('otp')"
+                >
                     ← Back to OTP
                 </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
-</div>
-</div>
-</div>
-<!-- PREMIUM FULL-SCREEN CUSTOMER DASHBOARD MODAL -->
-<div class="prem-dashboard-modal" id="premiumCustomerDashboard">
-<!-- Sidebar (Desktop View) -->
-<div class="prem-dash-sidebar">
-<div class="prem-brand" onclick="closePremiumDashboard()" style="cursor: pointer;">
-<img alt="Cerood Logo" src="/cerood-logo.webp" style="height: 45px; width: auto;"/>
-</div>
-<div class="prem-menu-item active" onclick="switchDashTab('home', this)">
-<i class="fa-solid fa-house"></i> Home Dashboard
+
+  <!-- PREMIUM FULL-SCREEN CUSTOMER DASHBOARD MODAL -->
+  <div id="premiumCustomerDashboard" class="prem-dashboard-modal">
+      
+      <!-- Sidebar (Desktop View) -->
+      <div class="prem-dash-sidebar">
+          <div class="prem-brand" style="cursor: pointer;" onclick="closePremiumDashboard()">
+              <img src="/cerood-logo.webp" alt="Cerood Logo"
+              style="height: 45px; width: auto;">
           </div>
-<div class="prem-menu-item" onclick="switchDashTab('bookings', this)">
-<i class="fa-solid fa-clipboard-list"></i> My Bookings
+          <div class="prem-menu-item active" onclick="switchDashTab('home', this)">
+              <i class="fa-solid fa-house"></i> Home Dashboard
           </div>
-<div class="prem-menu-item" onclick="switchDashTab('wallet', this)">
-<i class="fa-solid fa-wallet"></i> Wallet &amp; Offers
+          <div class="prem-menu-item" onclick="switchDashTab('bookings', this)">
+              <i class="fa-solid fa-clipboard-list"></i> My Bookings
           </div>
-<div class="prem-menu-item" onclick="switchDashTab('support', this)">
-<i class="fa-solid fa-headset"></i> Help &amp; Support
+          <div class="prem-menu-item" onclick="switchDashTab('wallet', this)">
+              <i class="fa-solid fa-wallet"></i> Wallet & Offers
           </div>
-<div class="prem-menu-item" onclick="switchDashTab('profile', this)">
-<i class="fa-solid fa-user"></i> Profile Settings
+          <div class="prem-menu-item" onclick="switchDashTab('support', this)">
+              <i class="fa-solid fa-headset"></i> Help & Support
           </div>
-<div style="flex-grow: 1;"></div>
-<div class="prem-menu-item" onclick="logoutUser()" style="color:#dc2626;">
-<i class="fa-solid fa-right-from-bracket"></i> Logout Securely
+          <div class="prem-menu-item" onclick="switchDashTab('profile', this)">
+              <i class="fa-solid fa-user"></i> Profile Settings
           </div>
-</div>
-<!-- Main Content -->
-<div class="prem-dash-content" id="dashContentArea">
-<!-- FIXED RESPONSIVE HEADER - NOW PERFECTLY CENTERED -->
-<div class="prem-dash-header prem-dash-header-centered">
-<div class="header-left-group">
-<button class="prem-icon-btn" onclick="handleDashboardBack()" style="margin:0; flex-shrink:0; background:rgba(255,255,255,0.2); border-radius:8px; width:36px; height:36px;" title="Back to Home Page"><i class="fa-solid fa-arrow-left"></i></button>
-<div class="prem-greeting" style="overflow: hidden;">
-<h1 class="prem-greeting-text" id="greetName"> Welcome, Customer</h1>
-</div>
-</div>
-<div class="header-center-group">
-<div class="prem-cust-id-badge" id="headerCustomerId">
+          
+          <div style="flex-grow: 1;"></div>
+          <div class="prem-menu-item" style="color:#dc2626;" onclick="logoutUser()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout Securely
+          </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="prem-dash-content" id="dashContentArea">
+          
+          <!-- FIXED RESPONSIVE HEADER - NOW PERFECTLY CENTERED -->
+          <div class="prem-dash-header prem-dash-header-centered">
+              <div class="header-left-group">
+                  <button class="prem-icon-btn" onclick="handleDashboardBack()" title="Back to Home Page" style="margin:0; flex-shrink:0; background:rgba(255,255,255,0.2); border-radius:8px; width:36px; height:36px;"><i class="fa-solid fa-arrow-left"></i></button>
+                  <div class="prem-greeting" style="overflow: hidden;">
+                      <h1 id="greetName" class="prem-greeting-text"> Welcome, Customer</h1>
+                  </div>
+              </div>
+              <div class="header-center-group">
+                  <div id="headerCustomerId" class="prem-cust-id-badge">
                       Cust ID: -
                   </div>
-</div>
-<div class="header-right-group">
-<button class="prem-icon-btn" id="dashboardProfileBtn" onclick="switchDashTab('profile', null, true)" style="margin:0;" title="Profile Settings">
-<i class="fa-solid fa-user"></i>
+              </div>
+              <div class="header-right-group">
+
+    <button class="prem-icon-btn"
+        id="dashboardProfileBtn"
+        style="margin:0;"
+        title="Profile Settings"
+        onclick="switchDashTab('profile', null, true)">
+    <i class="fa-solid fa-user"></i>
 </button>
+
 </div>
-</div>
-<!-- TAB 1: HOME DASHBOARD -->
-<div class="prem-tab-pane active" id="dashTabHome">
-<div class="prem-section-title">Dashboard Summary</div>
-<!-- Compact Clickable Summary Cards -->
-<div class="prem-grid-4">
-<div class="prem-stat-card" onclick="showSummaryDetail('bookings')">
-<h3 id="sumTotal">0</h3><p>Total Bookings</p>
-</div>
-<div class="prem-stat-card" onclick="showSummaryDetail('completed')">
-<h3 id="sumCompleted">0</h3><p>Completed</p>
-</div>
-<div class="prem-stat-card" onclick="showSummaryDetail('progress')">
-<h3 id="sumProgress" style="color:#f59e0b;">0</h3><p>In Progress</p>
-</div>
-<div class="prem-stat-card" onclick="showSummaryDetail('rejected')">
-<h3 id="sumRejected" style="color:#ef4444;">0</h3><p>Rejected Bookings</p>
-</div>
-</div>
-<!-- Dynamic Detail Display Box -->
-<div class="prem-summary-detail-box" id="summaryDetailBox">
-<h5 id="summaryDetailTitle">Details</h5>
-<div id="summaryDetailText">Click any summary box above to view detailed insights.</div>
-</div>
-<!-- LIVE TRACKING CONTAINER -->
-<div class="prem-section-title" id="liveTrackingTitle" style="display:none;">Live Tracking (Active Bookings)</div>
-<div id="liveTrackingContainer">
-<!-- Dynamic Compact Live Tracking Cards will render here for ALL active orders -->
-</div>
-</div>
-<!-- TAB 2: MY BOOKINGS -->
-<div class="prem-tab-pane" id="dashTabBookings">
-<div class="prem-section-title">My Booking History</div>
-<div id="premOrdersListContainer">
-<!-- Orders will load dynamically -->
-<p style="color:#64748b;">Loading your orders...</p>
-</div>
-</div>
-<!-- TAB 3: WALLET & OFFERS (UPDATED TO COMING SOON) -->
-<div class="prem-tab-pane" id="dashTabWallet">
-<div class="prem-section-title"><i class="fa-solid fa-wallet"></i> My Wallet &amp; Offers</div>
-<div class="prem-card-box" style="text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;">
-<div style="width: 80px; height: 80px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0284c7; font-size: 36px; margin-bottom: 5px;">
-<i class="fa-solid fa-clock-rotate-left"></i>
-</div>
-<h2 style="margin: 0; font-size: 24px; font-weight: 700; color: #0f172a;">Coming Soon!</h2>
-<p style="margin: 0; font-size: 14px; color: #64748b; max-width: 420px; line-height: 1.6;">We are currently building an enhanced Wallet Cash &amp; Exclusive Offers experience for you. Stay tuned!</p>
-<!-- Hidden span to prevent JS errors -->
-<span id="walletTabBalanceDisplay" style="display: none;">0</span>
-</div>
-</div>
-<!-- TAB 4: HELP & SUPPORT -->
-<div class="prem-tab-pane" id="dashTabSupport">
-<div class="prem-section-title"><i class="fa-solid fa-headset"></i> 24/7 Help &amp; Support Center</div>
-<p style="font-size: 13px; color:#64748b; margin-bottom: 20px;">Need assistance with your booking or have queries about our services? Reach out to us instantly.</p>
-<div class="prem-grid-4" style="grid-template-columns: repeat(3, 1fr);">
-<div class="prem-support-card" onclick="window.location.href='tel:+918946055856'">
-<i class="fa-solid fa-phone-volume"></i>
-<h4>Call Us</h4>
-<p>+91 8946055856</p>
-</div>
-<div class="prem-support-card" onclick="window.location.href='https://wa.me/918946055856'">
-<i class="fa-brands fa-whatsapp" style="color:#10b981;"></i>
-<h4>WhatsApp Chat</h4>
-<p>Instant Support</p>
-</div>
-</div>
-<div class="prem-card-box" style="margin-top: 20px;">
-<h4 style="margin:0 0 10px 0; color:#0f172a;"><i class="fa-solid fa-circle-question" style="color:#0284c7;"></i> Frequently Asked Questions</h4>
-<div style="border-bottom:1px solid #e2e8f0; padding:10px 0;">
-<strong style="font-size:13px;">How do I cancel my booking?</strong>
-<p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">You can cancel directly from the 'Live Tracking' section in your Home Dashboard before the technician is assigned.</p>
-</div>
-<div style="padding:10px 0;">
-<strong style="font-size:13px;">What if the issue is not fixed?</strong>
-<p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">We provide a 30-day service warranty. Please contact support to arrange a free re-visit.</p>
-</div>
-</div>
-</div>
-<!-- TAB 5: PROFILE SETTINGS -->
-<div class="prem-tab-pane" id="dashTabProfile">
-<div class="prem-section-title"> Profile Settings</div>
-<div class="prem-card-box">
-<div style="display:flex; justify-content:space-between; align-items:flex-start;">
-<div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
-<div style="width:70px; height:70px; border-radius:50%; background:#0284c7; color:white; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:bold;">
-<span id="premAvatarInitials">C</span>
-</div>
-<div>
-<h3 id="premProfileNameDisplay" style="margin:0; font-size:18px;">Customer Name</h3>
-<input id="premProfileNameEdit" style="display:none; font-size:16px; padding:4px; border-radius:4px; border:1px solid #cbd5e1;" type="text"/>
-<p id="premProfilePhone" style="margin:2px 0 0 0; color:#64748b; font-size:13px;">+91 XXXXXXXXXX</p>
-</div>
-</div>
-<button class="prem-btn-small" id="editNameBtn" onclick="toggleEditField('Name')">Edit Name</button>
-</div>
-<hr style="border:none; border-top:1px solid #f1f5f9; margin:15px 0;"/>
-<div class="prem-list-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
-<div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-<div class="prem-list-info">
-<h5>Delivery Address</h5>
-<p id="premProfileAddressDisplay">No address saved</p>
-</div>
-<button class="prem-btn-small" id="editAddressBtn" onclick="toggleProfileAddressEdit()">Edit</button>
-</div>
-<!-- Inline Multi-Field Edit Form -->
-<div id="premProfileAddressEditArea" style="display:none; width:100%; margin-top: 10px;">
-<div class="uc-fk-form-grid" style="gap: 10px;">
-<div class="uc-fk-field"><label>Door / Flat No *</label><input id="profDoor" placeholder="Door No" type="text"/></div>
-<div class="uc-fk-field"><label>Street Name (Optional)</label><input id="profStreet" placeholder="Street Name" type="text"/></div>
-<div class="uc-fk-field"><label>Village Name *</label><input id="profVillage" placeholder="Village" type="text"/></div>
-<div class="uc-fk-field"><label>City *</label><input id="profCity" placeholder="City" type="text"/></div>
-<div class="uc-fk-field"><label>Taluk *</label><input id="profTaluk" placeholder="Taluk" type="text"/></div>
-<div class="uc-fk-field"><label>District *</label><input id="profDistrict" placeholder="District" type="text"/></div>
-<div class="uc-fk-field full"><label>Pincode *</label><input id="profPincode" maxlength="6" oninput="validateNumberOnly(this)" placeholder="6-digit pincode" type="text"/></div>
-</div>
-<div style="display:flex; gap:10px; margin-top:15px;">
-<button onclick="toggleProfileAddressEdit()" style="flex:1; padding:8px; border:1px solid #cbd5e1; background:transparent; color:inherit; border-radius:6px; cursor:pointer;">Cancel</button>
-<button onclick="saveProfileAddress()" style="flex:1; padding:8px; border:none; background:#10b981; color:white; border-radius:6px; cursor:pointer;">Save Address</button>
-</div>
-</div>
-</div>
-<div class="prem-list-item">
-<div class="prem-list-info" style="width: 100%;">
-<h5>Email ID (Optional)</h5>
-<p id="premProfileEmailDisplay">email@domain.com</p>
-<input id="premProfileEmailEdit" style="display:none; width:80%; padding:4px; border-radius:4px; border:1px solid #cbd5e1; margin-top: 4px;" type="email"/>
-</div>
-<button class="prem-btn-small" id="editEmailBtn" onclick="toggleEditField('Email')">Edit</button>
-</div>
-<div class="prem-list-item">
-<div class="prem-list-info">
-<h5>App Theme</h5>
-<p>Switch between light and dark mode</p>
-</div>
-<button class="prem-btn-small" onclick="toggleDarkMode()"><i class="fa-solid fa-moon"></i> Toggle Theme</button>
-</div>
-<div class="prem-list-item" style="border-bottom: none; padding-top: 14px;">
-<div class="prem-list-info">
-<h5 style="color: #dc2626;">Account Access</h5>
-<p>Sign out from your active session</p>
-</div>
-<button class="prem-btn-small" onclick="logoutUser()" style="background: #fef2f2; color: #dc2626; border-color: #fecaca;">
-<i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+
+          <!-- TAB 1: HOME DASHBOARD -->
+          <div id="dashTabHome" class="prem-tab-pane active">
+              
+              <div class="prem-section-title">Dashboard Summary</div>
+              
+              <!-- Compact Clickable Summary Cards -->
+              <div class="prem-grid-4">
+                  <div class="prem-stat-card" onclick="showSummaryDetail('bookings')">
+                      <h3 id="sumTotal">0</h3><p>Total Bookings</p>
+                  </div>
+                  <div class="prem-stat-card" onclick="showSummaryDetail('completed')">
+                      <h3 id="sumCompleted">0</h3><p>Completed</p>
+                  </div>
+                  <div class="prem-stat-card" onclick="showSummaryDetail('progress')">
+                      <h3 id="sumProgress" style="color:#f59e0b;">0</h3><p>In Progress</p>
+                  </div>
+                  <div class="prem-stat-card" onclick="showSummaryDetail('rejected')">
+                      <h3 id="sumRejected" style="color:#ef4444;">0</h3><p>Rejected Bookings</p>
+                  </div>
+              </div>
+
+              <!-- Dynamic Detail Display Box -->
+              <div id="summaryDetailBox" class="prem-summary-detail-box">
+                  <h5 id="summaryDetailTitle">Details</h5>
+                  <div id="summaryDetailText">Click any summary box above to view detailed insights.</div>
+              </div>
+
+              <!-- LIVE TRACKING CONTAINER -->
+              <div class="prem-section-title" id="liveTrackingTitle" style="display:none;">Live Tracking (Active Bookings)</div>
+              <div id="liveTrackingContainer">
+                  <!-- Dynamic Compact Live Tracking Cards will render here for ALL active orders -->
+              </div>
+
+          </div>
+
+          <!-- TAB 2: MY BOOKINGS -->
+          <div id="dashTabBookings" class="prem-tab-pane">
+              <div class="prem-section-title">My Booking History</div>
+              <div id="premOrdersListContainer">
+                  <!-- Orders will load dynamically -->
+                  <p style="color:#64748b;">Loading your orders...</p>
+              </div>
+          </div>
+
+          <!-- TAB 3: WALLET & OFFERS (UPDATED TO COMING SOON) -->
+          <div id="dashTabWallet" class="prem-tab-pane">
+              <div class="prem-section-title"><i class="fa-solid fa-wallet"></i> My Wallet & Offers</div>
+              
+              <div class="prem-card-box" style="text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;">
+                  <div style="width: 80px; height: 80px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0284c7; font-size: 36px; margin-bottom: 5px;">
+                      <i class="fa-solid fa-clock-rotate-left"></i>
+                  </div>
+                  <h2 style="margin: 0; font-size: 24px; font-weight: 700; color: #0f172a;">Coming Soon!</h2>
+                  <p style="margin: 0; font-size: 14px; color: #64748b; max-width: 420px; line-height: 1.6;">We are currently building an enhanced Wallet Cash & Exclusive Offers experience for you. Stay tuned!</p>
+                  
+                  <!-- Hidden span to prevent JS errors -->
+                  <span id="walletTabBalanceDisplay" style="display: none;">0</span>
+              </div>
+          </div>
+
+          <!-- TAB 4: HELP & SUPPORT -->
+          <div id="dashTabSupport" class="prem-tab-pane">
+              <div class="prem-section-title"><i class="fa-solid fa-headset"></i> 24/7 Help & Support Center</div>
+              <p style="font-size: 13px; color:#64748b; margin-bottom: 20px;">Need assistance with your booking or have queries about our services? Reach out to us instantly.</p>
+              
+              <div class="prem-grid-4" style="grid-template-columns: repeat(3, 1fr);">
+                  <div class="prem-support-card" onclick="window.location.href='tel:+918946055856'">
+                      <i class="fa-solid fa-phone-volume"></i>
+                      <h4>Call Us</h4>
+                      <p>+91 8946055856</p>
+                  </div>
+                  <div class="prem-support-card" onclick="window.location.href='https://wa.me/918946055856'">
+                      <i class="fa-brands fa-whatsapp" style="color:#10b981;"></i>
+                      <h4>WhatsApp Chat</h4>
+                      <p>Instant Support</p>
+                  </div>
+                  
+              </div>
+
+              <div class="prem-card-box" style="margin-top: 20px;">
+                  <h4 style="margin:0 0 10px 0; color:#0f172a;"><i class="fa-solid fa-circle-question" style="color:#0284c7;"></i> Frequently Asked Questions</h4>
+                  <div style="border-bottom:1px solid #e2e8f0; padding:10px 0;">
+                      <strong style="font-size:13px;">How do I cancel my booking?</strong>
+                      <p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">You can cancel directly from the 'Live Tracking' section in your Home Dashboard before the technician is assigned.</p>
+                  </div>
+                  <div style="padding:10px 0;">
+                      <strong style="font-size:13px;">What if the issue is not fixed?</strong>
+                      <p style="font-size:12px; color:#64748b; margin:4px 0 0 0;">We provide a 30-day service warranty. Please contact support to arrange a free re-visit.</p>
+                  </div>
+              </div>
+          </div>
+
+          <!-- TAB 5: PROFILE SETTINGS -->
+          <div id="dashTabProfile" class="prem-tab-pane">
+              <div class="prem-section-title"> Profile Settings</div>
+              <div class="prem-card-box">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                      <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+                          <div style="width:70px; height:70px; border-radius:50%; background:#0284c7; color:white; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:bold;">
+                              <span id="premAvatarInitials">C</span>
+                          </div>
+                          <div>
+                              <h3 style="margin:0; font-size:18px;" id="premProfileNameDisplay">Customer Name</h3>
+                              <input type="text" id="premProfileNameEdit" style="display:none; font-size:16px; padding:4px; border-radius:4px; border:1px solid #cbd5e1;" />
+                              <p style="margin:2px 0 0 0; color:#64748b; font-size:13px;" id="premProfilePhone">+91 XXXXXXXXXX</p>
+                          </div>
+                      </div>
+                      <button class="prem-btn-small" id="editNameBtn" onclick="toggleEditField('Name')">Edit Name</button>
+                  </div>
+                  <hr style="border:none; border-top:1px solid #f1f5f9; margin:15px 0;">
+                  <div class="prem-list-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+                      <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                          <div class="prem-list-info">
+                              <h5>Delivery Address</h5>
+                              <p id="premProfileAddressDisplay">No address saved</p>
+                          </div>
+                          <button class="prem-btn-small" id="editAddressBtn" onclick="toggleProfileAddressEdit()">Edit</button>
+                      </div>
+                      
+                      <!-- Inline Multi-Field Edit Form -->
+                      <div id="premProfileAddressEditArea" style="display:none; width:100%; margin-top: 10px;">
+                          <div class="uc-fk-form-grid" style="gap: 10px;">
+                              <div class="uc-fk-field"><label>Door / Flat No *</label><input type="text" id="profDoor" placeholder="Door No"></div>
+                              <div class="uc-fk-field"><label>Street Name (Optional)</label><input type="text" id="profStreet" placeholder="Street Name"></div>
+                              <div class="uc-fk-field"><label>Village Name *</label><input type="text" id="profVillage" placeholder="Village"></div>
+                              <div class="uc-fk-field"><label>City *</label><input type="text" id="profCity" placeholder="City"></div>
+                              <div class="uc-fk-field"><label>Taluk *</label><input type="text" id="profTaluk" placeholder="Taluk"></div>
+                              <div class="uc-fk-field"><label>District *</label><input type="text" id="profDistrict" placeholder="District"></div>
+                              <div class="uc-fk-field full"><label>Pincode *</label><input type="text" id="profPincode" maxlength="6" placeholder="6-digit pincode" oninput="validateNumberOnly(this)"></div>
+                          </div>
+                          <div style="display:flex; gap:10px; margin-top:15px;">
+                              <button style="flex:1; padding:8px; border:1px solid #cbd5e1; background:transparent; color:inherit; border-radius:6px; cursor:pointer;" onclick="toggleProfileAddressEdit()">Cancel</button>
+                              <button style="flex:1; padding:8px; border:none; background:#10b981; color:white; border-radius:6px; cursor:pointer;" onclick="saveProfileAddress()">Save Address</button>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="prem-list-item">
+                      <div class="prem-list-info" style="width: 100%;">
+                          <h5>Email ID (Optional)</h5>
+                          <p id="premProfileEmailDisplay">email@domain.com</p>
+                          <input type="email" id="premProfileEmailEdit" style="display:none; width:80%; padding:4px; border-radius:4px; border:1px solid #cbd5e1; margin-top: 4px;" />
+                      </div>
+                      <button class="prem-btn-small" id="editEmailBtn" onclick="toggleEditField('Email')">Edit</button>
+                  </div>
+                  <div class="prem-list-item">
+                      <div class="prem-list-info">
+                          <h5>App Theme</h5>
+                          <p>Switch between light and dark mode</p>
+                      </div>
+                      <button class="prem-btn-small" onclick="toggleDarkMode()"><i class="fa-solid fa-moon"></i> Toggle Theme</button>
+                  </div>
+                  <div class="prem-list-item" style="border-bottom: none; padding-top: 14px;">
+                      <div class="prem-list-info">
+                          <h5 style="color: #dc2626;">Account Access</h5>
+                          <p>Sign out from your active session</p>
+                      </div>
+                      <button class="prem-btn-small" style="background: #fef2f2; color: #dc2626; border-color: #fecaca;" onclick="logoutUser()">
+                          <i class="fa-solid fa-right-from-bracket"></i> Logout
                       </button>
-</div>
-</div>
-<!-- Profile Audit/Tracking Logs -->
-<div class="prem-section-title" style="margin-top: 25px;">Profile Change Logs</div>
-<div class="prem-card-box" id="auditLogContainer" style="font-size:11px; color:#64748b; max-height:180px; overflow-y:auto; line-height: 1.5;">
-<!-- Logs generated dynamically via JS -->
-</div>
-</div>
-</div>
-</div>
-<!-- EDIT ADDRESS MODAL FOR LIVE TRACKING -->
-<div class="cart-modal-overlay" id="editOrderAddressModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
-<div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:500px; display:flex; flex-direction:column; gap:12px; box-shadow:0 10px 25px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;">
-<h3 style="margin:0; font-size:16px; color:#0f172a;">Edit Service Address</h3>
-<p style="font-size:13px; color:#64748b; margin:0;">Update the address for this specific booking.</p>
-<input id="editAddressOrderId" type="hidden"/>
-<div id="editAddressAlert" style="background:#fef2f2; border:1px solid #fca5a5; color:#991b1b; padding:8px 12px; border-radius:6px; font-size:12px; margin-bottom:12px; display:none;">
+                  </div>
+              </div>
+
+              <!-- Profile Audit/Tracking Logs -->
+              <div class="prem-section-title" style="margin-top: 25px;">Profile Change Logs</div>
+              <div class="prem-card-box" id="auditLogContainer" style="font-size:11px; color:#64748b; max-height:180px; overflow-y:auto; line-height: 1.5;">
+                  <!-- Logs generated dynamically via JS -->
+              </div>
+          </div>
+
+      </div>
+
+      </div>
+   <!-- EDIT ADDRESS MODAL FOR LIVE TRACKING -->
+  <div class="cart-modal-overlay" id="editOrderAddressModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
+      <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:500px; display:flex; flex-direction:column; gap:12px; box-shadow:0 10px 25px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto;">
+          <h3 style="margin:0; font-size:16px; color:#0f172a;">Edit Service Address</h3>
+          <p style="font-size:13px; color:#64748b; margin:0;">Update the address for this specific booking.</p>
+          <input type="hidden" id="editAddressOrderId">
+          
+          <div id="editAddressAlert" style="background:#fef2f2; border:1px solid #fca5a5; color:#991b1b; padding:8px 12px; border-radius:6px; font-size:12px; margin-bottom:12px; display:none;">
               Please fill in all fields correctly.
           </div>
-<div class="uc-fk-form-grid" style="margin-top: 10px;">
-<div class="uc-fk-field"><label>Door / Flat No *</label><input id="editDoor" placeholder="e.g. #45/2" type="text"/></div>
-<div class="uc-fk-field"><label>Street Name *</label><input id="editStreet" placeholder="Street / Area" type="text"/></div>
-<div class="uc-fk-field"><label>Village Name *</label><input id="editVillage" placeholder="Village" type="text"/></div>
-<div class="uc-fk-field"><label>City *</label><input id="editCity" placeholder="City" type="text"/></div>
-<div class="uc-fk-field"><label>Taluk *</label><input id="editTaluk" placeholder="Taluk" type="text"/></div>
-<div class="uc-fk-field"><label>District *</label><input id="editDistrict" placeholder="District" type="text"/></div>
-<div class="uc-fk-field full"><label>Pincode *</label><input id="editPincode" maxlength="6" oninput="validateNumberOnly(this)" placeholder="6-digit pincode" type="text"/></div>
-</div>
-<div style="display:flex; gap:10px; margin-top:10px;">
-<button onclick="closeEditOrderAddressModal()" style="flex:1; padding:10px; border:1px solid #0284c7; background:#ffffff; color:#0284c7; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;">Cancel</button>
-<button onclick="submitEditOrderAddress()" style="flex:1; padding:10px; border:none; background:#0284c7; color:#ffffff; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;">Save Address</button>
-</div>
-</div>
-</div>
-<!-- CANCELLATION MODAL -->
-<div class="cart-modal-overlay" id="cancelBookingModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
-<div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:400px; display:flex; flex-direction:column; gap:12px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
-<h3 style="margin:0; font-size:16px; color:#0f172a;">Cancel Booking</h3>
-<p style="font-size:13px; color:#64748b; margin:0;">Please let us know the reason for cancellation:</p>
-<form id="cancelReasonForm" style="display:flex; flex-direction:column; gap:12px; font-size:13px; color:#1e293b; margin-top:10px;">
-<label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input name="cancelReason" type="radio" value="Expected delivery is too late"/> Expected arrival is too late</label>
-<label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input name="cancelReason" type="radio" value="Found better price elsewhere"/> Found better price elsewhere</label>
-<label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input name="cancelReason" type="radio" value="Changed my mind"/> Changed my mind</label>
-<label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input name="cancelReason" type="radio" value="Other"/> Other</label>
-</form>
-<div style="display:flex; gap:10px; margin-top:15px;">
-<button onclick="closeCancelModal()" style="flex:1; padding:10px; border:1px solid #cbd5e1; background:white; color:#0f172a; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;">Keep Booking</button>
-<button onclick="submitCancellation()" style="flex:1; padding:10px; border:none; background:#ef4444; color:white; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;">Cancel Booking</button>
-</div>
-</div>
-</div>
-<!-- INVOICE MODAL -->
-<div class="cart-modal-overlay" id="invoiceViewModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
-<div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:450px; display:flex; flex-direction:column; gap:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
-<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
-<h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-file-invoice"></i> Invoice Details</h3>
-<button onclick="closeInvoiceView()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<div id="invoiceContent" style="font-size:13px; color:#475569; line-height:1.8;"></div>
-<button onclick="closeInvoiceView()" style="background:#0284c7; color:white; border:none; padding:10px; border-radius:6px; font-weight:600; cursor:pointer; width:100%; transition:0.2s; margin-top:10px;">Close Invoice</button>
-</div>
-</div>
-<!-- RATING MODAL -->
-<div class="cart-modal-overlay" id="ratingModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
-<div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:400px; display:flex; flex-direction:column; gap:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
-<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
-<h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Rate &amp; Review</h3>
-<button onclick="closeRatingModal()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<div style="text-align:center;">
-<h4 id="ratingServiceName" style="margin:0 0 5px 0; font-size:14px; color:#0f172a;">Service Name</h4>
-<p style="font-size:11px; margin:0 0 15px 0; color:#64748b;">Help us improve! Your rating updates live on our homepage.</p>
-<div id="starRatingContainer" style="color:#cbd5e1; font-size:28px; cursor:pointer; margin-bottom:15px; display:flex; justify-content:center; gap:10px;">
-<i class="fa-solid fa-star" onclick="setRating(1)"></i><i class="fa-solid fa-star" onclick="setRating(2)"></i><i class="fa-solid fa-star" onclick="setRating(3)"></i><i class="fa-solid fa-star" onclick="setRating(4)"></i><i class="fa-solid fa-star" onclick="setRating(5)"></i>
-</div>
-<input id="currentRatingVal" type="hidden" value="0"/>
-<input id="currentRatingOrderId" type="hidden" value=""/>
-<textarea id="ratingReviewText" placeholder="Write your review here (Optional)..." style="width:100%; height:80px; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; resize:none; box-sizing:border-box; outline:none; transition: border-color 0.2s;"></textarea>
-</div>
-<button onclick="submitServiceRating()" style="background:#10b981; color:white; border:none; padding:12px; border-radius:8px; font-weight:600; cursor:pointer; width:100%; transition:0.2s;">Submit Review</button>
-</div>
-</div>
-<!-- JAVASCRIPT LOGIC -->
-<script>
+
+          <div class="uc-fk-form-grid" style="margin-top: 10px;">
+              <div class="uc-fk-field"><label>Door / Flat No *</label><input type="text" id="editDoor" placeholder="e.g. #45/2"></div>
+              <div class="uc-fk-field"><label>Street Name *</label><input type="text" id="editStreet" placeholder="Street / Area"></div>
+              <div class="uc-fk-field"><label>Village Name *</label><input type="text" id="editVillage" placeholder="Village"></div>
+              <div class="uc-fk-field"><label>City *</label><input type="text" id="editCity" placeholder="City"></div>
+              <div class="uc-fk-field"><label>Taluk *</label><input type="text" id="editTaluk" placeholder="Taluk"></div>
+              <div class="uc-fk-field"><label>District *</label><input type="text" id="editDistrict" placeholder="District"></div>
+              <div class="uc-fk-field full"><label>Pincode *</label><input type="text" id="editPincode" maxlength="6" placeholder="6-digit pincode" oninput="validateNumberOnly(this)"></div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:10px;">
+              <button style="flex:1; padding:10px; border:1px solid #0284c7; background:#ffffff; color:#0284c7; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;" onclick="closeEditOrderAddressModal()">Cancel</button>
+              <button style="flex:1; padding:10px; border:none; background:#0284c7; color:#ffffff; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;" onclick="submitEditOrderAddress()">Save Address</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- CANCELLATION MODAL -->
+  <div class="cart-modal-overlay" id="cancelBookingModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
+      <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:400px; display:flex; flex-direction:column; gap:12px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+          <h3 style="margin:0; font-size:16px; color:#0f172a;">Cancel Booking</h3>
+          <p style="font-size:13px; color:#64748b; margin:0;">Please let us know the reason for cancellation:</p>
+          <form id="cancelReasonForm" style="display:flex; flex-direction:column; gap:12px; font-size:13px; color:#1e293b; margin-top:10px;">
+              <label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input type="radio" name="cancelReason" value="Expected delivery is too late"> Expected arrival is too late</label>
+              <label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input type="radio" name="cancelReason" value="Found better price elsewhere"> Found better price elsewhere</label>
+              <label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input type="radio" name="cancelReason" value="Changed my mind"> Changed my mind</label>
+              <label style="display:flex; gap:8px; align-items:center; cursor:pointer;"><input type="radio" name="cancelReason" value="Other"> Other</label>
+          </form>
+          <div style="display:flex; gap:10px; margin-top:15px;">
+              <button style="flex:1; padding:10px; border:1px solid #cbd5e1; background:white; color:#0f172a; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;" onclick="closeCancelModal()">Keep Booking</button>
+              <button style="flex:1; padding:10px; border:none; background:#ef4444; color:white; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;" onclick="submitCancellation()">Cancel Booking</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- INVOICE MODAL -->
+  <div class="cart-modal-overlay" id="invoiceViewModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
+      <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:450px; display:flex; flex-direction:column; gap:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+              <h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-file-invoice"></i> Invoice Details</h3>
+              <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;" onclick="closeInvoiceView()"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div id="invoiceContent" style="font-size:13px; color:#475569; line-height:1.8;"></div>
+          <button style="background:#0284c7; color:white; border:none; padding:10px; border-radius:6px; font-weight:600; cursor:pointer; width:100%; transition:0.2s; margin-top:10px;" onclick="closeInvoiceView()">Close Invoice</button>
+      </div>
+  </div>
+
+  <!-- RATING MODAL -->
+  <div class="cart-modal-overlay" id="ratingModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
+      <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:400px; display:flex; flex-direction:column; gap:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+              <h3 style="margin:0; font-size:16px; color:#0f172a;"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Rate & Review</h3>
+              <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;" onclick="closeRatingModal()"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div style="text-align:center;">
+              <h4 id="ratingServiceName" style="margin:0 0 5px 0; font-size:14px; color:#0f172a;">Service Name</h4>
+              <p style="font-size:11px; margin:0 0 15px 0; color:#64748b;">Help us improve! Your rating updates live on our homepage.</p>
+              <div id="starRatingContainer" style="color:#cbd5e1; font-size:28px; cursor:pointer; margin-bottom:15px; display:flex; justify-content:center; gap:10px;">
+                  <i class="fa-solid fa-star" onclick="setRating(1)"></i><i class="fa-solid fa-star" onclick="setRating(2)"></i><i class="fa-solid fa-star" onclick="setRating(3)"></i><i class="fa-solid fa-star" onclick="setRating(4)"></i><i class="fa-solid fa-star" onclick="setRating(5)"></i>
+              </div>
+              <input type="hidden" id="currentRatingVal" value="0">
+              <input type="hidden" id="currentRatingOrderId" value="">
+              <textarea id="ratingReviewText" placeholder="Write your review here (Optional)..." style="width:100%; height:80px; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; resize:none; box-sizing:border-box; outline:none; transition: border-color 0.2s;"></textarea>
+          </div>
+          <button style="background:#10b981; color:white; border:none; padding:12px; border-radius:8px; font-weight:600; cursor:pointer; width:100%; transition:0.2s;" onclick="submitServiceRating()">Submit Review</button>
+      </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
   const API_BASE_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000' 
     : 'https://catus-backend-d2js.onrender.com';
@@ -14450,307 +15088,7 @@ serviceStr =
     
     function downloadInvoice(orderId, serviceName, amount, status, dateStr, productId, custName, custPhone) {
         let printWindow = window.open('', '_blank', 'width=800,height=600');
-        let html = `<html><head><title>Invoice - ${orderId}</title><style>body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; } .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; } .logo { font-size: 22px; font-weight: bold; color: #0284c7; } .details { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 13px; } table { width: 100%; border-collapse: collapse; margin-top: 15px; } th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; font-size: 13px; } th { background: #f8fafc; color: #475569; } .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 20px; color: #16a34a; }</style>
-
-<style id="cerood-home-pages-index-header-design-only-20261002">
-/* DESIGN ONLY — Index desktop header reference. Existing click handlers / IDs / APIs remain untouched. */
-@media (min-width:851px){
-  .master-app-container{
-    padding-top:0!important;
-  }
-  .uc-homepage-wrapper{
-    width:calc(100% + 80px)!important;
-    margin-left:-40px!important;
-    margin-right:-40px!important;
-    margin-bottom:20px!important;
-    position:sticky!important;
-    top:0!important;
-    z-index:2147481000!important;
-    background:#577696!important;
-  }
-  .header-main-container{
-    width:100%!important;
-    min-height:86px!important;
-    margin:0!important;
-    padding:0 22px!important;
-    box-sizing:border-box!important;
-    background:#577696!important;
-    display:grid!important;
-    grid-template-columns:auto auto minmax(300px,680px) auto auto auto!important;
-    align-items:center!important;
-    justify-content:stretch!important;
-    column-gap:20px!important;
-    row-gap:0!important;
-    flex-wrap:nowrap!important;
-  }
-
-  /* Allow the existing location/cart/login children to take their Index positions. */
-  .header-nav-right{
-    display:contents!important;
-  }
-
-  .brand-logo{
-    grid-column:1!important;
-    order:unset!important;
-    margin:0!important;
-    display:flex!important;
-    align-items:center!important;
-    flex:none!important;
-    cursor:pointer!important;
-  }
-  .brand-logo img{
-    display:block!important;
-    width:auto!important;
-    height:54px!important;
-    max-width:132px!important;
-    object-fit:contain!important;
-    background:transparent!important;
-    border:0!important;
-    box-shadow:none!important;
-  }
-
-  .header-location-widget{
-    grid-column:2!important;
-    min-width:155px!important;
-    max-width:175px!important;
-    min-height:44px!important;
-    margin:0!important;
-    padding:5px 7px!important;
-    gap:7px!important;
-    border:0!important;
-    border-radius:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-    color:#fff!important;
-  }
-  .header-location-widget::before{
-    content:"⌖";
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:18px;
-    height:18px;
-    flex:0 0 18px;
-    color:#fff;
-    font-size:19px;
-    line-height:1;
-  }
-  .header-location-widget .loc-text-box{
-    min-width:0!important;
-    line-height:1.12!important;
-  }
-  .header-location-widget .loc-label{
-    color:#fff!important;
-    font-size:10px!important;
-    font-weight:600!important;
-  }
-  .header-location-widget #headerLocationDisplay{
-    display:block!important;
-    max-width:128px!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-    white-space:nowrap!important;
-    color:#fff!important;
-    font-size:11px!important;
-    font-weight:700!important;
-  }
-  .header-location-widget > i{
-    color:#fff!important;
-    font-size:9px!important;
-  }
-
-  .search-container{
-    grid-column:3!important;
-    order:unset!important;
-    width:100%!important;
-    max-width:680px!important;
-    height:45px!important;
-    min-height:45px!important;
-    margin:0!important;
-    padding:0 14px!important;
-    border:0!important;
-    border-radius:16px!important;
-    background:#fff!important;
-    box-shadow:none!important;
-    flex:none!important;
-  }
-  .search-container:focus-within{
-    border:0!important;
-    box-shadow:none!important;
-  }
-  .search-container .search-icon{
-    width:18px!important;
-    height:18px!important;
-    margin-right:10px!important;
-    stroke:#64748b!important;
-  }
-  .search-container input,
-  .search-container #searchInput{
-    height:100%!important;
-    padding:0!important;
-    border:0!important;
-    background:transparent!important;
-    color:#334155!important;
-    font-size:13px!important;
-  }
-
-  .cerood-index-home-services-visual{
-    grid-column:4!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    min-height:41px!important;
-    padding:6px 2px!important;
-    color:#fff!important;
-    background:transparent!important;
-    border:0!important;
-    white-space:nowrap!important;
-    font-size:12px!important;
-    font-weight:700!important;
-    pointer-events:none!important;
-  }
-
-  .header-nav-right .cart-item{
-    grid-column:5!important;
-    min-height:41px!important;
-    margin:0!important;
-    padding:6px 2px!important;
-    display:flex!important;
-    align-items:center!important;
-    gap:6px!important;
-    color:#fff!important;
-    background:transparent!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    white-space:nowrap!important;
-  }
-  .header-nav-right .cart-item svg{
-    width:19px!important;
-    height:19px!important;
-    stroke:#fff!important;
-  }
-  .header-nav-right .cart-item .nav-text{
-    color:#fff!important;
-    font-size:12px!important;
-    font-weight:700!important;
-  }
-  .header-nav-right .cart-badge{
-    width:17px!important;
-    min-width:17px!important;
-    height:17px!important;
-    padding:0!important;
-    border-radius:50%!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    font-size:9px!important;
-    line-height:1!important;
-  }
-
-  .header-nav-right .login-btn{
-    grid-column:6!important;
-    min-height:41px!important;
-    max-width:150px!important;
-    margin:0!important;
-    padding:6px 2px!important;
-    display:flex!important;
-    align-items:center!important;
-    gap:6px!important;
-    color:#fff!important;
-    background:transparent!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    white-space:nowrap!important;
-  }
-  .header-nav-right .login-btn:hover{
-    background:transparent!important;
-  }
-  .header-nav-right .login-btn svg{
-    width:18px!important;
-    height:18px!important;
-    stroke:#fff!important;
-  }
-  .header-nav-right .login-btn .nav-text{
-    max-width:105px!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-    color:#fff!important;
-    font-size:12px!important;
-    font-weight:700!important;
-  }
-
-  /* Desktop: keep mobile-only tools out of the Index-style header. */
-  .mobile-location-widget,
-  .csf-home-tools,
-  .cerood-unified-tools{
-    display:none!important;
-  }
-}
-@media (min-width:851px) and (max-width:1200px){
-  .header-main-container{
-    grid-template-columns:auto auto minmax(220px,1fr) auto auto auto!important;
-    column-gap:12px!important;
-  }
-  .header-location-widget{
-    min-width:135px!important;
-    max-width:150px!important;
-  }
-  .search-container{
-    max-width:none!important;
-  }
-}
-</style>
-
-</head><body><div class="header"><div class="logo">CEROOD SERVICES</div><div style="text-align: right;"><b>INVOICE</b><br>Date: ${dateStr}<br>Status: ${status}</div></div><div class="details"><div><b>Billed To:</b><br>${custName}<br>+91 ${custPhone}</div><div><b>Order Details:</b><br>Order ID: ${orderId}<br>Product ID: ${productId}</div></div><table><thead><tr><th>Service Description</th><th>Qty</th><th>Amount</th></tr></thead><tbody><tr><td>${serviceName}</td><td>1</td><td>₹${amount}</td></tr></tbody></table><div class="total">Total Paid: ₹${amount}</div><p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">Computer generated invoice.</p>
-
-<style id="cerood-product-flat-cart-login-final">
-/* Desktop only: match Home Services header - flat white Cart/Login, no white pills */
-@media (min-width:851px){
-  .product-index-header .header-nav-right .cart-item,
-  .product-index-header .header-nav-right .login-btn,
-  .product-index-header .crn-cart,
-  .product-index-header .crn-account{
-    background:transparent !important;
-    background-color:transparent !important;
-    background-image:none !important;
-    border:0 !important;
-    border-radius:0 !important;
-    box-shadow:none !important;
-    outline:0 !important;
-    padding:6px 2px !important;
-    min-height:41px !important;
-    color:#fff !important;
-  }
-  .product-index-header .header-nav-right .cart-item:hover,
-  .product-index-header .header-nav-right .login-btn:hover,
-  .product-index-header .crn-cart:hover,
-  .product-index-header .crn-account:hover{
-    background:transparent !important;
-    background-color:transparent !important;
-    box-shadow:none !important;
-  }
-  .product-index-header .header-nav-right .cart-item svg,
-  .product-index-header .header-nav-right .login-btn svg,
-  .product-index-header .crn-cart svg,
-  .product-index-header .crn-account svg,
-  .product-index-header .header-nav-right .cart-item svg *,
-  .product-index-header .header-nav-right .login-btn svg *{
-    stroke:#fff !important;
-    color:#fff !important;
-    fill:none !important;
-  }
-  .product-index-header .header-nav-right .cart-item .nav-text,
-  .product-index-header .header-nav-right .login-btn .nav-text,
-  .product-index-header .crn-cart .nav-text,
-  .product-index-header .crn-account .nav-text{
-    color:#fff !important;
-    font-size:12px !important;
-    font-weight:700 !important;
-  }
-}
-</style>
+        let html = `<html><head><title>Invoice - ${orderId}</title><style>body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; } .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; } .logo { font-size: 22px; font-weight: bold; color: #0284c7; } .details { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 13px; } table { width: 100%; border-collapse: collapse; margin-top: 15px; } th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; font-size: 13px; } th { background: #f8fafc; color: #475569; } .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 20px; color: #16a34a; }</style></head><body><div class="header"><div class="logo">CEROOD SERVICES</div><div style="text-align: right;"><b>INVOICE</b><br>Date: ${dateStr}<br>Status: ${status}</div></div><div class="details"><div><b>Billed To:</b><br>${custName}<br>+91 ${custPhone}</div><div><b>Order Details:</b><br>Order ID: ${orderId}<br>Product ID: ${productId}</div></div><table><thead><tr><th>Service Description</th><th>Qty</th><th>Amount</th></tr></thead><tbody><tr><td>${serviceName}</td><td>1</td><td>₹${amount}</td></tr></tbody></table><div class="total">Total Paid: ₹${amount}</div><p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">Computer generated invoice.</p>
 </body></html>`;
         printWindow.document.write(html); printWindow.document.close(); printWindow.focus();
         setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
@@ -16017,211 +16355,326 @@ function togglePasswordVisibility(fieldId, iconElement) {
 
   </script>
 <!-- REVIEWS & RATINGS POPUP MODAL (Only list display) -->
-<div class="cart-modal-overlay" id="productReviewsPopupModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
-<div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:600px; display:flex; flex-direction:column; gap:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15); max-height: 85vh; overflow-y: auto;">
-<!-- Modal Header -->
-<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
-<h3 style="margin:0; font-size:18px; color:#0f172a;"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Ratings &amp; Reviews (<span id="popupReviewsCountHeader">500</span>)</h3>
-<button onclick="closeReviewsPopup()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<!-- Reviews Dynamic List Container -->
-<div id="popupReviewsListContainer" style="display: flex; flex-direction: column; gap: 12px; max-height: 450px; overflow-y: auto; padding-right: 5px;">
-<!-- Artificial and Live reviews render here cleanly -->
-</div>
-</div>
-</div>
-<div class="cerood-global-mobile-nav" id="ceroodGlobalMobileNav">
-<button class="cerood-global-nav-btn active" data-nav="home" onclick="ceroodMobileNavigate('home', this)">
-<span class="cerood-global-nav-ring ring-home">
-<i data-lucide="house"></i>
-</span>
-<span>Home</span>
-</button>
-<button class="cerood-global-nav-btn" data-nav="services" onclick="ceroodMobileNavigate('services', this)">
-<span class="cerood-global-nav-ring ring-services">
-<i data-lucide="layout-grid"></i>
-</span>
-<span>Services</span>
-</button>
-<button class="cerood-global-nav-btn" data-nav="cart" onclick="ceroodMobileNavigate('cart', this)">
-<span class="cerood-global-nav-ring ring-cart">
-<i data-lucide="shopping-cart"></i>
-</span>
-<span>Cart</span>
-</button>
-<button class="cerood-global-nav-btn" data-nav="bookings" onclick="ceroodMobileNavigate('bookings', this)">
-<span class="cerood-global-nav-ring ring-bookings">
-<i data-lucide="calendar-days"></i>
-</span>
-<span>Bookings</span>
-</button>
-<button class="cerood-global-nav-btn" data-nav="account" onclick="ceroodMobileNavigate('account', this)">
-<span class="cerood-global-nav-ring ring-account">
-<i data-lucide="user-round"></i>
-</span>
-<span>Account</span>
-</button>
-</div>
+  <div class="cart-modal-overlay" id="productReviewsPopupModal" style="display:none; justify-content:center; align-items:center; z-index:99999999;">
+      <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:600px; display:flex; flex-direction:column; gap:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15); max-height: 85vh; overflow-y: auto;">
+          
+          <!-- Modal Header -->
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+              <h3 style="margin:0; font-size:18px; color:#0f172a;"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Ratings & Reviews (<span id="popupReviewsCountHeader">500</span>)</h3>
+              <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;" onclick="closeReviewsPopup()"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <!-- Reviews Dynamic List Container -->
+          <div id="popupReviewsListContainer" style="display: flex; flex-direction: column; gap: 12px; max-height: 450px; overflow-y: auto; padding-right: 5px;">
+              <!-- Artificial and Live reviews render here cleanly -->
+          </div>
+
+      </div>
+  </div>
+ <div class="cerood-global-mobile-nav"
+     id="ceroodGlobalMobileNav">
+
+    <button class="cerood-global-nav-btn active"
+            data-nav="home"
+            onclick="ceroodMobileNavigate('home', this)">
+
+        <span class="cerood-global-nav-ring ring-home">
+            <i data-lucide="house"></i>
+        </span>
+
+        <span>Home</span>
+    </button>
+
+
+    <button class="cerood-global-nav-btn"
+            data-nav="services"
+            onclick="ceroodMobileNavigate('services', this)">
+
+        <span class="cerood-global-nav-ring ring-services">
+            <i data-lucide="layout-grid"></i>
+        </span>
+
+        <span>Services</span>
+    </button>
+
+
+    <button class="cerood-global-nav-btn"
+            data-nav="cart"
+            onclick="ceroodMobileNavigate('cart', this)">
+
+        <span class="cerood-global-nav-ring ring-cart">
+            <i data-lucide="shopping-cart"></i>
+        </span>
+
+        <span>Cart</span>
+    </button>
+
+
+    <button class="cerood-global-nav-btn"
+            data-nav="bookings"
+            onclick="ceroodMobileNavigate('bookings', this)">
+
+        <span class="cerood-global-nav-ring ring-bookings">
+            <i data-lucide="calendar-days"></i>
+        </span>
+
+        <span>Bookings</span>
+    </button>
+
+
+    <button class="cerood-global-nav-btn"
+            data-nav="account"
+            onclick="ceroodMobileNavigate('account', this)">
+
+        <span class="cerood-global-nav-ring ring-account">
+            <i data-lucide="user-round"></i>
+        </span>
+
+        <span>Account</span>
+    </button>
+
+</div> 
+
+
+    
 <!-- Professional Footer Section -->
 <div class="footer-wrapper">
-<footer class="footer-inner">
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-bottom: 30px;">
-<!-- Column 1: Brand Info -->
-<div>
-<h3 style="color: #18181b; font-size: 16px; font-weight: 700; margin-bottom: 12px;">Cerood</h3>
-<p style="margin: 0 0 10px 0; line-height: 1.6; color: #52525b;">Doorstep home appliance repair, installation, and maintenance services at your convenience.</p>
-<div style="display: flex; gap: 12px; margin-top: 15px;">
-<!-- WhatsApp Green Circle Icon -->
-<a aria-label="WhatsApp" class="footer-social-link" href="https://wa.me/918946055856">
-<svg class="footer-social-svg whatsapp-circle-svg" viewbox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-<!-- Green circle -->
-<circle cx="16" cy="16" fill="#25D366" r="16"></circle>
-<!-- White WhatsApp outline -->
-<path d="M24.1 7.8A11.2 11.2 0 0 0 6.5 21.3L5 27l5.8-1.5A11.2 11.2 0 0 0 24.1 7.8ZM16 25.1c-1.7 0-3.4-.5-4.8-1.3l-.3-.2-3.4.9.9-3.3-.2-.3A9.1 9.1 0 1 1 16 25.1Zm5-6.8c-.3-.1-1.6-.8-1.9-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.3-.3-.5.3-.5.8-1.5.1-.2.1-.4 0-.5-.1-.2-.6-1.5-.9-2.1-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.6-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.3-.2-.4-.5-.6Z" fill="#ffffff"></path>
-</svg>
+    <footer class="footer-inner">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-bottom: 30px;">
+            
+            <!-- Column 1: Brand Info -->
+            <div>
+                <h3 style="color: #18181b; font-size: 16px; font-weight: 700; margin-bottom: 12px;">Cerood</h3>
+                <p style="margin: 0 0 10px 0; line-height: 1.6; color: #52525b;">Doorstep home appliance repair, installation, and maintenance services at your convenience.</p>
+                <div style="display: flex; gap: 12px; margin-top: 15px;">
+                    <!-- WhatsApp Green Circle Icon -->
+<a href="https://wa.me/918946055856"
+   class="footer-social-link"
+   aria-label="WhatsApp">
+
+    <svg class="footer-social-svg whatsapp-circle-svg"
+         viewBox="0 0 32 32"
+         xmlns="http://www.w3.org/2000/svg">
+
+        <!-- Green circle -->
+        <circle cx="16" cy="16" r="16" fill="#25D366"/>
+
+        <!-- White WhatsApp outline -->
+        <path fill="#ffffff"
+              d="M24.1 7.8A11.2 11.2 0 0 0 6.5 21.3L5 27l5.8-1.5A11.2 11.2 0 0 0 24.1 7.8ZM16 25.1c-1.7 0-3.4-.5-4.8-1.3l-.3-.2-3.4.9.9-3.3-.2-.3A9.1 9.1 0 1 1 16 25.1Zm5-6.8c-.3-.1-1.6-.8-1.9-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.3-.3-.5.3-.5.8-1.5.1-.2.1-.4 0-.5-.1-.2-.6-1.5-.9-2.1-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.6-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.3-.2-.4-.5-.6Z"/>
+    </svg>
 </a>
+
 <!-- Call -->
-<a aria-label="Call" class="footer-social-link" href="tel:+918946055856">
-<svg class="footer-social-svg call-svg" viewbox="0 0 24 24">
-<path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2z"></path>
-</svg>
+<a href="tel:+918946055856" class="footer-social-link" aria-label="Call">
+    <svg class="footer-social-svg call-svg" viewBox="0 0 24 24">
+        <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2z"/>
+    </svg>
 </a>
+
 <!-- Instagram -->
-<a aria-label="Cerood Instagram" class="footer-social-link" href="https://www.instagram.com/cerood_india/" rel="noopener noreferrer" target="_blank">
-<svg class="footer-social-svg" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<rect height="18" rx="5" stroke="#E1306C" stroke-width="2" width="18" x="3" y="3"></rect>
-<circle cx="12" cy="12" r="4" stroke="#E1306C" stroke-width="2"></circle>
-<circle cx="17.5" cy="6.5" fill="#E1306C" r="1.2"></circle>
-</svg>
+<a href="https://www.instagram.com/cerood_india/"
+   class="footer-social-link"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Cerood Instagram">
+
+    <svg class="footer-social-svg"
+         viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg"
+         fill="none">
+
+        <rect x="3" y="3"
+              width="18" height="18"
+              rx="5"
+              stroke="#E1306C"
+              stroke-width="2"/>
+
+        <circle cx="12" cy="12"
+                r="4"
+                stroke="#E1306C"
+                stroke-width="2"/>
+
+        <circle cx="17.5" cy="6.5"
+                r="1.2"
+                fill="#E1306C"/>
+    </svg>
+
 </a>
+
 <!-- LinkedIn -->
-<a aria-label="Cerood LinkedIn" class="footer-social-link" href="https://www.linkedin.com/company/cerood" rel="noopener noreferrer" target="_blank">
-<svg class="footer-social-svg" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.29zM5.32 7.41a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.1 20.45H3.54V8.98H7.1v11.47z" fill="#0A66C2"></path>
-</svg>
+<a href="https://www.linkedin.com/company/cerood"
+   class="footer-social-link"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Cerood LinkedIn">
+
+    <svg class="footer-social-svg"
+         viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+
+        <path fill="#0A66C2"
+              d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.29zM5.32 7.41a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.1 20.45H3.54V8.98H7.1v11.47z"/>
+    </svg>
+
 </a>
+
 <!-- Gmail Multicolor Icon -->
-</div>
-</div>
-<!-- Column 2: Quick Links -->
-<div>
-<h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Links</h4>
-<ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
-<li><a href="/" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
-<li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">My Cart</a></li>
-<li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
-<li>
-<a href="/" id="ceroodFooterAreaLink" style="color: #52525b; text-decoration: none; transition: 0.2s;">
+
+                </div>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div>
+                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                    <li><a href="/" style="color: #52525b; text-decoration: none; transition: 0.2s;">Home</a></li>
+                    <li><a href="#" onclick="toggleCartModal(true); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">My Cart</a></li>
+                    <li><a href="#" onclick="handleHeaderAuthClick(); return false;" style="color: #52525b; text-decoration: none; transition: 0.2s;">Customer Dashboard</a></li>
+                    <li>
+    <a
+        id="ceroodFooterAreaLink"
+        href="/"
+        style="color: #52525b; text-decoration: none; transition: 0.2s;"
+    >
         Service Areas
     </a>
 </li>
 <li>
-<a href="/services" style="color: #52525b; text-decoration: none; transition: 0.2s;">
+    <a
+        href="/services"
+        style="color: #52525b; text-decoration: none; transition: 0.2s;"
+    >
         All Services
     </a>
 </li>
+
 <li>
-<a href="/faq" style="color: #52525b; text-decoration: none; transition: 0.2s;">
-        Help &amp; FAQs
+    <a
+        href="/faq"
+        style="color: #52525b; text-decoration: none; transition: 0.2s;"
+    >
+        Help & FAQs
     </a>
 </li>
-</ul>
-</div>
-<!-- Column 3: Services -->
-<div>
-<h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Top Services</h4>
-<ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; color: #52525b;">
-<li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">Smart TV Repair</a></li>
+                    
+
+                </ul>
+            </div>
+
+            <!-- Column 3: Services -->
+            <div>
+                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Top Services</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; color: #52525b;">
+                    <li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">Smart TV Repair</a></li>
 <li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">AC Service</a></li>
 <li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">Washing Machine Repair</a></li>
 <li><a href="/#productGridContainer" style="color:inherit;text-decoration:none;">RO Water Purifier Service</a></li>
-</ul>
-</div>
-<!-- Column 4: Contact & Support -->
-<div>
-<h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Contact Us</h4>
-<!-- Phone -->
+                </ul>
+            </div>
+
+            <!-- Column 4: Contact & Support -->
+            <div>
+                <h4 style="color: #18181b; font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Contact Us</h4>
+                <!-- Phone -->
 <p class="footer-contact-row">
-<svg class="footer-contact-icon contact-phone" viewbox="0 0 24 24">
-<path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2z"></path>
-</svg>
-<span>+91 8946055856</span>
+    <svg class="footer-contact-icon contact-phone" viewBox="0 0 24 24">
+        <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2z"/>
+    </svg>
+    <span>+91 8946055856</span>
 </p>
+
+
+
 <!-- Location -->
 <p class="footer-contact-row">
-<svg class="footer-contact-icon contact-location" viewbox="0 0 24 24">
-<path d="M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13z"></path>
-<circle cx="12" cy="9" r="2.5"></circle>
-</svg>
-<span>Dharmapuri, Tamil Nadu, India</span>
+    <svg class="footer-contact-icon contact-location"
+         viewBox="0 0 24 24">
+        <path d="M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13z"/>
+        <circle cx="12" cy="9" r="2.5"/>
+    </svg>
+
+    <span>Dharmapuri, Tamil Nadu, India</span>
 </p>
+            </div>
+
+        </div>
+
+        <!-- Bottom Copyright Bar -->
+        <div style="border-top: 1px solid #ddd6fe; padding-top: 20px; text-align: center; color: #71717a; font-size: 12px;">
+            <p style="margin: 0;">© 2026 Cerood Home Services. All Rights Reserved.</p>
+        </div>
+    </footer>
 </div>
-</div>
-<!-- Bottom Copyright Bar -->
-<div style="border-top: 1px solid #ddd6fe; padding-top: 20px; text-align: center; color: #71717a; font-size: 12px;">
-<p style="margin: 0;">© 2026 Cerood Home Services. All Rights Reserved.</p>
-</div>
-</footer>
-</div>
+
 <!-- Location Change Popup Modal (இது ஃபுட்டருக்கு வெளியே இருக்க வேண்டும்) -->
 <div class="cart-modal-overlay" id="locationPopupModal" onclick="checkCloseLocationModal(event)" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 99999;">
-<div class="loc-modal-card" id="locModalCard" style="background: #ffffff; width: 90%; max-width: 460px; border-radius: 16px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-<h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #0f172a;">Change location</h3>
-<button class="close-cart" onclick="toggleLocationModal(false)"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<div style="display: flex; align-items: center; gap: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; background: #ffffff;">
-<i class="fa-solid fa-magnifying-glass" style="color: #64748b; font-size: 14px;"></i>
-<input autocomplete="off" id="locSearchInput" placeholder="Search village, area, town or pincode" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" type="text"/>
-</div>
-<div id="locSuggestionsBox" style="max-height: 180px; overflow-y: auto; margin-top: 5px; display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px;"></div>
-<div onclick="detectCurrentLocation()" style="display: flex; align-items: center; gap: 12px; padding: 16px 0; margin-top: 15px; cursor: pointer; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weight: 500; color: #7c3aed;">
-<i class="fa-solid fa-location-crosshairs" style="font-size: 16px;"></i>
-<span>Use current location</span>
-</div>
-<!-- Saved address is shown here; editor opens as a separate popup -->
-<button id="ceroodManualAddressToggle" onclick="toggleCeroodManualAddress(false)" style="width:100%;display:flex;align-items:center;gap:10px;padding:15px 0;border:0;border-bottom:1px solid #f1f5f9;background:transparent;color:#7c3aed;font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" type="button">
-<i class="fa-solid fa-pen-to-square"></i> Enter address manually
+    <div class="loc-modal-card" id="locModalCard" style="background: #ffffff; width: 90%; max-width: 460px; border-radius: 16px; padding: 24px; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #0f172a;">Change location</h3>
+            <button class="close-cart" onclick="toggleLocationModal(false)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; background: #ffffff;">
+            <i class="fa-solid fa-magnifying-glass" style="color: #64748b; font-size: 14px;"></i>
+            <input type="text" id="locSearchInput" placeholder="Search village, area, town or pincode" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" autocomplete="off">
+        </div>
+        <div id="locSuggestionsBox" style="max-height: 180px; overflow-y: auto; margin-top: 5px; display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px;"></div>
+
+        <div onclick="detectCurrentLocation()" style="display: flex; align-items: center; gap: 12px; padding: 16px 0; margin-top: 15px; cursor: pointer; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weight: 500; color: #7c3aed;">
+            <i class="fa-solid fa-location-crosshairs" style="font-size: 16px;"></i>
+            <span>Use current location</span>
+        </div>
+
+        <!-- Saved address is shown here; editor opens as a separate popup -->
+        <button type="button" onclick="toggleCeroodManualAddress(false)" id="ceroodManualAddressToggle"
+                style="width:100%;display:flex;align-items:center;gap:10px;padding:15px 0;border:0;border-bottom:1px solid #f1f5f9;background:transparent;color:#7c3aed;font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;">
+            <i class="fa-solid fa-pen-to-square"></i> Enter address manually
         </button>
-<div id="ceroodSavedAddressCard">
-<div style="display:flex;align-items:center;gap:7px;color:#15803d;font-weight:700;font-size:13px;margin-bottom:8px;"><i class="fa-solid fa-circle-check"></i> Saved service address</div>
-<div id="ceroodSavedAddressText"></div>
-<div style="display:flex;gap:8px;margin-top:12px;">
-<button class="cerood-address-action" onclick="toggleCeroodManualAddress(true)" type="button"><i class="fa-solid fa-pen"></i> Edit</button>
-<button class="cerood-address-action" onclick="deleteCeroodManualAddress()" style="color:#dc2626;border-color:#fecaca;" type="button"><i class="fa-solid fa-trash"></i> Delete</button>
+        <div id="ceroodSavedAddressCard">
+            <div style="display:flex;align-items:center;gap:7px;color:#15803d;font-weight:700;font-size:13px;margin-bottom:8px;"><i class="fa-solid fa-circle-check"></i> Saved service address</div>
+            <div id="ceroodSavedAddressText"></div>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+                <button type="button" class="cerood-address-action" onclick="toggleCeroodManualAddress(true)"><i class="fa-solid fa-pen"></i> Edit</button>
+                <button type="button" class="cerood-address-action" style="color:#dc2626;border-color:#fecaca;" onclick="deleteCeroodManualAddress()"><i class="fa-solid fa-trash"></i> Delete</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; font-size: 11px; color: #0284c7; font-weight: 500; margin-top: 15px; letter-spacing: 0.5px;">
+            <span><i class="fa-solid fa-shield-halved" style="margin-right: 4px;"></i> Cerood Secure Location</span>
+        </div>
+    </div>
 </div>
-</div>
-<div style="text-align: center; font-size: 11px; color: #0284c7; font-weight: 500; margin-top: 15px; letter-spacing: 0.5px;">
-<span><i class="fa-solid fa-shield-halved" style="margin-right: 4px;"></i> Cerood Secure Location</span>
-</div>
-</div>
-</div>
+
 <!-- Separate manual address popup: location search is not visible here -->
 <div id="ceroodManualAddressModal" onclick="if(event.target === this) closeCeroodManualAddress()">
-<div id="ceroodManualAddressCard">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-<h3 id="ceroodManualEditorTitle" style="margin:0;font-size:18px;color:#0f172a;">Enter address manually</h3>
-<button aria-label="Close manual address" class="close-cart" onclick="closeCeroodManualAddress()" type="button"><i class="fa-solid fa-xmark"></i></button>
+  <div id="ceroodManualAddressCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <h3 id="ceroodManualEditorTitle" style="margin:0;font-size:18px;color:#0f172a;">Enter address manually</h3>
+      <button type="button" class="close-cart" onclick="closeCeroodManualAddress()" aria-label="Close manual address"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+        <form id="ceroodManualAddressForm" onsubmit="saveCeroodManualAddress(event)" style="margin-top:14px;">
+            <p style="font-size:12px;color:#64748b;margin:0 0 12px;">Village not listed? Enter your service address below.</p>
+            <label for="ceroodManualHouse">House / street address *</label>
+            <input id="ceroodManualHouse" required maxlength="160" autocomplete="street-address" placeholder="Door no, street, building">
+            <label for="ceroodManualVillage">Village / area / town *</label>
+            <input id="ceroodManualVillage" required maxlength="100" placeholder="Village or town">
+            <label for="ceroodManualDistrict">District *</label>
+            <input id="ceroodManualDistrict" required maxlength="100" placeholder="District name">
+            <label for="ceroodManualState">State *</label>
+            <input id="ceroodManualState" required maxlength="100" placeholder="Tamil Nadu">
+            <label for="ceroodManualPincode">PIN code *</label>
+            <input id="ceroodManualPincode" required inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit PIN code" autocomplete="postal-code">
+            <label for="ceroodManualLandmark">Landmark (optional)</label>
+            <input id="ceroodManualLandmark" maxlength="140" placeholder="Near bus stand, temple, etc.">
+            <button type="submit" style="width:100%;margin-top:14px;padding:13px;border:0;border-radius:10px;background:#7c3aed;color:white;font-weight:600;cursor:pointer;">Save &amp; Continue</button>
+            <p style="font-size:11px;color:#64748b;line-height:1.5;">Address saved for booking; service availability is subject to technician coverage.</p>
+        </form>
+
+  </div>
 </div>
-<form id="ceroodManualAddressForm" onsubmit="saveCeroodManualAddress(event)" style="margin-top:14px;">
-<p style="font-size:12px;color:#64748b;margin:0 0 12px;">Village not listed? Enter your service address below.</p>
-<label for="ceroodManualHouse">House / street address *</label>
-<input autocomplete="street-address" id="ceroodManualHouse" maxlength="160" placeholder="Door no, street, building" required=""/>
-<label for="ceroodManualVillage">Village / area / town *</label>
-<input id="ceroodManualVillage" maxlength="100" placeholder="Village or town" required=""/>
-<label for="ceroodManualDistrict">District *</label>
-<input id="ceroodManualDistrict" maxlength="100" placeholder="District name" required=""/>
-<label for="ceroodManualState">State *</label>
-<input id="ceroodManualState" maxlength="100" placeholder="Tamil Nadu" required=""/>
-<label for="ceroodManualPincode">PIN code *</label>
-<input autocomplete="postal-code" id="ceroodManualPincode" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="6-digit PIN code" required=""/>
-<label for="ceroodManualLandmark">Landmark (optional)</label>
-<input id="ceroodManualLandmark" maxlength="140" placeholder="Near bus stand, temple, etc."/>
-<button style="width:100%;margin-top:14px;padding:13px;border:0;border-radius:10px;background:#7c3aed;color:white;font-weight:600;cursor:pointer;" type="submit">Save &amp; Continue</button>
-<p style="font-size:11px;color:#64748b;line-height:1.5;">Address saved for booking; service availability is subject to technician coverage.</p>
-</form>
-</div>
-</div>
+
 <script>
     function formatShortAddress(fullAddress) {
         if (!fullAddress) return "Select Location";
@@ -16470,6 +16923,7 @@ function loadMsg91() {
 }
 
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -16604,7 +17058,9 @@ if ('serviceWorker' in navigator) {
     });
 }
 </script>
-<nav aria-label="Cerood mobile navigation" class="csf-bottom"><a href="/"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"></path></svg><span>Home</span></a><a class="active" href="/home-services.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"></path></svg><span>Explore</span></a><a data-cerood-dashboard-tab="home" href="#" onclick="return ceroodOpenExistingDashboard(event, 'home')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></svg><span>Dashboard</span></a><a data-cerood-dashboard-tab="bookings" href="#" onclick="return ceroodOpenExistingDashboard(event, 'bookings')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="18" rx="2" width="14" x="5" y="3"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg><span>Orders</span></a><a data-cerood-dashboard-tab="profile" href="#" onclick="return ceroodOpenExistingDashboard(event, 'profile')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"></path></svg><span>Account</span></a></nav>
+
+<nav class="csf-bottom" aria-label="Cerood mobile navigation"><a href="/"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"/></svg><span>Home</span></a><a href="/home-services.html" class="active"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"/></svg><span>Explore</span></a><a href="#" data-cerood-dashboard-tab="home" onclick="return ceroodOpenExistingDashboard(event, 'home')"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></a><a href="#" data-cerood-dashboard-tab="bookings" onclick="return ceroodOpenExistingDashboard(event, 'bookings')"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>Orders</span></a><a href="#" data-cerood-dashboard-tab="profile" onclick="return ceroodOpenExistingDashboard(event, 'profile')"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"/></svg><span>Account</span></a></nav>
+
 <script id="cerood-existing-dashboard-navigation-fix">
 /* Keep customer in the existing Home Services dashboard and its live booking/profile tabs. */
 function ceroodOpenExistingDashboard(event, tab) {
@@ -16626,6 +17082,8 @@ window.addEventListener('DOMContentLoaded', function () {
   }
 });
 </script>
+
+
 <script id="cerood-mobile-fixed-header-measure-20260925">
 (function () {
   'use strict';
@@ -16659,202 +17117,6 @@ window.addEventListener('DOMContentLoaded', function () {
   else setup();
 })();
 </script>
-
-<style id="product-header-home-services-exact-fixed">
-@media (min-width:851px){
-  html,body{margin:0!important;padding:0!important}
-  .master-app-container{padding-top:0!important}
-
-  /* Same full-width bar as finalized home-services.html */
-  .product-index-header{
-    width:100vw!important;
-    max-width:none!important;
-    margin:0 calc(50% - 50vw) 20px!important;
-    padding:0!important;
-    position:relative!important;
-    top:auto!important;
-    left:auto!important;
-    transform:none!important;
-    background:#577696!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    overflow:visible!important;
-  }
-  .product-index-header .product-crn-header-main{
-    width:100%!important;
-    max-width:none!important;
-    height:86px!important;
-    min-height:86px!important;
-    margin:0!important;
-    padding:10px 18px!important;
-    display:flex!important;
-    flex-flow:row nowrap!important;
-    align-items:center!important;
-    justify-content:flex-start!important;
-    gap:13px!important;
-    box-sizing:border-box!important;
-    position:relative!important;
-    top:auto!important;
-    overflow:visible!important;
-    background:#577696!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-  }
-
-  .product-index-header .crn-logo{
-    order:1!important;
-    flex:0 0 148px!important;
-    width:148px!important;
-    min-width:148px!important;
-    height:auto!important;
-    margin:0!important;
-    padding:0!important;
-    display:flex!important;
-    align-items:center!important;
-    gap:2px!important;
-    position:static!important;
-    transform:none!important;
-    background:transparent!important;
-    border:0!important;
-    text-decoration:none!important;
-  }
-  .product-index-header .crn-logo .cerood-original-c-logo{
-    display:block!important;width:auto!important;height:54px!important;max-width:74px!important;
-    margin:0!important;position:static!important;transform:none!important;object-fit:contain!important;
-  }
-  .product-index-header .crn-logo .cerood-wordmark-erood{
-    display:inline-block!important;position:relative!important;top:3px!important;
-    margin:0!important;color:#fff!important;
-    font:400 30px/1 Inter,Arial,sans-serif!important;letter-spacing:-1.5px!important;
-  }
-
-  .product-index-header .crn-location{
-    order:2!important;
-    flex:0 0 180px!important;width:180px!important;min-width:180px!important;max-width:180px!important;
-    height:41px!important;min-height:41px!important;
-    margin:0!important;padding:5px 7px!important;
-    display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;
-    position:static!important;transform:none!important;
-    background:transparent!important;background-image:none!important;
-    border:0!important;border-radius:0!important;box-shadow:none!important;color:#fff!important;
-    overflow:hidden!important;text-align:left!important;
-  }
-  .product-index-header .crn-location:before{display:none!important;content:none!important}
-  .product-index-header .crn-location>.crn-icon{display:block!important;width:19px!important;height:19px!important;flex:0 0 19px!important;stroke:#fff!important}
-  .product-index-header .crn-location .loc-text-box{flex:1 1 auto!important;width:0!important;min-width:0!important;overflow:hidden!important}
-  .product-index-header .crn-location .loc-label{display:block!important;color:#fff!important;font-size:10px!important;line-height:13px!important;font-weight:600!important}
-  .product-index-header .crn-location #headerLocationDisplay{display:block!important;width:100%!important;max-width:100%!important;color:#fff!important;font-size:11px!important;line-height:15px!important;font-weight:700!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-  .product-index-header .crn-location .crn-chevron{display:block!important;width:13px!important;height:13px!important;flex:0 0 13px!important;stroke:#fff!important}
-
-  .product-index-header .crn-search{
-    order:3!important;
-    position:relative!important;
-    flex:1 1 680px!important;width:auto!important;max-width:none!important;min-width:260px!important;
-    height:45px!important;min-height:45px!important;
-    margin:0!important;padding:0 13px!important;
-    display:flex!important;align-items:center!important;gap:10px!important;
-    transform:none!important;box-sizing:border-box!important;
-    background:#fff!important;border:0!important;border-radius:16px!important;box-shadow:none!important;
-    overflow:visible!important;
-  }
-  .product-index-header .crn-search .search-icon{display:block!important;width:19px!important;height:19px!important;flex:0 0 19px!important;margin:0!important;stroke:#64748b!important}
-  .product-index-header .crn-search #searchInput{flex:1 1 auto!important;width:100%!important;min-width:0!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;outline:0!important;background:transparent!important;color:#172133!important;font:400 13px/1 Inter,Arial,sans-serif!important}
-  .product-index-header #suggestionsBox{position:absolute!important;top:49px!important;left:0!important;right:0!important;z-index:9999!important}
-
-  .product-index-header .crn-actions{
-    order:4!important;
-    flex:0 0 auto!important;
-    margin:0!important;padding:0!important;
-    display:flex!important;align-items:center!important;gap:20px!important;
-    position:static!important;transform:none!important;
-  }
-  .product-index-header .crn-service-pill,
-  .product-index-header .crn-cart,
-  .product-index-header .crn-account{
-    min-width:0!important;height:41px!important;min-height:41px!important;
-    margin:0!important;padding:6px 2px!important;
-    display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
-    position:static!important;transform:none!important;
-    background:transparent!important;background-image:none!important;
-    border:0!important;border-radius:0!important;box-shadow:none!important;
-    color:#fff!important;text-decoration:none!important;white-space:nowrap!important;
-    font:600 12px/1 Inter,Arial,sans-serif!important;
-  }
-  .product-index-header .crn-cart svg,
-  .product-index-header .crn-account svg{width:19px!important;height:19px!important;stroke:#fff!important;fill:none!important;color:#fff!important}
-  .product-index-header .crn-cart svg *,
-  .product-index-header .crn-account svg *{stroke:#fff!important;fill:none!important}
-  .product-index-header .nav-text{color:#fff!important;font-size:12px!important;font-weight:600!important}
-
-  .product-index-header .cart-icon-wrapper{position:relative!important;display:flex!important;align-items:center!important;overflow:visible!important}
-  .product-index-header .cart-badge{
-    position:absolute!important;top:-6px!important;right:-9px!important;
-    width:16px!important;min-width:16px!important;height:16px!important;min-height:16px!important;
-    padding:0!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
-    border-radius:50%!important;background:#16b94e!important;color:#fff!important;border:0!important;box-shadow:none!important;
-    font:800 9px/16px Inter,Arial,sans-serif!important;
-  }
-  .product-index-header .crn-account{max-width:135px!important;overflow:hidden!important}
-  .product-index-header .crn-account .nav-text{max-width:100px!important;overflow:hidden!important;text-overflow:ellipsis!important}
-
-  .product-index-header .mobile-location-widget,
-  .product-index-header .cerood-unified-tools{display:none!important}
-}
-@media (min-width:851px) and (max-width:1150px){
-  .product-index-header .product-crn-header-main{padding-left:18px!important;padding-right:18px!important;gap:9px!important}
-  .product-index-header .crn-logo{flex-basis:145px!important;width:145px!important;min-width:145px!important}
-  .product-index-header .crn-location{flex-basis:165px!important;width:165px!important;min-width:165px!important;max-width:165px!important}
-  .product-index-header .crn-actions{gap:12px!important}
-}
-</style>
-
-<style id="cerood-product-flat-cart-login-final">
-/* Desktop only: match Home Services header - flat white Cart/Login, no white pills */
-@media (min-width:851px){
-  .product-index-header .header-nav-right .cart-item,
-  .product-index-header .header-nav-right .login-btn,
-  .product-index-header .crn-cart,
-  .product-index-header .crn-account{
-    background:transparent !important;
-    background-color:transparent !important;
-    background-image:none !important;
-    border:0 !important;
-    border-radius:0 !important;
-    box-shadow:none !important;
-    outline:0 !important;
-    padding:6px 2px !important;
-    min-height:41px !important;
-    color:#fff !important;
-  }
-  .product-index-header .header-nav-right .cart-item:hover,
-  .product-index-header .header-nav-right .login-btn:hover,
-  .product-index-header .crn-cart:hover,
-  .product-index-header .crn-account:hover{
-    background:transparent !important;
-    background-color:transparent !important;
-    box-shadow:none !important;
-  }
-  .product-index-header .header-nav-right .cart-item svg,
-  .product-index-header .header-nav-right .login-btn svg,
-  .product-index-header .crn-cart svg,
-  .product-index-header .crn-account svg,
-  .product-index-header .header-nav-right .cart-item svg *,
-  .product-index-header .header-nav-right .login-btn svg *{
-    stroke:#fff !important;
-    color:#fff !important;
-    fill:none !important;
-  }
-  .product-index-header .header-nav-right .cart-item .nav-text,
-  .product-index-header .header-nav-right .login-btn .nav-text,
-  .product-index-header .crn-cart .nav-text,
-  .product-index-header .crn-account .nav-text{
-    color:#fff !important;
-    font-size:12px !important;
-    font-weight:700 !important;
-  }
-}
-</style>
 </body>
+
 </html>
