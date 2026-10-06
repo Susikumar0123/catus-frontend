@@ -14327,6 +14327,64 @@ body.cerood-search-open .master-app-container > .uc-homepage-wrapper {
     padding: 0 !important;
 }
 </style>
+
+<style id="cerood-home-search-overlay-zfix-20261006">
+/* Keep live search suggestions above the quick-service icon strip and page content. */
+.home-index-header {
+  position: relative !important;
+  z-index: 2147483600 !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+}
+.home-index-header .home-crn-header-main {
+  position: relative !important;
+  z-index: 2147483601 !important;
+  overflow: visible !important;
+}
+.home-index-header .crn-search {
+  position: relative !important;
+  z-index: 2147483640 !important;
+  overflow: visible !important;
+}
+.home-index-header #suggestionsBox {
+  z-index: 2147483647 !important;
+  background: #ffffff !important;
+  opacity: 1 !important;
+  isolation: isolate !important;
+}
+/* Force everything below the header into a lower stacking context so icons can never paint over search results. */
+.quick-services-bar {
+  position: relative !important;
+  z-index: 0 !important;
+  isolation: isolate !important;
+}
+.section-title-container,
+.scroll-wrapper,
+#productGridContainer {
+  position: relative !important;
+  z-index: 0 !important;
+}
+@media (max-width: 850px) {
+  .uc-homepage-wrapper {
+    position: relative !important;
+    z-index: 2147483600 !important;
+    overflow: visible !important;
+  }
+  .uc-homepage-wrapper > .header-main-container {
+    position: relative !important;
+    z-index: 2147483601 !important;
+    overflow: visible !important;
+  }
+  .uc-homepage-wrapper > .header-main-container > .search-container {
+    position: relative !important;
+    z-index: 2147483640 !important;
+    overflow: visible !important;
+  }
+  .uc-homepage-wrapper #suggestionsBox {
+    z-index: 2147483647 !important;
+  }
+}
+</style>
 </head>
         <body>
             <div class="header">
