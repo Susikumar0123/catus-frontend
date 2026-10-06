@@ -5506,7 +5506,10 @@ function options(n){return !n?[]:Array.isArray(n)?n:Object.keys(n)}
 function column(i){const keys=i===0?rootKeys:(selected.length>=i?options(at(selected.slice(0,i))):[]);
 return `<div class="cw-column" role="listbox" aria-label="Category level ${i+1}">${i===0?'<h3>♧ Your Categories</h3>':''}${keys.map(k=>`<button type="button" data-cw-col="${i}" data-cw-key="${escapeHTML(k)}" class="${selected[i]===k?'active':''}" aria-selected="${selected[i]===k}">${escapeHTML(k)}</button>`).join('')}</div>`}
 function setTitle(){const isBulk=mode==='bulk';$('ceroodUploadChooserTitle').textContent=isBulk?'Bulk Catalog Upload':'Add Single Catalog';$('ceroodUploadChooserNote').hidden=true;modal.classList.add('cw-single');modal.classList.remove('cw-final');bulk.hidden=true;single.hidden=false;wizard.hidden=false;back.hidden=true;panel.style.removeProperty('display')}
-function render(){setTitle();const leafReady=market==='renewed'?(selected.length>0&&options(at(selected)).length===0):!!(lockedLeafId||selectedLeafId());const ready=leafReady&&(mode==='bulk'||!!file);const path=selected.length?selected.join(' / '):'Choose a category from the left';
+function uiLeafSelected(){
+ return selected.length>0 && options(at(selected)).length===0;
+}
+function render(){setTitle();const leafReady=uiLeafSelected();const ready=leafReady&&(mode==='bulk'||!!file);const path=selected.length?selected.join(' / '):'Choose a category from the left';
 wizard.innerHTML=`<div class="cw-steps"><span class="active"><b>1</b> Select Category</span><span><b>2</b> ${mode==='bulk'?'Upload Catalog File':'Add Product Details'}</span></div><label class="cw-search-label" for="cwSearch">Search Category</label><div class="cw-search-wrap"><input id="cwSearch" class="cw-search" type="search" placeholder="Try Sarees, Toys, Charger, Mugs and more..." value="${escapeHTML(search)}"><div id="cwSearchResults" hidden></div></div><div class="cw-grid">${[0,1,2,3].map(column).join('')}<aside class="cw-image-box"><div class="cw-path">${escapeHTML(path)}</div><div class="cw-photo-stage">${url&&mode==='single'?`<img class="cw-photo-preview" src="${url}" alt="Selected product front image">`:`<div class="cw-photo-icon" aria-hidden="true">${market==='clothing'?'👕':market==='cosmetics'?'✨':market==='general'?'🛍️':'📺'}</div>`}<strong>${mode==='bulk'?'Select the correct category before uploading the catalog file':'Please provide only front image for each product'}</strong>${mode==='single'?`<button type="button" class="cw-upload-btn" id="cwOpenProductsPopup">↑ &nbsp; Add Product Images</button><small>${file?escapeHTML(file.name):'JPG, PNG or WebP · maximum 10 MB'}</small>`:`<p class="cw-bulk-note">Next: download the category template or upload your existing CSV / Excel supplier catalog.</p>`}</div><div class="cw-guidelines"><div class="cw-warning">ⓘ &nbsp; Follow guidelines to reduce quality check failure</div><strong>General Guidelines</strong><p>① Choose the exact category for the product.</p><p>② Use clear, original product images.</p><p>③ Avoid watermarks or promotional text.</p></div></aside></div><div class="cw-footer"><button type="button" class="cw-discard" id="cwDiscard">Discard Catalog</button><button type="button" class="cw-next" id="cwToDetails" ${!ready?'disabled':''}>${mode==='bulk'?'Continue to Bulk Upload':'Continue to Product Details'} →</button></div>`;
 }
 async function reset(nextMode){
@@ -5630,9 +5633,7 @@ function renderCatalogGallery(){
 window.__ceroodCatalogSetup=(files)=>{window.__ceroodStep1CatalogFiles=Array.from(files||[]).slice(0,9);const form=$('ceroodMarketplaceForm');if(form)form.noValidate=false;const queue=$('marketplaceQueue');if(queue)queue.hidden=true;renderCatalogGallery()};
 window.__ceroodCatalogGallery={get files(){return catalogFiles},render:()=>renderCatalogGallery()};
 async function finish(){
- const leafReady=market==='renewed'
-  ?(selected.length>0&&options(at(selected)).length===0)
-  :!!(lockedLeafId||selectedLeafId());
+ const leafReady=uiLeafSelected();
  if(!leafReady)return;
  if(mode==='single'){
   if(!file&&catalogFiles.length)file=catalogFiles[0];
