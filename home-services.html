@@ -12467,6 +12467,8 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
   }
 }
 </style>
+
+
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -12513,7 +12515,7 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
 <path d="m21 21-4.35-4.35"></path>
 </svg>
 <input autocomplete="off" id="searchInput" placeholder="What service do you need? Search TV repair, AC service, RO..." type="text"/>
-<div id="suggestionsBox"></div>
+<div id="suggestionsBox"></div><button class="cerood-reference-search-action" aria-label="Search services" type="button" onclick="document.getElementById('searchInput').focus();document.getElementById('searchInput').dispatchEvent(new Event('input',{bubbles:true}))"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
 </div>
 <div class="header-nav-right crn-actions">
 <a class="cerood-index-home-link crn-service-pill" href="/index.html">Home</a>
@@ -12535,6 +12537,7 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
 </svg>
 <span class="nav-text" id="loginBtnText">Login</span>
 </button>
+<details class="cerood-reference-menu"><summary aria-label="Open menu"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-reference-menu-list"><a href="/index.html">Home</a><a href="/home-services.html">Home Services</a><a href="/dashboard.html">Dashboard</a><button type="button" onclick="handleHeaderAuthClick();this.closest('details').open=false">Login / Account</button></div></details>
 </div>
 <div class="mobile-location-widget" onclick="openLocationModal()">
 <i class="fa-solid fa-location-dot"></i>
@@ -14329,6 +14332,46 @@ async function openServiceProduct(serviceId) {
                 Total Paid: ₹${amount}
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
+<style id="cerood-service-mobile-reference-header-20261006">
+.cerood-reference-menu,.cerood-reference-search-action{display:none}
+@media(max-width:850px){
+.master-app-container > .uc-homepage-wrapper:is(.home-index-header,.product-index-header){padding:0!important;border:0!important;border-radius:0!important;background:linear-gradient(110deg,#a8bac8,#577696)!important;box-shadow:none!important;overflow:visible!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .header-main-container.crn-header-main{display:grid!important;grid-template-columns:98px minmax(0,1fr) 76px!important;grid-template-rows:36px 42px!important;gap:8px 5px!important;width:100%!important;max-width:none!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0!important;padding:10px!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;position:relative!important;box-sizing:border-box!important;overflow:visible!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-logo{grid-column:1!important;grid-row:1!important;display:flex!important;align-items:center!important;gap:0!important;width:98px!important;min-width:0!important;margin:0!important;padding:0!important;position:static!important;transform:none!important;background:none!important;text-decoration:none!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-logo .cerood-original-c-logo{display:block!important;height:34px!important;width:auto!important;max-width:42px!important;min-width:0!important;object-fit:contain!important;margin:0!important;position:static!important;transform:none!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cerood-wordmark-erood{display:block!important;color:#fff!important;font:400 20px/1 Inter,Arial,sans-serif!important;letter-spacing:-1px!important;position:static!important;margin:0!important;transform:none!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .header-location-widget.crn-location{grid-column:2!important;grid-row:1!important;display:flex!important;align-items:center!important;gap:5px!important;width:100%!important;max-width:none!important;min-width:0!important;height:34px!important;min-height:34px!important;margin:0!important;padding:3px 5px!important;border:1px solid #dce3eb!important;border-radius:999px!important;background:#fff!important;color:#26364d!important;position:static!important;transform:none!important;overflow:hidden!important;box-sizing:border-box!important;box-shadow:none!important;text-align:left!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-location:before,.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-location:after{content:none!important;display:none!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-location>.crn-icon{display:block!important;width:13px!important;height:13px!important;flex:0 0 13px!important;stroke:#26364d!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-location .loc-text-box{display:block!important;flex:1!important;width:0!important;min-width:0!important;overflow:hidden!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .loc-label{display:block!important;color:#26364d!important;font:600 8px/11px Inter,Arial,sans-serif!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) #headerLocationDisplay{display:block!important;max-width:100%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;color:#563cdb!important;font:700 9px/11px Inter,Arial,sans-serif!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-chevron{display:block!important;width:10px!important;height:10px!important;flex:0 0 10px!important;stroke:#26364d!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .header-nav-right.crn-actions{grid-column:3!important;grid-row:1!important;display:flex!important;align-items:center!important;gap:4px!important;width:76px!important;min-width:0!important;margin:0!important;padding:0!important;position:static!important;background:none!important;transform:none!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-actions>.crn-service-pill,.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-actions>.crn-account,.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .mobile-location-widget,.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .csf-home-tools{display:none!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-actions>.crn-cart,.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cerood-reference-menu>summary{display:flex!important;align-items:center!important;justify-content:center!important;width:36px!important;min-width:36px!important;height:36px!important;min-height:36px!important;padding:6px!important;margin:0!important;background:#fff!important;color:#26364d!important;border:0!important;border-radius:12px!important;box-shadow:none!important;box-sizing:border-box!important;position:relative!important;transform:none!important;cursor:pointer!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-cart .nav-text{display:none!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cart-icon-wrapper{position:relative!important;display:flex!important;margin:0!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-cart svg,.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cerood-reference-menu svg{width:22px!important;height:22px!important;stroke:#26364d!important;color:#26364d!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cerood-reference-menu{display:block!important;position:relative!important}
+.cerood-reference-menu summary{list-style:none}.cerood-reference-menu summary::-webkit-details-marker{display:none}
+.cerood-reference-menu-list{position:absolute;right:0;top:44px;width:210px;padding:7px;background:white;border:1px solid #e5e7eb;border-radius:13px;box-shadow:0 12px 30px #17233d30;z-index:20}
+.cerood-reference-menu-list>a,.cerood-reference-menu-list>button{display:block;width:100%;padding:12px 13px;border:0;background:white;text-align:left;text-decoration:none;color:#26364d;font:500 13px Inter,Arial,sans-serif;cursor:pointer}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .search-container.crn-search{grid-column:1/-1!important;grid-row:2!important;display:flex!important;align-items:center!important;gap:9px!important;width:100%!important;max-width:none!important;min-width:0!important;height:42px!important;min-height:42px!important;padding:0 11px!important;margin:0!important;background:#fff!important;border:0!important;border-radius:12px!important;position:relative!important;transform:none!important;box-shadow:none!important;overflow:visible!important;box-sizing:border-box!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .search-icon{display:block!important;position:static!important;transform:none!important;flex:0 0 18px!important;width:18px!important;height:18px!important;margin:0!important;color:#64748b!important;stroke:#64748b!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) #searchInput{flex:1!important;min-width:0!important;width:0!important;height:100%!important;padding:0!important;margin:0!important;border:0!important;outline:0!important;background:#fff!important;background-image:none!important;color:#172133!important;font:400 13px/1 Inter,Arial,sans-serif!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cerood-reference-search-action{display:grid!important;place-items:center!important;flex:0 0 22px!important;width:22px!important;height:30px!important;padding:0!important;background:#fff!important;color:#64748b!important;border:0!important;cursor:pointer}
+.cerood-reference-search-action svg{width:18px;height:18px}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) #suggestionsBox{position:absolute!important;top:calc(100% + 5px)!important;left:0!important;right:0!important;z-index:30!important;background:#fff!important}
+}
+@media(max-width:380px){
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .header-main-container.crn-header-main{grid-template-columns:91px minmax(0,1fr) 70px!important;column-gap:4px!important;padding-left:8px!important;padding-right:8px!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-logo{width:91px!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cerood-wordmark-erood{font-size:18px!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-actions{width:70px!important}
+.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .crn-actions>.crn-cart,.uc-homepage-wrapper:is(.home-index-header,.product-index-header) .cerood-reference-menu>summary{width:33px!important;min-width:33px!important}
+}
+</style>
 </body>
         </html>
         `;
