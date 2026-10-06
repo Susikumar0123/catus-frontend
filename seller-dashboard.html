@@ -7026,18 +7026,60 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
   renderMapping();
  }
  function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function headerCompatible(field,header){
+  const n=norm(header),aliases=(ALIASES[field]||[]).map(norm);
+  if(aliases.includes(n))return true;
+  const extra={
+    supplier_sku:['merchant sku','vendor sku','stock code','article code','part code','item no','item number'],
+    product_name:['title en','english title','name','item title','item description','product title en'],
+    category:['category name','category breadcrumb','breadcrumb','department name'],
+    product_type:['leaf category','subcategory name','sub category name','product class'],
+    marketplace:['sales channel','channel','store name','division name'],
+    brand:['manufacturer brand','brandname'],
+    model:['model number','model no','manufacturer part no','manufacturer part number'],
+    selling_price:['unit price','offer price','selling rate','dealer price','wholesale price'],
+    mrp:['rrp','maximum retail price','retail mrp'],
+    stock:['inventory qty','inventory quantity','available stock','on hand','on hand qty'],
+    description:['short description','long description','content body html','content body','item details'],
+    video_url:['video link','video'],
+    size:['v size','variant size'],
+    color:['v color','v colour','variant color','variant colour'],
+    variant:['v style','variant style','style'],
+    shade:['variant shade'],
+    net_quantity:['package quantity','pack quantity','v volume','volume'],
+    batch_number:['lot number','lot no'],
+    manufacture_date:['manufactured date','mfg date','mfd'],
+    expiry_date:['expiration date','exp date','best before'],
+    ingredients:['ingredient list'],
+    directions:['usage instructions','how to use'],
+    warnings:['caution','safety warning'],
+    manufacturer:['manufacturer name','maker'],
+    importer:['importer name']
+  };
+  return (extra[field]||[]).map(norm).includes(n);
+ }
+ function compatibleHeaders(field){
+  const usedByOther=new Set(Object.entries(state.mapping).filter(([f,h])=>f!==field&&h).map(([,h])=>h));
+  return state.headers.filter(h=>!usedByOther.has(h)&&headerCompatible(field,h));
+ }
  function renderMapping(){
   const body=$('cicMappingBody');body.replaceChildren();
   const requiredEmpty=[];
   for(const [field,label,required] of MODE_FIELDS[state.mode]){
     const tr=document.createElement('tr'),a=document.createElement('td'),b=document.createElement('td'),c=document.createElement('td');
     a.innerHTML='<b>'+escapeHTML(label)+'</b><span class="'+(required?'cic-required':'cic-optional')+'">'+(required?'Required':'Optional')+'</span>';
-    const sel=document.createElement('select');sel.dataset.field=field;sel.append(new Option('— Not mapped —',''));state.headers.forEach(h=>sel.append(new Option(h,h)));sel.value=state.mapping[field]||'';
+    const sel=document.createElement('select');sel.dataset.field=field;
+    const candidates=compatibleHeaders(field);
+    const current=state.mapping[field]||'';
+    if(current&&!candidates.includes(current))state.mapping[field]='';
+    sel.append(new Option(candidates.length?'— Select matching column —':'— No matching supplier column —',''));
+    candidates.forEach(h=>sel.append(new Option(h,h)));
+    sel.value=state.mapping[field]||'';
     sel.onchange=()=>{state.mapping[field]=sel.value;persistMap();renderMapping()};
     b.append(sel);
     const mapped=state.mapping[field]||'';
     if(mapped){const idx=state.headers.indexOf(mapped),filled=idx>=0?state.rows.filter(r=>String(r[idx]??'').trim()).length:0;c.textContent=field+' · '+filled+'/'+state.rows.length+' filled';if(required&&filled===0)requiredEmpty.push(label+' ('+mapped+')');}
-    else c.textContent=field;
+    else c.textContent=candidates.length?field+' · choose from '+candidates.length+' matching column(s)':field+' · no compatible column detected';
     tr.append(a,b,c);body.append(tr)
   }
   $('cicMappingPanel').hidden=false;
