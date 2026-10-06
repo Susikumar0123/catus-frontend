@@ -6231,6 +6231,17 @@ if(typeof originalShowTab==='function')window.showTab=function(name){const r=ori
 window.ceroodLoadLatchedProducts=load;
 })();
 </script>
+<style id="cerood-ekart-location-serviceability-ui">
+.pickup-ekart-status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:9px}
+.pickup-ekart-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:750;border:1px solid #e3e7ef;background:#f8fafc;color:#667085}
+.pickup-ekart-pill.available{background:#effaf3;border-color:#cdebd8;color:#166534}
+.pickup-ekart-pill.unavailable{background:#fff5f5;border-color:#fecaca;color:#b42318}
+.pickup-ekart-pill.unknown{background:#fffaf0;border-color:#f5dfae;color:#946200}
+.pickup-ekart-meta{display:block;margin-top:6px!important;font-size:10.5px!important;color:#8a96a8!important}
+.pickup-ekart-meta.error{color:#b42318!important}
+.pickup-card-actions{flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:650px){.pickup-card-actions{justify-content:flex-start}}
+</style>
 <script id="cerood-seller-pickup-locations-script-v1">
 (()=>{'use strict';
  const states=['Andaman and Nicobar Islands','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh','Dadra and Nagar Haveli and Daman and Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu and Kashmir','Jharkhand','Karnataka','Kerala','Ladakh','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Puducherry','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'];
@@ -6244,11 +6255,40 @@ window.ceroodLoadLatchedProducts=load;
  byId('pickupCancelBtn').addEventListener('click',()=>{form.reset();byId('pickupName').value='Main Location';showForm(false)});
  function make(tag,text,cls){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
  async function load(){
-  list.innerHTML='<div class="pickup-empty">Loading pickup locations…</div>';
-  try{const d=await apiRequest('/api/sellers/locations');render(d.locations||[])}catch(e){list.innerHTML='<div class="pickup-empty">Unable to load pickup locations.</div>';message(e.message,'error')}
+  list.innerHTML='<div class="pickup-empty">Loading pickup locations and Ekart availability…</div>';
+  try{
+   let d;
+   try{d=await apiRequest('/api/sellers/ekart/locations')}
+   catch(_){d=await apiRequest('/api/sellers/locations')}
+   const rows=(d.locations||[]).filter(x=>x&&x.is_active!==false);
+   window.CeroodEkartLocations=rows;
+   render(rows);
+  }catch(e){list.innerHTML='<div class="pickup-empty">Unable to load pickup locations.</div>';message(e.message,'error')}
  }
+ function ekartInfo(x){const e=x.ekart||{};const pickup=e.seller_pickup!==undefined?e.seller_pickup:x.ekart_pickup_serviceable;const status=pickup===true?'available':pickup===false?'unavailable':'unknown';return{...e,seller_pickup:pickup,status}}
  function render(rows){list.replaceChildren();if(!rows.length){list.append(make('div','No pickup location added yet. Add your first fulfilment location.','pickup-empty'));return}
-  rows.forEach(x=>{const card=make('div',null,'pickup-card'),info=make('div'),title=make('strong',x.location_name||'Pickup Location');if(x.is_default)title.append(make('span','Default','pickup-badge'));info.append(title);const address=[x.address_line1,x.address_line2,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', ');info.append(make('p',address||'—'));const actions=make('div',null,'pickup-card-actions');if(!x.is_default){const b=make('button','Make default','seller-btn seller-btn-outline');b.type='button';b.onclick=async()=>{b.disabled=true;try{await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/default',{method:'PATCH'});message('Default pickup location updated.','success');await load();window.dispatchEvent(new Event('cerood:seller-locations-changed'))}catch(e){message(e.message,'error');b.disabled=false}};actions.append(b)}card.append(info,actions);list.append(card)})
+  rows.forEach(x=>{
+   const card=make('div',null,'pickup-card'),info=make('div'),title=make('strong',x.location_name||'Pickup Location');
+   if(x.is_default)title.append(make('span','Default','pickup-badge'));
+   info.append(title);
+   const address=[x.address_line1,x.address_line2,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', ');
+   info.append(make('p',address||'—'));
+   const ek=ekartInfo(x),statusWrap=make('div',null,'pickup-ekart-status'),pill=make('span',ek.status==='available'?'Ekart pickup available':ek.status==='unavailable'?'Ekart pickup unavailable':'Ekart pickup not verified','pickup-ekart-pill '+ek.status);
+   statusWrap.append(pill);info.append(statusWrap);
+   const facts=[];
+   if(ek.customer_delivery!==null&&ek.customer_delivery!==undefined)facts.push('Delivery '+(ek.customer_delivery?'available':'unavailable'));
+   if(ek.cod_available!==null&&ek.cod_available!==undefined)facts.push(ek.cod_available?'COD available':'No COD');
+   if(ek.customer_reverse_pickup!==null&&ek.customer_reverse_pickup!==undefined)facts.push(ek.customer_reverse_pickup?'Reverse pickup available':'No reverse pickup');
+   if(ek.checked_at)facts.push('Checked '+new Date(ek.checked_at).toLocaleString('en-IN'));
+   if(facts.length)info.append(make('small',facts.join(' · '),'pickup-ekart-meta'));
+   if(ek.error)info.append(make('small',ek.error,'pickup-ekart-meta error'));
+   const actions=make('div',null,'pickup-card-actions');
+   const check=make('button','Check Ekart','seller-btn seller-btn-outline');check.type='button';check.onclick=async()=>{check.disabled=true;check.textContent='Checking…';try{const d=await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/ekart-serviceability',{method:'POST'});message(d.message||'Ekart pickup availability refreshed.',d.serviceability?.seller_pickup?'success':'error');await load()}catch(e){message(e.message,'error')}finally{check.disabled=false;check.textContent='Check Ekart'}};actions.append(check);
+   if(ek.status==='available'&&!x.ekart_alias){const reg=make('button','Register Ekart','seller-btn seller-btn-outline');reg.type='button';reg.onclick=async()=>{reg.disabled=true;try{const d=await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/ekart-register',{method:'POST'});message(d.message||'Pickup address registered with Ekart.',d.serviceability?.seller_pickup===false?'error':'success');await load()}catch(e){message(e.message,'error');reg.disabled=false}};actions.append(reg)}
+   if(x.ekart_alias)actions.append(make('span','Ekart registered','pickup-badge'));
+   if(!x.is_default){const b=make('button','Make default','seller-btn seller-btn-outline');b.type='button';b.onclick=async()=>{b.disabled=true;try{await apiRequest('/api/sellers/locations/'+encodeURIComponent(x.id)+'/default',{method:'PATCH'});message('Default pickup location updated.','success');await load();window.dispatchEvent(new Event('cerood:seller-locations-changed'))}catch(e){message(e.message,'error');b.disabled=false}};actions.append(b)}
+   card.append(info,actions);list.append(card)
+  })
  }
  form.addEventListener('submit',async e=>{e.preventDefault();const pin=byId('pickupPincode').value.trim();if(!/^[1-9]\d{5}$/.test(pin)){message('Enter a valid 6-digit pincode.','error');return}const b=byId('pickupSaveBtn');b.disabled=true;try{await apiRequest('/api/sellers/locations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location_name:byId('pickupName').value.trim(),address_line1:byId('pickupAddress1').value.trim(),address_line2:byId('pickupAddress2').value.trim(),city:byId('pickupCity').value.trim(),district:byId('pickupDistrict').value.trim(),state:state.value,pincode:pin,is_default:byId('pickupDefault').checked})});form.reset();byId('pickupName').value='Main Location';showForm(false);message('Pickup location saved successfully.','success');await load();window.dispatchEvent(new Event('cerood:seller-locations-changed'))}catch(err){message(err.message,'error')}finally{b.disabled=false}});
  const original=window.renderAccount;if(typeof original==='function')window.renderAccount=function(){original.apply(this,arguments);load()};
@@ -6919,6 +6959,22 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  }
  function hasShipment(order){const s=shipmentObject(order),state=String(s.booking_state||s.status||'').toLowerCase();return Boolean(s.awb||['booked','created','confirmed','pickup_scheduled','in_transit','shipped','delivered'].includes(state))}
  window.ceroodSellerHasShipment=hasShipment;
+ let ekartLocationPromise=null,ekartLocationCacheAt=0;
+ async function ekartLocations(){
+  if(Array.isArray(window.CeroodEkartLocations)&&window.CeroodEkartLocations.length&&Date.now()-ekartLocationCacheAt<5*60*1000)return window.CeroodEkartLocations;
+  if(ekartLocationPromise)return ekartLocationPromise;
+  ekartLocationPromise=(async()=>{try{const d=await apiRequest('/api/sellers/ekart/locations');const rows=(d.locations||[]).filter(x=>x&&x.is_active!==false);window.CeroodEkartLocations=rows;ekartLocationCacheAt=Date.now();return rows}catch{return Array.isArray(window.CeroodEkartLocations)?window.CeroodEkartLocations:[]}finally{ekartLocationPromise=null}})();
+  return ekartLocationPromise;
+ }
+ async function applyPickupAvailability(button,order){
+  if(!button)return;
+  const rows=await ekartLocations();if(!rows.length)return;
+  const pickupOf=x=>{const e=x.ekart||{};return e.seller_pickup!==undefined?e.seller_pickup:x.ekart_pickup_serviceable};
+  const assigned=order.fulfilment_location_id||order.pickup_location_id||'';
+  const selected=assigned?rows.find(x=>String(x.id)===String(assigned)):null;
+  if(selected&&pickupOf(selected)===false){button.disabled=true;button.textContent='Ekart unavailable';button.title='Ekart pickup is unavailable from this assigned seller location.';return}
+  if(!assigned&&rows.every(x=>pickupOf(x)===false)){button.disabled=true;button.textContent='Ekart unavailable';button.title='Ekart pickup is unavailable from all active seller locations.'}
+ }
  function escapeText(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  function destinationPincode(order){const a=order?.delivery_address;if(a&&typeof a==='object')return a.pincode||a.pin_code||a.postal_code||'';if(typeof a==='string'){try{const x=JSON.parse(a);return x?.pincode||x?.pin_code||x?.postal_code||''}catch{}}return order?.customer_pincode||order?.delivery_pincode||''}
  function ensureModal(){
@@ -6933,12 +6989,25 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
   return modal;
  }
  async function loadPickupLocations(select,order){
-  select.disabled=true;select.innerHTML='<option value="">Loading pickup locations…</option>';
-  const data=await apiRequest('/api/sellers/locations');const rows=(Array.isArray(data.locations)?data.locations:[]).filter(x=>x&&x.is_active!==false);
+  select.disabled=true;select.innerHTML='<option value="">Checking Ekart pickup availability…</option>';
+  const data=await apiRequest('/api/sellers/ekart/locations');
+  const rows=(Array.isArray(data.locations)?data.locations:[]).filter(x=>x&&x.is_active!==false);
+  window.CeroodEkartLocations=rows;ekartLocationCacheAt=Date.now();
   select.replaceChildren(new Option('Select pickup location',''));
-  rows.forEach(x=>select.add(new Option((x.location_name||'Pickup Location')+' — '+[x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '),x.id)));
-  const wanted=order.fulfilment_location_id||order.pickup_location_id||'';const chosen=rows.find(x=>String(x.id)===String(wanted))||rows.find(x=>x.is_default)||rows[0];if(chosen)select.value=chosen.id;select.disabled=false;
+  for(const x of rows){
+   const e=x.ekart||{},pickup=e.seller_pickup!==undefined?e.seller_pickup:x.ekart_pickup_serviceable;
+   const suffix=pickup===true?' · Ekart available':pickup===false?' · Ekart unavailable':' · Check at booking';
+   const opt=new Option((x.location_name||'Pickup Location')+' — '+[x.city,x.district,x.state,x.pincode].filter(Boolean).join(', ')+suffix,x.id);
+   if(pickup===false)opt.disabled=true;
+   select.add(opt);
+  }
   if(!rows.length)throw new Error('No active seller pickup location is available. Add one in Shipping & pickup first.');
+  const selectable=rows.filter(x=>{const e=x.ekart||{},v=e.seller_pickup!==undefined?e.seller_pickup:x.ekart_pickup_serviceable;return v!==false});
+  if(!selectable.length)throw new Error('Ekart pickup is unavailable from all active seller locations. Add a serviceable pickup location or use another courier.');
+  const wanted=order.fulfilment_location_id||order.pickup_location_id||'';
+  const chosen=selectable.find(x=>String(x.id)===String(wanted))||selectable.find(x=>x.is_default)||selectable[0];
+  if(chosen)select.value=chosen.id;
+  select.disabled=false;
  }
  async function openShipment(order){
   const itemId=order.order_item_id;if(!itemId){showMessage('ordersMessage','Order item ID is missing. Refresh the order and try again.','error');return}
@@ -6971,7 +7040,7 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
   else detail.textContent=status==='packed'?'Create one shipment for this seller parcel. All packed items from the same seller, order and pickup location share this AWB.':'Shipment details will appear here when available.';
   info.append(title,detail);wrap.append(info);
   const actions=document.createElement('div');actions.className='ekart-order-shipping-actions';
-  if(status==='packed'&&!exists&&!uncertain){const b=document.createElement('button');b.type='button';b.className='seller-btn';b.textContent='Arrange Ekart Pickup';b.onclick=()=>openShipment(order);actions.append(b)}
+  if(status==='packed'&&!exists&&!uncertain){const b=document.createElement('button');b.type='button';b.className='seller-btn';b.textContent='Arrange Ekart Pickup';b.onclick=()=>openShipment(order);actions.append(b);applyPickupAvailability(b,order)}
   const refresh=document.createElement('button');refresh.type='button';refresh.className='seller-btn seller-btn-outline';refresh.textContent=s.awb?'Refresh Ekart':'Refresh';refresh.onclick=async()=>{refresh.disabled=true;try{if(s.awb){await apiRequest('/api/seller/orders/'+encodeURIComponent(order.order_item_id)+'/ekart-shipment/refresh',{method:'POST'})}await window.loadSellerOrders?.()}catch(err){showMessage('ordersMessage',String(err?.message||'Unable to refresh Ekart shipment.'),'error')}finally{refresh.disabled=false}};actions.append(refresh);wrap.append(actions);card.append(wrap);
  }
  window.ceroodAttachEkartShipmentControls=attach;
