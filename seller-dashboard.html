@@ -7002,9 +7002,47 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  function parseCSV(input){const rows=[];let row=[],value='',quoted=false;for(let i=0;i<input.length;i++){const c=input[i];if(quoted){if(c==='"'&&input[i+1]==='"'){value+='"';i++}else if(c==='"')quoted=false;else value+=c}else if(c==='"')quoted=true;else if(c===','){row.push(value);value=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&input[i+1]==='\n')i++;row.push(value);if(row.some(x=>String(x).trim()))rows.push(row);row=[];value=''}else value+=c}row.push(value);if(row.some(x=>String(x).trim()))rows.push(row);return rows}
  async function readFile(file){if(file.size>20*1024*1024)throw Error('File is larger than 20 MB. Split the supplier catalog into smaller files.');if(/\.xlsx$/i.test(file.name)){if(!window.XLSX)throw Error('Excel reader is unavailable. Check internet connection or use CSV.');const x=window.XLSX,book=x.read(await file.arrayBuffer(),{type:'array',cellDates:false});let data=[];for(const name of book.SheetNames){data=x.utils.sheet_to_json(book.Sheets[name],{header:1,defval:'',raw:false,blankrows:false});if(data.length)break}if(!data.length)throw Error('Excel workbook has no product rows.');return data.filter(r=>r.some(v=>String(v).trim()))}if(/\.csv$/i.test(file.name))return parseCSV((await file.text()).replace(/^\uFEFF/,''));throw Error('Only .xlsx and .csv files are supported.')}
  function signature(){return state.mode+'|'+state.headers.map(norm).join('|')}
- function autoMap(force=false){const saved=readJSON('cerood_import_column_maps_v1',{}),old=!force?saved[signature()]:null,used=new Set();state.mapping={};for(const [field] of MODE_FIELDS[state.mode]){if(old&&old[field]&&state.headers.includes(old[field])){state.mapping[field]=old[field];used.add(old[field]);continue}const aliases=(ALIASES[field]||[field]).map(norm);let found=state.headers.find(h=>!used.has(h)&&aliases.includes(norm(h)));if(!found&&field==='product_name')found=state.headers.find(h=>!used.has(h)&&['name','title'].includes(norm(h)));if(found){state.mapping[field]=found;used.add(found)}}renderMapping()}
+ function autoMap(force=false){
+  const saved=readJSON('cerood_import_column_maps_v1',{}),old=!force?saved[signature()]:null,used=new Set();
+  state.mapping={};
+  const aliasList=field=>(ALIASES[field]||[field]).map(norm);
+  const savedIsSafe=(field,header)=>{
+    if(!header||!state.headers.includes(header))return false;
+    const n=norm(header),aliases=aliasList(field);
+    // Never trust a stale saved mapping that no longer semantically matches the field.
+    // This prevents e.g. Product name -> Image from an older manual mapping.
+    return aliases.includes(n)||(field==='product_name'&&['name','title'].includes(n));
+  };
+  for(const [field] of MODE_FIELDS[state.mode]){
+    if(old&&savedIsSafe(field,old[field])&&!used.has(old[field])){
+      state.mapping[field]=old[field];used.add(old[field]);continue;
+    }
+    const aliases=aliasList(field);
+    let found=state.headers.find(h=>!used.has(h)&&aliases.includes(norm(h)));
+    if(!found&&field==='product_name')found=state.headers.find(h=>!used.has(h)&&['name','title'].includes(norm(h)));
+    if(found){state.mapping[field]=found;used.add(found)}
+  }
+  renderMapping();
+ }
  function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
- function renderMapping(){const body=$('cicMappingBody');body.replaceChildren();for(const [field,label,required] of MODE_FIELDS[state.mode]){const tr=document.createElement('tr'),a=document.createElement('td'),b=document.createElement('td'),c=document.createElement('td');a.innerHTML='<b>'+escapeHTML(label)+'</b><span class="'+(required?'cic-required':'cic-optional')+'">'+(required?'Required':'Optional')+'</span>';const sel=document.createElement('select');sel.dataset.field=field;sel.append(new Option('— Not mapped —',''));state.headers.forEach(h=>sel.append(new Option(h,h)));sel.value=state.mapping[field]||'';sel.onchange=()=>{state.mapping[field]=sel.value;persistMap()};b.append(sel);c.textContent=field;tr.append(a,b,c);body.append(tr)}$('cicMappingPanel').hidden=false;$('cicFileSummary').textContent=state.file.name+' · '+state.rows.length+' data row(s) · '+state.headers.length+' detected column(s)'}
+ function renderMapping(){
+  const body=$('cicMappingBody');body.replaceChildren();
+  const requiredEmpty=[];
+  for(const [field,label,required] of MODE_FIELDS[state.mode]){
+    const tr=document.createElement('tr'),a=document.createElement('td'),b=document.createElement('td'),c=document.createElement('td');
+    a.innerHTML='<b>'+escapeHTML(label)+'</b><span class="'+(required?'cic-required':'cic-optional')+'">'+(required?'Required':'Optional')+'</span>';
+    const sel=document.createElement('select');sel.dataset.field=field;sel.append(new Option('— Not mapped —',''));state.headers.forEach(h=>sel.append(new Option(h,h)));sel.value=state.mapping[field]||'';
+    sel.onchange=()=>{state.mapping[field]=sel.value;persistMap();renderMapping()};
+    b.append(sel);
+    const mapped=state.mapping[field]||'';
+    if(mapped){const idx=state.headers.indexOf(mapped),filled=idx>=0?state.rows.filter(r=>String(r[idx]??'').trim()).length:0;c.textContent=field+' · '+filled+'/'+state.rows.length+' filled';if(required&&filled===0)requiredEmpty.push(label+' ('+mapped+')');}
+    else c.textContent=field;
+    tr.append(a,b,c);body.append(tr)
+  }
+  $('cicMappingPanel').hidden=false;
+  const base=state.file.name+' · '+state.rows.length+' data row(s) · '+state.headers.length+' detected column(s)';
+  $('cicFileSummary').textContent=requiredEmpty.length?base+' · Warning: '+requiredEmpty.join(', ')+' has no values':base;
+ }
  function persistMap(){const all=readJSON('cerood_import_column_maps_v1',{});all[signature()]={...state.mapping};const keys=Object.keys(all);while(keys.length>20)delete all[keys.shift()];saveJSON('cerood_import_column_maps_v1',all)}
  function cell(row,field){const h=state.mapping[field];if(!h)return '';const i=state.headers.indexOf(h);return i<0?'':String(row[i]??'').trim()}
  async function loadCategories(){
