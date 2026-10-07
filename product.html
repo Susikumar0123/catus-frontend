@@ -8817,14 +8817,12 @@ html body .uc-homepage-wrapper .header-main-container .cerood-mobile-search-end{
 <h1 class="product-title" id="prodTitle">
             Smart TV Repair &amp; Service
         </h1>
-<div class="rating-row" onclick="openReviewsPopup()" style="cursor:pointer;">
+<div class="rating-row" id="productRatingRow" onclick="openReviewsPopup()" style="cursor:pointer; display:none;">
 <span class="rating-badge">
-<span id="prodRating">0.0</span>
+<span id="prodRating"></span>
 <i class="fa-solid fa-star" style="font-size:10px;"></i>
 </span>
-<span class="rating-text" id="prodReviewsCount">
-                No ratings yet
-            </span>
+<span class="rating-text" id="prodReviewsCount"></span>
 </div>
 <div class="price-section">
 <div class="starting-price-wrap">
@@ -10980,22 +10978,22 @@ const reviewCount =
 const averageRating =
     Number(data.average_rating) || 0;
 
-        if (ratingEl) {
-            ratingEl.textContent =
-                reviewCount > 0
-                    ? averageRating.toFixed(1)
-                    : '0.0';
+        const ratingRow = document.getElementById('productRatingRow');
+
+        if (reviewCount > 0 && averageRating > 0) {
+            if (ratingEl) ratingEl.textContent = averageRating.toFixed(1);
+            if (reviewsCountTextEl) reviewsCountTextEl.textContent = `${reviewCount} Ratings & Reviews`;
+            if (ratingRow) ratingRow.style.display = 'flex';
+        } else {
+            // Do not show a misleading 0.0 / "No ratings yet" trust signal.
+            // The row appears automatically once genuine Cerood service reviews exist.
+            if (ratingEl) ratingEl.textContent = '';
+            if (reviewsCountTextEl) reviewsCountTextEl.textContent = '';
+            if (ratingRow) ratingRow.style.display = 'none';
         }
 
         if (headerCount) {
             headerCount.textContent = reviewCount;
-        }
-
-        if (reviewsCountTextEl) {
-            reviewsCountTextEl.textContent =
-                reviewCount > 0
-                    ? `${reviewCount} Ratings & Reviews`
-                    : 'No ratings yet';
         }
 
         if (!container) return;
