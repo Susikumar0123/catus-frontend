@@ -198,13 +198,21 @@ try {
 // Search-result metadata only.
 // This does not add or change any visible product-page content.
 const serviceName = String(page.service_name || '').trim();
-const serviceNameLower = serviceName.toLowerCase();
+
+// Search Console shows users can use "fridge" wording for refrigerator services.
+// Keep the visible page/service name unchanged and use the consumer-friendly
+// synonym only in search-result metadata for refrigerator service pages.
+const isRefrigeratorService = /refrigerator/i.test(serviceName);
+const searchServiceName = isRefrigeratorService
+    ? serviceName.replace(/refrigerator/ig, 'Fridge')
+    : serviceName;
+const searchServiceNameLower = searchServiceName.toLowerCase();
 
 const title =
-    `${serviceName} in ${seoLocation} – Doorstep Service | Cerood`;
+    `${searchServiceName} in ${seoLocation} – Doorstep Service | Cerood`;
 
 const description =
-    `Book ${serviceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
+    `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
 
 
         // ==========================================
