@@ -219,11 +219,18 @@ const isWashingMachineService = /washing machine|washer/i.test(serviceName);
 const title =
     `${searchServiceName} in ${seoLocation} – Doorstep Service | Cerood`;
 
+// RO / water-purifier-specific search metadata only. Search Console already
+// shows installation, service, pump-repair and near-me intent across these URLs.
+// Preserve each exact service name instead of forcing one generic RO keyword.
+const isROService = /(^|\s)ro($|\s|-)|water purifier/i.test(serviceName);
+
 const description = isACService
     ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep AC technician service and check availability online.`
     : isWashingMachineService
         ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep washing machine technician service and check availability online.`
-        : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
+        : isROService
+            ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep RO water purifier technician service and check availability online.`
+            : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
 
 
         // ==========================================
