@@ -12508,6 +12508,35 @@ html body .uc-homepage-wrapper .header-main-container .cerood-mobile-search-end{
 }
 }
 </style>
+
+<script id="cerood-location-legacy-default-cleanup">
+(function () {
+  'use strict';
+  const migrationKey = 'cerood_location_legacy_cleanup_v2';
+  if (localStorage.getItem(migrationKey) === '1') return;
+
+  const keys = [
+    'cerood_global_location_v1',
+    'cerood_selected_location',
+    'cerood_global_location_cleared_v1',
+    'catus_user_location',
+    'catus_location_name',
+    'catus_district_name',
+    'catus_state_name',
+    'catus_pincode',
+    'catus_location_slug',
+    'catus_district_slug',
+    'catus_state_slug',
+    'catus_location_id'
+  ];
+
+  keys.forEach(function (key) {
+    localStorage.removeItem(key);
+  });
+
+  localStorage.setItem(migrationKey, '1');
+})();
+</script>
 <script id="cerood-shared-service-location-bootstrap">(function(){'use strict';var key='cerood_global_location_v1';function read(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}function selected(){if(localStorage.getItem('cerood_global_location_cleared_v1')==='1')return null;var v=read(key)||read('cerood_selected_location');return v&&typeof v==='object'&&(v.area||v.city||v.pincode)?v:null;}function slug(s){return String(s||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}function label(v){return [v.area||v.city,v.district||(!v.area?v.city:''),v.pincode].filter(Boolean).join(', ');}function sync(){var v=selected();if(!v)return;var area=v.area||v.city||'';var district=v.district||'';var state=v.state||'';var pin=v.pincode||'';var manual=read('cerood_manual_service_address_details')||read('cerood_manual_service_address_fields');var sameManual=manual&&String(manual.village||manual.area||'').toLowerCase()===String(area).toLowerCase()&&String(manual.pincode||'')===String(pin);var address=sameManual?(localStorage.getItem('cerood_manual_service_address')||label(v)):label(v);var oldArea=localStorage.getItem('catus_location_name')||'';var oldPin=localStorage.getItem('catus_pincode')||'';var values={catus_user_location:address,catus_location_name:area,catus_district_name:district,catus_state_name:state,catus_pincode:pin,catus_location_slug:slug(area),catus_district_slug:slug(district),catus_state_slug:slug(state)};Object.keys(values).forEach(function(k){var value=String(values[k]||'');if(localStorage.getItem(k)!==value)localStorage.setItem(k,value);});if(oldArea!==area||oldPin!==pin)localStorage.removeItem('catus_location_id');}window.CeroodServiceLocation={get:selected,label:label,sync:sync};sync();})();</script>
 </head>
 <body>
