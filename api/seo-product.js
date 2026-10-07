@@ -212,12 +212,18 @@ const searchServiceNameLower = searchServiceName.toLowerCase();
 // canonical URL and routing while making the snippet clearer for AC intent.
 const isACService = /(^|\s)ac($|\s|-)|air conditioner/i.test(serviceName);
 
+// Washing-machine-specific search metadata only. Keep the visible product page
+// untouched while making repair / installation intent clearer in Google results.
+const isWashingMachineService = /washing machine|washer/i.test(serviceName);
+
 const title =
     `${searchServiceName} in ${seoLocation} – Doorstep Service | Cerood`;
 
 const description = isACService
     ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep AC technician service and check availability online.`
-    : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
+    : isWashingMachineService
+        ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep washing machine technician service and check availability online.`
+        : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
 
 
         // ==========================================
