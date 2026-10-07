@@ -8700,6 +8700,16 @@ html body #productGridMain .product-info .product-trust-row .product-trust-item>
 }
 }
 </style>
+<style id="cerood-desktop-hide-mobile-header-controls">
+/* These duplicate controls belong exclusively to the mobile header. */
+@media(min-width:851px){
+html body .uc-homepage-wrapper .header-main-container>.cerood-mobile-index-location,
+html body .uc-homepage-wrapper .header-main-container>.cerood-mobile-index-tools,
+html body .uc-homepage-wrapper .header-main-container .cerood-mobile-search-end{
+ display:none!important;
+}
+}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->

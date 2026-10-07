@@ -12498,7 +12498,17 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
  .header-main-container.crn-header-main .crn-logo{width:91px!important;min-width:91px!important;max-width:91px!important}.header-main-container.crn-header-main .crn-logo .cerood-original-c-logo{max-width:39px!important;height:32px!important}.header-main-container.crn-header-main .crn-logo .cerood-wordmark-erood{font-size:18px!important}
  .header-main-container.crn-header-main>.cerood-mobile-index-tools{width:70px!important;min-width:70px!important;max-width:70px!important}.cerood-mobile-index-tools>button,.cerood-mobile-index-tools summary{width:33px!important;min-width:33px!important}
 }
-</style></head>
+</style><style id="cerood-desktop-hide-mobile-header-controls">
+/* These duplicate controls belong exclusively to the mobile header. */
+@media(min-width:851px){
+html body .uc-homepage-wrapper .header-main-container>.cerood-mobile-index-location,
+html body .uc-homepage-wrapper .header-main-container>.cerood-mobile-index-tools,
+html body .uc-homepage-wrapper .header-main-container .cerood-mobile-search-end{
+ display:none!important;
+}
+}
+</style>
+</head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
 <div id="ceroodInstallBanner" style="display:none;">
