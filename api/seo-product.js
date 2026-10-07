@@ -195,13 +195,18 @@ try {
         ? page.district
         : `${page.location_name}, ${page.district}`;
 
+// Keep database-provided SEO metadata as the first priority.
+// These fallbacks affect only <head> metadata; they do not add visible page sections.
+const serviceName = String(page.service_name || '').trim();
+const serviceNameLower = serviceName.toLowerCase();
+
 const title =
     page.seo_title ||
-    `${page.service_name} in ${seoLocation} | Cerood`;
+    `${serviceName} in ${seoLocation} – Doorstep Service | Cerood`;
 
 const description =
     page.seo_description ||
-    `Book ${page.service_name.toLowerCase()} in ${seoLocation} with Cerood. Check technician availability and request doorstep service online.`;
+    `Book ${serviceNameLower} in ${seoLocation} with Cerood. Request doorstep technician service online and check service availability for your location.`;
 
 
         // ==========================================
@@ -291,6 +296,46 @@ const description =
                 `    ${ogUrlTag}\n</head>`
             );
         }
+
+// ==========================================
+// ROBOTS + SOCIAL META (HEAD ONLY)
+// ==========================================
+
+const robotsTag =
+    `<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">`;
+
+if (/<meta\b(?=[^>]*\bname=["']robots["'])[^>]*>/i.test(html)) {
+    html = html.replace(
+        /<meta\b(?=[^>]*\bname=["']robots["'])[^>]*>/i,
+        robotsTag
+    );
+} else {
+    html = html.replace('</head>', `    ${robotsTag}\n</head>`);
+}
+
+const ogDescriptionTag =
+    `<meta property="og:description" content="${escapeHtml(description)}">`;
+
+if (/<meta\s+property=["']og:description["'][^>]*>/i.test(html)) {
+    html = html.replace(
+        /<meta\s+property=["']og:description["'][^>]*>/i,
+        ogDescriptionTag
+    );
+} else {
+    html = html.replace('</head>', `    ${ogDescriptionTag}\n</head>`);
+}
+
+const twitterTitleTag =
+    `<meta name="twitter:title" content="${escapeHtml(title)}">`;
+const twitterDescriptionTag =
+    `<meta name="twitter:description" content="${escapeHtml(description)}">`;
+
+html = html.replace(/<meta\b(?=[^>]*\bname=["']twitter:title["'])[^>]*>/gi, '');
+html = html.replace(/<meta\b(?=[^>]*\bname=["']twitter:description["'])[^>]*>/gi, '');
+html = html.replace(
+    '</head>',
+    `    ${twitterTitleTag}\n    ${twitterDescriptionTag}\n</head>`
+);
 
 // ==========================================
 // SEO TITLE + OPEN GRAPH TITLE
@@ -404,8 +449,31 @@ const serverSchema = {
                 "name": seoPlaceName
             },
             "serviceType": page.service_name
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": `${canonical}#breadcrumb`,
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://www.cerood.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": page.district || district,
+                    "item": `https://www.cerood.com/${encodePathSegment(state)}/${encodePathSegment(district)}`
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": page.service_name,
+                    "item": canonical
+                }
+            ]
         }
-        
     ]
 };
 
