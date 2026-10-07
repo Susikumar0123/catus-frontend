@@ -195,18 +195,16 @@ try {
         ? page.district
         : `${page.location_name}, ${page.district}`;
 
-// Keep database-provided SEO metadata as the first priority.
-// These fallbacks affect only <head> metadata; they do not add visible page sections.
+// Search-result metadata only.
+// This does not add or change any visible product-page content.
 const serviceName = String(page.service_name || '').trim();
 const serviceNameLower = serviceName.toLowerCase();
 
 const title =
-    page.seo_title ||
     `${serviceName} in ${seoLocation} – Doorstep Service | Cerood`;
 
 const description =
-    page.seo_description ||
-    `Book ${serviceNameLower} in ${seoLocation} with Cerood. Request doorstep technician service online and check service availability for your location.`;
+    `Book ${serviceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
 
 
         // ==========================================
