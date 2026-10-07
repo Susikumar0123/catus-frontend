@@ -8,7 +8,29 @@
         Cerood Service Locations
     </title>
 <meta content="Explore Cerood home appliance repair and service locations." id="districtMetaDescription" name="description"/>
-<meta content="index, follow, max-image-preview:large" name="robots"/>
+<meta content="index, follow, max-image-preview:large" name="robots" id="districtRobots"/>
+<script>
+/* Prevent unresolved template-placeholder URLs from becoming indexable district pages. */
+(function () {
+    var rawPath = String(window.location.pathname || '');
+    var decodedPath = rawPath;
+    try { decodedPath = decodeURIComponent(rawPath); } catch (e) {}
+
+    var unresolvedTemplate =
+        /\$\{[^}]+\}/i.test(decodedPath) ||
+        /%7b(?:district|state|location)[^%/]*%7d/i.test(rawPath);
+
+    if (!unresolvedTemplate) return;
+
+    var robots = document.getElementById('districtRobots');
+    if (robots) robots.setAttribute('content', 'noindex, nofollow');
+
+    var canonical = document.getElementById('districtCanonical');
+    if (canonical) canonical.setAttribute('href', 'https://www.cerood.com/services');
+
+    window.location.replace('/services');
+})();
+</script>
 <link href="https://www.cerood.com/" id="districtCanonical" rel="canonical"/>
 <style>
 
