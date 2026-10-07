@@ -208,11 +208,16 @@ const searchServiceName = isRefrigeratorService
     : serviceName;
 const searchServiceNameLower = searchServiceName.toLowerCase();
 
+// AC-specific search metadata only. This preserves the visible page, H1,
+// canonical URL and routing while making the snippet clearer for AC intent.
+const isACService = /(^|\s)ac($|\s|-)|air conditioner/i.test(serviceName);
+
 const title =
     `${searchServiceName} in ${seoLocation} – Doorstep Service | Cerood`;
 
-const description =
-    `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
+const description = isACService
+    ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep AC technician service and check availability online.`
+    : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
 
 
         // ==========================================
