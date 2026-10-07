@@ -17211,7 +17211,7 @@ function startCatusBannerFlow() {
         showToast("Delivery Address updated successfully!", false);
     }
 
-    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v3';
+    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v4_no_offer_videos';
 
     localStorage.removeItem('catus_home_html_cache');
 
@@ -17643,108 +17643,9 @@ if (
     `;
 }
 
-// =========================================
-// OFFER BANNERS - MIDDLE OF HOMEPAGE
-// Desktop: horizontal slider
-// Mobile: Banner 1 only
-// =========================================
-
-const middleCategory =
-    Math.max(1, Math.ceil(totalCategories / 2) - 3);
-
-if (categoryIndex === middleCategory) {
-
-    html += `
-        <div class="cerood-offer-slider">
-
-            <!-- BANNER 1 -->
-            <div
-                class="cerood-offer-banner"
-                onclick="openServiceProduct('tv-repair')"
-            >
-                <video
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    preload="metadata"
-                >
-                    <source
-                        src="/banner1-mobile.mp4"
-                        type="video/mp4"
-                    >
-                </video>
-            </div>
-
-            <!-- BANNER 2 - DESKTOP SLIDER -->
-            <div
-                class="cerood-offer-banner desktop-offer-only"
-                onclick="openServiceProduct('ac-service')"
-            >
-                <video
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    preload="metadata"
-                >
-                    <source
-                        src="/banner2-mobile.mp4"
-                        type="video/mp4"
-                    >
-                </video>
-            </div>
-
-            <!-- BANNER 3 -->
-<div
-    class="cerood-offer-banner desktop-offer-only"
-    onclick="openServiceProduct('washing-machine-repair')"
->
-    <video
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="metadata"
-    >
-        <source
-            src="/banner3-mobile.mp4"
-            type="video/mp4"
-        >
-    </video>
-</div>
-
-        </div>
-    `;
+// Promotional video sections removed from the homepage.
 }
 
-}
-
-  
-
-// =========================================
-// OFFER BANNER 2 - MOBILE END OF HOMEPAGE
-// =========================================
-
-html += `
-    <div
-        class="cerood-offer-banner mobile-end-offer"
-        onclick="openServiceProduct('ac-service')"
-    >
-        <video
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-        >
-            <source
-                src="/banner2-mobile.mp4"
-                type="video/mp4"
-            >
-        </video>
-    </div>
-`;
 
 container.innerHTML = html;
 
