@@ -1084,7 +1084,7 @@
 
         box-sizing: border-box !important;
 
-        background: #000000 !important;
+        background: #ffffff !important;
 
         border-top:
             1px solid #eeeeee !important;
@@ -1146,7 +1146,7 @@
         align-items: center !important;
         justify-content: center !important;
 
-        background: #000000 !important;
+        background: #ffffff !important;
 
         border: 2px solid #ffffff !important;
 
@@ -1159,7 +1159,7 @@
         width: 18px !important;
         height: 18px !important;
 
-        stroke: #ffffff !important;
+        stroke: #111827 !important;
 
         stroke-width: 1.8 !important;
     }
@@ -1198,7 +1198,7 @@
 
         font-weight: 400 !important;
 
-        color: #ffffff !important;
+        color: #111827 !important;
     }
 
 
@@ -7517,7 +7517,7 @@ border-radius: 12px !important;
 @media (max-width: 850px) {
 
     #ceroodGlobalMobileNav {
-        background: #000000 !important;
+        background: #ffffff !important;
         border-top: none !important;
         box-shadow: none !important;
     }
@@ -7528,20 +7528,20 @@ border-radius: 12px !important;
     }
 
     #ceroodGlobalMobileNav .cerood-global-nav-ring {
-        background: #000000 !important;
+        background: #ffffff !important;
     }
 
     #ceroodGlobalMobileNav .cerood-global-nav-ring svg {
-        stroke: #ffffff !important;
-        color: #ffffff !important;
+        stroke: #111827 !important;
+        color: #111827 !important;
     }
 
     #ceroodGlobalMobileNav .cerood-global-nav-btn > span:last-child {
-        color: #ffffff !important;
+        color: #111827 !important;
     }
 
     #ceroodGlobalMobileNav .cerood-global-nav-btn.active > span:last-child {
-        color: #ffffff !important;
+        color: #6d4aff !important;
     }
 }
 
@@ -17295,5 +17295,17 @@ window.addEventListener('DOMContentLoaded', function () {
   .cerood-global-mobile-nav .cerood-global-nav-btn:active {
     opacity:.8 !important;
   }
+}
+
+/* FINAL MOBILE NAV WHITE FIX */
+@media (max-width: 850px) {
+  #ceroodGlobalMobileNav { background:#ffffff !important; border-top:1px solid #eeeeee !important; box-shadow:0 -3px 14px rgba(0,0,0,.04) !important; }
+  #ceroodGlobalMobileNav .cerood-global-nav-btn { background:transparent !important; color:#111827 !important; }
+  #ceroodGlobalMobileNav .cerood-global-nav-ring { background:transparent !important; border-color:transparent !important; }
+  #ceroodGlobalMobileNav .cerood-global-nav-ring svg { stroke:#111827 !important; color:#111827 !important; }
+  #ceroodGlobalMobileNav .cerood-global-nav-btn > span:last-child { color:#111827 !important; }
+  #ceroodGlobalMobileNav .cerood-global-nav-btn.active .cerood-global-nav-ring { background:#f5f3ff !important; border:1px solid #ddd6fe !important; border-radius:14px !important; }
+  #ceroodGlobalMobileNav .cerood-global-nav-btn.active .cerood-global-nav-ring svg { stroke:#6d4aff !important; color:#6d4aff !important; }
+  #ceroodGlobalMobileNav .cerood-global-nav-btn.active > span:last-child { color:#6d4aff !important; }
 }
 </style>
