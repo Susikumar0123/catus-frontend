@@ -12588,7 +12588,7 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
 <div class="services-track" id="servicesTrack">
 </div>
 </div>
-<section class="cerood-reference-hero" aria-label="Home appliance service"><div><h1>Home Appliance<br><span>Repair &amp; Service</span></h1><p>Trusted technicians at your doorstep</p><button type="button" onclick="document.getElementById('productGridContainer').scrollIntoView({behavior:'smooth',block:'start'})">Book a Service →</button></div><img id="ceroodReferenceHeroArt" alt="Home appliance service" hidden></section><!-- 3. Title Container -->
+<section class="cerood-reference-hero" aria-label="Home appliance service"><div><h1>Home Appliance<br><span>Repair &amp; Service</span></h1><p>Trusted technicians at your doorstep</p><button type="button" onclick="document.getElementById('productGridContainer').scrollIntoView({behavior:'smooth',block:'start'})">Book a Service →</button></div><div class="reference-appliances" aria-hidden="true"></div></section><!-- 3. Title Container -->
 <h1 class="section-title-container">
     Doorstep Home Appliance Repair &amp; Installation
 </h1>
@@ -12600,20 +12600,7 @@ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
 </div>
 </div>
 <!-- CEROOD RENEWED — responsive premium shopping banner; links to existing store -->
-<section aria-label="Shop pre-owned and refurbished appliances" class="cr-renewed-premium">
-<a aria-label="Explore Cerood Renewed Store: pre-owned and refurbished appliances" class="cr-renewed-premium-link" href="/renewed.html">
-<picture class="cr-renewed-desktop-art">
-<img alt="Cerood Renewed: Great appliances. Second chances. Shop TVs, refrigerators, washing machines, microwaves and water purifiers." decoding="async" height="724" loading="lazy" src="/cerood-renewed-banner-desktop.webp" width="2172"/>
-</picture>
-<div class="cr-renewed-mobile-content">
-<span class="cr-renewed-mobile-kicker">CEROOD RENEWED</span>
-<h2>Great appliances.<br/><span>Second chances.</span></h2>
-<p>Explore quality pre-owned and refurbished appliances for a new home.</p>
-<img alt="Refurbished TV, fridge, washing machine, microwave and water purifier" decoding="async" height="545" loading="lazy" src="/cerood-renewed-banner-mobile.webp" width="1050"/>
-<span class="cr-renewed-mobile-cta">Explore Renewed Store <span aria-hidden="true">→</span></span>
-</div>
-</a>
-</section>
+
 <!-- 5. Product Categories & Grids (இதைக் கட்டாயம் சேர்க்கவும்) -->
 <div id="productGridContainer"></div>
 <!-- Toast Notification Pop-up -->
@@ -19570,6 +19557,7 @@ function closeCeroodInfoModal(modalId) {
     const searchInput = document.getElementById('searchInput');
 
     if (!searchInput) return;
+    if (window.matchMedia('(max-width:850px)').matches) { searchInput.placeholder='Search services, appliances & more...'; return; }
 
     const texts = [
         'Search for TV Repair',
@@ -19821,7 +19809,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 </script>
-<script id="csf-insert-divisions">document.addEventListener("DOMContentLoaded",function(){var h=document.querySelector(".uc-homepage-wrapper .header-main-container");if(h&&!document.querySelector(".csf-divisions"))h.insertAdjacentHTML("afterend",'<nav class="csf-divisions" aria-label="Cerood divisions"><a href="/cosmetics.html">Beauty</a><a class="active" aria-current="page" href="/home-services.html">Services</a><a href="/renewed.html">Renewed</a><a href="/clothing.html">Fashion</a></nav>');});</script>
+
 <nav aria-label="Cerood mobile navigation" class="csf-bottom"><a href="/"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3zM9 21v-7h6v7"></path></svg><span>Home</span></a><a class="active" href="/home-services.html"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.3 4.7-4.7 2.3 2.3-4.7z"></path></svg><span>Explore</span></a><a data-cerood-dashboard-tab="home" href="#" onclick="return ceroodOpenExistingDashboard(event, 'home')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></svg><span>Dashboard</span></a><a data-cerood-dashboard-tab="bookings" href="#" onclick="return ceroodOpenExistingDashboard(event, 'bookings')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="18" rx="2" width="14" x="5" y="3"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg><span>Orders</span></a><a data-cerood-dashboard-tab="profile" href="#" onclick="return ceroodOpenExistingDashboard(event, 'profile')"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c.6-4.5 3.2-7 8-7s7.4 2.5 8 7"></path></svg><span>Account</span></a></nav>
 <script id="cerood-existing-dashboard-navigation-fix">
 /* Keep customer in the existing Home Services dashboard and its live booking/profile tabs. */
@@ -19954,4 +19942,30 @@ body{padding-bottom:80px!important}
 }
 @media(min-width:851px){.cerood-reference-hero{display:none}}
 </style>
-<script id="cerood-reference-mobile-init">document.addEventListener('DOMContentLoaded',function(){var input=document.getElementById('searchInput');if(input&&matchMedia('(max-width:850px)').matches)input.placeholder='Search services, appliances & more...';var source=document.getElementById('headerLocationDisplay');function sync(){if(source)document.querySelectorAll('.cerood-mobile-location-value').forEach(function(e){e.textContent=source.textContent.trim()||'Select Location';});}sync();if(source)new MutationObserver(sync).observe(source,{childList:true,characterData:true,subtree:true});});</script>
+<script id="cerood-reference-mobile-init">document.addEventListener('DOMContentLoaded',function(){var input=document.getElementById('searchInput');if(input&&matchMedia('(max-width:850px)').matches)input.placeholder='Search services, appliances & more...';var source=document.getElementById('headerLocationDisplay');function sync(){if(source)document.querySelectorAll('.cerood-mobile-location-value').forEach(function(e){e.textContent=source.textContent.trim()||'Select Location';});}sync();if(source)new MutationObserver(sync).observe(source,{childList:true,characterData:true,subtree:true});});</script><style id="cerood-service-only-reference-final">
+/* Final scoped mobile design; preserve booking, cart and account handlers. */
+.uc-homepage-wrapper>.csf-divisions,nav.csf-divisions{display:none!important}
+@media(max-width:850px){
+.master-app-container{margin:0!important;padding:0!important;transform:none!important}
+.master-app-container>.uc-homepage-wrapper{margin:0!important;padding:0!important;height:auto!important;min-height:0!important}
+.quick-services-bar{display:block!important;position:relative!important;top:auto!important;margin:0!important;padding:8px 8px 6px!important;border:0!important;background:#fff!important;height:auto!important;min-height:0!important}
+.quick-services-bar .services-track{display:flex!important;align-items:center!important;gap:6px!important;overflow-x:auto!important;padding:0!important;margin:0!important;height:32px!important;scrollbar-width:none!important}
+.quick-services-bar .service-chip{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-width:56px!important;height:30px!important;margin:0!important;padding:0 12px!important;background:#f4f5fa!important;border:0!important;border-radius:9px!important;font-size:10px!important;color:#101525!important}
+.service-chip .chip-icon-bg,.service-chip::after{display:none!important}.service-chip.active{background:#ece6ff!important;color:#4b22ff!important}.service-chip.active span{color:#4b22ff!important}
+.cerood-reference-hero{box-sizing:border-box!important;min-height:156px!important;height:156px!important;margin:6px 10px 12px!important;padding:16px 13px!important}
+.cerood-reference-hero>div{width:64%!important}.cerood-reference-hero h1{font-size:21px!important}.cerood-reference-hero p{font-size:10px!important}.cerood-reference-hero button{padding:9px 11px!important}
+.cerood-reference-hero>.reference-appliances{position:absolute!important;right:2px!important;bottom:7px!important;width:42%!important;height:85%!important;z-index:1!important;pointer-events:none!important}
+.reference-appliances img{position:absolute!important;width:62%!important;height:75%!important;object-fit:contain!important;bottom:0!important;right:0!important}.reference-appliances img:nth-child(2){width:52%!important;height:62%!important;right:40%!important;bottom:0!important}.reference-appliances img:nth-child(3){width:50%!important;height:46%!important;right:0!important;bottom:0!important}
+#productGridContainer .uc-body h4{font-size:10px!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.product-grid#productGridMain .product-info .product-trust-row{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:9px!important;margin:12px 0!important}
+.product-grid#productGridMain .product-info .product-trust-item{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;height:auto!important;min-height:0!important;gap:7px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+.product-grid#productGridMain .product-info .product-trust-item i{display:inline-block!important;flex:0 0 16px!important;width:16px!important;height:auto!important;font-size:15px!important;color:#273a58!important}
+.product-grid#productGridMain .product-info .product-trust-item span{height:auto!important;font-size:10px!important;line-height:1.35!important;min-width:0!important;text-align:left!important}
+.product-grid#productGridMain .product-info .action-buttons{display:grid!important;grid-template-columns:1fr 1fr!important;gap:5px!important;margin:12px 0 0!important;width:100%!important;position:static!important;padding:0!important;background:none!important;box-shadow:none!important}
+.product-grid#productGridMain .product-info .action-buttons .btn{display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important;font-size:10px!important;min-width:0!important;width:100%!important;height:36px!important;padding:5px 3px!important;border-radius:7px!important;white-space:nowrap!important}
+.product-info .btn-cart{background:#fff!important;border:1px solid #5730ff!important;color:#5730ff!important}.product-info .btn-buy{background:#5730ff!important;color:#fff!important;border:1px solid #5730ff!important}
+.product-info #ceroodWorkProofSection{margin-top:10px!important}.product-info #ceroodWorkProofSection h3{font-size:11px!important}
+.product-info #productNoteContainer{font-size:10px!important;line-height:1.4!important}
+.product-gallery .main-image-container{min-height:0!important;aspect-ratio:1/1!important}
+}
+</style><script id="cerood-service-reference-behaviour">(function(){function init(){var mq=matchMedia('(max-width:850px)');var actions=document.querySelector('.cerood-booking-panel .action-buttons');var panel=document.querySelector('.cerood-booking-panel');var info=document.querySelector('.product-info');var anchor;if(actions&&panel&&info){anchor=document.createComment('booking-actions');actions.before(anchor);function arrange(){if(mq.matches)info.appendChild(actions);else anchor.parentNode.insertBefore(actions,anchor.nextSibling);}arrange();mq.addEventListener('change',arrange);}var track=document.getElementById('servicesTrack');if(track){function all(){if(track.querySelector('[data-reference-all]'))return;var b=document.createElement('button');b.type='button';b.className='service-chip active';b.dataset.referenceAll='1';b.innerHTML='<span>All</span>';b.onclick=function(){track.querySelectorAll('.service-chip').forEach(function(c){c.classList.remove('active');});b.classList.add('active');if(typeof filterProductsByGroup==='function')filterProductsByGroup('');};track.prepend(b);}all();new MutationObserver(all).observe(track,{childList:true});}var art=document.querySelector('.reference-appliances');var grid=document.getElementById('productGridContainer');if(art&&grid){function fill(){var imgs=Array.from(grid.querySelectorAll('.uc-card-img-wrapper img')).filter(function(e){return e.getAttribute('src');});var urls=[];imgs.forEach(function(e){if(urls.indexOf(e.src)<0)urls.push(e.src);});var key=urls.slice(0,3).join('|');if(key&&art.dataset.key!==key){art.dataset.key=key;art.replaceChildren();urls.slice(0,3).forEach(function(u){var im=new Image();im.src=u;im.alt='';art.appendChild(im);});}}fill();new MutationObserver(fill).observe(grid,{childList:true,subtree:true});}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script>
