@@ -12538,6 +12538,136 @@ html body .uc-homepage-wrapper .header-main-container .cerood-mobile-search-end{
 })();
 </script>
 <script id="cerood-shared-service-location-bootstrap">(function(){'use strict';var key='cerood_global_location_v1';function read(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}function selected(){if(localStorage.getItem('cerood_global_location_cleared_v1')==='1')return null;var v=read(key)||read('cerood_selected_location');return v&&typeof v==='object'&&(v.area||v.city||v.pincode)?v:null;}function slug(s){return String(s||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}function label(v){return [v.area||v.city,v.district||(!v.area?v.city:''),v.pincode].filter(Boolean).join(', ');}function sync(){var v=selected();if(!v)return;var area=v.area||v.city||'';var district=v.district||'';var state=v.state||'';var pin=v.pincode||'';var manual=read('cerood_manual_service_address_details')||read('cerood_manual_service_address_fields');var sameManual=manual&&String(manual.village||manual.area||'').toLowerCase()===String(area).toLowerCase()&&String(manual.pincode||'')===String(pin);var address=sameManual?(localStorage.getItem('cerood_manual_service_address')||label(v)):label(v);var oldArea=localStorage.getItem('catus_location_name')||'';var oldPin=localStorage.getItem('catus_pincode')||'';var values={catus_user_location:address,catus_location_name:area,catus_district_name:district,catus_state_name:state,catus_pincode:pin,catus_location_slug:slug(area),catus_district_slug:slug(district),catus_state_slug:slug(state)};Object.keys(values).forEach(function(k){var value=String(values[k]||'');if(localStorage.getItem(k)!==value)localStorage.setItem(k,value);});if(oldArea!==area||oldPin!==pin)localStorage.removeItem('catus_location_id');}window.CeroodServiceLocation={get:selected,label:label,sync:sync};sync();})();</script>
+
+<style id="cerood-mobile-popup-shell-fix">
+/* Mobile popup shell: keep Cerood header + bottom nav visible, popup only in between. */
+@media (max-width: 850px) {
+  :root {
+    --cerood-mobile-header-space: 116px;
+    --cerood-mobile-nav-space: 64px;
+  }
+
+  /* Common overlays / popups */
+  #locationPopupModal,
+  #ceroodManualAddressModal,
+  #cartModal,
+  #productReviewsPopupModal,
+  #editOrderAddressModal,
+  #cancelBookingModal,
+  #invoiceViewModal,
+  #ratingModal,
+  .cerood-info-modal,
+  #authModal.auth-modal-wrapper {
+    top: var(--cerood-mobile-header-space) !important;
+    bottom: var(--cerood-mobile-nav-space) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    height: auto !important;
+    max-height: none !important;
+    box-sizing: border-box !important;
+    z-index: 2147483000 !important;
+    overflow: hidden !important;
+  }
+
+  /* Location / manual / centered information popups */
+  #locationPopupModal,
+  #ceroodManualAddressModal,
+  #productReviewsPopupModal,
+  #editOrderAddressModal,
+  #cancelBookingModal,
+  #invoiceViewModal,
+  #ratingModal,
+  .cerood-info-modal {
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px !important;
+  }
+
+  #locationPopupModal .loc-modal-card,
+  #ceroodManualAddressCard,
+  #productReviewsPopupModal > div,
+  #editOrderAddressModal > div,
+  #cancelBookingModal > div,
+  #invoiceViewModal > div,
+  #ratingModal > div,
+  .cerood-info-modal-card {
+    width: min(94vw, 460px) !important;
+    max-width: 94vw !important;
+    max-height: calc(100dvh - var(--cerood-mobile-header-space) - var(--cerood-mobile-nav-space) - 20px) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Cart remains a drawer, but inside the visible app shell. */
+  #cartModal {
+    justify-content: flex-end !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+  }
+  #cartModal .cart-drawer {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+
+  /* Header and bottom navigation must stay above every popup. */
+  .cerood-mobile-header-shell,
+  .mobile-header-shell,
+  .mobile-header,
+  header {
+    z-index: 2147483600 !important;
+  }
+
+  #ceroodGlobalMobileNav,
+  .cerood-global-mobile-nav,
+  .mobile-bottom-nav {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    z-index: 2147483647 !important;
+  }
+
+  body.cerood-auth-open #ceroodGlobalMobileNav,
+  body.cerood-auth-open .cerood-global-mobile-nav,
+  body.cerood-auth-open .mobile-bottom-nav {
+    display: flex !important;
+  }
+
+  /* Authentication popup also stays between header and nav. */
+  #authModal.auth-modal-wrapper {
+    inset: auto 0 var(--cerood-mobile-nav-space) 0 !important;
+    top: var(--cerood-mobile-header-space) !important;
+    height: auto !important;
+    background: rgba(0,0,0,.45) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px !important;
+  }
+  #authModal .auth-modal-container {
+    width: min(94vw, 460px) !important;
+    max-width: 94vw !important;
+    height: auto !important;
+    max-height: calc(100dvh - var(--cerood-mobile-header-space) - var(--cerood-mobile-nav-space) - 20px) !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+  #authModal .auth-right-panel {
+    width: 100% !important;
+    height: auto !important;
+    max-height: calc(100dvh - var(--cerood-mobile-header-space) - var(--cerood-mobile-nav-space) - 20px) !important;
+    overflow-y: auto !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
