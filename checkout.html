@@ -3666,6 +3666,11 @@ function resetOrderSubmitState() {
                 localStorage.removeItem('catus_checkout_items');
                 localStorage.removeItem('cerood_service_booking');
                 const safeOrderId = String(result.order_id || '');
+                const approvalKey = String(result.customer_approval_key || '');
+                if (approvalKey && safeOrderId) {
+                    try { localStorage.setItem('cerood_home_approval_' + safeOrderId, approvalKey); }
+                    catch (_) { /* Browser storage may be disabled. Customer must save the key. */ }
+                }
                 const main = document.querySelector('main') || document.querySelector('.checkout-container');
                 if (main) {
                     main.innerHTML = '';
@@ -3674,6 +3679,14 @@ function resetOrderSubmitState() {
                     const title = document.createElement('h2'); title.textContent = 'Booking request received'; panel.appendChild(title);
                     const ref = document.createElement('p'); ref.textContent = 'Booking ID: ' + safeOrderId; panel.appendChild(ref);
                     const note = document.createElement('p'); note.textContent = 'Booking request is free. Inspection / visiting charges apply and will be confirmed with you before the technician visit. Repair charges are quoted after inspection and require your approval.'; panel.appendChild(note);
+                    if (approvalKey) {
+                        const security = document.createElement('p');
+                        security.textContent = 'Save your private approval key. You will need it to accept or reject inspection and repair charges. Do not share it publicly.';
+                        panel.appendChild(security);
+                        const keyBox = document.createElement('input'); keyBox.type = 'text'; keyBox.readOnly = true; keyBox.value = approvalKey; keyBox.setAttribute('aria-label','Private approval key'); keyBox.style.cssText = 'display:block;width:100%;padding:12px;box-sizing:border-box;margin:12px 0'; panel.appendChild(keyBox);
+                        const copy = document.createElement('button'); copy.type='button'; copy.textContent='Copy booking ID and private key'; copy.onclick=()=>{const text='Booking ID: '+safeOrderId+'\nPrivate approval key: '+approvalKey; if(navigator.clipboard)navigator.clipboard.writeText(text).catch(()=>window.prompt('Copy these details:',text));else window.prompt('Copy these details:',text)}; panel.appendChild(copy);
+                        const link = document.createElement('a'); link.href='/customer-approval.html'; link.textContent='Review inspection / repair charges'; link.style.cssText='display:block;margin-top:20px'; panel.appendChild(link);
+                    }
                     main.appendChild(panel);
                 } else {
                     alert('Booking request received! Booking ID: ' + safeOrderId + '. Paid inspection charge will be confirmed before visit.');

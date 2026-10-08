@@ -6025,36 +6025,7 @@ if (techResponse === 'Accepted') {
                 
 
 
-<!-- Cerood Home Services: booking fee / inspection / quote admin panel -->
-<section id="chsQuoteAdmin" style="margin:28px auto;padding:22px;max-width:1100px;background:white;border:1px solid #ddd;border-radius:12px;color:#161616;font-family:inherit">
-<h2 style="margin:0 0 10px">Home Services · Free Booking Management</h2>
-<p style="margin:0 0 16px">Booking is free. Inspection is paid and requires customer confirmation. Repair quotes are drafts until separately approved.</p>
-<button type="button" id="chsLoadBookings" style="padding:10px 18px;background:#111;color:#fff;border:0;border-radius:6px;cursor:pointer">Load free bookings</button>
-<p id="chsBookingMessage" role="status"></p>
-<div id="chsBookingRows" style="display:grid;gap:12px"></div>
-</section>
-<script>
-(function(){
-const root=document.getElementById('chsQuoteAdmin');if(!root)return;
-const list=document.getElementById('chsBookingRows'),msg=document.getElementById('chsBookingMessage');
-const base=typeof API_BASE_URL!=='undefined'?API_BASE_URL:'https://catus-backend-d2js.onrender.com';
-const token=()=>sessionStorage.getItem('adminToken')||localStorage.getItem('adminToken')||sessionStorage.getItem('cerood_admin_token')||localStorage.getItem('cerood_admin_token')||'';
-const el=(tag,txt)=>{const n=document.createElement(tag);n.textContent=txt;return n;};
-const field=(label,value)=>{const d=document.createElement('div');d.append(el('strong',label+': '),document.createTextNode(String(value??'—')));return d;};
-async function call(path,method,body){const t=token();if(!t)throw Error('Admin login required.');const r=await fetch(base+path,{method,headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d;}
-async function load(){msg.textContent='Loading...';list.replaceChildren();try{const data=await call('/api/admin/home-services/free-bookings','GET');msg.textContent=data.orders.length+' free booking(s)';data.orders.forEach(o=>{
-const card=el('article','');card.style.cssText='padding:16px;border:1px solid #ddd;border-radius:8px;display:grid;gap:8px';
-card.append(el('h3',o.order_id+' · '+(o.service_name||'Service')),field('Customer',o.customer_name),field('Phone',o.phone),field('Requested',String(o.service_date||'')+' '+String(o.service_time||'')),field('Status',o.status),field('Inspection fee',o.inspection_fee==null?'Not set':'₹'+o.inspection_fee),field('Inspection consent',o.inspection_fee_status),field('Repair quote',o.repair_quote_amount==null?'Not quoted':'₹'+o.repair_quote_amount),field('Quote status',o.repair_quote_status));
-const fee=document.createElement('input');fee.type='number';fee.min='0';fee.step='0.01';fee.placeholder='Inspection fee ₹';fee.value=o.inspection_fee??'';fee.style.padding='8px';
-const saveFee=el('button','Save inspection fee (not confirmed)');saveFee.type='button';saveFee.onclick=async()=>{try{const r=await call('/api/admin/home-services/free-bookings/'+encodeURIComponent(o.order_id)+'/inspection','PATCH',{inspection_fee:fee.value});msg.textContent=r.message;await load()}catch(e){msg.textContent=e.message}};
-const quote=document.createElement('input');quote.type='number';quote.min='0';quote.step='0.01';quote.placeholder='Repair quote ₹';quote.value=o.repair_quote_amount??'';quote.style.padding='8px';
-const notes=document.createElement('textarea');notes.placeholder='Repair details / parts';notes.value=o.repair_quote_notes??'';
-const saveQuote=el('button','Save repair quotation draft');saveQuote.type='button';saveQuote.onclick=async()=>{try{const r=await call('/api/admin/home-services/free-bookings/'+encodeURIComponent(o.order_id)+'/quotation','PATCH',{repair_quote_amount:quote.value,repair_quote_notes:notes.value});msg.textContent=r.message;await load()}catch(e){msg.textContent=e.message}};
-card.append(fee,saveFee,quote,notes,saveQuote);list.append(card);
-});}catch(e){msg.textContent=e.message;}}
-document.getElementById('chsLoadBookings').addEventListener('click',load);
-})();
-</script>
+
 </body>
                 </html>
             `);
@@ -7332,6 +7303,38 @@ async function savePartnershipLead(id) {
         note.textContent=`Lead #${id} updated successfully.`;
     } catch(error) {note.textContent=error.message;}
 }
+</script>
+<!-- Cerood Home Services: booking fee / inspection / quote admin panel -->
+<section id="chsQuoteAdmin" style="margin:28px auto;padding:22px;max-width:1100px;background:white;border:1px solid #ddd;border-radius:12px;color:#161616;font-family:inherit">
+<h2 style="margin:0 0 10px">Home Services · Free Booking Management</h2>
+<p style="margin:0 0 16px">Booking is free. Inspection is paid and requires customer confirmation. Repair quotes are drafts until separately approved.</p>
+<button type="button" id="chsLoadBookings" style="padding:10px 18px;background:#111;color:#fff;border:0;border-radius:6px;cursor:pointer">Load free bookings</button>
+<p id="chsBookingMessage" role="status"></p>
+<div id="chsBookingRows" style="display:grid;gap:12px"></div>
+</section>
+<script>
+(function(){
+const root=document.getElementById('chsQuoteAdmin');if(!root)return;
+const list=document.getElementById('chsBookingRows'),msg=document.getElementById('chsBookingMessage');
+const base=typeof API_BASE_URL!=='undefined'?API_BASE_URL:'https://catus-backend-d2js.onrender.com';
+const token=()=>sessionStorage.getItem('adminToken')||localStorage.getItem('adminToken')||sessionStorage.getItem('cerood_admin_token')||localStorage.getItem('cerood_admin_token')||'';
+const el=(tag,txt)=>{const n=document.createElement(tag);n.textContent=txt;return n;};
+const field=(label,value)=>{const d=document.createElement('div');d.append(el('strong',label+': '),document.createTextNode(String(value??'—')));return d;};
+async function call(path,method,body){const t=token();if(!t)throw Error('Admin login required.');const r=await fetch(base+path,{method,headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Request failed');return d;}
+async function load(){msg.textContent='Loading...';list.replaceChildren();try{const data=await call('/api/admin/home-services/free-bookings','GET');msg.textContent=data.orders.length+' free booking(s)';data.orders.forEach(o=>{
+const card=el('article','');card.style.cssText='padding:16px;border:1px solid #ddd;border-radius:8px;display:grid;gap:8px';
+card.append(el('h3',o.order_id+' · '+(o.service_name||'Service')),field('Customer',o.customer_name),field('Phone',o.phone),field('Requested',String(o.service_date||'')+' '+String(o.service_time||'')),field('Status',o.status),field('Inspection fee',o.inspection_fee==null?'Not set':'₹'+o.inspection_fee),field('Inspection consent',o.inspection_fee_status),field('Repair quote',o.repair_quote_amount==null?'Not quoted':'₹'+o.repair_quote_amount),field('Quote status',o.repair_quote_status));
+const fee=document.createElement('input');fee.type='number';fee.min='0';fee.step='0.01';fee.placeholder='Inspection fee ₹';fee.value=o.inspection_fee??'';fee.style.padding='8px';
+const saveFee=el('button','Save inspection fee (not confirmed)');saveFee.type='button';saveFee.onclick=async()=>{try{const r=await call('/api/admin/home-services/free-bookings/'+encodeURIComponent(o.order_id)+'/inspection','PATCH',{inspection_fee:fee.value});msg.textContent=r.message;await load()}catch(e){msg.textContent=e.message}};
+const quote=document.createElement('input');quote.type='number';quote.min='0';quote.step='0.01';quote.placeholder='Repair quote ₹';quote.value=o.repair_quote_amount??'';quote.style.padding='8px';
+const notes=document.createElement('textarea');notes.placeholder='Repair details / parts';notes.value=o.repair_quote_notes??'';
+const saveQuote=el('button','Save repair quotation draft');saveQuote.type='button';saveQuote.onclick=async()=>{try{const r=await call('/api/admin/home-services/free-bookings/'+encodeURIComponent(o.order_id)+'/quotation','PATCH',{repair_quote_amount:quote.value,repair_quote_notes:notes.value});msg.textContent=r.message;await load()}catch(e){msg.textContent=e.message}};
+const done=el('button','Mark inspection completed');done.type='button';done.onclick=async()=>{try{await call('/api/admin/home-services/free-bookings/'+encodeURIComponent(o.order_id)+'/inspection-completed','PATCH',{});await load()}catch(e){msg.textContent=e.message}};
+const send=el('button','Publish quotation for customer review');send.type='button';send.onclick=async()=>{if(!confirm('Publish the saved repair quotation for customer approval?'))return;try{await call('/api/admin/home-services/free-bookings/'+encodeURIComponent(o.order_id)+'/send-quotation','PATCH',{});await load()}catch(e){msg.textContent=e.message}};
+card.append(fee,saveFee,quote,notes,saveQuote,done,send);list.append(card);
+});}catch(e){msg.textContent=e.message;}}
+document.getElementById('chsLoadBookings').addEventListener('click',load);
+})();
 </script>
 </body>
 
