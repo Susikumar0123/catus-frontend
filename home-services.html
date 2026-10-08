@@ -14125,8 +14125,8 @@ async function openServiceProduct(serviceId) {
                 clearInterval(orderPollingInterval);
                 orderPollingInterval = null;
             }
-            localStorage.removeItem('catus_logged_user');
-            localStorage.removeItem('cerood_renewed_customer_session');
+            localStorage.removeItem('cerood_home_service_user');
+            localStorage.removeItem('cerood_home_service_session');
             currentUser = null;
             closePremiumDashboard();
             updateHeaderLoginUI();
@@ -14179,7 +14179,7 @@ async function openServiceProduct(serviceId) {
     let discountAmount = 0;
     let appliedCoupon = "";
     
-    let currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || null;
+    let currentUser = JSON.parse(localStorage.getItem('cerood_home_service_user')) || null;
     let tempPhone = "";
     
     let checkoutMode = 'single'; 
@@ -14191,7 +14191,7 @@ async function openServiceProduct(serviceId) {
 
     window.addEventListener('DOMContentLoaded', async () => {
     // 🛑 ரிஃப்ரேஷ் செய்யும் போது லாகின் செஷன் அழியாமல் இருக்க கட்டாயம் இருக்க வேண்டும்:
-    currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || null;
+    currentUser = JSON.parse(localStorage.getItem('cerood_home_service_user')) || null;
 
     const cartModal = document.getElementById('cartModal');
     if (cartModal) cartModal.style.display = 'none';
@@ -14261,7 +14261,7 @@ async function openServiceProduct(serviceId) {
                     }
                     if(field === 'Address') currentUser.address = newVal;
                     if(field === 'Email') currentUser.email = newVal;
-                    localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+                    localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
                     updateHeaderLoginUI();
                 }
             } else if (!newVal) {
@@ -15200,7 +15200,7 @@ async function checkUserAndProceed() {
     tempPhone = phone;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/check-user`, {
+        const response = await fetch(`${API_BASE_URL}/api/home-services/auth/check-user`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: tempPhone })
@@ -15711,7 +15711,7 @@ async function loginWithPassword() {
     if (!password) { alert('Please enter your password.'); return; }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/login-password`, {
+        const response = await fetch(`${API_BASE_URL}/api/home-services/auth/login-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: tempPhone, password: password })
@@ -15721,9 +15721,9 @@ async function loginWithPassword() {
         if (data.success) {
             currentUser = data.user;
             if(currentUser.wallet === undefined) currentUser.wallet = 0;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
-            if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
-            else localStorage.removeItem('cerood_renewed_customer_session');
+            localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
+            if (data.home_service_session) localStorage.setItem('cerood_home_service_session', data.home_service_session);
+            else localStorage.removeItem('cerood_home_service_session');
             updateHeaderLoginUI();
             toggleAuthModal(false);
             openPremiumDashboard();
@@ -16072,7 +16072,7 @@ async function verifyOtpAndSetPassword() {
                 try {
 
                     const response = await fetch(
-                        `${API_BASE_URL}/api/msg91/complete-registration`,
+                        `${API_BASE_URL}/api/home-services/auth/complete-registration`,
                         {
                             method: 'POST',
                             headers: {
@@ -16109,7 +16109,7 @@ async function verifyOtpAndSetPassword() {
                     }
 
                     localStorage.setItem(
-                        'catus_logged_user',
+                        'cerood_home_service_user',
                         JSON.stringify(currentUser)
                     );
 
@@ -16230,7 +16230,7 @@ async function submitNewPasswordReset() {
     try {
 
         const response = await fetch(
-            `${API_BASE_URL}/api/msg91/reset-password`,
+            `${API_BASE_URL}/api/home-services/auth/reset-password`,
             {
                 method: 'POST',
                 headers: {
@@ -16264,11 +16264,11 @@ async function submitNewPasswordReset() {
         }
 
         localStorage.setItem(
-            'catus_logged_user',
+            'cerood_home_service_user',
             JSON.stringify(currentUser)
         );
-        if (data.renewed_session) localStorage.setItem('cerood_renewed_customer_session', data.renewed_session);
-        else localStorage.removeItem('cerood_renewed_customer_session');
+        if (data.home_service_session) localStorage.setItem('cerood_home_service_session', data.home_service_session);
+        else localStorage.removeItem('cerood_home_service_session');
 
         updateHeaderLoginUI();
         toggleAuthModal(false);
@@ -17362,7 +17362,7 @@ function startCatusBannerFlow() {
             
             if(currentUser) {
                 currentUser.address = newAddress;
-                localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+                localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
             }
         }
         
