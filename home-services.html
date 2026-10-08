@@ -12673,12 +12673,21 @@ html body .uc-homepage-wrapper .header-main-container .cerood-mobile-search-end{
 .cerood-direct-call:hover,.cerood-direct-call:focus-visible{background:#0d1727!important;color:#fff!important}
 .cerood-direct-call svg{width:17px!important;height:17px!important;stroke:#fff!important;fill:none!important;flex-shrink:0}
 @media(max-width:850px){
-  .cerood-direct-call{position:fixed!important;right:14px!important;bottom:calc(77px + env(safe-area-inset-bottom,0px))!important;z-index:2147481000!important;min-height:43px!important;border-radius:24px!important;padding:10px 15px!important;font-size:12px!important;box-shadow:0 3px 14px rgba(0,0,0,.18)!important}
+  .cerood-direct-call{position:fixed!important;right:12px!important;top:calc(118px + env(safe-area-inset-top,0px))!important;bottom:auto!important;z-index:2147481000!important;min-height:43px!important;border-radius:24px!important;padding:10px 15px!important;font-size:12px!important;box-shadow:0 3px 14px rgba(0,0,0,.18)!important}
   body.cerood-auth-open .cerood-direct-call{display:none!important}
 }
 </style>
 <style id="cerood-direct-call-mobile-only">.cerood-direct-call-mobile{display:none!important}@media(max-width:850px){.cerood-direct-call-mobile{display:inline-flex!important}}</style>
 <style id="cerood-direct-call-mobile-only">.cerood-direct-call-mobile{display:none!important}@media(max-width:850px){.cerood-direct-call-mobile{display:inline-flex!important}}</style>
+
+<style id="cerood-call-mobile-top-final">
+@media(max-width:850px){
+  html body a.cerood-direct-call-mobile{display:inline-flex!important;position:fixed!important;top:calc(118px + env(safe-area-inset-top,0px))!important;right:12px!important;bottom:auto!important;left:auto!important;z-index:2147481000!important;border-radius:8px!important;padding:9px 12px!important;min-height:36px!important;box-shadow:0 2px 9px rgba(0,0,0,.13)!important}
+  html body a.cerood-direct-call:not(.cerood-direct-call-mobile){display:none!important}
+  html body.cerood-auth-open a.cerood-direct-call-mobile{display:none!important}
+}
+@media(min-width:851px){html body a.cerood-direct-call-mobile{display:none!important}}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
