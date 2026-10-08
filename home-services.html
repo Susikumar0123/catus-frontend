@@ -14538,36 +14538,7 @@ async function openServiceProduct(serviceId) {
                 Total Paid: ₹${amount}
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
-<script id="cerood-mobile-location-sync-20261007">(function(){function sync(){var src=document.getElementById('mobileHeaderLocationDisplay')||document.getElementById('headerLocationDisplay');var v=src&&src.textContent?src.textContent.trim():'Select Location';document.querySelectorAll('.cerood-mobile-location-value').forEach(function(el){el.textContent=v;});}document.addEventListener('DOMContentLoaded',function(){sync();var src=document.getElementById('mobileHeaderLocationDisplay')||document.getElementById('headerLocationDisplay');if(src&&window.MutationObserver)new MutationObserver(sync).observe(src,{childList:true,subtree:true,characterData:true});window.addEventListener('cerood-location-updated',sync);});})();<\/script>
 
-<!-- Cerood Home Services: booking request display, inspection is NOT free. -->
-<style>
-.cerood-booking-label{font-family:Inter,Arial,sans-serif!important;font-size:13px!important;font-weight:600!important;color:#171717!important;text-decoration:none!important}
-.cerood-booking-note{font-family:Inter,Arial,sans-serif;font-size:12px;color:#52525b;line-height:1.5;margin-top:7px}
-</style>
-<script>
-(function(){
- const note='Booking request is free. Inspection/visiting charges apply and will be confirmed before your appointment. Repair charges are quoted after inspection.';
- function apply(){
-  document.querySelectorAll('.uc-price').forEach(el=>{
-   if(el.closest('#cartItemsContainer,#cartPopup,#orderHistory'))return;
-   if(el.textContent.trim()!=='Free Booking'){
-    el.textContent='Free Booking';el.classList.add('cerood-booking-label');
-   }
-  });
-  const price=document.getElementById('displayPrice');
-  if(price&&price.textContent.trim()!=='Free Booking')price.textContent='Free Booking';
-  const wrap=document.querySelector('.starting-price-wrap');
-  if(wrap){let starts=wrap.querySelector('.starts-from-label');if(starts)starts.style.display='none';}
-  ['displayMrp','displayDiscount'].forEach(id=>{let el=document.getElementById(id);if(el)el.style.display='none';});
-  const section=document.querySelector('.price-section');
-  if(section&&!document.getElementById('ceroodInspectionNote')){
-   const p=document.createElement('p');p.id='ceroodInspectionNote';p.className='cerood-booking-note';p.textContent=note;section.insertAdjacentElement('afterend',p);
-  }
- }
- document.addEventListener('DOMContentLoaded',()=>{apply();let pending=false;new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;apply();});}).observe(document.body,{childList:true,subtree:true,characterData:true});});
-})();
-</script>
 </body>
         </html>
         `;
@@ -20010,34 +19981,6 @@ window.addEventListener('DOMContentLoaded', function () {
 </script>
 </div>
 
-<!-- Cerood Home Services: booking request display, inspection is NOT free. -->
-<style>
-.cerood-booking-label{font-family:Inter,Arial,sans-serif!important;font-size:13px!important;font-weight:600!important;color:#171717!important;text-decoration:none!important}
-.cerood-booking-note{font-family:Inter,Arial,sans-serif;font-size:12px;color:#52525b;line-height:1.5;margin-top:7px}
-</style>
-<script>
-(function(){
- const note='Booking request is free. Inspection/visiting charges apply and will be confirmed before your appointment. Repair charges are quoted after inspection.';
- function apply(){
-  document.querySelectorAll('.uc-price').forEach(el=>{
-   if(el.closest('#cartItemsContainer,#cartPopup,#orderHistory'))return;
-   if(el.textContent.trim()!=='Free Booking'){
-    el.textContent='Free Booking';el.classList.add('cerood-booking-label');
-   }
-  });
-  const price=document.getElementById('displayPrice');
-  if(price&&price.textContent.trim()!=='Free Booking')price.textContent='Free Booking';
-  const wrap=document.querySelector('.starting-price-wrap');
-  if(wrap){let starts=wrap.querySelector('.starts-from-label');if(starts)starts.style.display='none';}
-  ['displayMrp','displayDiscount'].forEach(id=>{let el=document.getElementById(id);if(el)el.style.display='none';});
-  const section=document.querySelector('.price-section');
-  if(section&&!document.getElementById('ceroodInspectionNote')){
-   const p=document.createElement('p');p.id='ceroodInspectionNote';p.className='cerood-booking-note';p.textContent=note;section.insertAdjacentElement('afterend',p);
-  }
- }
- document.addEventListener('DOMContentLoaded',()=>{apply();let pending=false;new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;apply();});}).observe(document.body,{childList:true,subtree:true,characterData:true});});
-})();
-</script>
 </body>
 </html>
 <script>document.addEventListener('DOMContentLoaded',function(){var grid=document.getElementById('productGridContainer');function art(){var src=grid&&grid.querySelector('.uc-card-img-wrapper img');var target=document.getElementById('ceroodReferenceHeroArt');if(src&&target){target.src=src.src;target.hidden=false;}}art();if(grid)new MutationObserver(art).observe(grid,{childList:true,subtree:true});});</script>

@@ -2406,7 +2406,6 @@ Please check all required fields, mobile number, and pincode.
 
 </div>
 
-        <div style="font:500 13px/1.6 Inter,Arial,sans-serif;color:#334155;padding:12px 14px;border:1px solid #e2e8f0;border-radius:8px;margin:12px 0;">Inspection is not free. The visiting/inspection charge must be confirmed before the appointment. Repair costs require a technician quotation and your approval. <strong>Important:</strong> This checkout currently uses existing backend-calculated amounts; do not interpret them as a free booking.</div>
         <!-- Payment Mode Selection -->
         <div style="margin-top: 12px;">
             <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Payment Method</label>
@@ -2868,8 +2867,7 @@ Please check all required fields, mobile number, and pincode.
             }
 
             orderItems = JSON.parse(rawItems);
-            renderSummary();
-            await loadBackendBillSummary();
+            renderFreeBookingSummary();
         });
 
         function toggleEditAddressForm() {
@@ -3410,6 +3408,28 @@ if (trustNote) {
         function onCountryChange() { loadStates(); }
         function onStateChange() { loadDistricts(); }
 
+        function renderFreeBookingSummary() {
+            const container = document.getElementById('summaryItemsContainer');
+            if (container) {
+                container.replaceChildren();
+                orderItems.forEach(item => {
+                    const p = document.createElement('p');
+                    p.textContent = String(item.name || 'Home service') + ' — Free Booking';
+                    container.appendChild(p);
+                });
+            }
+            const labels = {billItemTotal:'₹0', billConvenienceFee:'₹0',billTaxes:'₹0',billTotalSum:'₹0',billAmountToPay:'₹0'};
+            Object.entries(labels).forEach(([id,value]) => { const el = document.getElementById(id); if (el) el.textContent=value; });
+            ['convenienceFeeRow','gstRow'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+            const btn=document.getElementById('confirmOrderBtn');
+            if(btn) btn.textContent='Request Free Booking';
+            ['cardRazorpay','cardLater'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+            const notice=document.createElement('p');
+            notice.textContent='Booking request: ₹0. Inspection / visiting charges are paid and will be confirmed before the appointment. Repair costs will be quoted after inspection; no repair starts without approval.';
+            notice.style.cssText='padding:14px 0;font-size:14px;line-height:1.6;color:#222';
+            if(container) container.after(notice);
+        }
+
         function renderSummary() {
     const container = document.getElementById('summaryItemsContainer');
     let itemTotal = 0;
@@ -3606,7 +3626,70 @@ function resetOrderSubmitState() {
     }
 }
 
+        async function submitFreeBookingRequest() {
+            if (isOrderSubmitting) return;
+            const get = id => (document.getElementById(id)?.value || '').trim();
+            const name = get('fieldName'), phone = get('fieldMobile');
+            const door = get('fieldDoor'), street = get('fieldStreet');
+            const village = get('fieldVillage'), district = get('fieldDistrict');
+            const state = get('fieldState'), pincode = get('fieldPincode');
+            const country = get('fieldCountry');
+            if (!name || !/^[6-9]\d{9}$/.test(phone) || !door || !district || !state || !/^[1-9]\d{5}$/.test(pincode)) {
+                alert('Please complete your name, mobile number and service address.');
+                document.getElementById('addressFormContainer').style.display = 'grid';
+                return;
+            }
+            const items = (Array.isArray(orderItems) ? orderItems : [])
+                .filter(x => x && x.product_id)
+                .map(x => ({product_id: String(x.product_id)}));
+            if (!items.length) { alert('Please select a service.'); return; }
+            let serviceBooking = {};
+            try { serviceBooking = JSON.parse(localStorage.getItem('cerood_service_booking') || '{}') || {}; } catch (_) {}
+            const address = [door, street, village, district, state, pincode, country].filter(Boolean).join(', ');
+            const button = document.getElementById('confirmOrderBtn');
+            isOrderSubmitting = true;
+            if (button) { button.disabled = true; button.textContent = 'Submitting booking...'; }
+            try {
+                const currentUser = JSON.parse(localStorage.getItem('catus_logged_user') || '{}') || {};
+                const response = await fetch(`${API_BASE_URL}/api/home-services/free-bookings`, {
+                    method: 'POST', headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({
+                        customer_id: currentUser.id || null, customer_name: name, phone,
+                        whatsapp: phone, address, service_address: address,
+                        district, service_district: district, pincode, service_pincode: pincode,
+                        service_date: serviceBooking.service_date || null,
+                        service_time: serviceBooking.service_time || null, items
+                    })
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || 'Booking failed.');
+                localStorage.removeItem('catus_checkout_items');
+                localStorage.removeItem('cerood_service_booking');
+                const safeOrderId = String(result.order_id || '');
+                const main = document.querySelector('main') || document.querySelector('.checkout-container');
+                if (main) {
+                    main.innerHTML = '';
+                    const panel = document.createElement('section');
+                    panel.style.cssText = 'max-width:680px;margin:48px auto;padding:30px;border:1px solid #ddd;border-radius:12px;background:white;color:#111;';
+                    const title = document.createElement('h2'); title.textContent = 'Booking request received'; panel.appendChild(title);
+                    const ref = document.createElement('p'); ref.textContent = 'Booking ID: ' + safeOrderId; panel.appendChild(ref);
+                    const note = document.createElement('p'); note.textContent = 'Booking request is free. Inspection / visiting charges apply and will be confirmed with you before the technician visit. Repair charges are quoted after inspection and require your approval.'; panel.appendChild(note);
+                    main.appendChild(panel);
+                } else {
+                    alert('Booking request received! Booking ID: ' + safeOrderId + '. Paid inspection charge will be confirmed before visit.');
+                }
+                window.scrollTo({top:0,behavior:'smooth'});
+            } catch (error) {
+                alert(error.message || 'Unable to submit booking. Please try again.');
+            } finally {
+                isOrderSubmitting = false;
+                if (button && button.isConnected) { button.disabled = false; button.textContent = 'Request Free Booking'; }
+            }
+        }
+
         async function submitOrder() {
+            return submitFreeBookingRequest();
+
 
     if (isOrderSubmitting) return;
 
