@@ -1990,6 +1990,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
                             <div class="form-group"><label for="chsQuoteNotes">Quotation notes</label><textarea id="chsQuoteNotes" class="form-input" maxlength="2000" rows="2" placeholder="Work and parts required"></textarea></div>
                             <button type="button" class="save-addr-action-btn" onclick="chsAdminAction('quotation')">Save quotation draft</button>
                             <button type="button" class="save-addr-action-btn" onclick="chsAdminAction('send-quotation')">Publish quotation for customer approval</button>
+                            <button type="button" onclick="chsAdminRefresh()" style="margin-bottom:8px;padding:7px 12px;border:1px solid #ddd;background:white;border-radius:8px;cursor:pointer">Refresh approval status</button>
                             <p id="chsAdminState" style="font-size:12px;color:#52525b;"></p>
                         </section>
 
@@ -6054,70 +6055,6 @@ if (techResponse === 'Accepted') {
                     ${tableHtml}
                 
 
-<script>
-/* Home Services admin controls. Isolated from Renewed and other order types. */
-(function(){
-'use strict';
-const base='https://catus-backend-d2js.onrender.com';
-const el=id=>document.getElementById(id);
-const token=()=>localStorage.getItem('cerood_admin_token')||sessionStorage.getItem('cerood_admin_token')||localStorage.getItem('adminToken')||sessionStorage.getItem('adminToken')||'';
-let busy=false;
-function message(text,error=false){const n=el('chsAdminMessage');n.textContent=text;n.style.color=error?'#b91c1c':'#166534';}
-async function request(path,method='GET',payload){
- const headers={'Authorization':'Bearer '+token(),'Accept':'application/json'};
- if(payload)headers['Content-Type']='application/json';
- const response=await fetch(base+path,{method,headers,...(payload?{body:JSON.stringify(payload)}:{})});
- const data=await response.json().catch(()=>({}));
- if(!response.ok||!data.success)throw new Error(data.message||'Request failed ('+response.status+')');
- return data;
-}
-function showState(o){
- el('chsAdminState').textContent='Inspection: '+(o.inspection_fee_status||'Not recorded')+' · Inspection completed: '+(o.inspection_completed_at?'Yes':'No')+' · Quotation: '+(o.repair_quote_status||'Not Quoted');
- if(o.inspection_fee!=null)el('chsInspectionInput').value=o.inspection_fee;
- if(o.repair_quote_amount!=null)el('chsQuoteInput').value=o.repair_quote_amount;
- if(o.repair_quote_notes!=null)el('chsQuoteNotes').value=o.repair_quote_notes;
-}
-window.chsAdminOpen=async function(order){
- const panel=el('chsAdminControls');
- const id=String(order.order_id||'');
- panel.style.display=id.startsWith('CHS-')?'block':'none';
- if(!id.startsWith('CHS-'))return;
- panel.dataset.orderId=id;
- el('chsInspectionInput').value='';el('chsQuoteInput').value='';el('chsQuoteNotes').value='';
- message('Loading latest booking status…');
- try{
-  const data=await request('/api/admin/home-services/free-bookings');
-  if(panel.dataset.orderId!==id)return;
-  const current=(data.orders||[]).find(o=>String(o.order_id)===id);
-  if(!current)throw Error('Booking not found in latest 250 records.');
-  showState(current);message('Latest booking status loaded.');
- }catch(e){message(e.message,true);}
-};
-window.chsAdminAction=async function(action){
- const panel=el('chsAdminControls');const id=panel.dataset.orderId;
- if(busy||!id||!id.startsWith('CHS-'))return;
- const routes={inspection:'inspection',quotation:'quotation','inspection-completed':'inspection-completed','send-quotation':'send-quotation'};
- if(!routes[action])return;
- let payload;
- if(action==='inspection'){
-  const v=el('chsInspectionInput').value.trim();if(v===''||!Number.isFinite(Number(v))||Number(v)<0){message('Enter a valid inspection fee.',true);return;}
-  payload={inspection_fee:Number(v)};
- }else if(action==='quotation'){
-  const v=el('chsQuoteInput').value.trim();if(v===''||!Number.isFinite(Number(v))||Number(v)<0){message('Enter a valid quotation.',true);return;}
-  payload={repair_quote_amount:Number(v),repair_quote_notes:el('chsQuoteNotes').value};
- }
- if(!confirm('Confirm '+action.replaceAll('-',' ')+' for '+id+'?'))return;
- busy=true;panel.querySelectorAll('button').forEach(b=>b.disabled=true);
- try{
-  const result=await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id)+'/'+routes[action],'PATCH',payload);
-  message(result.message||'Saved. Customer approval is separate; no payment collected.');
-  const latest=await request('/api/admin/home-services/free-bookings');
-  const current=(latest.orders||[]).find(o=>String(o.order_id)===id);
-  if(current&&panel.dataset.orderId===id)showState(current);
- }catch(e){message(e.message,true);}finally{busy=false;panel.querySelectorAll('button').forEach(b=>b.disabled=false);}
-};
-})();
-</script>
 </body>
                 </html>
             `);
@@ -7395,6 +7332,82 @@ async function savePartnershipLead(id) {
         note.textContent=`Lead #${id} updated successfully.`;
     } catch(error) {note.textContent=error.message;}
 }
+</script>
+
+<script>
+/* Home Services admin controls. Isolated from Renewed and other order types. */
+(function(){
+'use strict';
+const base='https://catus-backend-d2js.onrender.com';
+const el=id=>document.getElementById(id);
+const token=()=>localStorage.getItem('cerood_admin_token')||sessionStorage.getItem('cerood_admin_token')||localStorage.getItem('adminToken')||sessionStorage.getItem('adminToken')||'';
+let busy=false;
+function message(text,error=false){const n=el('chsAdminMessage');n.textContent=text;n.style.color=error?'#b91c1c':'#166534';}
+async function request(path,method='GET',payload){
+ const headers={'Authorization':'Bearer '+token(),'Accept':'application/json'};
+ if(payload)headers['Content-Type']='application/json';
+ const response=await fetch(base+path,{method,headers,...(payload?{body:JSON.stringify(payload)}:{})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok||!data.success)throw new Error(data.message||'Request failed ('+response.status+')');
+ return data;
+}
+function showState(o){
+ el('chsAdminState').textContent='Inspection: '+(o.inspection_fee_status||'Not recorded')+' · Inspection completed: '+(o.inspection_completed_at?'Yes':'No')+' · Quotation: '+(o.repair_quote_status||'Not Quoted');
+ if(o.inspection_fee!=null)el('chsInspectionInput').value=o.inspection_fee;
+ if(o.repair_quote_amount!=null)el('chsQuoteInput').value=o.repair_quote_amount;
+ if(o.repair_quote_notes!=null)el('chsQuoteNotes').value=o.repair_quote_notes;
+}
+window.chsAdminOpen=async function(order){
+ const panel=el('chsAdminControls');
+ const id=String(order.order_id||'');
+ panel.style.display=id.startsWith('CHS-')?'block':'none';
+ if(!id.startsWith('CHS-'))return;
+ panel.dataset.orderId=id;
+ el('chsInspectionInput').value='';el('chsQuoteInput').value='';el('chsQuoteNotes').value='';
+ message('Loading latest booking status…');
+ try{
+  const data=await request('/api/admin/home-services/free-bookings');
+  if(panel.dataset.orderId!==id)return;
+  const current=(data.orders||[]).find(o=>String(o.order_id)===id);
+  if(!current)throw Error('Booking not found in latest 250 records.');
+  showState(current);message('Latest booking status loaded.');
+ }catch(e){message(e.message,true);}
+};
+window.chsAdminRefresh=async function(){
+ const panel=el('chsAdminControls');const id=panel.dataset.orderId;
+ if(!id||panel.style.display==='none'||busy)return;
+ try{const data=await request('/api/admin/home-services/free-bookings');
+ const current=(data.orders||[]).find(o=>String(o.order_id)===id);
+ if(current&&panel.dataset.orderId===id){showState(current);message('Customer approval status updated.');}
+ }catch(e){message('Refresh failed: '+e.message,true);}
+};
+setInterval(()=>{const panel=el('chsAdminControls');const modal=el('orderDetailModal');
+ if(panel&&modal&&panel.style.display!=='none'&&modal.style.display!=='none'&&!document.hidden)window.chsAdminRefresh();
+},15000);
+window.chsAdminAction=async function(action){
+ const panel=el('chsAdminControls');const id=panel.dataset.orderId;
+ if(busy||!id||!id.startsWith('CHS-'))return;
+ const routes={inspection:'inspection',quotation:'quotation','inspection-completed':'inspection-completed','send-quotation':'send-quotation'};
+ if(!routes[action])return;
+ let payload;
+ if(action==='inspection'){
+  const v=el('chsInspectionInput').value.trim();if(v===''||!Number.isFinite(Number(v))||Number(v)<0){message('Enter a valid inspection fee.',true);return;}
+  payload={inspection_fee:Number(v)};
+ }else if(action==='quotation'){
+  const v=el('chsQuoteInput').value.trim();if(v===''||!Number.isFinite(Number(v))||Number(v)<0){message('Enter a valid quotation.',true);return;}
+  payload={repair_quote_amount:Number(v),repair_quote_notes:el('chsQuoteNotes').value};
+ }
+ if(!confirm('Confirm '+action.replaceAll('-',' ')+' for '+id+'?'))return;
+ busy=true;panel.querySelectorAll('button').forEach(b=>b.disabled=true);
+ try{
+  const result=await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id)+'/'+routes[action],'PATCH',payload);
+  message(result.message||'Saved. Customer approval is separate; no payment collected.');
+  const latest=await request('/api/admin/home-services/free-bookings');
+  const current=(latest.orders||[]).find(o=>String(o.order_id)===id);
+  if(current&&panel.dataset.orderId===id)showState(current);
+ }catch(e){message(e.message,true);}finally{busy=false;panel.querySelectorAll('button').forEach(b=>b.disabled=false);}
+};
+})();
 </script>
 </body>
 
