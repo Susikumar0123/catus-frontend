@@ -17702,16 +17702,7 @@ const nameOnlyCategories = [
 const isNameOnlySection =
     nameOnlyCategories.includes(catName);
 
-const priceHTML = (!isNameOnlySection && price > 0)
-    ? `
-        <div class="uc-price">
-            ₹${Math.round(price)}
-            ${mrp > price
-                ? `<span class="uc-cut">₹${Math.round(mrp)}</span>`
-                : ''}
-        </div>
-      `
-    : '';
+const priceHTML = `<div class="uc-price">Free Booking</div>`;
 
     html += `
         <div
