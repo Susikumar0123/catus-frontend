@@ -2217,6 +2217,12 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 }
 @media(min-width:851px){html body a.cerood-direct-call-mobile{display:none!important}}
 </style>
+<style id="cerood-free-booking-checkout-ui-20261009">
+/* Home Services checkout only. Legacy calculated amounts remain in DOM for existing scripts. */
+.bill-row, .bill-summary, .bill-breakdown, #checkoutTrustNote { display:none !important; }
+#ceroodFreeBookingNotice { display:block !important; }
+#confirmOrderBtn { cursor:pointer; }
+</style>
 </head>
 <body>
 
@@ -2406,8 +2412,12 @@ Please check all required fields, mobile number, and pincode.
 
 </div>
 
+        <div id="ceroodFreeBookingNotice" role="status" style="padding:18px 0;color:#111;line-height:1.6">
+          <strong style="font-size:20px">Booking fee: ₹0 — Free Booking</strong>
+          <p style="margin:8px 0 0">No online payment is required to submit this request. Inspection / visiting charges are separate, will be disclosed, and require your approval before a technician visit. Repair charges are quoted after inspection and require separate approval.</p>
+        </div>
         <!-- Payment Mode Selection -->
-        <div style="margin-top: 12px;">
+        <div id="ceroodLegacyPaymentOptions" style="display:none !important;">
             <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Payment Method</label>
             
             <div class="payment-method-card selected" onclick="selectPaymentMode('razorpay')" id="cardRazorpay">
@@ -2443,13 +2453,13 @@ Please check all required fields, mobile number, and pincode.
     </div>
 
     <button class="confirm-btn" id="confirmOrderBtn" onclick="submitOrder()">
-    Continue to Payment
+    Confirm Free Booking
     <i class="fa-solid fa-arrow-right"></i>
 </button>
 
 <div id="checkoutTrustNote" class="checkout-trust-note">
     <i class="fa-solid fa-lock"></i>
-    <span>Online payments are processed through Razorpay.</span>
+    <span>No payment is required to submit your booking. Inspection / visiting charges are separate and require your approval.</span>
 </div>
 
 </div>
@@ -3284,7 +3294,7 @@ if (trustNote) {
                 document.getElementById('cardRazorpay').classList.add('selected');
                 document.getElementById('cardLater').classList.remove('selected');
                 document.getElementById('confirmOrderBtn').innerHTML =
-    'Continue to Payment <i class="fa-solid fa-arrow-right"></i>';
+    'Confirm Free Booking <i class="fa-solid fa-arrow-right"></i>';
             } else {
 
                 const trustNote = document.getElementById('checkoutTrustNote');
@@ -3302,7 +3312,7 @@ if (trustNote) {
                 document.getElementById('cardLater').classList.add('selected');
                 document.getElementById('cardRazorpay').classList.remove('selected');
                 document.getElementById('confirmOrderBtn').innerHTML =
-    'Confirm Booking <i class="fa-solid fa-arrow-right"></i>';
+    'Confirm Free Booking <i class="fa-solid fa-arrow-right"></i>';
             }
 
             updatePaymentModeTotal();
@@ -3422,15 +3432,17 @@ if (trustNote) {
             Object.entries(labels).forEach(([id,value]) => { const el = document.getElementById(id); if (el) el.textContent=value; });
             ['convenienceFeeRow','gstRow'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
             const btn=document.getElementById('confirmOrderBtn');
-            if(btn) btn.textContent='Request Free Booking';
+            if(btn) btn.textContent='Confirm Free Booking';
             ['cardRazorpay','cardLater'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
-            const notice=document.createElement('p');
+            document.getElementById('ceroodFreeBookingSummaryNote')?.remove();
+            const notice=document.createElement('p'); notice.id='ceroodFreeBookingSummaryNote';
             notice.textContent='Booking request: ₹0. Inspection / visiting charges are paid and will be confirmed before the appointment. Repair costs will be quoted after inspection; no repair starts without approval.';
             notice.style.cssText='padding:14px 0;font-size:14px;line-height:1.6;color:#222';
             if(container) container.after(notice);
         }
 
         function renderSummary() {
+            return renderFreeBookingSummary();
     const container = document.getElementById('summaryItemsContainer');
     let itemTotal = 0;
     container.innerHTML = '';
@@ -3619,12 +3631,22 @@ function resetOrderSubmitState() {
 
     if (selectedMode === 'later') {
         confirmBtn.innerHTML =
-            'Confirm Booking <i class="fa-solid fa-arrow-right"></i>';
+            'Confirm Free Booking <i class="fa-solid fa-arrow-right"></i>';
     } else {
         confirmBtn.innerHTML =
-            'Continue to Payment <i class="fa-solid fa-arrow-right"></i>';
+            'Confirm Free Booking <i class="fa-solid fa-arrow-right"></i>';
     }
 }
+
+        function getOrCreateFreeBookingRequestId() {
+            let id = '';
+            try { id = sessionStorage.getItem('cerood_free_booking_request_id') || ''; } catch (_) {}
+            if (!/^[0-9a-f-]{36}$/i.test(id)) {
+                id = crypto.randomUUID();
+                try { sessionStorage.setItem('cerood_free_booking_request_id', id); } catch (_) {}
+            }
+            return id;
+        }
 
         async function submitFreeBookingRequest() {
             if (isOrderSubmitting) return;
@@ -3651,10 +3673,11 @@ function resetOrderSubmitState() {
             if (button) { button.disabled = true; button.textContent = 'Submitting booking...'; }
             try {
                 const currentUser = JSON.parse(localStorage.getItem('catus_logged_user') || '{}') || {};
+                const requestId = getOrCreateFreeBookingRequestId();
                 const response = await fetch(`${API_BASE_URL}/api/home-services/free-bookings`, {
                     method: 'POST', headers: {'Content-Type':'application/json'},
                     body: JSON.stringify({
-                        customer_id: currentUser.id || null, customer_name: name, phone,
+                        booking_request_id: requestId, customer_id: currentUser.id || null, customer_name: name, phone,
                         whatsapp: phone, address, service_address: address,
                         district, service_district: district, pincode, service_pincode: pincode,
                         service_date: serviceBooking.service_date || null,
@@ -3665,6 +3688,7 @@ function resetOrderSubmitState() {
                 if (!response.ok || !result.success) throw new Error(result.message || 'Booking failed.');
                 localStorage.removeItem('catus_checkout_items');
                 localStorage.removeItem('cerood_service_booking');
+                try { sessionStorage.removeItem('cerood_free_booking_request_id'); } catch (_) {}
                 const safeOrderId = String(result.order_id || '');
                 const approvalKey = String(result.customer_approval_key || '');
                 if (approvalKey && safeOrderId) {
@@ -3696,7 +3720,7 @@ function resetOrderSubmitState() {
                 alert(error.message || 'Unable to submit booking. Please try again.');
             } finally {
                 isOrderSubmitting = false;
-                if (button && button.isConnected) { button.disabled = false; button.textContent = 'Request Free Booking'; }
+                if (button && button.isConnected) { button.disabled = false; button.textContent = 'Confirm Free Booking'; }
             }
         }
 
