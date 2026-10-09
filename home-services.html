@@ -20176,6 +20176,11 @@ document.addEventListener('DOMContentLoaded',function(){
  })});
 });
 </script>
+<style id="cerood-desktop-full-view">
+@media(min-width:851px){html:root body .master-app-container>.cerood-desktop-demo{width:var(--cerood-demo-width,100%)!important;max-width:none!important;margin-left:var(--cerood-demo-offset,0px)!important;margin-right:0!important;padding-left:16px!important;padding-right:16px!important;height:var(--cerood-demo-height,calc(100svh - 120px))!important;margin-bottom:18px!important;box-sizing:border-box!important}}
+</style><script id="cerood-desktop-full-view-sizing">
+document.addEventListener('DOMContentLoaded',function(){const demo=document.querySelector('.cerood-desktop-demo');if(!demo)return;const desktop=matchMedia('(min-width:851px)');function fit(){if(!desktop.matches){demo.style.removeProperty('--cerood-demo-width');demo.style.removeProperty('--cerood-demo-offset');demo.style.removeProperty('--cerood-demo-height');return}demo.style.setProperty('--cerood-demo-offset','0px');const rect=demo.getBoundingClientRect();demo.style.setProperty('--cerood-demo-width',document.documentElement.clientWidth+'px');demo.style.setProperty('--cerood-demo-offset',(-rect.left)+'px');const top=rect.top+window.scrollY;demo.style.setProperty('--cerood-demo-height',Math.max(320,window.innerHeight-top-16)+'px')}fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);desktop.addEventListener('change',fit)});
+</script>
 </body>
 </html>
 <script>document.addEventListener('DOMContentLoaded',function(){var grid=document.getElementById('productGridContainer');function art(){var src=grid&&grid.querySelector('.uc-card-img-wrapper img');var target=document.getElementById('ceroodReferenceHeroArt');if(src&&target){target.src=src.src;target.hidden=false;}}art();if(grid)new MutationObserver(art).observe(grid,{childList:true,subtree:true});});</script>
