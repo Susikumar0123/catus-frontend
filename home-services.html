@@ -19736,6 +19736,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <script>
 let ceroodDeferredInstallPrompt = null;
+let ceroodInstallHideTimer = null;
 
 function isCeroodRunningAsApp() {
     return (
@@ -19745,10 +19746,21 @@ function isCeroodRunningAsApp() {
 }
 
 window.addEventListener('beforeinstallprompt', function (event) {
-    // Keep installation user initiated; never show an automatic popup.
     event.preventDefault();
     if (isCeroodRunningAsApp()) return;
     ceroodDeferredInstallPrompt = event;
+    const banner = document.getElementById('ceroodInstallBanner');
+    if (!banner) return;
+    clearTimeout(ceroodInstallHideTimer);
+    banner.style.display = 'block';
+    requestAnimationFrame(function () {
+        banner.classList.add('show');
+        ceroodInstallHideTimer = setTimeout(function () {
+            banner.classList.remove('show');
+            banner.style.display = 'none';
+            ceroodInstallHideTimer = null;
+        }, 5000);
+    });
 });
 
 
@@ -19791,6 +19803,8 @@ if (ceroodInstallBtn) {
 
 
 function closeCeroodInstallBanner() {
+    clearTimeout(ceroodInstallHideTimer);
+    ceroodInstallHideTimer = null;
 
     const banner =
         document.getElementById('ceroodInstallBanner');
@@ -20477,3 +20491,11 @@ html:root body .master-app-container #productGridContainer .uc-category-box .uc-
 </style><script id="cerood-full-width-category-sizing">
 document.addEventListener('DOMContentLoaded',function(){const grid=document.getElementById('productGridContainer');if(!grid)return;const desktop=matchMedia('(min-width:851px)');function fit(){if(!desktop.matches){grid.style.removeProperty('--cerood-category-width');grid.style.removeProperty('--cerood-category-offset');return}grid.style.setProperty('--cerood-category-offset','0px');const left=grid.getBoundingClientRect().left;grid.style.setProperty('--cerood-category-width',document.documentElement.clientWidth+'px');grid.style.setProperty('--cerood-category-offset',(-left)+'px')}fit();window.addEventListener('load',fit);window.addEventListener('resize',fit);desktop.addEventListener('change',fit)});
 </script>
+
+<style id="cerood-search-results-front-layer">
+@media(min-width:851px){html:root body .master-app-container .uc-homepage-wrapper.home-index-header{position:sticky!important;top:0!important;z-index:100000!important;overflow:visible!important;background:#fff!important}}
+html:root body .master-app-container .uc-homepage-wrapper.home-index-header .header-main-container{overflow:visible!important}
+html:root body .master-app-container .uc-homepage-wrapper.home-index-header .search-container{position:relative!important;z-index:100010!important;overflow:visible!important}
+html:root body #suggestionsBox{position:absolute!important;z-index:100020!important;background:#fff!important;isolation:isolate!important;max-height:min(420px,60vh)!important;overflow-y:auto!important;box-shadow:0 12px 30px #0002!important}
+html:root body .master-app-container>.cerood-desktop-demo{position:relative!important;z-index:0!important;isolation:isolate!important}
+</style>
