@@ -3716,6 +3716,19 @@ function resetOrderSubmitState() {
                         panel.appendChild(security);
                         const keyBox = document.createElement('input'); keyBox.type = 'text'; keyBox.readOnly = true; keyBox.value = approvalKey; keyBox.setAttribute('aria-label','Private approval key'); keyBox.style.cssText = 'display:block;width:100%;padding:12px;box-sizing:border-box;margin:12px 0'; panel.appendChild(keyBox);
                         const copy = document.createElement('button'); copy.type='button'; copy.textContent='Copy booking ID and private key'; copy.onclick=()=>{const text='Booking ID: '+safeOrderId+'\nPrivate approval key: '+approvalKey; if(navigator.clipboard)navigator.clipboard.writeText(text).catch(()=>window.prompt('Copy these details:',text));else window.prompt('Copy these details:',text)}; panel.appendChild(copy);
+                        const printBtn = document.createElement('button');
+                        printBtn.type = 'button';
+                        printBtn.textContent = 'Download confirmation (Save as PDF)';
+                        printBtn.style.cssText = 'display:block;margin-top:14px;padding:12px 16px;border:1px solid #d4d4d8;border-radius:8px;background:#111;color:#fff;cursor:pointer';
+                        printBtn.onclick = () => {
+                            const w = window.open('', '_blank', 'width=760,height=780');
+                            if (!w) { alert('Please allow pop-ups to save the booking confirmation.'); return; }
+                            const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+                            w.document.open();
+                            w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Cerood Booking Confirmation</title><style>body{font-family:Arial,sans-serif;color:#171717;max-width:680px;margin:50px auto;line-height:1.7;padding:20px}h1{font-size:24px}code{display:block;overflow-wrap:anywhere;background:#f5f5f5;padding:12px;border-radius:6px}small{color:#555}@media print{button{display:none}}</style></head><body><h1>Cerood Home Services</h1><h2>Booking Request Received</h2><p><b>Booking ID</b></p><code>'+esc(safeOrderId)+'</code><p><b>Private Approval Key — Confidential</b></p><code>'+esc(approvalKey)+'</code><p>Booking fee: ₹0. Inspection / visiting charges are separate and must be approved before the technician visits. Repair quotation requires separate customer approval.</p><p>Approval page: https://www.cerood.com/customer-approval.html</p><small>Keep this document private. Anyone holding this key may be able to approve charges for this booking.</small><p><button onclick="window.print()">Print / Save as PDF</button></p></body></html>');
+                            w.document.close(); w.focus();
+                        };
+                        panel.appendChild(printBtn);
                         const link = document.createElement('a'); link.href='/customer-approval.html'; link.textContent='Review inspection / repair charges'; link.style.cssText='display:block;margin-top:20px'; panel.appendChild(link);
                     }
                     main.appendChild(panel);

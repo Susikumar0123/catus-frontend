@@ -14591,6 +14591,9 @@ serviceStr =
                         `;
                     }
 
+                    if (/^CHS-[0-9a-f-]{36}$/i.test(String(currentOrder.order_id || ''))) {
+                        actionButtons += `<button type="button" class="prem-btn-compact" style="background:#fff;color:#171717;border:1px solid #d4d4d8" onclick="ceroodOpenHomeApproval('${currentOrder.order_id}')">Review Charges</button>`;
+                    }
                     let cardHTML = `
                     <div class="prem-live-card">
                         <div class="prem-live-top-row">
@@ -14702,6 +14705,9 @@ serviceStr =
                         `;
                     }
 
+                    if (/^CHS-[0-9a-f-]{36}$/i.test(String(order.order_id || ''))) {
+                        actionButtonsHTML += `<button type="button" class="prem-btn-small" style="background:#fff;color:#171717;border:1px solid #d4d4d8" onclick="ceroodOpenHomeApproval('${order.order_id}')">Review Charges</button>`;
+                    }
                     ordersList.innerHTML += `
                         <div class="prem-card-box" style="margin-bottom:10px; padding:15px; border-radius:8px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
                             <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #f1f5f9; padding-bottom:10px; margin-bottom:10px;">
@@ -17221,6 +17227,29 @@ window.addEventListener('DOMContentLoaded', function () {
 }
 </style>
 
+
+<script>
+/* Home Services approval shortcut; private key never appears in URL. */
+function ceroodOpenHomeApproval(orderId) {
+    const id = String(orderId || '');
+    if (!/^CHS-[0-9a-f-]{36}$/i.test(id)) return;
+    let key = '';
+    try { key = localStorage.getItem('cerood_home_approval_' + id) || ''; } catch (_) {}
+    const details = 'Booking ID: ' + id + (key ? '\nPrivate approval key: ' + key : '');
+    if (key) {
+        const ok = window.confirm('Your approval key is saved on this browser. Copy booking details to clipboard and open Customer Approval? Keep the key private.');
+        if (!ok) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(details).catch(() => window.prompt('Copy your booking details:', details)).finally(() => { window.location.href = '/customer-approval.html'; });
+            return;
+        }
+        window.prompt('Copy your booking details:', details);
+    } else {
+        window.alert('Approval key is not stored on this browser. Please use your saved booking confirmation PDF or contact Cerood support for secure recovery.');
+    }
+    window.location.href = '/customer-approval.html';
+}
+</script>
 </body>
 </html>
 
