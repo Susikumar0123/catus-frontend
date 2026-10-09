@@ -19745,31 +19745,10 @@ function isCeroodRunningAsApp() {
 }
 
 window.addEventListener('beforeinstallprompt', function (event) {
-
-    if (isCeroodRunningAsApp()) {
-    return;
-}
-
-    // Browser automatic mini prompt-ai prevent pannuvom
+    // Keep installation user initiated; never show an automatic popup.
     event.preventDefault();
-
-    // Later Install button click-ku save pannuvom
+    if (isCeroodRunningAsApp()) return;
     ceroodDeferredInstallPrompt = event;
-
-    const banner =
-        document.getElementById('ceroodInstallBanner');
-
-    if (banner) {
-
-    banner.style.display = 'block';
-
-    // Every page load-la notification maari slide down
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            banner.classList.add('show');
-        });
-    });
-}
 });
 
 
