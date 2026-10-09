@@ -2452,6 +2452,24 @@ Please check all required fields, mobile number, and pincode.
         </div>
     </div>
 
+    <!-- CEROOD HOME SERVICES: preferred visit window (request, not guaranteed availability) -->
+    <section id="ceroodVisitPreference" style="display:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin:14px 0;">
+      <h3 style="margin:0 0 8px;font-size:16px;">Preferred technician visit</h3>
+      <p style="font-size:12px;color:#64748b;margin:0 0 14px;">Choose your preferred date and time. This is a request, not a confirmed technician slot. Cerood will confirm availability after inspection fee approval.</p>
+      <label for="ceroodVisitDate" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Preferred date</label>
+      <input type="date" id="ceroodVisitDate" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-bottom:12px;" />
+      <label for="ceroodVisitTime" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Preferred time window</label>
+      <select id="ceroodVisitTime" style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;">
+        <option value="">Select preferred time</option>
+        <option value="08:00-10:00">8 AM – 10 AM</option>
+        <option value="10:00-12:00">10 AM – 12 PM</option>
+        <option value="12:00-14:00">12 PM – 2 PM</option>
+        <option value="14:00-16:00">2 PM – 4 PM</option>
+        <option value="16:00-18:00">4 PM – 6 PM</option>
+        <option value="18:00-20:00">6 PM – 8 PM</option>
+      </select>
+      <p id="ceroodVisitError" role="alert" style="display:none;color:#b91c1c;font-size:12px;"></p>
+    </section>
     <button class="confirm-btn" id="confirmOrderBtn" onclick="submitOrder()">
     Confirm Free Booking
     <i class="fa-solid fa-arrow-right"></i>
@@ -3667,6 +3685,23 @@ function resetOrderSubmitState() {
             if (!items.length) { alert('Please select a service.'); return; }
             let serviceBooking = {};
             try { serviceBooking = JSON.parse(localStorage.getItem('cerood_service_booking') || '{}') || {}; } catch (_) {}
+            const preferredDate = document.getElementById('ceroodVisitDate')?.value || '';
+            const preferredTime = document.getElementById('ceroodVisitTime')?.value || '';
+            const visitError = document.getElementById('ceroodVisitError');
+            if (!preferredDate || !preferredTime) {
+                if (visitError) { visitError.textContent = 'Please select a preferred visit date and time window.'; visitError.style.display = 'block'; }
+                document.getElementById('ceroodVisitPreference')?.scrollIntoView({behavior:'smooth',block:'center'});
+                return;
+            }
+            const today = new Date();
+            const localToday = [today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
+            if (preferredDate < localToday) {
+                if (visitError) { visitError.textContent = 'Please choose today or a future date.'; visitError.style.display = 'block'; }
+                return;
+            }
+            serviceBooking.service_date = preferredDate;
+            serviceBooking.service_time = preferredTime;
+            if (visitError) visitError.style.display = 'none';
             const address = [door, street, village, district, state, pincode, country].filter(Boolean).join(', ');
             const button = document.getElementById('confirmOrderBtn');
             isOrderSubmitting = true;
@@ -4440,6 +4475,28 @@ document.getElementById('dispTotal').textContent =
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup, {once:true});
   else setup();
+})();
+</script>
+<script>
+(function(){
+  function setupVisitPreference(){
+    const panel=document.getElementById('ceroodVisitPreference');
+    if(!panel)return;
+    // The free booking submit flow exists on this page; keep scheduling request visible
+    // only for Home Services items, never for Renewed / Fashion / Beauty checkout.
+    let isHome=false;
+    try { const b=JSON.parse(localStorage.getItem('cerood_service_booking')||'{}'); isHome=!!(b && (b.service_date || b.service_time || b.service_name || b.service_id || b.product_id)); } catch(_){}
+    try { const items=JSON.parse(localStorage.getItem('catus_checkout_items')||'[]'); if(Array.isArray(items) && items.some(x=>x && (x.category==='home-service'||x.category==='home_services'||x.type==='service'))) isHome=true; } catch(_){}
+    if(!isHome) return;
+    panel.style.display='block';
+    const date=panel.querySelector('#ceroodVisitDate');
+    const time=panel.querySelector('#ceroodVisitTime');
+    const now=new Date();
+    const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+    date.min=today;
+    try {const b=JSON.parse(localStorage.getItem('cerood_service_booking')||'{}');date.value=b.service_date>=today?b.service_date:'';time.value=b.service_time||'';}catch(_){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setupVisitPreference);else setupVisitPreference();
 })();
 </script>
 </body>

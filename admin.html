@@ -1980,6 +1980,16 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 
                         <input type="hidden" id="manageOrderId">
                         <section id="chsAdminControls" style="display:none;margin:12px 0 20px;padding:15px;border:1px solid #e5e7eb;border-radius:12px;background:#fff;">
+                            <section id="chsAppointmentPanel" style="margin:0 0 18px;padding:12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;">
+                                <h4 style="margin:0 0 8px;font-size:14px;">Service appointment · Admin confirmation</h4>
+                                <p id="chsAppointmentState" role="status" style="font-size:12px;color:#475569;white-space:pre-wrap;">Loading appointment…</p>
+                                <p style="font-size:12px;color:#52525b;">Customer's preferred time is a request, not a confirmed slot. Verify technician availability and travel time manually before confirming.</p>
+                                <div class="form-group"><label for="chsAppointmentDate">Visit date</label><input id="chsAppointmentDate" class="form-input" type="date"></div>
+                                <div class="form-group"><label for="chsAppointmentWindow">Visit time window (IST)</label><select id="chsAppointmentWindow" class="form-input"><option value="">Select window</option><option value="08:00-10:00">08:00–10:00</option><option value="10:00-12:00">10:00–12:00</option><option value="12:00-14:00">12:00–14:00</option><option value="14:00-16:00">14:00–16:00</option><option value="16:00-18:00">16:00–18:00</option><option value="18:00-20:00">18:00–20:00</option></select></div>
+                                <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;margin:10px 0;"><input id="chsAppointmentCapacityChecked" type="checkbox" style="margin-top:2px"> I verified a technician is available for this visit window.</label>
+                                <button type="button" id="chsAppointmentConfirmBtn" class="save-addr-action-btn" onclick="chsAppointmentConfirm()">Confirm appointment</button>
+                                <button type="button" onclick="chsAppointmentRefresh()" style="margin-top:8px;padding:7px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer">Refresh appointment</button>
+                            </section>
                             <h4 style="margin:0 0 8px;font-size:14px;">Home Service · Customer approvals</h4>
                             <p style="font-size:12px;color:#52525b;">Booking ₹0. Inspection charge requires customer consent; repair quote requires separate consent. No payment is collected here.</p>
                             <p id="chsAdminMessage" role="status" style="font-size:12px;white-space:pre-wrap;"></p>
@@ -7383,12 +7393,55 @@ function showState(o){
  const fields=[['chsInspectionInput','inspection_fee'],['chsQuoteInput','repair_quote_amount'],['chsQuoteNotes','repair_quote_notes']];
  for(const [field,key] of fields){const input=el(field);if(!input.dataset.chsDirty && document.activeElement!==input)input.value=o[key]??'';}
 }
+// Phase 6: Appointment controls use Phase 5 authenticated backend APIs.
+const chsAppointmentEl=id=>document.getElementById(id);
+let chsAppointmentLoadedOrder='';
+let chsAppointmentSaving=false;
+function chsAppointmentNotice(text,error=false){
+ const node=chsAppointmentEl('chsAppointmentState');
+ node.textContent=text;node.style.color=error?'#b91c1c':'#475569';
+}
+function chsAppointmentTodayIST(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}
+window.chsAppointmentRefresh=async function(){
+ const id=chsAppointmentEl('chsAdminControls').dataset.orderId||'';
+ if(!/^CHS-[0-9a-f-]{36}$/i.test(id))return;
+ chsAppointmentNotice('Loading appointment…');
+ try{
+  const data=await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id)+'/appointment');
+  if(chsAppointmentEl('chsAdminControls').dataset.orderId!==id)return;
+  const b=data.booking||{};
+  chsAppointmentLoadedOrder=id;
+  chsAppointmentEl('chsAppointmentDate').value=String(b.appointment_date||b.service_date||'').slice(0,10);
+  const time=String(b.appointment_window||b.service_time||'');
+  chsAppointmentEl('chsAppointmentWindow').value=[...chsAppointmentEl('chsAppointmentWindow').options].some(o=>o.value===time)?time:'';
+  chsAppointmentEl('chsAppointmentCapacityChecked').checked=false;
+  chsAppointmentNotice('Status: '+(b.appointment_status||'Requested')+' · Customer requested: '+(b.service_date||'Not provided')+' / '+(b.service_time||'Not provided')+' · Inspection fee: '+(b.inspection_fee_status||'Awaiting Confirmation')+(b.appointment_status==='Confirmed'?' · Confirmed: '+(b.appointment_date||'')+' / '+(b.appointment_window||''):''));
+ }catch(e){chsAppointmentNotice(e.message,true);}
+};
+window.chsAppointmentConfirm=async function(){
+ if(chsAppointmentSaving)return;
+ const id=chsAppointmentEl('chsAdminControls').dataset.orderId||'';
+ if(!id||id!==chsAppointmentLoadedOrder){chsAppointmentNotice('Refresh the selected booking first.',true);return;}
+ const date=chsAppointmentEl('chsAppointmentDate').value;
+ const windowValue=chsAppointmentEl('chsAppointmentWindow').value;
+ if(!date||date<chsAppointmentTodayIST()||!windowValue){chsAppointmentNotice('Choose a valid date and time window.',true);return;}
+ if(!chsAppointmentEl('chsAppointmentCapacityChecked').checked){chsAppointmentNotice('Verify technician capacity and tick the checkbox first.',true);return;}
+ if(!confirm('Confirm this visit appointment? Technician capacity must have been checked manually.'))return;
+ chsAppointmentSaving=true;
+ chsAppointmentEl('chsAppointmentConfirmBtn').disabled=true;
+ try{
+  await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id)+'/appointment','PATCH',{appointment_date:date,appointment_window:windowValue});
+  if(chsAppointmentEl('chsAdminControls').dataset.orderId===id)await chsAppointmentRefresh();
+ }catch(e){chsAppointmentNotice(e.message,true);}
+ finally{chsAppointmentSaving=false;chsAppointmentEl('chsAppointmentConfirmBtn').disabled=false;}
+};
 window.chsAdminOpen=async function(order){
  const panel=el('chsAdminControls');
  const id=String(order.order_id||'');
  panel.style.display=id.startsWith('CHS-')?'block':'none';
  if(!id.startsWith('CHS-'))return;
  panel.dataset.orderId=id;
+ chsAppointmentLoadedOrder='';chsAppointmentNotice('Loading appointment…');
  savedBooking=null;clearChsDrafts();
  el('chsInspectionInput').value='';el('chsQuoteInput').value='';el('chsQuoteNotes').value='';
  message('Loading latest booking status…');
@@ -7396,6 +7449,7 @@ window.chsAdminOpen=async function(order){
   const current=await getBooking(id);
   if(panel.dataset.orderId!==id)return;
   showState(current);message('Latest booking status loaded.');
+  chsAppointmentRefresh();
  }catch(e){message(e.message,true);}
 };
 window.chsAdminRefresh=async function(){

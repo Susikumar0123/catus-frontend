@@ -218,7 +218,17 @@
         Service Order
     </h1>
 
-    <div id="orderContainer">
+    
+<section class="card" id="ceroodGpsPanel" style="display:none">
+<h2 class="section-heading">Live Journey Tracking</h2>
+<p style="font-size:13px;color:#475569">Location is shared only during your active journey. Keep this page open for updates. Customer must approve the visiting fee first.</p>
+<p id="ceroodGpsStatus" role="status">Tracking is off.</p>
+<button type="button" class="dashboard-btn" onclick="ceroodGpsStart()">Start Journey & Share Location</button>
+<button type="button" class="dashboard-btn" onclick="ceroodGpsEnd('arrived')" style="background:#0f766e">I Have Arrived</button>
+<button type="button" class="dashboard-btn" onclick="ceroodGpsEnd('stop')" style="background:#475569">Stop Sharing</button>
+</section>
+
+<div id="orderContainer">
 
         <div class="message">
             Loading order details...
@@ -337,6 +347,7 @@ async function loadOrder() {
         renderOrder(
             data.order
         );
+        document.getElementById("ceroodGpsPanel").style.display = String(orderId).startsWith("CHS-") ? "block" : "none";
 
     } catch (error) {
 
@@ -1482,6 +1493,34 @@ if (technicianToken && orderId) {
         loadExistingWorkProof();
     }, 100);
 }
+
+
+let ceroodGpsWatch=null,ceroodGpsActive=false,ceroodGpsSending=false,ceroodGpsLast=0;
+function ceroodGpsStatus(s){const e=document.getElementById('ceroodGpsStatus');if(e)e.textContent=s;}
+async function ceroodGpsSend(action,coords){
+ const body={action};if(coords){body.latitude=coords.latitude;body.longitude=coords.longitude;body.accuracy=coords.accuracy;}
+ const r=await fetch(`${API_BASE_URL}/api/home-services/tracking/technician/${encodeURIComponent(orderId)}`,{method:'POST',headers:{Authorization:`Bearer ${technicianToken}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+ const d=await r.json();if(!r.ok||!d.success)throw new Error(d.message||'Tracking update failed');return d;
+}
+function ceroodGpsStart(){
+ if(ceroodGpsWatch!==null)return;
+ if(!navigator.geolocation){ceroodGpsStatus('GPS unavailable on this device.');return;}
+ if(!window.isSecureContext){ceroodGpsStatus('HTTPS is required for GPS.');return;}
+ ceroodGpsStatus('Requesting location permission…');
+ ceroodGpsWatch=navigator.geolocation.watchPosition(async p=>{
+  if(ceroodGpsSending||Date.now()-ceroodGpsLast<10000)return;
+  ceroodGpsSending=true;
+  try{await ceroodGpsSend(ceroodGpsActive?'update':'start',p.coords);ceroodGpsActive=true;ceroodGpsLast=Date.now();ceroodGpsStatus('Journey location sharing is ON. Keep this page open.');}
+  catch(e){ceroodGpsStatus(e.message);if(!ceroodGpsActive){navigator.geolocation.clearWatch(ceroodGpsWatch);ceroodGpsWatch=null;}}
+  finally{ceroodGpsSending=false;}
+ },e=>ceroodGpsStatus('Location error: '+e.message),{enableHighAccuracy:true,maximumAge:5000,timeout:20000});
+}
+async function ceroodGpsEnd(action){
+ if(ceroodGpsWatch!==null){navigator.geolocation.clearWatch(ceroodGpsWatch);ceroodGpsWatch=null;}
+ try{await ceroodGpsSend(action);ceroodGpsActive=false;ceroodGpsStatus(action==='arrived'?'Arrived. Location sharing stopped.':'Location sharing stopped.');}
+ catch(e){ceroodGpsStatus('Unable to confirm stop: '+e.message);}
+}
+window.addEventListener('pagehide',()=>{if(ceroodGpsWatch!==null)navigator.geolocation.clearWatch(ceroodGpsWatch);});
 
 </script>
 
