@@ -19977,7 +19977,7 @@ function ceroodOpenHomeApproval(orderId) {
  window.ceroodOpenLiveTracking=function(orderId){if(!valid(orderId))return;cleanup();activeId=orderId;const overlay=document.createElement('div');overlay.id='chsTrackOverlay';overlay.className='chs-track-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Track service');overlay.innerHTML='<section class="chs-track-panel"><button class="chs-track-close" type="button" id="chsTrackClose">✕ Close</button><h2 style="font-size:20px;margin:0 0 8px">Track Your Service</h2><div class="chs-track-meta" id="chsTrackBooking"></div><div id="chsTrackStatus" class="chs-track-status" role="status">Checking technician location...</div><div id="chsTrackMap" class="chs-track-map" aria-label="Technician location map"></div><div class="chs-track-meta">Map shows the technician’s latest shared GPS position, not a guaranteed route or arrival time. Updates while the technician shares location. Location sharing ends after arrival or stop.</div><div class="chs-track-actions"><button type="button" id="chsTrackRefresh">Refresh location</button><button type="button" id="chsTrackCharges">Review charges</button></div></section>';document.body.appendChild(overlay);document.getElementById('chsTrackBooking').textContent='Booking ID: '+orderId;document.getElementById('chsTrackClose').onclick=cleanup;document.getElementById('chsTrackRefresh').onclick=refresh;document.getElementById('chsTrackCharges').onclick=()=>{cleanup();if(typeof window.ceroodOpenHomeApproval==='function')window.ceroodOpenHomeApproval(orderId);};overlay.addEventListener('click',e=>{if(e.target===overlay)cleanup();});refresh();timer=setInterval(refresh,15000);};
 })();
 </script>
-<script>function ceroodOpenFullTracking(id){if(!/^CHS-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(String(id||'')))return;sessionStorage.setItem('cerood_tracking_booking_id',id);window.location.href='/tracking.html';}</script>
+<script>function ceroodOpenFullTracking(id){if(!/^CHS-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(String(id||'')))return;if(typeof window.ceroodOpenLiveTracking==='function')window.ceroodOpenLiveTracking(id);}</script>
 
 <style id="chs-six-stage-20261009">
 #liveTrackingContainer .prem-live-card{padding:14px 16px!important;margin-bottom:12px!important;border-radius:15px!important;background:#fff!important}
@@ -20012,6 +20012,16 @@ function ceroodOpenHomeApproval(orderId) {
 .chs-unified-tech-detail{font-weight:600;color:#171717!important}
 .chs-unified-steps{grid-template-columns:repeat(6,minmax(112px,1fr));min-width:672px}
 .chs-unified-step{justify-content:flex-start}
+</style>
+<style id="chs-inline-approval-css">
+.chs-inline-approval{margin-top:12px;border:1px solid #e5e7eb;border-radius:12px;padding:15px;background:#fff}
+.chs-inline-approval>strong{font-size:13px;color:#111}
+.chs-inline-amount{font-size:24px;font-weight:700;margin:10px 0;color:#171717}
+.chs-inline-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.chs-unified-detail .chs-inline-actions button{flex:1;min-width:120px;padding:12px;font-weight:600}
+.chs-unified-detail .chs-inline-actions .chs-inline-decline{background:#fff;color:#171717;border:1px solid #d4d4d8}
+.chs-unified-detail .chs-inline-actions .chs-inline-accept{background:#15803d;border-color:#15803d;color:#fff}
+.chs-unified-detail .chs-inline-actions button:disabled{opacity:.55;cursor:wait}
 </style>
 <script id="chs-unified-tracking-script">
 (function(){'use strict';
@@ -20072,9 +20082,38 @@ function draw(o){const id=String(o.order_id||'');const root=Array.from(document.
  scroll.appendChild(steps);root.appendChild(scroll);if(chosen<0)return;
  const detail=document.createElement('section');detail.className='chs-unified-detail';detail.innerHTML='<div class="chs-unified-detail-head"><h4>'+names[chosen]+'</h4><button type="button" class="chs-unified-close" aria-label="Close details">×</button></div><p>'+safe(info(chosen,o,b,a,t,st))+'</p>';
  detail.querySelector('button').onclick=()=>{selected.set(id,-1);cleanupMap(id);draw(o);};
- if(chosen===1||chosen===4){const needsFee=chosen===1&&!st.approvedFee,needsQuote=chosen===4&&st.inspection&&!st.quoteOk;
-  if(needsFee||needsQuote){const p=document.createElement('p');p.className='chs-unified-note';p.textContent=needsFee?'Inspection / visiting fee must be approved before technician visit.':'Repair quotation approval is separate from the inspection fee approval.';detail.appendChild(p);
-   const btn=document.createElement('button');btn.type='button';btn.textContent='Review / approve charges';btn.onclick=()=>{if(typeof window.ceroodOpenHomeApproval==='function')window.ceroodOpenHomeApproval(id);else window.location.href='/customer-approval.html';};detail.appendChild(btn);}}
+ if(chosen===1||chosen===4){
+  const needsFee=chosen===1&&b.inspection_fee!=null&&norm(b.inspection_fee_status)==='awaiting customer confirmation';
+  const needsQuote=chosen===4&&b.repair_quote_amount!=null&&norm(b.repair_quote_status)==='sent'&&st.approvedFee&&st.inspection;
+  const waitingFee=chosen===1&&!st.approvedFee&&!needsFee;
+  if(needsFee||needsQuote){
+   const isFee=needsFee,amount=Number(isFee?b.inspection_fee:b.repair_quote_amount);
+   const box=document.createElement('div');box.className='chs-inline-approval';
+   const title=document.createElement('strong');title.textContent=isFee?'Inspection / Visiting Fee Approval':'Repair Quotation Approval';box.appendChild(title);
+   const amountEl=document.createElement('div');amountEl.className='chs-inline-amount';amountEl.textContent='₹'+amount.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});box.appendChild(amountEl);
+   const note=document.createElement('p');note.textContent=isFee?'This is the inspection / visiting charge, not the repair cost. Technician visit requires your approval.':'Repair starts only after you separately approve this quotation.';box.appendChild(note);
+   if(!isFee&&b.repair_quote_notes){const notes=document.createElement('p');notes.textContent='Work details: '+b.repair_quote_notes;box.appendChild(notes);}
+   const actions=document.createElement('div');actions.className='chs-inline-actions';
+   const decline=document.createElement('button');decline.type='button';decline.textContent='Decline';decline.className='chs-inline-decline';
+   const accept=document.createElement('button');accept.type='button';accept.textContent='Accept ₹'+amount.toLocaleString('en-IN');accept.className='chs-inline-accept';
+   const message=document.createElement('p');message.setAttribute('role','status');
+   async function decide(decision){
+    const key=keyFor(id);
+    if(!/^[a-f0-9]{64}$/i.test(key)){message.textContent='Private approval key not available on this device. Use your saved booking confirmation or contact Cerood support.';return;}
+    if(!window.confirm((decision==='accept'?'Approve ':'Decline ')+(isFee?'inspection / visiting fee':'repair quotation')+' of ₹'+amount.toLocaleString('en-IN')+'?'))return;
+    accept.disabled=true;decline.disabled=true;message.textContent='Saving your decision securely...';
+    try{
+     await post(isFee?'/api/home-services/inspection-response':'/api/home-services/quotation-response',{order_id:id,customer_approval_key:key,decision});
+     message.textContent='Decision saved successfully.';
+     await load(o);
+    }catch(err){message.textContent=err.message||'Unable to save decision. Please try again.';accept.disabled=false;decline.disabled=false;}
+   }
+   decline.onclick=()=>decide('reject');accept.onclick=()=>decide('accept');
+   actions.append(decline,accept);box.append(actions,message);detail.appendChild(box);
+  }else if(waitingFee){
+   const p=document.createElement('p');p.className='chs-unified-note';p.textContent='Waiting for Cerood admin to set and send the inspection / visiting fee. Approval buttons appear here after the fee request is sent.';detail.appendChild(p);
+  }
+ }
  if(chosen===3&&t.state==='on_the_way'&&t.latitude!=null&&t.longitude!=null&&window.L){const lat=Number(t.latitude),lng=Number(t.longitude);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180){const mapEl=document.createElement('div');mapEl.className='chs-unified-map';detail.appendChild(mapEl);setTimeout(()=>{if(!mapEl.isConnected)return;const map=L.map(mapEl).setView([lat,lng],15);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);L.marker([lat,lng]).addTo(map);maps.set(id,map);map.invalidateSize();},50);const note=document.createElement('p');note.className='chs-unified-note';note.textContent='Latest shared GPS position only; not a guaranteed ETA.';detail.appendChild(note);}}
  if(chosen===3&&st.assigned&&techName){const p=document.createElement('p');p.className='chs-unified-tech-detail';p.textContent='Assigned technician: '+techName;detail.appendChild(p);}
  if(dates[chosen]){const p=document.createElement('p');p.className='chs-unified-note';p.textContent='Recorded: '+dates[chosen];detail.appendChild(p);}
@@ -20082,7 +20121,12 @@ function draw(o){const id=String(o.order_id||'');const root=Array.from(document.
 }
 async function load(o){const id=String(o.order_id||'');if(!valid(id))return;const key=keyFor(id);if(!/^[0-9a-f]{64}$/i.test(key)){caches.set(id,{b:o});draw(o);return;}
  const payload={order_id:id,customer_approval_key:key};const results=await Promise.allSettled([post('/api/home-services/booking-status',payload),post('/api/home-services/appointment-status',payload),post('/api/home-services/tracking/customer/'+encodeURIComponent(id),{customer_approval_key:key})]);const prev=caches.get(id)||{};
- caches.set(id,{b:results[0].status==='fulfilled'?results[0].value.booking:(prev.b||o),a:results[1].status==='fulfilled'?results[1].value:(prev.a||null),t:results[2].status==='fulfilled'?results[2].value.tracking:(prev.t||null)});cleanupMap(id);draw(o);
+ caches.set(id,{b:results[0].status==='fulfilled'?results[0].value.booking:(prev.b||o),a:results[1].status==='fulfilled'?results[1].value:(prev.a||null),t:results[2].status==='fulfilled'?results[2].value.tracking:(prev.t||null)});
+ const fresh=caches.get(id).b||o;
+ const feeAction=fresh.inspection_fee!=null&&norm(fresh.inspection_fee_status)==='awaiting customer confirmation';
+ const quoteAction=fresh.repair_quote_amount!=null&&norm(fresh.repair_quote_status)==='sent'&&norm(fresh.inspection_fee_status)==='confirmed'&&Boolean(fresh.inspection_completed_at);
+ if(!selected.has(id)&&(feeAction||quoteAction))selected.set(id,feeAction?1:4);
+ cleanupMap(id);draw(o);
 }
 window.ceroodUnifiedLoad=function(o){const id=String(o?.order_id||'');if(!valid(id))return;draw(o);load(o).catch(()=>{});};
 setInterval(()=>{if(document.hidden)return;const dash=document.getElementById('premiumCustomerDashboard');if(!dash||getComputedStyle(dash).display==='none')return;const orders=window.currentOrders||[];orders.forEach(o=>{if(document.querySelector('.chs-unified-root[data-order-id="'+String(o.order_id).replace(/[^\w-]/g,'')+'"]'))load(o).catch(()=>{});});},30000);
