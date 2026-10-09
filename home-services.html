@@ -14540,45 +14540,7 @@ async function openServiceProduct(serviceId) {
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
 
 
-<style id="cerood-independent-service-rails">
-/* Stationary feature card beside two independently scrolling desktop rails. */
-.cerood-desktop-demo{display:grid;grid-template-columns:minmax(0,26fr) minmax(0,74fr);gap:14px;width:100%;max-width:100%;height:clamp(420px,calc(100svh - 155px),760px);padding:0 20px;margin:14px 0 22px;box-sizing:border-box;background:#fff;overflow:hidden}
-.cerood-demo-feature,.cerood-demo-rails,.cerood-demo-rail{min-width:0;min-height:0}
-.cerood-demo-rails{display:grid;grid-template-rows:minmax(0,63fr) minmax(0,40fr);gap:14px}
-.cerood-demo-rail{position:relative;isolation:isolate}
-.cerood-demo-track{display:flex;gap:12px;height:100%;width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x pan-y;border-radius:14px}
-.cerood-demo-track::-webkit-scrollbar{display:none}
-.cerood-demo-card{appearance:none;box-sizing:border-box;display:block;min-width:0;min-height:0;margin:0;padding:0;border:0;border-radius:14px;overflow:hidden;height:100%;background:#fff;cursor:pointer;scroll-snap-align:start;flex-shrink:0}
-.cerood-demo-feature>.cerood-demo-card{width:100%;height:100%}
-.cerood-demo-rail.large .cerood-demo-card{flex:0 0 calc((100% - 36px)/4)}
-.cerood-demo-rail.small .cerood-demo-card{flex:0 0 calc((100% - 60px)/6)}
-.cerood-demo-card img{display:block;height:100%;width:100%;object-fit:fill;pointer-events:none;user-select:none}
-.cerood-demo-nav{appearance:none;position:absolute;z-index:2;top:50%;transform:translateY(-50%);width:46px;height:64px;padding:0;border:1px solid #e0e0e0;background:#fff;color:#111;font-family:Arial,sans-serif;font-size:37px;line-height:1;border-radius:12px;box-shadow:0 2px 8px #0002;cursor:pointer}
-.cerood-demo-nav.previous{left:0}.cerood-demo-nav.next{right:0}.cerood-demo-nav:disabled{opacity:.4;cursor:default}
-.cerood-demo-card:focus-visible,.cerood-demo-nav:focus-visible,.cerood-demo-track:focus-visible{outline:3px solid #1463ff;outline-offset:-3px}
-@media(max-width:1100px) and (min-width:851px){.cerood-desktop-demo{padding:0 12px;gap:10px}.cerood-demo-rails{gap:10px}.cerood-demo-track{gap:8px}.cerood-demo-rail.large .cerood-demo-card{flex-basis:calc((100% - 24px)/4)}.cerood-demo-rail.small .cerood-demo-card{flex-basis:calc((100% - 40px)/6)}.cerood-demo-nav{width:34px;height:50px;font-size:29px}}
-@media(max-width:850px){.cerood-desktop-demo{display:none!important}}
-</style>
-<script id="cerood-independent-service-rails-behaviour">
-document.addEventListener('DOMContentLoaded',function(){
- const section=document.querySelector('.cerood-desktop-demo');if(!section)return;
- const reduced=matchMedia('(prefers-reduced-motion:reduce)');
- section.querySelectorAll('.cerood-demo-rail').forEach(function(rail){
-  const track=rail.querySelector('.cerood-demo-track'),previous=rail.querySelector('.previous'),next=rail.querySelector('.next');
-  function update(){const maximum=track.scrollWidth-track.clientWidth;previous.disabled=track.scrollLeft<=2;next.disabled=maximum<=2||track.scrollLeft>=maximum-2}
-  function move(direction){const card=track.querySelector('.cerood-demo-card');const step=card.getBoundingClientRect().width+parseFloat(getComputedStyle(track).gap);track.scrollBy({left:direction*step,behavior:reduced.matches?'auto':'smooth'})}
-  previous.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));
-  track.addEventListener('scroll',update,{passive:true});track.addEventListener('keydown',function(event){if(event.target!==track)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();move(event.key==='ArrowLeft'?-1:1)}});
-  if(typeof ResizeObserver!=='undefined')new ResizeObserver(update).observe(track);else window.addEventListener('resize',update);update();
- });
- section.querySelectorAll('.cerood-demo-card').forEach(function(card){card.addEventListener('click',function(){
-  const grid=document.getElementById('productGridContainer');if(!grid)return;
-  const words=card.dataset.service.toLowerCase().replace(/repair|service|installation/g,'').trim();
-  const boxes=Array.from(grid.querySelectorAll('.uc-category-box'));const match=boxes.find(function(box){const heading=box.querySelector('.uc-cat-header h3');return heading&&heading.textContent.toLowerCase().includes(words)});
-  (match||grid).scrollIntoView({behavior:reduced.matches?'auto':'smooth',block:'start'});
- })});
-});
-</script></body>
+</body>
         </html>
         `;
         printWindow.document.write(html);
@@ -20216,7 +20178,8 @@ document.addEventListener('DOMContentLoaded',function(){
   (match||grid).scrollIntoView({behavior:reduced.matches?'auto':'smooth',block:'start'});
  })});
 });
-</script></body>
+</script>
+</body>
 </html>
 <script>document.addEventListener('DOMContentLoaded',function(){var grid=document.getElementById('productGridContainer');function art(){var src=grid&&grid.querySelector('.uc-card-img-wrapper img');var target=document.getElementById('ceroodReferenceHeroArt');if(src&&target){target.src=src.src;target.hidden=false;}}art();if(grid)new MutationObserver(art).observe(grid,{childList:true,subtree:true});});</script>
 <style id="cerood-reference-mobile-20261007">
