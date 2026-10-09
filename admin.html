@@ -7425,8 +7425,8 @@ window.chsAppointmentConfirm=async function(){
  const date=chsAppointmentEl('chsAppointmentDate').value;
  const windowValue=chsAppointmentEl('chsAppointmentWindow').value;
  if(!date||date<chsAppointmentTodayIST()||!windowValue){chsAppointmentNotice('Choose a valid date and time window.',true);return;}
- if(!chsAppointmentEl('chsAppointmentCapacityChecked').checked){chsAppointmentNotice('Verify technician capacity and tick the checkbox first.',true);return;}
- if(!confirm('Confirm this visit appointment? Technician capacity must have been checked manually.'))return;
+ if(!chsAppointmentEl('chsAppointmentCapacityChecked').checked){chsAppointmentNotice('Confirm the assigned technician has accepted and has capacity, then tick the checkbox.',true);return;}
+ if(!confirm('Confirm this visit appointment? Technician must be assigned, have accepted, and have capacity for this slot.'))return;
  chsAppointmentSaving=true;
  chsAppointmentEl('chsAppointmentConfirmBtn').disabled=true;
  try{
