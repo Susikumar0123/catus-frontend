@@ -7388,7 +7388,13 @@ async function getBooking(id){
 }
 function showState(o){
  savedBooking=o;
- el('chsAdminState').textContent='Inspection: '+(o.inspection_fee_status||'Not recorded')+' · Inspection completed: '+(o.inspection_completed_at?'Yes':'No')+' · Quotation: '+(o.repair_quote_status||'Not Quoted');
+ const chsFeeOK=String(o.inspection_fee_status||'').toLowerCase()==='confirmed';
+ const chsApOK=String(o.appointment_status||'').toLowerCase()==='confirmed';
+ const chsAssigned=Boolean(o.technician_id);
+ const chsComplete=String(o.status||'').toLowerCase()==='completed';
+ const chsStages=['Booked','Approval','Appointment','Technician','Service','Completed'];
+ const chsCurrent=chsComplete?5:!chsFeeOK?1:!chsApOK?2:!chsAssigned?3:4;
+ el('chsAdminState').textContent='Customer tracking: '+chsStages.map((name,i)=>i<chsCurrent?'✓ '+name:i===chsCurrent?'● '+name:'○ '+name).join('  →  ')+' | Inspection: '+(o.inspection_fee_status||'Not recorded')+' | Inspection completed: '+(o.inspection_completed_at?'Yes':'No')+' | Quotation: '+(o.repair_quote_status||'Not Quoted');
  // Preserve edits while the user is typing or has changed a field since last load.
  const fields=[['chsInspectionInput','inspection_fee'],['chsQuoteInput','repair_quote_amount'],['chsQuoteNotes','repair_quote_notes']];
  for(const [field,key] of fields){const input=el(field);if(!input.dataset.chsDirty && document.activeElement!==input)input.value=o[key]??'';}
