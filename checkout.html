@@ -3685,6 +3685,13 @@ function resetOrderSubmitState() {
                     })
                 });
                 const result = await response.json();
+                if (response.status === 409) {
+                    // The server already accepted this request ID. Never generate a new
+                    // ID automatically: that could create a second service booking.
+                    const duplicate = new Error('This booking request may already be saved. Please contact Cerood support with your booking request ID: ' + requestId + '. Do not submit another booking until confirmed.');
+                    duplicate.code = 'BOOKING_ALREADY_RECEIVED';
+                    throw duplicate;
+                }
                 if (!response.ok || !result.success) throw new Error(result.message || 'Booking failed.');
                 localStorage.removeItem('catus_checkout_items');
                 localStorage.removeItem('cerood_service_booking');

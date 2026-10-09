@@ -1990,6 +1990,15 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
                             <div class="form-group"><label for="chsQuoteNotes">Quotation notes</label><textarea id="chsQuoteNotes" class="form-input" maxlength="2000" rows="2" placeholder="Work and parts required"></textarea></div>
                             <button type="button" class="save-addr-action-btn" onclick="chsAdminAction('quotation')">Save quotation draft</button>
                             <button type="button" class="save-addr-action-btn" onclick="chsAdminAction('send-quotation')">Publish quotation for customer approval</button>
+                            <div style="margin:12px 0;padding:12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;">
+                                <strong style="font-size:13px">Customer notification · Manual</strong>
+                                <p style="font-size:12px;color:#52525b">Copy a message and send it through your own WhatsApp/SMS. No automatic notification or private approval key is sent.</p>
+                                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                                    <button type="button" onclick="chsCopyCustomerMessage('inspection')" style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer">Copy inspection message</button>
+                                    <button type="button" onclick="chsCopyCustomerMessage('quotation')" style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer">Copy quotation message</button>
+                                </div>
+                                <textarea id="chsCustomerMessagePreview" aria-label="Customer message preview" readonly rows="5" style="display:none;margin-top:10px;width:100%;box-sizing:border-box;padding:10px;border:1px solid #ddd;border-radius:8px"></textarea>
+                            </div>
                             <button type="button" onclick="chsAdminRefresh()" style="margin-bottom:8px;padding:7px 12px;border:1px solid #ddd;background:white;border-radius:8px;cursor:pointer">Refresh approval status</button>
                             <p id="chsAdminState" style="font-size:12px;color:#52525b;"></p>
                         </section>
@@ -7342,6 +7351,7 @@ const base='https://catus-backend-d2js.onrender.com';
 const el=id=>document.getElementById(id);
 const token=()=>localStorage.getItem('cerood_admin_token')||sessionStorage.getItem('cerood_admin_token')||localStorage.getItem('adminToken')||sessionStorage.getItem('adminToken')||'';
 let busy=false;
+let savedBooking=null;
 function message(text,error=false){const n=el('chsAdminMessage');n.textContent=text;n.style.color=error?'#b91c1c':'#166534';}
 async function request(path,method='GET',payload){
  const headers={'Authorization':'Bearer '+token(),'Accept':'application/json'};
@@ -7351,11 +7361,15 @@ async function request(path,method='GET',payload){
  if(!response.ok||!data.success)throw new Error(data.message||'Request failed ('+response.status+')');
  return data;
 }
+for(const field of ['chsInspectionInput','chsQuoteInput','chsQuoteNotes']){el(field).addEventListener('input',()=>{el(field).dataset.chsDirty='1';});}
+function clearChsDrafts(){for(const field of ['chsInspectionInput','chsQuoteInput','chsQuoteNotes'])delete el(field).dataset.chsDirty;}
+async function getBooking(id){const data=await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id));return data.booking;}
 function showState(o){
+ savedBooking=o;
  el('chsAdminState').textContent='Inspection: '+(o.inspection_fee_status||'Not recorded')+' · Inspection completed: '+(o.inspection_completed_at?'Yes':'No')+' · Quotation: '+(o.repair_quote_status||'Not Quoted');
- if(o.inspection_fee!=null)el('chsInspectionInput').value=o.inspection_fee;
- if(o.repair_quote_amount!=null)el('chsQuoteInput').value=o.repair_quote_amount;
- if(o.repair_quote_notes!=null)el('chsQuoteNotes').value=o.repair_quote_notes;
+ // Preserve edits while the user is typing or has changed a field since last load.
+ const fields=[['chsInspectionInput','inspection_fee'],['chsQuoteInput','repair_quote_amount'],['chsQuoteNotes','repair_quote_notes']];
+ for(const [field,key] of fields){const input=el(field);if(!input.dataset.chsDirty && document.activeElement!==input)input.value=o[key]??'';}
 }
 window.chsAdminOpen=async function(order){
  const panel=el('chsAdminControls');
@@ -7363,27 +7377,54 @@ window.chsAdminOpen=async function(order){
  panel.style.display=id.startsWith('CHS-')?'block':'none';
  if(!id.startsWith('CHS-'))return;
  panel.dataset.orderId=id;
+ savedBooking=null;clearChsDrafts();
  el('chsInspectionInput').value='';el('chsQuoteInput').value='';el('chsQuoteNotes').value='';
  message('Loading latest booking status…');
  try{
-  const data=await request('/api/admin/home-services/free-bookings');
+  const current=await getBooking(id);
   if(panel.dataset.orderId!==id)return;
-  const current=(data.orders||[]).find(o=>String(o.order_id)===id);
-  if(!current)throw Error('Booking not found in latest 250 records.');
   showState(current);message('Latest booking status loaded.');
  }catch(e){message(e.message,true);}
 };
 window.chsAdminRefresh=async function(){
  const panel=el('chsAdminControls');const id=panel.dataset.orderId;
  if(!id||panel.style.display==='none'||busy)return;
- try{const data=await request('/api/admin/home-services/free-bookings');
- const current=(data.orders||[]).find(o=>String(o.order_id)===id);
+ try{const current=await getBooking(id);
  if(current&&panel.dataset.orderId===id){showState(current);message('Customer approval status updated.');}
  }catch(e){message('Refresh failed: '+e.message,true);}
 };
 setInterval(()=>{const panel=el('chsAdminControls');const modal=el('orderDetailModal');
  if(panel&&modal&&panel.style.display!=='none'&&modal.style.display!=='none'&&!document.hidden)window.chsAdminRefresh();
 },15000);
+window.chsCopyCustomerMessage=async function(kind){
+ const panel=el('chsAdminControls');
+ const id=String(panel?.dataset.orderId||'');
+ if(!/^CHS-[A-Za-z0-9-]+$/.test(id)){message('Open a valid Home Services booking first.',true);return;}
+ // Only use amounts confirmed by a fresh backend read, never unsaved form edits.
+ let latest;
+ try {
+  latest=await getBooking(id);
+ } catch(e){message('Cannot verify saved amount: '+e.message,true);return;}
+ if(panel.dataset.orderId!==id)return;
+ savedBooking=latest;
+ const fee=latest.inspection_fee;
+ const quote=latest.repair_quote_amount;
+ const notes=String(latest.repair_quote_notes||'').trim();
+ if(kind==='inspection' && (fee==null||!Number.isFinite(Number(fee))||Number(fee)<0||latest.inspection_fee_status!=='Awaiting Customer Confirmation')){
+  message('Save inspection fee and ensure customer approval is pending before copying.',true);return;
+ }
+ if(kind==='quotation' && (quote==null||!Number.isFinite(Number(quote))||Number(quote)<0||latest.repair_quote_status!=='Sent')){
+  message('Publish the saved quotation for customer approval before copying.',true);return;
+ }
+ const url='https://www.cerood.com/customer-approval.html';
+ const lines=kind==='inspection'
+  ? ['Cerood Home Services','Booking ID: '+id,'Online booking fee: ₹0','Proposed inspection / visiting charge: ₹'+Number(fee).toFixed(2),'Please review and approve or decline this charge before the technician visit.','Approval page: '+url,'Use your private approval key from your booking confirmation. Never share that key with others.','No payment is required to submit your approval.']
+  : ['Cerood Home Services','Booking ID: '+id,'Repair quotation: ₹'+Number(quote).toFixed(2),...(notes?['Work details: '+notes]:[]),'Please review and approve or decline the quotation before repair work begins.','Approval page: '+url,'Use your private approval key from your booking confirmation.','No payment is required to submit your approval.'];
+ const content=lines.join('\n');
+ const preview=el('chsCustomerMessagePreview');preview.style.display='block';preview.value=content;
+ try{await navigator.clipboard.writeText(content);message('Message copied. Send manually after checking the saved fee/quotation.');}
+ catch(e){preview.focus();preview.select();message('Clipboard unavailable. Copy the message from the preview.');}
+};
 window.chsAdminAction=async function(action){
  const panel=el('chsAdminControls');const id=panel.dataset.orderId;
  if(busy||!id||!id.startsWith('CHS-'))return;
@@ -7402,8 +7443,8 @@ window.chsAdminAction=async function(action){
  try{
   const result=await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id)+'/'+routes[action],'PATCH',payload);
   message(result.message||'Saved. Customer approval is separate; no payment collected.');
-  const latest=await request('/api/admin/home-services/free-bookings');
-  const current=(latest.orders||[]).find(o=>String(o.order_id)===id);
+  clearChsDrafts();
+  const current=await getBooking(id);
   if(current&&panel.dataset.orderId===id)showState(current);
  }catch(e){message(e.message,true);}finally{busy=false;panel.querySelectorAll('button').forEach(b=>b.disabled=false);}
 };
