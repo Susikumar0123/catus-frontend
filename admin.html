@@ -7363,7 +7363,19 @@ async function request(path,method='GET',payload){
 }
 for(const field of ['chsInspectionInput','chsQuoteInput','chsQuoteNotes']){el(field).addEventListener('input',()=>{el(field).dataset.chsDirty='1';});}
 function clearChsDrafts(){for(const field of ['chsInspectionInput','chsQuoteInput','chsQuoteNotes'])delete el(field).dataset.chsDirty;}
-async function getBooking(id){const data=await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id));return data.booking;}
+async function getBooking(id){
+ // Prefer the direct lookup on newer backends; older live versions expose only the list route.
+ try {
+  const data=await request('/api/admin/home-services/free-bookings/'+encodeURIComponent(id));
+  return data.booking;
+ } catch(error) {
+  if(!/\(404\)/.test(String(error.message)))throw error;
+  const data=await request('/api/admin/home-services/free-bookings');
+  const booking=(Array.isArray(data.orders)?data.orders:[]).find(o=>String(o.order_id)===String(id));
+  if(!booking)throw new Error('Booking not found in the latest 250 records. Update backend to support direct booking lookup.');
+  return booking;
+ }
+}
 function showState(o){
  savedBooking=o;
  el('chsAdminState').textContent='Inspection: '+(o.inspection_fee_status||'Not recorded')+' · Inspection completed: '+(o.inspection_completed_at?'Yes':'No')+' · Quotation: '+(o.repair_quote_status||'Not Quoted');
