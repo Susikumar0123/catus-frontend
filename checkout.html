@@ -2250,7 +2250,30 @@ body{background:#f7f8fb!important;color:#171717!important}
 #checkoutTrustNote{font-size:11.5px!important;line-height:1.5!important;color:#64748b!important}
 @media(max-width:900px){.checkout-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}.checkout-container{padding:12px 12px 25px!important}.checkout-grid>.card-box,.checkout-grid>div>.card-box{padding:16px!important;border-radius:15px!important}#summaryItemsContainer img{width:76px!important;height:76px!important}}
 </style>
-</head>
+<style id="cerood-simple-checkout-final">
+html body{background:#fff!important}
+.checkout-header{width:100%!important;max-width:none!important;box-sizing:border-box!important;margin:0!important;padding:12px clamp(16px,4vw,48px)!important;border-radius:0!important;min-height:72px!important;display:flex!important;align-items:center!important;gap:16px!important;position:sticky!important;top:0!important;box-shadow:0 1px 0 #ececec!important;background:#fff!important}
+.checkout-header img{height:42px!important;width:auto!important;object-fit:contain!important}
+.checkout-header>.cerood-direct-call{margin-left:auto!important}
+.checkout-header>.csf-checkout-search,.checkout-header>.cerood-unified-tools,.checkout-header>.secure-badge{display:none!important}
+.cerood-checkout-intro{display:none!important}
+.checkout-container{max-width:1240px!important;margin:auto!important;padding:22px 20px!important}
+.checkout-grid{display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;gap:22px!important;margin-top:0!important;align-items:start!important}
+.checkout-grid>.card-box{min-height:0!important;height:auto!important;overflow:visible!important;padding:22px!important;margin:0!important;border:1px solid #eceef2!important;box-shadow:none!important;border-radius:16px!important}
+.checkout-grid>.card-box .card-body-scroll{overflow:visible!important;max-height:none!important}
+.checkout-grid>.card-box .card-title{font-size:17px!important;margin-bottom:18px!important}
+.saved-address-card{background:#f8f9fb!important;border:1px solid #edf0f3!important}
+.cerood-service-summary-row{display:flex;gap:15px;align-items:center;padding:4px 0 16px!important;margin-bottom:12px!important;border-bottom:1px solid #f0f0f0}
+.cerood-service-summary-row img{width:118px!important;height:104px!important;object-fit:cover!important;border-radius:12px!important;flex-shrink:0}
+.cerood-service-summary-details{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0}
+.cerood-service-summary-details strong{font-size:17px;line-height:1.4;color:#171717;overflow-wrap:anywhere}
+.cerood-service-free-chip{font-size:12px;background:#eaf8ee;color:#147a3c;border-radius:30px;padding:5px 10px;font-weight:600}
+#ceroodFreeBookingSummaryNote{font-size:12px!important;color:#52525b!important;line-height:1.55!important;margin:10px 0 15px!important;padding:0!important}
+#summaryItemsContainer>p{font-size:15px!important;font-weight:600!important}
+.bill-summary-box{background:#fff!important;border:0!important;padding:0!important}
+.confirm-btn{background:#171717!important;color:#fff!important;font-weight:650!important;font-size:15px!important;min-height:48px!important}
+@media(max-width:850px){.checkout-header{min-height:64px!important;padding:10px 16px!important}.checkout-grid{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}.checkout-container{padding:14px 12px 28px!important}.checkout-grid>.card-box{padding:16px!important}.cerood-service-summary-row img{width:88px!important;height:88px!important}}
+</style></head>
 <body>
 
     <!-- Header -->
@@ -3461,26 +3484,27 @@ if (trustNote) {
         function onStateChange() { loadDistricts(); }
 
         function renderFreeBookingSummary() {
-            const container = document.getElementById('summaryItemsContainer');
-            if (container) {
+            const container=document.getElementById('summaryItemsContainer');
+            if(container){
                 container.replaceChildren();
-                orderItems.forEach(item => {
-                    const p = document.createElement('p');
-                    p.textContent = String(item.name || 'Home service') + ' — Free Booking';
-                    container.appendChild(p);
+                orderItems.forEach(item=>{
+                    const row=document.createElement('div');row.className='cerood-service-summary-row';
+                    if(item.image){const img=document.createElement('img');img.src=item.image;img.alt=String(item.name||'Service');img.loading='lazy';row.appendChild(img);}
+                    const detail=document.createElement('div');detail.className='cerood-service-summary-details';
+                    const title=document.createElement('strong');title.textContent=String(item.name||'Home service');detail.appendChild(title);
+                    const chip=document.createElement('span');chip.className='cerood-service-free-chip';chip.textContent='₹0 Booking';detail.appendChild(chip);
+                    row.appendChild(detail);container.appendChild(row);
                 });
             }
-            const labels = {billItemTotal:'₹0', billConvenienceFee:'₹0',billTaxes:'₹0',billTotalSum:'₹0',billAmountToPay:'₹0'};
-            Object.entries(labels).forEach(([id,value]) => { const el = document.getElementById(id); if (el) el.textContent=value; });
-            ['convenienceFeeRow','gstRow'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
-            const btn=document.getElementById('confirmOrderBtn');
-            if(btn) btn.textContent='Confirm Free Booking';
-            ['cardRazorpay','cardLater'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+            const labels={billItemTotal:'₹0',billConvenienceFee:'₹0',billTaxes:'₹0',billTotalSum:'₹0',billAmountToPay:'₹0'};
+            Object.entries(labels).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.textContent=value;});
+            ['convenienceFeeRow','gstRow'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+            const btn=document.getElementById('confirmOrderBtn');if(btn)btn.textContent='Confirm Free Booking';
+            ['cardRazorpay','cardLater'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
             document.getElementById('ceroodFreeBookingSummaryNote')?.remove();
-            const notice=document.createElement('p'); notice.id='ceroodFreeBookingSummaryNote';
-            notice.textContent='Booking request: ₹0. Inspection / visiting charges are paid and will be confirmed before the appointment. Repair costs will be quoted after inspection; no repair starts without approval.';
-            notice.style.cssText='padding:14px 0;font-size:14px;line-height:1.6;color:#222';
-            if(container) container.after(notice);
+            const notice=document.createElement('p');notice.id='ceroodFreeBookingSummaryNote';
+            notice.textContent='Visiting fee: shared for approval before the visit. Repair quote: approved separately.';
+            if(container)container.after(notice);
         }
 
         function renderSummary() {
