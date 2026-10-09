@@ -456,6 +456,20 @@ const serviceTime =
             : '-';
 
 
+    const approvalRequired = order.booking_pricing_model === 'quote_after_inspection';
+    const inspectionReady = order.inspection_fee_status === 'Confirmed';
+    const inspectionDone = !!order.inspection_completed_at;
+    const repairReady = order.repair_quote_status === 'Accepted';
+    const proofUnlocked = !approvalRequired || (inspectionReady && inspectionDone && repairReady);
+    const approvalNotice = approvalRequired
+        ? `<div class="card" style="border-color:${proofUnlocked ? '#bbf7d0' : '#fcd34d'};background:${proofUnlocked ? '#f0fdf4' : '#fffbeb'}">
+            <div class="section-heading">Customer Approval & Work Permission</div>
+            <div class="detail-row">Inspection charge: ${escapeHtml(order.inspection_fee_status || 'Pending')}</div>
+            <div class="detail-row">Inspection completed: ${inspectionDone ? 'Yes' : 'No — admin confirmation required'}</div>
+            <div class="detail-row">Repair quotation: ${escapeHtml(order.repair_quote_status || 'Not quoted')}</div>
+            <strong>${proofUnlocked ? 'Repair approved — work proof available' : 'Repair not approved — do not begin repair'}</strong>
+          </div>` : '';
+
     container.innerHTML = `
 
         <div class="card">
@@ -606,7 +620,8 @@ const serviceTime =
                 </div>
 
 
-        <div class="card" id="workProofCard">
+        ${approvalNotice}
+        <div class="card" id="workProofCard" ${!proofUnlocked ? 'hidden' : ''}>
 
     <div class="section-heading">
         Work Proof
