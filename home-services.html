@@ -17683,8 +17683,8 @@ const priceHTML = showStartingPrice ? '<div class="cerood-starting-price">Starts
             data-group-id="${s.group_id || ''}"
             onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')">
 
+            ${serviceTagHTML}
             <div class="uc-card-img-wrapper">
-                ${serviceTagHTML}
                 <img
     src="${getSmallProductImageUrl(s.image_url)}"
 alt="${s.service_name}"
@@ -20487,3 +20487,14 @@ html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-g
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card,
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic.cerood-mosaic-short .uc-card{background:#e1e1e2!important;background-color:#e1e1e2!important;border-color:#e1e1e2!important}
 </style>
+<style id="cerood-full-width-category-corners">
+@media(min-width:851px){
+html:root body .master-app-container #productGridContainer{width:var(--cerood-category-width,100%)!important;max-width:none!important;margin-left:var(--cerood-category-offset,0px)!important;margin-right:0!important;padding:0 16px!important;box-sizing:border-box!important}
+html:root body .master-app-container #productGridContainer .uc-category-box{width:100%!important;max-width:none!important;box-sizing:border-box!important}
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card{position:relative!important}
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card:has(>.cerood-service-tag){padding-top:30px!important}
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card>.cerood-service-tag{display:table!important;position:absolute!important;top:0!important;left:0!important;right:auto!important;bottom:auto!important;transform:none!important;margin:0!important;z-index:3!important;background:#00998b!important;color:#fff!important;padding:5px 8px!important;border-radius:9px 0 5px 0!important;font:700 10px/1.3 Arial,sans-serif!important;white-space:nowrap!important;pointer-events:none!important}
+}
+</style><script id="cerood-full-width-category-sizing">
+document.addEventListener('DOMContentLoaded',function(){const grid=document.getElementById('productGridContainer');if(!grid)return;const desktop=matchMedia('(min-width:851px)');function fit(){if(!desktop.matches){grid.style.removeProperty('--cerood-category-width');grid.style.removeProperty('--cerood-category-offset');return}grid.style.setProperty('--cerood-category-offset','0px');const left=grid.getBoundingClientRect().left;grid.style.setProperty('--cerood-category-width',document.documentElement.clientWidth+'px');grid.style.setProperty('--cerood-category-offset',(-left)+'px')}fit();window.addEventListener('load',fit);window.addEventListener('resize',fit);desktop.addEventListener('change',fit)});
+</script>
