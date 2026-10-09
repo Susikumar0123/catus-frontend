@@ -16994,8 +16994,6 @@ document.querySelectorAll(
 function getSmallProductImageUrl(imageUrl) {
     if (!imageUrl) return '';
 
-    if (window.matchMedia('(min-width:851px)').matches) return imageUrl;
-
     if (/-800\.webp(\?.*)?$/i.test(imageUrl)) {
         return imageUrl.replace(
             /-800\.webp(\?.*)?$/i,
@@ -17621,16 +17619,13 @@ for(let catName in displayCategoriesMap) {
 
 
                   let catData = displayCategoriesMap[catName];
-                  const sectionPalette = ['#082b4b','#ac101b','#e96b12','#132b3b','#008bb0'];
-                  const categoryColour = /(^|\W)ac(\W|$)|air condition/i.test(catName) ? '#ac101b' : /tv|television/i.test(catName) ? '#e96b12' : /refriger|fridge|washing/i.test(catName) ? '#132b3b' : /water|purifier|\bro\b/i.test(catName) ? '#008bb0' : sectionPalette[(categoryIndex - 1) % sectionPalette.length];
-
                   html += `
 <div class="uc-category-box
 
 
     ${catName === 'Quick Home Services' ? 'quick-home-fresh' : ''}
     
-    ${catName === 'Popular Services' ? 'popular-services-mobile-card' : ''}" style="--cerood-category-colour:${categoryColour}">
+    ${catName === 'Popular Services' ? 'popular-services-mobile-card' : ''}">
 
     <div class="uc-cat-header">
         <h3>${catName}</h3>
@@ -20450,17 +20445,4 @@ html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-g
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card,
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card,
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic.cerood-mosaic-short .uc-card{background:#e1e1e2!important;background-color:#e1e1e2!important;border-color:#e1e1e2!important}
-</style><style id="cerood-admin-image-fit">
-html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card .uc-card-img-wrapper img,
-html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card .uc-card-img-wrapper img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;box-sizing:border-box!important;aspect-ratio:auto!important;transform:none!important}
-</style><style id="cerood-category-coloured-gaps">
-@media(min-width:851px){
-html:root body #productGridContainer .uc-category-box{background:var(--cerood-category-colour,#082b4b)!important;border:2px solid var(--cerood-category-colour,#082b4b)!important;border-radius:16px!important;padding:18px!important;margin-bottom:24px!important;box-sizing:border-box!important}
-html:root body #productGridContainer .uc-category-box .uc-cat-header{background:transparent!important;margin-bottom:14px!important}
-html:root body #productGridContainer .uc-category-box .uc-cat-header h3,html:root body #productGridContainer .uc-category-box .uc-cat-header .uc-see-all-btn{color:#fff!important}
-html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper,
-html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid,
-html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic,
-html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic.cerood-mosaic-short{background:transparent!important;gap:16px!important}
-}
 </style>
