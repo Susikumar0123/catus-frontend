@@ -20005,6 +20005,13 @@ function ceroodOpenHomeApproval(orderId) {
 .chs-unified-note{font-size:10px!important;color:#737373!important}
 .chs-unified-step:focus-visible,.chs-unified-detail button:focus-visible{outline:2px solid #171717;outline-offset:3px}
 @media(max-width:768px){.chs-unified-detail{padding:12px}#liveTrackingContainer .prem-live-card{padding:12px!important}}
+
+/* Actual stage timestamps and assigned technician, no inferred dates */
+.chs-unified-step .chs-unified-time{font-size:9px;line-height:1.35;color:#64748b;font-weight:400;text-align:center;max-width:112px;white-space:normal;min-height:24px}
+.chs-unified-step .chs-unified-technician{font-size:10px;line-height:1.3;color:#171717;font-weight:600;text-align:center;max-width:112px;overflow-wrap:anywhere}
+.chs-unified-tech-detail{font-weight:600;color:#171717!important}
+.chs-unified-steps{grid-template-columns:repeat(6,minmax(112px,1fr));min-width:672px}
+.chs-unified-step{justify-content:flex-start}
 </style>
 <script id="chs-unified-tracking-script">
 (function(){'use strict';
@@ -20013,6 +20020,20 @@ const valid=id=>/^CHS-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(String
 const names=['Booked','Approval','Appointment','Technician','Service','Completed'],icons=['✓','₹','▦','➜','⚒','✓'];
 const caches=new Map(),selected=new Map(),maps=new Map();
 const norm=x=>String(x||'').trim().toLowerCase();
+// Display only timestamps actually supplied by the booking/appointment/tracking API.
+function fmt(v){if(!v)return '';const d=new Date(v);if(!Number.isFinite(d.getTime()))return '';return d.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});}
+function first(...values){return values.find(v=>v!==null&&v!==undefined&&String(v).trim()!=='')||'';}
+function technicianName(o,b,a){const ap=a?.appointment||{};const tech=a?.technician||{};return first(a?.technician_name,ap.technician_name,tech.name,b?.technician_name,o.technician_name,o.assigned_technician_name);}
+function milestones(o,b,a,t,st){const ap=a?.appointment||{};
+ const booking=first(b?.booked_at,b?.created_at,o.booked_at,o.created_at);
+ const fee=st.approvedFee?first(b?.inspection_fee_confirmed_at,o.inspection_fee_confirmed_at):'';
+ const appointment=st.ap.appointment_status&&norm(st.ap.appointment_status)==='confirmed'?first(ap.appointment_confirmed_at,a?.appointment_confirmed_at,o.appointment_confirmed_at):'';
+ const assigned=st.assigned?first(a?.assigned_at,ap.technician_assigned_at,a?.technician_assigned_at,b?.technician_assigned_at,o.technician_assigned_at,o.assigned_at):'';
+ const service=first(b?.service_started_at,o.service_started_at,b?.inspection_completed_at,o.inspection_completed_at);
+ const complete=st.complete?first(a?.completed_at,b?.completed_at,o.completed_at,o.service_completed_at):'';
+ return [booking,fee,appointment,assigned,service,complete].map(fmt);
+}
+
 function safe(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function keyFor(id){try{return localStorage.getItem('cerood_home_approval_'+id)||'';}catch(_){return '';}}
 async function post(path,body){const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});const j=await r.json();if(!r.ok||!j.success)throw Error(j.message||'Unable to load');return j;}
@@ -20044,9 +20065,10 @@ function info(i,o,b,a,t,st){switch(i){
 function cleanupMap(id){const m=maps.get(id);if(m){m.remove();maps.delete(id);}}
 function draw(o){const id=String(o.order_id||'');const root=Array.from(document.querySelectorAll('.chs-unified-root')).find(x=>x.dataset.orderId===id);if(!root)return;
  const data=caches.get(id)||{},b=data.b||o,a=data.a||{},t=data.t||{},st=getState(o,b,a,t),chosen=selected.has(id)?selected.get(id):-1;
+ const dates=milestones(o,b,a,t,st),techName=technicianName(o,b,a);
  root.replaceChildren();const scroll=document.createElement('div');scroll.className='chs-unified-scroll';const steps=document.createElement('div');steps.className='chs-unified-steps';
  const progress=document.createElement('span');progress.className='chs-unified-progress';progress.style.width=(st.current*100/6)+'%';steps.appendChild(progress);
- names.forEach((name,i)=>{const btn=document.createElement('button');btn.type='button';btn.className='chs-unified-step '+(st.done[i]?'done':i===st.current?'current':'')+(i===chosen?' selected':'');btn.setAttribute('aria-expanded',String(i===chosen));btn.setAttribute('aria-label',name+' tracking details');btn.innerHTML='<span class="chs-unified-dot">'+(st.done[i]?'✓':icons[i])+'</span><strong>'+name+'</strong>';btn.onclick=()=>{selected.set(id,chosen===i?-1:i);cleanupMap(id);draw(o);};steps.appendChild(btn);});
+ names.forEach((name,i)=>{const btn=document.createElement('button');btn.type='button';btn.className='chs-unified-step '+(st.done[i]?'done':i===st.current?'current':'')+(i===chosen?' selected':'');btn.setAttribute('aria-expanded',String(i===chosen));btn.setAttribute('aria-label',name+' tracking details');btn.innerHTML='<span class="chs-unified-dot">'+(st.done[i]?'✓':icons[i])+'</span><strong>'+name+'</strong>'+(dates[i]?'<small class="chs-unified-time">'+safe(dates[i])+'</small>':'')+(i===3&&st.assigned&&techName?'<small class="chs-unified-technician">'+safe(techName)+'</small>':'');btn.onclick=()=>{selected.set(id,chosen===i?-1:i);cleanupMap(id);draw(o);};steps.appendChild(btn);});
  scroll.appendChild(steps);root.appendChild(scroll);if(chosen<0)return;
  const detail=document.createElement('section');detail.className='chs-unified-detail';detail.innerHTML='<div class="chs-unified-detail-head"><h4>'+names[chosen]+'</h4><button type="button" class="chs-unified-close" aria-label="Close details">×</button></div><p>'+safe(info(chosen,o,b,a,t,st))+'</p>';
  detail.querySelector('button').onclick=()=>{selected.set(id,-1);cleanupMap(id);draw(o);};
@@ -20054,6 +20076,8 @@ function draw(o){const id=String(o.order_id||'');const root=Array.from(document.
   if(needsFee||needsQuote){const p=document.createElement('p');p.className='chs-unified-note';p.textContent=needsFee?'Inspection / visiting fee must be approved before technician visit.':'Repair quotation approval is separate from the inspection fee approval.';detail.appendChild(p);
    const btn=document.createElement('button');btn.type='button';btn.textContent='Review / approve charges';btn.onclick=()=>{if(typeof window.ceroodOpenHomeApproval==='function')window.ceroodOpenHomeApproval(id);else window.location.href='/customer-approval.html';};detail.appendChild(btn);}}
  if(chosen===3&&t.state==='on_the_way'&&t.latitude!=null&&t.longitude!=null&&window.L){const lat=Number(t.latitude),lng=Number(t.longitude);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180){const mapEl=document.createElement('div');mapEl.className='chs-unified-map';detail.appendChild(mapEl);setTimeout(()=>{if(!mapEl.isConnected)return;const map=L.map(mapEl).setView([lat,lng],15);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);L.marker([lat,lng]).addTo(map);maps.set(id,map);map.invalidateSize();},50);const note=document.createElement('p');note.className='chs-unified-note';note.textContent='Latest shared GPS position only; not a guaranteed ETA.';detail.appendChild(note);}}
+ if(chosen===3&&st.assigned&&techName){const p=document.createElement('p');p.className='chs-unified-tech-detail';p.textContent='Assigned technician: '+techName;detail.appendChild(p);}
+ if(dates[chosen]){const p=document.createElement('p');p.className='chs-unified-note';p.textContent='Recorded: '+dates[chosen];detail.appendChild(p);}
  root.appendChild(detail);
 }
 async function load(o){const id=String(o.order_id||'');if(!valid(id))return;const key=keyFor(id);if(!/^[0-9a-f]{64}$/i.test(key)){caches.set(id,{b:o});draw(o);return;}
