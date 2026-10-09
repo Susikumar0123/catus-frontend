@@ -17420,3 +17420,71 @@ function ceroodOpenHomeApproval(orderId) {
 <!-- Cerood mobile call button: fixed below header -->
 <a id="ceroodMobileCallFixed" href="tel:+918946055856" aria-label="Call Cerood at 8946055856 to book a service"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.8a2 2 0 0 1-.45 2.11L9.04 10.9a16 16 0 0 0 4.06 4.06l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.84.55 2.8.68A2 2 0 0 1 22 16.92z"/></svg><span>Call Now</span></a>
 <style id="ceroodMobileCallFixedStyle">#ceroodMobileCallFixed{display:none!important}@media(max-width:850px){html body #ceroodMobileCallFixed{display:inline-flex!important;position:fixed!important;top:calc(197px + env(safe-area-inset-top,0px))!important;right:18px!important;left:auto!important;bottom:auto!important;z-index:2147483000!important;align-items:center!important;gap:6px!important;background:#17253b!important;color:white!important;border:0!important;border-radius:8px!important;padding:9px 11px!important;font:600 12px Inter,Arial,sans-serif!important;text-decoration:none!important;box-shadow:0 2px 8px #0002!important}html body #ceroodMobileCallFixed svg{stroke:white!important;flex-shrink:0!important}html body.cerood-auth-open #ceroodMobileCallFixed{display:none!important}}</style>
+<style id="cerood-desktop-new-design">
+@media(min-width:851px){
+html body{background:#fff!important;color:#151515!important}
+html:root body .master-app-container{max-width:1440px!important;margin:auto!important;background:#fff!important;box-shadow:none!important}
+html:root body .uc-homepage-wrapper{background:#fff!important;border-bottom:1px solid #eee!important;box-shadow:none!important}
+html:root body .header-main-container{background:#fff!important;display:flex!important;flex-wrap:nowrap!important;padding:20px 32px!important;gap:24px!important;border-radius:0!important;box-shadow:none!important}
+html:root body .brand-logo{flex:0 0 auto!important;color:#111!important;min-width:150px!important}
+html:root body .cerood-wordmark-erood{color:#111!important}
+html:root body .header-location-widget{background:none!important;border:0!important;color:#111!important;max-width:220px!important;min-width:160px!important}
+html:root body .header-location-widget *{color:#111!important}
+html:root body .loc-label{display:none!important}
+html:root body .search-container{flex:1!important;min-width:180px!important;max-width:none!important;background:#fff!important;border:1px solid #ddd!important;border-radius:9px!important;box-shadow:none!important}
+html:root body #searchInput{background:#fff!important;color:#111!important;height:46px!important;border-radius:9px!important;padding-left:42px!important;background-image:none!important}
+html:root body .search-icon{color:#111!important;left:14px!important}
+html:root body .header-nav-right{gap:20px!important;flex:0 0 auto!important}
+html:root body .header-nav-right .nav-item,html:root body .header-nav-right .login-btn,html:root body .cerood-direct-call{background:none!important;color:#111!important;border:0!important;box-shadow:none!important;padding:8px 0!important}
+html:root body .header-nav-right svg,html:root body .header-nav-right svg *{stroke:#111!important}
+html:root body .header-nav-right .nav-text{color:#111!important}
+html:root body .cerood-direct-call{order:-1!important;white-space:nowrap!important}
+html:root body .cerood-index-home-services-visual{display:none!important}
+html:root body .breadcrumb{max-width:1280px!important;margin:22px auto!important;padding:0 32px!important;color:#777!important}
+.desktop-design-hero{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;max-width:1280px;margin:12px auto 24px;padding:0 32px}
+.desktop-design-hero h1{font-size:56px;line-height:1.12;letter-spacing:-2px;font-weight:750;margin:0 0 20px;color:#111}
+.desktop-design-hero p{font-size:20px;line-height:1.5;color:#666;margin:0}
+.desktop-design-hero .desktop-hero-photo{height:310px;background-size:215.5% auto;background-position:90.5% 13.7%;background-repeat:no-repeat;background-color:#eee}
+html:root body .quick-services-bar{max-width:1280px!important;margin:20px auto!important;background:#fff!important;border-bottom:1px solid #eee!important;padding:12px 32px 22px!important;box-shadow:none!important}
+html:root body .services-track{justify-content:center!important;gap:28px!important}
+html:root body .service-chip{background:#fff!important;border:0!important;box-shadow:none!important;min-width:105px!important;color:#111!important;padding:8px!important;border-radius:0!important}
+html:root body .service-chip img{width:64px!important;height:64px!important;object-fit:contain!important;background:none!important}
+html:root body .service-chip span{font-size:13px!important;color:#111!important}
+html:root body .cerood-reference-hero,html:root body .cerood-reference-services,html:root body .section-title-container,html:root body .scroll-wrapper.extra-container{display:none!important}
+html:root body #productGridContainer{max-width:1280px!important;margin:24px auto!important;padding:0 32px!important}
+html:root body #productGridContainer .uc-category-box{padding:0!important;margin:0 0 38px!important;border:0!important;background:#fff!important;box-shadow:none!important}
+html:root body #productGridContainer .uc-cat-header h3{font-size:28px!important;line-height:1.3!important;color:#111!important;margin:0 0 20px!important}
+html:root body #productGridContainer .uc-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:24px!important;overflow:visible!important}
+html:root body #productGridContainer .uc-card{width:auto!important;min-width:0!important;max-width:none!important;flex:none!important;border:0!important;box-shadow:none!important;background:#fff!important;padding:0!important}
+html:root body #productGridContainer .uc-card-img-wrapper{height:220px!important;width:100%!important;background:#fafafa!important;border-radius:7px!important;overflow:hidden!important}
+html:root body #productGridContainer .uc-card-img-wrapper img{width:100%!important;height:100%!important;object-fit:contain!important}
+html:root body #productGridContainer .uc-body{padding:14px 0!important;text-align:center!important}
+html:root body #productGridContainer .uc-body h4{font-size:17px!important;line-height:1.4!important;color:#111!important;margin:0!important;min-height:0!important}
+html:root body #productGridContainer .uc-carousel-arrow{display:none!important}
+html:root body #productGridMain{display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;gap:0 56px!important;max-width:1280px!important;margin:36px auto!important;padding:0 32px!important;border:0!important;background:#fff!important;box-shadow:none!important;align-items:start!important}
+html:root body .product-gallery{grid-column:1!important;grid-row:1 / span 2!important;position:static!important;width:100%!important}
+html:root body .main-image-container{height:440px!important;border:0!important;background:#fff!important;border-radius:0!important;padding:12px!important}
+html:root body #mainProductImage{width:100%!important;height:100%!important;object-fit:contain!important}
+html:root body .thumbnail-row{justify-content:center!important;gap:16px!important;margin-top:20px!important}
+html:root body .thumbnail-row img{width:96px!important;height:72px!important;object-fit:contain!important;border-radius:4px!important}
+html:root body .product-info{grid-column:2!important;grid-row:1!important;width:100%!important;padding:0!important}
+html:root body .product-title{font-size:34px!important;line-height:1.2!important;font-weight:750!important;letter-spacing:-.8px!important;margin:0 0 16px!important;color:#111!important}
+html:root body .price-section,html:root body .cerood-booking-fee-notice,html:root body .product-trust-row,html:root body #productRatingRow,html:root body #productNoteContainer{display:none!important}
+html:root body .cerood-booking-panel{grid-column:2!important;grid-row:2!important;padding:0!important;border:0!important;background:#fff!important;box-shadow:none!important;border-radius:0!important;width:100%!important;margin:12px 0 0!important;position:static!important}
+html:root body .cerood-booking-panel h2{font-size:15px!important;font-weight:400!important;color:#666!important;margin:0 0 28px!important}
+html:root body .cerood-booking-label{color:#111!important;font-size:16px!important;font-weight:500!important;margin:0 0 10px!important}
+html:root body .cerood-date-row{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important;margin-bottom:24px!important}
+html:root body .cerood-time-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;margin-bottom:26px!important}
+html:root body .cerood-date-btn,html:root body .cerood-time-btn{background:#fff!important;color:#111!important;border:1px solid #d7d7d7!important;border-radius:5px!important;min-height:54px!important;box-shadow:none!important}
+html:root body .cerood-date-btn.active,html:root body .cerood-time-btn.active{background:#111!important;color:#fff!important;border-color:#111!important}
+html:root body .cerood-date-btn.active *{color:#fff!important}
+html:root body .cerood-location-mini{background:#fff!important;padding:0!important;margin:20px 0 28px!important;display:flex!important;gap:16px!important;color:#111!important}
+html:root body .cerood-location-mini i{color:#111!important;background:none!important}
+html:root body .cerood-location-mini strong{font-size:16px!important;color:#111!important}
+html:root body .action-buttons{display:flex!important;gap:12px!important;margin:0!important}
+html:root body .btn-buy{background:#111!important;color:#fff!important;border-radius:5px!important;min-height:54px!important;flex:1!important;font-size:16px!important}
+html:root body .btn-cart{background:#fff!important;color:#111!important;border:1px solid #ddd!important;border-radius:5px!important;min-height:54px!important;flex:0 0 120px!important;font-size:13px!important}
+html:root body #relatedServicesBox{max-width:1280px!important;margin:40px auto!important;padding:24px 32px!important;border-top:1px solid #eee!important;background:#fff!important}
+}
+@media(max-width:850px){.desktop-design-hero{display:none!important}}
+</style><script id="cerood-desktop-design-behaviour">document.addEventListener('DOMContentLoaded',function(){var mq=matchMedia('(min-width:851px)');var input=document.getElementById('searchInput');var original=input&&input.placeholder;var title=document.querySelector('.cerood-booking-panel h2');var oldTitle=title&&title.textContent;var buy=document.querySelector('.btn-buy');var oldBuy=buy&&buy.textContent;function apply(){if(input)input.placeholder=mq.matches?'Search home services':original;if(title)title.textContent=mq.matches?'Choose a convenient date and time.':oldTitle;if(buy)buy.textContent=mq.matches?'Continue to Booking':oldBuy;}apply();mq.addEventListener('change',apply);});</script>
