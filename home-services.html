@@ -17651,7 +17651,7 @@ for(let catName in displayCategoriesMap) {
         <div class="uc-grid"
              data-category="${catName.replace(/"/g, '&quot;')}">`;
               
-                  catData.items.forEach((s) => {
+                  catData.items.forEach((s, serviceIndex) => {
 
     let trendingBadgeHTML =
     (catName !== 'New and noteworthy' && s.is_hot_deal == 1)
@@ -17660,8 +17660,9 @@ for(let catName in displayCategoriesMap) {
 
     const badgeName = String(s.service_name || s.name || s.slug || '').toLowerCase().replace(/&amp;|&|\band\b/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
     const freeBookingNames = ['ac relocation reinstallation', 'split ac installation', 'ac general service', 'ac inspection'];
-    const freeBooking = freeBookingNames.includes(badgeName);
-    const serviceTag = badgeName === 'split ac not cooling' ? 'Trending' : /ac gas refill/.test(badgeName) ? 'Most Booked' : '';
+    const freeBooking = serviceIndex < Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
+    const badgeCount = Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
+    const serviceTag = serviceIndex === badgeCount ? 'Trending' : serviceIndex === badgeCount + 1 ? 'Most Booked' : '';
     const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">FREE BOOKING</span>' : '';
     const serviceTagHTML = serviceTag ? '<span class="cerood-service-tag">' + serviceTag + '</span>' : '';
 
@@ -17676,7 +17677,7 @@ const nameOnlyCategories = [
 const isNameOnlySection =
     nameOnlyCategories.includes(catName);
 
-const showStartingPrice = ['window ac installation', 'ac outdoor unit repair', 'ac indoor unit noise'].includes(badgeName) && Number.isFinite(price) && price > 0;
+const showStartingPrice = !freeBooking && !serviceTag && serviceIndex < 9 && Number.isFinite(price) && price > 0;
 const priceHTML = showStartingPrice ? '<div class="cerood-starting-price">Starts from ₹' + price.toLocaleString('en-IN') + '</div>' : '';
 
     html += `
