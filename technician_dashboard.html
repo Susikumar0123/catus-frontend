@@ -261,7 +261,11 @@
     .header,.top { box-shadow:0 3px 18px rgba(47,30,110,.035); }
     @media(max-width:480px) { .login-card,.card { max-width:100%; } }
 
-  </style>
+  
+/* Home Services approval: plain white, readable status information */
+.chs-approval-status { margin: 16px 0; padding: 12px 0; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede; color: #171717; font-size: 14px; line-height: 1.8; }
+.chs-approval-status > strong { display: block; margin-bottom: 4px; font-size: 15px; }
+</style>
 </head>
 
 <body>
@@ -578,6 +582,23 @@ const serviceTime =
                 order.created_at ||
                 '-';
 
+            // Home Services only: distinguish job acceptance, visit permission and repair permission.
+            const isHomeService = order.booking_pricing_model === 'quote_after_inspection';
+            const inspectionApproved = order.inspection_fee_status === 'Confirmed';
+            const inspectionCompleted = Boolean(order.inspection_completed_at);
+            const repairApproved = order.repair_quote_status === 'Accepted';
+            const approvalSummary = !isHomeService ? '' : `
+                <div class="chs-approval-status" role="status">
+                    <strong>Customer Approval &amp; Work Permission</strong>
+                    <div>Booking fee: ₹0 (inspection / visiting charge is separate)</div>
+                    <div>Inspection fee: ${escapeHtml(order.inspection_fee == null ? 'Not set' : '₹' + order.inspection_fee)}</div>
+                    <div>Customer inspection approval: <strong>${inspectionApproved ? 'Confirmed' : 'Pending / Not approved'}</strong></div>
+                    <div>Visit permission: <strong>${inspectionApproved ? 'Inspection visit permitted' : 'Do not visit until customer approves the inspection charge'}</strong></div>
+                    <div>Inspection completed: <strong>${inspectionCompleted ? 'Yes' : 'No'}</strong></div>
+                    <div>Repair quotation: <strong>${escapeHtml(order.repair_quote_status || 'Not Quoted')}</strong></div>
+                    <div>Repair permission: <strong>${inspectionApproved && inspectionCompleted && repairApproved ? 'Approved' : 'Do not start repair'}</strong></div>
+                </div>`;
+
 
             return `
                 <div class="order-card">
@@ -640,6 +661,8 @@ const serviceTime =
                             formatDate(bookingDate)
                         )}
                     </div>
+
+                    ${approvalSummary}
 
                     ${
     technicianResponse === 'Pending'
