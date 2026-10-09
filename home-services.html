@@ -17658,6 +17658,13 @@ for(let catName in displayCategoriesMap) {
     ? `<div class="trending-badge">Hot Deal</div>`
     : ``;
 
+    const badgeName = String(s.service_name || s.name || s.slug || '').toLowerCase().replace(/&amp;|&|\band\b/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
+    const freeBookingNames = ['ac relocation reinstallation', 'split ac installation', 'ac general service', 'ac inspection'];
+    const freeBooking = freeBookingNames.includes(badgeName);
+    const serviceTag = badgeName === 'split ac not cooling' ? 'Trending' : /ac gas refill/.test(badgeName) ? 'Most Booked' : '';
+    const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">FREE BOOKING</span>' : '';
+    const serviceTagHTML = serviceTag ? '<span class="cerood-service-tag">' + serviceTag + '</span>' : '';
+
     const price = Number(s.price || 0);
 const mrp = Number(s.mrp || 0);
 
@@ -17669,7 +17676,8 @@ const nameOnlyCategories = [
 const isNameOnlySection =
     nameOnlyCategories.includes(catName);
 
-const priceHTML = ``; // Home Services listing: image + service name only
+const showStartingPrice = ['window ac installation', 'ac outdoor unit repair', 'ac indoor unit noise'].includes(badgeName) && Number.isFinite(price) && price > 0;
+const priceHTML = showStartingPrice ? '<div class="cerood-starting-price">Starts from ₹' + price.toLocaleString('en-IN') + '</div>' : '';
 
     html += `
         <div
@@ -17678,7 +17686,7 @@ const priceHTML = ``; // Home Services listing: image + service name only
             onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')">
 
             <div class="uc-card-img-wrapper">
-
+                ${serviceTagHTML}
                 <img
     src="${getSmallProductImageUrl(s.image_url)}"
 alt="${s.service_name}"
@@ -17686,8 +17694,8 @@ loading="lazy"
 decoding="async">
             </div>
 
-            <div class="uc-body">
-
+            <div class="uc-body${freeBooking ? ' cerood-highlight-name' : ''}">
+                ${freeBookingHTML}
                 <h4>${s.service_name}</h4>
 
                 
@@ -20408,4 +20416,20 @@ html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-g
 </style><style id="cerood-bright-row-image-colours">
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card .uc-card-img-wrapper,
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card .uc-card-img-wrapper{background:radial-gradient(ellipse at 50% 95%,rgba(255,255,255,.14),transparent 70%),var(--cerood-row-colour,#072b54)!important;border-color:var(--cerood-row-colour,#072b54)!important}
-</style><script id="cerood-bright-row-colour-init">document.addEventListener('DOMContentLoaded',function(){var root=document.getElementById('productGridContainer');if(!root)return;var palette=['#b50916','#072b54','#e76b08','#09243e','#008eb8','#ae1020'];var pending=false;function paint(){pending=false;root.querySelectorAll('.uc-grid').forEach(function(grid,section){var rows=[];Array.from(grid.querySelectorAll(':scope > .uc-card')).forEach(function(card){var top=Math.round(card.getBoundingClientRect().top);var row=rows.findIndex(function(v){return Math.abs(v-top)<5;});if(row<0){row=rows.length;rows.push(top);}var index=Array.from(grid.querySelectorAll(':scope > .uc-card')).indexOf(card);var colour=index===0?palette[section%palette.length]:row===0?palette[(section+1)%palette.length]:row===1?palette[(section+3)%palette.length]:palette[(section+2+(index%2?0:3))%palette.length];card.style.setProperty('--cerood-row-colour',colour);});});}function schedule(){if(!pending){pending=true;requestAnimationFrame(paint);}}schedule();new MutationObserver(schedule).observe(root,{childList:true,subtree:true});window.addEventListener('resize',schedule);window.addEventListener('load',schedule);if(window.ResizeObserver)new ResizeObserver(schedule).observe(root);});</script>
+</style><script id="cerood-bright-row-colour-init">document.addEventListener('DOMContentLoaded',function(){var root=document.getElementById('productGridContainer');if(!root)return;var palette=['#b50916','#072b54','#e76b08','#09243e','#008eb8','#ae1020'];var pending=false;function paint(){pending=false;root.querySelectorAll('.uc-grid').forEach(function(grid,section){var rows=[];Array.from(grid.querySelectorAll(':scope > .uc-card')).forEach(function(card){var top=Math.round(card.getBoundingClientRect().top);var row=rows.findIndex(function(v){return Math.abs(v-top)<5;});if(row<0){row=rows.length;rows.push(top);}var index=Array.from(grid.querySelectorAll(':scope > .uc-card')).indexOf(card);var colour=index===0?palette[section%palette.length]:row===0?palette[(section+1)%palette.length]:row===1?palette[(section+3)%palette.length]:palette[(section+2+(index%2?0:3))%palette.length];card.style.setProperty('--cerood-row-colour',colour);});});}function schedule(){if(!pending){pending=true;requestAnimationFrame(paint);}}schedule();new MutationObserver(schedule).observe(root,{childList:true,subtree:true});window.addEventListener('resize',schedule);window.addEventListener('load',schedule);if(window.ResizeObserver)new ResizeObserver(schedule).observe(root);});</script><style id="cerood-selective-service-badges">
+#productGridContainer .cerood-free-booking-badge,#productGridContainer .cerood-service-tag,#productGridContainer .cerood-starting-price{display:none!important}
+@media(min-width:851px){
+html:root body #productGridContainer .uc-card .cerood-free-booking-badge{display:table!important;background:#b50935!important;color:#fff!important;font:700 11px/1.3 Arial,sans-serif!important;padding:4px 7px!important;border-radius:4px!important;margin:0 0 5px!important;white-space:nowrap!important}
+html:root body #productGridContainer .uc-card .uc-card-img-wrapper{position:relative!important}
+html:root body #productGridContainer .uc-card .cerood-service-tag{display:block!important;position:absolute!important;left:5px!important;top:5px!important;z-index:2!important;background:#00998b!important;color:#fff!important;font:700 10px/1.3 Arial,sans-serif!important;padding:3px 6px!important;border-radius:3px!important;pointer-events:none!important}
+html:root body #productGridContainer .uc-card .cerood-highlight-name h4{color:#1748be!important}
+html:root body #productGridContainer .uc-card .cerood-starting-price{display:block!important;color:#1748be!important;font-size:11px!important;font-weight:600!important;line-height:1.4!important;margin-top:4px!important}
+html:root body #productGridContainer .uc-card .uc-body{flex-shrink:0!important}
+}
+</style><style id="cerood-badge-layout-fix">@media(min-width:851px){
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card .uc-body{background:#fff!important;padding:8px!important;height:auto!important;min-height:52px!important;max-height:none!important;overflow:visible!important;box-sizing:border-box!important}
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card .uc-body.cerood-highlight-name h4{color:#1748be!important}
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card{border:1px solid #e2e8f0!important;border-radius:10px!important;overflow:hidden!important;padding:0!important}
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card .uc-card-img-wrapper{border:0!important;border-radius:8px 8px 0 0!important;min-height:90px!important}
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic{grid-auto-rows:185px!important}
+}</style>
