@@ -334,7 +334,53 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 .chs-admin-track-detail{margin-top:7px;padding:13px;border:1px solid #ededed;background:#fafafa;border-radius:12px;font-size:12px;line-height:1.6}
 .chs-admin-track-detail p{margin:5px 0 0;color:#555}
 .chs-admin-track-step:focus-visible{outline:2px solid #171717;outline-offset:3px}
-</style></head>
+</style>
+<style id="chs-admin-manage-order-layout-20261009">
+/* Only the Manage Order dialog; other admin dialogs are untouched. */
+#orderDetailModal{padding:8px!important;align-items:center!important;justify-content:center!important}
+#orderDetailModal>.modal-box{
+ width:calc(100vw - 16px)!important;max-width:none!important;
+ height:calc(100dvh - 16px)!important;max-height:none!important;
+ border-radius:14px!important;overflow:hidden!important;
+}
+#orderDetailModal .modal-header{flex:0 0 auto;padding:15px 22px;min-height:64px}
+#orderDetailModal .modal-header h3{min-width:0;flex-wrap:wrap;overflow-wrap:anywhere;line-height:1.4}
+#orderDetailModal #modalOrderIdTitle{overflow-wrap:anywhere;font-size:12px!important}
+#orderDetailModal .modal-body{
+ display:grid!important;grid-template-columns:minmax(285px,34%) minmax(0,1fr)!important;
+ gap:20px!important;padding:20px!important;overflow-y:auto!important;
+ overflow-x:hidden!important;align-items:start!important;min-height:0;flex:1 1 auto;
+}
+#orderDetailModal .modal-body>div{min-width:0;max-width:100%}
+#orderDetailModal .info-card{min-width:0;max-width:100%;overflow-wrap:anywhere;padding:16px}
+#orderDetailModal .info-title{gap:7px;line-height:1.45;flex-wrap:wrap}
+#orderDetailModal .info-row{gap:14px;align-items:flex-start}
+#orderDetailModal .info-row span{flex:0 0 42%;min-width:0}
+#orderDetailModal .info-row strong{flex:1;min-width:0;max-width:none;text-align:right;overflow-wrap:anywhere}
+#orderDetailModal #chsAdminControls,
+#orderDetailModal #chsAppointmentPanel{min-width:0;max-width:100%;box-sizing:border-box}
+#orderDetailModal #chsAdminControls{padding:16px!important}
+#orderDetailModal #chsAppointmentPanel{padding:16px!important}
+#orderDetailModal .form-group{min-width:0}
+#orderDetailModal .form-input{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+#orderDetailModal #chsAdminControls button:not(.chs-admin-track-step){
+ max-width:100%;white-space:normal;line-height:1.35;overflow-wrap:anywhere;
+ border-radius:8px;min-height:38px;cursor:pointer;
+}
+#orderDetailModal #chsAppointmentConfirmBtn,
+#orderDetailModal #chsAdminControls>.save-addr-action-btn{margin:6px 8px 6px 0}
+#orderDetailModal .chs-admin-track-scroll{width:100%;max-width:100%;overflow-x:auto}
+#orderDetailModal .chs-admin-track-rail{grid-template-columns:repeat(6,minmax(108px,1fr));min-width:648px}
+#orderDetailModal .chs-admin-track-step{align-items:center!important;text-align:center!important}
+#orderDetailModal .chs-admin-track-detail{max-width:100%;overflow-wrap:anywhere}
+@media(max-width:850px){
+ #orderDetailModal>.modal-box{width:calc(100vw - 12px)!important;height:calc(100dvh - 12px)!important}
+ #orderDetailModal .modal-body{grid-template-columns:minmax(0,1fr)!important;gap:14px!important;padding:13px!important}
+ #orderDetailModal .modal-header{padding:12px 14px}
+ #orderDetailModal .info-row span{flex-basis:42%}
+}
+</style>
+</head>
 
     <body>
 
