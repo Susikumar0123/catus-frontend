@@ -7412,8 +7412,10 @@ function renderChsAdminTracking(o){
  const appointment=String(o.appointment_status||'').toLowerCase()==='confirmed';
  const assigned=Boolean(o.technician_id||o.technician_assigned_at);
  const completed=String(o.status||'').toLowerCase()==='completed';
- const stage=completed?5:!fee?1:!appointment?2:!assigned?3:4;
- const dates=[o.booked_at||o.created_at,fee?o.inspection_fee_confirmed_at:null,appointment?o.appointment_confirmed_at:null,assigned?(o.technician_assigned_at||o.assigned_at):null,o.service_started_at||o.inspection_completed_at,completed?(o.completed_at||o.service_completed_at):null];
+ const done=[true,fee,fee&&appointment,fee&&appointment&&assigned,fee&&appointment&&assigned&&completed,fee&&appointment&&assigned&&completed];
+ const firstPending=done.findIndex(value=>!value);
+ const stage=firstPending<0?5:firstPending;
+ const dates=[o.booked_at||o.created_at,fee?o.inspection_fee_confirmed_at:null,appointment?o.appointment_confirmed_at:null,assigned?(o.technician_assigned_at||o.assigned_at):null,o.service_started_at||o.inspection_completed_at,completed?(o.completed_at||o.service_completed_at):null].map((value,i)=>done[i]?value:null);
  const notes=[
   'Booking received. Booking fee ₹0.',
   'Inspection / visiting fee: '+(o.inspection_fee==null?'Not set':'₹'+o.inspection_fee)+' · '+(o.inspection_fee_status||'Awaiting customer confirmation')+'. Customer consent is required.',
@@ -7425,14 +7427,14 @@ function renderChsAdminTracking(o){
  host.replaceChildren();
  const scroll=document.createElement('div');scroll.className='chs-admin-track-scroll';
  const rail=document.createElement('div');rail.className='chs-admin-track-rail';
- const line=document.createElement('span');line.className='chs-admin-track-progress';line.style.width=(stage*100/6)+'%';rail.appendChild(line);
+ const line=document.createElement('span');line.className='chs-admin-track-progress';line.style.width=(Math.max(0,done.filter(Boolean).length-1)*100/6)+'%';rail.appendChild(line);
  chsStageLabels.forEach((name,i)=>{
-  const btn=document.createElement('button');btn.type='button';btn.className='chs-admin-track-step'+(i<stage?' done':i===stage?' current':'')+(i===chsSelectedStage?' selected':'');
+  const btn=document.createElement('button');btn.type='button';btn.className='chs-admin-track-step'+(done[i]?' done':i===stage?' current':'')+(i===chsSelectedStage?' selected':'');
   btn.setAttribute('aria-expanded',String(i===chsSelectedStage));
-  const dot=document.createElement('span');dot.className='chs-admin-track-dot';dot.textContent=i<stage?'✓':['✓','₹','▦','➜','⚒','✓'][i];
+  const dot=document.createElement('span');dot.className='chs-admin-track-dot';dot.textContent=done[i]?'✓':['✓','₹','▦','➜','⚒','✓'][i];
   const title=document.createElement('strong');title.textContent=name;btn.append(dot,title);
   const dt=chsAdminDate(dates[i]);if(dt){const small=document.createElement('small');small.textContent=dt;btn.appendChild(small);}
-  if(i===3&&assigned){const tech=document.createElement('small');tech.className='chs-admin-tech';tech.textContent=o.technician_name||o.assigned_technician_name||'Technician assigned';btn.appendChild(tech);}
+  if(i===3&&done[3]){const tech=document.createElement('small');tech.className='chs-admin-tech';tech.textContent=o.technician_name||o.assigned_technician_name||'Technician assigned';btn.appendChild(tech);}
   btn.onclick=()=>{chsSelectedStage=chsSelectedStage===i?-1:i;renderChsAdminTracking(o);};rail.appendChild(btn);
  });
  scroll.appendChild(rail);host.appendChild(scroll);

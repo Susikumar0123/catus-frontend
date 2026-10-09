@@ -20037,10 +20037,10 @@ function technicianName(o,b,a){const ap=a?.appointment||{};const tech=a?.technic
 function milestones(o,b,a,t,st){const ap=a?.appointment||{};
  const booking=first(b?.booked_at,b?.created_at,o.booked_at,o.created_at);
  const fee=st.approvedFee?first(b?.inspection_fee_confirmed_at,o.inspection_fee_confirmed_at):'';
- const appointment=st.ap.appointment_status&&norm(st.ap.appointment_status)==='confirmed'?first(ap.appointment_confirmed_at,a?.appointment_confirmed_at,o.appointment_confirmed_at):'';
- const assigned=st.assigned?first(a?.assigned_at,ap.technician_assigned_at,a?.technician_assigned_at,b?.technician_assigned_at,o.technician_assigned_at,o.assigned_at):'';
- const service=first(b?.service_started_at,o.service_started_at,b?.inspection_completed_at,o.inspection_completed_at);
- const complete=st.complete?first(a?.completed_at,b?.completed_at,o.completed_at,o.service_completed_at):'';
+ const appointment=st.done[2]?first(ap.appointment_confirmed_at,a?.appointment_confirmed_at,o.appointment_confirmed_at):'';
+ const assigned=st.done[3]?first(a?.assigned_at,ap.technician_assigned_at,a?.technician_assigned_at,b?.technician_assigned_at,o.technician_assigned_at,o.assigned_at):'';
+ const service=st.done[4]?first(b?.service_started_at,o.service_started_at,b?.inspection_completed_at,o.inspection_completed_at):'';
+ const complete=st.done[5]?first(a?.completed_at,b?.completed_at,o.completed_at,o.service_completed_at):'';
  return [booking,fee,appointment,assigned,service,complete].map(fmt);
 }
 
@@ -20052,16 +20052,16 @@ function getState(o,b,a,t){
  const complete=Boolean(a?.completed)||os==='completed';
  const inspection=Boolean(b?.inspection_completed_at||o.inspection_completed_at);
  const approvedFee=fee==='confirmed',quoteOk=quote==='accepted';
- const appointment=norm(ap.appointment_status)==='confirmed';
- const assigned=Boolean(a?.assigned)||Boolean(o.technician_id);
+ const appointment=norm(ap.appointment_status||b?.appointment_status||o.appointment_status)==='confirmed';
+ const assigned=Boolean(a?.assigned)||Boolean(b?.technician_id)||Boolean(o.technician_id);
  const onWay=['on_the_way','arrived'].includes(journey);
  const serviceStarted=Boolean(o.service_started_at)||['in service','service','completed'].includes(os);
- // A completed marker must be based on the actual milestone, not assumed from a later field.
- const done=[true,approvedFee,appointment,assigned,complete,complete];
- // Service stage represents inspection, quote approval and repair; keep it active until completion.
- // A later completed marker must not visually skip unfinished preceding milestones.
- const current=complete?5:!approvedFee?1:!appointment?2:!assigned?3:4;
- const displayDone=done.map((value,i)=>i<current&&value);
+ // Strict sequential presentation: an out-of-order backend event never skips a stage.
+ const done=[true,approvedFee,approvedFee&&appointment,approvedFee&&appointment&&assigned,
+             approvedFee&&appointment&&assigned&&complete,approvedFee&&appointment&&assigned&&complete];
+ const firstPending=done.findIndex(value=>!value);
+ const current=firstPending<0?5:firstPending;
+ const displayDone=done.map((value,i)=>value&&(firstPending<0||i<firstPending));
  return {done:displayDone,current,fee,quote,ap,journey,complete,inspection,approvedFee,quoteOk,assigned,onWay,serviceStarted};
 }
 function info(i,o,b,a,t,st){switch(i){
@@ -20075,10 +20075,10 @@ function info(i,o,b,a,t,st){switch(i){
 function cleanupMap(id){const m=maps.get(id);if(m){m.remove();maps.delete(id);}}
 function draw(o){const id=String(o.order_id||'');const root=Array.from(document.querySelectorAll('.chs-unified-root')).find(x=>x.dataset.orderId===id);if(!root)return;
  const data=caches.get(id)||{},b=data.b||o,a=data.a||{},t=data.t||{},st=getState(o,b,a,t),chosen=selected.has(id)?selected.get(id):-1;
- const dates=milestones(o,b,a,t,st),techName=technicianName(o,b,a);
+ const dates=milestones(o,b,a,t,st).map((value,i)=>st.done[i]?value:''),techName=technicianName(o,b,a);
  root.replaceChildren();const scroll=document.createElement('div');scroll.className='chs-unified-scroll';const steps=document.createElement('div');steps.className='chs-unified-steps';
- const progress=document.createElement('span');progress.className='chs-unified-progress';progress.style.width=(st.current*100/6)+'%';steps.appendChild(progress);
- names.forEach((name,i)=>{const btn=document.createElement('button');btn.type='button';btn.className='chs-unified-step '+(st.done[i]?'done':i===st.current?'current':'')+(i===chosen?' selected':'');btn.setAttribute('aria-expanded',String(i===chosen));btn.setAttribute('aria-label',name+' tracking details');btn.innerHTML='<span class="chs-unified-dot">'+(st.done[i]?'✓':icons[i])+'</span><strong>'+name+'</strong>'+(dates[i]?'<small class="chs-unified-time">'+safe(dates[i])+'</small>':'')+(i===3&&st.assigned&&techName?'<small class="chs-unified-technician">'+safe(techName)+'</small>':'');btn.onclick=()=>{selected.set(id,chosen===i?-1:i);cleanupMap(id);draw(o);};steps.appendChild(btn);});
+ const progress=document.createElement('span');progress.className='chs-unified-progress';progress.style.width=((Math.max(0,st.done.filter(Boolean).length-1))*100/6)+'%';steps.appendChild(progress);
+ names.forEach((name,i)=>{const btn=document.createElement('button');btn.type='button';btn.className='chs-unified-step '+(st.done[i]?'done':i===st.current?'current':'')+(i===chosen?' selected':'');btn.setAttribute('aria-expanded',String(i===chosen));btn.setAttribute('aria-label',name+' tracking details');btn.innerHTML='<span class="chs-unified-dot">'+(st.done[i]?'✓':icons[i])+'</span><strong>'+name+'</strong>'+(dates[i]?'<small class="chs-unified-time">'+safe(dates[i])+'</small>':'')+(i===3&&st.done[3]&&techName?'<small class="chs-unified-technician">'+safe(techName)+'</small>':'');btn.onclick=()=>{selected.set(id,chosen===i?-1:i);cleanupMap(id);draw(o);};steps.appendChild(btn);});
  scroll.appendChild(steps);root.appendChild(scroll);if(chosen<0)return;
  const detail=document.createElement('section');detail.className='chs-unified-detail';detail.innerHTML='<div class="chs-unified-detail-head"><h4>'+names[chosen]+'</h4><button type="button" class="chs-unified-close" aria-label="Close details">×</button></div><p>'+safe(info(chosen,o,b,a,t,st))+'</p>';
  detail.querySelector('button').onclick=()=>{selected.set(id,-1);cleanupMap(id);draw(o);};
@@ -20114,8 +20114,8 @@ function draw(o){const id=String(o.order_id||'');const root=Array.from(document.
    const p=document.createElement('p');p.className='chs-unified-note';p.textContent='Waiting for Cerood admin to set and send the inspection / visiting fee. Approval buttons appear here after the fee request is sent.';detail.appendChild(p);
   }
  }
- if(chosen===3&&t.state==='on_the_way'&&t.latitude!=null&&t.longitude!=null&&window.L){const lat=Number(t.latitude),lng=Number(t.longitude);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180){const mapEl=document.createElement('div');mapEl.className='chs-unified-map';detail.appendChild(mapEl);setTimeout(()=>{if(!mapEl.isConnected)return;const map=L.map(mapEl).setView([lat,lng],15);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);L.marker([lat,lng]).addTo(map);maps.set(id,map);map.invalidateSize();},50);const note=document.createElement('p');note.className='chs-unified-note';note.textContent='Latest shared GPS position only; not a guaranteed ETA.';detail.appendChild(note);}}
- if(chosen===3&&st.assigned&&techName){const p=document.createElement('p');p.className='chs-unified-tech-detail';p.textContent='Assigned technician: '+techName;detail.appendChild(p);}
+ if(chosen===3&&st.done[3]&&t.state==='on_the_way'&&t.latitude!=null&&t.longitude!=null&&window.L){const lat=Number(t.latitude),lng=Number(t.longitude);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180){const mapEl=document.createElement('div');mapEl.className='chs-unified-map';detail.appendChild(mapEl);setTimeout(()=>{if(!mapEl.isConnected)return;const map=L.map(mapEl).setView([lat,lng],15);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);L.marker([lat,lng]).addTo(map);maps.set(id,map);map.invalidateSize();},50);const note=document.createElement('p');note.className='chs-unified-note';note.textContent='Latest shared GPS position only; not a guaranteed ETA.';detail.appendChild(note);}}
+ if(chosen===3&&st.done[3]&&techName){const p=document.createElement('p');p.className='chs-unified-tech-detail';p.textContent='Assigned technician: '+techName;detail.appendChild(p);}
  if(dates[chosen]){const p=document.createElement('p');p.className='chs-unified-note';p.textContent='Recorded: '+dates[chosen];detail.appendChild(p);}
  root.appendChild(detail);
 }
