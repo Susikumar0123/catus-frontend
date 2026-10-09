@@ -2223,6 +2223,33 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom))!important}
 #ceroodFreeBookingNotice { display:block !important; }
 #confirmOrderBtn { cursor:pointer; }
 </style>
+<style id="cerood-modern-checkout-2026">
+body{background:#f7f8fb!important;color:#171717!important}
+.checkout-header{background:#fff!important;box-shadow:0 1px 0 #eceff3!important;border-radius:0!important}
+.checkout-container{max-width:1220px!important;padding:22px 20px 40px!important}
+.checkout-grid{grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr)!important;gap:22px!important;align-items:start!important}
+.checkout-grid>.card-box,.checkout-grid>div>.card-box{min-height:0!important;height:auto!important;box-shadow:0 6px 30px rgba(17,24,39,.045)!important;border:1px solid #edf0f4!important;border-radius:20px!important;padding:22px!important}
+.card-body-scroll{overflow:visible!important;max-height:none!important;flex-grow:0!important}
+.card-title{font-size:17px!important;letter-spacing:-.3px!important;margin-bottom:18px!important}
+.saved-address-card{background:#f8fafc!important;border:1px solid #e9eef5!important;border-radius:14px!important}
+.saved-address-info p{line-height:1.55!important}
+#summaryItemsContainer>div{display:flex!important;align-items:center!important;gap:14px!important;padding:12px 0!important}
+#summaryItemsContainer img{width:94px!important;height:94px!important;object-fit:cover!important;border-radius:14px!important;background:#f5f6f8!important;flex-shrink:0!important}
+.bill-summary-box{background:#fafbfc!important;border:1px solid #edf0f3!important;border-radius:14px!important;padding:15px!important}
+.cerood-modern-fee-note{padding:14px!important;background:#f0fdf4!important;border:1px solid #d4f5df!important;border-radius:14px!important;margin:12px 0!important}
+.cerood-modern-fee-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cerood-modern-fee-top strong{font-size:25px;color:#166534;font-weight:700}
+.cerood-modern-fee-top small{font-size:11px;font-weight:500;color:#166534}
+.cerood-modern-tag{background:#fff;border:1px solid #bbebcc;border-radius:30px;padding:7px 11px;color:#166534;font-size:12px;font-weight:700}
+.cerood-modern-fee-steps{display:grid;gap:9px;margin-top:13px;color:#28513a;font-size:12px;line-height:1.5}
+.cerood-modern-fee-steps i{margin-right:7px;color:#15803d}
+#ceroodVisitPreference{background:#fff!important;border:1px solid #e9eef4!important;border-radius:14px!important;padding:15px!important}
+#ceroodVisitPreference p{line-height:1.5!important}
+#confirmOrderBtn{background:#171717!important;color:#fff!important;border-radius:13px!important;min-height:54px!important;font-size:15px!important;font-weight:700!important;box-shadow:none!important}
+#confirmOrderBtn:hover:not(:disabled){background:#303030!important}
+#checkoutTrustNote{font-size:11.5px!important;line-height:1.5!important;color:#64748b!important}
+@media(max-width:900px){.checkout-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}.checkout-container{padding:12px 12px 25px!important}.checkout-grid>.card-box,.checkout-grid>div>.card-box{padding:16px!important;border-radius:15px!important}#summaryItemsContainer img{width:76px!important;height:76px!important}}
+</style>
 </head>
 <body>
 
@@ -2412,10 +2439,7 @@ Please check all required fields, mobile number, and pincode.
 
 </div>
 
-        <div id="ceroodFreeBookingNotice" role="status" style="padding:18px 0;color:#111;line-height:1.6">
-          <strong style="font-size:20px">Booking fee: ₹0 — Free Booking</strong>
-          <p style="margin:8px 0 0">No online payment is required to submit this request. Inspection / visiting charges are separate, will be disclosed, and require your approval before a technician visit. Repair charges are quoted after inspection and require separate approval.</p>
-        </div>
+        <div id="ceroodFreeBookingNotice" role="status" class="cerood-modern-fee-note"><div class="cerood-modern-fee-top"><span class="cerood-modern-tag"><i class="fa-solid fa-circle-check"></i> Free to book</span><strong>₹0 <small>pay now</small></strong></div><div class="cerood-modern-fee-steps"><span><i class="fa-solid fa-shield-halved"></i> Approve visiting fee before technician visit</span><span><i class="fa-solid fa-screwdriver-wrench"></i> Approve repair quote separately</span></div></div>
         <!-- Payment Mode Selection -->
         <div id="ceroodLegacyPaymentOptions" style="display:none !important;">
             <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Payment Method</label>
@@ -2455,7 +2479,7 @@ Please check all required fields, mobile number, and pincode.
     <!-- CEROOD HOME SERVICES: preferred visit window (request, not guaranteed availability) -->
     <section id="ceroodVisitPreference" style="display:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin:14px 0;">
       <h3 style="margin:0 0 8px;font-size:16px;">Preferred technician visit</h3>
-      <p style="font-size:12px;color:#64748b;margin:0 0 14px;">Choose your preferred date and time. This is a request, not a confirmed technician slot. Cerood will confirm availability after inspection fee approval.</p>
+      <p style="font-size:12px;color:#64748b;margin:0 0 14px;">Choose a preferred time. Cerood confirms the appointment after your visiting-fee approval.</p>
       <label for="ceroodVisitDate" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Preferred date</label>
       <input type="date" id="ceroodVisitDate" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-bottom:12px;" />
       <label for="ceroodVisitTime" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Preferred time window</label>
