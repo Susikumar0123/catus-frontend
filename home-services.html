@@ -17669,7 +17669,7 @@ const nameOnlyCategories = [
 const isNameOnlySection =
     nameOnlyCategories.includes(catName);
 
-const priceHTML = `<div class="uc-price">Free Booking</div>`;
+const priceHTML = ``; // Home Services listing: image + service name only
 
     html += `
         <div
@@ -17678,7 +17678,6 @@ const priceHTML = `<div class="uc-price">Free Booking</div>`;
             onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')">
 
             <div class="uc-card-img-wrapper">
-                ${trendingBadgeHTML}
 
                 <img
     src="${getSmallProductImageUrl(s.image_url)}"
