@@ -16994,6 +16994,8 @@ document.querySelectorAll(
 function getSmallProductImageUrl(imageUrl) {
     if (!imageUrl) return '';
 
+    if (window.matchMedia('(min-width:851px)').matches) return imageUrl;
+
     if (/-800\.webp(\?.*)?$/i.test(imageUrl)) {
         return imageUrl.replace(
             /-800\.webp(\?.*)?$/i,
@@ -20445,4 +20447,7 @@ html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-g
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card,
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card,
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic.cerood-mosaic-short .uc-card{background:#e1e1e2!important;background-color:#e1e1e2!important;border-color:#e1e1e2!important}
+</style><style id="cerood-admin-image-fit">
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card .uc-card-img-wrapper img,
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card .uc-card-img-wrapper img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;box-sizing:border-box!important;aspect-ratio:auto!important;transform:none!important}
 </style>
