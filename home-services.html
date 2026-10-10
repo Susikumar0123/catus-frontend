@@ -13377,6 +13377,13 @@ html:root body .master-app-container #productGridContainer .cerood-noteworthy-it
 @keyframes ceroodVisibleBadgeSweep{0%,30%{background-position:140% 0}80%,100%{background-position:-100% 0}}
 @media(prefers-reduced-motion:reduce){html:root body .master-app-container #productGridContainer .cerood-service-tag{animation:none!important}}
 </style>
+<style id="cerood-mobile-product-swipe">
+@media(max-width:850px){
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid{overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity!important;overscroll-behavior-x:contain;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid .uc-card:nth-child(n){display:flex!important;flex-shrink:0!important;scroll-snap-align:start!important}
+html:root body .master-app-container #productGridContainer .uc-carousel-arrow{display:none!important}
+}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -18069,24 +18076,7 @@ function startCatusBannerFlow() {
         return;
     }
 
-    // Preserve the original mobile layout: groups of three category boxes.
-    let track = null;
-    let count = 0;
-    [...container.children].forEach(child => {
-        if (!child.classList.contains('uc-category-box')) {
-            track = null;
-            count = 0;
-            return;
-        }
-        if (!track || count >= 3) {
-            track = document.createElement('div');
-            track.className = 'mobile-category-track';
-            container.insertBefore(track, child);
-            count = 0;
-        }
-        track.appendChild(child);
-        count++;
-    });
+    // Keep sections stationary; products scroll within each section.
     container.dataset.ceroodCategoryLayout = desiredMode;
 }
 
@@ -18257,16 +18247,15 @@ for (
         bigCardServices.slice(i, i + 4);
 
     let sectionName =
-        preferredSectionNames[sectionIndex];
+        preferredSectionNames[sectionIndex % preferredSectionNames.length];
 
     if (!sectionName) {
         sectionName =
             `More Services ${sectionIndex - preferredSectionNames.length + 1}`;
     }
 
-    mobileMixedMap[sectionName] = {
-        items: sectionItems
-    };
+    if (!mobileMixedMap[sectionName]) mobileMixedMap[sectionName] = {items: []};
+    mobileMixedMap[sectionName].items.push(...sectionItems);
 }
 
 displayCategoriesMap = mobileMixedMap;
