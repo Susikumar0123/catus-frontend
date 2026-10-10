@@ -13296,6 +13296,28 @@ html:root body .master-app-container>.cerood-desktop-demo .cerood-skyshot-scene{
 @keyframes ceroodHeroMobileGlow{0%,100%{opacity:.7}50%{opacity:1}}
 }
 </style>
+<style id="cerood-mobile-desktop-layout-fix">
+@media(max-width:850px){
+html:root body .master-app-container>.cerood-desktop-demo{grid-template-columns:minmax(0,30fr) minmax(0,70fr)!important;grid-template-rows:220px!important;align-content:start!important;align-items:stretch!important;gap:6px!important;height:288px!important;min-height:0!important;max-height:288px!important;padding:52px 8px 16px!important;margin:0 0 12px!important}
+html:root body .master-app-container>.cerood-desktop-demo>.cerood-demo-feature{height:220px!important;min-height:0!important;margin:0!important;align-self:stretch!important}
+html:root body .master-app-container>.cerood-desktop-demo>.cerood-demo-rails{height:220px!important;min-height:0!important;grid-template-rows:122px 92px!important;gap:6px!important;margin:0!important}
+html:root body .cerood-desktop-demo .cerood-demo-track{gap:6px!important;border-radius:9px!important}
+html:root body .cerood-desktop-demo .cerood-demo-rail.large .cerood-demo-card{flex:0 0 calc((100% - 6px)/2)!important}
+html:root body .cerood-desktop-demo .cerood-demo-rail.small .cerood-demo-card{flex:0 0 calc((100% - 12px)/3)!important}
+html:root body .cerood-desktop-demo .cerood-demo-card{border-radius:9px!important}
+html:root body .cerood-desktop-demo .cerood-demo-card .cerood-service-caption{flex:0 0 36px!important;height:36px!important;min-height:36px!important;max-height:36px!important;font-size:10px!important;padding:3px!important}
+html:root body .cerood-desktop-demo .cerood-demo-feature .cerood-service-caption{font-size:12px!important}
+html:root body .cerood-desktop-demo .cerood-demo-rail.small .cerood-service-caption{font-size:9px!important}
+html:root body .cerood-desktop-demo .cerood-demo-card img.cerood-service-photo{padding:4px!important}
+html:root body .cerood-desktop-demo .cerood-demo-nav{width:22px!important;height:32px!important;font-size:21px!important;border-radius:7px!important}
+html:root body .master-app-container .uc-homepage-wrapper.home-index-header,html:root body .master-app-container .home-index-header .home-crn-header-main{background:#fff!important;background-image:none!important;color:#151515!important;box-shadow:none!important}
+html:root body .master-app-container .home-index-header .crn-logo .cerood-wordmark-erood{color:#151515!important}
+html:root body .master-app-container .home-index-header .crn-location,html:root body .master-app-container .home-index-header .cerood-mobile-index-location{background:#fff!important;color:#151515!important;border:1px solid #e6e6e6!important}
+html:root body .master-app-container .home-index-header .crn-search{background:#fff!important;border:1px solid #dedede!important}
+html:root body .master-app-container .home-index-header .crn-search input{background:#fff!important;color:#151515!important}
+html:root body .master-app-container .home-index-header .cerood-direct-call{display:none!important}
+}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
