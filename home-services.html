@@ -17651,7 +17651,7 @@ for(let catName in displayCategoriesMap) {
     const freeBooking = serviceIndex < Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
     const badgeCount = Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
     const serviceTag = serviceIndex === badgeCount ? 'Trending' : serviceIndex === badgeCount + 1 ? 'Most Booked' : '';
-    const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">FREE BOOKING</span>' : '';
+    const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">Free booking</span>' : '';
     const serviceTagHTML = serviceTag ? '<span class="cerood-service-tag">' + serviceTag + '</span>' : '';
 
     const price = Number(s.price || 0);
@@ -20513,3 +20513,5 @@ html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-g
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card .uc-card-img-wrapper img{padding:0!important}
 }
 </style>
+
+<style id="cerood-free-booking-case">html:root body #productGridContainer .uc-card .cerood-free-booking-badge{text-transform:none!important}</style>
