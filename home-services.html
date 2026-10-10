@@ -13362,6 +13362,13 @@ html:root body .master-app-container #productGridContainer .uc-card .uc-body.cer
 html:root body .master-app-container #productGridContainer .uc-card .cerood-starting-price{display:block!important;color:#1748be!important;font:600 9px/1.3 Arial,sans-serif!important;margin-top:4px!important}
 }
 </style>
+<style id="cerood-service-badge-soft-shine">
+html:root body .master-app-container #productGridContainer .uc-card .cerood-service-tag{overflow:hidden!important;isolation:isolate;box-shadow:0 0 6px rgba(0,153,139,.28)!important}
+html:root body .master-app-container #productGridContainer .uc-card .cerood-service-tag::after{content:"";position:absolute;top:-30%;left:-70%;width:45%;height:160%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);transform:skewX(-20deg);animation:ceroodBadgeShine 5s ease-in-out infinite;pointer-events:none}
+html:root body .master-app-container #productGridContainer .uc-category-box:nth-child(even) .cerood-service-tag::after{animation-delay:1.6s}
+@keyframes ceroodBadgeShine{0%,65%{left:-70%;opacity:0}70%{opacity:1}90%,100%{left:140%;opacity:0}}
+@media(prefers-reduced-motion:reduce){html:root body .master-app-container #productGridContainer .uc-card .cerood-service-tag::after{animation:none!important;display:none!important}}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -18327,9 +18334,9 @@ for(let catName in displayCategoriesMap) {
     const badgeOffset = (categoryIndex - 1) % Math.max(1, sectionSize);
     const badgePosition = (serviceIndex - badgeOffset + sectionSize) % Math.max(1, sectionSize);
     const freeBooking = sectionSize >= 3 && badgePosition === 0;
-    const serviceTag = sectionSize >= 5 && badgePosition === 2
+    const serviceTag = sectionSize >= 5 && categoryIndex % 3 !== 0 && badgePosition === 2
         ? (categoryIndex % 2 ? 'Trending' : 'Most Booked')
-        : sectionSize >= 9 && badgePosition === 6
+        : sectionSize >= 12 && categoryIndex % 3 === 0 && badgePosition === 6
             ? (categoryIndex % 2 ? 'Most Booked' : 'Trending') : '';
     const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">Free booking</span>' : '';
     const serviceTagHTML = serviceTag ? '<span class="cerood-service-tag">' + serviceTag + '</span>' : '';
