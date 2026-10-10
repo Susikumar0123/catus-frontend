@@ -18322,9 +18322,15 @@ for(let catName in displayCategoriesMap) {
 
     const badgeName = String(s.service_name || s.name || s.slug || '').toLowerCase().replace(/&amp;|&|\band\b/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
     const freeBookingNames = ['ac relocation reinstallation', 'split ac installation', 'ac general service', 'ac inspection'];
-    const freeBooking = serviceIndex < Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
-    const badgeCount = Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
-    const serviceTag = serviceIndex === badgeCount ? 'Trending' : serviceIndex === badgeCount + 1 ? 'Most Booked' : '';
+    // Keep labels sparse and separated, with a different mix in each section.
+    const sectionSize = catData.items.length;
+    const badgeOffset = (categoryIndex - 1) % Math.max(1, sectionSize);
+    const badgePosition = (serviceIndex - badgeOffset + sectionSize) % Math.max(1, sectionSize);
+    const freeBooking = sectionSize >= 3 && badgePosition === 0;
+    const serviceTag = sectionSize >= 5 && badgePosition === 2
+        ? (categoryIndex % 2 ? 'Trending' : 'Most Booked')
+        : sectionSize >= 9 && badgePosition === 6
+            ? (categoryIndex % 2 ? 'Most Booked' : 'Trending') : '';
     const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">Free booking</span>' : '';
     const serviceTagHTML = serviceTag ? '<span class="cerood-service-tag">' + serviceTag + '</span>' : '';
 
