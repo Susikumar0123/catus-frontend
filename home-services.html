@@ -13369,6 +13369,14 @@ html:root body .master-app-container #productGridContainer .uc-category-box:nth-
 @keyframes ceroodBadgeShine{0%,65%{left:-70%;opacity:0}70%{opacity:1}90%,100%{left:140%;opacity:0}}
 @media(prefers-reduced-motion:reduce){html:root body .master-app-container #productGridContainer .uc-card .cerood-service-tag::after{animation:none!important;display:none!important}}
 </style>
+<style id="cerood-visible-shining-badges">
+html:root body .master-app-container #productGridContainer .cerood-service-tag{display:table!important;visibility:visible!important;opacity:1!important;color:#fff!important;background-color:#00998b!important;background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.85) 48%,transparent 66%)!important;background-size:250% 100%!important;animation:ceroodVisibleBadgeSweep 3.5s ease-in-out infinite!important;box-shadow:0 0 8px #00998b66!important}
+html:root body .master-app-container #productGridContainer .cerood-noteworthy-item{position:relative!important;background:#fff!important}
+html:root body .master-app-container #productGridContainer .cerood-noteworthy-item:has(>.cerood-service-tag){padding-top:23px!important}
+html:root body .master-app-container #productGridContainer .cerood-noteworthy-item>.cerood-service-tag{position:absolute!important;left:0!important;top:0!important;padding:3px 5px!important;font:700 9px/1.3 Arial,sans-serif!important;border-radius:3px!important;z-index:2!important}
+@keyframes ceroodVisibleBadgeSweep{0%,30%{background-position:140% 0}80%,100%{background-position:-100% 0}}
+@media(prefers-reduced-motion:reduce){html:root body .master-app-container #productGridContainer .cerood-service-tag{animation:none!important}}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -18334,10 +18342,8 @@ for(let catName in displayCategoriesMap) {
     const badgeOffset = (categoryIndex - 1) % Math.max(1, sectionSize);
     const badgePosition = (serviceIndex - badgeOffset + sectionSize) % Math.max(1, sectionSize);
     const freeBooking = sectionSize >= 3 && badgePosition === 0;
-    const serviceTag = sectionSize >= 5 && categoryIndex % 3 !== 0 && badgePosition === 2
-        ? (categoryIndex % 2 ? 'Trending' : 'Most Booked')
-        : sectionSize >= 12 && categoryIndex % 3 === 0 && badgePosition === 6
-            ? (categoryIndex % 2 ? 'Most Booked' : 'Trending') : '';
+    const serviceTag = sectionSize >= 3 && serviceIndex === (categoryIndex % 2 ? 1 : 2)
+        ? (categoryIndex % 2 ? 'Trending' : 'Most Booked') : '';
     const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">Free booking</span>' : '';
     const serviceTagHTML = serviceTag ? '<span class="cerood-service-tag">' + serviceTag + '</span>' : '';
 
@@ -18429,7 +18435,7 @@ if (
                 <div class="cerood-noteworthy-grid">
     `;
 
-    window.ceroodNewNoteworthyServices.forEach((s) => {
+    window.ceroodNewNoteworthyServices.forEach((s, noteworthyIndex) => {
 
         html += `
             <div
@@ -18437,6 +18443,7 @@ if (
                 onclick="openServiceProduct('${s.slug || s.service_slug || s.service_id}')"
             >
 
+                ${noteworthyIndex === 1 ? '<span class="cerood-service-tag">Trending</span>' : noteworthyIndex === 4 ? '<span class="cerood-service-tag">Most Booked</span>' : ''}
                 <div class="cerood-noteworthy-image">
 
                     <img
