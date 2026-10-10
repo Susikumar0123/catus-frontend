@@ -2302,13 +2302,30 @@ html:root body .saved-address-card,html:root body .bill-summary-box{background:#
 html:root body .checkout-header{background:#fff!important;background-image:none!important;}
 @media(max-width:850px){html:root body .checkout-container#checkoutMainSection{padding:48px 12px 24px!important;background-size:auto 100%,100% 100%!important;}html:root body .checkout-grid{grid-template-columns:minmax(0,1fr)!important;gap:14px!important;}html:root body .checkout-grid>.card-box{padding:16px!important;}html:root body #ceroodMobileCallFixed{position:static!important;margin:8px 12px!important;transform:none!important;}}
 </style>
+<style id="cerood-checkout-logo-mobile-fit">
+html:root body .checkout-header .cerood-checkout-brand{display:inline-flex!important;align-items:center!important;gap:0!important;text-decoration:none!important;flex:0 0 auto!important;white-space:nowrap!important;color:#111!important;}
+html:root body .checkout-header .cerood-checkout-brand img{height:42px!important;width:auto!important;max-width:55px!important;object-fit:contain!important;}
+html:root body .checkout-header .cerood-checkout-brand .cerood-wordmark-erood{display:inline-block!important;color:#111!important;-webkit-text-fill-color:#111!important;font:500 29px/1 Inter,Arial,sans-serif!important;letter-spacing:-1px!important;margin-left:-3px!important;visibility:visible!important;}
+@media(max-width:850px){
+html:root,html:root body{width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;overflow-x:clip!important;box-sizing:border-box!important;}
+html:root body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important;}
+html:root body .checkout-header{position:fixed!important;top:0!important;left:0!important;right:0!important;width:100%!important;max-width:none!important;height:64px!important;min-height:64px!important;max-height:64px!important;margin:0!important;padding:10px 14px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-radius:0!important;background:#fff!important;z-index:100000!important;}
+html:root body .checkout-header .cerood-checkout-brand img{height:34px!important;max-width:44px!important;}
+html:root body .checkout-header .cerood-checkout-brand .cerood-wordmark-erood{font-size:23px!important;}
+html:root body #cerood-mobile-fixed-header-spacer{height:64px!important;margin:0!important;padding:0!important;}
+html:root body .checkout-header>.cerood-direct-call{display:inline-flex!important;position:static!important;margin:0 0 0 auto!important;transform:none!important;font-size:11px!important;}
+html:root body #ceroodMobileCallFixed{display:none!important;}
+html:root body #checkoutMainSection{margin:0!important;width:100%!important;min-width:0!important;}
+html:root body .checkout-grid .card-title{display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;}
+html:root body .saved-address-card,html:root body .saved-address-info{min-width:0!important;max-width:100%!important;box-sizing:border-box!important;overflow-wrap:anywhere!important;}
+}
+</style>
 </head>
 <body>
 
     <!-- Header -->
     <div class="checkout-header">
-        <img src="/cerood-logo.webp" alt="Cerood Logo"
-         onclick="window.location.href='/home-services.html'">
+        <a class="cerood-checkout-brand" href="/home-services.html" aria-label="Cerood Home Services"><img src="/cerood-logo.webp" alt="" class="cerood-original-c-logo"><span class="cerood-wordmark-erood">erood</span></a>
         <a class="cerood-direct-call" href="tel:+918946055856" aria-label="Call Cerood to book a service at 8946055856" title="Call 8946055856"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.8a2 2 0 0 1-.45 2.11L9.04 10.9a16 16 0 0 0 4.06 4.06l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.84.55 2.8.68A2 2 0 0 1 22 16.92z"/></svg><span>Call Now</span></a><div class="cerood-unified-tools"><a href="/cerood-cart.html" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg></a><details class="cerood-unified-menu"><summary aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-unified-menu-list"><a href="/">Home</a><a href="/#divisions">Explore</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed Store</a><a href="/cosmetics.html">Beauty Store</a><a href="/clothing.html">Fashion Store</a><a href="/home-services.html#cerood-dashboard-home">Dashboard</a><a href="/home-services.html#cerood-dashboard-bookings">My Orders</a><a href="/home-services.html#cerood-dashboard-profile">Account</a><a href="/cerood-cart.html">Cart</a><a href="/contact.html">Help</a></div></details></div><div class="secure-badge">
     <i class="fa-solid fa-lock"></i>
     Secure Checkout
