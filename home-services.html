@@ -17651,7 +17651,7 @@ for(let catName in displayCategoriesMap) {
     const freeBooking = serviceIndex < Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
     const badgeCount = Math.min(4, Math.max(1, Math.ceil(catData.items.length / 3)));
     const serviceTag = serviceIndex === badgeCount ? 'Trending' : serviceIndex === badgeCount + 1 ? 'Most Booked' : '';
-    const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">FREE BOOKING</span>' : '';
+    const freeBookingHTML = freeBooking ? '<span class="cerood-free-booking-badge">Free booking</span>' : '';
     const serviceTagHTML = serviceTag ? '<span class="cerood-service-tag">' + serviceTag + '</span>' : '';
 
     const price = Number(s.price || 0);
@@ -20511,5 +20511,20 @@ html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-g
 @media(min-width:851px){
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic{grid-auto-rows:250px!important}
 html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card .uc-card-img-wrapper img{padding:0!important}
+}
+</style>
+
+<style id="cerood-free-booking-case">html:root body #productGridContainer .uc-card .cerood-free-booking-badge{text-transform:none!important}</style>
+
+
+
+<style id="cerood-section-background-orange">
+@media(min-width:851px){
+html:root body .master-app-container>.cerood-desktop-demo,
+html:root body .master-app-container #productGridContainer .uc-category-box{
+background:linear-gradient(110deg,#ff9900,#ff6700)!important;border:1px solid #df7100!important;border-radius:16px!important;padding:12px!important;box-sizing:border-box!important}
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-cat-header,
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-carousel-wrapper,
+html:root body .master-app-container #productGridContainer .uc-category-box .uc-grid{background:transparent!important}
 }
 </style>
