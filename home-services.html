@@ -20518,13 +20518,25 @@ html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-g
 
 
 
-<style id="cerood-section-background-orange">
+
+
+<style id="cerood-section-festival-colours">
 @media(min-width:851px){
+html:root body .master-app-container>.cerood-desktop-demo{--section-start:#ff9500;--section-end:#ff6000;--section-border:#e65c00}
+html:root body .master-app-container #productGridContainer .uc-category-box{--section-start:#237bcc;--section-end:#1254a5;--section-border:#1254a5}
+html:root body .master-app-container #productGridContainer .uc-category-box:first-child{--section-start:#ff9500;--section-end:#ff6000;--section-border:#e65c00}
+html:root body .master-app-container #productGridContainer .uc-category-box:nth-child(3n){--section-start:#7808f0;--section-end:#4700bf;--section-border:#4700bf}
+html:root body .master-app-container #productGridContainer .uc-category-box:nth-child(3n+1):not(:first-child){--section-start:#0ab77d;--section-end:#008958;--section-border:#008958}
 html:root body .master-app-container>.cerood-desktop-demo,
 html:root body .master-app-container #productGridContainer .uc-category-box{
-background:linear-gradient(110deg,#ff9900,#ff6700)!important;border:1px solid #df7100!important;border-radius:16px!important;padding:12px!important;box-sizing:border-box!important}
+background-color:var(--section-end)!important;
+background-image:radial-gradient(circle,rgba(255,255,235,.95) 0 1px,rgba(255,242,177,.35) 1.5px,transparent 4px),radial-gradient(circle,rgba(255,255,235,.8) 0 .8px,transparent 3px),linear-gradient(110deg,var(--section-start),var(--section-end))!important;
+background-size:53px 67px,89px 101px,100% 100%!important;background-position:8px 9px,31px 43px,0 0!important;
+border:1px solid var(--section-border)!important;border-radius:16px!important;padding:12px!important;box-sizing:border-box!important}
 html:root body .master-app-container #productGridContainer .uc-category-box .uc-cat-header,
 html:root body .master-app-container #productGridContainer .uc-category-box .uc-carousel-wrapper,
 html:root body .master-app-container #productGridContainer .uc-category-box .uc-grid{background:transparent!important}
+html:root body .master-app-container #productGridContainer .uc-category-box:not(:first-child) .uc-cat-header h3,
+html:root body .master-app-container #productGridContainer .uc-category-box:not(:first-child) .uc-see-all-btn{color:#fff!important}
 }
 </style>
