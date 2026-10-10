@@ -2320,6 +2320,18 @@ html:root body .checkout-grid .card-title{display:flex!important;align-items:cen
 html:root body .saved-address-card,html:root body .saved-address-info{min-width:0!important;max-width:100%!important;box-sizing:border-box!important;overflow-wrap:anywhere!important;}
 }
 </style>
+<style id="cerood-premium-booking-success">
+html:root body .cerood-booking-success{width:100%;max-width:500px;margin:20px auto;padding:32px 28px;box-sizing:border-box;border:1px solid #ece8de;border-radius:22px;background:#fff;color:#111;text-align:center;box-shadow:0 14px 40px #5a41100d;font-family:Inter,Arial,sans-serif;}
+.cerood-booking-success .cerood-success-check{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 20px;border-radius:50%;background:#edf8f1;color:#15834f;font-size:34px;}
+.cerood-booking-success h2{margin:0 0 14px;font-size:27px;font-weight:650;letter-spacing:-.7px;line-height:1.2;}
+.cerood-booking-success .cerood-success-reference{font-size:11px;line-height:1.6;color:#697078;overflow-wrap:anywhere;margin:0 0 14px;}
+.cerood-booking-success .cerood-success-note{font-size:13px;line-height:1.65;color:#535b62;margin:0 0 22px;}
+.cerood-booking-success .cerood-success-details{margin:0 0 18px;padding:12px 14px;background:#fafafa;border:1px solid #eee;border-radius:10px;text-align:left;font-size:12px;color:#61666c;}
+.cerood-success-details summary{cursor:pointer;color:#34383d;font-weight:500;}.cerood-success-details input{font-size:11px;border:1px solid #ddd;border-radius:7px;background:#fff;}.cerood-success-details button{border:1px solid #ddd;border-radius:7px;padding:9px 12px;background:#fff;color:#111;cursor:pointer;}
+.cerood-booking-success .cerood-success-primary,.cerood-booking-success .cerood-success-secondary{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;min-height:46px;margin-top:10px;padding:12px 16px;border-radius:9px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;}
+.cerood-booking-success .cerood-success-primary{background:#111;color:#fff;border:1px solid #111;}.cerood-booking-success .cerood-success-secondary{background:#fff;color:#111;border:1px solid #ddd;}
+@media(max-width:850px){html:root body .cerood-booking-success{margin:12px auto;padding:28px 20px;border-radius:18px;}.cerood-booking-success h2{font-size:24px;}}
+</style>
 </head>
 <body>
 
@@ -3804,20 +3816,24 @@ function resetOrderSubmitState() {
                 if (main) {
                     main.innerHTML = '';
                     const panel = document.createElement('section');
-                    panel.style.cssText = 'max-width:680px;margin:48px auto;padding:30px;border:1px solid #ddd;border-radius:12px;background:white;color:#111;';
-                    const title = document.createElement('h2'); title.textContent = 'Booking request received'; panel.appendChild(title);
-                    const ref = document.createElement('p'); ref.textContent = 'Booking ID: ' + safeOrderId; panel.appendChild(ref);
-                    const note = document.createElement('p'); note.textContent = 'Booking request is free. Inspection / visiting charges apply and will be confirmed with you before the technician visit. Repair charges are quoted after inspection and require your approval.'; panel.appendChild(note);
+                    panel.className = 'cerood-booking-success';
+                    const icon = document.createElement('div'); icon.className = 'cerood-success-check'; icon.setAttribute('aria-hidden','true'); icon.textContent = '✓'; panel.appendChild(icon);
+                    const title = document.createElement('h2'); title.textContent = 'Booking received'; panel.appendChild(title);
+                    const ref = document.createElement('p'); ref.className = 'cerood-success-reference'; ref.textContent = 'Booking ID: ' + safeOrderId; panel.appendChild(ref);
+                    const note = document.createElement('p'); note.className = 'cerood-success-note'; note.textContent = '₹0 booking · Visit and repair charges need your approval.'; panel.appendChild(note);
                     if (approvalKey) {
+                        const details = document.createElement('details'); details.className = 'cerood-success-details';
+                        const summary = document.createElement('summary'); summary.textContent = 'Booking access details'; details.appendChild(summary);
+                        panel.appendChild(details);
                         const security = document.createElement('p');
-                        security.textContent = 'Save your private approval key. You will need it to accept or reject inspection and repair charges. Do not share it publicly.';
-                        panel.appendChild(security);
-                        const keyBox = document.createElement('input'); keyBox.type = 'text'; keyBox.readOnly = true; keyBox.value = approvalKey; keyBox.setAttribute('aria-label','Private approval key'); keyBox.style.cssText = 'display:block;width:100%;padding:12px;box-sizing:border-box;margin:12px 0'; panel.appendChild(keyBox);
-                        const copy = document.createElement('button'); copy.type='button'; copy.textContent='Copy booking ID and private key'; copy.onclick=()=>{const text='Booking ID: '+safeOrderId+'\nPrivate approval key: '+approvalKey; if(navigator.clipboard)navigator.clipboard.writeText(text).catch(()=>window.prompt('Copy these details:',text));else window.prompt('Copy these details:',text)}; panel.appendChild(copy);
+                        security.textContent = 'Keep this key private. Save a copy to access your booking.';
+                        details.appendChild(security);
+                        const keyBox = document.createElement('input'); keyBox.type = 'text'; keyBox.readOnly = true; keyBox.value = approvalKey; keyBox.setAttribute('aria-label','Private approval key'); keyBox.style.cssText = 'display:block;width:100%;padding:12px;box-sizing:border-box;margin:12px 0'; details.appendChild(keyBox);
+                        const copy = document.createElement('button'); copy.type='button'; copy.textContent='Copy booking details'; copy.onclick=()=>{const text='Booking ID: '+safeOrderId+'\nPrivate approval key: '+approvalKey; if(navigator.clipboard)navigator.clipboard.writeText(text).catch(()=>window.prompt('Copy these details:',text));else window.prompt('Copy these details:',text)}; details.appendChild(copy);
                         const printBtn = document.createElement('button');
                         printBtn.type = 'button';
-                        printBtn.textContent = 'Download confirmation (Save as PDF)';
-                        printBtn.style.cssText = 'display:block;margin-top:14px;padding:12px 16px;border:1px solid #d4d4d8;border-radius:8px;background:#111;color:#fff;cursor:pointer';
+                        printBtn.textContent = 'Save confirmation';
+                        printBtn.className = 'cerood-success-secondary';
                         printBtn.onclick = () => {
                             const w = window.open('', '_blank', 'width=760,height=780');
                             if (!w) { alert('Please allow pop-ups to save the booking confirmation.'); return; }
@@ -3827,7 +3843,7 @@ function resetOrderSubmitState() {
                             w.document.close(); w.focus();
                         };
                         panel.appendChild(printBtn);
-                        const link = document.createElement('a'); link.href='/customer-approval.html'; link.textContent='Review inspection / repair charges'; link.style.cssText='display:block;margin-top:20px'; panel.appendChild(link);
+                        const link = document.createElement('a'); link.href='/customer-approval.html'; link.textContent='Manage booking'; link.className='cerood-success-primary'; panel.appendChild(link);
                     }
                     main.appendChild(panel);
                 } else {
