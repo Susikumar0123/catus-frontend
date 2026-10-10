@@ -9483,6 +9483,14 @@ html:root body .master-app-container #productGridMain .product-info .action-butt
 html:root body .master-app-container .cerood-direct-call{position:static!important;transform:none!important;margin:8px 12px!important;float:none!important;align-self:flex-end!important;}
 }
 </style>
+<style id="cerood-product-fixed-search-header">
+html:root body .master-app-container>.uc-homepage-wrapper.product-index-header{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;transform:none!important;background:#fff!important;z-index:2147481000!important;overflow:visible!important;}
+html:root body .master-app-container{padding-top:0!important;transform:none!important;filter:none!important;perspective:none!important;overflow:visible!important;}
+html:root body .master-app-container>.uc-homepage-wrapper.product-index-header .header-main-container{position:relative!important;top:auto!important;margin:0!important;}
+html:root body #cerood-mobile-fixed-header-spacer{display:block!important;width:100%!important;flex-shrink:0!important;margin:0!important;padding:0!important;}
+html:root body .product-index-header .search-container{position:relative!important;overflow:visible!important;}
+html:root body #suggestionsBox{z-index:2147481100!important;background:#fff!important;}
+</style>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -17621,10 +17629,6 @@ window.addEventListener('DOMContentLoaded', function () {
     spacer.setAttribute('aria-hidden', 'true');
     header.parentNode.insertBefore(spacer, header);
     function sync() {
-      if (!window.matchMedia('(max-width: 850px)').matches) {
-        spacer.style.height = '0px';
-        return;
-      }
       var height = Math.ceil(header.getBoundingClientRect().height);
       if (height > 0) {
         spacer.style.height = height + 'px';
