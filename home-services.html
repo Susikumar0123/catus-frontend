@@ -16989,16 +16989,7 @@ document.querySelectorAll(
 }
 
 function getSmallProductImageUrl(imageUrl) {
-    if (!imageUrl) return '';
-
-    if (/-800\.webp(\?.*)?$/i.test(imageUrl)) {
-        return imageUrl.replace(
-            /-800\.webp(\?.*)?$/i,
-            '-240.webp$1'
-        );
-    }
-
-    return imageUrl;
+    return imageUrl || '';
 }
 
     function filterProducts(keyword) {
@@ -20506,5 +20497,12 @@ html:root body .master-app-container>.cerood-desktop-demo{position:relative!impo
 .cerood-demo-rails{grid-template-rows:minmax(0,55.9fr) minmax(0,44.1fr);gap:12px}
 .cerood-demo-card{background:#fff;border:0;border-radius:18px}
 .cerood-demo-nav{color:#4e1864;border:0;box-shadow:0 2px 8px #0002}
+}
+</style>
+
+<style id="cerood-category-image-autofit">
+@media(min-width:851px){
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card .uc-card-img-wrapper{position:relative!important;flex:1 1 0!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
+html:root body #productGridContainer .uc-category-box .uc-carousel-wrapper .uc-grid.cerood-mosaic .uc-card .uc-card-img-wrapper img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;margin:0!important;padding:6px!important;box-sizing:border-box!important;transform:none!important}
 }
 </style>
