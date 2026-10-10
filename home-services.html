@@ -20561,21 +20561,36 @@ function el(tag,attrs){const n=document.createElementNS(ns,tag);Object.entries(a
 function build(box){
 if(box.querySelector(':scope > .cerood-festival-garland'))return;
 const svg=el('svg',{'class':'cerood-festival-garland','aria-hidden':'true','focusable':'false',viewBox:'0 0 1320 600',preserveAspectRatio:'none'});
-for(let row=0;row<3;row++){
-const top=12+row*188,offset=row%2?-160:0,span=320,depth=72;
-for(let swag=0;swag<5;swag++){
-const x=offset+swag*span;
-svg.append(el('path',{d:`M ${x} ${top} Q ${x+span/2} ${top+depth*2} ${x+span} ${top}`,fill:'none',stroke:'#ffe9ba','stroke-opacity':'.32','stroke-width':'.55','vector-effect':'non-scaling-stroke'}));
-let nextBright=2+(swag+row)%5;
-for(let i=0;i<23;i++){
-const t=i/22,bx=x+span*t,by=top+4*depth*t*(1-t);
-if(bx<0||bx>1320)continue;
-const bright=i===nextBright;if(bright)nextBright+=2+(i+swag+row)%5;
-const g=el('g',bright?{'class':'twinkle',style:`--blink-duration:${4+(i%4)*.45}s;--blink-delay:-${(i+row+swag)%7*.6}s`}:{});
-g.append(el('circle',{cx:bx,cy:by,r:bright?3.2:1.8,fill:'#ffe9aa',opacity:bright?'.22':'.08'}));
-g.append(el('circle',{cx:bx,cy:by,r:bright?1.1:.58,fill:'#fff8dc',opacity:bright?'1':'.8'}));svg.append(g);
+const boxes=Array.from(document.querySelectorAll('.master-app-container > .cerood-desktop-demo,#productGridContainer .uc-category-box'));
+const design=boxes.indexOf(box)%6;
+function strand(points,index){
+svg.append(el('polyline',{points:points.map(p=>p.join(',')).join(' '),fill:'none',stroke:'#ffe9ba','stroke-opacity':'.3','stroke-width':'.5','vector-effect':'non-scaling-stroke'}));
+let next=2+index%5;
+points.forEach(([x,y],i)=>{
+const bright=i===next;if(bright)next+=2+(i+index)%5;
+const g=el('g',bright?{'class':'twinkle',style:`--blink-duration:${4+(i%4)*.45}s;--blink-delay:-${(i+index)%7*.6}s`}:{});
+g.append(el('circle',{cx:x,cy:y,r:bright?3.2:1.8,fill:'#ffe9aa',opacity:bright?'.22':'.08'}));
+g.append(el('circle',{cx:x,cy:y,r:bright?1.1:.58,fill:'#fff8dc',opacity:bright?'1':'.8'}));svg.append(g);
+});
 }
+if(design===0||design===4){
+// Broad W garlands or alternating shallower scalloped festoons.
+for(let row=0;row<3;row++)for(let k=0;k<5;k++){
+const span=design===0?320:280,depth=design===0?72:35+(k%2)*22,x=k*span-(row%2?span/2:0),top=12+row*188;
+strand(Array.from({length:23},(_,i)=>{const t=i/22;return[x+span*t,top+4*depth*t*(1-t)]}),row*5+k);
 }
+}else if(design===1){
+// Hanging fairy-light curtains, alternating lengths and gentle bends.
+for(let k=0;k<12;k++)strand(Array.from({length:22},(_,i)=>{const t=i/21;return[35+k*112+7*Math.sin(t*Math.PI),8+t*(k%2?440:570)]}),k);
+}else if(design===2){
+// Fine diagonal strings across the coloured background.
+for(let k=-2;k<6;k++)strand(Array.from({length:38},(_,i)=>{const t=i/37;return[k*300+t*620,t*600]}),k+2);
+}else if(design===3){
+// Tiny bulbs framing the section edges.
+strand(Array.from({length:80},(_,i)=>{const d=i/79*3744;if(d<1296)return[12+d,12];if(d<1872)return[1308,12+d-1296];if(d<3168)return[1308-(d-1872),588];return[12,588-(d-3168)]}),0);
+}else{
+// Soft intersecting arcs for a distinct canopy pattern.
+for(let row=0;row<3;row++)for(let k=0;k<3;k++)strand(Array.from({length:35},(_,i)=>{const t=i/34;return[k*520-100+t*600,35+row*180+65*Math.sin(t*Math.PI)]}),row*3+k);
 }
 box.prepend(svg);
 }
