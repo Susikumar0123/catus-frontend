@@ -1779,7 +1779,7 @@ body > .cerood-location-error {
   html body .crn-header-main .crn-account{white-space:nowrap!important;}
 }
 </style>
-<style id="cerood-product-correctness-fixes-v1">.crn-cart,.cerood-unified-cart-link,.cr-mobile-nav a[data-cerood-cart-open]{position:relative}.cerood-cart-count-badge{position:absolute;right:-5px;top:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#171717;color:#fff;font:700 10px/18px Inter,Arial,sans-serif;text-align:center;box-shadow:0 0 0 2px #fff}.cerood-mobile-cart-count{right:calc(50% - 21px);top:1px}#ceroodBankOffer{display:none!important}</style></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
+<style id="cerood-product-correctness-fixes-v1">.crn-cart,.cerood-unified-cart-link,.cr-mobile-nav a[data-cerood-cart-open]{position:relative}.cerood-cart-count-badge{position:absolute;right:-5px;top:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#171717;color:#fff;font:700 10px/18px Inter,Arial,sans-serif;text-align:center;box-shadow:0 0 0 2px #fff}.cerood-mobile-cart-count{right:calc(50% - 21px);top:1px}#ceroodBankOffer{display:none!important}</style><script defer src="/cerood-auth.js"></script></head><body><header class="header crn-header"><div class="shell"><div class="header-main crn-header-main">
 <a aria-label="Cerood home" class="logo crn-logo" href="/index.html"><img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/><span class="cerood-wordmark-erood">erood</span></a>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="location location-trigger crn-location" id="desktopLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="locationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
 <button aria-controls="ceroodLocationDialog" aria-haspopup="dialog" class="mobile-location location-trigger crn-mobile-location" id="mobileLocationButton" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>Delivery location<b id="mobileLocationText">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
@@ -1926,10 +1926,10 @@ function ceroodEffectivePurchase(p){
 }
 function saveCart(cfg,id,p){
  let cart=[];try{cart=JSON.parse(localStorage.getItem(cfg.cart)||'[]');if(!Array.isArray(cart))cart=[]}catch{}
- if(Array.isArray(p.product_variants)&&p.product_variants.length&&!ceroodSelectedVariant){alert('Please choose the product options first.');return}
+ if(ceroodVariantList(p).length&&!ceroodSelectedVariant){alert('Please choose the product options first.');return}
  const listingId=cfg.key==='renewed'&&ceroodSelectedOffer?String(ceroodSelectedOffer.seller_listing_id||''):'';
  const purchase=ceroodEffectivePurchase(p),vp=ceroodVariantPayload(),variantKey=JSON.stringify(vp.variant_values||{});
- const existing=cart.find(x=>String(x.product_id)===String(id)&&String(x.seller_listing_id||'')===listingId&&JSON.stringify(x.variant_values||{})===variantKey);
+ const existing=cart.find(x=>String(x.product_id)===String(id)&&String(x.seller_listing_id||'')===listingId&&String(x.variant_id||'')===String(vp.variant_id||'')&&JSON.stringify(x.variant_values||{})===variantKey);
  if(existing){if(existing.quantity>=purchase.stock){alert('Only '+purchase.stock+' available for this option.');return}existing.quantity++}
  else cart.push({product_id:id,quantity:1,store:cfg.key,...(listingId?{seller_listing_id:listingId}:{}),...vp});
  localStorage.setItem(cfg.cart,JSON.stringify(cart));window.dispatchEvent(new Event(cfg.event));
@@ -2495,8 +2495,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    const key=s.key;if(catalog.has(key))return catalog.get(key);
    try{const r=await fetch(API+s.api,{cache:'no-store'});const d=await r.json();if(!r.ok)throw Error();const m=new Map(normalizeList(d).map(p=>[String(p.id??p.product_id),p]));catalog.set(key,m);return m}catch{return new Map()}
  }
- function remove(store,id){const s=stores.find(x=>x.key===store);if(!s)return;write(s,read(s).filter(x=>String(x.product_id)!==String(id)));render();updateBadges()}
- function qty(store,id,delta){const s=stores.find(x=>x.key===store);if(!s)return;const a=read(s),x=a.find(v=>String(v.product_id)===String(id));if(!x)return;x.quantity=Math.max(1,Math.min(10,Number(x.quantity||1)+delta));write(s,a);render();updateBadges()}
+ function remove(store,index){const s=stores.find(x=>x.key===store);if(!s)return;const a=read(s);if(!Number.isInteger(index)||index<0||index>=a.length)return;a.splice(index,1);write(s,a);render();updateBadges()}
+ function qty(store,index,delta){const s=stores.find(x=>x.key===store);if(!s)return;const a=read(s),x=a[index];if(!Number.isInteger(index)||!x)return;x.quantity=Math.max(1,Math.min(10,Number(x.quantity||1)+delta));write(s,a);render();updateBadges()}
  async function render(){
   const token=++renderToken,groups=stores.map(s=>({s,items:read(s)})).filter(x=>x.items.length);
   if(!groups.length){body.innerHTML='<div class="cerood-cart-empty"><b>Your cart is empty</b>Add a product and it will appear here.</div>';return}
@@ -2504,10 +2504,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   const maps=await Promise.all(groups.map(g=>loadCatalog(g.s)));if(token!==renderToken)return;
   body.innerHTML=groups.map((g,gi)=>{
     const map=maps[gi];let subtotal=0;
-    const rows=g.items.map(x=>{
-      const p=map.get(String(x.product_id))||{},q=Math.max(1,Number(x.quantity||1)),price=Number(p.price??p.sale_price??p.unit_price??0),line=price*q;subtotal+=line;
+    const rows=g.items.map((x,index)=>{
+      const p=map.get(String(x.product_id))||{},q=Math.max(1,Number(x.quantity||1)),price=Number((Array.isArray(p.variants)?p.variants.find(v=>String(v.id)===String(x.variant_id||''))?.price:undefined)??p.price??p.sale_price??p.unit_price??0),line=price*q;subtotal+=line;
       const name=p.name||p.product_name||'Product',url=img(p);
-      return `<div class="cerood-cart-row">${url?`<img class="cerood-cart-img" src="${esc(url)}" alt="${esc(name)}" loading="lazy">`:`<div class="cerood-cart-img cerood-cart-img-fallback">No image</div>`}<div class="cerood-cart-info"><b class="cerood-cart-name">${esc(name)}</b><div class="cerood-cart-price">${price?money(price):'Price at checkout'}</div><div class="cerood-cart-line">${price?`${money(price)} × ${q} = ${money(line)}`:`Qty ${q}`}</div></div><div class="cerood-cart-side"><button type="button" class="cerood-cart-remove" data-remove-store="${g.s.key}" data-remove-id="${esc(x.product_id)}">Remove</button><div class="cerood-cart-qty"><button type="button" aria-label="Decrease quantity" data-qty-store="${g.s.key}" data-qty-id="${esc(x.product_id)}" data-delta="-1">−</button><b>${q}</b><button type="button" aria-label="Increase quantity" data-qty-store="${g.s.key}" data-qty-id="${esc(x.product_id)}" data-delta="1">+</button></div></div></div>`;
+      return `<div class="cerood-cart-row">${url?`<img class="cerood-cart-img" src="${esc(url)}" alt="${esc(name)}" loading="lazy">`:`<div class="cerood-cart-img cerood-cart-img-fallback">No image</div>`}<div class="cerood-cart-info"><b class="cerood-cart-name">${esc(name)}</b>${x.variant_values&&Object.keys(x.variant_values).length?`<div class="cerood-cart-line">${esc(Object.entries(x.variant_values).map(([k,v])=>k+': '+v).join(' · '))}</div>`:''}<div class="cerood-cart-price">${price?money(price):'Price at checkout'}</div><div class="cerood-cart-line">${price?`${money(price)} × ${q} = ${money(line)}`:`Qty ${q}`}</div></div><div class="cerood-cart-side"><button type="button" class="cerood-cart-remove" data-remove-store="${g.s.key}" data-remove-index="${index}">Remove</button><div class="cerood-cart-qty"><button type="button" aria-label="Decrease quantity" data-qty-store="${g.s.key}" data-qty-index="${index}" data-delta="-1">−</button><b>${q}</b><button type="button" aria-label="Increase quantity" data-qty-store="${g.s.key}" data-qty-index="${index}" data-delta="1">+</button></div></div></div>`;
     }).join('');
     return `<section class="cerood-cart-store"><div class="cerood-cart-store-head"><strong>${g.s.label}</strong><span>${g.items.reduce((n,x)=>n+Number(x.quantity||0),0)} item(s)</span></div>${rows}<div class="cerood-cart-store-summary"><span>Subtotal</span><b>${subtotal?money(subtotal):'Calculated at checkout'}</b></div><div class="cerood-cart-store-actions"><button type="button" class="cerood-cart-checkout" data-checkout-store="${g.s.key}">Proceed to checkout</button></div></section>`;
   }).join('');
@@ -2517,8 +2517,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  document.addEventListener('click',e=>{
   const opener=e.target.closest('[data-cerood-cart-open]');if(opener){e.preventDefault();open();return}
   if(e.target.closest('[data-cerood-cart-close]')){close();return}
-  const rem=e.target.closest('[data-remove-store]');if(rem){remove(rem.dataset.removeStore,rem.dataset.removeId);return}
-  const q=e.target.closest('[data-qty-store]');if(q){qty(q.dataset.qtyStore,q.dataset.qtyId,Number(q.dataset.delta));return}
+  const rem=e.target.closest('[data-remove-store]');if(rem){remove(rem.dataset.removeStore,Number(rem.dataset.removeIndex));return}
+  const q=e.target.closest('[data-qty-store]');if(q){qty(q.dataset.qtyStore,Number(q.dataset.qtyIndex),Number(q.dataset.delta));return}
   const go=e.target.closest('[data-checkout-store]');if(go){location.href='/shop-checkout.html?store='+encodeURIComponent(go.dataset.checkoutStore)+'&mode=cart'}
  });
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!popup.hidden)close()});

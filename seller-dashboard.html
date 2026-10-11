@@ -3951,7 +3951,7 @@ initializeDashboard();
   const categorySelect=el('marketCategory'),categoryText=categorySelect.options[categorySelect.selectedIndex]?.text||'';
   const category=currentCategory();if(!category||!asBool(category.is_leaf))throw Error('Select a final product category.');
   const product={name:v('marketName'),category:category.name||categoryText,category_id:String(category.id),brand:v('marketBrand'),variant:v('marketVariant'),price:v('marketPrice'),compare_price:v('marketCompare'),stock:v('marketStock'),net_quantity:market==='cosmetics'?v('marketQuantity'):'',batch_number:market==='cosmetics'?v('marketBatch'):'',manufacture_date:market==='cosmetics'?v('marketMfg'):'',expiry_date:market==='cosmetics'?v('marketExpiry'):'',ingredients:market==='cosmetics'?v('marketIngredients'):'',description:v('marketDescription'),image_url,product_attributes:collectDynamicAttributes(),product_images,variants:collectVariants()};
-  if(market==='general'){product.subcategory=category.name||categoryText;product.model=v('marketModel');}
+  if(market==='general'){product.subcategory=category.name||categoryText;product.model=v('marketModel');product.product_variants=product.variants;}
   msg.textContent='Submitting to '+marketName()+' admin...';await apiRequest('/api/sellers/catalog-submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({marketplace:market,product})});
   msg.className='marketplace-message success';msg.textContent='Product added successfully!';window.__ceroodClearLocalDraft?.();form.reset();el('marketPreview').hidden=true;renderDynamicAttributes();renderDynamicImages();await loadQueue();
    if(typeof window.ceroodRefreshSingleCatalogs==='function'){try{await window.ceroodRefreshSingleCatalogs()}catch(_){}}
