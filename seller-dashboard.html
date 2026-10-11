@@ -7833,4 +7833,14 @@ html body.cerood-studio #dashboardContent .seller-section-guide summary{font-siz
 html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.product-field,.pickup-field,.marketplace-fields>label,.market-dynamic-grid>label,.final-form>label):has(input:is([type=checkbox],[type=radio])){flex-direction:row!important;align-items:center!important}
 html body.cerood-studio :is(#dashboardContent,.studio-modal-root) [hidden],html body.cerood-studio #dashboardContent[hidden]{display:none!important}
 </style>
+<style id="seller-status-colours">
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.seller-state,[data-seller-tone]){display:inline-flex!important;align-items:center;padding:5px 9px!important;border:1px solid currentColor!important;border-radius:5px!important;font-size:12px!important;font-weight:600!important;line-height:1.4!important;white-space:normal!important;background:#fff!important}
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.seller-state-good,[data-seller-tone=good],.seller-message.success,.pickup-message.success,.serviceability-msg.success,.marketplace-message.success){color:#16723e!important;background:#fff!important}
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.seller-state-bad,[data-seller-tone=bad],.seller-message.error,.pickup-message.error,.serviceability-msg.error,.marketplace-message.error,[role=status][data-tone=bad],.ccat-chip.error,.ci-badge.blocked){color:#b42318!important;background:#fff!important}
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.seller-state-waiting,[data-seller-tone=waiting]){color:#946200!important;background:#fff!important}
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.seller-state-info,[data-seller-tone=info]){color:#1565ac!important;background:#fff!important}
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.seller-state-neutral,[data-seller-tone=neutral],[role=status][data-tone=neutral]){color:#536278!important;background:#fff!important}
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(button[data-decision=accept],button[data-decision=accepted],button.seller-confirm-action){color:#16723e!important;border-color:#16723e!important}
+html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(button[data-decision=reject],button[data-decision=rejected],.ccat-single-danger,.studio-danger,button.danger){color:#b42318!important;border-color:#b42318!important}
+</style>
 <script src="seller-workspace.js"></script></body></html>
