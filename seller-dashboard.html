@@ -2225,7 +2225,48 @@ html body.cerood-studio #dashboardContent #section-add-product .ccat-controls{pa
 html body.cerood-studio #dashboardContent #section-add-product .ccat-alert{background:#fffbea!important;border:1px solid #f0e5bb!important;border-radius:4px!important;margin-bottom:12px!important}
 @media(max-width:800px){html body.cerood-studio #dashboardContent .seller-catalog-quality-banner{flex-wrap:wrap;gap:12px;min-height:0}html body.cerood-studio #dashboardContent .seller-catalog-quality-banner>div{flex:1 1 200px}html body.cerood-studio #dashboardContent .seller-catalog-quality-banner>.seller-btn{margin-left:0}html body.cerood-studio #dashboardContent #section-add-product .ccat-overview>div{padding:10px!important}}
 </style>
-</head>
+
+<style id="seller-reference-home-payment-refinement">
+html body.cerood-studio[data-seller-page=overview],html body.cerood-studio[data-seller-page=payments]{background:#f3f5fb!important}
+html body.cerood-studio[data-seller-page=overview] #dashboardContent .seller-workspace,html body.cerood-studio[data-seller-page=payments] #dashboardContent .seller-workspace{background:#f3f5fb!important}
+html body.cerood-studio[data-seller-page=overview] #sellerCleanHeader{min-height:84px!important;align-items:flex-start!important;padding-top:18px!important}
+html body.cerood-studio[data-seller-page=overview] #sellerCleanHeader p{display:block!important;margin:5px 0 0!important;font-size:13px!important;color:#536482!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-layout{grid-template-columns:minmax(0,1fr) 360px!important;gap:12px!important;margin-top:12px!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-setup{border:0!important;border-radius:0!important;background:white!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-steps button{min-height:58px!important;padding:10px 12px!important;font-size:12px!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-setup>p{display:none!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-welcome{padding:26px 24px!important;gap:28px!important;grid-template-columns:1fr 1fr!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-art{min-height:170px!important;background:#faf8f4!important;border-radius:4px!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-welcome h3{font-size:16px!important;line-height:1.4!important;font-weight:600!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-welcome p{font-size:12px!important;line-height:1.6!important;margin:12px 0!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-welcome button{background:#5030cc!important;color:white!important;border-color:#5030cc!important;border-radius:3px!important;height:36px!important;font-size:12px!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-learn{background:white!important;border:0!important;border-radius:8px!important;padding:20px 16px!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-learn h2{margin:0 0 4px!important;font-size:14px!important;font-weight:600!important}
+html body.cerood-studio #sellerFinalOverview .seller-home-learn button{min-height:70px!important;padding:16px 8px!important}
+html body.cerood-studio #sellerFinalOverview>.final-metrics{background:white!important;border-radius:6px!important;padding:16px!important;gap:12px!important}
+html body.cerood-studio #dashboardContent #sellerFinalFinance,html body.cerood-studio #dashboardContent #sellerFinalOverview{background:transparent!important}html body.cerood-studio #dashboardContent #sellerFinalFinance{padding:0!important;border:0!important}
+.seller-payment-panels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+html body.cerood-studio #dashboardContent .seller-payment-panel{background:white;border-radius:8px;min-height:458px;padding:18px 20px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.seller-payment-panel-head{display:flex;justify-content:space-between;align-items:center;width:100%;gap:12px}
+.seller-payment-panel-head h3{margin:0!important;font-size:16px!important;font-weight:600!important;display:flex;align-items:center;gap:10px}
+.seller-payment-panel-head h3:before{content:'◷';background:#f8be00;color:white;width:19px;height:19px;border-radius:50%;font-size:14px;display:grid;place-items:center}
+.seller-payment-panel:nth-child(2) h3:before{content:'✓';background:#38a638}
+html body.cerood-studio .seller-payment-panel-head button{font-size:12px!important;font-weight:400!important;min-height:30px!important;padding:5px 12px!important;border:1px solid #99a4b9!important;border-radius:6px!important;background:white!important;color:#253047!important}
+.seller-payment-art{width:120px;height:90px;margin-top:94px}
+.seller-payment-art svg{width:100%;height:100%}
+.seller-payment-panel>strong{font-size:23px;font-weight:600;margin-top:8px}
+.seller-payment-panel-state{font-size:14px!important;font-weight:600!important;color:#20242d!important;margin:10px 0!important}
+.seller-payment-panel-copy{max-width:240px;font-size:12px!important;line-height:1.6!important;color:#536482!important;margin:0!important}
+html body.cerood-studio #sellerFinalFinance>.final-metrics{grid-template-columns:repeat(5,minmax(0,1fr))!important;background:white!important;padding:16px!important;gap:12px!important}
+@media(max-width:1000px){html body.cerood-studio #sellerFinalOverview .seller-home-layout{grid-template-columns:1fr!important}html body.cerood-studio #sellerFinalFinance>.final-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:650px){html body.cerood-studio #sellerFinalOverview .seller-home-welcome{grid-template-columns:1fr!important;padding:20px!important;gap:16px!important}.seller-payment-panels{grid-template-columns:1fr}.seller-payment-panel{min-height:330px;padding:16px}.seller-payment-art{margin-top:35px}.seller-payment-panel-head h3{font-size:14px!important}html body.cerood-studio #sellerFinalFinance>.final-metrics{grid-template-columns:1fr!important}}
+</style>
+<style id="seller-reference-panel-canvas">
+html body.cerood-studio #dashboardContent :is(#section-overview,#section-payments,.seller-payment-panels,.seller-home-layout){background:transparent!important}
+html body.cerood-studio #dashboardContent #sellerFinalFinance .final-metric{grid-column:auto!important;min-height:110px!important;background:white!important;padding:14px!important}
+html body.cerood-studio #dashboardContent .seller-payment-panel{border-radius:8px!important}
+@media(max-width:650px){html body.cerood-studio #dashboardContent .seller-payment-panel{min-height:330px!important;padding:16px!important}}
+</style></head>
 <body class="cerood-studio">
 
 
