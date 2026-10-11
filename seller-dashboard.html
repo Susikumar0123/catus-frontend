@@ -7644,6 +7644,7 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
 (()=>{'use strict';
  const $=id=>document.getElementById(id);
  const destinations=[
+ ['sales-report','Main Store sales & stock report','Date filters, product order values and current low stock','report sales analytics stock csv'],
  ['overview','Dashboard home','Summary and tasks','home overview summary'],
  ['add-product','Add a product','Upload photos and submit for approval','new listing catalog upload'],
  ['products','My products & approval','Search your listings and read approval status','products approved rejected pending'],
@@ -7683,6 +7684,32 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  filterProducts();
  // Keep help discoverable without placing a long instruction block above every task.
  document.querySelectorAll('.seller-section-guide').forEach(guide=>{const title=guide.querySelector('strong')?.textContent||'Section guide',copy=guide.querySelector('p'),oldDetails=guide.querySelector('details'),list=oldDetails?.querySelector('ol'),details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='How to use this section — '+title;details.append(summary);if(copy)details.append(copy);if(list)details.append(list);guide.replaceChildren(details);guide.classList.add('seller-advanced-guide')});
+})();
+
+</script>
+<script id="seller-main-store-reports">
+(()=>{'use strict';
+ const $=id=>document.getElementById(id),section=document.createElement('section');section.id='section-sales-report';section.className='seller-section';
+ section.innerHTML='<div class="seller-dashboard-heading"><div><h1>Main Store sales & stock report</h1><p>Order totals for Main Store products only. These figures are not seller payouts.</p></div></div><form id="sellerReportForm" class="seller-product-filters"><label>From<input type="date" id="sellerReportFrom" required></label><label>To<input type="date" id="sellerReportTo" required></label><button type="submit" id="sellerReportLoad">Load report</button><button type="button" id="sellerReportExport" disabled>Download CSV</button></form><p id="sellerReportMessage" role="status" aria-live="polite">Choose your dates and load the report.</p><div id="sellerReportBody" hidden></div>';
+ document.querySelector('.seller-workspace').append(section);
+ const sidebar=document.querySelector('.hub-menu-scroll'),nav=document.createElement('button');nav.type='button';nav.className='hub-nav seller-tab';nav.dataset.tab='sales-report';nav.textContent='Sales & low-stock report';nav.onclick=()=>{window.showTab('sales-report');if(!loaded)load()};sidebar.append(nav);
+ const quick=document.createElement('button');quick.type='button';quick.textContent='Sales & stock report';quick.onclick=nav.onclick;$('sellerCommandBar').append(quick);
+ const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());$('sellerReportTo').value=today;$('sellerReportFrom').value=new Date(Date.parse(today+'T00:00:00Z')-29*86400000).toISOString().slice(0,10);
+ let loaded=false,report=null,range=null;
+ const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2}),make=(tag,text,cls)=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n};
+ function table(headers,rows){const wrap=document.createElement('div');wrap.style.overflowX='auto';const t=document.createElement('table');t.className='hub-product-table';const head=document.createElement('thead'),tr=document.createElement('tr');headers.forEach(x=>tr.append(make('th',x)));head.append(tr);t.append(head);const body=document.createElement('tbody');for(const row of rows){const r=document.createElement('tr');row.forEach(x=>r.append(make('td',String(x??'—'))));body.append(r)}t.append(body);wrap.append(t);return wrap}
+ function render(){const root=$('sellerReportBody');root.replaceChildren();const grid=document.createElement('div');grid.className='ek-metrics';const summary=report.summary||{};
+ for(const [label,value] of [['Confirmed orders',summary.confirmed_orders],['Units ordered',summary.ordered_units],['Product order value',money(summary.product_order_value)],['Delivered product value',money(summary.delivered_product_value)]]){const box=document.createElement('div');box.className='ek-metric';box.style.cursor='default';box.append(make('span',label),make('strong',String(value||0)));grid.append(box)}root.append(grid);
+ root.append(make('p','Delivered orders: '+summary.delivered_orders+' · New items: '+summary.new_items+' · Packing: '+summary.packing_items+' · Ready to dispatch: '+summary.dispatch_items+' · Cancelled orders: '+report.cancelled_orders+' · Rejected items: '+report.rejected_items));
+ root.append(make('h2','Top products by order value'));const tops=report.top_products||[];root.append(tops.length?table(['Product','Units','Product order value'],tops.map(x=>[x.product_name,x.units,money(x.product_order_value)])):make('p','No qualifying orders in this date range.'));
+ root.append(make('h2','Current low stock — 5 units or fewer'));root.append(make('p',report.low_stock_count+' low-stock product/option rows. Showing up to 50. Stock is current and does not depend on the report dates.'));
+ const stock=report.low_stock||[];root.append(stock.length?table(['Product','Option / SKU','Available units'],stock.map(x=>[x.name,[x.sku,...Object.entries(x.variant_values||{}).map(([k,v])=>k+': '+v)].filter(Boolean).join(' · ')||'Standard',x.stock])):make('p','No approved, published Main Store products are currently low in stock.'));
+ const edit=make('button','Manage stock','seller-btn seller-btn-outline');edit.type='button';edit.onclick=()=>window.showTab('inventory');root.append(edit);root.hidden=false;
+ }
+ async function load(){const button=$('sellerReportLoad'),msg=$('sellerReportMessage');if(button.disabled)return;button.disabled=true;$('sellerReportExport').disabled=true;$('sellerReportBody').hidden=true;msg.textContent='Loading your Main Store report…';const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),25000);try{const from=$('sellerReportFrom').value,to=$('sellerReportTo').value;const d=await apiRequest('/api/sellers/shop-report?from='+encodeURIComponent(from)+'&to='+encodeURIComponent(to),{signal:controller.signal});report=d.report;range=d.range;loaded=true;render();msg.textContent=d.note;$('sellerReportExport').disabled=false}catch(e){msg.textContent=e.name==='AbortError'?'The report took too long. Try again.':e.message||'Unable to load report. Try again.'}finally{clearTimeout(timer);button.disabled=false}}
+ $('sellerReportForm').onsubmit=e=>{e.preventDefault();load()};
+ const csvCell=x=>{let s=String(x??'');if(/^[=+@\-\t\r\n]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"'};
+ $('sellerReportExport').onclick=()=>{if(!report)return;const rows=[['Cerood Main Store report',range.from,range.to],['Metric','Value'],...Object.entries(report.summary),['Cancelled orders',report.cancelled_orders],['Rejected items',report.rejected_items],[],['Product','Units','Product order value'],...report.top_products.map(x=>[x.product_name,x.units,x.product_order_value]),[],['Current stock: product','SKU','Stock'],...report.low_stock.map(x=>[x.name,x.sku||'Standard',x.stock]),[],['Note','Product values are not seller payouts; low stock is current.']];const blob=new Blob(['\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='cerood-main-store-report-'+range.from+'-'+range.to+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 })();
 
 </script>
