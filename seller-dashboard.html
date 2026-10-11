@@ -2218,6 +2218,54 @@ function sellerOrderAddress(address) {
     .join(', ') || '—';
 }
 
+function sellerOrderVariantLabel(order) {
+  let value = order.variant_values || order.variant;
+  if (typeof value === 'string') {
+    try { value = JSON.parse(value); } catch { return value.slice(0, 300); }
+  }
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return '';
+  return Object.entries(value).filter(([,v]) => ['string','number'].includes(typeof v))
+    .map(([key,v]) => key + ': ' + String(v)).join(' · ').slice(0, 500);
+}
+
+function sellerPrintPackingSlip(order) {
+  const popup = window.open('', '_blank');
+  if (!popup) {
+    showMessage('ordersMessage', 'Allow popups for Cerood to print this packing slip.', 'error');
+    return;
+  }
+  popup.opener = null;
+  const doc = popup.document;
+  doc.title = 'Cerood packing slip';
+  const style = doc.createElement('style');
+  style.textContent = 'body{font:15px/1.6 Arial,sans-serif;color:#111;margin:32px;max-width:850px}h1{font-size:25px}h2{font-size:18px;margin-top:24px}p{overflow-wrap:anywhere;margin:8px 0}hr{border:0;border-top:1px solid #ddd;margin:22px 0}button{padding:12px 20px;font:inherit;cursor:pointer}@media print{button{display:none}body{margin:12mm}}';
+  doc.head.append(style);
+  function text(tag,content){const node=doc.createElement(tag);node.textContent=String(content??'');doc.body.append(node);return node}
+  text('h1','CEROOD · Packing slip');
+  text('p','Seller item only — not a tax invoice or courier label.');
+  text('p','Order: '+order.order_id);
+  text('p','Order item: '+order.order_item_id);
+  if(order.ordered_at){const date=new Date(order.ordered_at);if(!Number.isNaN(date.getTime()))text('p','Ordered: '+date.toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}));}
+  text('h2','Pack this item');
+  text('p',order.product_name||'Product');
+  text('p','Quantity: '+order.quantity);
+  const selected=sellerOrderVariantLabel(order);
+  if(selected)text('p','Selected option: '+selected);
+  if(order.variant_sku)text('p','SKU: '+order.variant_sku);
+  text('p','Product ID: '+order.product_id);
+  text('p','Seller item value: ₹'+Number(order.line_total||0).toLocaleString('en-IN'));
+  text('p','Payment method: '+String(order.payment_method||'—').toUpperCase());
+  text('p','Use the courier label for collection amounts and shipment routing. This item value may differ from the full customer order total.');
+  text('h2','Deliver to');
+  text('p',order.customer_name||'Customer');
+  text('p',sellerOrderAddress(order.delivery_address));
+  if(order.customer_phone)text('p','Phone: '+order.customer_phone);
+  text('h2','Packing check');
+  text('p','□ Correct product and selected option   □ Correct quantity   □ Accessories included   □ Package protected');
+  const print=text('button','Print / Save as PDF');print.type='button';print.onclick=()=>popup.print();
+  popup.focus();
+}
+
 function renderSellerOrders(orders) {
   window.hubSellerOrders = Array.isArray(orders) ? orders : [];
   if (!window.hubOrdersInitialStageChosen && window.hubSellerOrders.length) {
@@ -2272,6 +2320,9 @@ function renderSellerOrders(orders) {
     const info = document.createElement('div');
     info.className = 'seller-order-info';
     sellerOrderText(info, 'h3', order.product_name || 'Product');
+    const selectedOption = sellerOrderVariantLabel(order);
+    if (selectedOption) sellerOrderText(info, 'p', 'Selected option: ' + selectedOption);
+    if (order.variant_sku) sellerOrderText(info, 'p', 'SKU: ' + order.variant_sku);
     sellerOrderText(info, 'p',
       'Qty: ' + order.quantity + ' · Your item total: ₹' +
       Number(order.line_total || 0).toLocaleString('en-IN'));
@@ -2394,6 +2445,18 @@ function renderSellerOrders(orders) {
 
       actions.appendChild(fulfilButton);
       card.appendChild(actions);
+    }
+
+    if (['accepted','packed','shipped'].includes(currentStatus) && !['cancelled','canceled'].includes(String(order.delivery_status).toLowerCase())) {
+      const printActions = document.createElement('div');
+      printActions.className = 'seller-order-actions';
+      const printButton = document.createElement('button');
+      printButton.type = 'button';
+      printButton.className = 'seller-btn seller-btn-outline';
+      printButton.textContent = 'Print packing slip';
+      printButton.addEventListener('click', () => sellerPrintPackingSlip(order));
+      printActions.append(printButton);
+      card.append(printActions);
     }
 
     if (typeof window.ceroodAttachEkartShipmentControls === 'function') {
