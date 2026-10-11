@@ -1106,6 +1106,13 @@ body.cerood-studio{background:#fff!important;font-size:15px!important;color:#202
 @media(max-width:850px){.seller-start-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cerood-studio .seller-workspace{padding:22px 16px!important}.cerood-studio .seller-section h1{font-size:23px!important}.cerood-studio .seller-order-info p{font-size:13px!important}.seller-start-grid small{font-size:13px}}
 @media(max-width:420px){.seller-start-grid{gap:18px 12px}.seller-start-grid b{font-size:14px}}
 </style>
+<style id="seller-advanced-style">
+.seller-command-bar{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 26px;padding-bottom:20px;border-bottom:1px solid #e5e7eb}.seller-command-search{flex:1;min-width:200px;position:relative}.seller-command-search input{width:100%;border:1px solid #d1d5db;border-radius:8px;padding:12px 14px;font:14px inherit;min-height:44px;background:white}.seller-command-results{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 12px 30px #18202a15;z-index:50;max-height:300px;overflow:auto}.seller-command-results button{display:block;width:100%;text-align:left;background:white;border:0;border-bottom:1px solid #f0f1f3;padding:13px;cursor:pointer;font:inherit;color:#20242a}.seller-command-results button:hover{background:#f5f6f8}.seller-command-results small{display:block;font-size:12px;color:#5b6574;margin-top:3px}.seller-command-results p{padding:12px;margin:0}.seller-command-bar>button{border:1px solid #d1d5db;border-radius:8px;background:#fff;padding:11px 15px;min-height:44px;font:inherit;cursor:pointer}.seller-command-bar>button:first-of-type{background:#20242a;color:white;border-color:#20242a}
+.seller-work-queue{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-block:1px solid #e5e7eb;margin:24px 0;padding:12px 0}.seller-work-queue button{display:flex;flex-direction:column;gap:6px;text-align:left;min-height:96px;padding:16px 18px;background:#fff;border:0;border-right:1px solid #e5e7eb;font:inherit;cursor:pointer}.seller-work-queue button:last-child{border:0}.seller-work-queue b{font-size:16px;color:#20242a}.seller-work-queue small{font-size:13px;line-height:1.5;color:#596474}.seller-work-queue span{font-size:13px;font-weight:600;color:#315be9}
+.seller-product-filters{display:flex;flex-wrap:wrap;align-items:end;gap:14px;margin:20px 0}.seller-product-filters label{display:flex;flex-direction:column;gap:6px;flex:1;min-width:160px}.seller-product-filters input,.seller-product-filters select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:6px;background:#fff}.seller-product-filters button{background:#fff;border:1px solid #d1d5db;padding:11px 16px;border-radius:6px;font:inherit;cursor:pointer}.seller-product-result{color:#596474;font-size:14px;margin:8px 0 16px}.seller-no-products{padding:24px;border:1px dashed #d1d5db;text-align:center}.seller-advanced-guide{padding:0!important;border:0!important;margin:0 0 20px!important}.seller-advanced-guide>details{border:1px solid #e5e7eb;padding:14px 18px;border-radius:8px}.seller-advanced-guide summary{font-size:14px!important;color:#3d4858}.seller-advanced-guide details[open] summary{margin-bottom:10px}.seller-advanced-guide p{margin:0 0 10px!important}
+.cerood-studio .ek-action-row strong{font-size:16px!important}.cerood-studio .ek-metric span{font-size:14px!important;color:#566170!important}.cerood-studio .ek-metric strong{font-size:30px!important;color:#20242a!important}.cerood-studio .ek-metric{cursor:pointer}.cerood-studio .ek-metric:focus-visible{outline:3px solid #b2c3ff;outline-offset:3px}
+@media(max-width:640px){.seller-work-queue{grid-template-columns:1fr}.seller-work-queue button{border-right:0;border-bottom:1px solid #e5e7eb;min-height:80px}.seller-command-search{flex-basis:100%}.seller-command-bar>button{flex:1}.seller-product-filters label{min-width:130px}.seller-command-results{max-height:240px}}
+</style>
 </head>
 <body class="cerood-studio">
 &lt;!-- CEROOD SELLER DASHBOARD CLEAN V3 - 2026-10-05 --&gt;
@@ -1165,7 +1172,7 @@ body.cerood-studio{background:#fff!important;font-size:15px!important;color:#202
 
       </button>
 </nav>
-<div aria-live="polite" class="seller-message" id="dashboardMessage" role="status"></div>
+<div class="seller-command-bar" id="sellerCommandBar"><div class="seller-command-search"><input id="sellerCommandInput" type="search" aria-label="Find a dashboard section" placeholder="Where do you want to go? Try orders, stock, pickup…" aria-controls="sellerCommandResults" aria-expanded="false" autocomplete="off"><div id="sellerCommandResults" class="seller-command-results" hidden></div></div><button type="button" data-seller-quick="add-product">+ Add product</button><button type="button" data-seller-quick="orders">View orders</button></div><div aria-live="polite" class="seller-message" id="dashboardMessage" role="status"></div>
 <!-- OVERVIEW: CEROOD SELLER HUB HOME -->
 <section class="seller-section active cerood-home studio-overview" id="section-overview"><div class="studio-heading"><h1>Overview</h1><div class="ek-overview-actions"><button class="seller-btn seller-btn-outline" id="ekRefreshOverview" type="button">Refresh</button><button class="seller-btn" data-ek-go="add-product" type="button">+ Add product</button></div></div>
 <div class="seller-start"><h2>Start selling on Cerood</h2><p>New here? Follow these four steps. Already selling? Open Orders to handle new purchases.</p><div class="seller-start-grid">
@@ -1174,7 +1181,7 @@ body.cerood-studio{background:#fff!important;font-size:15px!important;color:#202
 <button type="button" data-ek-go="add-product"><span class="seller-step-number">3</span><b>Add your first product</b><small>Choose a category, upload photos, enter price and stock, then submit.</small></button>
 <button type="button" data-ek-go="products"><span class="seller-step-number">4</span><b>Check product approval</b><small>Read admin feedback. Approved and published products can appear in the store.</small></button>
 </div></div><h2 class="ek-section-head">Business summary</h2><div class="ek-metrics"><div class="ek-metric"><span>Total products</span><strong id="totalProducts">—</strong></div><div class="ek-metric"><span>Approved listings</span><strong id="approvedProducts">—</strong></div><div class="ek-metric"><span>Pending review</span><strong id="studioPendingProducts">—</strong></div><div class="ek-metric"><span>Active orders</span><strong id="studioActiveOrders">—</strong></div></div>
-<h2 class="ek-section-head">Action required</h2><div id="ekActionRequired" aria-live="polite"><p>Loading your seller activity…</p></div><div class="ek-links"><button data-ek-go="shipping" type="button">Manage pickup locations</button><button data-ek-go="support" type="button">Help &amp; support</button></div></section>
+<h2>Daily work</h2><div class="seller-work-queue"><button type="button" data-seller-order="new"><b>Accept new orders</b><small>Check availability and accept or reject each new item.</small><span>Open pending orders →</span></button><button type="button" data-seller-order="accepted"><b>Pack accepted orders</b><small>Prepare the correct product and mark it ready to ship.</small><span>Open accepted orders →</span></button><button type="button" data-seller-order="packed"><b>Arrange dispatch</b><small>Check pickup details and arrange shipment for packed orders.</small><span>Open ready-to-ship orders →</span></button></div><h2 class="ek-section-head">Action required</h2><div id="ekActionRequired" aria-live="polite"><p>Loading your seller activity…</p></div><div class="ek-links"><button data-ek-go="shipping" type="button">Manage pickup locations</button><button data-ek-go="support" type="button">Help &amp; support</button></div></section>
 <!-- MY PRODUCTS -->
 <section class="seller-section" id="section-products"><div class="seller-section-guide"><strong>Your products and approval</strong><p>Find your listings, check feedback and edit product details.</p><details><summary>How this section works</summary><ol><li>Draft: not submitted. Pending: admin is reviewing. Rejected: read the reason and correct the listing. Approved: check that the product is published before expecting it in the store.</li></ol></details></div>
 <div class="seller-dashboard-heading">
@@ -1196,7 +1203,7 @@ body.cerood-studio{background:#fff!important;font-size:15px!important;color:#202
 
         </button>
 </div>
-<div class="seller-message" id="productsMessage" role="status"></div>
+<div class="seller-product-filters"><label>Find your product<input id="sellerProductQuery" type="search" placeholder="Product name, brand or model"></label><label>Approval status<select id="sellerProductStatus"><option value="all">All statuses</option><option value="approved">Approved</option><option value="pending">Under review</option><option value="rejected">Needs changes</option><option value="draft">Draft</option><option value="withdrawn">Withdrawn</option></select></label><button type="button" id="sellerProductReset">Reset filters</button></div><div class="seller-product-result" id="sellerProductResult" role="status" aria-live="polite"></div><div class="seller-no-products" id="sellerProductEmpty" hidden>No loaded products match these filters. Clear the filters or check your spelling.</div><div class="seller-message" id="productsMessage" role="status"></div>
 <div hidden="" id="ceroodInlineRenewedEditor"></div>
 <div hidden="" id="ceroodInlineMarketplaceEditor"></div>
 <div class="hub-section-toolbar cerood-renewed-heading"><strong>📺 Renewed Products</strong></div>
@@ -7633,4 +7640,50 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
 })();
 </script>
 
+<script id="seller-advanced-controls">
+(()=>{'use strict';
+ const $=id=>document.getElementById(id);
+ const destinations=[
+ ['overview','Dashboard home','Summary and tasks','home overview summary'],
+ ['add-product','Add a product','Upload photos and submit for approval','new listing catalog upload'],
+ ['products','My products & approval','Search your listings and read approval status','products approved rejected pending'],
+ ['orders','Orders','Accept, pack and dispatch customer orders','order shipping dispatch tracking'],
+ ['inventory','Stock & inventory','Review product quantities','inventory stock quantity sku'],
+ ['shipping','Pickup addresses & shipping','Save pickup locations and delivery rules','pickup warehouse courier address pincode'],
+ ['catalog-sync','Bulk upload & stock updates','Import supplier spreadsheets','bulk excel csv supplier catalog sync'],
+ ['returns','Returns & RTO','Review customer and delivery returns','return refund rto'],
+ ['payments','Payouts','Settlement ledger is not connected yet','payment payout earnings settlement'],
+ ['account','Business account','Review seller details and account status','account profile business approval'],
+ ['support','Help & support','Find help and submit available tickets','support help ticket problem']
+ ];
+ const input=$('sellerCommandInput'),results=$('sellerCommandResults');
+ function closeSearch(){results.hidden=true;input.setAttribute('aria-expanded','false')}
+ function go(tab){closeSearch();window.showTab(tab)}
+ function search(){const q=input.value.trim().toLowerCase();results.replaceChildren();if(!q){closeSearch();return}
+  const matches=destinations.filter(x=>(x[1]+' '+x[2]+' '+x[3]).toLowerCase().includes(q));
+  for(const x of matches){const b=document.createElement('button'),strong=document.createElement('strong'),small=document.createElement('small');b.type='button';strong.textContent=x[1];small.textContent=x[2];b.append(strong,small);b.onclick=()=>{go(x[0]);input.value=''};results.append(b)}
+  if(!matches.length){const p=document.createElement('p');p.textContent='No section found. Try product, order, pickup or support.';results.append(p)}
+  results.hidden=false;input.setAttribute('aria-expanded','true');
+ }
+ input.addEventListener('input',search);input.addEventListener('keydown',e=>{if(e.key==='Escape')closeSearch();if(e.key==='ArrowDown'){const first=results.querySelector('button');if(first){e.preventDefault();first.focus()}}if(e.key==='Enter'){const first=results.querySelector('button');if(first){e.preventDefault();first.click()}}});
+ results.addEventListener('keydown',e=>{const buttons=[...results.querySelectorAll('button')],i=buttons.indexOf(document.activeElement);if(e.key==='Escape'){closeSearch();input.focus()}if(['ArrowDown','ArrowUp'].includes(e.key)&&buttons.length){e.preventDefault();buttons[(i+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length].focus()}});
+ document.addEventListener('click',e=>{if(!$('sellerCommandBar').contains(e.target))closeSearch()});
+ document.addEventListener('keydown',e=>{if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.target.closest('input,textarea,select,[contenteditable="true"]')&&!document.querySelector('.studio-modal-root:not([hidden])')){e.preventDefault();input.focus()}});
+ document.querySelectorAll('[data-seller-quick]').forEach(b=>b.onclick=()=>go(b.dataset.sellerQuick));
+ document.querySelectorAll('[data-seller-order]').forEach(b=>b.onclick=()=>{const stage=b.dataset.sellerOrder;window.hubOrderFilter=stage;window.hubOrdersInitialStageChosen=true;go('orders');document.querySelector('[data-order-filter="'+stage+'"]')?.click()});
+ // The metrics open the owning records rather than displaying duplicate tables.
+ const metricTargets=[['totalProducts','products','all'],['approvedProducts','products','approved'],['studioPendingProducts','products','pending'],['studioActiveOrders','orders']];
+ for(const [id,tab,status] of metricTargets){const box=$(id)?.closest('.ek-metric');if(!box)continue;box.setAttribute('role','button');box.tabIndex=0;box.setAttribute('aria-label','View '+box.querySelector('span').textContent.toLowerCase());const run=()=>{go(tab);if(status){$('sellerProductStatus').value=status;filterProducts()}};box.onclick=run;box.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run()}}}
+ function approval(card){const badge=card.querySelector('.approval-badge');if(!badge)return 'unknown';const classes=[...badge.classList],text=badge.textContent.trim().toLowerCase();if(classes.includes('approved')||text==='approved')return 'approved';if(classes.includes('rejected')||classes.includes('changes_requested')||text==='rejected')return 'rejected';if(classes.includes('withdrawn')||text==='withdrawn')return 'withdrawn';if(classes.includes('draft')||text==='draft')return 'draft';if(classes.some(c=>['pending','under_review','pending_approval','submitted'].includes(c))||/pending|under review/.test(text))return 'pending';return 'unknown'}
+ function filterProducts(){const section=$('section-products'),q=$('sellerProductQuery').value.trim().toLowerCase(),status=$('sellerProductStatus').value,cards=[...section.querySelectorAll('.product-list .product-card')];let shown=0;for(const card of cards){const name=card.querySelector('h3')?.textContent||'',meta=[...card.querySelectorAll('.product-meta')].map(x=>x.textContent).join(' ');const visible=(!q||(name+' '+meta).toLowerCase().includes(q))&&(status==='all'||approval(card)===status);card.hidden=!visible;if(visible)shown++}
+  const message=cards.length?shown+' of '+cards.length+' loaded products shown':'Products will appear here after your listings load.';if($('sellerProductResult').textContent!==message)$('sellerProductResult').textContent=message;$('sellerProductEmpty').hidden=!cards.length||shown>0;
+ }
+ $('sellerProductQuery').addEventListener('input',filterProducts);$('sellerProductStatus').addEventListener('change',filterProducts);$('sellerProductReset').onclick=()=>{$('sellerProductQuery').value='';$('sellerProductStatus').value='all';filterProducts()};
+ let scheduled=false;new MutationObserver(()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;filterProducts()})}).observe($('section-products'),{subtree:true,childList:true});
+ filterProducts();
+ // Keep help discoverable without placing a long instruction block above every task.
+ document.querySelectorAll('.seller-section-guide').forEach(guide=>{const title=guide.querySelector('strong')?.textContent||'Section guide',copy=guide.querySelector('p'),oldDetails=guide.querySelector('details'),list=oldDetails?.querySelector('ol'),details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='How to use this section — '+title;details.append(summary);if(copy)details.append(copy);if(list)details.append(list);guide.replaceChildren(details);guide.classList.add('seller-advanced-guide')});
+})();
+
+</script>
 </body></html>
