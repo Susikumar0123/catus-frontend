@@ -787,7 +787,20 @@ async function submitCommonReturn(){
  try{const r=await fetch(API+'/api/renewed/customer-returns',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({order_id:target.order.id,product_id:target.item.product_id,request_type,reason,details,quantity:Number(target.item.quantity||1)})}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to submit request');status.textContent='Request submitted successfully.';status.className='cr-return-status ok';await loadCommonRenewedReturns(true);const refresh=target.refresh;setTimeout(()=>{closeCommonReturn();refresh&&refresh()},450)}
  catch(e){status.textContent=e.message;status.className='cr-return-status error'}finally{btn.disabled=false}
 }
+async function renderShopOrderReturns(o){
+ const section=el('section','order-return-section');section.append(el('h4','','Main Store return requests'));const note=el('p','order-return-note','Requests need review. Approval does not complete pickup, refund or replacement.');section.append(note);
+ if(String(o.delivery_status||o.status).toLowerCase()!=='delivered'){note.textContent='Return requests are available after delivery.';return section}
+ const token=customerToken();if(!token){note.textContent='Sign in to create or view a return request.';return section}
+ async function call(path,options={}){const r=await fetchOrdersWithTimeout(API+path,{...options,headers:{Authorization:'Bearer '+token,...options.headers}});const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Unable to process return request');return d}
+ let requests;try{requests=(await call('/api/shop/customer-returns')).requests||[]}catch(e){note.textContent=e.message;const retry=el('button','outline','Retry');retry.type='button';retry.onclick=async()=>section.replaceWith(await renderShopOrderReturns(o));section.append(retry);return section}
+ for(const item of o.items||[]){if(!item.order_item_id||['rejected','cancelled'].includes(item.seller_order_status))continue;const card=el('article','order-return-item');card.append(el('strong','',item.product_name||'Product'));const option=Object.entries(item.variant_values||{}).map(([k,v])=>k+': '+v).join(' · ');card.append(el('p','order-return-note',(option?option+' · ':'')+'Qty '+item.quantity));const existing=requests.find(r=>String(r.order_item_id)===String(item.order_item_id));
+ if(existing){card.append(el('p','','Request: '+existing.request_type+' · '+crReturnPretty(existing.status)),el('p','order-return-note',existing.reason));if(existing.seller_note)card.append(el('p','order-return-note','Seller: '+existing.seller_note));if(existing.admin_note)card.append(el('p','order-return-note','Admin: '+existing.admin_note));}
+ else{const form=document.createElement('form');form.innerHTML='<label class="cr-return-field">Request type<select name="request_type" class="cr-return-control"><option value="return">Return</option><option value="exchange">Exchange</option><option value="replacement">Replacement</option></select></label><label class="cr-return-field">Reason<textarea name="reason" class="cr-return-control" required minlength="10" maxlength="500" placeholder="Explain the issue with this item"></textarea></label><p class="order-return-note">This request covers the full quantity of this selected item. Eligibility and resolution are reviewed by Cerood.</p><button type="submit" class="outline">Submit request</button><p role="status" class="order-return-note"></p>';
+ form.onsubmit=async e=>{e.preventDefault();const button=form.querySelector('button'),message=form.querySelector('[role=status]');button.disabled=true;try{const values=Object.fromEntries(new FormData(form));await call('/api/shop/customer-returns',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...values,order_item_id:item.order_item_id})});section.replaceWith(await renderShopOrderReturns(o))}catch(err){message.textContent=err.message;button.disabled=false}};card.append(form)}section.append(card)}return section;
+}
+
 async function renderOrderReturns(o,s){
+ if(s.id==='shop')return renderShopOrderReturns(o);
  const section=el('section','order-return-section'),title=el('h4','','Returns & Replacements'),note=el('p','order-return-note'),list=el('div','order-return-list');section.append(title,note,list);
  if(s.id!=='renewed'){note.textContent=(s.id==='clothing'?'Fashion':s.id==='cosmetics'?'Beauty':'This store')+' does not currently have a connected customer return/replacement API, so no fake request button is shown.';return section}
  if(String(o.delivery_status||'').toLowerCase()!=='delivered'){note.textContent='Return / Exchange / Replacement becomes available after this Renewed order is marked Delivered.';return section}
@@ -845,19 +858,21 @@ async function renderOrderReviews(o,s){
  const section=el('section','order-review-section'),title=el('h4','','Reviews & Ratings'),note=el('p','order-review-note');
  section.append(title,note);
  if(!orderDelivered(o)){note.textContent='Review will become available after this order is marked Delivered.';return section}
- const items=Array.isArray(o.items)?o.items:[],list=el('div','order-review-list');section.append(list);
+ const rawItems=Array.isArray(o.items)?o.items:[];
+ const items=s.id==='shop'?rawItems.filter((item,index,all)=>all.findIndex(x=>String(x.product_id)===String(item.product_id))===index):rawItems;
+ const list=el('div','order-review-list');section.append(list);
  if(!items.length){note.textContent='No product item is available for review in this order.';return section}
  const token=customerToken();let renewedSubmitted=[];
- if(s.id==='renewed'&&token){
-  try{const r=await fetch(API+'/api/renewed/my-reviews',{headers:{Authorization:'Bearer '+token},cache:'no-store'}),d=await r.json();if(r.ok&&d.success)renewedSubmitted=Array.isArray(d.reviews)?d.reviews:[]}catch(_){}
+ if(['renewed','shop'].includes(s.id)&&token){
+  try{const r=await fetchOrdersWithTimeout(API+'/api/'+s.id+'/my-reviews',{headers:{Authorization:'Bearer '+token},cache:'no-store'}),d=await r.json();if(r.ok&&d.success)renewedSubmitted=Array.isArray(d.reviews)?d.reviews:[]}catch(_){}
  }
- note.textContent=s.id==='renewed'?'Delivered products can be reviewed here. Approved reviews appear on the product page.':'Delivered products can be rated here. This keeps the same draft-review behaviour from the '+(s.id==='clothing'?'Fashion':'Beauty')+' dashboard.';
+ note.textContent=['renewed','shop'].includes(s.id)?'Delivered products can be reviewed here. Approved reviews appear on the product page.':'Delivered products can be rated here. This keeps the same draft-review behaviour from the '+(s.id==='clothing'?'Fashion':'Beauty')+' dashboard.';
  items.forEach((item,index)=>{
   const key=reviewDraftKey(s,o,item,index),draft=reviewDraft(key),card=el('article','order-review-card'),head=el('div','order-review-head');
   const rawImg=item.image_url||item.product_image||item.image||'';
   if(typeof rawImg==='string'&&/^https?:\/\//.test(rawImg)){const img=el('img','');img.src=rawImg;img.alt=item.product_name||'Product';head.append(img)}
   const info=el('div','');info.append(el('strong','',item.product_name||item.name||(s.id==='renewed'?'Renewed product':s.id==='clothing'?'Fashion product':'Beauty product')),el('small','','Delivered · Order #'+String(o.id||'').slice(0,8).toUpperCase()));head.append(info);card.append(head);
-  if(s.id==='renewed'){
+  if(['renewed','shop'].includes(s.id)){
    const existing=renewedSubmitted.find(x=>String(x.order_id)===String(o.id)&&String(x.product_id)===String(item.product_id));
    if(existing){const state=existing.status==='approved'?'Published':existing.status==='rejected'?'Not approved':'Awaiting admin approval';card.append(el('div','order-review-existing','★ '+existing.rating+'/5 · '+(existing.comment||'')+' · '+state));list.append(card);return}
   }
@@ -866,9 +881,18 @@ async function renderOrderReviews(o,s){
   const textarea=el('textarea','order-review-text');textarea.maxLength=1000;textarea.placeholder='Tell us about product condition, quality and delivery…';textarea.value=draft.text||'';card.append(textarea);
   let photos=null;
   if(s.id==='renewed'){const label=el('label','order-review-file','Customer product photos (optional, up to 3 · 5 MB each)');photos=el('input','');photos.type='file';photos.accept='image/jpeg,image/png,image/webp';photos.multiple=true;label.append(photos);card.append(label)}
-  const actions=el('div','order-review-actions'),save=el('button','outline',s.id==='renewed'?'Save draft':'Save rating draft'),status=el('p','order-review-status',s.id==='renewed'?'Only approved reviews appear on the product page.':'Draft only — not published.');
+  const actions=el('div','order-review-actions'),save=el('button','outline',s.id==='renewed'?'Save draft':'Save rating draft'),status=el('p','order-review-status',['renewed','shop'].includes(s.id)?'Only approved reviews appear on the product page.':'Draft only — not published.');
   save.type='button';save.onclick=()=>{if(!chosen){status.textContent='Choose a star rating first.';return}try{localStorage.setItem(key,JSON.stringify({rating:chosen,text:textarea.value.trim()}));status.textContent='Draft saved on this browser.'}catch{status.textContent='Could not save draft on this browser.'}};
   actions.append(save);
+  if(s.id==='shop'){
+   const submit=el('button','btn','Submit review');submit.type='button';actions.append(submit);
+   submit.onclick=async()=>{if(!token){status.textContent='Sign in before submitting a verified review.';return}if(!chosen||textarea.value.trim().length<10){status.textContent='Select stars and write at least 10 characters.';return}
+    submit.disabled=true;status.textContent='Submitting review…';
+    try{const r=await fetchOrdersWithTimeout(API+'/api/shop/reviews',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({order_id:o.id,product_id:item.product_id,rating:chosen,comment:textarea.value.trim()})}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Review submission failed');
+      localStorage.removeItem(key);status.textContent='Review submitted · Awaiting admin approval.';submit.remove();save.remove();textarea.disabled=true;buttons.forEach(b=>b.disabled=true);
+    }catch(e){status.textContent=e.message;submit.disabled=false}
+   };
+  }
   if(s.id==='renewed'){
    const submit=el('button','btn','Submit review');submit.type='button';actions.append(submit);
    submit.onclick=async()=>{if(!token){status.textContent='Sign in to your Cerood account before submitting a verified review.';return}if(!chosen||textarea.value.trim().length<10){status.textContent='Select stars and write at least 10 characters.';return}if(!item.product_id){status.textContent='Product reference missing; contact support.';return}if(photos.files.length>3||[...photos.files].some(f=>f.size>5*1024*1024||!['image/jpeg','image/png','image/webp'].includes(f.type))){status.textContent='Choose up to 3 JPG, PNG or WebP images, maximum 5 MB each.';return}
@@ -902,7 +926,8 @@ function renderTrackingDetails(o,s){
  const line=el('div','tracking-timeline'),stages=trackingStagesFor(s),rawCurrent=trackingStageKey(s.id==='renewed'?(o.delivery_status||'confirmed'):(o.delivery_status||o.status));
  const normalizedCurrent=(s.id!=='renewed'&&rawCurrent==='packing')?'processing':rawCurrent;
  let currentIndex=stages.findIndex(x=>x.k===normalizedCurrent);
- if(currentIndex<0)currentIndex=0;
+ const mainCancelled=s.id==='shop'&&o.status==='cancelled';
+ if(currentIndex<0&&!mainCancelled)currentIndex=0;
  const times=(o.status_timestamps&&typeof o.status_timestamps==='object')?o.status_timestamps:{};
  stages.forEach((stage,i)=>{
    const step=el('div','tracking-step '+(i<currentIndex?'done':i===currentIndex?'current':''));
@@ -913,13 +938,14 @@ function renderTrackingDetails(o,s){
    if(!t&&stage.k==='packing')t=times.processing;
    body.append(label,el('div','tracking-time',trackingDateTime(t)));step.append(dot,body);line.append(step);
  });
- card.append(line);
+ if(mainCancelled)card.append(el('p','tracking-extra','Order cancelled'+(o.cancelled_at?' · '+trackingDateTime(o.cancelled_at):'')));
+ else card.append(line);
  const reviewsHolder=el('div','');reviewsHolder.append(el('p','order-review-note','Loading reviews…'));card.append(reviewsHolder);
  renderOrderReviews(o,s).then(section=>reviewsHolder.replaceChildren(section)).catch(()=>{reviewsHolder.replaceChildren(el('p','order-review-note','Reviews are temporarily unavailable.'))});
  const warrantyHolder=el('div','');card.append(warrantyHolder);warrantyHolder.replaceChildren(renderOrderWarranty(o,s));
  const returnsHolder=el('div','');returnsHolder.append(el('p','order-return-note','Loading return options…'));card.append(returnsHolder);
  renderOrderReturns(o,s).then(section=>returnsHolder.replaceChildren(section)).catch(()=>returnsHolder.replaceChildren(el('p','order-return-note','Return options are temporarily unavailable.')));
- if(s.id==='clothing'||s.id==='cosmetics'){
+ if(['clothing','cosmetics','shop'].includes(s.id)){
    const extra=el('div','tracking-extra');
    if(o.courier_name)extra.append(el('span','', 'Courier: '+o.courier_name));
    if(o.tracking_number)extra.append(el('span','', 'Tracking ID: '+o.tracking_number));
