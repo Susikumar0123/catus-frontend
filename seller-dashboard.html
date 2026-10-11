@@ -1941,108 +1941,36 @@ document
 
 // ==========================================
 
-async function apiRequest(
-
-  path,
-
-  options = {}
-
-) {
-
-  const token =
-
-    auth.getToken();
-
-  if (!token) {
-
-    logoutSeller();
-
-    throw new Error(
-
-      'Seller login required.'
-
-    );
-
-  }
-
-  const headers = {
-
-    ...(options.headers || {}),
-
-    Authorization:
-
-      'Bearer ' + token
-
-  };
-
-  const response = await fetch(
-
-    API + path,
-
-    {
-
-      ...options,
-
-      headers,
-
-      cache: 'no-store'
-
-    }
-
-  );
-
-  let data;
-
+async function apiRequest(path, options = {}) {
+  const token = auth.getToken();
+  if (!token) { logoutSeller(); throw new Error('Seller login required.'); }
+  const controller = new AbortController();
+  const external = options.signal;
+  const abort = () => controller.abort(external?.reason);
+  if (external?.aborted) abort(); else external?.addEventListener('abort', abort, {once:true});
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      reject(new Error('Server took too long. Refresh this section to check whether the update completed before retrying.'));
+      controller.abort();
+    }, 25000);
+  });
   try {
-
-    data = await response.json();
-
-  } catch {
-
-    data = {
-
-      success: false,
-
-      message:
-
-        'Invalid server response.'
-
-    };
-
+    return await Promise.race([timeout, (async () => {
+      const response = await fetch(API + path, {...options, signal:controller.signal,
+        headers:{...(options.headers || {}),Authorization:'Bearer ' + token},cache:'no-store'});
+      let data;
+      try { data = await response.json(); }
+      catch (error) { if (controller.signal.aborted) throw error; data = {success:false,message:'Invalid server response.'}; }
+      if (auth.getToken() !== token) throw new Error('Seller session changed. Reload this section.');
+      if (response.status === 401) { logoutSeller(); throw new Error('Session expired.'); }
+      if (!response.ok || !data?.success) throw new Error(data?.message || 'Request failed.');
+      return data;
+    })()]);
+  } finally {
+    clearTimeout(timer);
+    external?.removeEventListener('abort', abort);
   }
-
-  if (response.status === 401) {
-
-    logoutSeller();
-
-    throw new Error(
-
-      'Session expired.'
-
-    );
-
-  }
-
-  if (
-
-    !response.ok ||
-
-    !data.success
-
-  ) {
-
-    throw new Error(
-
-      data.message ||
-
-      'Request failed.'
-
-    );
-
-  }
-
-  return data;
-
 }
 
 // ==========================================
