@@ -2215,7 +2215,11 @@ function updateHeaderLoginUI() {
     a.setAttribute('aria-label',user?'Open Cerood account':'Login or register with Cerood');
   });
 }
-function openCeroodAccountAfterAuth() { window.location.href='/cerood-orders.html#account'; }
+function openCeroodAccountAfterAuth() {
+ const raw=new URLSearchParams(location.search).get('return');
+ if(raw){try{const target=new URL(raw,location.origin);if(target.origin===location.origin&&['/shop-checkout.html','/shop-product.html','/cerood-orders.html'].includes(target.pathname)){location.href=target.pathname+target.search+target.hash;return}}catch{}}
+ window.location.href='/cerood-orders.html#account';
+}
 document.addEventListener('click',function(event){
  const a=event.target.closest('[data-cerood-auth-trigger]');if(!a)return;
  let user=null;try{user=JSON.parse(localStorage.getItem('catus_logged_user')||'null');}catch(_){}
@@ -3838,8 +3842,8 @@ window.addEventListener('cerood:auth-action', function (event) {
    const key=s.key;if(catalog.has(key))return catalog.get(key);
    try{const r=await fetch(API+s.api,{cache:'no-store'});const d=await r.json();if(!r.ok)throw Error();const m=new Map(normalizeList(d).map(p=>[String(p.id??p.product_id),p]));catalog.set(key,m);return m}catch{return new Map()}
  }
- function remove(store,id){const s=stores.find(x=>x.key===store);if(!s)return;write(s,read(s).filter(x=>String(x.product_id)!==String(id)));render();updateBadges()}
- function qty(store,id,delta){const s=stores.find(x=>x.key===store);if(!s)return;const a=read(s),x=a.find(v=>String(v.product_id)===String(id));if(!x)return;x.quantity=Math.max(1,Math.min(10,Number(x.quantity||1)+delta));write(s,a);render();updateBadges()}
+ function remove(store,index){const s=stores.find(x=>x.key===store);if(!s)return;const a=read(s);if(!Number.isInteger(index)||index<0||index>=a.length)return;a.splice(index,1);write(s,a);render();updateBadges()}
+ function qty(store,index,delta){const s=stores.find(x=>x.key===store);if(!s)return;const a=read(s),x=a[index];if(!Number.isInteger(index)||!x)return;x.quantity=Math.max(1,Math.min(10,Number(x.quantity||1)+delta));write(s,a);render();updateBadges()}
  async function render(){
   const token=++renderToken,groups=stores.map(s=>({s,items:read(s)})).filter(x=>x.items.length);
   if(!groups.length){body.innerHTML='<div class="cerood-cart-empty"><b>Your cart is empty</b>Add a product and it will appear here.</div>';return}
@@ -3847,10 +3851,10 @@ window.addEventListener('cerood:auth-action', function (event) {
   const maps=await Promise.all(groups.map(g=>loadCatalog(g.s)));if(token!==renderToken)return;
   body.innerHTML=groups.map((g,gi)=>{
     const map=maps[gi];let subtotal=0;
-    const rows=g.items.map(x=>{
-      const p=map.get(String(x.product_id))||{},q=Math.max(1,Number(x.quantity||1)),price=Number(p.price??p.sale_price??p.unit_price??0),line=price*q;subtotal+=line;
+    const rows=g.items.map((x,index)=>{
+      const p=map.get(String(x.product_id))||{},q=Math.max(1,Number(x.quantity||1)),price=Number((Array.isArray(p.variants)?p.variants.find(v=>String(v.id)===String(x.variant_id||''))?.price:undefined)??p.price??p.sale_price??p.unit_price??0),line=price*q;subtotal+=line;
       const name=p.name||p.product_name||'Product',url=img(p);
-      return `<div class="cerood-cart-row">${url?`<img class="cerood-cart-img" src="${esc(url)}" alt="${esc(name)}" loading="lazy">`:`<div class="cerood-cart-img cerood-cart-img-fallback">No image</div>`}<div class="cerood-cart-info"><b class="cerood-cart-name">${esc(name)}</b><div class="cerood-cart-price">${price?money(price):'Price at checkout'}</div><div class="cerood-cart-line">${price?`${money(price)} × ${q} = ${money(line)}`:`Qty ${q}`}</div></div><div class="cerood-cart-side"><button type="button" class="cerood-cart-remove" data-remove-store="${g.s.key}" data-remove-id="${esc(x.product_id)}">Remove</button><div class="cerood-cart-qty"><button type="button" aria-label="Decrease quantity" data-qty-store="${g.s.key}" data-qty-id="${esc(x.product_id)}" data-delta="-1">−</button><b>${q}</b><button type="button" aria-label="Increase quantity" data-qty-store="${g.s.key}" data-qty-id="${esc(x.product_id)}" data-delta="1">+</button></div></div></div>`;
+      return `<div class="cerood-cart-row">${url?`<img class="cerood-cart-img" src="${esc(url)}" alt="${esc(name)}" loading="lazy">`:`<div class="cerood-cart-img cerood-cart-img-fallback">No image</div>`}<div class="cerood-cart-info"><b class="cerood-cart-name">${esc(name)}</b>${x.variant_values&&Object.keys(x.variant_values).length?`<div class="cerood-cart-line">${esc(Object.entries(x.variant_values).map(([k,v])=>k+': '+v).join(' · '))}</div>`:''}<div class="cerood-cart-price">${price?money(price):'Price at checkout'}</div><div class="cerood-cart-line">${price?`${money(price)} × ${q} = ${money(line)}`:`Qty ${q}`}</div></div><div class="cerood-cart-side"><button type="button" class="cerood-cart-remove" data-remove-store="${g.s.key}" data-remove-index="${index}">Remove</button><div class="cerood-cart-qty"><button type="button" aria-label="Decrease quantity" data-qty-store="${g.s.key}" data-qty-index="${index}" data-delta="-1">−</button><b>${q}</b><button type="button" aria-label="Increase quantity" data-qty-store="${g.s.key}" data-qty-index="${index}" data-delta="1">+</button></div></div></div>`;
     }).join('');
     return `<section class="cerood-cart-store"><div class="cerood-cart-store-head"><strong>${g.s.label}</strong><span>${g.items.reduce((n,x)=>n+Number(x.quantity||0),0)} item(s)</span></div>${rows}<div class="cerood-cart-store-summary"><span>Subtotal</span><b>${subtotal?money(subtotal):'Calculated at checkout'}</b></div><div class="cerood-cart-store-actions"><button type="button" class="cerood-cart-checkout" data-checkout-store="${g.s.key}">Proceed to checkout</button></div></section>`;
   }).join('');
@@ -3860,8 +3864,8 @@ window.addEventListener('cerood:auth-action', function (event) {
  document.addEventListener('click',e=>{
   const opener=e.target.closest('[data-cerood-cart-open]');if(opener){e.preventDefault();open();return}
   if(e.target.closest('[data-cerood-cart-close]')){close();return}
-  const rem=e.target.closest('[data-remove-store]');if(rem){remove(rem.dataset.removeStore,rem.dataset.removeId);return}
-  const q=e.target.closest('[data-qty-store]');if(q){qty(q.dataset.qtyStore,q.dataset.qtyId,Number(q.dataset.delta));return}
+  const rem=e.target.closest('[data-remove-store]');if(rem){remove(rem.dataset.removeStore,Number(rem.dataset.removeIndex));return}
+  const q=e.target.closest('[data-qty-store]');if(q){qty(q.dataset.qtyStore,Number(q.dataset.qtyIndex),Number(q.dataset.delta));return}
   const go=e.target.closest('[data-checkout-store]');if(go){location.href='/shop-checkout.html?store='+encodeURIComponent(go.dataset.checkoutStore)+'&mode=cart'}
  });
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!popup.hidden)close()});
@@ -4039,5 +4043,5 @@ document.addEventListener('DOMContentLoaded', function () {
   setTimeout(paint,250);
 })();
 </script>
-</body>
+<footer id="cerood-founder-link" style="padding:24px 20px;text-align:center;background:#fff;color:#26364d;font-size:14px"><a href="/about#founder" style="color:inherit;text-underline-offset:4px">Meet Susikumar Soundarraj — Founder &amp; CEO, Cerood</a></footer></body>
 </html>
