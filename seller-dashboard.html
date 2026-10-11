@@ -6859,191 +6859,7 @@ body.cerood-studio .studio-modal-root :is(.studio-dialog-window,.studio-dialog-b
 @media(max-width:640px){.ca-modal{padding:10px}.ca-dialog{max-height:calc(100dvh - 20px)}.ca-modal-head,.ca-modal-body{padding:16px}.ca-detail-grid{grid-template-columns:1fr}.ca-record-head,.studio-ticket-row{align-items:flex-start}.ca-record-head h3{font-size:16px}.studio-ticket-toolbar{align-items:flex-start;flex-direction:column}.studio-ticket-row{gap:12px}.studio-ticket-row .studio-status{white-space:normal;min-width:76px}}
 </style>
 
-<style id="cerood-ekart-reference-clean">/* A single visual scale for the seller workspace and its dialogs. */
-html body.cerood-studio{
- --studio-header:56px;--studio-sidebar:204px;--studio-bg:#fff;--studio-ink:#172b41;--studio-muted:#596778;--studio-line:#e4e8ed;--studio-blue:#1872c9;
- --v3-header:56px;--v3-sidebar:204px;--v3-bg:#fff;--v3-blue:#1872c9;--v3-line:#e4e8ed;--v3-text:#172b41;--v3-muted:#596778;
- font-family:Arial,Helvetica,sans-serif!important;font-size:13px!important;line-height:1.55!important;color:#172b41!important;background:#fff!important;
-}
-html body.cerood-studio *{box-sizing:border-box}
-html body.cerood-studio [hidden]{display:none!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root){font:inherit!important;color:inherit}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(h1,h2,h3,h4,h5,h6,strong,b){font-size:13px!important;line-height:1.55!important;font-weight:700!important;letter-spacing:0!important;text-transform:none!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(p,span,small,label,li,td,th,button,input,select,textarea,a,time,summary,div,dl,dt,dd){font-family:inherit!important;font-size:13px!important;line-height:1.55!important;letter-spacing:0!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(p,small){color:#596778}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) p{margin:6px 0 12px}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(h1,h2,h3,h4){margin:0 0 10px}
-html body.cerood-studio button{cursor:pointer;transition:color .15s ease,border-color .15s ease!important;box-shadow:none!important;transform:none!important}
-html body.cerood-studio button:disabled{opacity:.45;cursor:not-allowed}
-html body.cerood-studio :is(button,a,input,select,textarea):focus-visible{outline:2px solid #1872c9!important;outline-offset:3px!important}
-html body.cerood-studio .seller-header{height:56px!important;min-height:56px!important;background:#fff!important;border-bottom:1px solid #e4e8ed!important;box-shadow:none!important}
-html body.cerood-studio .seller-header-inner{height:56px!important;min-height:56px!important;padding:0 20px!important;gap:18px!important}
-html body.cerood-studio .studio-brand{width:165px!important;gap:0!important}
-html body.cerood-studio .seller-logo{font-size:27px!important;color:#172b41!important;font-weight:700!important}
-html body.cerood-studio .studio-brand-dot{color:#1872c9!important}
-html body.cerood-studio :is(.studio-brand-sub,.studio-brand-divider,.hub-brand,.studio-workspace-pill,.hub-side-tools,.hub-menu-caption,.studio-sidebar-foot,#logoutBtn){display:none!important}
-html body.cerood-studio .studio-top-search{max-width:440px!important;height:34px!important;border:1px solid #d5dce4!important;border-radius:4px!important;background:#fff!important}
-html body.cerood-studio .studio-top-search input{font-family:inherit!important;font-size:13px!important}
-html body.cerood-studio :is(.studio-verified,.studio-avatar){font-size:13px!important;border:0!important;background:#fff!important;color:#172b41!important}
-html body.cerood-studio .studio-top-actions{gap:16px!important}
-html body.cerood-studio .seller-container{margin-top:56px!important;background:#fff!important}
-html body.cerood-studio .hub-sidebar{top:56px!important;width:204px!important;max-width:204px!important;height:calc(100dvh - 56px)!important;padding:12px 0 0!important;background:#fff!important;border-right:1px solid #e4e8ed!important;box-shadow:none!important}
-html body.cerood-studio .hub-store{min-height:50px!important;padding:0 17px 12px!important;margin:0!important;gap:9px!important;border:0!important;border-bottom:1px solid #e4e8ed!important;border-radius:0!important;background:#fff!important}
-html body.cerood-studio .hub-store :is(strong,small){font-family:inherit!important;font-size:13px!important;line-height:1.5!important}
-html body.cerood-studio #hubClose{display:none!important;border:0!important;background:#fff!important;color:#172b41!important;min-width:32px!important;min-height:32px!important;margin-left:auto!important}
-html body.cerood-studio .hub-store .studio-store-meta{max-width:100%!important;min-width:0!important}
-html body.cerood-studio .hub-store small{display:none!important}
-html body.cerood-studio .studio-store-mark{width:27px!important;height:27px!important;border:0!important;border-radius:0!important;background:#fff!important;color:#596778!important}
-html body.cerood-studio .hub-menu-scroll{padding:8px 0!important;min-height:0!important;overflow-y:auto!important;scrollbar-width:thin}
-html body.cerood-studio #hubSidebar .hub-nav{white-space:nowrap!important}
-html body.cerood-studio #hubSidebar :is(.hub-nav,.hub-sub){display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:42px!important;padding:10px 17px!important;margin:0!important;border:0!important;border-left:2px solid transparent!important;border-radius:0!important;background:#fff!important;color:#172b41!important;font:400 13px/1.55 Arial,Helvetica,sans-serif!important;box-shadow:none!important;text-align:left!important}
-html body.cerood-studio #hubSidebar :is(.hub-nav,.hub-sub):hover{background:#fff!important;color:#1872c9!important}
-html body.cerood-studio #hubSidebar :is(.hub-nav,.hub-sub).active{background:#fff!important;color:#1872c9!important;border-left-color:#1872c9!important;font-weight:700!important}
-html body.cerood-studio #hubSidebar :is(.hub-modern-icon,.hub-modern-icon svg){width:16px!important;min-width:16px!important;height:16px!important;border:0!important;background:none!important;border-radius:0!important;color:currentColor!important}
-html body.cerood-studio .studio-sidebar-bottom{padding:5px 0!important;background:#fff!important;border-top:1px solid #e4e8ed!important}
-html body.cerood-studio #hubLogout{min-height:40px!important}
-html body.cerood-studio .seller-workspace{margin-left:204px!important;padding:0 24px 30px!important;min-width:0!important;background:#fff!important}
-html body.cerood-studio .studio-footer{margin-left:204px!important;padding:12px 24px!important;background:#fff!important;font:13px/1.55 Arial,Helvetica,sans-serif!important;color:#596778!important;border-top:1px solid #e4e8ed!important}
-html body.cerood-studio .hub-topbar{display:none!important}
-html body.cerood-studio #dashboardContent :is(.studio-page-header,.studio-heading){display:flex!important;align-items:center!important;justify-content:space-between!important;gap:18px!important;min-height:70px!important;margin:0 0 20px!important;padding:16px 0!important;border:0!important;border-bottom:1px solid #e4e8ed!important;background:#fff!important;border-radius:0!important}
-html body.cerood-studio #dashboardContent :is(.studio-page-header,.studio-heading) h1{margin:0!important;color:#172b41!important}
-html body.cerood-studio #dashboardContent :is(.studio-page-header,.studio-heading) p{display:none!important}
-html body.cerood-studio .studio-page-kicker{display:none!important}
-html body.cerood-studio #dashboardContent :is(.studio-page-actions,.ek-overview-actions){display:flex!important;align-items:center!important;gap:20px!important}
-html body.cerood-studio #dashboardContent .seller-section{background:#fff!important;padding:0!important;min-height:0!important}
-html body.cerood-studio #dashboardContent :is(.seller-card,.hub-content-card,.studio-panel,.hub-quality-card,.cc-help-card,.cc-ticket,.cc-hero,.cc-alert,.rp-metric,.rp-tip,.serviceability-box,.pickup-card,.pickup-location-card,.cerood-latch-offer,.cerood-latch-result,.cerood-latched-card,.hub-content-note,.hub-quality-note,.cf-card,.cf-v3-card,.cf-template-card,.cf-main,.cf-left,.cf-v3-main,.cf-v3-left,.ccat-shell,.ccat-records,.ci-layout,.ci-details,.cr-live-note,.cr-live-reason){background:#fff!important;background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-html body.cerood-studio #dashboardContent .hub-order-toolbar{border:0!important;border-radius:0!important;background:#fff!important;padding:0!important;box-shadow:none!important}
-html body.cerood-studio #dashboardContent :is(.serviceability-row,.pickup-location){border:0!important;border-bottom:1px solid #e4e8ed!important;border-radius:0!important;background:#fff!important;padding:16px 0!important;margin:0!important}
-html body.cerood-studio #dashboardContent :is(.pickup-badge,.pickup-default,.cerood-latched-status){background:#fff!important;border:0!important;border-radius:0!important;padding:0!important;color:#237644!important;font-weight:400!important}
-html body.cerood-studio #dashboardContent :is(.ccat-single-thumb,.seller-order-product img,.ccat-view-picture){background:#fff!important;border:0!important;box-shadow:none!important}
-html body.cerood-studio #dashboardContent :is(.seller-card,.hub-content-card,.studio-panel,.hub-quality-card,.cc-help-card,.rp-metric,.serviceability-box){padding:0!important;margin:0 0 24px!important;min-height:0!important}
-html body.cerood-studio #dashboardContent :is(.seller-order-card,.cr-live-card,.cr-order-card,.cerood-latched-card,.pickup-card,.pickup-location-card,.cerood-latch-result){padding:18px 0!important;margin:0!important;border:0!important;border-bottom:1px solid #e4e8ed!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
-html body.cerood-studio #dashboardContent :is(.hub-order-grid,.seller-orders-list,.pickup-list,.cc-help-grid,.cerood-latched-grid,.cerood-latch-results){display:block!important;gap:0!important}
-html body.cerood-studio #dashboardContent :is(.cc-help-card,.cerood-latched-card){padding:16px 0!important;border-bottom:1px solid #e4e8ed!important}
-html body.cerood-studio #dashboardContent .cc-help-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:40px!important}
-html body.cerood-studio #dashboardContent :is(.seller-btn,.cc-action,.cr-export,.rp-save,.hub-table-link,.ccat-single-actions button,.ccat-row-actions button,.hub-table-button,.product-actions button,.studio-text-link,.studio-icon-button,.cc-link,.cr-link,.cc-issue,.studio-feedback-callout,.hub-order-action){padding:6px 0!important;min-height:32px!important;border:0!important;border-radius:0!important;background:#fff!important;background-image:none!important;box-shadow:none!important;color:#1872c9!important;font-weight:400!important;white-space:normal!important}
-html body.cerood-studio #dashboardContent .seller-btn:not(.seller-btn-outline):not(.secondary){padding:6px 13px!important;border:1px solid #1872c9!important;border-radius:4px!important;color:#1872c9!important;background:#fff!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.studio-danger,.ccat-single-danger,.danger,[data-decision=reject],[data-decision=reject] .seller-btn){color:#be3333!important;background:#fff!important}
-html body.cerood-studio #dashboardContent :is(.hub-order-tabs,.ccat-main-tabs,.ccat-status-tabs,.ci-tabs,.cc-tabs,.cc-status-tabs,.cr-tabs,.cr-status-tabs,.rp-tabs,.ek-pricing-tabs){display:flex!important;gap:20px!important;padding:0!important;margin:0 0 16px!important;border:0!important;border-bottom:1px solid #e4e8ed!important;border-radius:0!important;overflow-x:auto!important;background:#fff!important;scrollbar-width:thin}
-html body.cerood-studio #dashboardContent :is(.hub-order-tab,.ccat-main-tabs button,.ccat-status-tabs button,.ci-tab,.cc-tab,.cr-tab,.rp-tab,.ek-pricing-tabs button){flex:0 0 auto!important;min-height:42px!important;padding:10px 0!important;margin:0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:#fff!important;color:#172b41!important;box-shadow:none!important;font-weight:400!important;white-space:nowrap!important}
-html body.cerood-studio #dashboardContent :is(.hub-order-tab,.ccat-main-tabs button,.ccat-status-tabs button,.ci-tab,.cc-tab,.cr-tab,.rp-tab,.ek-pricing-tabs button).active{background:#fff!important;color:#1872c9!important;border-bottom-color:#1872c9!important;font-weight:400!important}
-html body.cerood-studio #dashboardContent :is(.hub-order-count,.ci-tab span,.studio-status,.approval-badge,.ccat-chip,.ci-badge,.cr-live-badge,.cr-badge,.seller-order-status,.cerood-latch-badge,.cerood-latched-badge,.seller-status){display:inline!important;border:0!important;border-radius:0!important;background:transparent!important;padding:0!important;color:#596778;font-weight:400!important;box-shadow:none!important}
-html body.cerood-studio #dashboardContent :is(.approved,.good,.ccat-qc-approved,.ci-badge.active,.approval-approved){color:#237644!important}
-html body.cerood-studio #dashboardContent :is(.pending,.wait,.ccat-qc-pending,.approval-pending){color:#987000!important}
-html body.cerood-studio #dashboardContent :is(.rejected,.bad,.ccat-qc-rejected,.approval-rejected){color:#be3333!important}
-html body.cerood-studio #dashboardContent table{width:100%!important;border-collapse:collapse!important;border:0!important;border-radius:0!important;background:#fff!important}
-html body.cerood-studio #dashboardContent :is(th,td){border:0!important;border-bottom:1px solid #e4e8ed!important;background:#fff!important;padding:13px 12px!important;vertical-align:middle!important;text-align:left!important;font-weight:400!important}
-html body.cerood-studio #dashboardContent th{font-weight:700!important;color:#172b41!important}
-html body.cerood-studio #dashboardContent th:first-child,html body.cerood-studio #dashboardContent td:first-child{padding-left:0!important}
-html body.cerood-studio #dashboardContent th:last-child,html body.cerood-studio #dashboardContent td:last-child{padding-right:0!important}
-html body.cerood-studio #dashboardContent :is(.ccat-single-actions,.product-actions,.seller-order-actions,.cr-live-actions){display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:16px!important}
-html body.cerood-studio #dashboardContent :is(.ccat-single-actions,.product-actions) button{min-width:0!important;width:auto!important}
-html body.cerood-studio #dashboardContent td.ccat-single-actions{display:table-cell!important;white-space:nowrap!important}
-html body.cerood-studio #dashboardContent td.ccat-single-actions button+button{margin-left:16px!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=hidden]),select,textarea){border:1px solid #cbd3de!important;border-radius:4px!important;background:#fff!important;color:#172b41!important;padding:8px 10px!important;box-shadow:none!important;max-width:100%!important;min-height:34px!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) input[type=file]{background:#fff!important;font:inherit!important;max-width:100%!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.cc-search,.ci-search,.cr-search,.rp-search){border:0!important;background:#fff!important;padding:0!important;min-width:0!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.cr-search,.rp-search) input{border:1px solid #cbd3de!important}
-html body.cerood-studio #dashboardContent :is(.hub-order-controls,.ccat-controls,.ci-filters,.cr-filters,.studio-ticket-toolbar,.cc-toolbar){padding:0 0 16px!important;margin:0!important;gap:16px!important;border:0!important;background:#fff!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important}
-html body.cerood-studio #dashboardContent .ccat-controls input{width:260px!important}
-html body.cerood-studio #dashboardContent .studio-ticket-toolbar .cc-status-tabs{flex:1 1 0!important;min-width:0!important;max-width:100%!important}
-html body.cerood-studio #dashboardContent :is(.cr-heading strong,.cc-head,.ci-head h2,.ci-head-actions button,.rp-header small,.rp-header h2,.hub-content-card>.hub-section-toolbar,.ccat-intro,.ccat-single-footer,.ccat-single-panel-note,.ccat-bulk-entry,.rp-metrics,.rp-tip,.ccat-single-table th:nth-child(6),.ccat-single-table td:nth-child(6)){display:none!important}
-html body.cerood-studio #dashboardContent .ccat-alert{background:#fff!important;border:0!important;border-radius:0!important;color:#596778!important;padding:0 0 15px!important;margin:0!important}
-html body.cerood-studio #ccatSinglePanel>.ccat-alert{display:none!important}
-html body.cerood-studio #dashboardContent .ccat-records{margin:0!important}
-html body.cerood-studio #dashboardContent :is(.cr-empty,.cc-empty,.ci-empty,.pickup-empty,.cr-results){min-height:0!important;padding:35px 0!important;background:#fff!important}
-html body.cerood-studio #dashboardContent :is(.cr-empty-art,.cc-empty>span,.hub-placeholder-icon,.ci-empty>span){display:none!important}
-html body.cerood-studio #dashboardContent .ci-layout{grid-template-columns:240px minmax(0,1fr)!important;border-top:1px solid #e4e8ed!important}
-html body.cerood-studio #dashboardContent .ci-catalogs{border:0!important;border-right:1px solid #e4e8ed!important;background:#fff!important}
-html body.cerood-studio #dashboardContent .ci-catalog{border:0!important;border-bottom:1px solid #e4e8ed!important;border-radius:0!important;background:#fff!important;padding:14px 15px 14px 0!important;box-shadow:none!important}
-html body.cerood-studio #dashboardContent .ci-catalog.active{background:#fff!important;border-left:0!important;color:#1872c9!important}
-html body.cerood-studio #dashboardContent .ci-details{padding-left:20px!important}
-html body.cerood-studio #dashboardContent :is(.ci-details-head,.pickup-head,.serviceability-toolbar){margin:0!important;padding:16px 0!important;border-bottom:1px solid #e4e8ed!important;background:#fff!important}
-html body.cerood-studio #dashboardContent :is(.studio-ticket-row,.studio-ticket-message){padding:16px 0!important;border:0!important;border-bottom:1px solid #e4e8ed!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
-html body.cerood-studio #dashboardContent .cc-issue{border-bottom:1px solid #eef1f4!important;justify-content:space-between!important}
-html body.cerood-studio #dashboardContent :is(.account-row,.seller-account-row,.seller-detail){display:grid!important;grid-template-columns:180px minmax(0,1fr)!important;gap:24px!important;padding:12px 0!important;border-bottom:1px solid #e4e8ed!important;border-radius:0!important;background:#fff!important}
-html body.cerood-studio #section-overview .ek-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:8px 0 24px;margin:0 0 24px;border-bottom:1px solid #e4e8ed;gap:0}
-html body.cerood-studio #section-overview .ek-metric{padding:0 24px;border-left:1px solid #e4e8ed}
-html body.cerood-studio #section-overview .ek-metric:first-child{padding-left:0;border-left:0}
-html body.cerood-studio #section-overview .ek-metric strong{display:block;margin:7px 0 0;color:#1872c9}
-html body.cerood-studio #section-overview .ek-section-head{margin:0 0 12px}
-html body.cerood-studio #section-overview .ek-action-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:17px 0;border-bottom:1px solid #e4e8ed}
-html body.cerood-studio #section-overview .ek-action-row p{margin:4px 0 0}
-html body.cerood-studio #section-overview .ek-links{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px}
-html body.cerood-studio #section-overview .ek-links button{border:0;background:#fff;color:#1872c9;padding:0;min-height:34px}
-html body.cerood-studio #dashboardContent :is(.cf-v3-top,.hub-info-banner strong,.hub-plus){display:none!important}
-html body.cerood-studio #dashboardContent :is(.cf-v3-search,.hub-info-banner){padding:0!important;border:0!important;border-radius:0!important;background:#fff!important}
-html body.cerood-studio #dashboardContent .cf-v3-grid{gap:0!important;min-height:350px!important}
-html body.cerood-studio #dashboardContent :is(.cf-v3-col,.cf-v3-detail){border:0!important;border-right:1px solid #e4e8ed!important;background:#fff!important}
-html body.cerood-studio #dashboardContent .cf-v3-detail{border-right:0!important}
-html body.cerood-studio #dashboardContent :is(.cf-v3-label,.cf-v3-path){background:#fff!important;border-bottom:1px solid #e4e8ed!important;color:#172b41!important}
-html body.cerood-studio #dashboardContent .cf-v3-options button{background:#fff!important;color:#172b41!important;border-bottom:1px solid #e4e8ed!important}
-html body.cerood-studio #dashboardContent .cf-v3-options button.active{background:#fff!important;color:#1872c9!important}
-html body.cerood-studio #dashboardContent :is(.cf-v3-prefill,.cf-v3-empty){background:#fff!important;border:0!important;border-radius:0!important;color:#1872c9!important;padding:8px 0!important}
-html body.cerood-studio #dashboardContent :is(.cf-v3-upload,.hub-dropzone){background:#fff!important;border:1px dashed #cbd3de!important;border-radius:4px!important;color:#1872c9!important}
-html body.cerood-studio #dashboardContent .cf-v3-review{border:0!important;border-top:1px solid #e4e8ed!important;padding:20px 0!important;background:#fff!important}
-html body.cerood-studio #dashboardContent .cf-v3-bottom{position:static!important;border-top:1px solid #e4e8ed!important;padding:16px 0!important;margin:24px 0 0!important;background:#fff!important}
-html body.cerood-studio #dashboardContent .cf-v3-bottom button{color:#1872c9!important;border-color:#cbd3de!important}
-html body.cerood-studio #dashboardContent #section-image-upload .hub-feature-grid{grid-template-columns:1fr!important;gap:20px!important}
-html body.cerood-studio #dashboardContent .hub-image-rules{border:0!important;border-top:1px solid #e4e8ed!important;padding:16px 0!important;background:#fff!important}
-html body.cerood-studio #dashboardContent .hub-image-rules summary{color:#1872c9!important;cursor:pointer}
-html body.cerood-studio #dashboardContent .hub-info-banner{display:flex!important;gap:20px!important;margin:0 0 20px!important;justify-content:space-between!important}
-html body.cerood-studio .studio-modal-root{background:rgba(15,30,50,.24)!important;backdrop-filter:none!important;padding:28px!important}
-html body.cerood-studio .studio-modal-root :is(.studio-dialog-window,.cerood-upload-chooser,.ccat-edit-window,.ccat-view-window,.ci-modal-window,.cwp-panel,.cerood-chooser-panel){background:#fff!important;border:1px solid #e4e8ed!important;border-radius:6px!important;box-shadow:0 16px 55px rgba(15,30,50,.12)!important}
-html body.cerood-studio .studio-modal-root :is(.studio-dialog-head,.ccat-view-head,.ccat-edit-head,.ci-modal-head,.cwp-head){padding:16px 22px!important;border-bottom:1px solid #e4e8ed!important;background:#fff!important}
-html body.cerood-studio .studio-modal-root :is(.studio-dialog-head,.ccat-view-head,.ccat-edit-head) small{display:none!important}
-html body.cerood-studio .studio-modal-root :is(.studio-dialog-body,.ccat-view-body,.ccat-edit-body,.ci-modal-body){padding:22px!important;background:#fff!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.ccat-view-price,.cw-price){font-size:13px!important;font-weight:700!important}
-html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.ccat-view-picture,.ccat-view-picture img){background:#fff!important;border:0!important;border-radius:0!important}
-html body.cerood-studio .studio-modal-root .ccat-view-foot button{background:#fff!important;color:#1872c9!important;border:1px solid #cbd3de!important;border-radius:4px!important;font-weight:400!important}
-html body.cerood-studio .studio-modal-root :is(.seller-card,.cc-ticket,.cc-alert,.cerood-latch-offer,.studio-ticket-message,.cw-form-card,.cw-step,.marketplace-note){border:0!important;border-radius:0!important;background:#fff!important;background-image:none!important;box-shadow:none!important}
-html body.cerood-studio .studio-modal-root :is(.studio-ticket-message,.cw-step){border-bottom:1px solid #e4e8ed!important}
-html body.cerood-studio .studio-modal-root :is(.seller-btn,.cc-action,.cc-link,.hub-table-link){padding:7px 14px!important;border:1px solid #cbd3de!important;border-radius:4px!important;background:#fff!important;color:#1872c9!important;min-height:34px!important;font-weight:400!important}
-html body.cerood-studio .studio-modal-root .cc-link{border:0!important;padding-left:0!important;padding-right:0!important}
-html body.cerood-studio .studio-modal-root .seller-btn:not(.seller-btn-outline){border-color:#1872c9!important}
-html body.cerood-studio .studio-modal-root :is(.studio-ticket-reply,.cw-form-block,.cw-step-content){background:#fff!important;border-color:#e4e8ed!important;box-shadow:none!important}
-html body.cerood-studio .studio-modal-root :is(.cw-step-title,.marketplace-heading){background:#fff!important;color:#172b41!important}
-html body.cerood-studio .studio-modal-root :is(.ccat-product-metric,.ccat-info-card,.ccat-view-summary,.ccat-view-info,.cwp-item,.cw-preview-card){border-radius:0!important;background:#fff!important;box-shadow:none!important}
-html body.cerood-studio .studio-modal-root .ccat-view-grid{gap:22px!important}
-html body.cerood-studio .studio-modal-root :is(.product-field,.pickup-field){margin-bottom:14px!important}
-html body.cerood-studio .studio-modal-root :is(.cw-path,.cw-warning,.cw-guidelines,.cw-photo-stage,.cw-steps span b,.cw-upload-btn,.cw-next,.cf-v3-warning,.cf-v3-add,.cf-v3-path){background:#fff!important;background-image:none!important;border-color:#e4e8ed!important;border-radius:0!important;box-shadow:none!important;color:#172b41!important}
-html body.cerood-studio .studio-modal-root :is(.cw-next,.cw-upload-btn,.cf-v3-step button,.cf-v3-step-upload,.cf-v3-empty){background:#fff!important;color:#1872c9!important;border:1px solid #cbd3de!important;border-radius:4px!important}
-html body.cerood-studio .studio-modal-root :is(.cw-steps span.active,.cf-v3-tabs button.active){color:#1872c9!important;border-bottom-color:#1872c9!important}
-html body.cerood-studio .studio-modal-root textarea{min-height:110px!important}
-html body.cerood-studio :is(.seller-message,.rp-notice,.pickup-message,.serviceability-msg,.cc-note,.cr-notice){border:0!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;font-size:13px!important}
-html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dashboardContent[hidden],html body.cerood-studio #dashboardContent #studioPageHeader[hidden]{display:none!important}
-@media(max-width:1000px) and (min-width:801px){html body.cerood-studio .studio-verified{display:none!important}html body.cerood-studio .seller-workspace{padding:0 18px 24px!important}}
-@media(max-width:800px){
- html body.cerood-studio .seller-header-inner{padding:0 14px!important;gap:12px!important}
- html body.cerood-studio .studio-brand{width:auto!important;flex:1!important}
- html body.cerood-studio :is(.studio-top-search,.studio-verified){display:none!important}
- html body.cerood-studio .studio-top-actions{gap:13px!important}
- html body.cerood-studio .hub-sidebar{width:240px!important;max-width:calc(100vw - 44px)!important;top:56px!important}
- html body.cerood-studio #hubClose{display:block!important}
- html body.cerood-studio .hub-mobile-overlay{inset:56px 0 0!important}
- html body.cerood-studio .seller-workspace{margin-left:0!important;padding:0 16px 24px!important}
- html body.cerood-studio .studio-footer{margin-left:0!important;padding:12px 16px!important}
- html body.cerood-studio #dashboardContent :is(.studio-page-header,.studio-heading){flex-direction:row!important;align-items:center!important;gap:12px!important;min-height:64px!important;margin-bottom:18px!important}
- html body.cerood-studio #dashboardContent :is(.studio-page-actions,.ek-overview-actions){gap:14px!important;max-width:65%!important;flex-wrap:wrap!important;justify-content:flex-end!important}
- html body.cerood-studio #dashboardContent #studioPageHeader[data-ek-page=add-product]{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
- html body.cerood-studio #dashboardContent #studioPageHeader[data-ek-page=add-product] .studio-page-actions{max-width:none!important;justify-content:flex-start!important}
- html body.cerood-studio #dashboardContent .studio-page-actions .seller-btn{flex:0 0 auto!important}
- html body.cerood-studio #section-overview .ek-metrics{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:22px}
- html body.cerood-studio #section-overview .ek-metric{padding:0 14px!important}
- html body.cerood-studio #section-overview .ek-metric:nth-child(odd){padding-left:0!important;border-left:0}
- html body.cerood-studio #dashboardContent .cc-help-grid{grid-template-columns:1fr!important;column-gap:0!important}
- html body.cerood-studio #dashboardContent .ci-layout{display:block!important}
- html body.cerood-studio #dashboardContent .ci-catalogs{display:flex!important;overflow-x:auto!important;border-right:0!important;border-bottom:1px solid #e4e8ed!important}
- html body.cerood-studio #dashboardContent .ci-catalog{min-width:210px!important;border-bottom:0!important;padding-right:16px!important}
- html body.cerood-studio #dashboardContent .ci-details{padding-left:0!important}
- html body.cerood-studio .studio-modal-root{padding:12px!important}
- html body.cerood-studio .studio-modal-root :is(.studio-dialog-body,.ccat-view-body,.ccat-edit-body,.ci-modal-body){padding:18px!important}
- html body.cerood-studio #dashboardContent :is(.account-row,.seller-account-row,.seller-detail){grid-template-columns:120px minmax(0,1fr)!important;gap:15px!important}
- html body.cerood-studio #dashboardContent .ccat-controls input{width:100%!important}
- html body.cerood-studio #dashboardContent :is(.ccat-main-tabs,.ccat-status-tabs,.hub-order-tabs){gap:20px!important}
-}
-@media(prefers-reduced-motion:reduce){html body.cerood-studio *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-</style><script id="cerood-ekart-reference-navigation">/* Canonical routes remove duplicate listings, approval and claim landing pages. */
+<script id="cerood-ekart-reference-navigation">/* Canonical routes remove duplicate listings, approval and claim landing pages. */
 (()=>{'use strict';
  const $=id=>document.getElementById(id),qs=s=>document.querySelector(s);
  const offers=$('ekOffersPanel'),tabs=qs('.ccat-main-tabs');
@@ -7075,7 +6891,6 @@ html body.cerood-studio #dashboardContent [hidden],html body.cerood-studio #dash
  }
  const previous=window.showTab;
  window.showTab=function(tab){
-  if(tab==='claims'){window.ceroodSupportShowTickets?.('Returns/RTO & Exchange');return}
   const redirected=tab==='quality'||tab==='products';tab=redirected?'add-product':tab==='dispatch'?'orders':tab==='price-drop'?'pricing':tab;
   if(tab==='pricing'||tab==='rto-pricing')document.querySelectorAll('.ek-pricing-tabs').forEach(n=>n.remove());
   const result=previous.call(this,tab);polish(tab);
@@ -7930,10 +7745,10 @@ html body.cerood-studio{--studio-sidebar:224px;--studio-blue:#5030cc;--studio-bg
 html body.cerood-studio .hub-sidebar{background:#26282b!important;border-right:0!important;padding:16px 8px 10px!important;color:#fff!important}
 html body.cerood-studio .hub-sidebar :is(.hub-store,.hub-store b,.studio-store-meta,.studio-store-meta b,.hub-brand b){color:#fff!important}
 html body.cerood-studio .hub-sidebar :is(.studio-store-meta small,.hub-brand small,.studio-workspace-pill,.studio-sidebar-foot){color:#b7bfca!important}
-html body.cerood-studio .hub-sidebar .hub-menu-scroll .seller-clean-menu-label{color:#a7b0c1!important;padding:0 12px!important;font-size:11px!important}
-html body.cerood-studio .hub-sidebar .hub-menu-scroll .hub-nav{color:#f1f2f6!important;background:transparent!important;border:0!important;border-radius:4px!important;min-height:42px!important;padding:11px 13px!important;font-size:13px!important;text-align:left!important}
-html body.cerood-studio .hub-sidebar .hub-menu-scroll .hub-nav:hover{background:#393c43!important}
-html body.cerood-studio .hub-sidebar .hub-menu-scroll .hub-nav.active{background:#515560!important;color:#fff!important;box-shadow:inset 3px 0 #c7bcff!important}
+html body.cerood-studio #hubSidebar .hub-menu-scroll .seller-clean-menu-label{color:#a7b0c1!important;padding:0 12px!important;font-size:11px!important}
+html body.cerood-studio #hubSidebar .hub-menu-scroll .hub-nav{color:#f1f2f6!important;background:transparent!important;border:0!important;border-radius:4px!important;min-height:42px!important;padding:11px 13px!important;font-size:13px!important;text-align:left!important}
+html body.cerood-studio #hubSidebar .hub-menu-scroll .hub-nav:hover{background:#393c43!important}
+html body.cerood-studio #hubSidebar .hub-menu-scroll .hub-nav.active{background:#515560!important;color:#fff!important;box-shadow:inset 3px 0 #c7bcff!important}
 html body.cerood-studio .hub-sidebar .seller-clean-menu-group{border-color:#444750!important}
 html body.cerood-studio .hub-sidebar .seller-clean-menu-group summary{color:#e0e3eb!important}
 html body.cerood-studio .hub-sidebar .studio-sidebar-bottom{background:#26282b!important;border-color:#444750!important}
@@ -7955,5 +7770,33 @@ html body.cerood-studio :is(#dashboardContent,.studio-modal-root) :is(.product-f
 html body.cerood-studio .studio-modal-root :is(.cwp-window,.cerood-chooser-box,.studio-dialog-window){border-radius:7px!important}
 @media(max-width:800px){html body.cerood-studio #dashboardContent .seller-workspace{margin-left:0!important;padding:0 16px 24px!important}html body.cerood-studio .hub-sidebar{width:280px!important;max-width:calc(100vw - 40px)!important}}
 @media(prefers-reduced-motion:reduce){html body.cerood-studio *,html body.cerood-studio *::before,html body.cerood-studio *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style id="seller-reference-layout-repair">
+html body.cerood-studio #dashboardContent:not(.seller-hidden){display:block!important;min-height:calc(100dvh - 72px)!important}
+html body.cerood-studio .seller-header,html body.cerood-studio .seller-header-inner{height:72px!important;min-height:72px!important}
+html body.cerood-studio .seller-container{margin-top:72px!important}
+html body.cerood-studio #hubSidebar{position:fixed!important;top:72px!important;left:0!important;bottom:0!important;width:224px!important;max-width:224px!important;height:calc(100dvh - 72px)!important}
+html body.cerood-studio #dashboardContent .seller-workspace{margin-left:224px!important;width:calc(100% - 224px)!important;box-sizing:border-box!important}
+html body.cerood-studio #hubSidebar .hub-store{background:#26282b!important;border-bottom:1px solid #454750!important;padding:8px 12px 18px!important}
+html body.cerood-studio #hubSidebar .studio-store-mark{background:#393c43!important;color:#fff!important}
+html body.cerood-studio #hubSidebar .hub-store strong{color:#fff!important}
+html body.cerood-studio #hubSidebar .hub-menu-scroll .hub-nav.active{border-left-color:#c7bcff!important}
+html body.cerood-studio #hubSidebar .hub-menu-scroll .hub-nav:hover{text-decoration:none!important}
+@media(max-width:800px){html body.cerood-studio #dashboardContent .seller-workspace{margin-left:0!important;width:100%!important}html body.cerood-studio #hubSidebar{width:280px!important;max-width:calc(100vw - 40px)!important}}
+</style>
+<style id="seller-reference-navigation-details">
+html body.cerood-studio #hubSidebar .hub-menu-scroll .hub-nav{display:flex!important;align-items:center!important;gap:12px!important}
+html body.cerood-studio #hubSidebar .seller-menu-icon{display:inline-flex;align-items:center;justify-content:center;width:19px;flex:0 0 19px;font-size:19px;line-height:1;color:#c7bcec}
+html body.cerood-studio #hubSidebar .seller-clean-menu-label:first-child{margin-top:8px!important}
+html body.cerood-studio #dashboardContent .ccat-intro{display:block!important;border:1px solid #e2e5ed!important;border-radius:6px!important;padding:20px!important;margin-bottom:20px!important}
+html body.cerood-studio #dashboardContent .ccat-intro .ccat-actions{display:flex;gap:12px;flex-wrap:wrap}
+html body.cerood-studio #dashboardContent .ccat-intro .ccat-actions button{padding:11px 18px!important;min-height:42px!important;border:1px solid #5737cd!important;border-radius:4px!important;color:#5030cc!important}
+html body.cerood-studio #dashboardContent .ccat-overview{display:flex!important;gap:36px!important;margin-top:22px!important;flex-wrap:wrap}
+html body.cerood-studio #dashboardContent .ccat-overview strong{font-size:24px!important;color:#23262e!important}
+html body.cerood-studio #dashboardContent .ccat-overview small{font-size:12px!important;color:#697488!important}
+html body.cerood-studio #dashboardContent :is(.ccat-main-tabs,.ccat-status-tabs,.ci-tabs,.cc-tabs,.hub-order-tabs){background:#fff!important;border-bottom:1px solid #e1e5ee!important;gap:22px!important;overflow-x:auto!important;display:flex!important}
+html body.cerood-studio #dashboardContent :is(.ccat-main-tabs button,.ccat-status-tabs button,.ci-tab,.cc-tab,.hub-order-tab){border:0!important;border-bottom:2px solid transparent!important;background:#fff!important;border-radius:0!important;padding:12px 5px!important;color:#59677b!important;font-size:13px!important;white-space:nowrap!important}
+html body.cerood-studio #dashboardContent :is(.ccat-main-tabs button,.ccat-status-tabs button,.ci-tab,.cc-tab,.hub-order-tab).active{color:#5030cc!important;border-bottom-color:#5030cc!important}
+html body.cerood-studio #dashboardContent .cc-help-card{border:1px solid #dfe4ee!important;border-radius:6px!important;padding:18px!important}
 </style>
 </body></html>
