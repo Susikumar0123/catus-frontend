@@ -167,6 +167,81 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script id="cerood-service-request-timeout">(()=>{'use strict';if(!window.fetch||window.__ceroodServiceFetchTimeout)return;window.__ceroodServiceFetchTimeout=true;const native=window.fetch.bind(window);window.fetch=async function(input,options){const url=new URL(typeof input==='string'?input:input.url,location.href);if(url.hostname!=='catus-backend-d2js.onrender.com'&&!(url.origin===location.origin&&url.pathname.startsWith('/api/')))return native(input,options);const opts={...options},controller=new AbortController(),parent=opts.signal||(typeof Request!=='undefined'&&input instanceof Request?input.signal:null);let timedOut=false;const abort=()=>controller.abort(parent?.reason);if(parent){if(parent.aborted)abort();else parent.addEventListener('abort',abort,{once:true});}const timer=setTimeout(()=>{timedOut=true;controller.abort();},25000);opts.signal=controller.signal;try{return await native(input,opts);}catch(error){if(timedOut)throw new Error('Connection timed out. Your booking may already be received. Retry the same request or check with Cerood support before creating another booking.');throw error;}finally{clearTimeout(timer);parent?.removeEventListener('abort',abort);}};})();</script>
+<script id="cerood-service-search-cache">let ceroodSearchServices=null,ceroodSearchPromise=null,ceroodSearchLoadedAt=0;async function ceroodLoadServiceSearch(base){if(ceroodSearchServices&&Date.now()-ceroodSearchLoadedAt<60000)return ceroodSearchServices;if(ceroodSearchPromise)return ceroodSearchPromise;ceroodSearchPromise=(async()=>{const response=await fetch(base+'/api/services');const data=await response.json();if(!response.ok||!data.success||!Array.isArray(data.services))throw Error('Services unavailable');ceroodSearchServices=data;ceroodSearchLoadedAt=Date.now();return data;})();try{return await ceroodSearchPromise;}finally{ceroodSearchPromise=null;}}</script>
+
 <style>
 @media (max-width: 768px) {
 
@@ -13415,8 +13490,6 @@ html:root body .master-app-container .cerood-desktop-demo .cerood-demo-card .cer
 html:root body .master-app-container .cerood-desktop-demo .cerood-demo-card .cerood-brand-wordmark{font-size:9px!important}
 }
 </style>
-<script id="cerood-service-request-timeout">(()=>{'use strict';if(!window.fetch||window.__ceroodServiceFetchTimeout)return;window.__ceroodServiceFetchTimeout=true;const native=window.fetch.bind(window);window.fetch=async function(input,options){const url=new URL(typeof input==='string'?input:input.url,location.href);if(url.hostname!=='catus-backend-d2js.onrender.com'&&!(url.origin===location.origin&&url.pathname.startsWith('/api/')))return native(input,options);const opts={...options},controller=new AbortController(),parent=opts.signal||(typeof Request!=='undefined'&&input instanceof Request?input.signal:null);let timedOut=false;const abort=()=>controller.abort(parent?.reason);if(parent){if(parent.aborted)abort();else parent.addEventListener('abort',abort,{once:true});}const timer=setTimeout(()=>{timedOut=true;controller.abort();},25000);opts.signal=controller.signal;try{return await native(input,opts);}catch(error){if(timedOut)throw new Error('Connection timed out. Your booking may already be received. Retry the same request or check with Cerood support before creating another booking.');throw error;}finally{clearTimeout(timer);parent?.removeEventListener('abort',abort);}};})();</script>
-<script id="cerood-service-search-cache">let ceroodSearchServices=null,ceroodSearchPromise=null,ceroodSearchLoadedAt=0;async function ceroodLoadServiceSearch(base){if(ceroodSearchServices&&Date.now()-ceroodSearchLoadedAt<60000)return ceroodSearchServices;if(ceroodSearchPromise)return ceroodSearchPromise;ceroodSearchPromise=(async()=>{const response=await fetch(base+'/api/services');const data=await response.json();if(!response.ok||!data.success||!Array.isArray(data.services))throw Error('Services unavailable');ceroodSearchServices=data;ceroodSearchLoadedAt=Date.now();return data;})();try{return await ceroodSearchPromise;}finally{ceroodSearchPromise=null;}}</script>
 <style id="cerood-approved-festival-mobile-v3">/* Approved Cerood mobile festival storefront */
 @media(max-width:850px){
 html:root body{background:#fff!important;font-family:Arial,Helvetica,sans-serif!important;padding-bottom:calc(66px + env(safe-area-inset-bottom))!important}
@@ -13451,13 +13524,13 @@ html:root body #productGridContainer#productGridContainer#productGridContainer .
 html:root body #productGridContainer#productGridContainer#productGridContainer .cerood-starting-price{order:1!important;display:block!important;background:#153be4!important;border-radius:0 0 12px 12px!important;color:#fff!important;text-align:center!important;font:700 11px/1.4 Arial!important;padding:6px 2px!important;margin:0!important;min-height:26px!important}
 html:root body #productGridContainer#productGridContainer#productGridContainer .cerood-service-tag,html:root body #productGridContainer#productGridContainer#productGridContainer .cerood-free-booking-badge,html:root body .trending-badge{display:none!important}
 html:root body #productGridContainer#productGridContainer#productGridContainer .uc-carousel-arrow{display:none!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2){background:#fff!important;border-radius:0!important;padding:0!important;overflow:visible!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2):before,html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2):after{display:none!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2) h3{color:#171c2a!important;font-size:20px!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2) .uc-grid{grid-auto-flow:row!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:none!important;grid-auto-columns:auto!important;gap:14px 10px!important;overflow:visible!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2) .uc-card-img-wrapper{aspect-ratio:1/1!important;background:#f3f3f3!important;border-radius:8px!important;padding:5px!important;box-shadow:inset 1px 1px 3px #c8eeff80!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2) .uc-body h4{order:0!important;color:#171c2a!important;font-size:11px!important;font-weight:600!important;text-align:left!important;height:28px!important;min-height:28px!important;margin:5px 0 2px!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box:nth-of-type(2) .cerood-starting-price{color:#064dff!important;background:none!important;font-size:11px!important;font-weight:400!important;text-align:left!important;padding:0!important;min-height:15px!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel{background:#fff!important;border-radius:0!important;padding:0!important;overflow:visible!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel:before,html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel:after{display:none!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel h3{color:#171c2a!important;font-size:20px!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel .uc-grid{grid-auto-flow:row!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:none!important;grid-auto-columns:auto!important;gap:14px 10px!important;overflow:visible!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel .uc-card-img-wrapper{aspect-ratio:1/1!important;background:#f3f3f3!important;border-radius:8px!important;padding:5px!important;box-shadow:inset 1px 1px 3px #c8eeff80!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel .uc-body h4{order:0!important;color:#171c2a!important;font-size:11px!important;font-weight:600!important;text-align:left!important;height:28px!important;min-height:28px!important;margin:5px 0 2px!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box.cerood-recommended-panel .cerood-starting-price{color:#064dff!important;background:none!important;font-size:11px!important;font-weight:400!important;text-align:left!important;padding:0!important;min-height:15px!important}
 html:root body #productGridContainer#productGridContainer#productGridContainer .quick-home-fresh{background:linear-gradient(145deg,#7d05fc,#a115f1 40%,#6845f4)!important}
 html:root body #productGridContainer#productGridContainer#productGridContainer .quick-home-fresh .uc-grid{grid-auto-flow:row!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:none!important;grid-auto-columns:auto!important;background:white!important;border-radius:12px!important;padding:7px!important;gap:10px!important;overflow:visible!important}
 html:root body #productGridContainer#productGridContainer#productGridContainer .quick-home-fresh .uc-card-img-wrapper{aspect-ratio:1/1!important;background:#eaf6ff!important;border-radius:8px!important}html:root body #productGridContainer#productGridContainer#productGridContainer .quick-home-fresh .uc-body h4{color:#171c2a!important;font-weight:600!important}html:root body #productGridContainer#productGridContainer#productGridContainer .quick-home-fresh .cerood-starting-price{background:none!important;color:#0755ee!important}
@@ -13468,7 +13541,198 @@ html:root body .csf-bottom,html:root body .cerood-direct-call,html:root body .ce
 @media(prefers-reduced-motion:reduce){#productGridContainer#productGridContainer#productGridContainer .uc-category-box:before{animation:none!important}}
 
 @media(max-width:850px){html:root body .master-app-container{padding-top:0!important}html:root body .cerood-category-festive-art,html:root body .cerood-skyshot-scene{display:none!important}}
-</style></head>
+</style>
+<style>
+                body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
+                .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; }
+                .logo { font-size: 22px; font-weight: bold; color: #0284c7; }
+                .details { display: flex; justify-content: space-between; margin-bottom: 30px; }
+                .box { font-size: 13px; line-height: 1.6; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+                th, td { border: 1px solid #e2e8f0; padding: 10px 14px; font-size: 13px; text-align: left; }
+                th { background: #f8fafc; color: #0f172a; }
+                .total { text-align: right; font-size: 16px; font-weight: bold; color: #0f172a; }
+            </style>
+<style id="cerood-home-index-header-exact-final">
+/* Desktop design-only override based directly on the supplied latest Index header. */
+@media (min-width:851px){
+  .master-app-container{padding-top:0!important}
+
+  /* Index is edge-to-edge: no floating rounded outer card. */
+  .uc-homepage-wrapper{
+    position:sticky!important;top:0!important;z-index:2147481000!important;
+    width:calc(100% + 80px)!important;max-width:none!important;
+    margin:0 -40px 20px!important;padding:0!important;
+    background:#577696!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+  }
+
+  .header-main-container{
+    width:100%!important;max-width:none!important;height:86px!important;min-height:86px!important;
+    margin:0!important;padding:10px 22px!important;box-sizing:border-box!important;
+    display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:nowrap!important;
+    gap:13px!important;background:#577696!important;background-image:none!important;
+    border:0!important;border-radius:0!important;box-shadow:none!important;
+  }
+
+  /* Logo = original C + white "erood", exactly like Index composition. */
+  .brand-logo{
+    order:0!important;flex:0 0 auto!important;min-width:148px!important;
+    margin:0!important;padding:0!important;display:inline-flex!important;align-items:center!important;gap:2px!important;
+    background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important;
+  }
+  .brand-logo .cerood-original-c-logo{
+    display:block!important;width:auto!important;height:54px!important;max-width:74px!important;
+    object-fit:contain!important;background:transparent!important;border:0!important;box-shadow:none!important;
+  }
+  .brand-logo .cerood-wordmark-erood{
+    display:inline-block!important;position:relative!important;top:3px!important;
+    color:#fff!important;font-family:Inter,Arial,sans-serif!important;font-size:30px!important;
+    line-height:1!important;font-weight:400!important;letter-spacing:-1.5px!important;white-space:nowrap!important;
+  }
+
+  /* Existing right wrapper becomes part of the same Index row. */
+  .header-nav-right{
+    order:0!important;display:contents!important;
+  }
+
+  /* Delivery location: no white button/pill. */
+  .header-location-widget{
+    order:0!important;flex:0 1 205px!important;width:205px!important;min-width:155px!important;max-width:205px!important;
+    height:41px!important;min-height:41px!important;margin-left:10px!important;padding:5px 7px!important;
+    display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;
+    background:transparent!important;background-image:none!important;border:0!important;border-radius:0!important;
+    box-shadow:none!important;color:#fff!important;text-align:left!important;overflow:hidden!important;
+  }
+  .header-location-widget:hover,.header-location-widget:focus-visible{
+    background:transparent!important;outline:none!important;
+  }
+  .home-index-location-pin{
+    display:block!important;width:19px!important;height:19px!important;flex:0 0 19px!important;
+    color:#fff!important;stroke:#fff!important;
+  }
+  .header-location-widget .loc-text-box{
+    flex:1 1 auto!important;width:0!important;min-width:0!important;
+    display:flex!important;flex-direction:column!important;line-height:1.2!important;overflow:hidden!important;
+  }
+  .header-location-widget .loc-label{
+    color:#fff!important;font-size:10px!important;font-weight:600!important;white-space:nowrap!important;
+  }
+  #headerLocationDisplay{
+    display:block!important;width:100%!important;max-width:100%!important;
+    color:#fff!important;font-size:11px!important;font-weight:700!important;
+    overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
+  }
+  .header-location-widget>i{
+    flex:0 0 auto!important;color:#fff!important;font-size:9px!important;margin-left:0!important;
+  }
+
+  /* Put the location immediately after logo, then search. */
+  .header-location-widget{order:1!important}
+  .search-container{
+    order:2!important;flex:0 1 680px!important;width:min(680px,100%)!important;max-width:680px!important;
+    height:45px!important;min-height:45px!important;margin:0!important;padding:0 13px!important;
+    display:flex!important;align-items:center!important;gap:10px!important;
+    background:#fff!important;border:0!important;border-radius:16px!important;box-shadow:none!important;overflow:visible!important;
+  }
+  .search-container:focus-within{border:0!important;box-shadow:none!important}
+  .search-container .search-icon{
+    width:19px!important;height:19px!important;flex:0 0 19px!important;margin-right:0!important;
+    stroke:#64748b!important;stroke-width:1.8!important;
+  }
+  .search-container #searchInput{
+    flex:1 1 auto!important;width:100%!important;min-width:0!important;height:100%!important;
+    padding:0!important;border:0!important;outline:0!important;background:transparent!important;
+    color:#172133!important;font-family:Inter,Arial,sans-serif!important;font-size:13px!important;font-weight:400!important;
+  }
+
+  /* Same flat Index action typography. */
+  .cerood-index-home-link{
+    order:3!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    min-height:41px!important;margin-left:auto!important;padding:6px 2px!important;
+    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+    color:#fff!important;text-decoration:none!important;font-family:Inter,Arial,sans-serif!important;
+    font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
+  }
+  .cart-item{
+    order:4!important;display:flex!important;align-items:center!important;gap:6px!important;
+    min-height:41px!important;margin:0 0 0 20px!important;padding:6px 2px!important;
+    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+    color:#fff!important;font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
+  }
+  .cart-item:hover{color:#fff!important}
+  .cart-item svg{width:19px!important;height:19px!important;stroke:#fff!important}
+  .cart-item .nav-text{color:#fff!important;font-size:12px!important;font-weight:600!important}
+  .cart-icon-wrapper{position:relative!important}
+  .cart-badge{
+    top:-6px!important;right:-9px!important;width:17px!important;min-width:17px!important;height:17px!important;
+    padding:0!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;
+    color:#fff!important;background:#16a34a!important;font-size:9px!important;font-weight:800!important;line-height:1!important;
+    box-shadow:none!important;
+  }
+
+  .login-btn{
+    order:5!important;min-height:41px!important;max-width:150px!important;margin:0 0 0 20px!important;padding:6px 2px!important;
+    display:flex!important;align-items:center!important;gap:7px!important;
+    background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+    color:#fff!important;font-family:Inter,Arial,sans-serif!important;font-size:12px!important;font-weight:600!important;
+    white-space:nowrap!important;
+  }
+  .login-btn:hover{background:transparent!important;color:#fff!important}
+  .login-btn svg{width:19px!important;height:19px!important;stroke:#fff!important}
+  .login-btn .nav-text{
+    max-width:105px!important;overflow:hidden!important;text-overflow:ellipsis!important;
+    color:#fff!important;font-size:12px!important;font-weight:600!important;
+  }
+
+  /* Desktop only: hide mobile tools. */
+  .mobile-location-widget,.csf-home-tools,.cerood-unified-tools{display:none!important}
+}
+
+@media (min-width:851px) and (max-width:1200px){
+  .header-main-container{gap:8px!important;padding-left:16px!important;padding-right:16px!important}
+  .brand-logo{min-width:140px!important}
+  .header-location-widget{flex-basis:155px!important;width:155px!important;max-width:155px!important;margin-left:6px!important}
+  .search-container{flex:1 1 auto!important;width:auto!important;max-width:none!important}
+  .cart-item,.login-btn{margin-left:10px!important}
+}
+</style>
+<style id="cerood-festival-final-details">@media(max-width:850px){
+html:root body{margin:0!important;padding-top:0!important;background:#fff!important}
+html:root body .master-app-container{margin:0!important;padding-top:0!important;min-height:0!important;border-radius:0!important;overflow:visible!important}
+html:root body .home-index-header.home-index-header.home-index-header{margin:0!important;width:100%!important;min-height:0!important;border-radius:0!important;padding-top:0!important;isolation:isolate}
+html:root body #ceroodMobileCallFixed,html:root body .cerood-skyshot-scene,html:root body .cerood-category-festive-art{display:none!important}
+html:root body .cerood-noteworthy-section .cerood-noteworthy-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;grid-auto-rows:auto!important;gap:14px 10px!important}
+html:root body .cerood-noteworthy-section .cerood-noteworthy-item.cerood-noteworthy-item{grid-area:auto!important;grid-column:auto!important;grid-row:auto!important;width:auto!important;max-width:none!important;min-width:0!important;height:auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;border:0!important;border-radius:0!important;overflow:hidden!important}
+html:root body .cerood-noteworthy-image.cerood-noteworthy-image{width:100%!important;aspect-ratio:1/1!important;height:auto!important;min-height:0!important;max-height:none!important;padding:5px!important;background:#f4f4f4!important;border-radius:9px!important}
+html:root body .cerood-noteworthy-image img{display:block!important;object-fit:contain!important;width:100%!important;height:100%!important;transform:none!important;max-width:100%!important;max-height:100%!important}
+html:root body .cerood-noteworthy-name{width:100%!important;height:29px!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important;color:#171c2a!important;font:600 11px/1.3 Arial!important;margin:5px 0!important;padding:0!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box::before{background:radial-gradient(circle,#fffbea 0 1.4px,#ffe9a6 2px,transparent 5px) 0 0/12px 8px repeat-x!important;height:8px!important;box-shadow:0 0 5px #ffd26080!important}
+html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box::after{background:linear-gradient(120deg,transparent 15%,#ffffff0c 40%,#d4efff25 48%,transparent 56%)!important;background-size:240% 100%!important;animation:ceroodApprovedShimmer 12s ease-in-out infinite!important;pointer-events:none!important}
+.cerood-approved-garland{position:absolute;left:0;top:0;width:100%;height:42px;pointer-events:none;z-index:0;overflow:visible}.cerood-approved-garland path{fill:none;stroke:#cbb58c;stroke-width:.5}.cerood-approved-garland circle{fill:#fff5da;filter:drop-shadow(0 0 2px #ffb34c)}.cerood-approved-garland circle:nth-of-type(5n){animation:ceroodApprovedTwinkle 5s ease-in-out infinite}.cerood-approved-garland circle:nth-of-type(7n){animation:ceroodApprovedTwinkle 6.5s ease-in-out -3s infinite}
+.home-index-header>.cerood-approved-garland{width:49%;height:35px;opacity:.75;z-index:0}.home-index-header .header-main-container,.cerood-festival-tabs{position:relative;z-index:1}
+#productGridContainer .uc-category-box>.cerood-approved-garland{top:3px;height:40px;opacity:.85}
+}
+@keyframes ceroodApprovedTwinkle{0%,100%{opacity:.65}45%{opacity:1;filter:drop-shadow(0 0 4px #ffda85)}}
+@keyframes ceroodApprovedShimmer{0%,100%{background-position:100% 0}50%{background-position:0 0}}
+@media(prefers-reduced-motion:reduce){.cerood-approved-garland circle{animation:none!important}#productGridContainer .uc-category-box::after{animation:none!important}}
+</style>
+<style id="cerood-festival-v5-conflict-fixes">
+.cerood-festival-tabs{display:none}
+@media(max-width:850px){
+html:root body .cerood-festival-tabs{display:flex!important;justify-content:space-between!important;gap:0!important}
+html:root body .cerood-festival-garland,html:root body .cerood-category-festive-art,html:root body #ceroodMobileCallFixed{display:none!important}
+html:root body .home-index-header{left:auto!important;transform:none!important;max-width:100%!important}
+html:root body #productGridContainer .uc-category-box{isolation:isolate!important}
+html:root body #productGridContainer .uc-category-box>.cerood-approved-garland{opacity:1!important;z-index:0!important;height:45px!important}
+html:root body .cerood-approved-garland path{stroke:#ffe0a5;stroke-width:.6}
+html:root body .cerood-approved-garland circle{fill:#fff6de;filter:drop-shadow(0 0 3px #ffd66c) drop-shadow(0 0 6px #ff9e37)}
+html:root body #productGridContainer .cerood-recommended-panel::before,html:root body #productGridContainer .cerood-recommended-panel::after{display:none!important}
+html:root body #productGridContainer .uc-category-box::after{z-index:0!important;opacity:1!important;background:radial-gradient(ellipse at 20% 85%,#78caff75,transparent 34%),radial-gradient(ellipse at 90% 12%,#ba7dff75,transparent 35%),linear-gradient(125deg,transparent 25%,#ffffff24 46%,transparent 58%)!important;background-size:100% 100%,100% 100%,240% 100%!important}
+html:root body #productGridContainer .uc-grid{grid-template-rows:none!important;grid-auto-rows:auto!important}
+html:root body #productGridContainer .cerood-recommended-panel .uc-grid{gap:14px 10px!important}
+}
+</style>
+</head>
 <body id="ceroodFestivalPage">
 <!-- CEROOD PWA INSTALL BANNER -->
 <div id="ceroodInstallBanner" style="display:none;">
@@ -15112,166 +15376,14 @@ async function openServiceProduct(serviceId) {
         <html>
         <head>
             <title>Invoice - ${orderId}</title>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
-                .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px; }
-                .logo { font-size: 22px; font-weight: bold; color: #0284c7; }
-                .details { display: flex; justify-content: space-between; margin-bottom: 30px; }
-                .box { font-size: 13px; line-height: 1.6; }
-                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-                th, td { border: 1px solid #e2e8f0; padding: 10px 14px; font-size: 13px; text-align: left; }
-                th { background: #f8fafc; color: #0f172a; }
-                .total { text-align: right; font-size: 16px; font-weight: bold; color: #0f172a; }
-            </style>
+            
         
 
 
 
 
 
-<style id="cerood-home-index-header-exact-final">
-/* Desktop design-only override based directly on the supplied latest Index header. */
-@media (min-width:851px){
-  .master-app-container{padding-top:0!important}
 
-  /* Index is edge-to-edge: no floating rounded outer card. */
-  .uc-homepage-wrapper{
-    position:sticky!important;top:0!important;z-index:2147481000!important;
-    width:calc(100% + 80px)!important;max-width:none!important;
-    margin:0 -40px 20px!important;padding:0!important;
-    background:#577696!important;border:0!important;border-radius:0!important;box-shadow:none!important;
-  }
-
-  .header-main-container{
-    width:100%!important;max-width:none!important;height:86px!important;min-height:86px!important;
-    margin:0!important;padding:10px 22px!important;box-sizing:border-box!important;
-    display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:nowrap!important;
-    gap:13px!important;background:#577696!important;background-image:none!important;
-    border:0!important;border-radius:0!important;box-shadow:none!important;
-  }
-
-  /* Logo = original C + white "erood", exactly like Index composition. */
-  .brand-logo{
-    order:0!important;flex:0 0 auto!important;min-width:148px!important;
-    margin:0!important;padding:0!important;display:inline-flex!important;align-items:center!important;gap:2px!important;
-    background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important;
-  }
-  .brand-logo .cerood-original-c-logo{
-    display:block!important;width:auto!important;height:54px!important;max-width:74px!important;
-    object-fit:contain!important;background:transparent!important;border:0!important;box-shadow:none!important;
-  }
-  .brand-logo .cerood-wordmark-erood{
-    display:inline-block!important;position:relative!important;top:3px!important;
-    color:#fff!important;font-family:Inter,Arial,sans-serif!important;font-size:30px!important;
-    line-height:1!important;font-weight:400!important;letter-spacing:-1.5px!important;white-space:nowrap!important;
-  }
-
-  /* Existing right wrapper becomes part of the same Index row. */
-  .header-nav-right{
-    order:0!important;display:contents!important;
-  }
-
-  /* Delivery location: no white button/pill. */
-  .header-location-widget{
-    order:0!important;flex:0 1 205px!important;width:205px!important;min-width:155px!important;max-width:205px!important;
-    height:41px!important;min-height:41px!important;margin-left:10px!important;padding:5px 7px!important;
-    display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;
-    background:transparent!important;background-image:none!important;border:0!important;border-radius:0!important;
-    box-shadow:none!important;color:#fff!important;text-align:left!important;overflow:hidden!important;
-  }
-  .header-location-widget:hover,.header-location-widget:focus-visible{
-    background:transparent!important;outline:none!important;
-  }
-  .home-index-location-pin{
-    display:block!important;width:19px!important;height:19px!important;flex:0 0 19px!important;
-    color:#fff!important;stroke:#fff!important;
-  }
-  .header-location-widget .loc-text-box{
-    flex:1 1 auto!important;width:0!important;min-width:0!important;
-    display:flex!important;flex-direction:column!important;line-height:1.2!important;overflow:hidden!important;
-  }
-  .header-location-widget .loc-label{
-    color:#fff!important;font-size:10px!important;font-weight:600!important;white-space:nowrap!important;
-  }
-  #headerLocationDisplay{
-    display:block!important;width:100%!important;max-width:100%!important;
-    color:#fff!important;font-size:11px!important;font-weight:700!important;
-    overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
-  }
-  .header-location-widget>i{
-    flex:0 0 auto!important;color:#fff!important;font-size:9px!important;margin-left:0!important;
-  }
-
-  /* Put the location immediately after logo, then search. */
-  .header-location-widget{order:1!important}
-  .search-container{
-    order:2!important;flex:0 1 680px!important;width:min(680px,100%)!important;max-width:680px!important;
-    height:45px!important;min-height:45px!important;margin:0!important;padding:0 13px!important;
-    display:flex!important;align-items:center!important;gap:10px!important;
-    background:#fff!important;border:0!important;border-radius:16px!important;box-shadow:none!important;overflow:visible!important;
-  }
-  .search-container:focus-within{border:0!important;box-shadow:none!important}
-  .search-container .search-icon{
-    width:19px!important;height:19px!important;flex:0 0 19px!important;margin-right:0!important;
-    stroke:#64748b!important;stroke-width:1.8!important;
-  }
-  .search-container #searchInput{
-    flex:1 1 auto!important;width:100%!important;min-width:0!important;height:100%!important;
-    padding:0!important;border:0!important;outline:0!important;background:transparent!important;
-    color:#172133!important;font-family:Inter,Arial,sans-serif!important;font-size:13px!important;font-weight:400!important;
-  }
-
-  /* Same flat Index action typography. */
-  .cerood-index-home-link{
-    order:3!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
-    min-height:41px!important;margin-left:auto!important;padding:6px 2px!important;
-    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
-    color:#fff!important;text-decoration:none!important;font-family:Inter,Arial,sans-serif!important;
-    font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
-  }
-  .cart-item{
-    order:4!important;display:flex!important;align-items:center!important;gap:6px!important;
-    min-height:41px!important;margin:0 0 0 20px!important;padding:6px 2px!important;
-    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
-    color:#fff!important;font-size:12px!important;font-weight:600!important;white-space:nowrap!important;
-  }
-  .cart-item:hover{color:#fff!important}
-  .cart-item svg{width:19px!important;height:19px!important;stroke:#fff!important}
-  .cart-item .nav-text{color:#fff!important;font-size:12px!important;font-weight:600!important}
-  .cart-icon-wrapper{position:relative!important}
-  .cart-badge{
-    top:-6px!important;right:-9px!important;width:17px!important;min-width:17px!important;height:17px!important;
-    padding:0!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;
-    color:#fff!important;background:#16a34a!important;font-size:9px!important;font-weight:800!important;line-height:1!important;
-    box-shadow:none!important;
-  }
-
-  .login-btn{
-    order:5!important;min-height:41px!important;max-width:150px!important;margin:0 0 0 20px!important;padding:6px 2px!important;
-    display:flex!important;align-items:center!important;gap:7px!important;
-    background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
-    color:#fff!important;font-family:Inter,Arial,sans-serif!important;font-size:12px!important;font-weight:600!important;
-    white-space:nowrap!important;
-  }
-  .login-btn:hover{background:transparent!important;color:#fff!important}
-  .login-btn svg{width:19px!important;height:19px!important;stroke:#fff!important}
-  .login-btn .nav-text{
-    max-width:105px!important;overflow:hidden!important;text-overflow:ellipsis!important;
-    color:#fff!important;font-size:12px!important;font-weight:600!important;
-  }
-
-  /* Desktop only: hide mobile tools. */
-  .mobile-location-widget,.csf-home-tools,.cerood-unified-tools{display:none!important}
-}
-
-@media (min-width:851px) and (max-width:1200px){
-  .header-main-container{gap:8px!important;padding-left:16px!important;padding-right:16px!important}
-  .brand-logo{min-width:140px!important}
-  .header-location-widget{flex-basis:155px!important;width:155px!important;max-width:155px!important;margin-left:6px!important}
-  .search-container{flex:1 1 auto!important;width:auto!important;max-width:none!important}
-  .cart-item,.login-btn{margin-left:10px!important}
-}
-</style>
 
 </head>
         <body>
@@ -15318,8 +15430,8 @@ async function openServiceProduct(serviceId) {
 
 
 
-</body>
-        </html>
+
+        
         `;
         printWindow.document.write(html);
         printWindow.document.close();
@@ -18089,7 +18201,7 @@ function startCatusBannerFlow() {
         showToast("Delivery Address updated successfully!", false);
     }
 
-    const CATUS_HOME_HTML_CACHE = 'catus_home_html_cache_v4_no_offer_videos';
+    const CATUS_HOME_HTML_CACHE = 'cerood_home_festival_v5_' + (window.innerWidth <= 850 ? 'mobile' : 'desktop');
 
     localStorage.removeItem('catus_home_html_cache');
 
@@ -18097,7 +18209,7 @@ function startCatusBannerFlow() {
     const container = document.getElementById('productGridContainer');
     if (!container) return;
 
-    const desktop = window.innerWidth >= 769;
+    const desktop = window.innerWidth >= 851;
     const desiredMode = desktop ? 'desktop' : 'mobile';
 
     // Remove previous category-row wrappers without changing the order of
@@ -18129,7 +18241,7 @@ function startCatusBannerFlow() {
 window.addEventListener('resize', () => {
     const container = document.getElementById('productGridContainer');
     if (container && container.dataset.ceroodCategoryLayout &&
-        container.dataset.ceroodCategoryLayout !== (window.innerWidth >= 769 ? 'desktop' : 'mobile')) {
+        container.dataset.ceroodCategoryLayout !== (window.innerWidth >= 851 ? 'desktop' : 'mobile')) {
         setupMobileCategorySlider();
     }
 }, {passive:true});
@@ -18217,7 +18329,7 @@ allServices.forEach(service => {
 
 let displayCategoriesMap = categoriesMap;
 
-if (window.innerWidth <= 768) {
+if (window.innerWidth <= 850) {
 
     const categoryQueues = Object.values(categoriesMap)
         .map(category => [...category.items])
@@ -18252,13 +18364,13 @@ if (window.innerWidth <= 768) {
 */
 
 const firstBigCardServices =
-    mixedServices.slice(0, 12);
+    mixedServices.slice(0, 14);
 
 window.ceroodNewNoteworthyServices =
-    mixedServices.slice(12, 22);
+    mixedServices.slice(14, 24);
 
 const remainingBigCardServices =
-    mixedServices.slice(22);
+    mixedServices.slice(24);
 
 const bigCardServices = [
     ...firstBigCardServices,
@@ -18283,23 +18395,11 @@ const preferredSectionNames = [
    setupMobileCategorySlider()
    3 cards per horizontal row handle pannum.
 */
-for (
-    let i = 0, sectionIndex = 0;
-    i < bigCardServices.length;
-    i += 4, sectionIndex++
-) {
-
-    const sectionItems =
-        bigCardServices.slice(i, i + 4);
-
-    let sectionName =
-        preferredSectionNames[sectionIndex % preferredSectionNames.length];
-
-    if (!sectionName) {
-        sectionName =
-            `More Services ${sectionIndex - preferredSectionNames.length + 1}`;
-    }
-
+for (let offset = 0, sectionIndex = 0; offset < bigCardServices.length; sectionIndex++) {
+    const sectionName = preferredSectionNames[sectionIndex % preferredSectionNames.length];
+    const count = sectionIndex === 1 ? 6 : 4;
+    const sectionItems = bigCardServices.slice(offset, offset + count);
+    offset += count;
     if (!mobileMixedMap[sectionName]) mobileMixedMap[sectionName] = {items: []};
     mobileMixedMap[sectionName].items.push(...sectionItems);
 }
@@ -18337,7 +18437,8 @@ for(let catName in displayCategoriesMap) {
 
     ${catName === 'Quick Home Services' ? 'quick-home-fresh' : ''}
     
-    ${catName === 'Popular Services' ? 'popular-services-mobile-card' : ''}">
+    ${catName === 'Popular Services' ? 'popular-services-mobile-card' : ''}
+    ${catName === 'Recommended For You' ? 'cerood-recommended-panel' : ''}">
 
     <div class="uc-cat-header">
         <h3>${catName}</h3>
@@ -18454,7 +18555,7 @@ html += `
 // =========================================
 
 if (
-    window.innerWidth <= 768 &&
+    window.innerWidth <= 850 &&
     categoryIndex === 3 &&
     Array.isArray(window.ceroodNewNoteworthyServices) &&
     window.ceroodNewNoteworthyServices.length > 0
@@ -18620,7 +18721,7 @@ function showAllCategoryServices(categoryName) {
     const track = categoryBox.querySelector('.uc-grid');
     if (!track) return;
 
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= 850;
 
     if (isMobile) {
 
@@ -20828,8 +20929,8 @@ document.addEventListener('DOMContentLoaded',function(){
 document.addEventListener('DOMContentLoaded',function(){const demo=document.querySelector('.cerood-desktop-demo');if(!demo)return;const desktop=matchMedia('(min-width:851px)');function fit(){if(!desktop.matches){demo.style.removeProperty('--cerood-demo-width');demo.style.removeProperty('--cerood-demo-offset');demo.style.removeProperty('--cerood-demo-height');return}demo.style.setProperty('--cerood-demo-offset','0px');const rect=demo.getBoundingClientRect();demo.style.setProperty('--cerood-demo-width',document.documentElement.clientWidth+'px');demo.style.setProperty('--cerood-demo-offset',(-rect.left)+'px');const top=rect.top+window.scrollY;demo.style.setProperty('--cerood-demo-height',Math.max(380,Math.round((window.innerHeight-top-16)*1.12))+'px')}fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);desktop.addEventListener('change',fit)});
 </script>
 <script id="cerood-home-cart-link">document.addEventListener('DOMContentLoaded',()=>{if(location.hash==='#cart'&&typeof toggleCartModal==='function')toggleCartModal(true);});window.addEventListener('hashchange',()=>{if(location.hash==='#cart'&&typeof toggleCartModal==='function')toggleCartModal(true);});</script>
-<script id="cerood-festival-navigation">document.addEventListener('DOMContentLoaded',function(){var header=document.querySelector('.home-index-header');if(!header)return;var tabs=document.createElement('nav');tabs.className='cerood-festival-tabs';tabs.setAttribute('aria-label','Service categories');['AC','Washing','Fridge','TV','RO'].forEach(function(label,i){var b=document.createElement('button');b.type='button';b.textContent=label;b.className=i===0?'active':'';b.onclick=function(){tabs.querySelectorAll('button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');var input=document.getElementById('searchInput');input.value=({Washing:'Washing Machine',Fridge:'Refrigerator'})[label]||label;input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();};tabs.appendChild(b);});header.appendChild(tabs);var input=document.getElementById('searchInput');if(matchMedia('(max-width:850px)').matches&&input)input.placeholder='Search home services';});</script></body>
-</html>
+<script id="cerood-festival-navigation">document.addEventListener('DOMContentLoaded',function(){var header=document.querySelector('.home-index-header');if(!header)return;var tabs=document.createElement('nav');tabs.className='cerood-festival-tabs';tabs.setAttribute('aria-label','Service categories');['AC','Washing','Fridge','TV','RO'].forEach(function(label,i){var b=document.createElement('button');b.type='button';b.textContent=label;b.className=i===0?'active':'';b.onclick=function(){tabs.querySelectorAll('button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');var input=document.getElementById('searchInput');input.value=({Washing:'Washing Machine',Fridge:'Refrigerator'})[label]||label;input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();};tabs.appendChild(b);});header.appendChild(tabs);var input=document.getElementById('searchInput');if(matchMedia('(max-width:850px)').matches&&input)input.placeholder='Search home services';});</script>
+
 <script>document.addEventListener('DOMContentLoaded',function(){var grid=document.getElementById('productGridContainer');function art(){var src=grid&&grid.querySelector('.uc-card-img-wrapper img');var target=document.getElementById('ceroodReferenceHeroArt');if(src&&target){target.src=src.src;target.hidden=false;}}art();if(grid)new MutationObserver(art).observe(grid,{childList:true,subtree:true});});</script>
 
 <script id="cerood-reference-mobile-init">document.addEventListener('DOMContentLoaded',function(){var input=document.getElementById('searchInput');if(input&&matchMedia('(max-width:850px)').matches)input.placeholder='Search services, appliances & more...';var source=document.getElementById('headerLocationDisplay');function sync(){if(source)document.querySelectorAll('.cerood-mobile-location-value').forEach(function(e){e.textContent=source.textContent.trim()||'Select Location';});}sync();if(source)new MutationObserver(sync).observe(source,{childList:true,characterData:true,subtree:true});});</script><script id="cerood-service-reference-behaviour">(function(){function init(){var mq=matchMedia('(max-width:850px)');var actions=document.querySelector('.cerood-booking-panel .action-buttons');var panel=document.querySelector('.cerood-booking-panel');var info=document.querySelector('.product-info');var anchor;if(actions&&panel&&info){anchor=document.createComment('booking-actions');actions.before(anchor);function arrange(){if(mq.matches)info.appendChild(actions);else anchor.parentNode.insertBefore(actions,anchor.nextSibling);}arrange();mq.addEventListener('change',arrange);}var track=document.getElementById('servicesTrack');if(track){function all(){if(track.querySelector('[data-reference-all]'))return;var b=document.createElement('button');b.type='button';b.className='service-chip active';b.dataset.referenceAll='1';b.innerHTML='<span>All</span>';b.onclick=function(){track.querySelectorAll('.service-chip').forEach(function(c){c.classList.remove('active');});b.classList.add('active');if(typeof filterProductsByGroup==='function')filterProductsByGroup('');};track.prepend(b);}all();new MutationObserver(all).observe(track,{childList:true});}var art=null;var grid=document.getElementById('productGridContainer');if(art&&grid){function fill(){var imgs=Array.from(grid.querySelectorAll('.uc-card-img-wrapper img')).filter(function(e){return e.getAttribute('src');});var urls=[];imgs.forEach(function(e){if(urls.indexOf(e.src)<0)urls.push(e.src);});var key=urls.slice(0,3).join('|');if(key&&art.dataset.key!==key){art.dataset.key=key;art.replaceChildren();urls.slice(0,3).forEach(function(u){var im=new Image();im.src=u;im.alt='';art.appendChild(im);});}}fill();new MutationObserver(fill).observe(grid,{childList:true,subtree:true});}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script><script id="cerood-reference-service-cards">document.addEventListener('DOMContentLoaded',function(){var track=document.getElementById('servicesTrack');var box=document.querySelector('.cerood-reference-service-grid');if(track&&box){function cards(){var groups=Array.from(track.querySelectorAll('.service-chip:not([data-reference-all])'));var key=groups.map(function(b){return b.dataset.groupId;}).join('|');if(!key||box.dataset.key===key)return;box.dataset.key=key;box.replaceChildren();groups.slice(0,8).forEach(function(source){var b=document.createElement('button');b.type='button';var im=source.querySelector('img');if(im){var copy=im.cloneNode(true);copy.removeAttribute('onerror');b.appendChild(copy);}var label=document.createElement('span');label.textContent=source.querySelector('span')?.textContent||source.textContent;b.appendChild(label);b.onclick=function(){source.click();document.getElementById('productGridContainer').scrollIntoView({behavior:'smooth',block:'start'});};box.appendChild(b);});}cards();new MutationObserver(cards).observe(track,{childList:true});}});</script><script id="cerood-category-deep-link">document.addEventListener('DOMContentLoaded',function(){var wanted=new URLSearchParams(location.search).get('category');var track=document.getElementById('servicesTrack');if(!wanted||!track)return;var keys={'ac':'ac','washing-machine':'washing','refrigerator':'refrigerator','tv':'tv'};function apply(){var match=Array.from(track.querySelectorAll('.service-chip')).find(function(b){var label=b.querySelector('span')?.textContent.toLowerCase()||'';return label.includes(keys[wanted]||wanted);});if(match){observer.disconnect();match.click();}}var observer=new MutationObserver(apply);observer.observe(track,{childList:true});apply();});</script><script id="cerood-shared-service-location-paint">(function(){'use strict';function chosen(){var bridge=window.CeroodServiceLocation;return bridge&&bridge.get();}function paint(){var v=chosen();var cleared=localStorage.getItem('cerood_global_location_cleared_v1')==='1';var api=window.CeroodLocation;var text=v?(api&&api.label?api.label(v):window.CeroodServiceLocation.label(v)):cleared?'Select Location':localStorage.getItem('catus_user_location')||'Select Location';['headerLocationDisplay','mobileHeaderLocationDisplay','productBookingLocation'].forEach(function(id){var el=document.getElementById(id);if(el){if(el.textContent!==text)el.textContent=text;el.title=text;}});document.querySelectorAll('.cerood-mobile-location-value').forEach(function(el){if(el.textContent!==text)el.textContent=text;el.title=text;});}function sync(){window.CeroodServiceLocation.sync();paint();}function setup(){sync();['headerLocationDisplay','mobileHeaderLocationDisplay','productBookingLocation'].forEach(function(id){var el=document.getElementById(id);if(el)new MutationObserver(paint).observe(el,{childList:true,subtree:true,characterData:true});});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();window.addEventListener('load',sync);window.addEventListener('pageshow',sync);window.addEventListener('cerood-global-location-changed',sync);window.addEventListener('cerood-location-updated',function(){queueMicrotask(sync);});window.addEventListener('storage',function(e){if(!e.key||e.key==='cerood_global_location_v1'||e.key==='cerood_global_location_cleared_v1'||e.key==='cerood_selected_location')sync();});})();</script>
@@ -20957,32 +21058,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 <script id="cerood-mobile-festival-v3-init">
 (function(){var mq=matchMedia('(max-width:850px)');function set(e,k,v){if(e)e.style.setProperty(k,v,'important');}
-function init(){var sheet=document.getElementById('cerood-approved-festival-mobile-v3');if(sheet)document.head.appendChild(sheet);if(!mq.matches)return;
+function init(){if(!mq.matches)return;
 document.querySelectorAll('.csf-bottom').forEach(function(e){e.remove();});document.querySelectorAll('.cerood-desktop-demo,.cerood-reference-hero,.cerood-reference-services,.cerood-direct-call').forEach(function(e){set(e,'display','none');});
 var header=document.querySelector('.home-index-header');set(header,'background','linear-gradient(155deg,#0635bb,#2523d6 55%,#7007e7)');var row=document.querySelector('.home-index-header .header-main-container');set(row,'background','transparent');set(row,'display','grid');
 var nav=document.getElementById('ceroodGlobalMobileNav');set(nav,'display','grid');if(nav){nav.querySelectorAll('[data-nav="cart"]').forEach(function(e){e.remove();});set(nav,'grid-template-columns','repeat(4,1fr)');}
 var root=document.getElementById('productGridContainer');if(!root)return;var scheduled=false;
-function paint(){scheduled=false;root.querySelectorAll('.uc-category-box').forEach(function(box,index){set(box,'background',index===1?'#fff':box.classList.contains('quick-home-fresh')?'linear-gradient(145deg,#7d05fc,#a115f1,#6845f4)':'linear-gradient(160deg,#0065ff,#285dff,#484cff)');set(box,'margin','18px 16px 22px');set(box,'padding',index===1?'0':'15px 11px 12px');set(box,'border-radius',index===1?'0':'16px');var grid=box.querySelector('.uc-grid');set(grid,'display','grid');set(grid,'grid-template-columns',index===1?'repeat(3,minmax(0,1fr))':box.classList.contains('quick-home-fresh')?'repeat(2,minmax(0,1fr))':'none');set(grid,'grid-auto-flow',index===1||box.classList.contains('quick-home-fresh')?'row':'column');set(grid,'grid-auto-columns','39%');set(grid,'gap','10px');set(grid,'overflow-x',index===1||box.classList.contains('quick-home-fresh')?'visible':'auto');box.querySelectorAll('.uc-card').forEach(function(card){set(card,'grid-area','auto');set(card,'width','auto');set(card,'min-width','0');set(card,'background','transparent');set(card,'height','auto');var img=card.querySelector('.uc-card-img-wrapper');set(img,'width','100%');set(img,'height','auto');set(img,'aspect-ratio',index===1||box.classList.contains('quick-home-fresh')?'1 / 1':'3 / 4');set(img,'min-height','0');set(img,'max-height','none');var photo=img&&img.querySelector('img');set(photo,'height','100%');set(photo,'width','100%');set(photo,'object-fit','contain');set(photo,'transform','none');});});}
+function paint(){scheduled=false;root.querySelectorAll('.uc-category-box').forEach(function(box,index){var recommended=box.classList.contains('cerood-recommended-panel');set(box,'background',recommended?'#fff':box.classList.contains('quick-home-fresh')?'linear-gradient(145deg,#7d05fc,#a115f1,#6845f4)':'linear-gradient(160deg,#0065ff,#285dff,#484cff)');set(box,'margin','18px 16px 22px');set(box,'padding',recommended?'0':'15px 11px 12px');set(box,'border-radius',recommended?'0':'16px');var grid=box.querySelector('.uc-grid');set(grid,'display','grid');set(grid,'grid-template-columns',recommended?'repeat(3,minmax(0,1fr))':box.classList.contains('quick-home-fresh')?'repeat(2,minmax(0,1fr))':'none');set(grid,'grid-auto-flow',recommended||box.classList.contains('quick-home-fresh')?'row':'column');set(grid,'grid-auto-columns','39%');set(grid,'gap',recommended?'14px 10px':'10px');set(grid,'overflow-x',recommended||box.classList.contains('quick-home-fresh')?'visible':'auto');box.querySelectorAll('.uc-card').forEach(function(card){set(card,'grid-area','auto');set(card,'width','auto');set(card,'min-width','0');set(card,'background','transparent');set(card,'height','auto');var img=card.querySelector('.uc-card-img-wrapper');set(img,'width','100%');set(img,'height','auto');set(img,'aspect-ratio',recommended||box.classList.contains('quick-home-fresh')?'1 / 1':'3 / 4');set(img,'min-height','0');set(img,'max-height','none');var photo=img&&img.querySelector('img');set(photo,'height','100%');set(photo,'width','100%');set(photo,'object-fit','contain');set(photo,'transform','none');});});}
 function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(paint);}}schedule();new MutationObserver(schedule).observe(root,{childList:true,subtree:true});window.addEventListener('resize',schedule);
 }if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
 </script>
-<style id="cerood-festival-final-details">@media(max-width:850px){
-html:root body{margin:0!important;padding-top:0!important;background:#fff!important}
-html:root body .master-app-container{margin:0!important;padding-top:0!important;min-height:0!important;border-radius:0!important;overflow:visible!important}
-html:root body .home-index-header.home-index-header.home-index-header{margin:0!important;width:100%!important;min-height:0!important;border-radius:0!important;padding-top:0!important;isolation:isolate}
-html:root body #ceroodMobileCallFixed,html:root body .cerood-skyshot-scene,html:root body .cerood-category-festive-art{display:none!important}
-html:root body .cerood-noteworthy-section .cerood-noteworthy-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important;grid-auto-rows:auto!important;gap:14px 10px!important}
-html:root body .cerood-noteworthy-section .cerood-noteworthy-item.cerood-noteworthy-item{grid-area:auto!important;grid-column:auto!important;grid-row:auto!important;width:auto!important;max-width:none!important;min-width:0!important;height:auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;border:0!important;border-radius:0!important;overflow:hidden!important}
-html:root body .cerood-noteworthy-image.cerood-noteworthy-image{width:100%!important;aspect-ratio:1/1!important;height:auto!important;min-height:0!important;max-height:none!important;padding:5px!important;background:#f4f4f4!important;border-radius:9px!important}
-html:root body .cerood-noteworthy-image img{display:block!important;object-fit:contain!important;width:100%!important;height:100%!important;transform:none!important;max-width:100%!important;max-height:100%!important}
-html:root body .cerood-noteworthy-name{width:100%!important;height:29px!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important;color:#171c2a!important;font:600 11px/1.3 Arial!important;margin:5px 0!important;padding:0!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box::before{background:radial-gradient(circle,#fffbea 0 1.4px,#ffe9a6 2px,transparent 5px) 0 0/12px 8px repeat-x!important;height:8px!important;box-shadow:0 0 5px #ffd26080!important}
-html:root body #productGridContainer#productGridContainer#productGridContainer .uc-category-box::after{background:linear-gradient(120deg,transparent 15%,#ffffff0c 40%,#d4efff25 48%,transparent 56%)!important;background-size:240% 100%!important;animation:ceroodApprovedShimmer 12s ease-in-out infinite!important;pointer-events:none!important}
-.cerood-approved-garland{position:absolute;left:0;top:0;width:100%;height:42px;pointer-events:none;z-index:0;overflow:visible}.cerood-approved-garland path{fill:none;stroke:#cbb58c;stroke-width:.5}.cerood-approved-garland circle{fill:#fff5da;filter:drop-shadow(0 0 2px #ffb34c)}.cerood-approved-garland circle:nth-of-type(5n){animation:ceroodApprovedTwinkle 5s ease-in-out infinite}.cerood-approved-garland circle:nth-of-type(7n){animation:ceroodApprovedTwinkle 6.5s ease-in-out -3s infinite}
-.home-index-header>.cerood-approved-garland{width:49%;height:35px;opacity:.75;z-index:0}.home-index-header .header-main-container,.cerood-festival-tabs{position:relative;z-index:1}
-#productGridContainer .uc-category-box>.cerood-approved-garland{top:3px;height:40px;opacity:.85}
-}
-@keyframes ceroodApprovedTwinkle{0%,100%{opacity:.65}45%{opacity:1;filter:drop-shadow(0 0 4px #ffda85)}}
-@keyframes ceroodApprovedShimmer{0%,100%{background-position:100% 0}50%{background-position:0 0}}
-@media(prefers-reduced-motion:reduce){.cerood-approved-garland circle{animation:none!important}#productGridContainer .uc-category-box::after{animation:none!important}}
-</style><script id="cerood-approved-festival-garlands">(function(){function decorate(){if(!matchMedia('(max-width:850px)').matches)return;var root=document.getElementById('productGridContainer');var header=document.querySelector('.home-index-header');function add(box){if(!box||box.querySelector(':scope > .cerood-approved-garland'))return;var ns='http://www.w3.org/2000/svg';var svg=document.createElementNS(ns,'svg');svg.setAttribute('class','cerood-approved-garland');svg.setAttribute('viewBox','0 0 360 42');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');var path=document.createElementNS(ns,'path');path.setAttribute('d','M0 3 Q90 53 180 3 Q270 53 360 3');svg.appendChild(path);for(var i=0;i<=36;i++){var x=i*10;var t=(x%180)/180;var y=3+100*t*(1-t);var b=document.createElementNS(ns,'circle');b.setAttribute('cx',x);b.setAttribute('cy',y+2);b.setAttribute('r',i%5===0?'1.6':'1.1');svg.appendChild(b);}box.prepend(svg);}add(header);function paint(){if(!root)return;Array.from(root.querySelectorAll('.uc-category-box')).forEach(function(box,i){if(i!==1)add(box);});}paint();if(root){var pending=false;new MutationObserver(function(){if(!pending){pending=true;requestAnimationFrame(function(){pending=false;paint();});}}).observe(root,{childList:true,subtree:true});}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',decorate);else decorate();})();</script>
+<script id="cerood-approved-festival-garlands">(function(){function decorate(){if(!matchMedia('(max-width:850px)').matches)return;var root=document.getElementById('productGridContainer');var header=document.querySelector('.home-index-header');function add(box){if(!box||box.querySelector(':scope > .cerood-approved-garland'))return;var ns='http://www.w3.org/2000/svg';var svg=document.createElementNS(ns,'svg');svg.setAttribute('class','cerood-approved-garland');svg.setAttribute('viewBox','0 0 360 42');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');var path=document.createElementNS(ns,'path');path.setAttribute('d','M0 3 Q90 53 180 3 Q270 53 360 3');svg.appendChild(path);for(var i=0;i<=36;i++){var x=i*10;var t=(x%180)/180;var y=3+100*t*(1-t);var b=document.createElementNS(ns,'circle');b.setAttribute('cx',x);b.setAttribute('cy',y+2);b.setAttribute('r',i%5===0?'1.6':'1.1');svg.appendChild(b);}box.prepend(svg);}add(header);function paint(){if(!root)return;Array.from(root.querySelectorAll('.uc-category-box')).forEach(function(box,i){if(!box.classList.contains('cerood-recommended-panel'))add(box);});}paint();if(root){var pending=false;new MutationObserver(function(){if(!pending){pending=true;requestAnimationFrame(function(){pending=false;paint();});}}).observe(root,{childList:true,subtree:true});}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',decorate);else decorate();})();</script>
+</body>
+</html>
