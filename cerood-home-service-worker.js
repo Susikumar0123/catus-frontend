@@ -1,5 +1,5 @@
 /* Cerood Home Services only: never caches API, auth or payment requests. */
-const CACHE = 'cerood-home-shell-festival12';
+const CACHE = 'cerood-home-shell-festival13';
 const PAGE = '/home-services.html';
 const LOGO = '/cerood-logo.webp';
 async function currentPage(request) {
@@ -7,7 +7,7 @@ async function currentPage(request) {
   const timer = setTimeout(() => controller.abort(), 6000);
   try {
     const response = await fetch(request, {cache:'no-store', signal:controller.signal});
-    if (!response.ok || !(await response.clone().text()).includes('cerood-mobile-design-current-v12')) throw new Error('Current home design unavailable');
+    if (!response.ok || !(await response.clone().text()).includes('cerood-responsive-design-v13')) throw new Error('Current home design unavailable');
     const cache = await caches.open(CACHE);
     await cache.put(PAGE, response.clone());
     return response;
