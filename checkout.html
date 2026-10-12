@@ -2332,13 +2332,17 @@ html:root body .cerood-booking-success{width:100%;max-width:500px;margin:20px au
 .cerood-booking-success .cerood-success-primary{background:#111;color:#fff;border:1px solid #111;}.cerood-booking-success .cerood-success-secondary{background:#fff;color:#111;border:1px solid #ddd;}
 @media(max-width:850px){html:root body .cerood-booking-success{margin:12px auto;padding:28px 20px;border-radius:18px;}.cerood-booking-success h2{font-size:24px;}}
 </style>
+<script id="cerood-service-request-timeout">(()=>{'use strict';if(!window.fetch||window.__ceroodServiceFetchTimeout)return;window.__ceroodServiceFetchTimeout=true;const native=window.fetch.bind(window);window.fetch=async function(input,options){const url=new URL(typeof input==='string'?input:input.url,location.href);if(url.hostname!=='catus-backend-d2js.onrender.com'&&!(url.origin===location.origin&&url.pathname.startsWith('/api/')))return native(input,options);const opts={...options},controller=new AbortController(),parent=opts.signal||(typeof Request!=='undefined'&&input instanceof Request?input.signal:null);let timedOut=false;const abort=()=>controller.abort(parent?.reason);if(parent){if(parent.aborted)abort();else parent.addEventListener('abort',abort,{once:true});}const timer=setTimeout(()=>{timedOut=true;controller.abort();},25000);opts.signal=controller.signal;try{return await native(input,opts);}catch(error){if(timedOut)throw new Error('Connection timed out. Your booking may already be received. Retry the same request or check with Cerood support before creating another booking.');throw error;}finally{clearTimeout(timer);parent?.removeEventListener('abort',abort);}};})();</script>
+<script id="cerood-home-checkout-session">function ceroodCheckoutHomeUser(){try{if(!localStorage.getItem('cerood_home_service_session'))return null;const user=JSON.parse(localStorage.getItem('cerood_home_service_user')||'null');return user&&typeof user==='object'&&user.phone?user:null;}catch(_){return null;}}
+function ceroodCheckoutStoreAddress(a,address){const area=a.village||a.street||'',v={area,city:area,district:a.district,state:a.state,pincode:a.pincode};localStorage.setItem('cerood_manual_service_address_details',JSON.stringify({...a,village:area}));localStorage.setItem('cerood_manual_service_address',address);localStorage.setItem('cerood_global_location_v1',JSON.stringify(v));localStorage.setItem('cerood_selected_location',JSON.stringify(v));localStorage.removeItem('cerood_global_location_cleared_v1');localStorage.removeItem('catus_location_id');for(const [key,value] of Object.entries({catus_user_location:address,catus_location_name:area,catus_district_name:a.district,catus_state_name:a.state,catus_pincode:a.pincode}))localStorage.setItem(key,String(value||''));window.dispatchEvent(new Event('cerood-location-updated'));}
+function ceroodCheckoutClearAddress(){for(const key of ['cerood_manual_service_address_details','cerood_manual_service_address_fields','cerood_manual_service_address','cerood_global_location_v1','cerood_selected_location','catus_user_location','catus_location_name','catus_district_name','catus_state_name','catus_pincode','catus_location_slug','catus_district_slug','catus_state_slug','catus_location_id'])localStorage.removeItem(key);localStorage.setItem('cerood_global_location_cleared_v1','1');window.dispatchEvent(new Event('cerood-location-updated'));}</script>
 </head>
 <body>
 
     <!-- Header -->
     <div class="checkout-header">
-        <a class="cerood-checkout-brand" href="/home-services.html" aria-label="Cerood Home Services"><img src="/cerood-logo.webp" alt="" class="cerood-original-c-logo"><span class="cerood-wordmark-erood">erood</span></a>
-        <a class="cerood-direct-call" href="tel:+918946055856" aria-label="Call Cerood to book a service at 8946055856" title="Call 8946055856"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.8a2 2 0 0 1-.45 2.11L9.04 10.9a16 16 0 0 0 4.06 4.06l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.84.55 2.8.68A2 2 0 0 1 22 16.92z"/></svg><span>Call Now</span></a><div class="cerood-unified-tools"><a href="/cerood-cart.html" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg></a><details class="cerood-unified-menu"><summary aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-unified-menu-list"><a href="/">Home</a><a href="/#divisions">Explore</a><a href="/home-services.html">Home Services</a><a href="/renewed.html">Renewed Store</a><a href="/cosmetics.html">Beauty Store</a><a href="/clothing.html">Fashion Store</a><a href="/home-services.html#cerood-dashboard-home">Dashboard</a><a href="/home-services.html#cerood-dashboard-bookings">My Orders</a><a href="/home-services.html#cerood-dashboard-profile">Account</a><a href="/cerood-cart.html">Cart</a><a href="/contact.html">Help</a></div></details></div><div class="secure-badge">
+        <a class="cerood-checkout-brand" href="/home-services.html" aria-label="Cerood Home Services"><img src="/cerood-logo.webp" alt="" class="cerood-original-c-logo" onerror="this.style.display='none';this.nextElementSibling.textContent='Cerood'"><span class="cerood-wordmark-erood">erood</span></a>
+        <a class="cerood-direct-call" href="tel:+918946055856" aria-label="Call Cerood to book a service at 8946055856" title="Call 8946055856"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.8a2 2 0 0 1-.45 2.11L9.04 10.9a16 16 0 0 0 4.06 4.06l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.84.55 2.8.68A2 2 0 0 1 22 16.92z"/></svg><span>Call Now</span></a><div class="cerood-unified-tools"><a href="/home-services.html#cart" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12.5l2-9H5"/></svg></a><details class="cerood-unified-menu"><summary aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="cerood-unified-menu-list"><a href="/home-services.html">Home</a><a href="/home-services.html#productGridContainer">Explore</a><a href="/home-services.html">Home Services</a><a href="/home-services.html#cerood-dashboard-home">Dashboard</a><a href="/home-services.html#cerood-dashboard-bookings">My Orders</a><a href="/home-services.html#cerood-dashboard-profile">Account</a><a href="/home-services.html#cart">Cart</a><a href="/contact.html">Help</a></div></details></div><div class="secure-badge">
     <i class="fa-solid fa-lock"></i>
     Secure Checkout
 </div><form class="csf-checkout-search" role="search" action="/home-services.html" method="get"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input name="search" aria-label="Search home services" placeholder="Search TV repair, AC service, RO..." type="search"></form>
@@ -2924,10 +2928,10 @@ Please check all required fields, mobile number, and pincode.
             await fetchAllCountries();
             loadStates();
 
-            const currentUser = JSON.parse(localStorage.getItem('catus_logged_user'));
+            const currentUser = ceroodCheckoutHomeUser();
             if (!currentUser) {
                 alert("Please login first!");
-                window.location.href = '/';
+                window.location.href = '/home-services.html';
                 return;
             }
 
@@ -2953,15 +2957,6 @@ Please check all required fields, mobile number, and pincode.
                 productManualAddress.pincode, productManualAddress.landmark
             ].filter(Boolean).join(', ') : '';
             let savedAddress = manualFullAddress || currentUser.address;
-            if (!savedAddress || savedAddress === "No address saved") {
-                const adminCache = JSON.parse(localStorage.getItem('catusAdminCache') || '{}');
-                for (let key in adminCache) {
-                    if (adminCache[key].address) {
-                        savedAddress = adminCache[key].address;
-                        break;
-                    }
-                }
-            }
 
             if (savedAddress && savedAddress !== "No address saved") {
                 document.getElementById('savedAddressContainer').style.display = 'block';
@@ -3019,7 +3014,7 @@ document.getElementById('fieldDistrict').innerHTML =
     if (!confirmed) return;
 
     const currentUser =
-        JSON.parse(localStorage.getItem('catus_logged_user')) || {};
+        JSON.parse(localStorage.getItem('cerood_home_service_user')) || {};
 
     if (!currentUser.phone) {
         alert("Please login again.");
@@ -3029,11 +3024,12 @@ document.getElementById('fieldDistrict').innerHTML =
     try {
 
         const response = await fetch(
-            `${API_BASE_URL}/api/users/remove-address`,
+            `${API_BASE_URL}/api/home-services/customer/remove-address`,
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+(localStorage.getItem('cerood_home_service_session')||'')
                 },
                 body: JSON.stringify({
                     phone: currentUser.phone
@@ -3056,10 +3052,11 @@ document.getElementById('fieldDistrict').innerHTML =
         };
 
         localStorage.setItem(
-            'catus_logged_user',
+            'cerood_home_service_user',
             JSON.stringify(updatedUser)
         );
 
+        ceroodCheckoutClearAddress();
         // Hide saved address
         document.getElementById(
             'savedAddressContainer'
@@ -3178,16 +3175,17 @@ const newAddressStr =
     `${addressParts.join(', ')} - ${pincode}, ${country}`;
             
             const currentUser =
-    JSON.parse(localStorage.getItem('catus_logged_user')) || {};
+    JSON.parse(localStorage.getItem('cerood_home_service_user')) || {};
 
 try {
 
     const response = await fetch(
-        `${API_BASE_URL}/api/users/update-address`,
+        `${API_BASE_URL}/api/home-services/customer/update-address`,
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+(localStorage.getItem('cerood_home_service_session')||'')
             },
             body: JSON.stringify({
                 phone: currentUser.phone,
@@ -3212,10 +3210,11 @@ try {
     };
 
     localStorage.setItem(
-        'catus_logged_user',
+        'cerood_home_service_user',
         JSON.stringify(updatedUser)
     );
 
+    ceroodCheckoutStoreAddress({house:door,street,village,district,state,pincode,country},updatedUser.address);
     document.getElementById('savedAddressText').textContent =
         updatedUser.address;
 
@@ -3250,7 +3249,7 @@ try {
                 if (field) field.value = value || '';
             };
             set('fieldDoor', a.house);
-            set('fieldStreet', a.landmark || '');
+            set('fieldStreet', a.street || a.landmark || '');
             set('fieldVillage', a.village);
             set('fieldPincode', a.pincode);
             set('fieldCountry', 'India');
@@ -3782,7 +3781,8 @@ function resetOrderSubmitState() {
             isOrderSubmitting = true;
             if (button) { button.disabled = true; button.textContent = 'Submitting booking...'; }
             try {
-                const currentUser = JSON.parse(localStorage.getItem('catus_logged_user') || '{}') || {};
+                const currentUser = ceroodCheckoutHomeUser();
+                if(!currentUser)throw new Error('Please log in to Home Services before booking.');
                 const requestId = getOrCreateFreeBookingRequestId();
                 const response = await fetch(`${API_BASE_URL}/api/home-services/free-bookings`, {
                     method: 'POST', headers: {'Content-Type':'application/json'},
@@ -4242,9 +4242,9 @@ parts.forEach(part => { p[part.type] = part.value; });
 
 const currentDate = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}`;
             
-            const currentUser = JSON.parse(localStorage.getItem('catus_logged_user')) || {};
+            const currentUser = JSON.parse(localStorage.getItem('cerood_home_service_user')) || {};
             currentUser.address = addressStr;
-            localStorage.setItem('catus_logged_user', JSON.stringify(currentUser));
+            localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
 
             let phoneDigits = String(mobile || currentUser.phone || '40001').replace(/[^0-9]/g, '');
             let permanentCustId = 40000 + parseInt(phoneDigits.slice(-4)); 

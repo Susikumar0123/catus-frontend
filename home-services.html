@@ -13415,6 +13415,8 @@ html:root body .master-app-container .cerood-desktop-demo .cerood-demo-card .cer
 html:root body .master-app-container .cerood-desktop-demo .cerood-demo-card .cerood-brand-wordmark{font-size:9px!important}
 }
 </style>
+<script id="cerood-service-request-timeout">(()=>{'use strict';if(!window.fetch||window.__ceroodServiceFetchTimeout)return;window.__ceroodServiceFetchTimeout=true;const native=window.fetch.bind(window);window.fetch=async function(input,options){const url=new URL(typeof input==='string'?input:input.url,location.href);if(url.hostname!=='catus-backend-d2js.onrender.com'&&!(url.origin===location.origin&&url.pathname.startsWith('/api/')))return native(input,options);const opts={...options},controller=new AbortController(),parent=opts.signal||(typeof Request!=='undefined'&&input instanceof Request?input.signal:null);let timedOut=false;const abort=()=>controller.abort(parent?.reason);if(parent){if(parent.aborted)abort();else parent.addEventListener('abort',abort,{once:true});}const timer=setTimeout(()=>{timedOut=true;controller.abort();},25000);opts.signal=controller.signal;try{return await native(input,opts);}catch(error){if(timedOut)throw new Error('Connection timed out. Your booking may already be received. Retry the same request or check with Cerood support before creating another booking.');throw error;}finally{clearTimeout(timer);parent?.removeEventListener('abort',abort);}};})();</script>
+<script id="cerood-service-search-cache">let ceroodSearchServices=null,ceroodSearchPromise=null,ceroodSearchLoadedAt=0;async function ceroodLoadServiceSearch(base){if(ceroodSearchServices&&Date.now()-ceroodSearchLoadedAt<60000)return ceroodSearchServices;if(ceroodSearchPromise)return ceroodSearchPromise;ceroodSearchPromise=(async()=>{const response=await fetch(base+'/api/services');const data=await response.json();if(!response.ok||!data.success||!Array.isArray(data.services))throw Error('Services unavailable');ceroodSearchServices=data;ceroodSearchLoadedAt=Date.now();return data;})();try{return await ceroodSearchPromise;}finally{ceroodSearchPromise=null;}}</script>
 </head>
 <body>
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -15262,6 +15264,7 @@ async function openServiceProduct(serviceId) {
                 Total Paid: ₹${amount}
             </div>
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size:12px;">This is a computer generated invoice and does not require a physical signature.</p>
+
 
 
 </body>
@@ -17771,8 +17774,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const suggestionsBox = document.getElementById('suggestionsBox');
 
     if (searchInput && suggestionsBox) {
+        let searchVersion=0;
         searchInput.addEventListener('input', async (e) => {
             const query = e.target.value.toLowerCase().trim();
+            const version=++searchVersion;
 
             if (query.length === 0) {
     suggestionsBox.style.display = 'none';
@@ -17782,63 +17787,21 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/services`);
-                const data = await response.json();
-
-                if (data.success && data.services) {
-                    const filtered = data.services.filter(s => 
-                        s.service_name.toLowerCase().includes(query) || 
-                        (s.category && s.category.toLowerCase().includes(query))
-                    );
+                const data = await ceroodLoadServiceSearch(API_BASE_URL);
+                if(version!==searchVersion||searchInput.value.toLowerCase().trim()!==query)return;
+                if (data.success && Array.isArray(data.services)) {
+                    const filtered = data.services.filter(s =>
+                        String(s.service_name||'').toLowerCase().includes(query) ||
+                        String(s.category||'').toLowerCase().includes(query)
+                    ).slice(0,20);
 
                     if (filtered.length > 0) {
-    
-                        let html = '';
-
-    filtered.forEach(s => {
-
-    const safeName =
-        String(s.service_name || '')
-            .replace(/\\/g, '\\\\')
-            .replace(/'/g, "\\'");
-
-    const serviceImage =
-        s.image_url ||
-        s.image ||
-        s.icon_url ||
-        'cerood-logo.webp';
-
-    const groupName =
-        s.group_name ||
-        s.category ||
-        'Home Service';
-
-    html += `
-        <div
-            class="suggestion-item"
-            onmousedown="handleIndexSearchSelect('${s.slug || s.service_id}', '${safeName}')"
-        >
-
-            <img
-                src="${serviceImage}"
-                class="search-suggestion-image"
-                alt="${s.service_name || 'Service'}"
-                onerror="this.src='cerood-logo.webp'"
-            >
-
-            <div class="search-suggestion-content">
-
-                <div class="search-suggestion-title">
-                    ${s.service_name || 'Service'}
-                </div>
-
-
-            </div>
-
-        </div>
-    `;
-});
-                        suggestionsBox.innerHTML = html;
+                        suggestionsBox.replaceChildren();
+                        for(const service of filtered){
+                            const row=document.createElement('button');row.type='button';row.className='suggestion-item';row.dataset.serviceId=String(service.slug||service.service_id);row.style.cssText='width:100%;border:0;background:#fff;text-align:left;cursor:pointer';
+                            const image=document.createElement('img');image.className='search-suggestion-image';image.alt=String(service.service_name||'Service');image.src=service.image_url||service.image||service.icon_url||'/cerood-logo.webp';image.onerror=()=>{image.onerror=null;image.src='/cerood-logo.webp';};
+                            const content=document.createElement('div');content.className='search-suggestion-content';const title=document.createElement('div');title.className='search-suggestion-title';title.textContent=String(service.service_name||'Service');content.append(title);row.append(image,content);row.onmousedown=event=>event.preventDefault();row.onclick=()=>handleIndexSearchSelect(String(service.slug||service.service_id),String(service.service_name||'Service')); suggestionsBox.append(row);
+                        }
                         suggestionsBox.style.display = 'block';
                     } else {
                         suggestionsBox.innerHTML = `<div class="suggestion-item" style="color:#ef4444;">No matching services found</div>`;
@@ -17847,6 +17810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {
                 console.error("Search error:", err);
+                if(version===searchVersion&&searchInput.value.trim()){suggestionsBox.replaceChildren();const notice=document.createElement('p');notice.textContent='Unable to load services. Please try again.';notice.setAttribute('role','status');suggestionsBox.append(notice);suggestionsBox.style.display='block';}
             }
 
             
@@ -17869,7 +17833,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 const query = searchInput.value.trim();
                 if (!query) return;
-                window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
+                suggestionsBox.querySelector('.suggestion-item[data-service-id]')?.click();
             }
         };
     }
@@ -20817,6 +20781,7 @@ document.addEventListener('DOMContentLoaded',function(){
 <script id="cerood-desktop-full-view-sizing">
 document.addEventListener('DOMContentLoaded',function(){const demo=document.querySelector('.cerood-desktop-demo');if(!demo)return;const desktop=matchMedia('(min-width:851px)');function fit(){if(!desktop.matches){demo.style.removeProperty('--cerood-demo-width');demo.style.removeProperty('--cerood-demo-offset');demo.style.removeProperty('--cerood-demo-height');return}demo.style.setProperty('--cerood-demo-offset','0px');const rect=demo.getBoundingClientRect();demo.style.setProperty('--cerood-demo-width',document.documentElement.clientWidth+'px');demo.style.setProperty('--cerood-demo-offset',(-rect.left)+'px');const top=rect.top+window.scrollY;demo.style.setProperty('--cerood-demo-height',Math.max(380,Math.round((window.innerHeight-top-16)*1.12))+'px')}fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);desktop.addEventListener('change',fit)});
 </script>
+<script id="cerood-home-cart-link">document.addEventListener('DOMContentLoaded',()=>{if(location.hash==='#cart'&&typeof toggleCartModal==='function')toggleCartModal(true);});window.addEventListener('hashchange',()=>{if(location.hash==='#cart'&&typeof toggleCartModal==='function')toggleCartModal(true);});</script>
 </body>
 </html>
 <script>document.addEventListener('DOMContentLoaded',function(){var grid=document.getElementById('productGridContainer');function art(){var src=grid&&grid.querySelector('.uc-card-img-wrapper img');var target=document.getElementById('ceroodReferenceHeroArt');if(src&&target){target.src=src.src;target.hidden=false;}}art();if(grid)new MutationObserver(art).observe(grid,{childList:true,subtree:true});});</script>
