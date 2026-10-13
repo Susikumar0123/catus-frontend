@@ -2336,8 +2336,28 @@ html:root body .cerood-booking-success{width:100%;max-width:500px;margin:20px au
 <script id="cerood-home-checkout-session">function ceroodCheckoutHomeUser(){try{if(!localStorage.getItem('cerood_home_service_session'))return null;const user=JSON.parse(localStorage.getItem('cerood_home_service_user')||'null');return user&&typeof user==='object'&&user.phone?user:null;}catch(_){return null;}}
 function ceroodCheckoutStoreAddress(a,address){const area=a.village||a.street||'',v={area,city:area,district:a.district,state:a.state,pincode:a.pincode};localStorage.setItem('cerood_manual_service_address_details',JSON.stringify({...a,village:area}));localStorage.setItem('cerood_manual_service_address',address);localStorage.setItem('cerood_global_location_v1',JSON.stringify(v));localStorage.setItem('cerood_selected_location',JSON.stringify(v));localStorage.removeItem('cerood_global_location_cleared_v1');localStorage.removeItem('catus_location_id');for(const [key,value] of Object.entries({catus_user_location:address,catus_location_name:area,catus_district_name:a.district,catus_state_name:a.state,catus_pincode:a.pincode}))localStorage.setItem(key,String(value||''));window.dispatchEvent(new Event('cerood-location-updated'));}
 function ceroodCheckoutClearAddress(){for(const key of ['cerood_manual_service_address_details','cerood_manual_service_address_fields','cerood_manual_service_address','cerood_global_location_v1','cerood_selected_location','catus_user_location','catus_location_name','catus_district_name','catus_state_name','catus_pincode','catus_location_slug','catus_district_slug','catus_state_slug','catus_location_id'])localStorage.removeItem(key);localStorage.setItem('cerood_global_location_cleared_v1','1');window.dispatchEvent(new Event('cerood-location-updated'));}</script>
-</head>
-<body>
+<style id="cerood-checkout-home-match-v33">
+html:root body#ceroodCheckoutMatch{background:#fff!important;color:#172033!important;}
+html:root body#ceroodCheckoutMatch .checkout-header.checkout-header{background:#082c61!important;background-image:none!important;color:#fff!important;border:0!important;}
+html:root body#ceroodCheckoutMatch .checkout-header .cerood-checkout-brand,html:root body#ceroodCheckoutMatch .checkout-header .cerood-wordmark-erood,html:root body#ceroodCheckoutMatch .checkout-header .secure-badge{color:#fff!important;}
+html:root body#ceroodCheckoutMatch .checkout-header .cerood-unified-tools>a,html:root body#ceroodCheckoutMatch .checkout-header .cerood-unified-menu>summary,html:root body#ceroodCheckoutMatch .checkout-header>.cerood-direct-call{background:transparent!important;color:#fff!important;border-color:#ffffff45!important;box-shadow:none!important;}
+html:root body#ceroodCheckoutMatch .checkout-header .cerood-unified-tools svg,html:root body#ceroodCheckoutMatch .checkout-header .cerood-unified-tools svg *{stroke:#fff!important;fill:none!important;}
+html:root body#ceroodCheckoutMatch .checkout-header .cerood-unified-menu-list{background:#fff!important;color:#172033!important;}
+html:root body#ceroodCheckoutMatch .checkout-header .cerood-unified-menu-list a{color:#172033!important;}
+html:root body#ceroodCheckoutMatch .checkout-container#checkoutMainSection{background:#fff!important;background-image:none!important;}
+html:root body#ceroodCheckoutMatch .checkout-grid .card-box{min-width:0!important;min-height:0!important;height:auto!important;max-height:none!important;background:#fff!important;border:1px solid #edf0f5!important;border-radius:12px!important;}
+html:root body#ceroodCheckoutMatch .confirm-btn,html:root body#ceroodCheckoutMatch .save-addr-action-btn{background:#2463eb!important;background-image:none!important;color:#fff!important;border-color:#2463eb!important;min-height:46px!important;border-radius:10px!important;}
+html:root body#ceroodCheckoutMatch .form-input{background:#fff!important;border:1px solid #dce3ed!important;min-width:0!important;}
+html:root body#ceroodCheckoutMatch .form-input:focus{border-color:#2463eb!important;outline:2px solid #2463eb20!important;}
+html:root body#ceroodCheckoutMatch .form-input.error{border-color:#ef4444!important;background:#fef2f2!important;}
+html:root body#ceroodCheckoutMatch .saved-address-card{background:#f5f8ff!important;border:1px solid #dce6fa!important;}
+html:root body#ceroodCheckoutMatch .cerood-checkout-cart-link{position:relative!important;overflow:visible!important;}
+html:root body#ceroodCheckoutMatch .cerood-checkout-cart-count{position:absolute;top:-5px;right:-5px;min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:20px;background:#7545ff;color:#fff;font:600 10px/15px Arial;text-align:center;}
+html:root body#ceroodCheckoutMatch .cerood-checkout-cart-count[hidden]{display:none!important;}
+@media(max-width:850px){html:root body#ceroodCheckoutMatch .checkout-container#checkoutMainSection{padding:18px 12px 88px!important;}html:root body#ceroodCheckoutMatch .checkout-grid{grid-template-columns:minmax(0,1fr)!important;gap:14px!important;margin-top:12px!important;}html:root body#ceroodCheckoutMatch .checkout-header .secure-badge{font-size:10px!important;white-space:nowrap!important;}html:root body#ceroodCheckoutMatch .form-input{font-size:16px!important;}html:root body#ceroodCheckoutMatch .saved-address-content-row{flex-wrap:wrap!important;}html:root body#ceroodCheckoutMatch .action-btns-inline{flex-wrap:wrap!important;gap:12px!important;}}
+@media(max-width:380px){html:root body#ceroodCheckoutMatch .form-grid{grid-template-columns:minmax(0,1fr)!important;}html:root body#ceroodCheckoutMatch .form-group.full{grid-column:1!important;}}
+</style></head>
+<body id="ceroodCheckoutMatch">
 
     <!-- Header -->
     <div class="checkout-header">
@@ -4578,7 +4598,7 @@ document.getElementById('dispTotal').textContent =
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setupVisitPreference);else setupVisitPreference();
 })();
 </script>
-</body>
+<script id="cerood-checkout-cart-count-v33">document.addEventListener('DOMContentLoaded',function(){const link=document.querySelector('.checkout-header .cerood-unified-tools>a[aria-label="Cart"]');if(!link)return;link.classList.add('cerood-checkout-cart-link');const badge=document.createElement('span');badge.className='cerood-checkout-cart-count';link.appendChild(badge);function sync(){let items=[];try{const saved=JSON.parse(localStorage.getItem('catus_cart')||'[]');if(Array.isArray(saved))items=saved;}catch{}badge.textContent=String(items.length);badge.hidden=!items.length;link.setAttribute('aria-label','Cart, '+items.length+' services');}sync();window.addEventListener('pageshow',sync);window.addEventListener('storage',function(e){if(!e.key||e.key==='catus_cart')sync();});});</script></body>
 </html>
 
 
