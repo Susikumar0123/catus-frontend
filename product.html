@@ -9620,6 +9620,35 @@ html:root body#ceroodProductReference .header-main-container>.search-container{g
 html:root body#ceroodProductReference .header-nav-right{grid-column:4!important}
 html:root body#ceroodProductReference #productGridMain .product-gallery{top:calc(var(--cerood-product-header-height,65px) + 16px)!important}
 }
+</style><style id="cerood-product-fit-v3">
+html:root{width:100%;overflow-x:clip}
+html:root body#ceroodProductReference{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:clip!important;transform:none!important;filter:none!important}
+html:root body#ceroodProductReference .master-app-container{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow#ceroodProductHeaderRow#ceroodProductHeaderRow{display:grid!important;width:100%!important;max-width:1600px!important;margin:0 auto!important;min-height:0!important;height:auto!important;box-sizing:border-box!important;align-items:center!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow .header-location-widget{display:flex!important;align-items:center!important;gap:7px!important;width:100%!important;min-width:0!important;max-width:100%!important;height:32px!important;overflow:hidden!important;padding:0!important;justify-content:center!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow .header-location-widget svg,html:root body#ceroodProductReference #ceroodProductHeaderRow .header-location-widget i{width:18px!important;height:18px!important;min-width:18px!important;max-width:18px!important;min-height:18px!important;max-height:18px!important;font-size:16px!important;flex:0 0 18px!important;color:#fff!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow .header-location-widget .crn-chevron{width:12px!important;height:12px!important;min-width:12px!important;max-width:12px!important;min-height:12px!important;max-height:12px!important;flex:0 0 12px!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow .loc-text-box{min-width:0!important;max-width:calc(100% - 44px)!important;overflow:hidden!important;flex:0 1 auto!important}
+html:root body#ceroodProductReference #headerLocationDisplay#headerLocationDisplay{font:500 12px/1.3 Arial!important;color:#fff!important;display:block!important;max-width:100%!important;white-space:nowrap!important;text-overflow:ellipsis!important;overflow:hidden!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow .cart-item svg{width:25px!important;height:25px!important;min-width:25px!important;max-width:25px!important;min-height:25px!important;max-height:25px!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow .search-container{min-width:0!important;max-width:100%!important;box-sizing:border-box!important;position:relative!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow .search-icon{width:18px!important;height:18px!important;min-width:18px!important;flex:0 0 18px!important;position:static!important;transform:none!important}
+html:root body#ceroodProductReference #ceroodProductHeaderRow #searchInput{font-size:14px!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;color:#29344b!important}
+html:root body#ceroodProductReference #cerood-mobile-fixed-header-spacer{display:none!important;height:0!important}
+@media(max-width:850px){
+html:root body#ceroodProductReference #ceroodProductHeaderRow#ceroodProductHeaderRow#ceroodProductHeaderRow{grid-template-columns:25px minmax(0,1fr) 30px!important;gap:9px 10px!important;padding:calc(10px + env(safe-area-inset-top)) 15px 12px!important}
+html:root body#ceroodProductReference #productGridMain#productGridMain#productGridMain{display:flex!important;flex-direction:column!important;gap:0!important;width:100%!important;margin:0!important;padding:0!important}
+html:root body#ceroodProductReference #productGridMain#productGridMain#productGridMain .main-image-container{height:clamp(260px,85vw,420px)!important;min-height:0!important;max-height:none!important;width:100%!important;box-sizing:border-box!important}
+html:root body#ceroodProductReference #productGridMain .product-gallery,html:root body#ceroodProductReference #productGridMain .product-info,html:root body#ceroodProductReference #productGridMain .cerood-booking-panel{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;position:static!important}
+}
+@media(min-width:851px){
+html:root body#ceroodProductReference #ceroodProductHeaderRow#ceroodProductHeaderRow#ceroodProductHeaderRow{grid-template-columns:30px 190px minmax(0,1fr) 180px!important;gap:16px!important;padding:12px 24px!important}
+html:root body#ceroodProductReference #productGridMain#productGridMain#productGridMain{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:22px 32px!important;margin:24px!important;width:calc(100% - 48px)!important;max-width:calc(100% - 48px)!important;box-sizing:border-box!important}
+html:root body#ceroodProductReference #productGridMain .product-gallery{grid-column:1!important;grid-row:1/3!important;position:sticky!important;top:calc(var(--cerood-product-header-height,65px) + 16px)!important;width:100%!important;min-width:0!important}
+html:root body#ceroodProductReference #productGridMain .product-info{grid-column:2!important;grid-row:1!important;position:static!important;width:100%!important;min-width:0!important}
+html:root body#ceroodProductReference #productGridMain .cerood-booking-panel{grid-column:2!important;grid-row:2!important;width:100%!important;min-width:0!important}
+html:root body#ceroodProductReference .action-buttons.action-buttons{position:static!important;inset:auto!important;display:grid!important;grid-template-columns:1fr 1fr!important;width:100%!important;padding:0!important;margin:16px 0 0!important}
+}
 </style></head>
 <body id="ceroodProductReference">
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -9642,7 +9671,7 @@ html:root body#ceroodProductReference #productGridMain .product-gallery{top:calc
 <div class="master-app-container">
 <!-- HEADER & SEARCH BAR SECTION -->
 <div class="uc-homepage-wrapper product-index-header">
-<div class="header-main-container crn-header-main product-crn-header-main"><a class="cerood-product-back" href="/home-services.html" aria-label="Back to home services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5m7-7-7 7 7 7"/></svg></a>
+<div class="header-main-container crn-header-main product-crn-header-main" id="ceroodProductHeaderRow"><a class="cerood-product-back" href="/home-services.html" aria-label="Back to home services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5m7-7-7 7 7 7"/></svg></a>
 <a aria-label="Cerood home" class="brand-logo crn-logo" href="/home-services.html">
 <img alt="Cerood" class="cerood-original-c-logo" src="/cerood-logo.webp"/>
 <span class="cerood-wordmark-erood">erood</span>
@@ -9665,7 +9694,7 @@ html:root body#ceroodProductReference #productGridMain .product-gallery{top:calc
 <circle cx="11" cy="11" r="8"></circle>
 <path d="m21 21-4.35-4.35"></path>
 </svg>
-<input autocomplete="off" id="searchInput" placeholder="Search products, brands &amp; categories..." type="text"/>
+<input autocomplete="off" id="searchInput" placeholder="Search products, brands &amp; categories..." type="text" readonly data-product-search="1">
 <button aria-label="Search" class="cerood-mobile-search-end" type="button" onclick="document.getElementById('searchInput')?.focus()"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg></button><div id="suggestionsBox"></div>
 </div>
 <div class="header-nav-right crn-actions">
@@ -17610,35 +17639,7 @@ window.addEventListener('DOMContentLoaded', function () {
   }
 });
 </script>
-<script id="cerood-mobile-fixed-header-measure-20260925">
-(function () {
-  'use strict';
-  var selector = '.master-app-container > .uc-homepage-wrapper';
-  function setup() {
-    var header = document.querySelector(selector);
-    if (!header || header.dataset.ceroodFixedHeaderReady === '1') return;
-    header.dataset.ceroodFixedHeaderReady = '1';
-    var spacer = document.createElement('div');
-    spacer.id = 'cerood-mobile-fixed-header-spacer';
-    spacer.setAttribute('aria-hidden', 'true');
-    header.parentNode.insertBefore(spacer, header);
-    function sync() {
-      var height = Math.ceil(header.getBoundingClientRect().height);
-      if (height > 0) {
-        spacer.style.height = height + 'px';
-        document.documentElement.style.setProperty('--cerood-fixed-header-height', height + 'px');
-      }
-    }
-    sync();
-    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(sync).observe(header);
-    window.addEventListener('resize', sync, {passive:true});
-    window.addEventListener('pageshow', sync);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup, {once:true});
-  else setup();
-})();
-</script>
+
 
 
 
@@ -17683,7 +17684,7 @@ function ceroodOpenHomeApproval(orderId) {
 })();
 </script>
 <script>function ceroodOpenFullTracking(id){if(!/^CHS-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(String(id||'')))return;sessionStorage.setItem('cerood_tracking_booking_id',id);window.location.href='/tracking.html';}</script>
-<script id="cerood-product-reference-init">(function(){function init(){var header=document.querySelector('.uc-homepage-wrapper'),mq=matchMedia('(max-width:850px)');function measure(){if(header&&mq.matches)document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}if(header&&window.ResizeObserver)new ResizeObserver(measure).observe(header);measure();window.addEventListener('resize',measure,{passive:true});var input=document.getElementById('searchInput');if(input&&mq.matches){input.placeholder='Search services';input.autocomplete='off';}var buy=document.querySelector('#productGridMain .btn-buy');if(buy)buy.textContent='Book service';}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script><script id="cerood-product-extra-data">function ceroodRenderMoreServices(services,currentId){var grid=document.getElementById('ceroodMoreServicesGrid'),section=document.getElementById('ceroodMoreServices');if(!grid||!section)return;grid.replaceChildren();services.filter(function(s){return String(s.service_id)!==String(currentId);}).slice(0,8).forEach(function(s){var a=document.createElement('a');a.className='cerood-more-service';a.href='/product.html?id='+encodeURIComponent(s.slug||s.service_id);var im=document.createElement('img');im.src=s.image_url||'';im.alt=s.service_name||'Service';im.loading='lazy';var title=document.createElement('strong');title.textContent=s.service_name||'Service';a.append(im,title);var value=Number(s.price);if(Number.isFinite(value)&&value>0){var price=document.createElement('span');price.textContent='Starts from ₹'+value.toLocaleString('en-IN');a.append(price);}grid.append(a);});section.hidden=!grid.childElementCount;}document.addEventListener('DOMContentLoaded',function(){var image=document.getElementById('mainProductImage'),title=document.getElementById('prodTitle');function sync(){if(!image||!image.getAttribute('src')||!title)return;document.getElementById('ceroodSpotlightImage').src=image.src;document.getElementById('ceroodSpotlightImage').alt=title.textContent.trim();document.getElementById('ceroodSpotlightTitle').textContent=title.textContent.trim();document.getElementById('ceroodServiceSpotlight').hidden=false;}sync();if(image)new MutationObserver(sync).observe(image,{attributes:true,attributeFilter:['src']});if(title)new MutationObserver(sync).observe(title,{childList:true,subtree:true,characterData:true});});</script><script id="cerood-approved-product-layout">document.addEventListener('DOMContentLoaded',function(){var header=document.querySelector('.uc-homepage-wrapper');if(header){document.body.prepend(header);function measure(){document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}measure();if(window.ResizeObserver)new ResizeObserver(measure).observe(header);window.addEventListener('resize',measure,{passive:true});}var panel=document.querySelector('.cerood-booking-panel'),location=panel&&panel.querySelector('.cerood-location-mini');if(location){panel.prepend(location);location.style.marginBottom='18px';var label=location.querySelector('span');if(label)label.textContent='Service location';}var share=document.createElement('button');share.type='button';share.className='cerood-product-share';share.setAttribute('aria-label','Share service');share.textContent='↗';share.style.cssText='position:absolute;right:12px;top:12px;border:0;border-radius:50%;width:36px;height:36px;background:white;color:#174caf;font-size:22px;cursor:pointer';var gallery=document.querySelector('.main-image-container');if(gallery){gallery.style.position='relative';gallery.append(share);}share.onclick=async function(){var data={title:document.getElementById('prodTitle').textContent,url:location&&window.location.href};data.url=window.location.href;try{if(navigator.share)await navigator.share(data);else if(navigator.clipboard){await navigator.clipboard.writeText(data.url);share.title='Link copied';}}catch(_){}};});</script></body>
+<script id="cerood-product-reference-init">(function(){function init(){var header=document.querySelector('.uc-homepage-wrapper'),mq=matchMedia('(max-width:850px)');function measure(){if(header&&mq.matches)document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}if(header&&window.ResizeObserver)new ResizeObserver(measure).observe(header);measure();window.addEventListener('resize',measure,{passive:true});var input=document.getElementById('searchInput');if(input&&mq.matches){input.placeholder='Search services';input.autocomplete='off';}var buy=document.querySelector('#productGridMain .btn-buy');if(buy)buy.textContent='Book service';}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script><script id="cerood-product-extra-data">function ceroodRenderMoreServices(services,currentId){var grid=document.getElementById('ceroodMoreServicesGrid'),section=document.getElementById('ceroodMoreServices');if(!grid||!section)return;grid.replaceChildren();services.filter(function(s){return String(s.service_id)!==String(currentId);}).slice(0,8).forEach(function(s){var a=document.createElement('a');a.className='cerood-more-service';a.href='/product.html?id='+encodeURIComponent(s.slug||s.service_id);var im=document.createElement('img');im.src=s.image_url||'';im.alt=s.service_name||'Service';im.loading='lazy';var title=document.createElement('strong');title.textContent=s.service_name||'Service';a.append(im,title);var value=Number(s.price);if(Number.isFinite(value)&&value>0){var price=document.createElement('span');price.textContent='Starts from ₹'+value.toLocaleString('en-IN');a.append(price);}grid.append(a);});section.hidden=!grid.childElementCount;}document.addEventListener('DOMContentLoaded',function(){var image=document.getElementById('mainProductImage'),title=document.getElementById('prodTitle');function sync(){if(!image||!image.getAttribute('src')||!title)return;document.getElementById('ceroodSpotlightImage').src=image.src;document.getElementById('ceroodSpotlightImage').alt=title.textContent.trim();document.getElementById('ceroodSpotlightTitle').textContent=title.textContent.trim();document.getElementById('ceroodServiceSpotlight').hidden=false;}sync();if(image)new MutationObserver(sync).observe(image,{attributes:true,attributeFilter:['src']});if(title)new MutationObserver(sync).observe(title,{childList:true,subtree:true,characterData:true});});</script><script id="cerood-approved-product-layout">document.addEventListener('DOMContentLoaded',function(){var header=document.querySelector('.uc-homepage-wrapper');if(header){document.body.prepend(header);function measure(){document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}measure();if(window.ResizeObserver)new ResizeObserver(measure).observe(header);window.addEventListener('resize',measure,{passive:true});}var panel=document.querySelector('.cerood-booking-panel'),location=panel&&panel.querySelector('.cerood-location-mini');if(location){panel.prepend(location);location.style.marginBottom='18px';var label=location.querySelector('span');if(label)label.textContent='Service location';}var share=document.createElement('button');share.type='button';share.className='cerood-product-share';share.setAttribute('aria-label','Share service');share.textContent='↗';share.style.cssText='position:absolute;right:12px;top:12px;border:0;border-radius:50%;width:36px;height:36px;background:white;color:#174caf;font-size:22px;cursor:pointer';var gallery=document.querySelector('.main-image-container');if(gallery){gallery.style.position='relative';gallery.append(share);}share.onclick=async function(){var data={title:document.getElementById('prodTitle').textContent,url:location&&window.location.href};data.url=window.location.href;try{if(navigator.share)await navigator.share(data);else if(navigator.clipboard){await navigator.clipboard.writeText(data.url);share.title='Link copied';}}catch(_){}};});</script><script id="cerood-product-search-fit-v3">document.addEventListener('DOMContentLoaded',function(){var input=document.getElementById('searchInput'),box=document.getElementById('suggestionsBox');if(input){input.type='search';input.autocomplete='off';input.name='cerood_product_lookup';if(document.activeElement!==input)input.value='';input.placeholder='Search home services';input.addEventListener('focus',function(){input.removeAttribute('readonly');});input.addEventListener('pointerdown',function(){input.removeAttribute('readonly');});}if(box)box.style.display='none';});</script></body>
 </html>
 
 
