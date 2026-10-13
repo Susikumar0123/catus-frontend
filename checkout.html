@@ -2376,6 +2376,17 @@ html:root body#ceroodCheckoutMatch .checkout-grid>.card-box>div:first-child:has(
 #ceroodSummaryConfirmBar .cos-pay small{font:400 11px/1.4 Arial;color:#687386;}
 html:root body#ceroodCheckoutMatch #ceroodSummaryConfirmBar #confirmOrderBtn{width:min(55%,320px)!important;margin:0!important;background:#ffc400!important;background-image:none!important;color:#172033!important;border:0!important;border-radius:5px!important;min-height:46px!important;box-shadow:none!important;font:600 14px/1.4 Arial!important;}
 @media(max-width:850px){html:root body#ceroodCheckoutMatch .checkout-container#checkoutMainSection{padding:0!important;}html:root body#ceroodCheckoutMatch .checkout-grid{margin:0!important;gap:10px!important;}html:root body#ceroodCheckoutMatch .checkout-grid .card-box{border:0!important;border-radius:0!important;padding:16px!important;margin-bottom:0!important;}html:root body#ceroodCheckoutMatch .card-title{font-size:15px!important;}}
+</style><style id="cerood-checkout-live-progress-v35">
+#ceroodOrderSummaryHeader .cos-steps{position:relative;isolation:isolate;}
+#ceroodOrderSummaryHeader .cos-steps:before{content:'';position:absolute;left:11%;right:11%;top:11px;height:2px;background:#dfe4e8;z-index:-1;}
+#ceroodOrderSummaryHeader .cos-steps:after{content:'';position:absolute;left:11%;top:11px;height:2px;width:var(--cos-progress,0%);background:#169b62;z-index:-1;transition:width .3s ease;}
+#ceroodOrderSummaryHeader .cos-steps span{flex:1;flex-direction:column;gap:5px;font-size:10px;background:transparent;}
+#ceroodOrderSummaryHeader .cos-steps b{background:#fff;color:#89929e;}
+#ceroodOrderSummaryHeader .cos-done b{background:#169b62;color:#fff;border-color:#169b62;}
+#ceroodOrderSummaryHeader .cos-current b{background:#169b62;color:#fff;border-color:#169b62;}
+#ceroodOrderSummaryHeader .cos-done{color:#138452;}
+#ceroodOrderSummaryHeader .cos-current{color:#172033;font-weight:700;}
+@media(prefers-reduced-motion:reduce){#ceroodOrderSummaryHeader .cos-steps:after{transition:none;}}
 </style></head>
 <body id="ceroodCheckoutMatch"><div id="ceroodOrderSummaryHeader"><div class="cos-title"><button type="button" onclick="goBackToProduct()" aria-label="Back to service"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button><span>Order Summary</span></div><div class="cos-steps" aria-label="Booking steps"><span><b>1</b>Address</span><span class="cos-current"><b>2</b>Order Summary</span><span><b>3</b>Confirmation</span></div></div>
 
@@ -4618,7 +4629,24 @@ document.getElementById('dispTotal').textContent =
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setupVisitPreference);else setupVisitPreference();
 })();
 </script>
-<script id="cerood-checkout-cart-count-v33">document.addEventListener('DOMContentLoaded',function(){const link=document.querySelector('.checkout-header .cerood-unified-tools>a[aria-label="Cart"]');if(!link)return;link.classList.add('cerood-checkout-cart-link');const badge=document.createElement('span');badge.className='cerood-checkout-cart-count';link.appendChild(badge);function sync(){let items=[];try{const saved=JSON.parse(localStorage.getItem('catus_cart')||'[]');if(Array.isArray(saved))items=saved;}catch{}badge.textContent=String(items.length);badge.hidden=!items.length;link.setAttribute('aria-label','Cart, '+items.length+' services');}sync();window.addEventListener('pageshow',sync);window.addEventListener('storage',function(e){if(!e.key||e.key==='catus_cart')sync();});});</script><script id="cerood-checkout-confirm-bar-v34">document.addEventListener('DOMContentLoaded',function(){const main=document.getElementById('checkoutMainSection'),button=document.getElementById('confirmOrderBtn'),amount=document.getElementById('billAmountToPay');if(!main||!button)return;const bar=document.createElement('div');bar.id='ceroodSummaryConfirmBar';const pay=document.createElement('div');pay.className='cos-pay';pay.innerHTML='<small>Payable now</small><span>₹0</span>';bar.append(pay,button);document.body.appendChild(bar);function paint(){pay.querySelector('span').textContent=amount?amount.textContent:'₹0';const hidden=getComputedStyle(main).display==='none';bar.style.display=hidden?'none':'flex';document.getElementById('ceroodOrderSummaryHeader').style.display=hidden?'none':'';}if(amount)new MutationObserver(paint).observe(amount,{childList:true,subtree:true,characterData:true});new MutationObserver(paint).observe(main,{attributes:true,attributeFilter:['style','class']});paint();});</script></body>
+<script id="cerood-checkout-cart-count-v33">document.addEventListener('DOMContentLoaded',function(){const link=document.querySelector('.checkout-header .cerood-unified-tools>a[aria-label="Cart"]');if(!link)return;link.classList.add('cerood-checkout-cart-link');const badge=document.createElement('span');badge.className='cerood-checkout-cart-count';link.appendChild(badge);function sync(){let items=[];try{const saved=JSON.parse(localStorage.getItem('catus_cart')||'[]');if(Array.isArray(saved))items=saved;}catch{}badge.textContent=String(items.length);badge.hidden=!items.length;link.setAttribute('aria-label','Cart, '+items.length+' services');}sync();window.addEventListener('pageshow',sync);window.addEventListener('storage',function(e){if(!e.key||e.key==='catus_cart')sync();});});</script><script id="cerood-checkout-confirm-bar-v34">document.addEventListener('DOMContentLoaded',function(){
+ const main=document.getElementById('checkoutMainSection'),button=document.getElementById('confirmOrderBtn'),header=document.getElementById('ceroodOrderSummaryHeader'),result=document.getElementById('successPageView');if(!main||!button||!header)return;
+ const bar=document.createElement('div');bar.id='ceroodSummaryConfirmBar';const pay=document.createElement('div');pay.className='cos-pay';pay.innerHTML='<small>Payable now</small><span>₹0</span>';bar.append(pay,button);document.body.appendChild(bar);
+ function visible(el){return !!el&&getComputedStyle(el).display!=='none';}
+ function paint(){
+  const complete=!!main.querySelector('.cerood-booking-success')||(visible(result)&&!result.classList.contains('cerood-result-failed'));
+  const editing=!complete&&visible(document.getElementById('addressFormContainer'))&&visible(main);
+  const stage=complete?3:editing?1:2;
+  const amount=document.getElementById('billAmountToPay');pay.querySelector('span').textContent=amount?amount.textContent:'₹0';
+  bar.style.display=complete||!visible(main)?'none':'flex';
+  header.style.display='';
+  header.querySelector('.cos-title>span').textContent=complete?'Booking received':editing?'Service Address':'Order Summary';
+  const steps=header.querySelector('.cos-steps');steps.style.setProperty('--cos-progress',stage===1?'0%':stage===2?'39%':'78%');
+  steps.querySelectorAll('span').forEach(function(el,index){const done=complete||index<stage-1,current=!complete&&index===stage-1;el.classList.toggle('cos-done',done);el.classList.toggle('cos-current',current);if(current)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');el.querySelector('b').textContent=done?'✓':String(index+1);});
+ }
+ new MutationObserver(paint).observe(main,{attributes:true,attributeFilter:['style','class'],childList:true,subtree:true,characterData:true});
+ if(result)new MutationObserver(paint).observe(result,{attributes:true,attributeFilter:['style','class'],childList:true,subtree:true});paint();
+});</script></body>
 </html>
 
 
