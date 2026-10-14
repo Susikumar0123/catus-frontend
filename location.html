@@ -284,7 +284,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         >
 
             <h2>
-                Nearby Service Locations
+                Other Locations in This District
             </h2>
 
             <div
@@ -302,6 +302,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
 
     <script>
+(async function () {
 
         // ==========================================
         // API
@@ -585,49 +586,41 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         // SERVICES
         // ==========================================
 
-        const services = [
 
-            {
-                name:
-                    'Smart TV Repair',
-
-                slug:
-                    'tv-repair'
-            },
-
-            {
-                name:
-                    'AC Service',
-
-                slug:
-                    'ac-service'
-            },
-
-            {
-                name:
-                    'Washing Machine Repair',
-
-                slug:
-                    'washing-machine-repair'
-            },
-
-            {
-                name:
-                    'Refrigerator Repair',
-
-                slug:
-                    'refrigerator-repair'
-            },
-
-            {
-                name:
-                    'RO Water Purifier Service',
-
-                slug:
-                    'ro-water-purifier-service'
+        // Use the published service catalogue rather than a fixed five-link list.
+        async function loadHubServices() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/services`);
+                const data = await response.json();
+                if (!response.ok || !data.success || !Array.isArray(data.services)) {
+                    throw new Error('Service catalogue unavailable');
+                }
+                const seen = new Set();
+                return data.services.filter(item => {
+                    const slug = String(item.slug || '').trim();
+                    if (!/^[a-z0-9-]+$/.test(slug) || !item.service_name || seen.has(slug)) return false;
+                    seen.add(slug);
+                    return true;
+                }).map(item => ({name: String(item.service_name), slug: String(item.slug).trim()}));
+            } catch (error) {
+                console.error('Hub service catalogue:', error);
+                const container = document.getElementById('districtServices') || document.getElementById('locationServices');
+                if (container) {
+                    const message = document.createElement('p');
+                    message.textContent = 'Services could not be loaded. Please reload this page or contact Cerood.';
+                    const link = document.createElement('a');
+                    link.href = '/contact';
+                    link.textContent = 'Contact Cerood';
+                    container.replaceChildren(message, link);
+                }
+                return [];
             }
+        }
+        function escapeHubText(value) {
+            return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        }
 
-        ];
+        const services = await loadHubServices();
 
 
 
@@ -777,7 +770,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             );
 
 
-        if (serviceContainer) {
+        if (serviceContainer && services.length) {
 
             serviceContainer.innerHTML =
                 services
@@ -792,7 +785,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
                                 class="link-card"
                                 href="${serviceUrl}"
                             >
-                                ${service.name} in ${locationName}
+                                ${escapeHubText(service.name)} in ${escapeHubText(locationName)}
                             </a>
                         `;
 
@@ -980,7 +973,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
                 ) {
 
                     localServiceInfoText.textContent +=
-                        ` Nearby service areas include ${nearbyNames.join(', ')}.`;
+                        ` Other service locations in this district include ${nearbyNames.join(', ')}.`;
                 }
 
 
@@ -1041,7 +1034,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
         loadNearbyLocations();
 
-    </script>
+    
+})();
+</script>
 
 </body>
 

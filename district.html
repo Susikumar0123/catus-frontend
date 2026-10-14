@@ -218,6 +218,7 @@ html{scroll-behavior:smooth}body{font-family:Inter,-apple-system,BlinkMacSystemF
 </section>
 </main><footer class="cr-footer"><div class="cr-footer-inner"><div class="cr-footer-grid"><div><a aria-label="Cerood Home" href="/"><img alt="Cerood" class="cr-footer-logo" src="/cerood-logo.webp"/></a><p>Home appliance service, made simple. Discover doorstep repair, installation and maintenance through Cerood.</p></div><div><h3>Explore</h3><a href="/">Home</a><a href="/services">Services</a><a href="/about">About Cerood</a></div><div><h3>Support</h3><a href="/faq">Help &amp; FAQs</a><a href="/contact">Contact us</a><a href="https://wa.me/918946055856" rel="noopener noreferrer" target="_blank">WhatsApp support</a></div><div><h3>Contact</h3><a href="tel:+918946055856">+91 8946055856</a><p>Dharmapuri, Tamil Nadu, India</p><p>Service availability depends on location and technician availability.</p></div></div><div class="cr-footer-bottom">© 2026 Cerood Home Services. All rights reserved.</div></div></footer>
 <script>
+(async function () {
 
         // ==========================================
         // API
@@ -475,49 +476,41 @@ html{scroll-behavior:smooth}body{font-family:Inter,-apple-system,BlinkMacSystemF
         // MAIN SERVICES
         // ==========================================
 
-        const mainServices = [
 
-            {
-                name:
-                    'Smart TV Repair',
-
-                slug:
-                    'tv-repair'
-            },
-
-            {
-                name:
-                    'AC Service',
-
-                slug:
-                    'ac-service'
-            },
-
-            {
-                name:
-                    'Washing Machine Repair',
-
-                slug:
-                    'washing-machine-repair'
-            },
-
-            {
-                name:
-                    'Refrigerator Repair',
-
-                slug:
-                    'refrigerator-repair'
-            },
-
-            {
-                name:
-                    'RO Water Purifier Service',
-
-                slug:
-                    'ro-water-purifier-service'
+        // Use the published service catalogue rather than a fixed five-link list.
+        async function loadHubServices() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/services`);
+                const data = await response.json();
+                if (!response.ok || !data.success || !Array.isArray(data.services)) {
+                    throw new Error('Service catalogue unavailable');
+                }
+                const seen = new Set();
+                return data.services.filter(item => {
+                    const slug = String(item.slug || '').trim();
+                    if (!/^[a-z0-9-]+$/.test(slug) || !item.service_name || seen.has(slug)) return false;
+                    seen.add(slug);
+                    return true;
+                }).map(item => ({name: String(item.service_name), slug: String(item.slug).trim()}));
+            } catch (error) {
+                console.error('Hub service catalogue:', error);
+                const container = document.getElementById('districtServices') || document.getElementById('locationServices');
+                if (container) {
+                    const message = document.createElement('p');
+                    message.textContent = 'Services could not be loaded. Please reload this page or contact Cerood.';
+                    const link = document.createElement('a');
+                    link.href = '/contact';
+                    link.textContent = 'Contact Cerood';
+                    container.replaceChildren(message, link);
+                }
+                return [];
             }
+        }
+        function escapeHubText(value) {
+            return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        }
 
-        ];
+        const mainServices = await loadHubServices();
 
 
 
@@ -655,7 +648,7 @@ html{scroll-behavior:smooth}body{font-family:Inter,-apple-system,BlinkMacSystemF
             );
 
 
-        if (serviceContainer) {
+        if (serviceContainer && mainServices.length) {
 
             serviceContainer.innerHTML =
                 mainServices
@@ -670,7 +663,7 @@ html{scroll-behavior:smooth}body{font-family:Inter,-apple-system,BlinkMacSystemF
                                 class="link-card"
                                 href="${serviceUrl}"
                             >
-                                ${service.name} in ${districtName}
+                                ${escapeHubText(service.name)} in ${escapeHubText(districtName)}
                             </a>
                         `;
 
@@ -943,6 +936,8 @@ html{scroll-behavior:smooth}body{font-family:Inter,-apple-system,BlinkMacSystemF
 
         loadDistrictLocations();
 
-    </script>
+    
+})();
+</script>
 </body>
 </html>
