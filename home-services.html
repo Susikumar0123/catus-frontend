@@ -15193,187 +15193,32 @@ function loadMsg91() {
 }
 
 async function loadSeoServiceAreas() {
-
-    const container =
-        document.getElementById(
-            'seoServiceAreasContainer'
-        );
-
-    if (!container) return;
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_BASE_URL}/api/seo-locations`
-            );
-
-        const data =
-            await response.json();
-
-        if (
-            !response.ok ||
-            !data.success ||
-            !Array.isArray(data.locations) ||
-            data.locations.length === 0
-        ) {
-            
-            return;
-        }
-
-        const districtMap = {};
-
-        data.locations.forEach(location => {
-
-            const district =
-                String(
-                    location.district || ''
-                ).trim();
-
-            if (!district) return;
-
-            if (!districtMap[district]) {
-                districtMap[district] = [];
-            }
-
-            districtMap[district].push(location);
-        });
-
-
-        const slugify = value =>
-            String(value || '')
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '');
-
-
-        let html = '';
-
-        Object.keys(districtMap)
-            .sort()
-            .forEach(district => {
-
-                const locations =
-                    districtMap[district];
-
-                const firstLocation =
-    locations[0];
-
-const districtStateSlug =
-    slugify(
-        firstLocation?.state || ''
-    );
-
-const districtSlug =
-    slugify(district);
-
-html += `
-    <details class="seo-district-group">
-        <summary>
-            <a
-                href="/${districtStateSlug}/${districtSlug}"
-                onclick="event.stopPropagation();"
-            >
-                ${district}
-            </a>
-        </summary>
-
-                        <div class="seo-location-links">
-                `;
-
-                locations.forEach(location => {
-
-                    const stateSlug =
-                        slugify(location.state);
-
-                    const districtSlug =
-                        slugify(location.district);
-
-                    const locationSlug =
-                        String(
-                            location.location_slug || ''
-                        ).trim();
-
-                    if (
-                        !stateSlug ||
-                        !districtSlug ||
-                        !locationSlug
-                    ) {
-                        return;
-                    }
-
-                    const mainServices = [
-    { name: 'TV Repair', slug: 'tv-repair' },
-    { name: 'AC Service', slug: 'ac-service' },
-    { name: 'Washing Machine Repair', slug: 'washing-machine-repair' },
-    { name: 'Refrigerator Repair', slug: 'refrigerator-repair' },
-    { name: 'RO Water Purifier Service', slug: 'ro-water-purifier-service' }
-];
-
-html += `
-    <div class="seo-location-service-group">
-        <strong>${location.location_name}</strong>
-
-        <div class="seo-location-service-links">
-            ${mainServices.map(service => `
-                <a href="${
-    locationSlug === districtSlug
-        ? `/${stateSlug}/${districtSlug}/${service.slug}`
-        : `/${stateSlug}/${districtSlug}/${locationSlug}/${service.slug}`
-}">
-                    ${service.name}
-                </a>
-            `).join('')}
-        </div>
-    </div>
-`;
-
-                    
-                });
-
-                html += `
-                        </div>
-                    </details>
-                `;
-            });
-
-        container.innerHTML = html;
-        const districtDetails =
-    container.querySelectorAll(
-        '.seo-district-group'
-    );
-
-districtDetails.forEach(detail => {
-
-    detail.addEventListener(
-        'toggle',
-        () => {
-
-            if (!detail.open) return;
-
-            districtDetails.forEach(other => {
-
-                if (other !== detail) {
-                    other.open = false;
-                }
-
-            });
-
-        }
-    );
-
-});
-
-    } catch (error) {
-
-        console.error(
-            'SEO service areas loading error:',
-            error
-        );
-
-    
-    }
+ const container=document.getElementById('seoServiceAreasContainer');if(!container)return;
+ try {
+  const response=await fetch(API_BASE_URL+'/api/seo-locations');const data=await response.json();
+  if(!response.ok||!data.success||!Array.isArray(data.locations)||!data.locations.length)return;
+  const clean=v=>String(v||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const valid=v=>/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(v);
+  const groups=new Map();
+  data.locations.forEach(function(loc){
+   if(/\$\{|[{}<>]/.test([loc.state,loc.district,loc.location_slug].join(' ')))return;
+   const state=clean(loc.state),district=clean(loc.district),place=String(loc.location_slug||'').trim();
+   if(!valid(state)||!valid(district)||!valid(place))return;
+   const key=state+'/'+district;
+   if(!groups.has(key))groups.set(key,{state,district,label:String(loc.district).trim(),locations:[],seen:new Set()});
+   const group=groups.get(key);if(group.seen.has(place))return;group.seen.add(place);group.locations.push({place,label:String(loc.location_name||place)});
+  });
+  const fragment=document.createDocumentFragment();const details=[];
+  const services=[['TV Repair','tv-repair'],['AC Service','ac-service'],['Washing Machine Repair','washing-machine-repair'],['Refrigerator Repair','refrigerator-repair'],['RO Water Purifier Service','ro-water-purifier-service']];
+  Array.from(groups.values()).sort((a,b)=>a.label.localeCompare(b.label)).forEach(function(group){
+   const detail=document.createElement('details');detail.className='seo-district-group';details.push(detail);
+   const summary=document.createElement('summary');const districtLink=document.createElement('a');districtLink.href='/'+group.state+'/'+group.district;districtLink.textContent=group.label;districtLink.addEventListener('click',e=>e.stopPropagation());summary.append(districtLink);detail.append(summary);
+   const links=document.createElement('div');links.className='seo-location-links';
+   group.locations.forEach(function(loc){const box=document.createElement('div');box.className='seo-location-service-group';const label=document.createElement('strong');label.textContent=loc.label;box.append(label);const row=document.createElement('div');row.className='seo-location-service-links';services.forEach(function([name,slug]){const parts=[group.state,group.district];if(loc.place!==group.district)parts.push(loc.place);parts.push(slug);const a=document.createElement('a');a.href='/'+parts.join('/');a.textContent=name;row.append(a);});box.append(row);links.append(box);});detail.append(links);fragment.append(detail);
+   detail.addEventListener('toggle',function(){if(detail.open)details.forEach(other=>{if(other!==detail)other.open=false;});});
+  });
+  container.replaceChildren(fragment);
+ }catch(error){console.error('SEO service areas loading error:',error);}
 }
 
 
