@@ -52,12 +52,12 @@
         const items = select(services, current);
         if (items.length < 2) return '';
         const groups = ['Install or set up', 'Service or repair', 'Move or remove'];
-        return '<style>#ceroodApplianceServiceChoices .cerood-appliance-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}#ceroodApplianceServiceChoices .cerood-appliance-option{display:flex;align-items:center;justify-content:flex-start;box-sizing:border-box;min-width:0;min-height:42px;padding:9px 10px;border:1px solid #ddd;border-radius:5px;background:#fff;color:#111;font-size:12px;line-height:1.45;overflow-wrap:anywhere;cursor:default} @media(min-width:851px){#ceroodApplianceServiceChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0!important;padding:10px 0!important;min-width:0}#ceroodApplianceServiceChoices>h2{grid-column:1/-1;font-size:13px!important;margin:0!important}#ceroodApplianceServiceChoices>div{margin:0!important}#ceroodApplianceServiceChoices h3{font-size:11px!important;margin-bottom:5px!important}#ceroodApplianceServiceChoices .cerood-appliance-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}#ceroodApplianceServiceChoices .cerood-appliance-option{font-size:11px;line-height:1.35;min-height:32px;padding:6px 8px}} @media(max-width:320px){#ceroodApplianceServiceChoices .cerood-appliance-options{grid-template-columns:1fr}}</style>' +
+        return '<style>#ceroodApplianceServiceChoices .cerood-appliance-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}#ceroodApplianceServiceChoices .cerood-appliance-option{display:flex;align-items:center;justify-content:flex-start;box-sizing:border-box;min-width:0;min-height:42px;padding:9px 10px;border:1px solid #ddd;border-radius:5px;background:#fff;color:#111;font-size:12px;line-height:1.45;overflow-wrap:anywhere;cursor:default} @media(min-width:851px){#ceroodApplianceServiceChoices{display:block;width:100%;box-sizing:border-box;margin:14px 0 0!important;padding:10px 0 0!important;min-width:0}#ceroodApplianceServiceChoices>h2{font-size:13px!important;margin:0 0 10px!important}#ceroodApplianceServiceChoices>.cerood-appliance-group{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px;align-items:start;margin:0 0 9px!important}#ceroodApplianceServiceChoices h3{font-size:11px!important;line-height:1.4!important;margin:0!important;padding-top:7px}#ceroodApplianceServiceChoices .cerood-appliance-options{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}#ceroodApplianceServiceChoices .cerood-appliance-option{flex:0 1 auto;max-width:100%;font-size:11px;line-height:1.35;min-height:30px;padding:6px 8px}} @media(max-width:320px){#ceroodApplianceServiceChoices .cerood-appliance-options{grid-template-columns:1fr}}</style>' +
             '<h2 style="font-size:14px;line-height:1.4;margin:0 0 12px;color:#111">Services for your appliance</h2>' +
             groups.map(label => {
                 const subset = items.filter(item => group(item) === label);
                 if (!subset.length) return '';
-                return '<div style="margin:0 0 14px;min-width:0"><h3 style="font-size:12px;line-height:1.4;color:#333;margin:0 0 7px">' + label + '</h3><div class="cerood-appliance-options">' +
+                return '<div class="cerood-appliance-group" style="margin:0 0 14px;min-width:0"><h3 style="font-size:12px;line-height:1.4;color:#333;margin:0 0 7px">' + label + '</h3><div class="cerood-appliance-options">' +
                     subset.map(item => '<span class="cerood-appliance-option">' + escape(item.service_name) + '</span>').join('') +
                     '</div></div>';
             }).join('');
@@ -69,7 +69,8 @@
         const info = grid && grid.querySelector('.product-info');
         if (!section || !grid || !info) return;
         if (window.matchMedia('(min-width:851px)').matches) {
-            grid.insertAdjacentElement('afterend', section);
+            const panel = document.getElementById('ceroodVisitPanel');
+            if (panel) panel.appendChild(section);
         } else {
             const options = document.getElementById('productVariantArea');
             const anchor = options && info.contains(options) ? options : document.getElementById('prodTitle');
