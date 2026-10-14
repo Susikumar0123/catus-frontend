@@ -13137,8 +13137,10 @@ if (breadcrumbTitle) {
         : page.location_name;
 
         metaDescription.content =
+    `Call 8946055856 to book. ` + String(
     page.seo_description ||
-    `Book ${page.service_name.toLowerCase()} near you in ${seoPlaceName}. Trusted doorstep service with Cerood.`;
+    `Book ${page.service_name.toLowerCase()} near you in ${seoPlaceName}. Trusted doorstep service with Cerood.`
+    ).replace(/Call 8946055856 to book\.\s*/g, '');
 
 
         // ------------------------------------------
@@ -13180,8 +13182,10 @@ const seoTitle =
     `${page.service_name} in ${page.location_name} | Cerood`;
 
 const seoDescription =
+    `Call 8946055856 to book. ` + String(
     page.seo_description ||
-    `Book ${page.service_name.toLowerCase()} near you in ${seoPlaceName}. Trusted doorstep service with Cerood.`;
+    `Book ${page.service_name.toLowerCase()} near you in ${seoPlaceName}. Trusted doorstep service with Cerood.`
+    ).replace(/Call 8946055856 to book\.\s*/g, '');
 
 function setOgMeta(property, content) {
 

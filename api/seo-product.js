@@ -224,13 +224,13 @@ const title =
 // Preserve each exact service name instead of forcing one generic RO keyword.
 const isROService = /(^|\s)ro($|\s|-)|water purifier/i.test(serviceName);
 
-const description = isACService
+const description = `Call 8946055856 to book. ` + (isACService
     ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep AC technician service and check availability online.`
     : isWashingMachineService
         ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep washing machine technician service and check availability online.`
         : isROService
             ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep RO water purifier technician service and check availability online.`
-            : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`;
+            : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`);
 
 
         // ==========================================
