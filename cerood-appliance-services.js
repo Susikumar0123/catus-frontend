@@ -52,14 +52,14 @@
         const items = select(services, current);
         if (items.length < 2) return '';
         const groups = ['Install or set up', 'Service or repair', 'Move or remove'];
-        return '<h2 style="font-size:14px;line-height:1.4;margin:0 0 12px;color:#111">Appliance services</h2>' +
+        return '<style>#ceroodApplianceServiceChoices .cerood-appliance-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}#ceroodApplianceServiceChoices .cerood-appliance-option{display:flex;align-items:center;justify-content:flex-start;box-sizing:border-box;min-width:0;min-height:42px;padding:9px 10px;border:1px solid #ddd;border-radius:5px;background:#fff;color:#111;font-size:12px;line-height:1.45;overflow-wrap:anywhere;cursor:default} @media(min-width:768px){#ceroodApplianceServiceChoices .cerood-appliance-options{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}} @media(max-width:320px){#ceroodApplianceServiceChoices .cerood-appliance-options{grid-template-columns:1fr}}</style>' +
+            '<h2 style="font-size:14px;line-height:1.4;margin:0 0 12px;color:#111">Services for your appliance</h2>' +
             groups.map(label => {
                 const subset = items.filter(item => group(item) === label);
                 if (!subset.length) return '';
-                return '<div style="margin:0 0 14px;min-width:0"><h3 style="font-size:12px;line-height:1.4;color:#333;margin:0 0 6px">' + label + '</h3>' +
-                    '<ul style="margin:0;padding:0 0 0 17px;color:#555;font-size:12px;line-height:1.6;overflow-wrap:anywhere">' +
-                    subset.map(item => '<li style="margin:0 0 4px;padding:0">' + escape(item.service_name) + '</li>').join('') +
-                    '</ul></div>';
+                return '<div style="margin:0 0 14px;min-width:0"><h3 style="font-size:12px;line-height:1.4;color:#333;margin:0 0 7px">' + label + '</h3><div class="cerood-appliance-options">' +
+                    subset.map(item => '<span class="cerood-appliance-option">' + escape(item.service_name) + '</span>').join('') +
+                    '</div></div>';
             }).join('');
     }
 
