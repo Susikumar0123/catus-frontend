@@ -19037,7 +19037,7 @@ const preferredSectionNames = [
 */
 for (let offset = 0, sectionIndex = 0; offset < bigCardServices.length; sectionIndex++) {
     const sectionName = preferredSectionNames[sectionIndex % preferredSectionNames.length];
-    const count = sectionIndex === 1 ? 6 : 4;
+    const count = sectionIndex === 1 ? 4 : 3;
     const sectionItems = bigCardServices.slice(offset, offset + count);
     offset += count;
     if (!mobileMixedMap[sectionName]) mobileMixedMap[sectionName] = {items: []};
