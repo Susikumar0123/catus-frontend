@@ -17413,176 +17413,45 @@ function startTwoMinTimer() {
     }, 1000);
 }
 
+let ceroodOtpVerificationPending = false;
 async function verifyOtpAndSetPassword() {
-
-    const otpInput =
-        document.getElementById('inputRegOTP');
-
-    const otp =
-        otpInput
-            ? otpInput.value.trim()
-            : '';
-
-    if (!/^\d{4}$/.test(otp)) {
-        alert('Please enter a valid 4-digit OTP.');
-        return;
-    }
-
-    if (!tempPhone) {
-        alert('Mobile number missing. Please re-enter.');
-        return;
-    }
-
-    if (!authFlowMode) {
-        alert('Authentication session expired. Please start again.');
-        backToPhoneStep();
-        return;
-    }
-
-    if (!msg91ReqId) {
-        alert('OTP session expired. Please request OTP again.');
-        return;
-    }
-
-    if (typeof window.verifyOtp !== 'function') {
-        alert('OTP service is loading. Please try again.');
-        return;
-    }
-
-    window.verifyOtp(
-        otp,
-
-        async function (data) {
-
-            console.log(
-                'MSG91 OTP verified:',
-                data
-            );
-            
-
-            msg91AccessToken =
-                getMsg91AccessToken(data);
-
-            if (!msg91AccessToken) {
-
-                console.error(
-                    'MSG91 access token missing:',
-                    data
-                );
-
-                alert(
-                    'OTP verification token missing. Please try again.'
-                );
-
-                return;
-            }
-
-            if (authFlowMode === 'register') {
-
-                try {
-
-                    const response = await fetch(
-                        `${API_BASE_URL}/api/home-services/auth/complete-registration`,
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                accessToken: msg91AccessToken,
-                                phone: tempPhone,
-                                name: pendingRegData.name || '',
-                                email: pendingRegData.email || '',
-                                pincode: pendingRegData.pincode || '',
-                                password: pendingRegData.password || ''
-                            })
-                        }
-                    );
-
-                    const result = await response.json();
-
-                    if (!response.ok || !result.success) {
-                        alert(
-                            result.message ||
-                            'Unable to complete registration.'
-                        );
-                        return;
-                    }
-
-                    currentUser = result.user;
-
-                    if (
-                        currentUser &&
-                        currentUser.wallet === undefined
-                    ) {
-                        currentUser.wallet = 0;
-                    }
-
-                    localStorage.setItem(
-                        'cerood_home_service_user',
-                        JSON.stringify(currentUser)
-                    );
-
-                    updateHeaderLoginUI();
-                    toggleAuthModal(false);
-                    openPremiumDashboard();
-
-                    showToast(
-                        'Account created successfully!',
-                        false
-                    );
-
-                    pendingRegData = {};
-                    authFlowMode = null;
-                    otpVerified = false;
-                    msg91ReqId = '';
-                    msg91AccessToken = '';
-
-                } catch (error) {
-
-                    console.error(
-                        'Registration completion error:',
-                        error
-                    );
-
-                    alert(
-                        'Server connection error during registration.'
-                    );
-                }
-
-                return;
-            }
-
-            if (authFlowMode === 'forgot') {
-
-                otpVerified = true;
-
-                showAuthStep('newpassword');
-
-                showToast(
-                    'OTP verified successfully!',
-                    false
-                );
-
-                return;
-            }
-        },
-
-        function (error) {
-
-            console.error(
-                'MSG91 OTP verification failed:',
-                error
-            );
-
-            alert(
-                'Invalid or incorrect OTP. Please try again.'
-            );
-        },
-
-        msg91ReqId
-    );
+ if(ceroodOtpVerificationPending)return;
+ const otp=(document.getElementById('inputRegOTP')?.value||'').trim();
+ if(!/^\d{4}$/.test(otp)){alert('Please enter a valid 4-digit OTP.');return;}
+ if(!tempPhone||!authFlowMode||!msg91ReqId){alert('OTP session expired. Please request OTP again.');return;}
+ if(typeof window.verifyOtp!=='function'){alert('OTP service is loading. Please try again.');return;}
+ const button=document.getElementById('otpContinueBtn'),original=button?.textContent;
+ const flow=authFlowMode,phone=tempPhone,requestId=msg91ReqId;
+ ceroodOtpVerificationPending=true;if(button){button.disabled=true;button.textContent='Verifying...';}
+ try {
+  const data=await new Promise(function(resolve,reject){
+   let settled=false,errorTimer;
+   const timeout=setTimeout(function(){if(settled)return;settled=true;clearTimeout(errorTimer);reject(new Error('OTP verification timed out. Please try again.'));},30000);
+   function success(value){if(settled)return;settled=true;clearTimeout(errorTimer);clearTimeout(timeout);resolve(value);}
+   function failure(){if(settled||errorTimer)return;errorTimer=setTimeout(function(){if(settled)return;settled=true;clearTimeout(timeout);reject(new Error('Invalid or incorrect OTP. Please try again.'));},250);}
+   try{window.verifyOtp(otp,success,failure,requestId);}catch(error){if(!settled){settled=true;clearTimeout(errorTimer);clearTimeout(timeout);reject(new Error('OTP service unavailable. Please try again.'));}}
+  });
+  msg91AccessToken=getMsg91AccessToken(data);
+  if(!msg91AccessToken)throw new Error('OTP verification token missing. Please request OTP again.');
+  if(flow==='register'){
+   const response=await fetch(API_BASE_URL+'/api/home-services/auth/complete-registration',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({accessToken:msg91AccessToken,phone,name:pendingRegData.name||'',email:pendingRegData.email||'',pincode:pendingRegData.pincode||'',password:pendingRegData.password||''})
+   });
+   const result=await response.json();
+   if(!response.ok||!result.success)throw new Error(result.message||'Unable to complete registration.');
+   currentUser=result.user;if(currentUser&&currentUser.wallet===undefined)currentUser.wallet=0;
+   localStorage.setItem('cerood_home_service_user',JSON.stringify(currentUser));
+   if(result.home_service_session)localStorage.setItem('cerood_home_service_session',result.home_service_session);
+   updateHeaderLoginUI();toggleAuthModal(false);openPremiumDashboard();showToast('Account created successfully!',false);
+   pendingRegData={};authFlowMode=null;otpVerified=false;msg91ReqId='';msg91AccessToken='';
+  }else if(flow==='forgot'){
+   otpVerified=true;showAuthStep('newpassword');showToast('OTP verified successfully!',false);
+  }
+ }catch(error){alert(error.message||'Unable to verify OTP. Please try again.');}
+ finally{ceroodOtpVerificationPending=false;if(button){button.disabled=false;button.textContent=original||'VERIFY & CONTINUE';}}
 }
+
 
 async function submitNewPasswordReset() {
 
