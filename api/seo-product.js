@@ -114,6 +114,7 @@ module.exports = async function handler(req, res) {
 // ==========================================
 
 let relatedServices = [];
+let applianceServices = [];
 
 try {
 
@@ -130,6 +131,8 @@ try {
         servicesData.success &&
         Array.isArray(servicesData.services)
     ) {
+
+        applianceServices = servicesData.services;
 
         relatedServices =
             servicesData.services
@@ -388,6 +391,16 @@ html = html.replace(
 // ==========================================
 // SERVER-RENDER LOCAL SEO CONTENT
 // ==========================================
+
+// Render the same catalogue-backed service choices before JavaScript runs.
+const applianceChoices = require(path.join(process.cwd(), 'cerood-appliance-services.js'));
+const applianceChoicesHtml = applianceChoices.html(applianceServices, page, {state, district, location});
+if (applianceChoicesHtml) {
+    html = html.replace(
+        /(<h1[^>]*id=["']prodTitle["'][^>]*>[\s\S]*?<\/h1>)/i,
+        heading => heading + `<section id="ceroodApplianceServiceChoices" style="background:#fff;margin:12px 0;padding:12px 0;border-top:1px solid #eee">${applianceChoicesHtml}</section>`
+    );
+}
 
 const isGasRefill = service === 'ac-gas-refill';
 // Service information and FAQs are accessed through the existing footer /faq link.

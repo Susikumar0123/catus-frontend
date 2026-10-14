@@ -9815,6 +9815,7 @@ html:root body#ceroodProductReference#ceroodProductReference#ceroodProductRefere
 .cerood-discovery-row::-webkit-scrollbar{display:none;}
 @media(max-width:850px){#ceroodServiceDiscovery{padding:0 12px 24px;}.cerood-discovery-section{padding:16px 12px;margin:18px 0;}.cerood-discovery-section h2{font-size:19px;}.cerood-discovery-row{grid-auto-columns:46%;gap:10px;}.cerood-discovery-card img{height:160px;}}
 </style>
+<script defer src="/cerood-appliance-services.js"></script>
 </head>
 <body id="ceroodProductReference">
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -12157,6 +12158,13 @@ const averageRating =
     function loadRelevantServicesSection(allServices, currentCategory, currentId) {
         const relatedContainer = document.getElementById('relatedContainer');
         const relatedBox = document.getElementById('relatedServicesBox');
+        if (window.CeroodApplianceServices) {
+            const currentService = allServices.find(item => String(item.service_id) === String(currentId));
+            if (currentService) window.CeroodApplianceServices.render(allServices, currentService, {
+                state: currentStateSlug, district: currentDistrictSlug, location: currentLocationSlug,
+                manualAddress: !!(localStorage.getItem('cerood_manual_service_address_details') || localStorage.getItem('cerood_manual_service_address_fields') || localStorage.getItem('cerood_manual_service_address'))
+            });
+        }
         if(!relatedContainer) return;
 
         if(relatedBox) {
