@@ -376,8 +376,9 @@ html = html.replace(
 // SERVER-RENDER H1
 // ==========================================
 
-const h1Text =
-    `${page.service_name} in ${page.location_name}`;
+// Keep the customer-facing heading consistent with the frontend.
+// Location remains in SEO metadata and the existing location controls.
+const h1Text = page.service_name;
 
 html = html.replace(
     /<h1([^>]*?)id=["']prodTitle["']([^>]*)>[\s\S]*?<\/h1>/i,
