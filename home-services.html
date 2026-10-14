@@ -14198,6 +14198,16 @@ html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFe
 /* Navy breathing room below search, before categories or page content. */
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .header-main-container {padding-bottom:14px!important;background:transparent!important;}
 </style>
+<style id="cerood-product-row-slide-v38">
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #productGridContainer .uc-grid,
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #relatedContainer {display:grid!important;grid-template-columns:none!important;grid-template-rows:auto!important;grid-auto-flow:column!important;grid-auto-columns:calc((100% - (var(--cerood-visible-count,4) - 1)*16px)/var(--cerood-visible-count,4))!important;gap:16px!important;min-width:0!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:none!important;scroll-behavior:auto!important;touch-action:pan-x pan-y!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+@media(max-width:850px){html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #productGridContainer .uc-grid,
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #relatedContainer {grid-auto-columns:46%!important;gap:10px!important;}}
+@media(hover:hover) and (pointer:fine){html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #productGridContainer .uc-grid,
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #relatedContainer {cursor:grab;}}
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .cerood-row-dragging,html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .cerood-row-dragging *{cursor:grabbing!important;user-select:none!important;-webkit-user-select:none!important;}
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #productGridContainer .uc-grid::-webkit-scrollbar,html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage #relatedContainer::-webkit-scrollbar{display:none;}
+</style>
 </head>
 <body id="ceroodFestivalPage">
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -21627,5 +21637,51 @@ document.addEventListener('DOMContentLoaded',function(){
  banner.addEventListener('pointercancel',reset);
  banner.addEventListener('click',function(e){if(suppressClick){e.preventDefault();e.stopImmediatePropagation();}},true);
  new MutationObserver(function(){if(!banner.classList.contains('show'))reset();}).observe(banner,{attributes:true,attributeFilter:['class']});
-});</script></body>
+});</script><script id="cerood-product-row-drag-v38">(function(){
+ 'use strict';
+ const selector='#productGridContainer .uc-grid, #relatedContainer';
+ let drag=null,blocked=null,blockedUntil=0;
+ document.addEventListener('pointerdown',function(e){
+  if(e.pointerType!=='mouse'||e.button!==0||e.isPrimary===false)return;
+  const row=e.target.closest(selector);
+  if(!row||row.scrollWidth<=row.clientWidth+1||e.target.closest('input,select,textarea'))return;
+  blocked=null;drag={row,id:e.pointerId,x:e.clientX,y:e.clientY,left:row.scrollLeft,active:false};
+ });
+ document.addEventListener('pointermove',function(e){
+  if(!drag||e.pointerId!==drag.id)return;
+  const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.active){
+   if(Math.abs(dx)<8)return;
+   if(Math.abs(dy)>Math.abs(dx)){drag=null;return;}
+   drag.active=true;drag.row.classList.add('cerood-row-dragging');
+   drag.row.setPointerCapture(e.pointerId);
+  }
+  e.preventDefault();drag.row.scrollLeft=drag.left-dx;
+ },{passive:false});
+ function finish(e){
+  if(!drag||(e&&e.pointerId!==undefined&&e.pointerId!==drag.id))return;
+  const d=drag;drag=null;
+  if(d.active){blocked=d.row;blockedUntil=Date.now()+400;d.row.classList.remove('cerood-row-dragging');}
+  if(d.row.hasPointerCapture(d.id))d.row.releasePointerCapture(d.id);
+ }
+ document.addEventListener('pointerup',finish);
+ document.addEventListener('pointercancel',finish);
+ document.addEventListener('lostpointercapture',finish);
+ window.addEventListener('blur',function(){finish();});
+ document.addEventListener('click',function(e){
+  if(e.detail!==0&&blocked&&Date.now()<blockedUntil&&blocked.contains(e.target)){
+   e.preventDefault();e.stopImmediatePropagation();
+  }
+ },true);
+ document.addEventListener('dragstart',function(e){if(e.target.closest(selector))e.preventDefault();});
+ document.addEventListener('keydown',function(e){
+  if(!e.target.matches(selector)||!['ArrowLeft','ArrowRight'].includes(e.key))return;
+  e.preventDefault();e.target.scrollBy({left:(e.key==='ArrowRight'?1:-1)*e.target.clientWidth*.8,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+ });
+ function prepare(){document.querySelectorAll(selector).forEach(function(row){if(!row.hasAttribute('tabindex'))row.tabIndex=0;});}
+ function init(){prepare();['productGridContainer','relatedContainer'].forEach(function(id){const root=document.getElementById(id);if(root)new MutationObserver(prepare).observe(root,{childList:true,subtree:true});});}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
 </html>
