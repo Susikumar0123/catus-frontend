@@ -52,18 +52,17 @@
         const items = select(services, current);
         if (items.length < 2) return '';
         const groups = ['Install or set up', 'Service or repair', 'Move or remove'];
-        return '<h2 style="font-size:15px;margin:0 0 6px;color:#111">Services for your appliance</h2>' +
-            '<p style="font-size:12px;line-height:1.5;margin:0 0 12px;color:#555">Choose the service you need. Each service has its own details and booking.</p>' +
+        return '<h2 style="font-size:14px;line-height:1.4;margin:0 0 12px;color:#111">Appliance services</h2>' +
             groups.map(label => {
                 const subset = items.filter(item => group(item) === label);
                 if (!subset.length) return '';
-                return '<div style="margin:0 0 12px"><h3 style="font-size:12px;color:#333;margin:0 0 7px">' + label + '</h3><div style="display:flex;flex-wrap:wrap;gap:8px">' +
-                    subset.map(item => {
-                        const active = String(item.slug) === String(current.slug) || (item.service_id != null && current.service_id != null && String(item.service_id) === String(current.service_id));
-                        return '<a href="' + escape(url(item, route)) + '"' + (active ? ' aria-current="page"' : '') + ' style="display:block;padding:8px 10px;border:1px solid ' + (active ? '#333' : '#ddd') + ';border-radius:5px;color:#111;background:#fff;font-size:12px;line-height:1.4;text-decoration:none;' + (active ? 'font-weight:700;' : '') + '">' + escape(item.service_name) + '</a>';
-                    }).join('') + '</div></div>';
+                return '<div style="margin:0 0 14px;min-width:0"><h3 style="font-size:12px;line-height:1.4;color:#333;margin:0 0 6px">' + label + '</h3>' +
+                    '<ul style="margin:0;padding:0 0 0 17px;color:#555;font-size:12px;line-height:1.6;overflow-wrap:anywhere">' +
+                    subset.map(item => '<li style="margin:0 0 4px;padding:0">' + escape(item.service_name) + '</li>').join('') +
+                    '</ul></div>';
             }).join('');
     }
+
     function render(services, current, route) {
         const heading = document.getElementById('prodTitle');
         if (!heading) return;
