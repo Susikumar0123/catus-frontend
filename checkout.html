@@ -2399,7 +2399,13 @@ html:root body#ceroodCheckoutMatch #savedAddressText,html:root body#ceroodChecko
 html:root body#ceroodCheckoutMatch .cerood-address-summary-mode>.card-title{display:none!important;}
 html:root body#ceroodCheckoutMatch #addressFormContainer{gap:14px!important;}
 @media(max-width:850px){html:root body#ceroodCheckoutMatch #addressFormContainer{grid-template-columns:minmax(0,1fr)!important;}html:root body#ceroodCheckoutMatch #addressFormContainer .form-group.full{grid-column:1!important;}html:root body#ceroodCheckoutMatch .address-form-actions{display:flex!important;gap:10px!important;flex-wrap:wrap!important;}}
-</style></head>
+</style><style id="cerood-booking-success-center-v40">
+html:root body#ceroodCheckoutMatch.cerood-booking-complete{padding-bottom:0!important;}
+html:root body#ceroodCheckoutMatch #checkoutMainSection.cerood-checkout-complete{display:flex!important;justify-content:center!important;align-items:center!important;flex-direction:column!important;min-height:calc(100dvh - 104px)!important;width:100%!important;max-width:none!important;margin:0 auto!important;padding:24px 16px!important;box-sizing:border-box!important;}
+html:root body#ceroodCheckoutMatch .cerood-checkout-complete .cerood-booking-success{flex:none!important;width:100%!important;max-width:500px!important;margin:0 auto!important;}
+html:root body#ceroodCheckoutMatch .cerood-success-back{border:0!important;background:transparent!important;color:#626975!important;}
+</style>
+</head>
 <body id="ceroodCheckoutMatch"><div id="ceroodOrderSummaryHeader"><div class="cos-title"><button type="button" onclick="goBackToProduct()" aria-label="Back to service"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button><span>Order Summary</span></div><div class="cos-steps" aria-label="Booking steps"><span><b>1</b>Address</span><span class="cos-current"><b>2</b>Order Summary</span><span><b>3</b>Confirmation</span></div></div>
 
     <!-- Header -->
@@ -3893,21 +3899,24 @@ function resetOrderSubmitState() {
                         details.appendChild(security);
                         const keyBox = document.createElement('input'); keyBox.type = 'text'; keyBox.readOnly = true; keyBox.value = approvalKey; keyBox.setAttribute('aria-label','Private approval key'); keyBox.style.cssText = 'display:block;width:100%;padding:12px;box-sizing:border-box;margin:12px 0'; details.appendChild(keyBox);
                         const copy = document.createElement('button'); copy.type='button'; copy.textContent='Copy booking details'; copy.onclick=()=>{const text='Booking ID: '+safeOrderId+'\nPrivate approval key: '+approvalKey; if(navigator.clipboard)navigator.clipboard.writeText(text).catch(()=>window.prompt('Copy these details:',text));else window.prompt('Copy these details:',text)}; details.appendChild(copy);
-                        const printBtn = document.createElement('button');
-                        printBtn.type = 'button';
-                        printBtn.textContent = 'Save confirmation';
-                        printBtn.className = 'cerood-success-secondary';
-                        printBtn.onclick = () => {
-                            const w = window.open('', '_blank', 'width=760,height=780');
-                            if (!w) { alert('Please allow pop-ups to save the booking confirmation.'); return; }
-                            const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-                            w.document.open();
-                            w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Cerood Booking Confirmation</title><style>body{font-family:Arial,sans-serif;color:#171717;max-width:680px;margin:50px auto;line-height:1.7;padding:20px}h1{font-size:24px}code{display:block;overflow-wrap:anywhere;background:#f5f5f5;padding:12px;border-radius:6px}small{color:#555}@media print{button{display:none}}</style></head><body><h1>Cerood Home Services</h1><h2>Booking Request Received</h2><p><b>Booking ID</b></p><code>'+esc(safeOrderId)+'</code><p><b>Private Approval Key — Confidential</b></p><code>'+esc(approvalKey)+'</code><p>Booking fee: ₹0. Inspection / visiting charges are separate and must be approved before the technician visits. Repair quotation requires separate customer approval.</p><p>Approval page: https://www.cerood.com/customer-approval.html</p><small>Keep this document private. Anyone holding this key may be able to approve charges for this booking.</small><p><button onclick="window.print()">Print / Save as PDF</button></p></body></html>');
-                            w.document.close(); w.focus();
-                        };
-                        panel.appendChild(printBtn);
-                        const link = document.createElement('a'); link.href='/customer-approval.html'; link.textContent='Manage booking'; link.className='cerood-success-primary'; panel.appendChild(link);
                     }
+                    const call = document.createElement('a');
+                    call.href = 'tel:+918946055856';
+                    call.className = 'cerood-success-primary';
+                    call.textContent = 'Call to book · 89460 55856';
+                    panel.appendChild(call);
+                    const tracking = document.createElement('a');
+                    tracking.href = '/home-services.html#cerood-dashboard-bookings';
+                    tracking.className = 'cerood-success-secondary';
+                    tracking.textContent = 'Dashboard / Tracking';
+                    panel.appendChild(tracking);
+                    const back = document.createElement('a');
+                    back.href = '/home-services.html';
+                    back.className = 'cerood-success-secondary cerood-success-back';
+                    back.textContent = 'Back';
+                    panel.appendChild(back);
+                    main.classList.add('cerood-checkout-complete');
+                    document.body.classList.add('cerood-booking-complete');
                     main.appendChild(panel);
                 } else {
                     alert('Booking request received! Booking ID: ' + safeOrderId + '. Paid inspection charge will be confirmed before visit.');
