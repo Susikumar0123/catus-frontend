@@ -30,23 +30,23 @@
       "destination": "https://catus-backend-d2js.onrender.com/api/sitemaps/:division/:page.xml"
     },
     {
-      "source": "/:state/:district/:location/:serviceId(\\d{1,})",
+      "source": "/:state([a-z0-9-]+)/:district([a-z0-9-]+)/:location([a-z0-9-]+)/:serviceId(\\d{1,})",
       "destination": "https://catus-backend-d2js.onrender.com/api/seo-redirect/:state/:district/:location/:serviceId"
     },
     {
-      "source": "/:state/:district",
+      "source": "/:state([a-z0-9-]+)/:district([a-z0-9-]+)",
       "destination": "/district.html?state=:state&district=:district"
     },
     {
-      "source": "/:state/:district/location/:location",
+      "source": "/:state([a-z0-9-]+)/:district([a-z0-9-]+)/location/:location([a-z0-9-]+)",
       "destination": "/location.html?state=:state&district=:district&location=:location"
     },
     {
-      "source": "/:state/:district/:service",
+      "source": "/:state([a-z0-9-]+)/:district([a-z0-9-]+)/:service([a-z0-9-]+)",
       "destination": "/api/seo-product?state=:state&district=:district&location=:district&service=:service&clean=1"
     },
     {
-      "source": "/:state/:district/:location/:service",
+      "source": "/:state([a-z0-9-]+)/:district([a-z0-9-]+)/:location([a-z0-9-]+)/:service([a-z0-9-]+)",
       "destination": "/api/seo-product?state=:state&district=:district&location=:location&service=:service"
     }
   ]
