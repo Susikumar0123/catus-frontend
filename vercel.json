@@ -49,5 +49,17 @@
       "source": "/:state([a-z0-9-]+)/:district([a-z0-9-]+)/:location([a-z0-9-]+)/:service([a-z0-9-]+)",
       "destination": "/api/seo-product?state=:state&district=:district&location=:location&service=:service"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/home-services.html",
+      "permanent": false
+    },
+    {
+      "source": "/index.html",
+      "destination": "/home-services.html",
+      "permanent": false
+    }
   ]
 }
