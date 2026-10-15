@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Cerood’s private workspace for customer acquisition experiments.">
+  <meta name="theme-color" content="#ffffff">
+  <title>Cerood · Growth Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to workspace</a>
+  <aside class="sidebar">
+    <a class="brand" href="#overview" aria-label="Cerood Growth Hub home"><span class="brand-symbol">c<span></span></span><span>cerood<span class="brand-sub">GROWTH HUB</span></span></a>
+    <div class="workspace-label">YOUR WORKSPACE</div>
+    <nav id="navigation" aria-label="Workspace"></nav>
+    <div class="sidebar-bottom"><div class="private-label"><span class="dot"></span>Private workspace</div><p>Small experiments.<br>Real customers. Clear signals.</p><button class="text-button" id="export-button">Export workspace <span>↗</span></button><button class="text-button" id="import-button">Import backup <span>↓</span></button><input type="file" id="import-file" accept="application/json" hidden></div>
+    <div class="owner"><span class="avatar">S</span><div>Susikumar<span>Cerood owner</span></div><span class="owner-dots">···</span></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div class="mobile-brand"><span class="mini-mark">c</span>cerood</div><div id="breadcrumb">Workspace <span>/</span> Overview</div><div class="topbar-right"><span class="saved"><span class="dot"></span><span id="save-state">Saved on this device</span></span><span class="private-pill" title="This Site is hosted with owner-only access">◈ Owner only</span></div></header>
+    <main id="main" tabindex="-1"></main>
+    <footer class="footer"><span>Made for Cerood’s next customer.</span><span>Private prototype · No live bookings or messages</span></footer>
+  </div>
+  <dialog id="modal" aria-labelledby="modal-title"><div id="modal-content"></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="model.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
