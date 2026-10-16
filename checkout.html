@@ -2405,6 +2405,21 @@ html:root body#ceroodCheckoutMatch #checkoutMainSection.cerood-checkout-complete
 html:root body#ceroodCheckoutMatch .cerood-checkout-complete .cerood-booking-success{flex:none!important;width:100%!important;max-width:500px!important;margin:0 auto!important;}
 html:root body#ceroodCheckoutMatch .cerood-success-back{border:0!important;background:transparent!important;color:#626975!important;}
 </style>
+<script id="cerood-order-images-v42">
+window.CeroodOrderImages=(function(){
+ const clean=x=>String(x||'').trim();
+ const url=x=>{try{const u=new URL(clean(x),location.origin);return /^https?:$/.test(u.protocol)&&clean(x)?u.href:'';}catch(_){return '';}};
+ const image=x=>url(x&&(x.image_url||x.image||x.img||x.product_image||x.service_image));
+ function list(x){if(Array.isArray(x))return x;if(typeof x==='string'){try{const a=JSON.parse(x);if(Array.isArray(a))return a;}catch(_){}return x.split(/\s*(?:,|\||\+)\s*/).filter(Boolean);}return [];}
+ function items(o){const a=list(o.items||o.order_items||o.services||o.booking_items);if(a.length)return a.map(x=>typeof x==='object'?x:{product_id:x});const ids=list(o.product_ids||o.product_id),names=list(o.service_names||o.service_name);return Array.from({length:Math.max(ids.length,names.length,1)},(_,i)=>({product_id:ids[i],name:names[i],image:ids.length<2&&names.length<2?image(o):''}));}
+ function saved(o){try{return JSON.parse(localStorage.getItem('cerood_order_images_'+o.order_id)||'[]');}catch(_){return [];}}
+ function resolve(o,map){const stored=saved(o);let a=items(o);if(stored.length>a.length)a=stored;return a.map((x,i)=>{const id=clean(x.product_id||x.service_id),name=clean(x.name||x.service_name);const old=stored.find(s=>id&&clean(s.product_id)===id)||stored.find(s=>name&&clean(s.name).toLowerCase()===name.toLowerCase())||{};return {name:name||old.name||'Service',image:image(x)||url(map[id])||url(map[name.toLowerCase()])||image(old)};});}
+ const esc=x=>String(x||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function gallery(o,map){return '<div class="cerood-order-images">'+resolve(o,map).map(x=>'<figure>'+(x.image?'<img src="'+esc(x.image)+'" alt="'+esc(x.name)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>Image unavailable</span>':'<span>Image unavailable</span>')+'<figcaption>'+esc(x.name)+'</figcaption></figure>').join('')+'</div>';}
+ function save(id,a){if(!id)return;try{localStorage.setItem('cerood_order_images_'+id,JSON.stringify(a.map(x=>({product_id:clean(x.product_id||x.service_id),name:clean(x.name||x.service_name),image:image(x)}))));}catch(_){}}
+ return {image,resolve,gallery,save};
+})();
+</script><style id="cerood-order-images-style-v42">.cerood-order-images{display:flex;gap:10px;overflow-x:auto;margin:10px 0}.cerood-order-images figure{margin:0;flex:0 0 88px;max-width:100px;font:500 11px/1.35 Arial;color:#475569}.cerood-order-images img{display:block;width:64px;height:64px;object-fit:contain;background:#f8fafc;border-radius:8px}.cerood-order-images figcaption{margin-top:5px;overflow-wrap:anywhere}.cerood-order-images figure>span{font-size:10px;color:#64748b}</style>
 </head>
 <body id="ceroodCheckoutMatch"><div id="ceroodOrderSummaryHeader"><div class="cos-title"><button type="button" onclick="goBackToProduct()" aria-label="Back to service"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button><span>Order Summary</span></div><div class="cos-steps" aria-label="Booking steps"><span><b>1</b>Address</span><span class="cos-current"><b>2</b>Order Summary</span><span><b>3</b>Confirmation</span></div></div>
 
@@ -3599,7 +3614,7 @@ if (trustNote) {
                 container.replaceChildren();
                 orderItems.forEach(item=>{
                     const row=document.createElement('div');row.className='cerood-service-summary-row';
-                    if(item.image){const img=document.createElement('img');img.src=item.image;img.alt=String(item.name||'Service');img.loading='lazy';row.appendChild(img);}
+                    if(CeroodOrderImages.image(item)){const img=document.createElement('img');img.src=CeroodOrderImages.image(item);img.alt=String(item.name||'Service');img.loading='lazy';row.appendChild(img);}
                     const detail=document.createElement('div');detail.className='cerood-service-summary-details';
                     const title=document.createElement('strong');title.textContent=String(item.name||'Home service');detail.appendChild(title);
                     const chip=document.createElement('span');chip.className='cerood-service-free-chip';chip.textContent='₹0 Booking';detail.appendChild(chip);
@@ -3876,6 +3891,7 @@ function resetOrderSubmitState() {
                 localStorage.removeItem('cerood_service_booking');
                 try { sessionStorage.removeItem('cerood_free_booking_request_id'); } catch (_) {}
                 const safeOrderId = String(result.order_id || '');
+                CeroodOrderImages.save(safeOrderId, orderItems);
                 const approvalKey = String(result.customer_approval_key || '');
                 if (approvalKey && safeOrderId) {
                     try { localStorage.setItem('cerood_home_approval_' + safeOrderId, approvalKey); }

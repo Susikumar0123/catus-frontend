@@ -14206,7 +14206,7 @@ html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFe
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;padding:7px 10px!important;box-sizing:border-box!important;border:1px solid #ffffffaa!important;border-radius:9px!important;background:transparent!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-decoration:none!important;white-space:nowrap!important;min-width:0!important;line-height:1.2!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking svg{display:block!important;width:19px!important;height:19px!important;flex-shrink:0!important;stroke:#fff!important;fill:none!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking .cerood-call-desktop{display:block!important;font:500 11px/1.3 Arial,sans-serif!important;}
-html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking strong{display:block!important;font:700 13px/1.3 Arial,sans-serif!important;color:#fff!important;}
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking strong{display:block!important;font:700 12px/1.3 Arial,sans-serif!important;color:#fff!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking .cerood-call-mobile{display:none!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking:focus-visible{outline:2px solid white!important;outline-offset:3px!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-direct-call{display:none!important;}
@@ -14215,14 +14215,29 @@ html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFe
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking{grid-column:5!important;grid-row:1!important;justify-self:end!important;}
 }
 @media(max-width:850px){
-html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .header-main-container{grid-template-columns:minmax(80px,.9fr) minmax(0,1fr) 30px 58px!important;column-gap:7px!important;}
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .header-main-container{grid-template-columns:minmax(80px,.9fr) minmax(0,1fr) 30px 106px!important;column-gap:7px!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking{grid-column:4!important;grid-row:1!important;padding:7px 5px!important;gap:4px!important;min-height:34px!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking svg{width:15px!important;height:15px!important;}
-html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking .cerood-call-desktop{display:none!important;}
-html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking .cerood-call-mobile{display:block!important;font:600 11px/1.2 Arial,sans-serif!important;}
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking .cerood-call-desktop{display:block!important;font:500 10px/1.2 Arial,sans-serif!important;}
+html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .cerood-header-call-booking .cerood-call-mobile{display:none!important;}
 html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage .home-index-header .search-container{grid-column:1/-1!important;grid-row:2!important;}
 }
 </style>
+<script id="cerood-order-images-v42">
+window.CeroodOrderImages=(function(){
+ const clean=x=>String(x||'').trim();
+ const url=x=>{try{const u=new URL(clean(x),location.origin);return /^https?:$/.test(u.protocol)&&clean(x)?u.href:'';}catch(_){return '';}};
+ const image=x=>url(x&&(x.image_url||x.image||x.img||x.product_image||x.service_image));
+ function list(x){if(Array.isArray(x))return x;if(typeof x==='string'){try{const a=JSON.parse(x);if(Array.isArray(a))return a;}catch(_){}return x.split(/\s*(?:,|\||\+)\s*/).filter(Boolean);}return [];}
+ function items(o){const a=list(o.items||o.order_items||o.services||o.booking_items);if(a.length)return a.map(x=>typeof x==='object'?x:{product_id:x});const ids=list(o.product_ids||o.product_id),names=list(o.service_names||o.service_name);return Array.from({length:Math.max(ids.length,names.length,1)},(_,i)=>({product_id:ids[i],name:names[i],image:ids.length<2&&names.length<2?image(o):''}));}
+ function saved(o){try{return JSON.parse(localStorage.getItem('cerood_order_images_'+o.order_id)||'[]');}catch(_){return [];}}
+ function resolve(o,map){const stored=saved(o);let a=items(o);if(stored.length>a.length)a=stored;return a.map((x,i)=>{const id=clean(x.product_id||x.service_id),name=clean(x.name||x.service_name);const old=stored.find(s=>id&&clean(s.product_id)===id)||stored.find(s=>name&&clean(s.name).toLowerCase()===name.toLowerCase())||{};return {name:name||old.name||'Service',image:image(x)||url(map[id])||url(map[name.toLowerCase()])||image(old)};});}
+ const esc=x=>String(x||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function gallery(o,map){return '<div class="cerood-order-images">'+resolve(o,map).map(x=>'<figure>'+(x.image?'<img src="'+esc(x.image)+'" alt="'+esc(x.name)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>Image unavailable</span>':'<span>Image unavailable</span>')+'<figcaption>'+esc(x.name)+'</figcaption></figure>').join('')+'</div>';}
+ function save(id,a){if(!id)return;try{localStorage.setItem('cerood_order_images_'+id,JSON.stringify(a.map(x=>({product_id:clean(x.product_id||x.service_id),name:clean(x.name||x.service_name),image:image(x)}))));}catch(_){}}
+ return {image,resolve,gallery,save};
+})();
+</script><style id="cerood-order-images-style-v42">.cerood-order-images{display:flex;gap:10px;overflow-x:auto;margin:10px 0}.cerood-order-images figure{margin:0;flex:0 0 88px;max-width:100px;font:500 11px/1.35 Arial;color:#475569}.cerood-order-images img{display:block;width:64px;height:64px;object-fit:contain;background:#f8fafc;border-radius:8px}.cerood-order-images figcaption{margin-top:5px;overflow-wrap:anywhere}.cerood-order-images figure>span{font-size:10px;color:#64748b}</style>
 </head>
 <body id="ceroodFestivalPage">
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -14263,7 +14278,7 @@ html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFe
 <path d="m6 9 6 6 6-6"></path>
 </svg>
 </button><button aria-label="Delivery location" class="cerood-mobile-index-location" onclick="openLocationModal()" type="button"><svg aria-hidden="true" class="crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span class="loc-text-box"><span class="loc-label">Delivery location</span><b class="cerood-mobile-location-value">Select Location</b></span><svg aria-hidden="true" class="crn-chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
-<a class="cerood-header-call-booking" href="tel:+918946055856" aria-label="Call Cerood on 8946055856 to book a service"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.8a2 2 0 0 1-.45 2.11L9.04 10.9a16 16 0 0 0 4.06 4.06l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.84.55 2.8.68A2 2 0 0 1 22 16.92z"/></svg><span class="cerood-call-desktop">Call to book<strong>89460 55856</strong></span><span class="cerood-call-mobile">Call</span></a>
+<a class="cerood-header-call-booking" href="tel:+918946055856" aria-label="Call Cerood on 8946055856 to book a service"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.8a2 2 0 0 1-.45 2.11L9.04 10.9a16 16 0 0 0 4.06 4.06l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.84.55 2.8.68A2 2 0 0 1 22 16.92z"/></svg><span class="cerood-call-desktop">Call to book<strong>89460 55856</strong></span><span class="cerood-call-mobile">Call to book</span></a>
 <div class="search-container crn-search">
 <svg aria-hidden="true" class="search-icon crn-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
 <circle cx="11" cy="11" r="8"></circle>
@@ -17710,12 +17725,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fetch services map first so we can grab the correct image per product_id
         let servicesMap = {};
         try {
-            const sRes = await fetch(`${API_BASE_URL}/api/services`);
+            const sRes = await fetch(`${API_BASE_URL}/api/home-services`);
             const sData = await sRes.json();
             if (sData.success && sData.services) {
                 sData.services.forEach(srv => {
                     servicesMap[String(srv.service_id).trim()] = srv.image_url;
-                    servicesMap[srv.service_name.toLowerCase().trim()] = srv.image_url;
+                    servicesMap[String(srv.service_name || '').toLowerCase().trim()] = srv.image_url;
                 });
             }
         } catch(e) {
@@ -17816,10 +17831,7 @@ if (data.success && Array.isArray(data.orders)) {
                     let displayProductId = currentOrder.product_id || '';
                     
                     // Match the correct product image dynamically
-                    let orderImgUrl =
-    servicesMap[String(displayProductId).trim()] ||
-    servicesMap[currentOrder.service_name.toLowerCase().trim()] ||
-    '';
+                    let orderImgUrl = (CeroodOrderImages.resolve(currentOrder, servicesMap).find(x => x.image) || {}).image || "";
 
                     let stepBookedClass = 'prem-step-compact done';
                     let stepAssignedClass = 'prem-step-compact';
@@ -17880,6 +17892,7 @@ serviceStr =
 
                     let cardHTML = `
                     <div class="prem-live-card">
+${CeroodOrderImages.gallery(currentOrder, servicesMap)}
                         <div class="prem-live-top-row">
                             <div>
                                 <h3 style="margin: 0 0 4px 0; font-size: 14px; color: #0f172a;">${currentOrder.service_name}</h3>
@@ -17941,10 +17954,7 @@ else if (bookingStatus === 'completed') {
                     let safeServiceName = order.service_name.replace(/'/g, "\\'");
                     
                     // Match the correct product image dynamically for history list
-                    let orderImgUrl =
-    servicesMap[String(displayProductId).trim()] ||
-    servicesMap[order.service_name.toLowerCase().trim()] ||
-    '';
+                    let orderImgUrl = (CeroodOrderImages.resolve(order, servicesMap).find(x => x.image) || {}).image || "";
 
                     let isRated = ratedOrders.has(String(order.order_id));
                     let ratingBtnHTML = '';
@@ -18548,7 +18558,7 @@ function startCatusBannerFlow() {
 
     const CATUS_HOME_HTML_CACHE = 'cerood_home_festival_v13_all';
 
-    localStorage.removeItem('catus_home_html_cache');
+    try { ['catus_home_html_cache', CATUS_HOME_HTML_CACHE].forEach(k => localStorage.removeItem(k)); } catch (_) {}
 
     function setupMobileCategorySlider() {
     const container = document.getElementById('productGridContainer');
@@ -18591,43 +18601,15 @@ window.addEventListener('resize', () => {
     }
 }, {passive:true});
 
-function showCachedHomeServices() {
+function showCachedHomeServices() { return false; }
 
-    const container =
-        document.getElementById('productGridContainer');
-
-    if (!container) return false;
-
-    const cachedHTML =
-        localStorage.getItem(CATUS_HOME_HTML_CACHE);
-
-    if (!cachedHTML) return false;
-
-    let record;
-    try { record = JSON.parse(cachedHTML); } catch (_) { return false; }
-    if (!record || record.design !== 'mixed-search27' || typeof record.html !== 'string') return false;
-    container.innerHTML = record.html;
-
-setupMobileCategorySlider();
-
-if (window.lucide) {
-        lucide.createIcons();
-    }
-
-    if (currentHomeGroupId) {
-        filterProductsByGroup(currentHomeGroupId);
-    }
-
-    return true;
-}
-   
     async function loadLiveServicesForFrontend() {
   try {
 
    
 
       const servicesResponse =
-    await fetch(`${API_BASE_URL}/api/home-services`);
+    await fetch(`${API_BASE_URL}/api/home-services`, {cache:"no-store"});
 
 const data =
     await servicesResponse.json();
@@ -18969,16 +18951,7 @@ setupMobileCategorySlider();
 
 
 
-// Full homepage normal state cache
-try {
-    localStorage.setItem(
-        CATUS_HOME_HTML_CACHE,
-        JSON.stringify({design: 'mixed-search27', html: html})
-    );
-} catch (error) {
-    console.warn('Catus homepage cache save failed:', error);
-}
-
+// Render current API data; do not restore saved markup from an older design.
 if (window.lucide) {
     lucide.createIcons();
 }
@@ -21008,7 +20981,7 @@ window.addEventListener('appinstalled', function () {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
         navigator.serviceWorker
-            .register('/cerood-home-service-worker.js?v=festival15', {scope:'/home-services.html', updateViaCache:'none'})
+            .register('/cerood-home-service-worker.js?v=current42', {scope:'/home-services.html', updateViaCache:'none'})
             .then(function (registration) {
                 console.log(
                     'Cerood Service Worker registered:',
