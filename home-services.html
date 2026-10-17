@@ -21539,3 +21539,20 @@ html:root body#ceroodFestivalPage [data-personal-care-clean] h3,html:root body#c
 <script id="cerood-personal-care-clean-markers">
 (function(){function mark(){document.querySelectorAll('.uc-category-box').forEach(box=>{const title=box.querySelector('h3')?.textContent.trim();if(title==='Massage & Wellness'||title==='Salon & Beauty')box.setAttribute('data-personal-care-clean','');});}function init(){mark();const grid=document.getElementById('productGridContainer');if(grid)new MutationObserver(mark).observe(grid,{childList:true,subtree:true});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
 </script>
+<script id="cerood-personal-card-background-fix">
+(function(){'use strict';
+function apply(el,styles){for(const [key,value] of Object.entries(styles))if(el.style.getPropertyValue(key)!==value||el.style.getPropertyPriority(key)!=='important')el.style.setProperty(key,value,'important');}
+function clean(){document.querySelectorAll('.uc-category-box').forEach(box=>{
+ const heading=box.querySelector('.uc-cat-header h3');const name=heading?.textContent.trim();
+ if(!/^(Massage & Wellness|Salon & Beauty)$/i.test(name||'')&&!box.closest('#ceroodBeautyFirstSection'))return;
+ box.setAttribute('data-cerood-theme','white');box.setAttribute('data-personal-care-clean','');
+ apply(box,{'background':'#fff','background-image':'none','box-shadow':'none','border':'0'});
+ box.querySelectorAll('.uc-card,.uc-body,.cerood-starting-price').forEach(el=>apply(el,{'background':'transparent','background-image':'none','box-shadow':'none','border':'0'}));
+ box.querySelectorAll('h3,h4,.cerood-starting-price,.cerood-starting-price span,.cerood-starting-price strong').forEach(el=>apply(el,{'color':'#111','text-shadow':'none','-webkit-text-fill-color':'#111'}));
+ box.querySelectorAll('.uc-card-img-wrapper').forEach(el=>apply(el,{'background':'transparent','background-image':'none','padding':'0px','border':'0px','box-shadow':'none','overflow':'hidden','aspect-ratio':'1 / 1','height':'auto','box-sizing':'border-box'}));
+ box.querySelectorAll('.uc-card-img-wrapper img').forEach(el=>apply(el,{'display':'block','position':'static','inset':'auto','width':'100%','height':'100%','max-width':'100%','max-height':'none','padding':'0px','margin':'0px','border':'0px','background':'transparent','object-fit':'cover','transform':'none','box-sizing':'border-box'}));
+ });}
+function init(){clean();const root=document.getElementById('productGridContainer');if(root)new MutationObserver(clean).observe(root,{childList:true,subtree:true});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
