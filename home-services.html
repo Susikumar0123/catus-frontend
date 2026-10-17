@@ -14238,6 +14238,38 @@ window.CeroodOrderImages=(function(){
  return {image,resolve,gallery,save};
 })();
 </script><style id="cerood-order-images-style-v42">.cerood-order-images{display:flex;gap:10px;overflow-x:auto;margin:10px 0}.cerood-order-images figure{margin:0;flex:0 0 88px;max-width:100px;font:500 11px/1.35 Arial;color:#475569}.cerood-order-images img{display:block;width:64px;height:64px;object-fit:contain;background:#f8fafc;border-radius:8px}.cerood-order-images figcaption{margin-top:5px;overflow-wrap:anywhere}.cerood-order-images figure>span{font-size:10px;color:#64748b}</style>
+<script id="cerood-service-families">
+(function(){'use strict';
+const words=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+function family(s){
+ const text=words([s.service_name,s.name,s.slug,s.service_slug,s.category_name,s.category,s.group_name,s.service_family].filter(Boolean).join(' '));
+ if(/\b(massage|spa|wellness|ayurveda|ayurvedic|herbal compress|postnatal|post natal|senior comfort|elderly care|comfort therapy|body scrub|arm scrub)\b/.test(text))return 'wellness';
+ if(/\b(salon|beauty|pedicure|manicure|waxing|roll on wax|spatula wax|facial|cleanup|clean up|threading|haircut|hair spa|bridal|makeup)\b/.test(text))return 'beauty';
+ return 'home';
+}
+const title=f=>f==='wellness'?'Massage & Wellness':f==='beauty'?'Salon & Beauty':'Home Services';
+function options(s){
+ const original=String(s.select_options||'').split(',').map(v=>v.trim()).filter(Boolean);
+ if(family(s)==='home')return original;
+ const suitable=original.filter(v=>! /\b(repair|installation|install|inspection|diagnosis|gas|spare|mounting|standard service|general service)\b/i.test(v));
+ return suitable.length?suitable:[String(s.service_name||s.name||'').trim()||'Book an appointment'];
+}
+function prepare(s){return family(s)==='home'?s:{...s,select_options:options(s).join(','),enable_select_options:1};}
+function product(s){
+ const f=family(s);document.documentElement.dataset.serviceFamily=f;
+ if(f==='home')return;
+ const area=document.getElementById('productVariantArea');if(area)area.hidden=false;
+ const label=document.querySelector('.variant-title');if(label){label.textContent='Choose your treatment';label.style.display='block';}
+ const box=document.getElementById('variantContainer');if(box){box.replaceChildren();options(s).forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='variant-btn'+(i===0?' active':'');b.textContent=v;b.onclick=()=>{box.querySelectorAll('.variant-btn').forEach(n=>n.classList.remove('active'));b.classList.add('active');};box.append(b);});}
+ const heading=document.querySelector('#ceroodVisitPanel h2');if(heading)heading.textContent='Choose an appointment';
+ document.querySelectorAll('#ceroodVisitPanel .cerood-visit-date span').forEach(n=>n.textContent='Appointment date');
+ document.querySelectorAll('#ceroodVisitDate').forEach(n=>n.setAttribute('aria-label','Appointment date'));
+ ['productNoteContainer','featuresContainer'].forEach(id=>{const el=document.getElementById(id);if(el&&/\b(repair|installation|spare parts|gas refill|appliance)\b/i.test(el.textContent)){el.hidden=true;el.style.setProperty('display','none','important');}});
+ document.querySelectorAll('.cerood-booking-fee-notice').forEach(el=>{if(/repair|inspection|technician/i.test(el.textContent))el.textContent='Free booking. Appointment availability and service charges will be confirmed before the service.';});
+}
+window.CeroodServiceFamilies={family,title,options,prepare,product,same:(a,b)=>family(a)===family(b)};
+})();</script>
+<style id="cerood-treatment-label-style">html[data-service-family="wellness"] body #productGridMain .product-info #productVariantArea .variant-title,html[data-service-family="beauty"] body #productGridMain .product-info #productVariantArea .variant-title{display:block!important;text-transform:none!important}</style>
 </head>
 <body id="ceroodFestivalPage">
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -18635,7 +18667,7 @@ const usedServiceIds = new Set();
 allServices.forEach(service => {
 
     const categoryName =
-        String(service.category || 'Other Services').trim();
+        (CeroodServiceFamilies.family(service)==='home' ? String(service.category || 'Other Services').trim() : CeroodServiceFamilies.title(CeroodServiceFamilies.family(service)));
 
     if (!categoriesMap[categoryName]) {
         categoriesMap[categoryName] = {
@@ -18662,7 +18694,7 @@ let displayCategoriesMap = categoriesMap;
 if (document.body.id === 'ceroodFestivalPage') {
 
     const categoryQueues = Object.values(categoriesMap)
-        .map(category => [...category.items])
+        .map(category => category.items.filter(s => CeroodServiceFamilies.family(s) === 'home'))
         .filter(items => items.length > 0);
 
     const mixedServices = [];
@@ -18734,7 +18766,8 @@ for (let offset = 0, sectionIndex = 0; offset < bigCardServices.length; sectionI
     mobileMixedMap[sectionName].items.push(...sectionItems);
 }
 
-displayCategoriesMap = mobileMixedMap;
+['wellness','beauty'].forEach(family=>{const items=allServices.filter(s=>CeroodServiceFamilies.family(s)===family);if(items.length)mobileMixedMap[CeroodServiceFamilies.title(family)]={items};});
+ displayCategoriesMap = mobileMixedMap;
 }
 
 /* Empty category sections remove */

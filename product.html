@@ -9831,6 +9831,38 @@ window.CeroodOrderImages=(function(){
  return {image,resolve,gallery,save};
 })();
 </script><style id="cerood-order-images-style-v42">.cerood-order-images{display:flex;gap:10px;overflow-x:auto;margin:10px 0}.cerood-order-images figure{margin:0;flex:0 0 88px;max-width:100px;font:500 11px/1.35 Arial;color:#475569}.cerood-order-images img{display:block;width:64px;height:64px;object-fit:contain;background:#f8fafc;border-radius:8px}.cerood-order-images figcaption{margin-top:5px;overflow-wrap:anywhere}.cerood-order-images figure>span{font-size:10px;color:#64748b}</style>
+<script id="cerood-service-families">
+(function(){'use strict';
+const words=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+function family(s){
+ const text=words([s.service_name,s.name,s.slug,s.service_slug,s.category_name,s.category,s.group_name,s.service_family].filter(Boolean).join(' '));
+ if(/\b(massage|spa|wellness|ayurveda|ayurvedic|herbal compress|postnatal|post natal|senior comfort|elderly care|comfort therapy|body scrub|arm scrub)\b/.test(text))return 'wellness';
+ if(/\b(salon|beauty|pedicure|manicure|waxing|roll on wax|spatula wax|facial|cleanup|clean up|threading|haircut|hair spa|bridal|makeup)\b/.test(text))return 'beauty';
+ return 'home';
+}
+const title=f=>f==='wellness'?'Massage & Wellness':f==='beauty'?'Salon & Beauty':'Home Services';
+function options(s){
+ const original=String(s.select_options||'').split(',').map(v=>v.trim()).filter(Boolean);
+ if(family(s)==='home')return original;
+ const suitable=original.filter(v=>! /\b(repair|installation|install|inspection|diagnosis|gas|spare|mounting|standard service|general service)\b/i.test(v));
+ return suitable.length?suitable:[String(s.service_name||s.name||'').trim()||'Book an appointment'];
+}
+function prepare(s){return family(s)==='home'?s:{...s,select_options:options(s).join(','),enable_select_options:1};}
+function product(s){
+ const f=family(s);document.documentElement.dataset.serviceFamily=f;
+ if(f==='home')return;
+ const area=document.getElementById('productVariantArea');if(area)area.hidden=false;
+ const label=document.querySelector('.variant-title');if(label){label.textContent='Choose your treatment';label.style.display='block';}
+ const box=document.getElementById('variantContainer');if(box){box.replaceChildren();options(s).forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='variant-btn'+(i===0?' active':'');b.textContent=v;b.onclick=()=>{box.querySelectorAll('.variant-btn').forEach(n=>n.classList.remove('active'));b.classList.add('active');};box.append(b);});}
+ const heading=document.querySelector('#ceroodVisitPanel h2');if(heading)heading.textContent='Choose an appointment';
+ document.querySelectorAll('#ceroodVisitPanel .cerood-visit-date span').forEach(n=>n.textContent='Appointment date');
+ document.querySelectorAll('#ceroodVisitDate').forEach(n=>n.setAttribute('aria-label','Appointment date'));
+ ['productNoteContainer','featuresContainer'].forEach(id=>{const el=document.getElementById(id);if(el&&/\b(repair|installation|spare parts|gas refill|appliance)\b/i.test(el.textContent)){el.hidden=true;el.style.setProperty('display','none','important');}});
+ document.querySelectorAll('.cerood-booking-fee-notice').forEach(el=>{if(/repair|inspection|technician/i.test(el.textContent))el.textContent='Free booking. Appointment availability and service charges will be confirmed before the service.';});
+}
+window.CeroodServiceFamilies={family,title,options,prepare,product,same:(a,b)=>family(a)===family(b)};
+})();</script>
+<style id="cerood-treatment-label-style">html[data-service-family="wellness"] body #productGridMain .product-info #productVariantArea .variant-title,html[data-service-family="beauty"] body #productGridMain .product-info #productVariantArea .variant-title{display:block!important;text-transform:none!important}</style>
 </head>
 <body id="ceroodProductReference">
 <!-- CEROOD PWA INSTALL BANNER -->
@@ -11403,13 +11435,13 @@ if (normalBcLocationSeparator) {
                     const variantContainer = document.getElementById('variantContainer');
                     const variantTitleEl = document.querySelector('.variant-title');
                     if (variantContainer) {
-                        if (s.enable_select_options == 0) {
+                        if (s.enable_select_options == 0 && CeroodServiceFamilies.family(s)==='home') {
                             variantContainer.style.display = 'none';
                             if (variantTitleEl) variantTitleEl.style.display = 'none';
                         } else {
                             variantContainer.style.display = 'flex';
                             if (variantTitleEl) variantTitleEl.style.display = 'block';
-                            let optionsArr = (s.select_options || 'Standard Service').split(',');
+                            let optionsArr = (CeroodServiceFamilies.prepare(s).select_options || 'Standard Service').split(',');
                             let optHtml = '';
                             optionsArr.forEach((opt, idx) => {
                                 optHtml += `<button class="variant-btn ${idx === 0 ? 'active' : ''}" onclick="selectVariant(this)">${opt.trim()}</button>`;
@@ -11418,6 +11450,7 @@ if (normalBcLocationSeparator) {
                         }
                     }
 
+                    CeroodServiceFamilies.product(s);
                     // 5. Why Choose Us Dynamic Content
                     const featuresContainer = document.getElementById('featuresContainer');
 const featuresSection = document.querySelector('.features-section');
@@ -12173,7 +12206,10 @@ const averageRating =
     function loadRelevantServicesSection(allServices, currentCategory, currentId) {
         const relatedContainer = document.getElementById('relatedContainer');
         const relatedBox = document.getElementById('relatedServicesBox');
-        if (window.CeroodApplianceServices) {
+        const activeService = allServices.find(item => String(item.service_id) === String(currentId)) || currentProductData;
+        CeroodServiceFamilies.product(activeService);
+        allServices = allServices.filter(item => CeroodServiceFamilies.same(item, activeService));
+        if (CeroodServiceFamilies.family(activeService)==='home' && window.CeroodApplianceServices) {
             const currentService = allServices.find(item => String(item.service_id) === String(currentId));
             if (currentService) window.CeroodApplianceServices.render(allServices, currentService, {
                 state: currentStateSlug, district: currentDistrictSlug, location: currentLocationSlug,
@@ -12186,7 +12222,7 @@ const averageRating =
             let catHeader = relatedBox.querySelector('.uc-cat-header');
             if(catHeader) {
                 catHeader.innerHTML = `
-                    <h3>Similar Services</h3>
+                    <h3>${CeroodServiceFamilies.family(activeService)==='home'?'Similar Services':CeroodServiceFamilies.title(CeroodServiceFamilies.family(activeService))}</h3>
                     
                 `;
             }
@@ -12839,7 +12875,7 @@ const variantTitleEl =
 
 if (variantContainer) {
 
-    if (Number(fullService.enable_select_options) === 0) {
+    if (Number(fullService.enable_select_options) === 0 && CeroodServiceFamilies.family(fullService)==='home') {
 
         variantContainer.style.display = 'none';
 
@@ -12857,7 +12893,7 @@ if (variantContainer) {
 
         const optionsArr =
             String(
-                fullService.select_options ||
+                CeroodServiceFamilies.prepare(fullService).select_options ||
                 'Standard Service'
             )
             .split(',')
@@ -12877,6 +12913,7 @@ if (variantContainer) {
 }
 
 
+CeroodServiceFamilies.product(fullService);
 // ADMIN CONTROL -> WHY CHOOSE US
 const featuresContainer =
     document.getElementById('featuresContainer');
@@ -17726,15 +17763,19 @@ function ceroodOpenHomeApproval(orderId) {
 </script>
 <script>function ceroodOpenFullTracking(id){if(!/^CHS-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(String(id||'')))return;sessionStorage.setItem('cerood_tracking_booking_id',id);window.location.href='/tracking.html';}</script>
 <script id="cerood-product-reference-init">(function(){function init(){var header=document.querySelector('.uc-homepage-wrapper'),mq=matchMedia('(max-width:850px)');function measure(){if(header&&mq.matches)document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}if(header&&window.ResizeObserver)new ResizeObserver(measure).observe(header);measure();window.addEventListener('resize',measure,{passive:true});var input=document.getElementById('searchInput');if(input&&mq.matches){input.placeholder='Search services';input.autocomplete='off';}var buy=document.querySelector('#productGridMain .btn-buy');if(buy)buy.textContent='Book service';}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script><script id="cerood-product-extra-data">function ceroodRenderMoreServices(services,currentId,usedIds){
+ const active=services.find(s=>String(s.service_id)===String(currentId)) || currentProductData;
+ services=services.filter(s=>CeroodServiceFamilies.same(s,active));
+ const personal=
+ CeroodServiceFamilies.family(active)!=='home';
  const anchor=document.getElementById('relatedServicesBox');if(!anchor)return;
  let host=document.getElementById('ceroodServiceDiscovery');if(!host){host=document.createElement('div');host.id='ceroodServiceDiscovery';anchor.after(host);}host.replaceChildren();
  const seen=new Set((usedIds||[]).map(String));seen.add(String(currentId));
  const remaining=services.filter(function(s){const id=String(s.service_id||s.slug||'');if(!id||seen.has(id))return false;seen.add(id);return true;});
- const install=remaining.filter(s=>/install|fitting|mounting/i.test(s.service_name||''));
+ const install=personal?[]:remaining.filter(s=>/install|fitting|mounting/i.test(s.service_name||''));
  const others=remaining.filter(s=>!install.includes(s));
  const groups=[];if(install.length)groups.push(['Installation services',install]);
  const size=Math.max(4,Math.ceil(others.length/(install.length?2:3)));
- for(let i=0;i<others.length;i+=size)groups.push([groups.length===0?'Other appliance services':groups.length===1?'Explore more services':'More services for your home',others.slice(i,i+size)]);
+ for(let i=0;i<others.length;i+=size)groups.push([personal?CeroodServiceFamilies.title(CeroodServiceFamilies.family(active)):(groups.length===0?'Other appliance services':groups.length===1?'Explore more services':'More services for your home'),others.slice(i,i+size)]);
  groups.forEach(function([title,items]){if(!items.length)return;const section=document.createElement('section');section.className='cerood-discovery-section';const h=document.createElement('h2');h.textContent=title;section.append(h);const row=document.createElement('div');row.className='cerood-discovery-row';row.tabIndex=0;row.setAttribute('aria-label',title+', swipe to explore');items.forEach(function(s){const a=document.createElement('a');a.className='cerood-discovery-card';a.href='/product.html?id='+encodeURIComponent(s.slug||s.service_id);const img=document.createElement('img');img.src=s.image_url||'';img.alt=s.service_name||'Service';img.loading='lazy';const name=document.createElement('strong');name.textContent=s.service_name||'Service';const note=document.createElement('span');note.textContent='Free booking';a.append(img,name,note);row.append(a);});section.append(row);host.append(section);});
 }
 document.addEventListener('DOMContentLoaded',function(){var image=document.getElementById('mainProductImage'),title=document.getElementById('prodTitle');function sync(){if(!image||!image.getAttribute('src')||!title)return;document.getElementById('ceroodSpotlightImage').src=image.src;document.getElementById('ceroodSpotlightImage').alt=title.textContent.trim();document.getElementById('ceroodSpotlightTitle').textContent=title.textContent.trim();document.getElementById('ceroodServiceSpotlight').hidden=false;}sync();if(image)new MutationObserver(sync).observe(image,{attributes:true,attributeFilter:['src']});if(title)new MutationObserver(sync).observe(title,{childList:true,subtree:true,characterData:true});});</script><script id="cerood-approved-product-layout">document.addEventListener('DOMContentLoaded',function(){var header=document.querySelector('.uc-homepage-wrapper');if(header){document.body.prepend(header);function measure(){document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}measure();if(window.ResizeObserver)new ResizeObserver(measure).observe(header);window.addEventListener('resize',measure,{passive:true});}var panel=document.querySelector('.cerood-booking-panel'),location=panel&&panel.querySelector('.cerood-location-mini');if(location){panel.prepend(location);location.style.marginBottom='18px';var label=location.querySelector('span');if(label)label.textContent='Service location';}var share=document.createElement('button');share.type='button';share.className='cerood-product-share';share.setAttribute('aria-label','Share service');share.textContent='↗';share.style.cssText='position:absolute;right:12px;top:12px;border:0;border-radius:50%;width:36px;height:36px;background:white;color:#174caf;font-size:22px;cursor:pointer';var gallery=document.querySelector('.main-image-container');if(gallery){gallery.style.position='relative';gallery.append(share);}share.onclick=async function(){var data={title:document.getElementById('prodTitle').textContent,url:location&&window.location.href};data.url=window.location.href;try{if(navigator.share)await navigator.share(data);else if(navigator.clipboard){await navigator.clipboard.writeText(data.url);share.title='Link copied';}}catch(_){}};});</script><script id="cerood-product-search-fit-v3">document.addEventListener('DOMContentLoaded',function(){var input=document.getElementById('searchInput'),box=document.getElementById('suggestionsBox');if(input){input.type='search';input.autocomplete='off';input.name='cerood_product_lookup';if(document.activeElement!==input)input.value='';input.placeholder='Search home services';input.addEventListener('focus',function(){input.removeAttribute('readonly');});input.addEventListener('pointerdown',function(){input.removeAttribute('readonly');});}if(box)box.style.display='none';});</script><script id="cerood-product-single-option-clean">document.addEventListener('DOMContentLoaded',function(){var area=document.getElementById('productVariantArea'),container=document.getElementById('variantContainer');function sync(){if(area&&container)area.hidden=container.querySelectorAll('.variant-btn').length<=1;}sync();if(container)new MutationObserver(sync).observe(container,{childList:true,subtree:true});});</script><script defer src="/cerood-notify.js"></script><script id="cerood-cart-shell-sync-v29">document.addEventListener('DOMContentLoaded',function(){const modal=document.getElementById('cartModal');if(!modal)return;function sync(){document.body.classList.toggle('cerood-cart-open',modal.style.display!=='none'&&getComputedStyle(modal).display!=='none');}new MutationObserver(sync).observe(modal,{attributes:true,attributeFilter:['style']});sync();document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('cerood-cart-open'))toggleCartModal(false);});});</script><script id="cerood-native-notification-optin-v30">

@@ -2420,6 +2420,38 @@ window.CeroodOrderImages=(function(){
  return {image,resolve,gallery,save};
 })();
 </script><style id="cerood-order-images-style-v42">.cerood-order-images{display:flex;gap:10px;overflow-x:auto;margin:10px 0}.cerood-order-images figure{margin:0;flex:0 0 88px;max-width:100px;font:500 11px/1.35 Arial;color:#475569}.cerood-order-images img{display:block;width:64px;height:64px;object-fit:contain;background:#f8fafc;border-radius:8px}.cerood-order-images figcaption{margin-top:5px;overflow-wrap:anywhere}.cerood-order-images figure>span{font-size:10px;color:#64748b}</style>
+<script id="cerood-service-families">
+(function(){'use strict';
+const words=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+function family(s){
+ const text=words([s.service_name,s.name,s.slug,s.service_slug,s.category_name,s.category,s.group_name,s.service_family].filter(Boolean).join(' '));
+ if(/\b(massage|spa|wellness|ayurveda|ayurvedic|herbal compress|postnatal|post natal|senior comfort|elderly care|comfort therapy|body scrub|arm scrub)\b/.test(text))return 'wellness';
+ if(/\b(salon|beauty|pedicure|manicure|waxing|roll on wax|spatula wax|facial|cleanup|clean up|threading|haircut|hair spa|bridal|makeup)\b/.test(text))return 'beauty';
+ return 'home';
+}
+const title=f=>f==='wellness'?'Massage & Wellness':f==='beauty'?'Salon & Beauty':'Home Services';
+function options(s){
+ const original=String(s.select_options||'').split(',').map(v=>v.trim()).filter(Boolean);
+ if(family(s)==='home')return original;
+ const suitable=original.filter(v=>! /\b(repair|installation|install|inspection|diagnosis|gas|spare|mounting|standard service|general service)\b/i.test(v));
+ return suitable.length?suitable:[String(s.service_name||s.name||'').trim()||'Book an appointment'];
+}
+function prepare(s){return family(s)==='home'?s:{...s,select_options:options(s).join(','),enable_select_options:1};}
+function product(s){
+ const f=family(s);document.documentElement.dataset.serviceFamily=f;
+ if(f==='home')return;
+ const area=document.getElementById('productVariantArea');if(area)area.hidden=false;
+ const label=document.querySelector('.variant-title');if(label){label.textContent='Choose your treatment';label.style.display='block';}
+ const box=document.getElementById('variantContainer');if(box){box.replaceChildren();options(s).forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='variant-btn'+(i===0?' active':'');b.textContent=v;b.onclick=()=>{box.querySelectorAll('.variant-btn').forEach(n=>n.classList.remove('active'));b.classList.add('active');};box.append(b);});}
+ const heading=document.querySelector('#ceroodVisitPanel h2');if(heading)heading.textContent='Choose an appointment';
+ document.querySelectorAll('#ceroodVisitPanel .cerood-visit-date span').forEach(n=>n.textContent='Appointment date');
+ document.querySelectorAll('#ceroodVisitDate').forEach(n=>n.setAttribute('aria-label','Appointment date'));
+ ['productNoteContainer','featuresContainer'].forEach(id=>{const el=document.getElementById(id);if(el&&/\b(repair|installation|spare parts|gas refill|appliance)\b/i.test(el.textContent)){el.hidden=true;el.style.setProperty('display','none','important');}});
+ document.querySelectorAll('.cerood-booking-fee-notice').forEach(el=>{if(/repair|inspection|technician/i.test(el.textContent))el.textContent='Free booking. Appointment availability and service charges will be confirmed before the service.';});
+}
+window.CeroodServiceFamilies={family,title,options,prepare,product,same:(a,b)=>family(a)===family(b)};
+})();</script>
+<style id="cerood-treatment-label-style">html[data-service-family="wellness"] body #productGridMain .product-info #productVariantArea .variant-title,html[data-service-family="beauty"] body #productGridMain .product-info #productVariantArea .variant-title{display:block!important;text-transform:none!important}</style>
 </head>
 <body id="ceroodCheckoutMatch"><div id="ceroodOrderSummaryHeader"><div class="cos-title"><button type="button" onclick="goBackToProduct()" aria-label="Back to service"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button><span>Order Summary</span></div><div class="cos-steps" aria-label="Booking steps"><span><b>1</b>Address</span><span class="cos-current"><b>2</b>Order Summary</span><span><b>3</b>Confirmation</span></div></div>
 
@@ -2608,7 +2640,7 @@ Please check all required fields, mobile number, and pincode.
 
 </div>
 
-        <div id="ceroodFreeBookingNotice" role="status" class="cerood-modern-fee-note"><div class="cerood-modern-fee-top"><span class="cerood-modern-tag"><i class="fa-solid fa-circle-check"></i> Free to book</span><strong>₹0 <small>pay now</small></strong></div><div class="cerood-modern-fee-steps"><span><i class="fa-solid fa-shield-halved"></i> Approve visiting fee before technician visit</span><span><i class="fa-solid fa-screwdriver-wrench"></i> Approve repair quote separately</span></div></div>
+        <div id="ceroodFreeBookingNotice" role="status" class="cerood-modern-fee-note"><div class="cerood-modern-fee-top"><span class="cerood-modern-tag"><i class="fa-solid fa-circle-check"></i> Free to book</span><strong>₹0 <small>pay now</small></strong></div><div class="cerood-modern-fee-steps"><span><i class="fa-solid fa-shield-halved"></i> Confirm availability before your appointment</span><span><i class="fa-solid fa-screwdriver-wrench"></i> Approve service charges before work begins</span></div></div>
         <!-- Payment Mode Selection -->
         <div id="ceroodLegacyPaymentOptions" style="display:none !important;">
             <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Payment Method</label>
@@ -2669,7 +2701,7 @@ Please check all required fields, mobile number, and pincode.
         <h1 style="color: #0f172a; margin: 0 0 10px 0; font-size: 28px;">Booking Confirmed!</h1>
         <p style="color: #64748b; font-size: 15px; margin-bottom: 30px;">
     Your booking has been received successfully.
-    You can track technician assignment and service updates from your Cerood account.
+    You can track professional assignment and service updates from your Cerood account.
 </p>
 
         <div class="receipt-box">
@@ -3628,7 +3660,7 @@ if (trustNote) {
             ['cardRazorpay','cardLater'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
             document.getElementById('ceroodFreeBookingSummaryNote')?.remove();
             const notice=document.createElement('p');notice.id='ceroodFreeBookingSummaryNote';
-            notice.textContent='Visiting fee: shared for approval before the visit. Repair quote: approved separately.';
+            notice.textContent='Appointment availability and any visiting or service charges will be shared for your approval before service.';
             if(container)container.after(notice);
         }
 
@@ -3905,7 +3937,7 @@ function resetOrderSubmitState() {
                     const icon = document.createElement('div'); icon.className = 'cerood-success-check'; icon.setAttribute('aria-hidden','true'); icon.textContent = '✓'; panel.appendChild(icon);
                     const title = document.createElement('h2'); title.textContent = 'Booking received'; panel.appendChild(title);
                     const ref = document.createElement('p'); ref.className = 'cerood-success-reference'; ref.textContent = 'Booking ID: ' + safeOrderId; panel.appendChild(ref);
-                    const note = document.createElement('p'); note.className = 'cerood-success-note'; note.textContent = '₹0 booking · Visit and repair charges need your approval.'; panel.appendChild(note);
+                    const note = document.createElement('p'); note.className = 'cerood-success-note'; note.textContent = '₹0 booking · Any visiting or service charges need your approval.'; panel.appendChild(note);
                     if (approvalKey) {
                         const details = document.createElement('details'); details.className = 'cerood-success-details';
                         const summary = document.createElement('summary'); summary.textContent = 'Booking access details'; details.appendChild(summary);
@@ -3935,7 +3967,7 @@ function resetOrderSubmitState() {
                     document.body.classList.add('cerood-booking-complete');
                     main.appendChild(panel);
                 } else {
-                    alert('Booking request received! Booking ID: ' + safeOrderId + '. Paid inspection charge will be confirmed before visit.');
+                    alert('Booking request received! Booking ID: ' + safeOrderId + '. Any visiting or service charges will be confirmed before service.');
                 }
                 window.scrollTo({top:0,behavior:'smooth'});
             } catch (error) {
