@@ -9863,7 +9863,27 @@ function product(s){
 window.CeroodServiceFamilies={family,title,options,prepare,product,same:(a,b)=>family(a)===family(b)};
 })();</script>
 <style id="cerood-treatment-label-style">html[data-service-family="wellness"] body #productGridMain .product-info #productVariantArea .variant-title,html[data-service-family="beauty"] body #productGridMain .product-info #productVariantArea .variant-title{display:block!important;text-transform:none!important}</style>
-</head>
+<script id="cerood-beauty-priority">
+(function(){
+const names=['spatula waxing','glow facial cleanup','roll on waxing','rose pedicure'];
+function rank(s){const n=String(s.service_name||s.name||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();const i=names.indexOf(n);return i<0?99:i;}
+window.ceroodBeautyFirst=items=>items.map((s,i)=>({s,i})).sort((a,b)=>rank(a.s)-rank(b.s)||a.i-b.i).map(v=>v.s);
+window.ceroodPlaceBeautyFirst=function(){
+ const grid=document.getElementById('productGridContainer');if(!grid)return;
+ let host=document.getElementById('ceroodBeautyFirstSection');if(!host){host=document.createElement('section');host.id='ceroodBeautyFirstSection';host.setAttribute('aria-label','Salon and beauty services');const anchor=document.querySelector('.cerood-festival-banner')||grid;anchor.before(host);}
+ const box=Array.from(grid.querySelectorAll('.uc-category-box')).find(b=>b.querySelector('h3')?.textContent.trim()==='Salon & Beauty');
+ host.replaceChildren();host.hidden=true;if(box){const featured=box.cloneNode(true);const wanted=n=>names.includes(String(n.querySelector('h4')?.textContent||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim());featured.querySelectorAll('.uc-card').forEach(n=>{if(!wanted(n))n.remove();});featured.querySelectorAll('.uc-see-all-btn,.uc-carousel-arrow').forEach(n=>n.remove());if(featured.querySelector('.uc-card')){host.hidden=false;host.append(featured);box.querySelectorAll('.uc-card').forEach(n=>{if(wanted(n))n.remove();});if(!box.querySelector('.uc-card'))box.remove();const row=featured.querySelector('.uc-grid');if(row)row.scrollLeft=0;}}
+};
+})();</script>
+<style id="cerood-beauty-first-layout">
+#ceroodBeautyFirstSection{margin:16px 24px 22px;clear:both}#ceroodBeautyFirstSection[hidden]{display:none!important}
+html:root body #ceroodBeautyFirstSection .uc-category-box{width:100%!important;max-width:none!important;margin:0!important;display:block!important}
+html:root body #ceroodBeautyFirstSection .uc-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;overflow:visible!important;width:100%!important;transform:none!important}
+html:root body #ceroodBeautyFirstSection .uc-card{width:auto!important;min-width:0!important;max-width:none!important;flex:initial!important}
+html:root body #ceroodBeautyFirstSection .uc-card-img-wrapper{aspect-ratio:1/1!important;height:auto!important}html:root body #ceroodBeautyFirstSection .uc-card img{width:100%!important;height:100%!important;object-fit:cover!important}
+html:root body #ceroodBeautyFirstSection .uc-carousel-arrow{display:none!important}
+@media(max-width:850px){#ceroodBeautyFirstSection{margin:12px 15px 18px}html:root body #ceroodBeautyFirstSection .uc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
+</style></head>
 <body id="ceroodProductReference">
 <!-- CEROOD PWA INSTALL BANNER -->
 <div id="ceroodInstallBanner" style="display:none;">
@@ -12204,6 +12224,7 @@ const averageRating =
     }
 
     function loadRelevantServicesSection(allServices, currentCategory, currentId) {
+        allServices = ceroodBeautyFirst(allServices);
         const relatedContainer = document.getElementById('relatedContainer');
         const relatedBox = document.getElementById('relatedServicesBox');
         const activeService = allServices.find(item => String(item.service_id) === String(currentId)) || currentProductData;
@@ -17763,6 +17784,7 @@ function ceroodOpenHomeApproval(orderId) {
 </script>
 <script>function ceroodOpenFullTracking(id){if(!/^CHS-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(String(id||'')))return;sessionStorage.setItem('cerood_tracking_booking_id',id);window.location.href='/tracking.html';}</script>
 <script id="cerood-product-reference-init">(function(){function init(){var header=document.querySelector('.uc-homepage-wrapper'),mq=matchMedia('(max-width:850px)');function measure(){if(header&&mq.matches)document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}if(header&&window.ResizeObserver)new ResizeObserver(measure).observe(header);measure();window.addEventListener('resize',measure,{passive:true});var input=document.getElementById('searchInput');if(input&&mq.matches){input.placeholder='Search services';input.autocomplete='off';}var buy=document.querySelector('#productGridMain .btn-buy');if(buy)buy.textContent='Book service';}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script><script id="cerood-product-extra-data">function ceroodRenderMoreServices(services,currentId,usedIds){
+ services=ceroodBeautyFirst(services);
  const active=services.find(s=>String(s.service_id)===String(currentId)) || currentProductData;
  services=services.filter(s=>CeroodServiceFamilies.same(s,active));
  const personal=
