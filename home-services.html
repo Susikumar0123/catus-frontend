@@ -21556,3 +21556,17 @@ function init(){clean();const root=document.getElementById('productGridContainer
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+
+<script id="cerood-all-service-horizontal-sliders">
+(function(){'use strict';
+function set(el,styles){for(const [key,value] of Object.entries(styles))if(el.style.getPropertyValue(key)!==value)el.style.setProperty(key,value,'important');}
+function arrange(){const mobile=matchMedia('(max-width:850px)').matches;
+ document.querySelectorAll('.uc-category-box .uc-grid,.cerood-noteworthy-grid').forEach(row=>{
+ set(row,{'display':'flex','flex-direction':'row','flex-wrap':'nowrap','gap':'12px','overflow-x':'auto','overflow-y':'hidden','width':'100%','max-width':'100%','height':'auto','min-height':'0px','max-height':'none','align-items':'stretch','justify-content':'flex-start','scroll-snap-type':'x mandatory','scroll-behavior':'smooth','overscroll-behavior-x':'contain','grid-template-columns':'none','grid-template-rows':'none','padding-bottom':'6px','box-sizing':'border-box'});
+ row.style.setProperty('-webkit-overflow-scrolling','touch');row.tabIndex=0;
+ row.querySelectorAll(':scope > .uc-card,:scope > .cerood-noteworthy-item').forEach(card=>set(card,{'flex':mobile?'0 0 46%':'0 0 22%','width':mobile?'46%':'22%','min-width':'0px','max-width':'none','height':'auto','min-height':'0px','scroll-snap-align':'start','box-sizing':'border-box','margin':'0px'}));
+ const section=row.closest('.uc-category-box');if(section){set(section,{'height':'auto','min-height':'0px','max-height':'none'});const wrap=row.closest('.uc-carousel-wrapper');if(wrap)set(wrap,{'height':'auto','min-height':'0px','max-height':'none','width':'100%'});const more=section.querySelector('.uc-see-all-btn');if(more){if(more.textContent!=='See more ›')more.textContent='See more ›';more.onclick=function(event){event.preventDefault();event.stopImmediatePropagation();row.scrollBy({left:row.clientWidth*.85,behavior:'smooth'});return false;};}}
+ });}
+function init(){arrange();['productGridContainer','ceroodBeautyFirstSection'].forEach(id=>{const el=document.getElementById(id);if(el)new MutationObserver(arrange).observe(el,{childList:true,subtree:true});});window.addEventListener('resize',arrange,{passive:true});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();</script>
