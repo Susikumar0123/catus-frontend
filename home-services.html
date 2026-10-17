@@ -18802,6 +18802,15 @@ Object.keys(categoriesMap).forEach(categoryName => {
        
 let html = '';
 
+// Personal care sections precede appliance and other home services on every viewport.
+const personalFirst = {};
+['Massage & Wellness', 'Salon & Beauty'].forEach(name => {
+    if (displayCategoriesMap[name]) personalFirst[name] = displayCategoriesMap[name];
+});
+Object.keys(displayCategoriesMap).forEach(name => {
+    if (!Object.prototype.hasOwnProperty.call(personalFirst, name)) personalFirst[name] = displayCategoriesMap[name];
+});
+displayCategoriesMap = personalFirst;
 const categoryNames = Object.keys(displayCategoriesMap);
 const totalCategories = categoryNames.length;
 
