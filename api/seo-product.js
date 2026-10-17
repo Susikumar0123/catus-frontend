@@ -18,6 +18,8 @@ function encodePathSegment(value) {
 
 module.exports = async function handler(req, res) {
 
+    res.setHeader('Cache-Control', 'no-store');
+
     const state =
         String(req.query.state || '')
             .trim()
@@ -42,10 +44,9 @@ module.exports = async function handler(req, res) {
         String(req.query.clean || '') === '1';
 
     if (
-        !state ||
-        !district ||
-        !location ||
-        !service
+        [req.query.state, req.query.district, req.query.location, req.query.service]
+            .some(value => typeof value !== 'string') ||
+        ![state, district, location, service].every(value => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value))
     ) {
         return res
             .status(400)
@@ -92,21 +93,18 @@ module.exports = async function handler(req, res) {
             `${encodePathSegment(service)}`;
 
         const apiResponse =
-            await fetch(apiUrl);
+            await fetch(apiUrl, {signal: AbortSignal.timeout(10000)});
 
-        const data =
-            await apiResponse.json();
-
-        if (
-            !apiResponse.ok ||
-            !data.success ||
-            !data.page
-        ) {
-            return res
-                .status(404)
-                .send('Service page not found');
+        // A temporary upstream failure is not a missing page.
+        if (apiResponse.status === 404) {
+            res.setHeader('X-Robots-Tag', 'noindex');
+            return res.status(404).send('Service page not found');
         }
-
+        if (!apiResponse.ok) throw new Error('Service data temporarily unavailable');
+        const data = await apiResponse.json();
+        if (!data.success || !data.page || !data.page.service_name) {
+            throw new Error('Incomplete service data');
+        }
         const page = data.page;
 
         // ==========================================
@@ -120,7 +118,8 @@ try {
 
     const servicesResponse =
         await fetch(
-            'https://catus-backend-d2js.onrender.com/api/services'
+            'https://catus-backend-d2js.onrender.com/api/home-services',
+            {signal: AbortSignal.timeout(5000)}
         );
 
     const servicesData =
@@ -193,10 +192,11 @@ try {
         // SEO TITLE + DESCRIPTION
         // ==========================================
 
-        const seoLocation =
-    district === location
-        ? page.district
-        : `${page.location_name}, ${page.district}`;
+        const displayPlace = value => String(value || '').split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+const districtName = String(page.district || displayPlace(district)).trim();
+const locationName = String(page.location_name || displayPlace(location)).trim();
+const seoLocation = district === location || locationName.toLowerCase() === districtName.toLowerCase()
+    ? districtName : `${locationName}, ${districtName}`;
 
 // Search-result metadata only.
 // This does not add or change any visible product-page content.
@@ -220,21 +220,14 @@ const isACService = /(^|\s)ac($|\s|-)|air conditioner/i.test(serviceName);
 const isWashingMachineService = /washing machine|washer/i.test(serviceName);
 
 const title =
-    `${searchServiceName} in ${seoLocation} – Doorstep Service | Cerood`;
+    `${searchServiceName} in ${seoLocation} | Cerood`;
 
 // RO / water-purifier-specific search metadata only. Search Console already
 // shows installation, service, pump-repair and near-me intent across these URLs.
 // Preserve each exact service name instead of forcing one generic RO keyword.
 const isROService = /(^|\s)ro($|\s|-)|water purifier/i.test(serviceName);
 
-const description = `Call 8946055856 to book. ` + (isACService
-    ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep AC technician service and check availability online.`
-    : isWashingMachineService
-        ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep washing machine technician service and check availability online.`
-        : isROService
-            ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Request doorstep RO water purifier technician service and check availability online.`
-            : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Get doorstep service, check technician availability and request service online.`);
-
+const description = `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Call 8946055856 to check availability. Visit charges and repair quotes are shared for approval.`;
 
         // ==========================================
         // LOAD PRODUCT PAGE
@@ -259,7 +252,7 @@ const description = `Call 8946055856 to book. ` + (isACService
 
         html = html.replace(
             /<title[^>]*>[\s\S]*?<\/title>/i,
-            `<title>${escapeHtml(title)}</title>`
+            `<title id="pageTitle">${escapeHtml(title)}</title>`
         );
 
 
@@ -280,48 +273,22 @@ const description = `Call 8946055856 to book. ` + (isACService
         const canonicalTag =
             `<link rel="canonical" href="${escapeHtml(canonical)}">`;
 
-        if (
-            /<link\s+rel=["']canonical["'][^>]*>/i
-                .test(html)
-        ) {
-
-            html = html.replace(
-                /<link\s+rel=["']canonical["'][^>]*>/i,
-                canonicalTag
-            );
-
-        } else {
-
-            html = html.replace(
-                '</head>',
-                `    ${canonicalTag}\n</head>`
-            );
-        }
-
+        html = html.replace(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/gi, '');
+        html = html.replace('</head>', `${canonicalTag}\n</head>`);
 
         // ==========================================
         // OG URL
         // ==========================================
 
-        const ogUrlTag =
-            `<meta property="og:url" content="${escapeHtml(canonical)}">`;
-
-        if (
-            /<meta\s+property=["']og:url["'][^>]*>/i
-                .test(html)
-        ) {
-
-            html = html.replace(
-                /<meta\s+property=["']og:url["'][^>]*>/i,
-                ogUrlTag
-            );
-
-        } else {
-
-            html = html.replace(
-                '</head>',
-                `    ${ogUrlTag}\n</head>`
-            );
+        const socialValues = {'og:url':canonical, 'og:title':title, 'og:description':description, 'og:type':'website', 'og:site_name':'Cerood'};
+        if (page.image_url && /^https?:\/\//i.test(page.image_url)) {
+            socialValues['og:image'] = page.image_url;
+            socialValues['og:image:alt'] = `${serviceName} in ${seoLocation}`;
+        }
+        for (const [property, value] of Object.entries(socialValues)) {
+            const pattern = new RegExp('<meta\\b(?=[^>]*\\bproperty=["\']' + property + '["\'])[^>]*>', 'gi');
+            html = html.replace(pattern, '');
+            html = html.replace('</head>', `<meta property="${property}" content="${escapeHtml(value)}">\n</head>`);
         }
 
 // ==========================================
@@ -391,6 +358,12 @@ html = html.replace(
 // ==========================================
 // SERVER-RENDER LOCAL SEO CONTENT
 // ==========================================
+
+const localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in ${escapeHtml(seoLocation)}" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569"><p>${escapeHtml(serviceName)} in ${escapeHtml(seoLocation)}. Contact Cerood to confirm technician availability. Visit charges and any repair quote are shared for approval before proceeding.</p><a href="tel:+918946055856" data-cerood-contact="call" style="font-weight:600">Call to book: 89460 55856</a></section>`;
+html = html.replace(/(<h1[^>]*id=["']prodTitle["'][^>]*>[\s\S]*?<\/h1>)/i, heading => heading + localIntro);
+// Keep metadata consistent when the existing location loader hydrates the page.
+const hydrationMetadata = JSON.stringify({seo_title:title, seo_description:description}).replace(/</g, '\\u003c');
+html = html.replace(/const page\s*=\s*data\.page\s*;/, matched => matched + `\nObject.assign(page, ${hydrationMetadata});`);
 
 // Render the same catalogue-backed service choices before JavaScript runs.
 const applianceChoices = require(path.join(process.cwd(), 'cerood-appliance-services.js'));
@@ -479,12 +452,13 @@ const serverSchema = {
             "image": page.image_url || undefined,
             "provider": {
                 "@type": "Organization",
-                "name": "Cerood Home Services",
-                "url": "https://www.cerood.com/"
+                "name": "Cerood",
+                "url": "https://www.cerood.com/home-services.html",
+                "telephone": "+918946055856"
             },
             "areaServed": {
                 "@type": "Place",
-                "name": seoPlaceName
+                "name": seoLocation
             },
             "serviceType": page.service_name
         },
@@ -504,9 +478,14 @@ const serverSchema = {
                     "name": page.district || district,
                     "item": `https://www.cerood.com/${encodePathSegment(state)}/${encodePathSegment(district)}`
                 },
+                ...(district !== location ? [{
+                    "@type": "ListItem", "position": 3,
+                    "name": locationName,
+                    "item": `https://www.cerood.com/${encodePathSegment(state)}/${encodePathSegment(district)}/location/${encodePathSegment(location)}`
+                }] : []),
                 {
                     "@type": "ListItem",
-                    "position": 3,
+                    "position": district === location ? 3 : 4,
                     "name": page.service_name,
                     "item": canonical
                 }
@@ -537,7 +516,7 @@ html = html.replace(
 
         res.setHeader(
             'Cache-Control',
-            'public, s-maxage=3600, stale-while-revalidate=86400'
+            'public, max-age=0, s-maxage=300, stale-while-revalidate=300'
         );
 
         return res
@@ -551,10 +530,7 @@ html = html.replace(
             error
         );
 
-        return res
-            .status(500)
-            .send(
-                'Unable to render service page'
-            );
+        res.setHeader('Retry-After', '60');
+        return res.status(503).send('Service page temporarily unavailable. Please try again.');
     }
 };

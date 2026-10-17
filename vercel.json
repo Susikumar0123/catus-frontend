@@ -60,6 +60,11 @@
       "source": "/index.html",
       "destination": "/home-services.html",
       "permanent": false
+    },
+    {
+      "source": "/tamil-nadu/chennai/chennai/:service([a-z0-9-]+)",
+      "destination": "/tamil-nadu/chennai/:service",
+      "permanent": true
     }
   ]
 }

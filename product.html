@@ -11266,6 +11266,40 @@ let currentLocationName = '';
 let currentDistrictName = '';
 let locationServiceData = null;
 
+// Keep canonical, social metadata and service schema on one service identity.
+function ceroodProductCanonical(page) {
+    const origin = 'https://www.cerood.com';
+    const params = getProductUrlParams();
+    const part = value => String(value || '').trim().toLowerCase();
+    const slug = part(page && (page.slug || page.service_slug)) || part(params.serviceId);
+    const state = part(params.state), district = part(params.district), location = part(params.location);
+    const valid = value => /^[a-z0-9-]+$/.test(value);
+    if (state && district && location && [state,district,location,slug].every(valid) && !/^\d+$/.test(slug)) {
+        const parts = district === location ? [state,district,slug] : [state,district,location,slug];
+        return origin + '/' + parts.map(encodeURIComponent).join('/');
+    }
+    const url = new URL('/product.html', origin);
+    url.searchParams.set('id', String(page && (page.slug || page.service_slug || page.service_id) || params.serviceId));
+    // Do not merge different service or location query URLs into /product.html.
+    ['state','district','location'].forEach(key => { if(params[key]) url.searchParams.set(key,params[key]); });
+    return url.href;
+}
+function ceroodSetProductCanonical(url) {
+    const tags = Array.from(document.querySelectorAll('link[rel="canonical"]'));
+    const tag = tags.shift() || document.createElement('link');
+    tags.forEach(old => old.remove());
+    tag.rel = 'canonical'; tag.href = url;
+    if (!tag.parentNode) document.head.appendChild(tag);
+}
+function ceroodNormalProductSeo(service) {
+    const name = String(service.service_name || service.name || 'Home Appliance Service');
+    document.title = String(service.seo_title || name + ' | Cerood');
+    let description = document.querySelector('meta[name="description"]');
+    if (!description) { description = document.createElement('meta'); description.name = 'description'; document.head.appendChild(description); }
+    description.content = String(service.seo_description || 'Explore ' + name + ' with Cerood. Check service details and contact Cerood to confirm availability and charges.');
+    ceroodSetProductCanonical(ceroodProductCanonical(service));
+}
+
 function getProductUrlParams() {
 
     const params =
@@ -11394,6 +11428,7 @@ const productLoadSafetyTimer = setTimeout(() => {
 );
                 if (s) {
                     currentProductData = s;
+                    ceroodNormalProductSeo(s);
                     document.getElementById('prodTitle').innerText = s.service_name;
                     document.getElementById('displayPrice').innerText = "₹" + Math.round(parseFloat(s.price));
                     document.getElementById('displayMrp').innerText = "₹" + Math.round(parseFloat(s.mrp));
@@ -12465,9 +12500,7 @@ function updateCeroodSeoSchemas(page) {
     const districtName =
         page.district || '';
 
-    const currentUrl =
-        'https://www.cerood.com' +
-        window.location.pathname;
+    const currentUrl = ceroodProductCanonical(page);
 
     // Remove old schemas
     [
@@ -13186,7 +13219,7 @@ if (breadcrumbTitle) {
 
         document.title =
     page.seo_title ||
-    `${page.service_name} in ${page.location_name} | Cerood`;
+    `${page.service_name}${(page.location_name || page.district) ? ' in ' + (page.location_name || page.district) : ''} | Cerood`;
 
 
         // ------------------------------------------
@@ -13246,21 +13279,17 @@ if (breadcrumbTitle) {
             );
         }
 
-        canonical.href =
-            'https://www.cerood.com' +
-            window.location.pathname;
+        ceroodSetProductCanonical(ceroodProductCanonical(page));
 
         // ------------------------------------------
 // DYNAMIC OPEN GRAPH SEO
 // ------------------------------------------
 
-const currentSeoUrl =
-    'https://www.cerood.com' +
-    window.location.pathname;
+const currentSeoUrl = ceroodProductCanonical(page);
 
 const seoTitle =
     page.seo_title ||
-    `${page.service_name} in ${page.location_name} | Cerood`;
+    `${page.service_name}${(page.location_name || page.district) ? ' in ' + (page.location_name || page.district) : ''} | Cerood`;
 
 const seoDescription =
     `Call 8946055856 to book. ` + String(
