@@ -19,7 +19,7 @@ function encodePathSegment(value) {
 module.exports = async function handler(req, res) {
 
     res.setHeader('Cache-Control', 'no-store');
-    res.setHeader('X-Cerood-Service-Copy', 'family-copy-v2');
+    res.setHeader('X-Cerood-Service-Copy', 'family-copy-v3-no-inline-call');
 
     const state =
         String(req.query.state || '')
@@ -371,7 +371,7 @@ html = html.replace(
 // SERVER-RENDER LOCAL SEO CONTENT
 // ==========================================
 
-const localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in ${escapeHtml(seoLocation)}" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569"><p>${escapeHtml(serviceName)} in ${escapeHtml(seoLocation)}. Contact Cerood to confirm ${escapeHtml(professional)} availability. ${escapeHtml(approvalText)}</p><a href="tel:+918946055856" data-cerood-contact="call" style="font-weight:600">Call to book: 89460 55856</a></section>`;
+const localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in ${escapeHtml(seoLocation)}" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569"><p>${escapeHtml(serviceName)} in ${escapeHtml(seoLocation)}. Contact Cerood to confirm ${escapeHtml(professional)} availability. ${escapeHtml(approvalText)}</p></section>`;
 html = html.replace(/(<h1[^>]*id=["']prodTitle["'][^>]*>[\s\S]*?<\/h1>)/i, heading => heading + localIntro);
 // Keep metadata consistent when the existing location loader hydrates the page.
 const hydrationMetadata = JSON.stringify({seo_title:title, seo_description:description}).replace(/</g, '\\u003c');
