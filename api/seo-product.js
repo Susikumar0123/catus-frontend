@@ -19,6 +19,7 @@ function encodePathSegment(value) {
 module.exports = async function handler(req, res) {
 
     res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Cerood-Service-Copy', 'family-copy-v2');
 
     const state =
         String(req.query.state || '')
@@ -227,7 +228,18 @@ const title =
 // Preserve each exact service name instead of forcing one generic RO keyword.
 const isROService = /(^|\s)ro($|\s|-)|water purifier/i.test(serviceName);
 
-const description = `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Call 8946055856 to check availability. Visit charges and repair quotes are shared for approval.`;
+// Match the service families used by the product UI; do not describe beauty as repair.
+const familyText = [page.service_name,page.name,page.slug,page.service_slug,page.category_name,page.category,page.group_name,page.service_family]
+    .filter(Boolean).join(' ').toLowerCase().replace(/[^a-z0-9]+/g,' ');
+const serviceFamily = /\b(massage|spa|wellness|ayurveda|ayurvedic|herbal compress|postnatal|post natal|senior comfort|elderly care|comfort therapy|body scrub|arm scrub)\b/.test(familyText)
+    ? 'wellness' : /\b(salon|beauty|pedicure|manicure|waxing|roll on wax|spatula wax|facial|cleanup|clean up|threading|haircut|hair spa|bridal|makeup)\b/.test(familyText) ? 'beauty' : 'home';
+const professional = serviceFamily === 'beauty' ? 'beauty professional' : serviceFamily === 'wellness' ? 'wellness professional' : 'technician';
+const approvalText = serviceFamily === 'home'
+    ? 'Visit charges and any repair quote are shared for approval before proceeding.'
+    : 'Appointment availability, service details and charges are confirmed before the service.';
+const description = serviceFamily === 'home'
+    ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Call 8946055856 to check availability. Visit charges and repair quotes are shared for approval.`
+    : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Call 8946055856 to check appointment availability, service details and charges.`;
 
         // ==========================================
         // LOAD PRODUCT PAGE
@@ -359,7 +371,7 @@ html = html.replace(
 // SERVER-RENDER LOCAL SEO CONTENT
 // ==========================================
 
-const localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in ${escapeHtml(seoLocation)}" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569"><p>${escapeHtml(serviceName)} in ${escapeHtml(seoLocation)}. Contact Cerood to confirm technician availability. Visit charges and any repair quote are shared for approval before proceeding.</p><a href="tel:+918946055856" data-cerood-contact="call" style="font-weight:600">Call to book: 89460 55856</a></section>`;
+const localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in ${escapeHtml(seoLocation)}" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569"><p>${escapeHtml(serviceName)} in ${escapeHtml(seoLocation)}. Contact Cerood to confirm ${escapeHtml(professional)} availability. ${escapeHtml(approvalText)}</p><a href="tel:+918946055856" data-cerood-contact="call" style="font-weight:600">Call to book: 89460 55856</a></section>`;
 html = html.replace(/(<h1[^>]*id=["']prodTitle["'][^>]*>[\s\S]*?<\/h1>)/i, heading => heading + localIntro);
 // Keep metadata consistent when the existing location loader hydrates the page.
 const hydrationMetadata = JSON.stringify({seo_title:title, seo_description:description}).replace(/</g, '\\u003c');
@@ -516,7 +528,7 @@ html = html.replace(
 
         res.setHeader(
             'Cache-Control',
-            'public, max-age=0, s-maxage=300, stale-while-revalidate=300'
+            'public, max-age=0, s-maxage=60, stale-while-revalidate=0'
         );
 
         return res

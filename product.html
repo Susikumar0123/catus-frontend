@@ -9851,6 +9851,25 @@ function prepare(s){return family(s)==='home'?s:{...s,select_options:options(s).
 function product(s){
  const f=family(s);document.documentElement.dataset.serviceFamily=f;
  if(f==='home')return;
+ // Correct server-rendered copy as well as the appointment controls.
+ const professional=f==='beauty'?'beauty professional':'wellness professional';
+ function appointmentCopy(text){return String(text||'')
+   .replace(/technician availability/gi,professional+' availability')
+   .replace(/technician coverage/gi,professional+' availability')
+   .replace(/Visit charges and (?:any )?repair quotes? are shared for approval(?: before proceeding)?\./gi,'Appointment availability, service details and charges are confirmed before the service.')
+   .replace(/Doorstep service subject to technician availability\./gi,'Appointments are subject to professional availability.');}
+ const intro=document.querySelector('#ceroodLocalServiceIntro p');
+ if(intro)intro.textContent=appointmentCopy(intro.textContent);
+ document.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[name="twitter:description"]').forEach(el=>{el.content=appointmentCopy(el.content);});
+ document.querySelectorAll('script[type="application/ld+json"]').forEach(el=>{
+   try{const data=JSON.parse(el.textContent);let changed=false;
+     function update(node){if(!node||typeof node!=='object')return;
+       if(node['@type']==='Service'&&typeof node.description==='string'){const copy=appointmentCopy(node.description);if(copy!==node.description){node.description=copy;changed=true;}}
+       if(Array.isArray(node['@graph']))node['@graph'].forEach(update);
+     }if(Array.isArray(data))data.forEach(update);else update(data);
+     if(changed)el.textContent=JSON.stringify(data).replace(/</g,'\\u003c');
+   }catch(_){}
+ });
  const area=document.getElementById('productVariantArea');if(area)area.hidden=false;
  const label=document.querySelector('.variant-title');if(label){label.textContent='Choose your treatment';label.style.display='block';}
  const box=document.getElementById('variantContainer');if(box){box.replaceChildren();options(s).forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='variant-btn'+(i===0?' active':'');b.textContent=v;b.onclick=()=>{box.querySelectorAll('.variant-btn').forEach(n=>n.classList.remove('active'));b.classList.add('active');};box.append(b);});}
@@ -12547,7 +12566,7 @@ function updateCeroodSeoSchemas(page) {
             },
             "description":
                 page.seo_description ||
-                `Book ${serviceName.toLowerCase()} in ${locationName} with Cerood. Doorstep service subject to technician availability.`
+                `Book ${serviceName.toLowerCase()} in ${locationName} with Cerood. Availability and service charges are confirmed before the service.`
         });
 
     document.head.appendChild(
