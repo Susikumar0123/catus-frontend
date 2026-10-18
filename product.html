@@ -35,7 +35,7 @@
 <script defer="" src="/cerood-location.js"></script>
 
 
-<script defer="" src="/cerood-home-frontend-auth.js"></script>
+
 
 
 
@@ -13851,18 +13851,8 @@ document.addEventListener(
 
    function handleHeaderAuthClick() {
     ceroodProductSyncCommonAuth();
-    if (currentUser) {
-        openPremiumDashboard();
-    } else if (window.CeroodAuth) {
-        window.CeroodAuth.requireLogin(function () {
-            ceroodProductSyncCommonAuth();
-            if (currentUser) openPremiumDashboard();
-        });
-    } else {
-        // Fallback only if the shared JS fails to load.
-        showAuthStep('phone');
-        toggleAuthModal(true);
-    }
+    if(currentUser) openPremiumDashboard();
+    else { showAuthStep('phone'); toggleAuthModal(true); }
 }
 async function submitNewPasswordReset() {
 
@@ -17915,6 +17905,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+<script id="cerood-product-truecaller-session">
+window.CeroodAcceptTruecallerLogin = function(data) {
+ if (!data || !data.user || !data.home_service_session) return false;
+ currentUser = data.user;
+ localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
+ localStorage.setItem('cerood_home_service_session', data.home_service_session);
+ updateHeaderLoginUI();
+ toggleAuthModal(false);
+ window.dispatchEvent(new CustomEvent('cerood:auth-changed', {detail:{loggedIn:true,user:data.user}}));
+ if(typeof showToast === 'function') showToast('Login successful!',false);
+ return true;
+};
+</script>
+<script defer src="/cerood-truecaller-web.js?v=1"></script>
 </body>
 </html>
 

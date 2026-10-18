@@ -21435,6 +21435,20 @@ document.addEventListener('DOMContentLoaded',function(){
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+<script id="cerood-truecaller-home-session">
+window.CeroodAcceptTruecallerLogin = function(data) {
+ if (!data || !data.user || !data.home_service_session) return false;
+ currentUser = data.user;
+ localStorage.setItem('cerood_home_service_user', JSON.stringify(currentUser));
+ localStorage.setItem('cerood_home_service_session', data.home_service_session);
+ updateHeaderLoginUI();
+ toggleAuthModal(false);
+ window.dispatchEvent(new CustomEvent('cerood:auth-changed', {detail:{loggedIn:true,user:data.user}}));
+ if(typeof showToast === 'function') showToast('Login successful!',false);
+ return true;
+};
+</script>
+<script defer src="/cerood-truecaller-web.js?v=1"></script>
 </body>
 </html>
 
