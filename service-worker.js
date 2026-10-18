@@ -115,11 +115,16 @@ self.addEventListener('push', event => {
             // Fall back to Cerood homepage for an invalid URL.
         }
 
+        let image;
+        try { const u=new URL(payload.image); if(u.protocol==='https:'&&!u.username&&!u.password) image=u.href; } catch (_) {}
+        const action=Array.isArray(payload.actions)?payload.actions.find(a=>a&&a.action==='open'&&typeof a.title==='string'&&a.title.trim()):null;
         await self.registration.showNotification(title, {
             body: String(payload.body || payload.message || 'Explore the latest updates from Cerood.'),
             icon: '/fevicon.png', // Replace if your actual logo filename differs.
             badge: '/fevicon.png',
-            tag: 'cerood-' + Date.now(),
+            ...(image ? { image } : {}),
+            ...(action ? { actions: [{ action: 'open', title: action.title.trim().slice(0,30) }] } : {}),
+            tag: String(payload.tag || ('cerood-' + Date.now())),
             data: { url: destination }
         });
     })());
