@@ -220,8 +220,12 @@ const isACService = /(^|\s)ac($|\s|-)|air conditioner/i.test(serviceName);
 // untouched while making repair / installation intent clearer in Google results.
 const isWashingMachineService = /washing machine|washer/i.test(serviceName);
 
-const title =
-    `${searchServiceName} in ${seoLocation} | Cerood`;
+// Focus this change on the Chennai TV-repair landing page only.
+const isChennaiTVRepair = state === 'tamil-nadu' && district === 'chennai'
+    && location === 'chennai' && service === 'tv-repair';
+const title = isChennaiTVRepair
+    ? 'TV Repair in Chennai | Smart TV Service | Cerood'
+    : `${searchServiceName} in ${seoLocation} | Cerood`;
 
 // RO / water-purifier-specific search metadata only. Search Console already
 // shows installation, service, pump-repair and near-me intent across these URLs.
@@ -237,7 +241,9 @@ const professional = serviceFamily === 'beauty' ? 'beauty professional' : servic
 const approvalText = serviceFamily === 'home'
     ? 'Visit charges and any repair quote are shared for approval before proceeding.'
     : 'Appointment availability, service details and charges are confirmed before the service.';
-const description = serviceFamily === 'home'
+const description = isChennaiTVRepair
+    ? 'TV not turning on, no picture or no sound? Request Smart TV repair in Chennai. Call 8946055856 to confirm availability and inspection charges.'
+    : serviceFamily === 'home'
     ? `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Call 8946055856 to check availability. Visit charges and repair quotes are shared for approval.`
     : `Book ${searchServiceNameLower} in ${seoLocation} with Cerood. Call 8946055856 to check appointment availability, service details and charges.`;
 
@@ -371,7 +377,15 @@ html = html.replace(
 // SERVER-RENDER LOCAL SEO CONTENT
 // ==========================================
 
-const localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in ${escapeHtml(seoLocation)}" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569"><p>${escapeHtml(serviceName)} in ${escapeHtml(seoLocation)}. Contact Cerood to confirm ${escapeHtml(professional)} availability. ${escapeHtml(approvalText)}</p></section>`;
+let localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in ${escapeHtml(seoLocation)}" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569"><p>${escapeHtml(serviceName)} in ${escapeHtml(seoLocation)}. Contact Cerood to confirm ${escapeHtml(professional)} availability. ${escapeHtml(approvalText)}</p></section>`;
+if (isChennaiTVRepair) {
+    localIntro = `<section id="ceroodLocalServiceIntro" aria-label="TV repair in Chennai" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569">
+<p>Need Smart TV repair in Chennai? Tell Cerood your TV brand, model, problem and service address so we can check technician availability in your area.</p>
+<details style="margin:8px 0"><summary style="cursor:pointer;font-weight:600">What to share before booking</summary><p>Tell us if the TV will not turn on, has sound without a picture, has no sound, or has a display issue. Share the screen size and when the problem started. The cause and repair options need technician assessment.</p></details>
+<details style="margin:8px 0"><summary style="cursor:pointer;font-weight:600">Inspection and repair charges</summary><p>Confirm the visit or inspection charge before booking. After assessment, ask for the repair estimate, any spare-part costs and applicable warranty terms before approving the work.</p></details>
+<a href="tel:+918946055856" data-cerood-contact="call" style="display:inline-block;padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;color:#143f85;font-weight:600;text-decoration:none">Call about TV repair: 89460 55856</a>
+</section>`;
+}
 html = html.replace(/(<h1[^>]*id=["']prodTitle["'][^>]*>[\s\S]*?<\/h1>)/i, heading => heading + localIntro);
 // Keep metadata consistent when the existing location loader hydrates the page.
 const hydrationMetadata = JSON.stringify({seo_title:title, seo_description:description}).replace(/</g, '\\u003c');
