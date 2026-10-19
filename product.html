@@ -9867,7 +9867,7 @@ function product(s){
  document.querySelectorAll('#ceroodVisitPanel .cerood-visit-date span').forEach(n=>n.textContent='Appointment date');
  document.querySelectorAll('#ceroodVisitDate').forEach(n=>n.setAttribute('aria-label','Appointment date'));
  ['productNoteContainer','featuresContainer'].forEach(id=>{const el=document.getElementById(id);if(el&&/\b(repair|installation|spare parts|gas refill|appliance)\b/i.test(el.textContent)){el.hidden=true;el.style.setProperty('display','none','important');}});
- document.querySelectorAll('.cerood-booking-fee-notice').forEach(el=>{if(/repair|inspection|technician/i.test(el.textContent))el.textContent='Free booking. Appointment availability and service charges will be confirmed before the service.';});
+ document.querySelectorAll('.cerood-booking-fee-notice').forEach(el=>{if(/repair|inspection|technician/i.test(el.textContent))el.textContent='No payment is collected when you request a booking. Appointment availability and service charges will be confirmed before the service.';});
 }
 window.CeroodServiceFamilies={family,title,options,prepare,product,same:(a,b)=>family(a)===family(b)};
 })();</script>
@@ -10009,20 +10009,14 @@ html:root body #ceroodBeautyFirstSection .uc-carousel-arrow{display:none!importa
 </div>
 <div class="cerood-booking-summary">
 <div class="cerood-booking-summary-row">
-<span class="cerood-free-booking-label">Free booking</span>
-<span class="starts-from-label">Starts from</span>
-<span class="current-price" id="displayPrice">
-            ₹349
-        </span>
+<span class="cerood-free-booking-label">Booking amount ₹0</span>
+<span class="starts-from-label"></span>
+<span class="current-price" id="displayPrice"></span>
 </div>
-<span class="original-price" id="displayMrp">
-        ₹699
-    </span>
-<span class="discount-pct" id="displayDiscount">
-        50% off
-    </span>
+<span class="original-price" id="displayMrp"></span>
+<span class="discount-pct" id="displayDiscount"></span>
 </div>
-<p class="cerood-booking-fee-notice" style="font-size:12px;line-height:1.6;color:#555;margin:7px 0 12px">Booking is free. Visiting and repair charges require your approval.</p>
+<p class="cerood-booking-fee-notice" style="font-size:12px;line-height:1.6;color:#555;margin:7px 0 12px">No payment is collected when you request a booking. Any visit or inspection fee is confirmed before the appointment; service and parts charges require your approval.</p>
 <div id="productNoteContainer" style="
                 font-size:13px;
                 color:#64748b;
@@ -12125,12 +12119,24 @@ letter-spacing:0.2px;
     const ratingEl =
         document.getElementById('prodRating');
 
+    // Do not retain another product's count while reviews are loading.
+    if (headerCount) headerCount.textContent = '—';
+    if (reviewsCountTextEl) reviewsCountTextEl.textContent = '';
+    if (ratingEl) ratingEl.textContent = '';
+    const loadingRatingRow = document.getElementById('productRatingRow');
+    if (loadingRatingRow) loadingRatingRow.style.display = 'none';
+    if (container) container.textContent = 'Loading reviews…';
+
     try {
 
         const res =
             await fetch(`${API_BASE_URL}/api/reviews/${serviceId}`);
 
+        if (!res.ok) throw new Error('Reviews request failed');
         const data = await res.json();
+        if (!data.success || !Array.isArray(data.reviews)) {
+            throw new Error('Reviews response unavailable');
+        }
 
         const reviews =
             (data.success && Array.isArray(data.reviews))
@@ -12139,8 +12145,11 @@ letter-spacing:0.2px;
 
         const validReviews = reviews;
 
+const rawReviewCount = Number(data.review_count);
 const reviewCount =
-    Number(data.review_count) || 0;
+    Number.isInteger(rawReviewCount) && rawReviewCount >= 0
+        ? rawReviewCount
+        : reviews.length;
 
 const averageRating =
     Number(data.average_rating) || 0;
@@ -12248,6 +12257,8 @@ const averageRating =
         container.innerHTML = html;
 
     } catch (err) {
+        if (headerCount) headerCount.textContent = '—';
+        if (container) container.textContent = 'Reviews are temporarily unavailable. Please try again later.';
 
         console.error(
             "Error fetching CATUS reviews:",
@@ -17151,7 +17162,7 @@ function togglePasswordVisibility(fieldId, iconElement) {
 <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:600px; display:flex; flex-direction:column; gap:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15); max-height: 85vh; overflow-y: auto;">
 <!-- Modal Header -->
 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
-<h3 style="margin:0; font-size:18px; color:#0f172a;"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Ratings &amp; Reviews (<span id="popupReviewsCountHeader">500</span>)</h3>
+<h3 style="margin:0; font-size:18px; color:#0f172a;"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Ratings &amp; Reviews (<span id="popupReviewsCountHeader">—</span>)</h3>
 <button onclick="closeReviewsPopup()" style="background:none; border:none; font-size:18px; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
 </div>
 <!-- Reviews Dynamic List Container -->
@@ -17826,7 +17837,7 @@ function ceroodOpenHomeApproval(orderId) {
  const groups=[];if(install.length)groups.push(['Installation services',install]);
  const size=Math.max(4,Math.ceil(others.length/(install.length?2:3)));
  for(let i=0;i<others.length;i+=size)groups.push([personal?CeroodServiceFamilies.title(CeroodServiceFamilies.family(active)):(groups.length===0?'Other appliance services':groups.length===1?'Explore more services':'More services for your home'),others.slice(i,i+size)]);
- groups.forEach(function([title,items]){if(!items.length)return;const section=document.createElement('section');section.className='cerood-discovery-section';const h=document.createElement('h2');h.textContent=title;section.append(h);const row=document.createElement('div');row.className='cerood-discovery-row';row.tabIndex=0;row.setAttribute('aria-label',title+', swipe to explore');items.forEach(function(s){const a=document.createElement('a');a.className='cerood-discovery-card';a.href='/product.html?id='+encodeURIComponent(s.slug||s.service_id);const img=document.createElement('img');img.src=s.image_url||'';img.alt=s.service_name||'Service';img.loading='lazy';const name=document.createElement('strong');name.textContent=s.service_name||'Service';const note=document.createElement('span');note.textContent='Free booking';a.append(img,name,note);row.append(a);});section.append(row);host.append(section);});
+ groups.forEach(function([title,items]){if(!items.length)return;const section=document.createElement('section');section.className='cerood-discovery-section';const h=document.createElement('h2');h.textContent=title;section.append(h);const row=document.createElement('div');row.className='cerood-discovery-row';row.tabIndex=0;row.setAttribute('aria-label',title+', swipe to explore');items.forEach(function(s){const a=document.createElement('a');a.className='cerood-discovery-card';a.href='/product.html?id='+encodeURIComponent(s.slug||s.service_id);const img=document.createElement('img');img.src=s.image_url||'';img.alt=s.service_name||'Service';img.loading='lazy';const name=document.createElement('strong');name.textContent=s.service_name||'Service';const note=document.createElement('span');note.textContent='Booking amount ₹0';a.append(img,name,note);row.append(a);});section.append(row);host.append(section);});
 }
 document.addEventListener('DOMContentLoaded',function(){var image=document.getElementById('mainProductImage'),title=document.getElementById('prodTitle');function sync(){if(!image||!image.getAttribute('src')||!title)return;document.getElementById('ceroodSpotlightImage').src=image.src;document.getElementById('ceroodSpotlightImage').alt=title.textContent.trim();document.getElementById('ceroodSpotlightTitle').textContent=title.textContent.trim();document.getElementById('ceroodServiceSpotlight').hidden=false;}sync();if(image)new MutationObserver(sync).observe(image,{attributes:true,attributeFilter:['src']});if(title)new MutationObserver(sync).observe(title,{childList:true,subtree:true,characterData:true});});</script><script id="cerood-approved-product-layout">document.addEventListener('DOMContentLoaded',function(){var header=document.querySelector('.uc-homepage-wrapper');if(header){document.body.prepend(header);function measure(){document.documentElement.style.setProperty('--cerood-product-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');}measure();if(window.ResizeObserver)new ResizeObserver(measure).observe(header);window.addEventListener('resize',measure,{passive:true});}var panel=document.querySelector('.cerood-booking-panel'),location=panel&&panel.querySelector('.cerood-location-mini');if(location){panel.prepend(location);location.style.marginBottom='18px';var label=location.querySelector('span');if(label)label.textContent='Service location';}var share=document.createElement('button');share.type='button';share.className='cerood-product-share';share.setAttribute('aria-label','Share service');share.textContent='↗';share.style.cssText='position:absolute;right:12px;top:12px;border:0;border-radius:50%;width:36px;height:36px;background:white;color:#174caf;font-size:22px;cursor:pointer';var gallery=document.querySelector('.main-image-container');if(gallery){gallery.style.position='relative';gallery.append(share);}share.onclick=async function(){var data={title:document.getElementById('prodTitle').textContent,url:location&&window.location.href};data.url=window.location.href;try{if(navigator.share)await navigator.share(data);else if(navigator.clipboard){await navigator.clipboard.writeText(data.url);share.title='Link copied';}}catch(_){}};});</script><script id="cerood-product-search-fit-v3">document.addEventListener('DOMContentLoaded',function(){var input=document.getElementById('searchInput'),box=document.getElementById('suggestionsBox');if(input){input.type='search';input.autocomplete='off';input.name='cerood_product_lookup';if(document.activeElement!==input)input.value='';input.placeholder='Search home services';input.addEventListener('focus',function(){input.removeAttribute('readonly');});input.addEventListener('pointerdown',function(){input.removeAttribute('readonly');});}if(box)box.style.display='none';});</script><script id="cerood-product-single-option-clean">document.addEventListener('DOMContentLoaded',function(){var area=document.getElementById('productVariantArea'),container=document.getElementById('variantContainer');function sync(){if(area&&container)area.hidden=container.querySelectorAll('.variant-btn').length<=1;}sync();if(container)new MutationObserver(sync).observe(container,{childList:true,subtree:true});});</script><script defer src="/cerood-notify.js?v=guest1"></script><script id="cerood-cart-shell-sync-v29">document.addEventListener('DOMContentLoaded',function(){const modal=document.getElementById('cartModal');if(!modal)return;function sync(){document.body.classList.toggle('cerood-cart-open',modal.style.display!=='none'&&getComputedStyle(modal).display!=='none');}new MutationObserver(sync).observe(modal,{attributes:true,attributeFilter:['style']});sync();document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('cerood-cart-open'))toggleCartModal(false);});});</script><script id="cerood-native-notification-auto-v31">
 (function(){function init(){window.CeroodNotify?.start('services');}
