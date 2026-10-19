@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/:state(.*districtStateSlug.*)/:district(.*districtSlug.*)",
+      "destination": "/api/invalid-seo-url"
+    },
+    {
       "source": "/about",
       "destination": "/about.html"
     },
