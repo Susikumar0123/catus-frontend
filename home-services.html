@@ -21075,28 +21075,10 @@ window.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <!-- Cerood native notification request; browser permission remains user-controlled. -->
-<script defer="" src="/cerood-notify.js"></script>
+<script defer="" src="/cerood-notify.js?v=guest1"></script>
 <script id="cerood-native-notification-auto-v31">
-(function(){'use strict';
-async function init(){
- if(!window.isSecureContext||!('Notification' in window)||!('PushManager' in window)||!('serviceWorker' in navigator))return;
- if(Notification.permission==='denied')return;
- try{
-  if(Notification.permission==='default'){
-   // Browser decides whether a page-load request displays a native prompt.
-   // No custom prompt or unrelated-click permission fallback.
-   try{if(sessionStorage.getItem('cerood_native_notify_requested_v31'))return;
-    sessionStorage.setItem('cerood_native_notify_requested_v31','1');}catch{}
-   const permission=await Notification.requestPermission();
-   if(permission!=='granted')return;
-  }
-  if(Notification.permission==='granted'&&typeof window.CeroodNotify?.enable==='function'){
-   await window.CeroodNotify.enable('services');
-  }
- }catch(error){console.debug('Cerood notification setup unavailable:',error?.name||'Error');}
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-})();
+(function(){function init(){window.CeroodNotify?.start('services');}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();})();
 </script>
 <!-- Cerood global browsing location: late header sync only; checkout and booking addresses unchanged. -->
 <script id="cerood-home-global-location-header-sync">
