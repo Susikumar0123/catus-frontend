@@ -79,7 +79,7 @@ button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;co
 </main>
 <script>
 (()=>{'use strict';
-const API=location.hostname==='localhost'?'http://localhost:3000':'https://catus-backend-d2js.onrender.com';
+const API=['localhost','127.0.0.1'].includes(location.hostname)?'http://localhost:3000':'https://catus-backend-d2js.onrender.com';
 const $=id=>document.getElementById(id);
 const q=new URLSearchParams(location.search),mode=q.get('mode')==='buy'?'buy':'cart';
 const aliases={shop:'general',main:'general',clothing:'fashion',cosmetics:'beauty'};
@@ -171,7 +171,7 @@ async function checkQuote(){
 function refresh(){
  const pm=payment(),available=pm==='cod'?codEnabled:onlineEnabled;
  $('onlinePayment').disabled=!onlineEnabled;
- $('paymentAvailability').textContent=onlineEnabled?'COD and online payment are available for this store.':(codEnabled?'Cash on Delivery is available. Online payment is currently unavailable here.':'Checkout is not enabled for this store.');
+ $('paymentAvailability').textContent=onlineEnabled&&codEnabled?'COD and online payment are available for this store.':onlineEnabled?'Online payment is available. Cash on Delivery is currently unavailable here.':codEnabled?'Cash on Delivery is available. Online payment is currently unavailable here.':'Checkout is not enabled for this store.';
  $('place').disabled=completed||busy||!available||!items.length||!quote;
  if(completed){$('place').textContent='Order placed ✓';return}
  $('place').textContent=busy?'Please wait…':!available?'Payment method unavailable':pm==='cod'?'Place COD Order':'Continue to Secure Payment';
