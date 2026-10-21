@@ -8921,6 +8921,37 @@ html body.cerood-studio.cerood-dark #dashboardContent #section-support .studio-t
 html body.cerood-studio.cerood-dark #dashboardContent #section-support .cc-status-tabs{display:flex!important;flex-wrap:wrap!important;min-width:0!important;max-width:100%!important;gap:4px!important}
 html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-heading,html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders th{background:#fafafa!important}
 html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview>p{display:none!important}
+
+/* Overview: compact operational grid, aligned cells and a dense order table. */
+html body.cerood-studio.cerood-dark[data-simple-page="overview"] #dashboardContent .seller-workspace{padding:20px 24px 32px!important}
+html body.cerood-studio.cerood-dark[data-simple-page="overview"] #dashboardContent #sellerCleanHeader{padding-bottom:14px!important;margin-bottom:16px!important;gap:12px!important}
+html body.cerood-studio.cerood-dark[data-simple-page="overview"] #dashboardContent #sellerCleanHeader h1{font-size:22px!important}
+html body.cerood-studio.cerood-dark[data-simple-page="overview"] #dashboardContent #sellerCleanHeader button{min-height:34px!important;padding:7px 12px!important;font-size:12px!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview{gap:16px!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview>.final-metrics{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:0!important;border:1px solid #e3e6eb!important;border-radius:6px!important;overflow:hidden!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:space-between!important;gap:10px!important;min-height:86px!important;padding:14px 16px!important;margin:0!important;border:0!important;border-right:1px solid #e3e6eb!important;border-radius:0!important;background:white!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric:last-child{border-right:0!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric:hover{background:#f7f9fc!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric span{font-size:12px!important;line-height:1.4!important;max-width:100%!important;color:#566273!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric strong{font-size:21px!important;line-height:1!important;margin:0!important;font-weight:600!important;color:#172b4d!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders{border-radius:6px!important;border-color:#e3e6eb!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-heading{padding:10px 14px!important;min-height:48px!important;background:#fff!important;border-color:#e3e6eb!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-heading h2{font-size:14px!important;font-weight:600!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-heading button{font-size:12px!important;padding:6px 10px!important;min-height:30px!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders>p{font-size:11px!important;padding:8px 14px!important;line-height:1.4!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders table{font-size:12px!important;table-layout:fixed!important;min-width:620px!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders :is(th,td){padding:10px 12px!important;font-size:12px!important;line-height:1.45!important;text-align:left!important;border:1px solid #e8ebef!important;vertical-align:middle!important;overflow-wrap:anywhere!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders th{font-weight:500!important;color:#4b5768!important;background:#fafbfc!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders :is(th,td):nth-child(1){width:23%!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders :is(th,td):nth-child(2){width:32%!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders :is(th,td):nth-child(3){width:10%!important;text-align:center!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders :is(th,td):nth-child(4){width:15%!important;text-align:right!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .dark-recent-orders :is(th,td):nth-child(5){width:20%!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .seller-home-order-summary{border-radius:6px!important;padding:0!important;margin:0!important;border-color:#e3e6eb!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .seller-home-order-summary summary{font-size:12px!important;padding:12px 14px!important;color:#3f4e64!important}
+html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .seller-home-order-summary :is(th,td){padding:10px 12px!important;font-size:12px!important;border:1px solid #e8ebef!important}
+@media(max-width:1100px){html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview>.final-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important}html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric:nth-child(-n+3){border-bottom:1px solid #e3e6eb!important}html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric:nth-child(3n){border-right:0!important}}
+@media(max-width:600px){html body.cerood-studio.cerood-dark[data-simple-page="overview"] #dashboardContent .seller-workspace{padding:16px 12px 24px!important}html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview>.final-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric{padding:12px!important;min-height:82px!important;border-right:1px solid #e3e6eb!important;border-bottom:1px solid #e3e6eb!important}html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric:nth-child(3){border-right:1px solid #e3e6eb!important}html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric:nth-child(2n){border-right:0!important}html body.cerood-studio.cerood-dark #dashboardContent #sellerFinalOverview .final-metric:nth-last-child(-n+2){border-bottom:0!important}}
 </style>
 <script id="cerood-dark-workspace">(()=>{'use strict';
 const $=id=>document.getElementById(id),make=(tag,text,cls='')=>{const n=document.createElement(tag);n.textContent=text;n.className=cls;return n;};
