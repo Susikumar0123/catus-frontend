@@ -8815,4 +8815,35 @@ for(const b of document.querySelectorAll('.simple-main-nav')){const icon=documen
 const header=document.getElementById('sellerCleanHeader'),descriptions={overview:'Your orders, products and the tasks that need attention.',products:'Find listings, review approval feedback, and manage prices and stock.','new-product':'Add a single product or upload a supplier file. Review details before submitting.',orders:'Accept orders, pack items and follow dispatch progress.',returns:'Review return requests, delivery returns and related claims.',payments:'Review recorded settlements and check actual bank receipt separately.',support:'Get help with products, orders, returns or your account.',account:'Manage business details, pickup addresses and delivery settings.'};
 const fix=()=>{const p=header?.querySelector('p'),text=descriptions[document.body.dataset.simplePage];if(p&&text&&p.textContent!==text)p.textContent=text;};
 if(header)new MutationObserver(fix).observe(header,{subtree:true,childList:true,characterData:true});fix();
+})();</script><script id="seller-focused-workflow">
+(()=>{'use strict';const $=id=>document.getElementById(id),make=(tag,text,cls='')=>{const n=document.createElement(tag);n.textContent=text;n.className=cls;return n;};
+const toolbar=document.querySelector('.simple-context-tools');
+const primary={overview:['Summary','Activity'],products:['Product list','Update live stock','Prices'],orders:['Manage orders','Courier bookings'],returns:['Marketplace returns','Main Store returns'],account:['Business details','Pickup & delivery']};
+function reduceTools(){if(!toolbar)return;const buttons=[...toolbar.children].filter(n=>n.tagName==='BUTTON');if(!buttons.length)return;const keep=primary[document.body.dataset.simplePage]||[];const secondary=buttons.filter(b=>!keep.includes(b.textContent));if(!secondary.length)return;const more=make('details','','seller-more-tools'),label=make('summary','More tools'),menu=make('div','','seller-more-menu');label.setAttribute('aria-label','Show additional tools');menu.append(...secondary);more.append(label,menu);toolbar.append(more);if(secondary.some(b=>b.classList.contains('active'))){more.open=true;const active=secondary.find(b=>b.classList.contains('active'));label.textContent=active.textContent;}}
+new MutationObserver(reduceTools).observe(toolbar,{childList:true});reduceTools();
+// Keep the upload form one click from its dedicated page; do not bypass its existing validation.
+const add=$('section-new-product');if(add){const choices=add.querySelector('.simple-upload-choices'),steps=add.querySelector('.simple-upload-steps');if(choices&&steps)add.insertBefore(choices,steps);const heading=make('h2','What you will need','seller-upload-heading');steps?.before(heading);const note=make('p','Have your product photos, selling price, available stock and product details ready. Fields vary by category.','seller-upload-note');heading.after(note);}
+const flow=window.showTab;window.showTab=function(tab,...args){const result=flow.call(this,tab,...args);if(tab==='new-product'){const first=add?.querySelector('button');first?.focus({preventScroll:true});}const more=toolbar?.querySelector('details');if(more&&!more.querySelector('button.active'))more.open=false;return result;};
+// Show these actions once, next to the page heading.
+const overview=$('sellerFinalOverview');if(overview){for(const b of [...overview.children].filter(n=>n.tagName==='BUTTON'))b.hidden=true;const learn=overview.querySelector('.seller-home-learn');if(learn)learn.hidden=true;}
+const header=$('sellerCleanHeader');function addShortcut(){if(document.body.dataset.simplePage!=='overview')return;const actions=header.querySelector('.seller-clean-actions');if(!actions||actions.querySelector('[data-start-upload]'))return;const b=make('button','+ Add Product','seller-btn');b.type='button';b.dataset.startUpload='1';b.onclick=()=>window.showTab('new-product');actions.prepend(b);}
+new MutationObserver(addShortcut).observe(header,{childList:true,subtree:true});addShortcut();
+const menu=$('hubMenu'),close=$('hubClose');function closeNav(){ $('hubSidebar').classList.remove('hub-open');$('hubOverlay').classList.remove('hub-open');menu?.setAttribute('aria-expanded','false');}
+menu?.addEventListener('click',()=>{menu.setAttribute('aria-expanded','true');});close?.addEventListener('click',closeNav);$('hubOverlay')?.addEventListener('click',closeNav);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('hubSidebar').classList.contains('hub-open')){closeNav();menu?.focus();}});
+document.querySelectorAll('.simple-main-nav').forEach(b=>b.addEventListener('click',()=>menu?.setAttribute('aria-expanded','false')));
+const styles=make('style','');styles.textContent=`
+html body.cerood-studio.seller-simple #dashboardContent .seller-home-layout{grid-template-columns:1fr!important}
+html body.cerood-studio.seller-simple #dashboardContent .seller-home-learn[hidden]{display:none!important}
+html body.cerood-studio.seller-simple #dashboardContent #sellerFinalOverview>button[hidden]{display:none!important}
+html body.cerood-studio.seller-simple #dashboardContent .seller-home-welcome{padding:24px 28px!important;min-height:180px!important}
+html body.cerood-studio.seller-simple #dashboardContent .simple-context-tools{align-items:flex-start!important}
+.seller-more-tools{position:relative;margin-left:auto}.seller-more-tools>summary{cursor:pointer;background:#fff;border:1px solid #dce3ed;padding:11px 16px;border-radius:8px;font-size:13px;color:#344054;font-weight:600;min-height:40px}
+.seller-more-menu{position:absolute;right:0;top:calc(100% + 8px);display:grid;gap:5px;width:230px;padding:8px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 12px 30px #15243e18;z-index:35}
+.seller-more-menu button{text-align:left;width:100%}.seller-upload-heading{font-size:18px;color:#1d2939;margin-top:28px}.seller-upload-note{font-size:14px;color:#667085;line-height:1.7;margin-bottom:20px}
+html body.cerood-studio.seller-simple #dashboardContent .simple-upload-choices .seller-card{padding:28px!important;margin:0!important}
+html body.cerood-studio.seller-simple #dashboardContent .simple-upload-choices h2{font-size:21px!important;color:#1d2939!important;margin:0 0 10px!important}
+html body.cerood-studio.seller-simple #dashboardContent .simple-upload-choices button{margin-top:16px!important}
+html body.cerood-studio.seller-simple #dashboardContent button:focus-visible,html body.cerood-studio.seller-simple #dashboardContent summary:focus-visible{outline:3px solid #8aaaff!important;outline-offset:3px!important}
+@media(max-width:800px){.seller-more-tools{margin-left:0}.seller-more-menu{left:0;right:auto}html body.cerood-studio.seller-simple #dashboardContent #sellerFinalOverview>.final-metrics{gap:10px!important}html body.cerood-studio.seller-simple #dashboardContent #sellerFinalOverview>.final-metrics .final-metric{padding:16px!important;min-height:100px!important}}
+`;document.head.append(styles);
 })();</script></body></html>
