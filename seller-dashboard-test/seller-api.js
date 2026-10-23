@@ -29,10 +29,15 @@ class SellerAPI {
  returns(){return this.request('/api/sellers/shop/returns');}
  review(id,decision,note){if(!['approve','reject'].includes(decision)||note.trim().length<10||note.length>1500)throw Error('Enter a review note of 10–1500 characters.');return this.request('/api/sellers/shop/returns/'+encodeURIComponent(id),{method:'PATCH',body:{decision,seller_note:note.trim()}});}
  settlements(page=1){return this.request('/api/sellers/shop/settlements?page='+page);}
- tickets(){return this.request('/api/sellers/support/tickets');}
+ tickets(offset=0){return this.request('/api/sellers/support/tickets?offset='+offset+'&limit=50');}
  ticket(body){return this.request('/api/sellers/support/tickets',{method:'POST',body});}
  thread(id){return this.request('/api/sellers/support/tickets/'+encodeURIComponent(id));}
  reply(id,body){return this.request('/api/sellers/support/tickets/'+encodeURIComponent(id)+'/messages',{method:'POST',body:{body}});}
+ async download(path){
+  if(!/^\/api\/sellers?\//.test(path))throw Error('Unsupported seller API route.');const token=this.storage.getItem('ceroodSellerConnectedToken');if(!token)throw Error('Sign in to download.');
+  const response=await this.fetcher(this.base+path,{headers:{Authorization:'Bearer '+token},credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(45000)});
+  if(response.status===401)this.clear();if(!response.ok){let x;try{x=await response.json();}catch{}throw Object.assign(Error(x?.message||'Download failed.'),{status:response.status});}return response.blob();
+ }
  upload(file){const form=new FormData();form.append('file',file);return this.request('/api/sellers/upload-media',{method:'POST',body:form});}
 }
 root.SellerAPI=SellerAPI;if(typeof module!=='undefined')module.exports=SellerAPI;
