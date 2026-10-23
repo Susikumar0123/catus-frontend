@@ -15475,6 +15475,14 @@ function getLocationProductUrl(serviceId) {
         return `/product.html?id=${safeServiceId}`;
     }
 
+    // Numeric catalogue IDs belong to product.html; three-part numeric SEO
+    // URLs have no legacy redirect route. Only validated slugs use SEO paths.
+    const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    if (![stateSlug, districtSlug, String(serviceId || '').trim()].every(value => slugPattern.test(value)) ||
+        /^\d+$/.test(String(serviceId || '').trim())) {
+        return `/product.html?id=${safeServiceId}`;
+    }
+
     const locationKey =
         `${stateSlug}|${districtSlug}|${locationSlug || ''}`;
 
@@ -21552,3 +21560,5 @@ function arrange(){const mobile=matchMedia('(max-width:850px)').matches;
 function init(){arrange();['productGridContainer','ceroodBeautyFirstSection'].forEach(id=>{const el=document.getElementById(id);if(el)new MutationObserver(arrange).observe(el,{childList:true,subtree:true});});window.addEventListener('resize',arrange,{passive:true});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();</script>
+
+<script src="/contact-events.js" defer></script>

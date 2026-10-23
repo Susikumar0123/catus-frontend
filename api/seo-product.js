@@ -19,7 +19,7 @@ function encodePathSegment(value) {
 module.exports = async function handler(req, res) {
 
     res.setHeader('Cache-Control', 'no-store');
-    res.setHeader('X-Cerood-Service-Copy', 'family-copy-v3-no-inline-call');
+    res.setHeader('X-Cerood-Service-Copy', 'dharmapuri-booking-v4');
 
     const state =
         String(req.query.state || '')
@@ -386,6 +386,23 @@ if (isChennaiTVRepair) {
 <a href="tel:+918946055856" data-cerood-contact="call" style="display:inline-block;padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;color:#143f85;font-weight:600;text-decoration:none">Call about TV repair: 89460 55856</a>
 </section>`;
 }
+// Local booking guidance for Dharmapuri appliance pages; no invented prices,
+// response times, technician credentials or warranty promises.
+const isDharmapuriAppliance = state === 'tamil-nadu' && district === 'dharmapuri'
+    && location === district && serviceFamily === 'home'
+    && (isACService || isRefrigeratorService || isWashingMachineService || isROService || service === 'tv-repair');
+if (isDharmapuriAppliance) {
+    const issueHint = isACService ? 'cooling, water leakage, unusual noise or power issues'
+        : isRefrigeratorService ? 'cooling, water leakage, unusual noise or power issues'
+        : isWashingMachineService ? 'draining, spinning, water leakage or power issues'
+        : isROService ? 'water flow, leakage, filter replacement or installation needs'
+        : 'power, picture, sound or display issues';
+    localIntro = `<section id="ceroodLocalServiceIntro" aria-label="Service in Dharmapuri" style="margin:10px 0 14px;font-size:14px;line-height:1.6;color:#475569">
+<p>${escapeHtml(serviceName)} in Dharmapuri. Share your appliance brand, model and ${escapeHtml(issueHint)} so Cerood can check the appropriate service and technician availability.</p>
+<details style="margin:8px 0"><summary style="cursor:pointer;font-weight:600">Visit and repair charges</summary><p>Confirm the visit or inspection charge before booking. Ask for the repair estimate, spare-part costs and any applicable warranty terms before approving work.</p></details>
+<details style="margin:8px 0"><summary style="cursor:pointer;font-weight:600">Booking in your area</summary><p>Share your Dharmapuri locality and preferred visit time when you contact us. Availability and the appointment time need confirmation before the visit.</p></details>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"><a href="tel:+918946055856" style="padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;color:#143f85;text-decoration:none">Call to check availability</a><a href="https://wa.me/918946055856" target="_blank" rel="noopener noreferrer" style="padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;color:#143f85;text-decoration:none">WhatsApp Cerood</a></div></section>`;
+}
 html = html.replace(/(<h1[^>]*id=["']prodTitle["'][^>]*>[\s\S]*?<\/h1>)/i, heading => heading + localIntro);
 // Keep metadata consistent when the existing location loader hydrates the page.
 const hydrationMetadata = JSON.stringify({seo_title:title, seo_description:description}).replace(/</g, '\\u003c');
@@ -544,6 +561,8 @@ html = html.replace(
             'Cache-Control',
             'public, max-age=0, s-maxage=60, stale-while-revalidate=0'
         );
+
+        html = html.replace('</head>', '<script src="/contact-events.js" defer></script>\n</head>');
 
         return res
             .status(200)
