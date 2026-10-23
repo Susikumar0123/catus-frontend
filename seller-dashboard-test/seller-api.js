@@ -20,8 +20,8 @@ class SellerAPI {
  async me(){const x=await this.request('/api/sellers/me');if(!x.seller?.id||x.seller.status!=='approved'){this.clear();throw Error('An approved seller account is required.');}this.seller=x.seller;return x.seller;}
  summary(){return this.request('/api/sellers/workspace/summary');}
  products(){return this.request('/api/sellers/catalog-submissions');}
- categories(market='general'){if(!['general','clothing','cosmetics'].includes(market))throw Error('Choose a supported marketplace.');return this.request('/api/sellers/product-categories?marketplace='+market);}
- submit(product,marketplace='general',id){return this.request('/api/sellers/catalog-submissions'+(id?'/'+encodeURIComponent(id):''),{method:id?'PATCH':'POST',body:{marketplace,product}});}
+ categories(){return this.request('/api/sellers/product-categories?marketplace=general');}
+ submit(product,marketplace='general',id){if(marketplace!=='general')throw Error('Use the common product catalog.');return this.request('/api/sellers/catalog-submissions'+(id?'/'+encodeURIComponent(id):''),{method:id?'PATCH':'POST',body:{marketplace,product}});}
  inventory(){return this.request('/api/sellers/shop/inventory');}
  stock(row,stock){if(!Number.isSafeInteger(stock)||stock<0||stock>1000000)throw Error('Enter a valid whole stock quantity.');return this.request('/api/sellers/shop/inventory/'+encodeURIComponent(row.id),{method:'PATCH',body:{stock,expected_stock:Number(row.variant_id?row.variant_stock:row.stock),...(row.variant_id?{variant_id:row.variant_id}:{})}});}
  orders(){return this.request('/api/seller/orders');}
