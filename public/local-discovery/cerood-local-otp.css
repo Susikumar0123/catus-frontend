@@ -1,0 +1,7 @@
+/* Only styles Cerood Local Discovery Login button and status. MSG91 owns its popup UI. */
+.cl-otp-trigger{display:inline-flex;align-items:center;justify-content:center;padding:10px 15px;border:0;border-radius:9px;background:#174fbe;color:white;font:600 14px/1.4 system-ui,sans-serif;cursor:pointer}
+.cl-otp-trigger:hover{background:#123f98}
+.cl-otp-trigger:disabled{opacity:.6;cursor:wait}
+.cl-otp-trigger:focus-visible{outline:3px solid #77a8ff;outline-offset:2px}
+.cl-otp-status{display:block;font:12px/1.45 system-ui,sans-serif;color:#326447;margin-top:5px}
+.cl-otp-status.cl-otp-error{color:#b42318}
