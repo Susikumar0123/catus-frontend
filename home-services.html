@@ -14282,22 +14282,6 @@ html:root body #ceroodBeautyFirstSection .uc-carousel-arrow{display:none!importa
 @media(max-width:850px){#ceroodBeautyFirstSection{margin:12px 15px 18px}html:root body #ceroodBeautyFirstSection .uc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
 </style></head>
 <body id="ceroodFestivalPage">
-<!-- CEROOD PWA INSTALL BANNER -->
-<div id="ceroodInstallBanner" style="display:none;">
-<div class="cerood-install-content">
-<img alt="Cerood" src="/icon-192.png"/>
-<div class="cerood-install-text">
-<strong>Get the Cerood App</strong>
-<span>Faster booking &amp; easy access</span>
-</div>
-<button id="ceroodInstallBtn">
-            Install
-        </button>
-<button aria-label="Close" class="cerood-install-close" onclick="closeCeroodInstallBanner()">
-            ×
-        </button>
-</div>
-</div>
 <!-- Master Single Container -->
 <div class="master-app-container">
 <!-- 1. Header & Search Bar Section -->
@@ -20936,107 +20920,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <script>
-let ceroodDeferredInstallPrompt = null;
-let ceroodInstallHideTimer = null;
-
-function isCeroodRunningAsApp() {
-    return (
-        window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone === true
-    );
-}
-
+// Automatic app-install notifications are disabled on this page.
 window.addEventListener('beforeinstallprompt', function (event) {
     event.preventDefault();
-    if (isCeroodRunningAsApp()) return;
-    ceroodDeferredInstallPrompt = event;
-    const banner = document.getElementById('ceroodInstallBanner');
-    if (!banner) return;
-    clearTimeout(ceroodInstallHideTimer);
-    banner.style.display = 'block';
-    requestAnimationFrame(function () {
-        banner.classList.add('show');
-        ceroodInstallHideTimer = setTimeout(function () {
-            banner.classList.remove('show');
-            banner.style.display = 'none';
-            ceroodInstallHideTimer = null;
-        }, 5000);
-    });
-});
-
-
-const ceroodInstallBtn =
-    document.getElementById('ceroodInstallBtn');
-
-if (ceroodInstallBtn) {
-
-    ceroodInstallBtn.addEventListener(
-        'click',
-        async function () {
-
-            if (!ceroodDeferredInstallPrompt) {
-                return;
-            }
-
-            ceroodDeferredInstallPrompt.prompt();
-
-            const choice =
-                await ceroodDeferredInstallPrompt.userChoice;
-
-            console.log(
-                'Cerood install choice:',
-                choice.outcome
-            );
-
-            ceroodDeferredInstallPrompt = null;
-
-            const banner =
-                document.getElementById(
-                    'ceroodInstallBanner'
-                );
-
-            if (banner) {
-                banner.style.display = 'none';
-            }
-        }
-    );
-}
-
-
-function closeCeroodInstallBanner() {
-    clearTimeout(ceroodInstallHideTimer);
-    ceroodInstallHideTimer = null;
-
-    const banner =
-        document.getElementById('ceroodInstallBanner');
-
-    if (!banner) return;
-
-    // Notification slide-up
-    banner.classList.remove('show');
-
-    setTimeout(() => {
-        banner.style.display = 'none';
-    }, 450);
-}
-
-
-
-
-window.addEventListener('appinstalled', function () {
-
-    ceroodDeferredInstallPrompt = null;
-
-    const banner =
-        document.getElementById(
-            'ceroodInstallBanner'
-        );
-
-    if (banner) {
-        banner.style.display = 'none';
-    }
-
-    console.log('Cerood PWA installed successfully');
 });
 </script>
 <script>
