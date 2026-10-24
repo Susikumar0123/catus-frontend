@@ -2452,6 +2452,7 @@ function product(s){
 window.CeroodServiceFamilies={family,title,options,prepare,product,same:(a,b)=>family(a)===family(b)};
 })();</script>
 <style id="cerood-treatment-label-style">html[data-service-family="wellness"] body #productGridMain .product-info #productVariantArea .variant-title,html[data-service-family="beauty"] body #productGridMain .product-info #productVariantArea .variant-title{display:block!important;text-transform:none!important}</style>
+<script defer src="/cerood-home-conversion.js"></script>
 </head>
 <body id="ceroodCheckoutMatch"><div id="ceroodOrderSummaryHeader"><div class="cos-title"><button type="button" onclick="goBackToProduct()" aria-label="Back to service"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 12H5m7-7-7 7 7 7"/></svg></button><span>Order Summary</span></div><div class="cos-steps" aria-label="Booking steps"><span><b>1</b>Address</span><span class="cos-current"><b>2</b>Order Summary</span><span><b>3</b>Confirmation</span></div></div>
 
@@ -3900,10 +3901,11 @@ function resetOrderSubmitState() {
                 const currentUser = ceroodCheckoutHomeUser();
                 if(!currentUser)throw new Error('Please log in to Home Services before booking.');
                 const requestId = getOrCreateFreeBookingRequestId();
+                if (window.CeroodHomeConversion) window.CeroodHomeConversion.track('booking_attempt');
                 const response = await fetch(`${API_BASE_URL}/api/home-services/free-bookings`, {
                     method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('cerood_home_service_session')||'')},
                     body: JSON.stringify({
-                        booking_request_id: requestId, customer_id: currentUser.id || null, customer_name: name, phone,
+                        booking_request_id: requestId, conversion: (window.CeroodHomeConversion && window.CeroodHomeConversion.context()) || {}, customer_id: currentUser.id || null, customer_name: name, phone,
                         whatsapp: phone, address, service_address: address,
                         district, service_district: district, pincode, service_pincode: pincode,
                         service_date: serviceBooking.service_date || null,
