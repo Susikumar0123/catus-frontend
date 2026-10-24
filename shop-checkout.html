@@ -1,57 +1,15 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Main Store Checkout | Cerood</title><link rel="icon" href="/fevicon.png"><script defer src="/cerood-auth.js"></script><script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:#172133;background:#f6f7fb}a{text-decoration:none;color:inherit}
-header{background:#fff;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}header img{height:48px}header a{background:#fff;border-radius:999px;padding:10px 15px;font-size:13px}
-main{max-width:1050px;margin:24px auto;padding:0 16px 90px;display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.card{background:#fff;border:1px solid #e6e9f0;border-radius:16px;padding:20px}.card h1,.card h2{margin:0 0 15px}h1{font-size:24px}h2{font-size:18px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.wide{grid-column:1/-1}label{font-size:12px;font-weight:700}input{width:100%;margin-top:5px;padding:12px;border:1px solid #dce1ea;border-radius:9px;font:inherit}.item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 0;border-bottom:1px solid #eee;font-size:13px}.item strong{display:block}.total{display:flex;justify-content:space-between;padding-top:14px;font-size:18px;font-weight:800}
-button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;color:#fff;font-weight:700;margin-top:16px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.muted{font-size:12px;color:#64748b;line-height:1.6}.status{margin-top:12px;font-size:13px}.ok{color:#15803d}.err{color:#b91c1c}.login{background:#f5f3ff;padding:11px;border-radius:10px;margin-bottom:13px}
-@media(max-width:760px){main{grid-template-columns:1fr;margin-top:13px}.grid{grid-template-columns:1fr}.wide{grid-column:auto}header img{height:38px}}
-</style>
-<style id="cerood-checkout-desktop-reference-20261005">
-@media (min-width:761px){
- body{background:#f5f7fb!important;}
- header{max-width:1256px;margin:12px auto 0;border-radius:14px;padding:13px 28px;min-height:72px;box-shadow:0 16px 32px rgba(50,73,99,.10);}
- header img{height:48px;}
- header a:last-child{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.45);font-weight:700;padding:9px 16px;font-size:13px;color:#172133;}
- header a:last-child::before{content:'';}
- header a:last-child::after{content:'';}
- main{max-width:1138px;margin:24px auto;padding:0 0 90px;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(360px,.95fr);gap:18px;align-items:start;}
- main::before{content:'Complete your order\A Confirm your delivery address, review the bill and choose how to pay.';white-space:pre-line;grid-column:1/-1;font-size:14px;line-height:1.55;color:#64748b;margin:0 0 -4px;}
- .card{background:#fff;border:0;border-radius:18px;padding:20px;box-shadow:0 1px 0 rgba(15,23,42,.02);}
- main>section.card{grid-column:1;grid-row:2;}
- main>aside.card{grid-column:2;grid-row:2;}
- #checkoutTitle{position:static!important;margin:0 0 14px!important;font-size:23px!important;line-height:1.2;color:#10213b!important;}
- .login{background:transparent;padding:0;margin:0 0 12px;color:#64748b;}
- #storeNotice{background:#f3f0ff;color:#52617a;padding:11px 14px;border-radius:3px;margin:0 0 14px;}
- main>section.card>h2{margin-top:4px;}
- .grid{gap:12px 15px;}
- label{font-size:12px;color:#34425a;}
- input{background:#f8fafc;border:1px solid #d9e1ec;border-radius:10px;padding:14px;}
- #checkDelivery{width:auto;background:#f5f8fc;color:#31517b;border:1px solid #d7e0ec;padding:10px 14px;margin:14px 0 10px auto;display:block;}
- #paymentBox{border-top:1px solid #e8edf4;padding-top:15px;}
- #paymentBox label{border:1px solid #6b4eff;border-radius:12px;padding:13px 16px;background:#fbfaff;}
- #paymentBox input[type=radio]{width:auto;margin:0;padding:0;}
- #place{background:#171717;}
- aside.card h2{font-size:18px;font-weight:500;}
- .total{border-top:1px solid #edf0f4;margin-top:0;padding:14px 0;}
-}
-</style>
-</head><body>
-<header><a href="/"><img src="/cerood-logo.webp" alt="Cerood"></a><a href="/cerood-orders.html">My Orders</a></header>
-<main>
-<section class="card">
+<!doctype html><html lang="en" data-cr-store="general"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f8f9f6"><title>Checkout | Cerood Shop</title><meta name="description" content="Review your selection, confirm the delivery address and final total, and place your Cerood order."><link rel="icon" href="/fevicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/cerood-storefront.css?v=2"><script src="/cerood-design-preview.js"></script><script defer src="/cerood-auth.js"></script><script defer src="/cerood-location.js"></script></head><body class="shop-checkout"><a class="skip" href="#main">Skip to content</a><div class="utility"><span>Thoughtful choices. Everyday possibilities.</span><a href="/seller-register.html">Sell with Cerood ↗</a></div><header class="store-header"><div class="store-header-inner"><a class="wordmark" href="/" aria-label="Cerood Shop home">cerood<span>●</span></a><span class="checkout-word">CHECKOUT</span><div class="header-links"><a href="/cerood-orders.html#account" aria-label="Account" class="account-link" data-cerood-auth-trigger><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg><span>Account</span></a><a href="#cerood-cart" data-cerood-cart-open aria-label="Open shopping cart" class="cart-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3h2l3 12h11l3-9H6M9 20h.01M19 20h.01"/></svg><span>Cart</span><b data-cerood-cart-count>0</b></a></div></div></header><main id="main" class="checkout-main"><div class="checkout-heading"><a href="/#catalog">← Continue shopping</a><div class="checkout-progress"><span class="done">Bag</span><i></i><span class="current">Delivery & payment</span><i></i><span>Confirmation</span></div></div><div class="checkout-layout">
+<section class="card checkout-form-card">
   <h1 id="checkoutTitle">Cerood Checkout</h1>
   <div class="login" id="loginState"></div>
   <p class="muted" id="storeNotice">Loading your selected products…</p>
-  <h2>📍 Delivery Address Details</h2>
+  <div class="step-kicker">01 / DELIVERY</div><h2>Where should we deliver?</h2>
   <label id="savedAddressLabel" hidden>Saved address<select id="savedAddress" style="display:block;width:100%;margin:8px 0 16px;padding:12px;border:1px solid #dce1ea;border-radius:9px"><option value="">Choose a saved address</option></select></label>
   <form id="addressForm" class="grid">
     <label>Full name<input name="name" required maxlength="120" autocomplete="name"></label>
     <label>Mobile number<input name="phone" required inputmode="numeric" maxlength="10" autocomplete="tel-national"></label>
     <label class="wide">Door / flat / street<input name="house" required maxlength="160"></label>
-    <label>Area / landmark<input name="street" maxlength="160"></label>
+    <label>Area / locality<input name="street" maxlength="160"></label>
     <label>Village / city<input name="village" required maxlength="120"></label>
     <label>District<input name="district" required maxlength="120"></label>
     <label>State<input name="state" required maxlength="120"></label>
@@ -60,7 +18,7 @@ button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;co
   </form>
   <button type="button" id="checkDelivery">Save address & check delivery</button>
   <div id="paymentBox" style="margin-top:18px">
-    <h2>Payment method</h2>
+    <div class="step-kicker">02 / PAYMENT</div><h2>How would you like to pay?</h2>
     <label style="display:flex;gap:9px;align-items:center;margin:9px 0"><input type="radio" name="paymentMode" value="cod" checked> Cash on Delivery</label>
     <label style="display:flex;gap:9px;align-items:center;margin:9px 0"><input type="radio" name="paymentMode" value="online" id="onlinePayment"> Pay Online via Razorpay</label>
     <p class="muted" id="paymentAvailability"></p>
@@ -68,212 +26,12 @@ button{width:100%;border:0;border-radius:10px;padding:14px;background:#171717;co
   <button id="place" disabled>Checking checkout…</button>
   <p id="status" class="status" role="status"></p>
 </section>
-<aside class="card">
-  <h2>▣ Order Summary</h2>
+<aside class="card order-summary">
+  <h2>Your selection</h2>
   <div id="items"></div>
   <div class="total"><span>Subtotal</span><span id="subtotal">—</span></div>
   <div class="total" style="font-size:14px"><span>Delivery</span><span id="delivery">—</span></div>
   <div class="total"><span>Total</span><span id="total">—</span></div>
   <p class="muted">Review the final total before placing your order.</p>
 </aside>
-</main>
-<script>
-(()=>{'use strict';
-const API=['localhost','127.0.0.1'].includes(location.hostname)?'http://localhost:3000':'https://catus-backend-d2js.onrender.com';
-const $=id=>document.getElementById(id);
-const q=new URLSearchParams(location.search),mode=q.get('mode')==='buy'?'buy':'cart';
-const aliases={shop:'general',main:'general',clothing:'fashion',cosmetics:'beauty'};
-let store=aliases[(q.get('store')||'general').toLowerCase()]||(q.get('store')||'general').toLowerCase();
-const CFG={
- general:{label:'Main Store',cart:'cerood_shop_cart',buy:'cerood_shop_buy_now',products:'/api/shop/products',quote:'/api/shop/quote',status:'/api/shop/checkout-status',cod:'/api/shop/place-cod-order',receipt:'cerood_shop_device_receipts',request:'cerood_shop_cod_request',online:false},
- renewed:{label:'Renewed',cart:'cerood_renewed_cart',buy:'cerood_renewed_buy_now',products:'/api/renewed/products',quote:'/api/renewed/delivery-quote',status:'/api/renewed/checkout-status',cod:'/api/renewed/place-cod-order',receipt:'cerood_renewed_device_receipts',request:'cerood_renewed_cod_request',online:'legacy'},
- fashion:{label:'Fashion',cart:'cerood_clothing_cart',buy:'cerood_clothing_buy_now',products:'/api/clothing/products',quote:'/api/clothing/quote',status:'/api/clothing/checkout-status',cod:'/api/clothing/place-cod-order',receipt:'cerood_clothing_device_receipts',request:'cerood_clothing_pending_request_v1',online:true,prepare:'/api/clothing/create-razorpay-order',verify:'/api/clothing/verify-razorpay-payment'},
- beauty:{label:'Beauty',cart:'cerood_cosmetics_cart',buy:'cerood_cosmetics_buy_now',products:'/api/cosmetics/products',quote:'/api/cosmetics/quote',status:'/api/cosmetics/checkout-status',cod:'/api/cosmetics/place-cod-order',receipt:'cerood_cosmetics_device_receipts',request:'cerood_cosmetics_pending_request_v1',online:true,prepare:'/api/cosmetics/create-razorpay-order',verify:'/api/cosmetics/verify-razorpay-payment'}
-};
-if(!CFG[store])store='general';
-const cfg=CFG[store];let items=[],products=[],quote=null,codEnabled=false,onlineEnabled=false,busy=false,completed=false,quoteVersion=0,quoteAddress='';
-const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
-function variantText(x){const v=x&&x.variant_values&&typeof x.variant_values==='object'?x.variant_values:{};return Object.entries(v).map(([k,val])=>String(k).replace(/[_-]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase())+': '+(Array.isArray(val)?val.join(', '):val)).join(' · ')}
-const uuid=()=>crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
-function token(){const a=localStorage.getItem('cerood_customer_session')||'',b=localStorage.getItem('cerood_renewed_customer_session')||'',t=a||b;if(t&&!a)localStorage.setItem('cerood_customer_session',t);if(t&&!b)localStorage.setItem('cerood_renewed_customer_session',t);return t}
-async function json(path,opt={}){const h={Accept:'application/json',...(opt.headers||{})},t=token();if(t)h.Authorization='Bearer '+t;const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),25000);try{const r=await fetch(API+path,{cache:'no-store',...opt,headers:h,signal:controller.signal});let d={};try{d=await r.json()}catch{}if(!r.ok||d.success===false)throw Error(d.message||'Checkout service unavailable.');return d}catch(e){if(e.name==='AbortError')throw Error('Server took too long. Retry; the same checkout request prevents duplicate orders.');throw e}finally{clearTimeout(timer)}}
-function readItems(){try{
- // Renewed: seller_listing_id is intentionally optional. Missing ID lets the backend auto-allocate; an explicit customer choice is preserved.
- const raw=JSON.parse((mode==='buy'?sessionStorage.getItem(cfg.buy):localStorage.getItem(cfg.cart))||'[]'),m=new Map();
- if(!Array.isArray(raw))return[];
- for(const x of raw){
-  const id=String(x?.product_id||''),n=Number(x?.quantity),listing=String(x?.seller_listing_id||'').trim(),variantId=String(x?.variant_id||'').trim(),variantSku=String(x?.variant_sku||x?.sku||'').trim();
-  if(!/^[\w-]{1,100}$/.test(id)||!Number.isSafeInteger(n)||n<1)continue;
-  if(listing&&!/^[0-9a-f-]{36}$/i.test(listing))continue;
-  if(variantId&&!/^[0-9a-f-]{36}$/i.test(variantId))continue;
-  const variantValues=x?.variant_values&&typeof x.variant_values==='object'&&!Array.isArray(x.variant_values)?x.variant_values:{};
-  const key=id+'::'+listing+'::'+variantId+'::'+JSON.stringify(variantValues);
-  const prev=m.get(key);
-  m.set(key,{product_id:id,quantity:Math.min(store==='general'?10:99,(prev?.quantity||0)+n),...(listing?{seller_listing_id:listing}:{}),...(variantId?{variant_id:variantId}:{}),...(variantSku?{variant_sku:variantSku}:{}),...(Object.keys(variantValues).length?{variant_values:variantValues}:{})});
- }
- return [...m.values()].slice(0,20);
-}catch{return[]}}
-function address(){const f=$('addressForm'),x=Object.fromEntries(new FormData(f).entries());return {full_name:x.name.trim(),name:x.name.trim(),phone:x.phone.trim(),street:[x.house,x.street].filter(Boolean).join(', '),house:x.house.trim(),area:x.street.trim(),address_line1:x.house.trim(),address_line2:x.street.trim(),city:x.village.trim(),village:x.village.trim(),district:x.district.trim(),state:x.state.trim(),pincode:x.pincode.trim(),landmark:x.landmark.trim()}}
-function valid(a){return a.full_name.length>=2&&/^[6-9]\d{9}$/.test(a.phone)&&a.house.length>=2&&a.city.length>=2&&a.district.length>=2&&a.state.length>=2&&/^[1-9]\d{5}$/.test(a.pincode)}
-function payment(){return document.querySelector('input[name=paymentMode]:checked')?.value||'cod'}
-function setStatus(s,err=false){$('status').className='status '+(err?'err':'');$('status').textContent=s}
-function authState(){const t=token();$('loginState').innerHTML=t?'Signed in to your Cerood account. Order will appear in My Orders.':'Guest checkout. <button type="button" id="loginBtn" style="width:auto;margin:0 0 0 8px;padding:7px 10px">Login</button>';if(!t)$('loginBtn').onclick=()=>window.CeroodAuth?.open()}
-async function saveAccountAddress(a){const t=token();if(!t)return;try{await fetch(API+'/api/customer/addresses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify({full_name:a.full_name,phone:a.phone,address_line1:a.house,address_line2:a.area,landmark:a.landmark,city:a.city,district:a.district,state:a.state,pincode:a.pincode,address_type:'HOME'}),cache:'no-store'})}catch{}}
-function prefill(){let loc=null;for(const k of ['cerood_checkout_address','cerood_selected_location','catus_user_location']){try{const x=JSON.parse(localStorage.getItem(k)||'null');if(x&&typeof x==='object'){loc=x;break}}catch{}}const f=$('addressForm');if(loc){const map={name:'name',full_name:'name',phone:'phone',house:'house',street:'street',area:'street',village:'village',city:'village',district:'district',state:'state',pincode:'pincode',landmark:'landmark'};for(const [k,n] of Object.entries(map))if(loc[k]&&f.elements[n]&&!f.elements[n].value)f.elements[n].value=loc[k]}try{const u=JSON.parse(localStorage.getItem('catus_logged_user')||'null');if(u){if(u.name)f.elements.name.value=u.name;if(u.phone)f.elements.phone.value=u.phone}}catch{}}
-let savedAddresses=[];
-async function loadSavedAddresses(){
- if(!token())return;
- try{const d=await json('/api/customer/addresses');savedAddresses=Array.isArray(d.addresses)?d.addresses:[];
-  const select=$('savedAddress');select.replaceChildren(new Option('Choose a saved address',''));
-  savedAddresses.forEach((a,i)=>select.add(new Option([a.full_name||a.name,a.address_line1,a.city,a.pincode].filter(Boolean).join(', '),String(i))));
-  $('savedAddressLabel').hidden=!savedAddresses.length;
- }catch{ $('savedAddressLabel').hidden=true; }
-}
-$('savedAddress').onchange=()=>{
- const a=savedAddresses[Number($('savedAddress').value)];if($('savedAddress').value===''||!a)return;
- const f=$('addressForm');const values={name:a.full_name||a.name||'',phone:a.phone||'',house:a.address_line1||a.house||'',street:a.address_line2||a.area||'',village:a.city||a.village||'',district:a.district||'',state:a.state||'',pincode:a.pincode||'',landmark:a.landmark||''};
- for(const [key,value] of Object.entries(values))f.elements[key].value=value;
- quote=null;quoteAddress='';quoteVersion++;refresh();checkQuote();
-};
-async function loadStatus(){if(!cfg.status)return;try{const d=await json(cfg.status);if(store==='general'){codEnabled=d.cod_enabled===true;onlineEnabled=false}else if(store==='renewed'){const guest=d.guest_checkout_enabled===true;codEnabled=guest&&d.cod_enabled===true;onlineEnabled=guest&&d.payment_enabled===true&&d.reservations_enabled===true}else{codEnabled=!!d.cod_enabled;onlineEnabled=!!d.online_enabled}}catch{codEnabled=false;onlineEnabled=false}}
-async function loadProducts(){
- if(store==='renewed'){
-   const d=await json('/api/renewed/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items})});
-   products=d.items||[];$('subtotal').textContent=money(d.subtotal);
- }else{
-   if(store==='general'){const ids=[...new Set(items.map(x=>x.product_id))];products=await Promise.all(ids.map(async id=>{const d=await json(cfg.products+'/'+encodeURIComponent(id));if(!d.product)throw Error('A selected product is unavailable.');return d.product}))}
-   else{const d=await json(cfg.products),arr=d.products||d.items||[];products=arr.filter(p=>items.some(x=>String(x.product_id)===String(p.id)))}
- }
- let subtotal=0;$('items').innerHTML=items.map((x,i)=>{const p=(store==='renewed'&&products[i])||products.find(v=>String(v.id||v.product_id)===x.product_id)||{};const pv=Array.isArray(p.variants)?p.variants.find(v=>String(v.id||'')===String(x.variant_id||'')):null;const price=Number(pv?.price??p.price??p.unit_price??0),line=Number(p.line_total??price*x.quantity);subtotal+=line;const warranty=store==='renewed'&&Number(p.warranty_days)>0?' · '+Number(p.warranty_days)+' days warranty':'';const variant=variantText(x),sku=x.variant_sku||pv?.sku||'';const variantLine=variant?`<span style="display:block;color:#475569;margin-top:4px">${variant.replace(/[<>&"]/g,'')}${sku?' · SKU: '+String(sku).replace(/[<>&"]/g,''):''}</span>`:'';return `<div class="item"><div><strong>${String(p.name||'Product').replace(/[<>&"]/g,'')}</strong><span>${x.quantity} × ${money(price)}${warranty}</span>${variantLine}</div><b>${money(line)}</b></div>`}).join('');
- if(store!=='renewed')$('subtotal').textContent=money(subtotal);
- if(store==='general'){$('delivery').textContent='Check delivery address';$('total').textContent='—';quote=null}
-}
-async function checkQuote(){
- const version=++quoteVersion;quote=null;refresh();const a=address();if(!valid(a)){setStatus('Enter a complete delivery address, valid mobile number and PIN code.',true);return false}
- try{
-   const body={address:a,items,payment_method:payment()};
-   const result=await json(cfg.quote,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-   if(version!==quoteVersion)return false;quote=result;quoteAddress=JSON.stringify(a);
-   if(store==='general'&&Array.isArray(quote.items)){
-     $('items').replaceChildren(...quote.items.map(x=>{
-       const row=document.createElement('div');row.className='item';
-       const detail=document.createElement('div'),title=document.createElement('strong'),info=document.createElement('span'),amount=document.createElement('b');
-       title.textContent=x.name||'Product';info.textContent=x.quantity+' × '+money(x.unit_price)+(variantText(x)?' · '+variantText(x):'');amount.textContent=money(x.line_total);
-       detail.append(title,info);row.append(detail,amount);return row;
-     }));
-   }
-   $('subtotal').textContent=money(quote.subtotal);$('delivery').textContent=quote.delivery_fee==null?'—':money(quote.delivery_fee);$('total').textContent=quote.total==null?'—':money(quote.total);
-   localStorage.setItem('cerood_selected_location',JSON.stringify({area:a.area,city:a.city,pincode:a.pincode,district:a.district,state:a.state}));
-   localStorage.setItem('cerood_checkout_address',JSON.stringify({...a,street:a.area}));
-   setStatus('Delivery and final price confirmed.');refresh();return quote.total!=null
- }catch(e){if(version!==quoteVersion)return false;quote=null;setStatus(e.message,true);refresh();return false}
-}
-function refresh(){
- const pm=payment(),available=pm==='cod'?codEnabled:onlineEnabled;
- $('onlinePayment').disabled=!onlineEnabled;
- $('paymentAvailability').textContent=onlineEnabled&&codEnabled?'COD and online payment are available for this store.':onlineEnabled?'Online payment is available. Cash on Delivery is currently unavailable here.':codEnabled?'Cash on Delivery is available. Online payment is currently unavailable here.':'Checkout is not enabled for this store.';
- $('place').disabled=completed||busy||!available||!items.length||!quote;
- if(completed){$('place').textContent='Order placed ✓';return}
- $('place').textContent=busy?'Please wait…':!available?'Payment method unavailable':pm==='cod'?'Place COD Order':'Continue to Secure Payment';
-}
-function saveReceipt(id,requestId,a){try{let r=JSON.parse(localStorage.getItem(cfg.receipt)||'[]');if(!Array.isArray(r))r=[];r=r.filter(x=>String(x.id)!==String(id));r.unshift({id,request_id:requestId,phone:a.phone});localStorage.setItem(cfg.receipt,JSON.stringify(r.slice(0,30)))}catch{}}
-async function placeCod(){
- const a=address();if(!valid(a))throw Error('Complete your delivery address first.');
- if(!quote||quoteAddress!==JSON.stringify(a))throw Error('Save address & check delivery first.');
- let requestId=sessionStorage.getItem(cfg.request)||uuid();
- if(store==='general'){
-   const fingerprint=JSON.stringify({address:a,items:items.map(x=>({product_id:x.product_id,variant_id:x.variant_id||null,quantity:x.quantity})).sort((x,y)=>(x.product_id+':'+(x.variant_id||'')).localeCompare(y.product_id+':'+(y.variant_id||'')))});
-   const fingerprintKey=cfg.request+'_fingerprint',previous=sessionStorage.getItem(fingerprintKey);
-   if(previous&&previous!==fingerprint)requestId=uuid();
-   sessionStorage.setItem(fingerprintKey,fingerprint);
- }
- sessionStorage.setItem(cfg.request,requestId);
- const d=await json(cfg.cod,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({request_id:requestId,address:a,items,...(store==='general'?{expected_total:quote.total}:{})})});
- const id=d.order_id||d.order?.id;if(!id)throw Error('Order ID missing from server response.');
- completed=true;saveReceipt(id,requestId,a);await saveAccountAddress(a);
- if(mode==='buy')sessionStorage.removeItem(cfg.buy);else localStorage.removeItem(cfg.cart);sessionStorage.removeItem(cfg.request);
- setStatus('Order placed successfully. Order #'+String(id).slice(0,8).toUpperCase());$('place').textContent='Order placed ✓';$('place').disabled=true;
- setTimeout(()=>location.href='/cerood-orders.html#orders',900);
-}
-async function placeRenewedOnline(){
- const a=address();
- if(store!=='renewed'||!valid(a)||!quote)throw Error('Save a valid delivery address and check delivery first.');
- if(typeof Razorpay!=='function')throw Error('Razorpay checkout could not be loaded.');
- setStatus('Preparing secure payment…');
- const d=await json('/api/renewed/prepare-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({address:a,items})});
- if(!d.razorpay_order_id||!d.key_id||!d.amount)throw Error('Secure payment details are incomplete.');
- await new Promise((resolve,reject)=>{
-  let done=false;
-  const rzp=new Razorpay({
-   key:d.key_id,amount:d.amount,currency:d.currency||'INR',name:'Cerood',
-   description:'Cerood Renewed Order',order_id:d.razorpay_order_id,
-   prefill:{name:a.full_name,contact:a.phone},theme:{color:'#171717'},
-   modal:{ondismiss:()=>{if(!done){done=true;reject(Error('Payment was cancelled.'))}}},
-   handler:async r=>{
-    if(done)return;
-    try{
-     const v=await json('/api/renewed/verify-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-      razorpay_order_id:r.razorpay_order_id,razorpay_payment_id:r.razorpay_payment_id,razorpay_signature:r.razorpay_signature
-     })});
-     if(!v.success)throw Error(v.message||'Payment verification is pending.');
-     done=true;completed=true;saveReceipt(d.order_id,'ONLINE_'+(d.transaction_id||''),a);await saveAccountAddress(a);
-     if(mode==='buy')sessionStorage.removeItem(cfg.buy);else localStorage.removeItem(cfg.cart);
-     setStatus('Payment verified. Order placed successfully.');$('place').textContent='Payment successful ✓';$('place').disabled=true;
-     setTimeout(()=>location.href='/cerood-orders.html#orders',900);resolve(v);
-    }catch(e){done=true;reject(e)}
-   }
-  });
-  rzp.on('payment.failed',r=>{if(!done){done=true;reject(Error(r?.error?.description||'Payment failed.'))}});
-  rzp.open();
- });
-}
-async function placeCommonOnline(){
- const a=address();
- if(!cfg.prepare||!valid(a)||!quote||quoteAddress!==JSON.stringify(a))throw Error('Check your delivery address before payment.');
- if(typeof Razorpay!=='function')throw Error('Secure payment could not be loaded. Please retry.');
- const key=cfg.request+'_online',requestId=sessionStorage.getItem(key)||uuid();sessionStorage.setItem(key,requestId);
- const d=await json(cfg.prepare,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({request_id:requestId,address:a,items})});
- async function finish(id){
-   if(!id)throw Error('Order confirmation missing. Contact support before paying again.');
-   completed=true;saveReceipt(id,requestId,a);await saveAccountAddress(a);
-   if(mode==='buy')sessionStorage.removeItem(cfg.buy);else localStorage.removeItem(cfg.cart);
-   sessionStorage.removeItem(key);setStatus('Payment verified. Order placed successfully.');
-   $('place').textContent='Payment successful ✓';$('place').disabled=true;
-   setTimeout(()=>location.href='/cerood-orders.html#orders',900);
- }
- if(d.already_paid){await finish(d.order_id);return}
- if(!d.razorpay_order_id||!d.key_id||!d.amount)throw Error('Payment preparation incomplete. Retry this checkout.');
- // Retain the order receipt before opening payment, including if this tab closes.
- saveReceipt(d.order_id,requestId,a);
- await new Promise((resolve,reject)=>{
-   let done=false;
-   const checkout=new Razorpay({key:d.key_id,amount:d.amount,currency:d.currency||'INR',name:'Cerood',
-     description:cfg.label+' order',order_id:d.razorpay_order_id,prefill:{name:a.full_name,contact:a.phone},theme:{color:'#171717'},
-     modal:{ondismiss:()=>{if(!done){done=true;reject(Error('Payment closed. Your checkout is saved; retry to continue.'))}}},
-     handler:async result=>{if(done)return;done=true;try{
-       const verified=await json(cfg.verify,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-         razorpay_order_id:result.razorpay_order_id,razorpay_payment_id:result.razorpay_payment_id,razorpay_signature:result.razorpay_signature
-       })});
-       if(!verified.success)throw Error('Payment verification pending. Do not pay again.');
-       await finish(verified.order_id||d.order_id);resolve(verified);
-     }catch(error){reject(Error(error.message+' Check My Orders before paying again.'))}}
-   });
-   checkout.on('payment.failed',result=>{if(!done){done=true;reject(Error(result?.error?.description||'Payment failed. Retry this checkout.'))}});
-   checkout.open();
- });
-}
-async function init(){
- $('checkoutTitle').textContent='Cerood '+cfg.label+' Checkout';$('storeNotice').textContent=`Review your items and confirm your delivery address to see the final total.`;
- items=readItems();authState();prefill();if(!items.length){$('items').textContent='Your cart is empty.';$('place').disabled=true;return}
- await Promise.all([loadStatus(),loadProducts(),loadSavedAddresses()]);refresh();
-}
-$('checkDelivery').onclick=checkQuote;
-$('addressForm').addEventListener('submit',e=>{e.preventDefault();checkQuote()});
-$('addressForm').addEventListener('input',()=>{quote=null;quoteAddress='';quoteVersion++;$('delivery').textContent='Check delivery address';$('total').textContent='—';refresh()});
-for(const x of document.querySelectorAll('input[name=paymentMode]'))x.onchange=async()=>{quote=null;if(store!=='general'&&valid(address()))await checkQuote();refresh()};
-$('place').onclick=async()=>{if(busy)return;busy=true;refresh();try{if(payment()==='online'){if(store==='renewed')await placeRenewedOnline();else await placeCommonOnline();return}await placeCod()}catch(e){setStatus(e.message,true)}finally{busy=false;refresh()}};
-window.addEventListener('cerood:login',()=>{authState();loadSavedAddresses()});
-init().catch(e=>setStatus(e.message,true));
-})();
-</script>
-</body></html>
+</div></main><footer class="store-footer"><div><a class="wordmark" href="/">cerood<span>●</span></a><p>Find something good for your everyday.</p></div><div><a href="/cerood-orders.html">My orders</a><a href="/contact.html">Contact & support</a><a href="/home-services.html">Home Services</a></div><div><a href="/privacy.html">Privacy policy</a><a href="/terms.html">Terms & conditions</a><a href="/seller-register.html">Become a seller</a></div><small>© Cerood · All rights reserved.</small></footer><div id="ceroodCommonCartPopup" class="cart-overlay" hidden aria-hidden="true"><section class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="ceroodCartTitle"><div class="drawer-heading"><div><span class="eyebrow">YOUR SELECTION</span><h2 id="ceroodCartTitle">Shopping bag</h2></div><button class="cerood-cart-close icon-button" data-cerood-cart-close aria-label="Close cart">×</button></div><div id="ceroodCommonCartBody"></div><p class="cart-footnote">Delivery and final prices are confirmed at checkout.</p></section><button class="cart-backdrop" data-cerood-cart-close aria-label="Close cart"></button></div><script src="/cerood-shop-model.js?v=2"></script><script src="/cerood-store-cart.js?v=2"></script><script src="/cerood-storefront.js?v=2"></script><script src="https://checkout.razorpay.com/v1/checkout.js"></script><script src="/cerood-checkout-engine.js?v=2"></script><script src="/cerood-checkout-extras.js?v=2"></script></body></html>
