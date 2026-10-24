@@ -5841,6 +5841,7 @@ if (techResponse === 'Accepted') {
 
         let existingCache =
             techCache[orderId] || {};
+ if(newStatus==='Rejected'&&statusResult.notification){const n=statusResult.notification;alert('Booking rejected. Notification: '+n.status+' · Push accepted: '+n.accepted+' · Failed: '+n.failed+'. Push display is not guaranteed.');}
 
 
         existingCache.status =
@@ -6035,8 +6036,9 @@ if (techResponse === 'Accepted') {
                 <td>${homeAdminEscape(c.email)}</td><td>${homeAdminEscape(c.phone)}</td>
                 <td>Not available</td><td>${c.orders}</td>
                 <td><span class="badge ${c.source==='registered'?'badge-active':'badge-pending'}">${homeAdminEscape(c.status)}</span></td>
-                <td><button class="manage-btn" style="background:#0284c7" data-home-customer="${homeAdminEscape(c.id)}">View customer</button></td>
+                <td><button class="manage-btn" style="background:#0284c7" data-home-customer="${homeAdminEscape(c.id)}">View customer</button> ${c.source==='registered'?`<button class="manage-btn" data-home-notify="${homeAdminEscape(c.id)}">Send notification</button>`:''}</td>
             </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64748b">No Home Service customers found.</td></tr>';
+            tbody.querySelectorAll('[data-home-notify]').forEach(b=>b.onclick=()=>window.ceroodSendHomeCustomerNotification(b.dataset.homeNotify));
             tbody.querySelectorAll('[data-home-customer]').forEach(b=>b.onclick=()=>openCustomerModal(b.dataset.homeCustomer));
         }
 
@@ -7618,6 +7620,6 @@ window.chsAdminAction=async function(action){
 };
 })();
 </script>
-</body>
+<script src="/cerood-admin-home-push.js?v=20261024-personal1"></script></body>
 
     </html>

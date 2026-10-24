@@ -15570,8 +15570,9 @@ async function openServiceProduct(serviceId) {
         }
     }
     
-    function logoutUser() {
+    async function logoutUser() {
         if(confirm("Are you sure you want to logout securely?")) {
+ try{await window.CeroodHomePush?.disconnect();}catch(error){alert('Unable to disconnect personal alerts. Please retry logout when connected.');return;}
             if (orderPollingInterval) {
                 clearInterval(orderPollingInterval);
                 orderPollingInterval = null;
@@ -21316,7 +21317,7 @@ window.CeroodAcceptTruecallerLogin = function(data) {
 </script>
 <script defer src="/cerood-truecaller-web.js?v=1"></script>
 <script defer src="/cerood-google-web.js?v=1"></script>
-</body>
+<script src="/cerood-home-push.js?v=20261024-personal1"></script></body>
 </html>
 
 <!-- Cerood booking help: mobile prompt / desktop enquiry -->
