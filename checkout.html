@@ -3901,7 +3901,7 @@ function resetOrderSubmitState() {
                 if(!currentUser)throw new Error('Please log in to Home Services before booking.');
                 const requestId = getOrCreateFreeBookingRequestId();
                 const response = await fetch(`${API_BASE_URL}/api/home-services/free-bookings`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
+                    method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('cerood_home_service_session')||'')},
                     body: JSON.stringify({
                         booking_request_id: requestId, customer_id: currentUser.id || null, customer_name: name, phone,
                         whatsapp: phone, address, service_address: address,

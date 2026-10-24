@@ -15194,7 +15194,7 @@ function formatIndiaInlineTime(value) {
             console.error("Could not preload services map for images", e);
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/orders/${phone}`);
+        const response = await fetch(`${API_BASE_URL}/api/home-services/customer/orders`,{headers:{Authorization:'Bearer '+(localStorage.getItem('cerood_home_service_session')||'')},cache:'no-store'});
         const data = await response.json();
         
         const ordersList = document.getElementById('premOrdersListContainer');
@@ -15240,21 +15240,9 @@ if (data.success && Array.isArray(data.orders)) {
 }
 
         if (data.success && data.orders) {
-            let processedOrders = data.orders.map(o => {
-                let cached = adminCache[o.order_id];
-                if (cached) {
-                    return {
-                        ...o,
-                        status: cached.status || o.status,
-                        technician_name: cached.name || o.technician_name,
-                        eta: cached.eta || o.eta,
-                        address: cached.address || o.address
-                    };
-                }
-                return o;
-            });
-            
-            processedOrders = processedOrders.filter(o => o.status !== 'Trash');
+            // Never let stale admin localStorage hide or overwrite a server rejection.
+            let processedOrders = data.orders.map(o=>({...o,status:String(o.status||'Pending').trim()}));
+            processedOrders = processedOrders.filter(o => o.status.toLowerCase() !== 'trash');
             window.currentOrders = processedOrders; 
             
             let compCount = processedOrders.filter(o => o.status.toLowerCase() === 'completed').length;
@@ -15460,7 +15448,7 @@ ${CeroodOrderImages.gallery(currentOrder, servicesMap)}
                         `;
                     }
 
-                    if (/^CHS-[0-9a-f-]{36}$/i.test(String(order.order_id || ''))) {
+                    if (!['rejected','cancelled'].includes(order.status.toLowerCase()) && /^CHS-[0-9a-f-]{36}$/i.test(String(order.order_id || ''))) {
                         actionButtonsHTML += `<button type="button" class="prem-btn-small" style="background:#fff;color:#171717;border:1px solid #d4d4d8" onclick="ceroodOpenHomeApproval('${order.order_id}')">Review Charges</button>`;
                         actionButtonsHTML += `<button type="button" class="prem-btn-small" style="background:#fff;color:#171717;border:1px solid #d4d4d8" onclick="ceroodOpenFullTracking('${order.order_id}')">Full Tracking</button>`;
                     }
@@ -15479,7 +15467,7 @@ ${CeroodOrderImages.gallery(currentOrder, servicesMap)}
                                     </div>
                                 </div>
                                 <div style="text-align:right;">
-                                    <span style="background:${statusBg}; color:${statusColor}; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700;">${order.status}</span>
+                                    <span style="background:${statusBg}; color:${statusColor}; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700;">${order.status.toLowerCase()==='rejected'?'Rejected':order.status}</span>
                                     <div style="font-size:15px; font-weight:800; color:#0f172a; margin-top:8px;">₹${order.amount}</div>
                                 </div>
                             </div>

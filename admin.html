@@ -380,7 +380,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
  #orderDetailModal .info-row span{flex-basis:42%}
 }
 </style>
-</head>
+<style>.badge-rejected{background:#fef2f2!important;color:#dc2626!important;border:1px solid #fecaca}#customerTableBody td:first-child{max-width:220px;overflow-wrap:anywhere}</style></head>
 
     <body>
 
@@ -571,7 +571,8 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
                             <button class="tab-btn" onclick="switchTab('In Service', this, 'bookings')">In Service</button>
                             <button class="tab-btn" onclick="switchTab('Completed', this, 'bookings')">Completed</button>
                             <button class="tab-btn" onclick="switchTab('Re-Service Requested', this, 'bookings')">Re-Service Requested</button>
-                            <button class="tab-btn trash-tab" onclick="switchTab('Trash', this, 'bookings')"><i class="fa-solid fa-trash"></i> Trash</button>
+                            <button class="tab-btn" onclick="switchTab('Rejected', this, 'bookings')">Rejected</button>
+<button class="tab-btn trash-tab" onclick="switchTab('Trash', this, 'bookings')"><i class="fa-solid fa-trash"></i> Trash</button>
                         </div>
 
                         <div class="export-group" style="display: flex; gap: 6px; flex-shrink: 0;">
@@ -623,7 +624,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
             <div id="page-customers" class="main-tab-pane">
                 <div class="panel-card">
                     <div class="panel-header">
-                        <h3 style="margin:0; font-size:15px; color:#1e293b;">Registered Customers List</h3>
+                        <h3 style="margin:0; font-size:15px; color:#1e293b;">Home Service Customers · Registered accounts & booking contacts</h3>
                         <div class="export-group"><button class="export-btn excel-btn"><i class="fa-solid fa-file-excel"></i> Export CSV</button></div>
                     </div>
                     <div class="table-responsive">
@@ -1981,13 +1982,15 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 
                         <div class="info-title"><i class="fa-solid fa-user"></i> Customer Information</div>
 
-                        <div class="info-row"><span>Full Name:</span> <strong id="detCustName">-</strong></div>
+                        <div class="info-row"><span>Booking Contact:</span> <strong id="detCustName">-</strong></div>
 
-                        <div class="info-row"><span>Mobile No:</span> <strong id="detCustPhone">-</strong></div>
+                        <div class="info-row"><span>Service Contact:</span> <strong id="detCustPhone">-</strong></div>
 
-                        <div class="info-row"><span>Email ID:</span> <strong id="detCustEmail" style="color:#0284c7;">srinathaus27@gmail.com</strong></div>
+                        <div class="info-row"><span>Registered Name:</span> <strong id="detRegisteredName">Not linked</strong></div>
+<div class="info-row"><span>Registered Mobile:</span> <strong id="detRegisteredPhone">Not linked</strong></div>
+<div class="info-row"><span>Registered Email:</span> <strong id="detCustEmail" style="color:#0284c7;">Not provided</strong></div>
 
-                        <div class="info-row"><span>Wallet Balance:</span> <strong style="color:#16a34a; font-size:15px;">₹2500</strong></div>
+                        <div class="info-row"><span>Wallet Balance:</span> <strong style="font-size:13px;">Not available</strong></div>
 
                     </div>
 
@@ -2095,7 +2098,8 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 
                                 <option value="Re-Service Requested">Re-Service Requested</option>
 
-                                <option value="Trash">Cancel / Move to Trash</option>
+                                <option value="Rejected">Reject booking — visible to customer</option>
+<option value="Trash">Move to Trash — hide booking</option>
 
                             </select>
 
@@ -2281,7 +2285,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 
                         <div class="info-row"><span>Mobile No:</span> <strong id="cusModalPhone">-</strong></div>
 
-                        <div class="info-row"><span>Email ID:</span> <strong id="cusModalEmail">-</strong></div>
+                        <div class="info-row"><span>Registered Email:</span> <strong id="cusModalEmail">-</strong></div>
 
                         <div class="info-row"><span>Primary Address:</span> <strong id="cusModalAddress" style="text-align: right; max-width: 60%;">-</strong></div>
 
@@ -4595,7 +4599,7 @@ function rejectWorkProof() {
             btnElement.classList.add('active');
             document.getElementById('topbarTitle').textContent = title;
 
-            if(pageId === 'customers') renderCustomerTable();
+            if(pageId === 'customers') fetchLiveCustomers();
             if(pageId === 'wallet') renderWalletTable(); 
             if (pageId === 'work-proofs') {
     loadTechnicianWorkProofs();
@@ -5151,9 +5155,10 @@ if (pageId === 'inactive-technicians') {
     }
 
         function fetchLiveBookings() {
-            fetch(`${API_BASE_URL}/api/admin/orders`)
+            fetch(`${API_BASE_URL}/api/admin/home-services/orders`)
             .then(response => response.json())
             .then(data => {
+                if(!data?.success||!Array.isArray(data.orders))throw Error(data.message||'Unable to load Home Service bookings.');
                 if(data && data.success && data.orders) {
                     allBookings = data.orders.map(order => {
                         let cachedData = techCache[order.order_id];
@@ -5223,8 +5228,7 @@ technician_response_reason:
     pincode: updatedPincode,
 
     is_deleted:
-        ((cachedData && cachedData.status === 'Trash') ||
-        order.status === 'Trash')
+        (order.status === 'Trash')
             ? 1
             : 0
 };
@@ -5373,6 +5377,7 @@ if (
                     if(displayStatus === 'Assigned' || displayStatus === 'On the way') badgeClass = 'badge-assigned';
                     if(displayStatus === 'In Service') badgeClass = 'badge-active';
                     if(displayStatus === 'Completed') badgeClass = 'badge-completed';
+ if(String(displayStatus).toLowerCase()==='rejected')badgeClass='badge-rejected';
                     if(displayStatus === 'Re-Service Requested') badgeClass = 'badge-reservice';
                     if(item.is_deleted == 1) { badgeClass = 'badge-trash'; displayStatus = 'Trash'; }
 
@@ -5501,7 +5506,10 @@ ${rejectReasonHTML}
             document.getElementById('manageOrderId').value = order.order_id;
             chsAdminOpen(order);
             document.getElementById('detCustName').textContent = order.customer_name;
-            document.getElementById('detCustPhone').textContent = order.phone;
+            document.getElementById('detCustPhone').textContent = order.phone || 'Not provided';
+ document.getElementById('detRegisteredName').textContent=order.registered_customer_name||'Not linked to a Home Service account';
+ document.getElementById('detRegisteredPhone').textContent=order.registered_customer_phone||'Not linked';
+ document.getElementById('detCustEmail').textContent=order.registered_customer_email||'Not provided';
             
             document.getElementById('detServiceName').textContent = order.service_name || 'Smart TV Repair';
             document.getElementById('detProductId').textContent = order.product_id;
@@ -5548,7 +5556,7 @@ document.getElementById('detPincode').textContent =
 
             let currentStatus = order.is_deleted == 1 ? 'Trash' : order.status;
             if(currentStatus === 'Active' || currentStatus === 'Service') currentStatus = 'In Service';
-            if(!["Pending", "Assigned", "On the way", "In Service", "Completed", "Re-Service Requested", "Trash"].includes(currentStatus)) currentStatus = 'Pending'; 
+            if(!["Pending", "Assigned", "On the way", "In Service", "Completed", "Re-Service Requested", "Rejected", "Trash"].includes(currentStatus)) currentStatus = 'Pending'; 
             document.getElementById('statusUpdateSelect').value = currentStatus;
 
             selectedTechnicianId = order.technician_id || '';
@@ -5695,7 +5703,9 @@ if (techResponse === 'Accepted') {
     }
 
 
-    if (
+    if(newStatus==='Rejected'&&!confirm('Reject this booking? The customer will see Rejected. No refund is processed by this action.'))return;
+
+ if (
         newStatus === 'Trash' &&
         !confirm('Move to Trash?')
     ) {
@@ -5716,7 +5726,7 @@ if (techResponse === 'Accepted') {
         // ==========================================
 
         if (
-            technicianChanged &&
+            newStatus !== 'Rejected' && technicianChanged &&
             document.getElementById('techDetailsEdit').style.display === 'block' &&
             tName
         ) {
@@ -5760,9 +5770,9 @@ if (techResponse === 'Accepted') {
         // ==========================================
 
         const statusResponse = await fetch(
-            `${API_BASE_URL}/api/admin/update-status`,
+            newStatus==='Rejected' ? `${API_BASE_URL}/api/admin/home-services/orders/${encodeURIComponent(orderId)}/reject` : `${API_BASE_URL}/api/admin/update-status`,
             {
-                method: 'POST',
+                method: newStatus==='Rejected'?'PATCH':'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -5997,56 +6007,37 @@ if (techResponse === 'Accepted') {
         }
 
         let customersData = [];
-        function fetchLiveCustomers() {
-            fetch(`${API_BASE_URL}/api/admin/customers`)
-            .then(response => response.json())
-            .then(data => {
-                if(data.success && data.customers) {
-                    customersData = data.customers.map(c => {
-                        let cleanPhone = String(c.phone || '40001').replace(/[^0-9]/g, '');
-                        let numericId = 40000 + parseInt(cleanPhone.slice(-4));
-                        return {
-                            id: String(numericId),
-                            name: c.name || 'Customer',
-                            email: c.email || 'N/A',
-                            phone: c.phone,
-                            wallet: 0, 
-                            orders: c.total_orders !== undefined ? c.total_orders : 0,
-                            status: c.status || 'Active',
-                            address: c.address || 'Doorstep Service Location'
-                        };
-                    });
-                    renderCustomerTable();
-                }
-            }).catch(err => {
-                console.error("Customers fetch error:", err);
-            });
-        }
-
-        function renderCustomerTable() {
-            let tbody = document.getElementById('customerTableBody');
-            if(!tbody) return;
-            let searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            let filtered = customersData.filter(c => c.name.toLowerCase().includes(searchQuery) || c.phone.includes(searchQuery));
-            let html = '';
-            if(filtered.length === 0) {
-                html = `<tr><td colspan="8" style="text-align:center; padding: 35px; color:#64748b;">No customers found.</td></tr>`;
-            } else {
-                filtered.forEach(c => {
-                    let badgeClass = c.status === 'Active' ? 'badge-active' : 'badge-inactive';
-                    html += `<tr>
-                        <td><b>${c.id}</b></td>
-                        <td><strong>${c.name}</strong></td>
-                        <td>${c.email}</td>
-                        <td>${c.phone}</td>
-                        <td><strong style="color:#16a34a;">₹${c.wallet}</strong></td>
-                        <td>${c.orders}</td>
-                        <td><span class="badge ${badgeClass}">${c.status}</span></td>
-                        <td><button class="manage-btn" style="background:#0284c7;" onclick="openCustomerModal('${c.id}')"><i class="fa-solid fa-sliders"></i> Manage</button></td>
-                    </tr>`;
-                });
+        async function fetchLiveCustomers() {
+            try {
+                const response=await fetch(`${API_BASE_URL}/api/admin/home-services/customers`);
+                const data=await response.json();
+                if(!response.ok||!data.success||!Array.isArray(data.customers))throw Error(data.message||'Unable to load Home Service customers.');
+                customersData=data.customers.map(c=>({
+                    id:String(c.id),name:c.name||'Booking contact',email:c.email||'Not provided',
+                    phone:String(c.phone||''),wallet:null,orders:Number(c.total_orders||0),
+                    status:c.source==='registered'?'Registered':'Booking contact',source:c.source,
+                    address:c.address||'No address saved'
+                }));
+                renderCustomerTable();
+            }catch(error){
+                console.error('Home customer master:',error.message);
+                document.getElementById('customerTableBody').innerHTML='<tr><td colspan="8" style="padding:24px;color:#b91c1c">Unable to load Home Service customers. Check the backend update and retry.</td></tr>';
             }
-            tbody.innerHTML = html;
+        }
+        function homeAdminEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+        function renderCustomerTable() {
+            const tbody=document.getElementById('customerTableBody');if(!tbody)return;
+            const search=document.getElementById('searchInput').value.toLowerCase();
+            const rows=customersData.filter(c=>[c.name,c.phone,c.email,c.id].some(v=>String(v).toLowerCase().includes(search)));
+            tbody.innerHTML=rows.length?rows.map(c=>`<tr>
+                <td><b title="${homeAdminEscape(c.id)}">${homeAdminEscape(c.id)}</b></td>
+                <td><strong>${homeAdminEscape(c.name)}</strong></td>
+                <td>${homeAdminEscape(c.email)}</td><td>${homeAdminEscape(c.phone)}</td>
+                <td>Not available</td><td>${c.orders}</td>
+                <td><span class="badge ${c.source==='registered'?'badge-active':'badge-pending'}">${homeAdminEscape(c.status)}</span></td>
+                <td><button class="manage-btn" style="background:#0284c7" data-home-customer="${homeAdminEscape(c.id)}">View customer</button></td>
+            </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64748b">No Home Service customers found.</td></tr>';
+            tbody.querySelectorAll('[data-home-customer]').forEach(b=>b.onclick=()=>openCustomerModal(b.dataset.homeCustomer));
         }
 
         function openCustomerModal(id) {
@@ -6054,11 +6045,15 @@ if (techResponse === 'Accepted') {
             if(!currentManageCustomer) return;
             document.getElementById('modalCusIdTitle').textContent = `(${currentManageCustomer.id})`;
             document.getElementById('cusModalName').textContent = currentManageCustomer.name;
+ document.getElementById('cusStatusBadge').textContent=currentManageCustomer.status;
             document.getElementById('cusModalPhone').textContent = currentManageCustomer.phone;
             document.getElementById('cusModalEmail').textContent = currentManageCustomer.email;
             document.getElementById('cusModalAddress').textContent = currentManageCustomer.address;
             document.getElementById('cusModalTotalOrders').textContent = currentManageCustomer.orders;
-            document.getElementById('walletBalanceInput').value = currentManageCustomer.wallet;
+            document.getElementById('walletBalanceInput').value = '';
+ document.getElementById('walletBalanceInput').placeholder='Not available';
+ document.getElementById('walletBalanceInput').disabled=true;
+ document.querySelectorAll('#customerDetailModal [onclick="updateWalletBalance()"],#customerDetailModal #blockBtn').forEach(b=>{b.disabled=true;b.title='This action is not connected to a Home Service customer API.';});
             document.getElementById('customerDetailModal').style.display = 'flex';
         }
 
@@ -6137,8 +6132,8 @@ if (techResponse === 'Accepted') {
                     ${tableHtml}
                 
 
-</body>
-                </html>
+<\/body>
+                <\/html>
             `);
             printWin.document.close();
             printWin.focus();
@@ -7454,6 +7449,7 @@ let chsSelectedStage=-1;
 function chsAdminDate(v){if(!v)return '';const d=new Date(v);return Number.isNaN(d.getTime())?'':d.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});}
 function renderChsAdminTracking(o){
  const host=el('chsAdminState');if(!host)return;
+ if(['rejected','cancelled','trash'].includes(String(o.status||'').toLowerCase())){host.replaceChildren();const message=document.createElement('p');message.style.cssText='color:#b91c1c;background:#fef2f2;padding:14px;border-radius:8px';message.textContent='Booking '+o.status+'. No active technician visit is scheduled by this status.';host.append(message);return;}
  const fee=String(o.inspection_fee_status||'').toLowerCase()==='confirmed';
  const appointment=String(o.appointment_status||'').toLowerCase()==='confirmed';
  const assigned=Boolean(o.technician_id||o.technician_assigned_at);
