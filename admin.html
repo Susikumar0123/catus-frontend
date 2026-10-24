@@ -2067,8 +2067,8 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
                             <button type="button" class="save-addr-action-btn" onclick="chsAdminAction('quotation')">Save quotation draft</button>
                             <button type="button" class="save-addr-action-btn" onclick="chsAdminAction('send-quotation')">Publish quotation for customer approval</button>
                             <div style="margin:12px 0;padding:12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;">
-                                <strong style="font-size:13px">Customer notification · Manual</strong>
-                                <p style="font-size:12px;color:#52525b">Copy a message and send it through your own WhatsApp/SMS. No automatic notification or private approval key is sent.</p>
+                                <strong style="font-size:13px">Optional manual follow-up</strong>
+                                <p style="font-size:12px;color:#52525b">Saved booking stages create personal push updates. You may also copy a message for manual follow-up. No private approval key is included.</p>
                                 <div style="display:flex;gap:8px;flex-wrap:wrap">
                                     <button type="button" onclick="chsCopyCustomerMessage('inspection')" style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer">Copy inspection message</button>
                                     <button type="button" onclick="chsCopyCustomerMessage('quotation')" style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer">Copy quotation message</button>
@@ -2084,7 +2084,8 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
 
                             <label>Current Status</label>
 
-                            <select id="statusUpdateSelect" class="form-input" style="font-weight:700;">
+                            <button type="button" class="save-addr-action-btn" onclick="ceroodSendHomeOrderNotification(document.getElementById('manageOrderId').value)" style="margin-bottom:12px">Notify customer about this order</button>
+<select id="statusUpdateSelect" class="form-input" style="font-weight:700;">
 
                                 <option value="Pending">Pending</option>
 
@@ -2099,6 +2100,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;ba
                                 <option value="Re-Service Requested">Re-Service Requested</option>
 
                                 <option value="Rejected">Reject booking — visible to customer</option>
+<option value="Cancelled">Cancel booking — visible to customer</option>
 <option value="Trash">Move to Trash — hide booking</option>
 
                             </select>
@@ -5377,7 +5379,7 @@ if (
                     if(displayStatus === 'Assigned' || displayStatus === 'On the way') badgeClass = 'badge-assigned';
                     if(displayStatus === 'In Service') badgeClass = 'badge-active';
                     if(displayStatus === 'Completed') badgeClass = 'badge-completed';
- if(String(displayStatus).toLowerCase()==='rejected')badgeClass='badge-rejected';
+ if(['rejected','cancelled'].includes(String(displayStatus).toLowerCase()))badgeClass='badge-rejected';
                     if(displayStatus === 'Re-Service Requested') badgeClass = 'badge-reservice';
                     if(item.is_deleted == 1) { badgeClass = 'badge-trash'; displayStatus = 'Trash'; }
 
@@ -5443,11 +5445,12 @@ if (
     ${techResponseHTML}
 ${rejectReasonHTML}
 </td>
-                    <td class="no-print"><button class="manage-btn" onclick="openOrderModal('${item.order_id}')"><i class="fa-solid fa-user-pen"></i> Manage</button></td>
+                    <td class="no-print"><button class="manage-btn" onclick="openOrderModal('${item.order_id}')"><i class="fa-solid fa-user-pen"></i> Manage</button> <button class="manage-btn" data-order-notify="${homeAdminEscape(item.order_id)}" style="margin-top:5px;background:#0284c7">Notify customer</button></td>
                 </tr>`;
                 });
             }
             tbody.innerHTML = html;
+ tbody.querySelectorAll('[data-order-notify]').forEach(button=>button.onclick=()=>ceroodSendHomeOrderNotification(button.dataset.orderNotify));
         }
 
         function formatServiceDate(value) {
@@ -5556,7 +5559,7 @@ document.getElementById('detPincode').textContent =
 
             let currentStatus = order.is_deleted == 1 ? 'Trash' : order.status;
             if(currentStatus === 'Active' || currentStatus === 'Service') currentStatus = 'In Service';
-            if(!["Pending", "Assigned", "On the way", "In Service", "Completed", "Re-Service Requested", "Rejected", "Trash"].includes(currentStatus)) currentStatus = 'Pending'; 
+            if(!["Pending", "Assigned", "On the way", "In Service", "Completed", "Re-Service Requested", "Rejected", "Cancelled", "Trash"].includes(currentStatus)) currentStatus = 'Pending'; 
             document.getElementById('statusUpdateSelect').value = currentStatus;
 
             selectedTechnicianId = order.technician_id || '';
@@ -5703,7 +5706,7 @@ if (techResponse === 'Accepted') {
     }
 
 
-    if(newStatus==='Rejected'&&!confirm('Reject this booking? The customer will see Rejected. No refund is processed by this action.'))return;
+    if(['Rejected','Cancelled'].includes(newStatus)&&!confirm(newStatus+' booking? The customer will see this status. No refund is processed by this action.'))return;
 
  if (
         newStatus === 'Trash' &&
@@ -5726,7 +5729,7 @@ if (techResponse === 'Accepted') {
         // ==========================================
 
         if (
-            newStatus !== 'Rejected' && technicianChanged &&
+            !['Rejected','Cancelled'].includes(newStatus) && technicianChanged &&
             document.getElementById('techDetailsEdit').style.display === 'block' &&
             tName
         ) {
@@ -5770,9 +5773,9 @@ if (techResponse === 'Accepted') {
         // ==========================================
 
         const statusResponse = await fetch(
-            newStatus==='Rejected' ? `${API_BASE_URL}/api/admin/home-services/orders/${encodeURIComponent(orderId)}/reject` : `${API_BASE_URL}/api/admin/update-status`,
+            ['Rejected','Cancelled'].includes(newStatus) ? `${API_BASE_URL}/api/admin/home-services/orders/${encodeURIComponent(orderId)}/${newStatus==='Rejected'?'reject':'cancel'}` : `${API_BASE_URL}/api/admin/update-status`,
             {
-                method: newStatus==='Rejected'?'PATCH':'POST',
+                method: ['Rejected','Cancelled'].includes(newStatus)?'PATCH':'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -5841,7 +5844,7 @@ if (techResponse === 'Accepted') {
 
         let existingCache =
             techCache[orderId] || {};
- if(newStatus==='Rejected'&&statusResult.notification){const n=statusResult.notification;alert('Booking rejected. Notification: '+n.status+' · Push accepted: '+n.accepted+' · Failed: '+n.failed+'. Push display is not guaranteed.');}
+ if(['Rejected','Cancelled'].includes(newStatus)&&statusResult.notification){const n=statusResult.notification;alert('Booking '+newStatus+'. Notification: '+n.status+' · Push accepted: '+n.accepted+' · Failed: '+n.failed+'. Push display is not guaranteed.');}
 
 
         existingCache.status =
@@ -6036,9 +6039,8 @@ if (techResponse === 'Accepted') {
                 <td>${homeAdminEscape(c.email)}</td><td>${homeAdminEscape(c.phone)}</td>
                 <td>Not available</td><td>${c.orders}</td>
                 <td><span class="badge ${c.source==='registered'?'badge-active':'badge-pending'}">${homeAdminEscape(c.status)}</span></td>
-                <td><button class="manage-btn" style="background:#0284c7" data-home-customer="${homeAdminEscape(c.id)}">View customer</button> ${c.source==='registered'?`<button class="manage-btn" data-home-notify="${homeAdminEscape(c.id)}">Send notification</button>`:''}</td>
+                <td><button class="manage-btn" style="background:#0284c7" data-home-customer="${homeAdminEscape(c.id)}">View customer</button></td>
             </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64748b">No Home Service customers found.</td></tr>';
-            tbody.querySelectorAll('[data-home-notify]').forEach(b=>b.onclick=()=>window.ceroodSendHomeCustomerNotification(b.dataset.homeNotify));
             tbody.querySelectorAll('[data-home-customer]').forEach(b=>b.onclick=()=>openCustomerModal(b.dataset.homeCustomer));
         }
 
@@ -7620,6 +7622,6 @@ window.chsAdminAction=async function(action){
 };
 })();
 </script>
-<script src="/cerood-admin-home-push.js?v=20261024-personal1"></script></body>
+<script src="/cerood-admin-home-push.js?v=20261024-orders2"></script></body>
 
     </html>
