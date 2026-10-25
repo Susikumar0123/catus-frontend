@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const form=document.querySelector('#siteSearch'),input=document.querySelector('#searchText');if(input)input.value=new URLSearchParams(location.search).get('q')||'';
-if(form)form.addEventListener('submit',e=>{e.preventDefault();location.href='/?q='+encodeURIComponent(input.value.trim())+'#catalog'});
+if(form)form.addEventListener('submit',e=>{e.preventDefault();location.href='/shop.html?q='+encodeURIComponent(input.value.trim())+'#catalog'});
 const notice=document.createElement('p');notice.className='store-toast';notice.setAttribute('role','status');notice.hidden=true;document.body.append(notice);let timer;
 function message(text){notice.textContent=text;notice.hidden=false;clearTimeout(timer);timer=setTimeout(()=>notice.hidden=true,6000)}
 document.addEventListener('click',e=>{const a=e.target.closest('[data-cerood-auth-trigger]');if(!a)return;if(window.CEROOD_DESIGN_PREVIEW){e.preventDefault();message('Sign-in is disabled in this private design preview.');return}if(!window.CeroodAuth){e.preventDefault();message('Sign-in could not load. Refresh this page and try again.');return}if(!window.CeroodAuth.isLoggedIn()){e.preventDefault();window.CeroodAuth.open()}});
