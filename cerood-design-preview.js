@@ -1,1 +1,1 @@
-/* Production: published catalogue only. No preview data or interception. */
+/* Production: no sample catalogue, test sessions or payment mocks. */

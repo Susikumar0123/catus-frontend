@@ -723,11 +723,12 @@ html body .header.crn-header .crn-header-main::after{
 (()=>{'use strict';const API='https://catus-backend-d2js.onrender.com';const CUSTOMER_SESSION='cerood_customer_session';
 const LEGACY_RENEWED_SESSION='cerood_renewed_customer_session';
 const stores=[{id:'renewed',receipt:'cerood_renewed_device_receipts',dashboard:'/cerood-orders.html#dashboard',orders:'/cerood-orders.html#orders'},{id:'clothing',receipt:'cerood_clothing_device_receipts',dashboard:'/cerood-orders.html#dashboard',orders:'/cerood-orders.html#orders'},{id:'cosmetics',receipt:'cerood_cosmetics_device_receipts',dashboard:'/cerood-orders.html#dashboard',orders:'/cerood-orders.html#orders'},{id:'shop',receipt:'cerood_shop_device_receipts',dashboard:'/cerood-orders.html#dashboard',orders:'/cerood-orders.html#orders'}];
+async function accountFetch(url,options={}){const account=customerToken(),r=await fetch(url,options);if(account!==customerToken())throw Error('Your account changed. Reload your account.');const decode=r.json.bind(r);r.json=async()=>{const d=await decode();if(account!==customerToken())throw Error('Your account changed. Reload your account.');return d};return r}
 function customerToken(){return localStorage.getItem(CUSTOMER_SESSION)||localStorage.getItem(LEGACY_RENEWED_SESSION)||''}const $=id=>document.getElementById(id);const money=n=>'₹'+Number(n||0).toLocaleString('en-IN');const fmt=v=>{if(!v)return '';const d=new Date(v);return isNaN(d)?'':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})};function read(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}}function txt(id,v){const n=$(id);if(n)n.textContent=v||'—'}function profile(){const u=read('catus_logged_user')||{};const loc=read('cerood_selected_location')||read('catus_user_location')||localStorage.getItem('catus_location_name')||'';const name=u.name||u.full_name||u.fullName||u.customer_name||'Cerood Customer',phone=u.phone||u.mobile||u.mobile_number||u.phone_number||'',email=u.email||'';txt('customerName',name);txt('customerPhone',phone);txt('customerEmail',email);txt('sideName',name);$('sidePhone').textContent=phone;$('sideEmail').textContent=email;$('avatar').textContent=name[0].toUpperCase();const welcomeName=$('welcomeName');if(welcomeName)welcomeName.textContent=name.split(' ')[0].toUpperCase()+'!';txt('customerLocation',typeof loc==='string'?loc:(loc.display_name||loc.name||loc.address||[loc.village,loc.district,loc.state].filter(Boolean).join(', ')));const summaryProfile=$('summaryProfile');if(summaryProfile)summaryProfile.textContent=[name,phone,email].filter(Boolean).join(' · ');const np=String(name||'').trim().split(/\s+/).filter(Boolean);txt('profileFirstName',np[0]||name);txt('profileLastName',np.slice(1).join(' ')||'—');txt('profileEmail',email);txt('profilePhone',phone);txt('profileLocation',typeof loc==='string'?loc:(loc.display_name||loc.name||loc.address||[loc.village,loc.district,loc.state].filter(Boolean).join(', ')))}function view(v){const allowed=['dashboard','orders','addresses','settings','support'];if(!allowed.includes(v))v='dashboard';allowed.forEach(x=>$(x+'View').hidden=x!==v);document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));document.title=(v==='dashboard'?'My Profile':v==='orders'?'My Orders':v==='addresses'?'Addresses':v==='settings'?'Account Settings':'Help & Support')+' | Cerood';if(location.hash!=='#'+v)history.replaceState(null,'','#'+v);if(v==='addresses')addresses();window.scrollTo(0,0)}document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>view(b.dataset.view)));window.addEventListener('hashchange',()=>view(location.hash.slice(1)));$('logoutBtn').addEventListener('click',()=>{if(window.CeroodAuth?.logout)window.CeroodAuth.logout();else{localStorage.removeItem('catus_logged_user');localStorage.removeItem('cerood_customer_session');localStorage.removeItem('cerood_renewed_customer_session')}location.href='/'});$('loginSettings').addEventListener('click',()=>window.CeroodAuth?.open?.());function el(tag,cls,content){const n=document.createElement(tag);if(cls)n.className=cls;if(content!==undefined)n.textContent=content;return n}
 async function fetchOrdersWithTimeout(url,options={},timeout=12000){
  const controller=new AbortController();
  const timer=setTimeout(()=>controller.abort(),timeout);
- try{return await fetch(url,{...options,signal:controller.signal})}
+ try{return await accountFetch(url,{...options,signal:controller.signal})}
  finally{clearTimeout(timer)}
 }
 async function getOrders(s){
@@ -768,7 +769,7 @@ function crReturnDate(v){if(!v)return '—';const d=new Date(v);return Number.is
 async function loadCommonRenewedReturns(force=false){
  if(!force&&Array.isArray(commonRenewedReturns))return commonRenewedReturns;
  const token=customerToken();if(!token){commonRenewedReturns=[];return commonRenewedReturns}
- try{const r=await fetch(API+'/api/renewed/customer-returns',{headers:{Authorization:'Bearer '+token},cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to load requests');commonRenewedReturns=Array.isArray(d.requests)?d.requests:[]}catch(e){console.warn('Renewed returns:',e.message);commonRenewedReturns=[]}
+ try{const r=await accountFetch(API+'/api/renewed/customer-returns',{headers:{Authorization:'Bearer '+token},cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to load requests');commonRenewedReturns=Array.isArray(d.requests)?d.requests:[]}catch(e){console.warn('Renewed returns:',e.message);commonRenewedReturns=[]}
  return commonRenewedReturns;
 }
 function crActiveReturn(orderId,productId){return (commonRenewedReturns||[]).find(r=>String(r.order_id)===String(orderId)&&String(r.product_id)===String(productId)&&!['rejected','cancelled','closed'].includes(String(r.status||'').toLowerCase()))}
@@ -784,7 +785,7 @@ async function submitCommonReturn(){
  if(!token||!target){status.textContent='Customer session or order details are missing.';status.className='cr-return-status error';return}
  const reason=document.getElementById('ceroodReturnReason').value.trim(),details=document.getElementById('ceroodReturnDetails').value.trim(),request_type=document.getElementById('ceroodReturnType').value;if(!reason){status.textContent='Please select a reason.';status.className='cr-return-status error';return}
  btn.disabled=true;status.textContent='Submitting request…';status.className='cr-return-status';
- try{const r=await fetch(API+'/api/renewed/customer-returns',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({order_id:target.order.id,product_id:target.item.product_id,request_type,reason,details,quantity:Number(target.item.quantity||1)})}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to submit request');status.textContent='Request submitted successfully.';status.className='cr-return-status ok';await loadCommonRenewedReturns(true);const refresh=target.refresh;setTimeout(()=>{closeCommonReturn();refresh&&refresh()},450)}
+ try{const r=await accountFetch(API+'/api/renewed/customer-returns',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({order_id:target.order.id,product_id:target.item.product_id,request_type,reason,details,quantity:Number(target.item.quantity||1)})}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to submit request');status.textContent='Request submitted successfully.';status.className='cr-return-status ok';await loadCommonRenewedReturns(true);const refresh=target.refresh;setTimeout(()=>{closeCommonReturn();refresh&&refresh()},450)}
  catch(e){status.textContent=e.message;status.className='cr-return-status error'}finally{btn.disabled=false}
 }
 async function renderShopOrderReturns(o){
@@ -899,7 +900,7 @@ async function renderOrderReviews(o,s){
    submit.onclick=async()=>{if(!token){status.textContent='Sign in to your Cerood account before submitting a verified review.';return}if(!chosen||textarea.value.trim().length<10){status.textContent='Select stars and write at least 10 characters.';return}if(!item.product_id){status.textContent='Product reference missing; contact support.';return}if(photos.files.length>3||[...photos.files].some(f=>f.size>5*1024*1024||!['image/jpeg','image/png','image/webp'].includes(f.type))){status.textContent='Choose up to 3 JPG, PNG or WebP images, maximum 5 MB each.';return}
     submit.disabled=true;status.textContent='Submitting review…';
     try{const form=new FormData();form.append('order_id',o.id);form.append('product_id',item.product_id);form.append('rating',chosen);form.append('comment',textarea.value.trim());for(const f of photos.files)form.append('photos',f);
-     const r=await fetch(API+'/api/renewed/reviews',{method:'POST',headers:{Authorization:'Bearer '+token},body:form}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Review submission failed');
+     const r=await accountFetch(API+'/api/renewed/reviews',{method:'POST',headers:{Authorization:'Bearer '+token},body:form}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Review submission failed');
      localStorage.removeItem(key);status.textContent='Review submitted · Awaiting admin approval.';submit.remove();save.remove();photos.disabled=true;textarea.disabled=true;buttons.forEach(b=>b.disabled=true)
     }catch(e){status.textContent=e.message;submit.disabled=false}
    };
@@ -979,7 +980,7 @@ function renderOrder(o,s){
  const name=items.map(x=>x.product_name||x.name).filter(Boolean).join(', ')||o.product_name||'Order '+String(o.id||'').slice(0,8);
  info.append(el('strong','',name),el('small','', 'Order ID: '+String(o.id||'—')+'  ·  '+fmt(o.created_at)),el('small','', 'Qty: '+(items.reduce((n,x)=>n+Number(x.quantity||1),0)||1)));
  const st=s.id==='renewed'?(o.delivery_status||'confirmed'):(o.delivery_status||o.status||'Order placed');info.append(el('span','status '+(/deliver(ed)?/i.test(st)?'delivered':/cancel/i.test(st)?'cancelled':''),String(st).replaceAll('_',' ')));
- amount.textContent=money(o.total);action.type='button';action.setAttribute('aria-label','View order live tracking');
+ if(s.id==='shop'&&o.payment_status)info.append(el('small','', 'Payment: '+String(o.payment_status).replaceAll('_',' ')));amount.textContent=money(o.total);action.type='button';action.setAttribute('aria-label','View order live tracking');
  action.addEventListener('click',()=>openOrderDetailsPopup(o,s));
  if(s.id==='shop'&&o.payment_method==='online'&&o.payment_status==='pending'&&customerToken()){
   const recover=el('button','outline','Check payment status'),note=el('small','');recover.type='button';
@@ -987,7 +988,9 @@ function renderOrder(o,s){
  }
  row.append(pic,info,amount,action);return row
 }
+let orderLoadRevision=0;
 async function load(){
+ const revision=++orderLoadRevision,account=customerToken();
  const recent=$('recentOrders'),all=$('allOrders'),refresh=$('refreshBtn');
  if(!all)return;
  if(recent)recent.replaceChildren(el('p','muted','Loading your orders…'));
@@ -995,6 +998,7 @@ async function load(){
  if(refresh)refresh.disabled=true;
  try{
   const results=await Promise.all(stores.map(async s=>({s,...await getOrders(s)})));
+  if(revision!==orderLoadRevision||account!==customerToken())return;
   const combined=[],warnings=[];
   for(const r of results){
    for(const o of r.orders)combined.push({o,s:r.s});
@@ -1014,10 +1018,10 @@ async function load(){
   }
   const w=$('orderWarnings');if(w)w.textContent=warnings.length?'Some records could not be verified. Try Refresh.':'';
  }catch(e){
-  console.error('Cerood orders load failed:',e);
+  if(revision!==orderLoadRevision||account!==customerToken())return;console.error('Cerood orders load failed:',e);
   all.replaceChildren(el('p','message error','Unable to load orders. Please tap Refresh and try again.'));
  }finally{
-  if(refresh)refresh.disabled=false;
+  if(refresh&&revision===orderLoadRevision)refresh.disabled=false;
  }
 }
 let accountAddresses=[];
@@ -1026,9 +1030,9 @@ function ap(){return {full_name:$('addrFullName').value.trim(),phone:$('addrPhon
 function af(x=null){$('addressEditId').value=x?.id||'';$('addrFullName').value=x?.full_name||'';$('addrPhone').value=x?.phone||'';$('addrLine1').value=x?.address_line1||'';$('addrLine2').value=x?.address_line2||'';$('addrLandmark').value=x?.landmark||'';$('addrCity').value=x?.city||'';$('addrDistrict').value=x?.district||'';$('addrState').value=x?.state||'';$('addrPincode').value=x?.pincode||'';$('accountAddressForm').hidden=false}
 function ac(){$('accountAddressForm').reset();$('addressEditId').value='';$('accountAddressForm').hidden=true;$('addressFormStatus').textContent=''}
 function ar(){const l=$('addressList');l.replaceChildren();txt('addressCount',String(accountAddresses.length));if(!accountAddresses.length){l.append(el('p','message',customerToken()?'No saved addresses yet. A successful shopping checkout can add one automatically.':'Sign in to view saved addresses.'));return}accountAddresses.forEach(x=>{const c=el('div','addr'),head=el('div','');head.append(el('strong','',(x.address_type||'HOME')+'  ·  '+(x.full_name||'Customer')+'  ·  '+(x.phone||'')));const line=el('div','',[x.address_line1,x.address_line2,x.landmark,x.city,x.district,x.state,x.pincode].filter(Boolean).join(', '));const act=el('div','rowactions'),edit=el('button','outline','EDIT'),del=el('button','outline','DELETE');edit.type=del.type='button';edit.onclick=()=>af(x);del.onclick=()=>ad(x.id);act.append(edit,del);if(x.is_default)c.append(el('small','','DEFAULT ADDRESS'));c.append(head,line,act);l.append(c)});const d=accountAddresses.find(x=>x.is_default)||accountAddresses[0];txt('defaultAddress',[d.address_line1,d.city,d.district,d.state,d.pincode].filter(Boolean).join(', '))}
-async function addresses(){if(!customerToken()){accountAddresses=[];ar();return}try{const r=await fetch(API+'/api/customer/addresses',{headers:ah(),cache:'no-store'}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Unable to load addresses');accountAddresses=Array.isArray(d.addresses)?d.addresses:[];ar()}catch(e){$('addressList').replaceChildren(el('p','message error',e.message))}}
-async function ad(id){if(!confirm('Delete this saved address?'))return;const r=await fetch(API+'/api/customer/addresses/'+encodeURIComponent(id),{method:'DELETE',headers:ah(),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)return alert(d.message||'Unable to delete address');addresses()}
-$('addAddressBtn')?.addEventListener('click',()=>af());$('cancelAddressBtn')?.addEventListener('click',ac);$('accountAddressForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!customerToken())return window.CeroodAuth?.open?.();const id=$('addressEditId').value.trim(),st=$('addressFormStatus');st.textContent='Saving…';try{const r=await fetch(API+'/api/customer/addresses'+(id?'/'+encodeURIComponent(id):''),{method:id?'PUT':'POST',headers:ah(true),body:JSON.stringify(ap()),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to save address');ac();await addresses()}catch(x){st.textContent=x.message}});
+async function addresses(){if(!customerToken()){accountAddresses=[];ar();return}try{const r=await accountFetch(API+'/api/customer/addresses',{headers:ah(),cache:'no-store'}),d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'Unable to load addresses');accountAddresses=Array.isArray(d.addresses)?d.addresses:[];ar()}catch(e){$('addressList').replaceChildren(el('p','message error',e.message))}}
+async function ad(id){if(!confirm('Delete this saved address?'))return;const r=await accountFetch(API+'/api/customer/addresses/'+encodeURIComponent(id),{method:'DELETE',headers:ah(),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)return alert(d.message||'Unable to delete address');addresses()}
+$('addAddressBtn')?.addEventListener('click',()=>af());$('cancelAddressBtn')?.addEventListener('click',ac);$('accountAddressForm')?.addEventListener('submit',async e=>{e.preventDefault();if(!customerToken())return window.CeroodAuth?.open?.();const id=$('addressEditId').value.trim(),st=$('addressFormStatus');st.textContent='Saving…';try{const r=await accountFetch(API+'/api/customer/addresses'+(id?'/'+encodeURIComponent(id):''),{method:id?'PUT':'POST',headers:ah(true),body:JSON.stringify(ap()),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to save address');ac();await addresses()}catch(x){st.textContent=x.message}});
 function applyOrderFilters(){
  const q=($('orderSearchInput')?.value||'').trim().toLowerCase();
  const statusChecks=[...document.querySelectorAll('[data-order-status]:checked')].map(x=>x.dataset.orderStatus);
@@ -1057,10 +1061,10 @@ document.querySelectorAll('[data-order-status],[data-order-time]').forEach(x=>x.
 let ceroodProfileSnapshot=null;
 function splitProfileName(n){const p=String(n||'').trim().split(/\s+/).filter(Boolean);return{first:p[0]||'',last:p.slice(1).join(' ')}}
 function setProfileInputs(u){const n=splitProfileName(u?.name);$('profileFirstNameInput').value=n.first;$('profileLastNameInput').value=n.last;$('profileEmailInput').value=u?.email||'';$('profilePhoneInput').value=u?.phone||'';ceroodProfileSnapshot={name:u?.name||'',email:u?.email||'',phone:u?.phone||''}}
-async function loadEditableProfile(){const local=read('catus_logged_user')||{};setProfileInputs(local);const t=customerToken();if(!t)return;try{const r=await fetch(API+'/api/customer/profile',{headers:{Accept:'application/json',Authorization:'Bearer '+t},cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to load profile.');setProfileInputs(d.user||{});localStorage.setItem('catus_logged_user',JSON.stringify({...local,...d.user}));profile()}catch(e){$('profileSaveMessage').textContent=e.message}}
+async function loadEditableProfile(){const local=read('catus_logged_user')||{};setProfileInputs(local);const t=customerToken();if(!t)return;try{const r=await accountFetch(API+'/api/customer/profile',{headers:{Accept:'application/json',Authorization:'Bearer '+t},cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to load profile.');setProfileInputs(d.user||{});localStorage.setItem('catus_logged_user',JSON.stringify({...local,...d.user}));profile()}catch(e){$('profileSaveMessage').textContent=e.message}}
 function profileEdit(k,on){const ids=k==='personal'?['profileFirstNameInput','profileLastNameInput']:['profileEmailInput'];ids.forEach(id=>$(id).disabled=!on);$(k==='personal'?'personalActions':'emailActions').hidden=!on;if(on)$(ids[0]).focus()}
 function cancelProfileEdit(k){setProfileInputs(ceroodProfileSnapshot||read('catus_logged_user')||{});profileEdit(k,false);$('profileSaveMessage').textContent=''}
-async function saveProfileSection(k){const first=$('profileFirstNameInput').value.trim(),last=$('profileLastNameInput').value.trim(),email=$('profileEmailInput').value.trim(),name=[first,last].filter(Boolean).join(' '),msg=$('profileSaveMessage');if(!name)return msg.textContent='Name is required.';if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return msg.textContent='Enter a valid email address.';msg.textContent='Saving…';try{const t=customerToken();if(!t)throw Error('Please sign in again.');const r=await fetch(API+'/api/customer/profile',{method:'PUT',headers:{Accept:'application/json','Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify({name,email}),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to save profile.');const u={...(read('catus_logged_user')||{}),...(d.user||{})};localStorage.setItem('catus_logged_user',JSON.stringify(u));setProfileInputs(u);profileEdit(k,false);profile();msg.textContent='Profile updated successfully.'}catch(e){msg.textContent=e.message}}
+async function saveProfileSection(k){const first=$('profileFirstNameInput').value.trim(),last=$('profileLastNameInput').value.trim(),email=$('profileEmailInput').value.trim(),name=[first,last].filter(Boolean).join(' '),msg=$('profileSaveMessage');if(!name)return msg.textContent='Name is required.';if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return msg.textContent='Enter a valid email address.';msg.textContent='Saving…';try{const t=customerToken();if(!t)throw Error('Please sign in again.');const r=await accountFetch(API+'/api/customer/profile',{method:'PUT',headers:{Accept:'application/json','Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify({name,email}),cache:'no-store'}),d=await r.json().catch(()=>({}));if(!r.ok||!d.success)throw Error(d.message||'Unable to save profile.');const u={...(read('catus_logged_user')||{}),...(d.user||{})};localStorage.setItem('catus_logged_user',JSON.stringify(u));setProfileInputs(u);profileEdit(k,false);profile();msg.textContent='Profile updated successfully.'}catch(e){msg.textContent=e.message}}
 $('editPersonalBtn')?.addEventListener('click',()=>profileEdit('personal',true));$('cancelPersonalBtn')?.addEventListener('click',()=>cancelProfileEdit('personal'));$('savePersonalBtn')?.addEventListener('click',()=>saveProfileSection('personal'));$('editEmailBtn')?.addEventListener('click',()=>profileEdit('email',true));$('cancelEmailBtn')?.addEventListener('click',()=>cancelProfileEdit('email'));$('saveEmailBtn')?.addEventListener('click',()=>saveProfileSection('email'));
 loadEditableProfile();
 document.addEventListener('click',e=>{if(e.target.closest('[data-order-popup-close]'))closeOrderDetailsPopup()});
@@ -1071,6 +1075,10 @@ addresses();
 view(location.hash ? (location.hash.slice(1)==='account'?'dashboard':location.hash.slice(1)) : 'orders');
 $('refreshBtn')?.addEventListener('click',load);
 load();
+function commerceAccountChanged(){orderLoadRevision++;accountAddresses=[];ceroodProfileSnapshot=null;closeOrderDetailsPopup();closeCommonReturn();ac();txt('orderCount','0');txt('addressCount','0');txt('defaultAddress','');for(const id of ['recentOrders','allOrders','addressList'])$(id)?.replaceChildren(el('p','message','Refreshing this account…'));profile();load();addresses();loadEditableProfile()}
+window.addEventListener('cerood:login',commerceAccountChanged);window.addEventListener('cerood:logout',commerceAccountChanged);
+window.addEventListener('storage',e=>{if([CUSTOMER_SESSION,LEGACY_RENEWED_SESSION].includes(e.key))commerceAccountChanged()});
+
 })();
 
 </script>

@@ -6,7 +6,7 @@ const q=new URLSearchParams(location.search),mode=q.get('mode')==='buy'?'buy':'c
 const aliases={shop:'general',main:'general',clothing:'fashion',cosmetics:'beauty'};
 let store=aliases[(q.get('store')||'general').toLowerCase()]||(q.get('store')||'general').toLowerCase();
 const CFG={
- general:{label:'Main Store',cart:'cerood_shop_cart',buy:'cerood_shop_buy_now',products:'/api/shop/products',quote:'/api/shop/quote',status:'/api/shop/checkout-status',cod:'/api/shop/place-cod-order',receipt:'cerood_shop_device_receipts',request:'cerood_shop_cod_request',online:false},
+ general:{label:'Main Store',cart:'cerood_shop_cart',buy:'cerood_shop_buy_now',products:'/api/shop/products',quote:'/api/shop/quote',status:'/api/shop/checkout-status',cod:'/api/shop/place-cod-order',receipt:'cerood_shop_device_receipts',request:'cerood_shop_cod_request',online:true,prepare:'/api/shop/create-razorpay-order',verify:'/api/shop/verify-razorpay-payment'},
  renewed:{label:'Renewed',cart:'cerood_renewed_cart',buy:'cerood_renewed_buy_now',products:'/api/renewed/products',quote:'/api/renewed/delivery-quote',status:'/api/renewed/checkout-status',cod:'/api/renewed/place-cod-order',receipt:'cerood_renewed_device_receipts',request:'cerood_renewed_cod_request',online:'legacy'},
  fashion:{label:'Fashion',cart:'cerood_clothing_cart',buy:'cerood_clothing_buy_now',products:'/api/clothing/products',quote:'/api/clothing/quote',status:'/api/clothing/checkout-status',cod:'/api/clothing/place-cod-order',receipt:'cerood_clothing_device_receipts',request:'cerood_clothing_pending_request_v1',online:true,prepare:'/api/clothing/create-razorpay-order',verify:'/api/clothing/verify-razorpay-payment'},
  beauty:{label:'Beauty',cart:'cerood_cosmetics_cart',buy:'cerood_cosmetics_buy_now',products:'/api/cosmetics/products',quote:'/api/cosmetics/quote',status:'/api/cosmetics/checkout-status',cod:'/api/cosmetics/place-cod-order',receipt:'cerood_cosmetics_device_receipts',request:'cerood_cosmetics_pending_request_v1',online:true,prepare:'/api/cosmetics/create-razorpay-order',verify:'/api/cosmetics/verify-razorpay-payment'}
@@ -17,7 +17,7 @@ const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:
 function variantText(x){const v=x&&x.variant_values&&typeof x.variant_values==='object'?x.variant_values:{};return Object.entries(v).map(([k,val])=>String(k).replace(/[_-]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase())+': '+(Array.isArray(val)?val.join(', '):val)).join(' · ')}
 const uuid=()=>crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)});
 function token(){const a=localStorage.getItem('cerood_customer_session')||'',b=localStorage.getItem('cerood_renewed_customer_session')||'',t=a||b;if(t&&!a)localStorage.setItem('cerood_customer_session',t);if(t&&!b)localStorage.setItem('cerood_renewed_customer_session',t);return t}
-async function json(path,opt={}){const h={Accept:'application/json',...(opt.headers||{})},t=token();if(t)h.Authorization='Bearer '+t;const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),25000);try{const r=await fetch(API+path,{cache:'no-store',...opt,headers:h,signal:controller.signal});let d={};try{d=await r.json()}catch{}if(!r.ok||d.success===false)throw Error(d.message||'Checkout service unavailable.');return d}catch(e){if(e.name==='AbortError')throw Error('Server took too long. Retry; the same checkout request prevents duplicate orders.');throw e}finally{clearTimeout(timer)}}
+async function json(path,opt={}){const h={Accept:'application/json',...(opt.headers||{})},t=token();if(t)h.Authorization='Bearer '+t;const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),25000);try{const r=await fetch(API+path,{cache:'no-store',...opt,headers:h,signal:controller.signal});let d={};try{d=await r.json()}catch{}if(t!==token())throw Error('Your account changed. Refresh checkout before continuing.');if(!r.ok||d.success===false)throw Error(d.message||'Checkout service unavailable.');return d}catch(e){if(e.name==='AbortError')throw Error('Server took too long. Retry; the same checkout request prevents duplicate orders.');throw e}finally{clearTimeout(timer)}}
 function readItems(){try{
  // Renewed: seller_listing_id is intentionally optional. Missing ID lets the backend auto-allocate; an explicit customer choice is preserved.
  const raw=JSON.parse((mode==='buy'?sessionStorage.getItem(cfg.buy):localStorage.getItem(cfg.cart))||'[]'),m=new Map();
@@ -56,7 +56,7 @@ $('savedAddress').onchange=()=>{
  for(const [key,value] of Object.entries(values))f.elements[key].value=value;
  quote=null;quoteAddress='';quoteVersion++;refresh();checkQuote();
 };
-async function loadStatus(){if(!cfg.status)return;try{const d=await json(cfg.status);if(store==='general'){codEnabled=d.cod_enabled===true;onlineEnabled=false}else if(store==='renewed'){const guest=d.guest_checkout_enabled===true;codEnabled=guest&&d.cod_enabled===true;onlineEnabled=guest&&d.payment_enabled===true&&d.reservations_enabled===true}else{codEnabled=!!d.cod_enabled;onlineEnabled=!!d.online_enabled}}catch{codEnabled=false;onlineEnabled=false}}
+async function loadStatus(){if(!cfg.status)return;try{const d=await json(cfg.status);if(store==='general'){codEnabled=d.cod_enabled===true;onlineEnabled=d.online_enabled===true}else if(store==='renewed'){const guest=d.guest_checkout_enabled===true;codEnabled=guest&&d.cod_enabled===true;onlineEnabled=guest&&d.payment_enabled===true&&d.reservations_enabled===true}else{codEnabled=!!d.cod_enabled;onlineEnabled=!!d.online_enabled}}catch{codEnabled=false;onlineEnabled=false}}
 async function loadProducts(){
  if(store==='renewed'){
    const d=await json('/api/renewed/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items})});
@@ -91,7 +91,7 @@ async function checkQuote(){
 }
 function refresh(){
  const pm=payment(),available=pm==='cod'?codEnabled:onlineEnabled;
- $('onlinePayment').disabled=!onlineEnabled;
+ $('onlinePayment').disabled=busy||!onlineEnabled;const cod=document.querySelector('input[name=paymentMode][value=cod]');if(cod)cod.disabled=busy||!codEnabled;
  $('paymentAvailability').textContent=onlineEnabled&&codEnabled?'COD and online payment are available for this store.':onlineEnabled?'Online payment is available. Cash on Delivery is currently unavailable here.':codEnabled?'Cash on Delivery is available. Online payment is currently unavailable here.':'Checkout is not enabled for this store.';
  $('place').disabled=completed||busy||!available||!items.length||!quote;
  if(completed){$('place').textContent='Order placed ✓';return}
@@ -152,13 +152,26 @@ async function placeCommonOnline(){
  const a=address();
  if(!cfg.prepare||!valid(a)||!quote||quoteAddress!==JSON.stringify(a))throw Error('Check your delivery address before payment.');
  if(typeof Razorpay!=='function')throw Error('Secure payment could not be loaded. Please retry.');
- const key=cfg.request+'_online',requestId=sessionStorage.getItem(key)||uuid();sessionStorage.setItem(key,requestId);
- const d=await json(cfg.prepare,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({request_id:requestId,address:a,items})});
+ if(store==='general'&&!token()){window.CeroodAuth?.open();throw Error('Sign in with your delivery mobile number before online payment.');}
+ const paymentToken=token(),snapshot={address:a,items:JSON.parse(JSON.stringify(items)),quote:{...quote}};
+ if(!crypto?.subtle?.digest)throw Error('Secure payments require HTTPS. Open the secure Cerood website.');
+ let identity=paymentToken;if(store==='general'){const account=await json('/api/customer/profile');identity=String(account.user?.id||'');if(!/^[\w-]{1,100}$/.test(identity))throw Error('Your verified account could not be loaded. Sign in again before payment.')}
+ const accountKey=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(identity)).then(x=>Array.from(new Uint8Array(x),v=>v.toString(16).padStart(2,'0')).join(''));
+ const key=cfg.request+'_online_'+accountKey,signatureKey=key+'_fingerprint',pendingKey=key+'_pending';
+ const signature=window.CeroodPaymentModel.checkoutSignature(a,items,quote.total),fingerprint=signature;
+ if(sessionStorage.getItem(key)&&sessionStorage.getItem(signatureKey)!==fingerprint){
+   let prior;try{prior=JSON.parse(sessionStorage.getItem(pendingKey)||'null')}catch{}
+   if(store==='general'&&prior?.order_id){const result=await json('/api/shop/recover-razorpay-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({order_id:prior.order_id})});if(result.paid){if(prior.mode==='cart'){let current=[];try{current=JSON.parse(localStorage.getItem(cfg.cart)||'[]')}catch{}localStorage.setItem(cfg.cart,JSON.stringify(window.CeroodPaymentModel.subtractPurchased(current,prior.items||[])))}sessionStorage.removeItem(key);sessionStorage.removeItem(signatureKey);sessionStorage.removeItem(pendingKey);throw Error('Your previous payment is confirmed. Refresh checkout to review your remaining cart before another purchase.')}}
+   throw Error('An earlier payment checkout has different items or address. Check My Orders before starting another payment.');
+ }
+ const requestId=sessionStorage.getItem(key)||uuid();sessionStorage.setItem(key,requestId);sessionStorage.setItem(signatureKey,fingerprint);
+ const d=await json(cfg.prepare,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(store==='general'?window.CeroodPaymentModel.payload(requestId,a,items,quote):{request_id:requestId,address:a,items})});
+ if(store==='general')window.CeroodPaymentModel.prepared(d,snapshot.quote);if(d.order_id)sessionStorage.setItem(pendingKey,JSON.stringify({order_id:d.order_id,items:snapshot.items,mode}));
  async function finish(id){
-   if(!id)throw Error('Order confirmation missing. Contact support before paying again.');
+   if(paymentToken!==token())throw Error('Your account changed. Sign in to the original account and check My Orders.');if(!id||String(id)!==String(d.order_id))throw Error('Order confirmation does not match this checkout. Check My Orders before paying again.');
    completed=true;saveReceipt(id,requestId,a);await saveAccountAddress(a);
-   if(mode==='buy')sessionStorage.removeItem(cfg.buy);else localStorage.removeItem(cfg.cart);
-   sessionStorage.removeItem(key);setStatus('Payment verified. Order placed successfully.');
+   if(mode==='buy'){if(window.CeroodPaymentModel.checkoutSignature(a,readItems(),snapshot.quote.total)===signature)sessionStorage.removeItem(cfg.buy)}else{let current=[];try{current=JSON.parse(localStorage.getItem(cfg.cart)||'[]')}catch{}localStorage.setItem(cfg.cart,JSON.stringify(window.CeroodPaymentModel.subtractPurchased(current,snapshot.items)))}
+   sessionStorage.removeItem(key);sessionStorage.removeItem(signatureKey);sessionStorage.removeItem(pendingKey);setStatus('Payment verified. Order placed successfully.');
    $('place').textContent='Payment successful ✓';$('place').disabled=true;
    setTimeout(()=>location.href='/cerood-orders.html#orders',900);
  }
@@ -171,7 +184,7 @@ async function placeCommonOnline(){
    const checkout=new Razorpay({key:d.key_id,amount:d.amount,currency:d.currency||'INR',name:'Cerood',
      description:cfg.label+' order',order_id:d.razorpay_order_id,prefill:{name:a.full_name,contact:a.phone},theme:{color:'#171717'},
      modal:{ondismiss:()=>{if(!done){done=true;reject(Error('Payment closed. Your checkout is saved; retry to continue.'))}}},
-     handler:async result=>{if(done)return;done=true;try{
+     handler:async result=>{if(done)return;done=true;try{if(result.razorpay_order_id!==d.razorpay_order_id)throw Error('Payment response belongs to a different order.');
        const verified=await json(cfg.verify,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
          razorpay_order_id:result.razorpay_order_id,razorpay_payment_id:result.razorpay_payment_id,razorpay_signature:result.razorpay_signature
        })});
@@ -191,8 +204,9 @@ async function init(){
 $('checkDelivery').onclick=checkQuote;
 $('addressForm').addEventListener('submit',e=>{e.preventDefault();checkQuote()});
 $('addressForm').addEventListener('input',()=>{quote=null;quoteAddress='';quoteVersion++;$('delivery').textContent='Check delivery address';$('total').textContent='—';refresh()});
-for(const x of document.querySelectorAll('input[name=paymentMode]'))x.onchange=async()=>{quote=null;if(store!=='general'&&valid(address()))await checkQuote();refresh()};
-$('place').onclick=async()=>{if(busy)return;busy=true;refresh();try{if(payment()==='online'){if(store==='renewed')await placeRenewedOnline();else await placeCommonOnline();return}await placeCod()}catch(e){setStatus(e.message,true)}finally{busy=false;refresh()}};
-window.addEventListener('cerood:login',()=>{authState();loadSavedAddresses()});
+for(const x of document.querySelectorAll('input[name=paymentMode]'))x.onchange=async()=>{if(busy)return;quote=null;quoteAddress='';quoteVersion++;if(valid(address()))await checkQuote();refresh()};
+$('place').onclick=async()=>{if(busy)return;busy=true;document.querySelectorAll('#addressForm input').forEach(x=>x.readOnly=true);document.querySelectorAll('#savedAddress,input[name=paymentMode],#checkDelivery').forEach(x=>x.disabled=true);refresh();try{if(payment()==='online'){if(store==='renewed')await placeRenewedOnline();else await placeCommonOnline();return}await placeCod()}catch(e){setStatus(e.message,true)}finally{busy=false;document.querySelectorAll('#addressForm input').forEach(x=>x.readOnly=false);document.querySelectorAll('#savedAddress,input[name=paymentMode],#checkDelivery').forEach(x=>x.disabled=false);refresh()}};
+function accountChanged(){quote=null;quoteAddress='';quoteVersion++;savedAddresses=[];$('savedAddress').replaceChildren();$('savedAddressLabel').hidden=true;$('delivery').textContent='Check delivery address';$('total').textContent='—';authState();refresh();if(token())loadSavedAddresses()}
+window.addEventListener('cerood:login',accountChanged);window.addEventListener('cerood:logout',accountChanged);
 init().catch(e=>setStatus(e.message,true));
 })();
