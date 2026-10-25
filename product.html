@@ -9892,7 +9892,8 @@ html:root body #ceroodBeautyFirstSection .uc-card{width:auto!important;min-width
 html:root body #ceroodBeautyFirstSection .uc-card-img-wrapper{aspect-ratio:1/1!important;height:auto!important}html:root body #ceroodBeautyFirstSection .uc-card img{width:100%!important;height:100%!important;object-fit:cover!important}
 html:root body #ceroodBeautyFirstSection .uc-carousel-arrow{display:none!important}
 @media(max-width:850px){#ceroodBeautyFirstSection{margin:12px 15px 18px}html:root body #ceroodBeautyFirstSection .uc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
-</style></head>
+</style><script src="/cerood-service-details.js?v=1" defer></script>
+</head>
 <body id="ceroodProductReference">
 <!-- Master Single Container -->
 <div class="master-app-container">
@@ -11494,6 +11495,7 @@ if (normalBcLocationSeparator) {
                     }
 
                     CeroodServiceFamilies.product(s);
+if(window.CeroodServiceDetails)window.CeroodServiceDetails.render(s);
                     // 5. Why Choose Us Dynamic Content
                     const featuresContainer = document.getElementById('featuresContainer');
 const featuresSection = document.querySelector('.features-section');
@@ -12973,6 +12975,7 @@ if (variantContainer) {
 
 
 CeroodServiceFamilies.product(fullService);
+if(window.CeroodServiceDetails)window.CeroodServiceDetails.render(fullService);
 // ADMIN CONTROL -> WHY CHOOSE US
 const featuresContainer =
     document.getElementById('featuresContainer');

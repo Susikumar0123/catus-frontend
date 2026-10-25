@@ -419,7 +419,15 @@ if (applianceChoicesHtml) {
 }
 
 const isGasRefill = service === 'ac-gas-refill';
-// Service information and FAQs are accessed through the existing footer /faq link.
+// Restore visible details using the same escaped renderer as client hydration.
+if (serviceFamily === 'home') {
+ const catalogService = applianceServices.find(item => String(item.service_id) === String(page.service_id)) || {};
+ const detailService = {...catalogService, ...page, slug: service};
+ const details = require(path.join(process.cwd(), 'cerood-service-details.js')).html(detailService);
+ const marker = /(<\/div>\s*<!-- RIGHT : BOOKING PANEL -->)/;
+ if (details && marker.test(html)) html = html.replace(marker, () => '<section id="ceroodServiceDetails" aria-label="Service details">' + details + '</section>\n</div>\n<!-- RIGHT : BOOKING PANEL -->');
+}
+
 if (isGasRefill) {
  html = html.replace(/<span class="starts-from-label">[\s\S]*?<\/span>/i, '<span class="starts-from-label">Inspection charge</span>');
 }
