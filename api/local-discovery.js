@@ -37,6 +37,8 @@ function rebase(text) {
   if (/<html[\s>]/i.test(text) && /<head[\s>]/i.test(text) && !text.includes('cerood-interface.css?v=1')) {
     text=text.replace(/<\/head>/i, '<link rel="stylesheet" href="/cerood-interface.css?v=1"><script defer src="/cerood-interface.js?v=1"></script></head>');
   }
+  // Shared branding on Local HTML only.
+  if (/<html[\s>]/i.test(text) && /<head[\s>]/i.test(text) && !text.includes('/cerood-brand.js?v=1')) text=text.replace(/<\/head>/i, '<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=1"><link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=1"><link rel="shortcut icon" href="/favicon.ico?v=1"><link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=1"><link rel="stylesheet" href="/cerood-brand.css?v=1"><script defer src="/cerood-brand.js?v=1"></script></head>');
   return text;
 }
 function sessionCookie(header) {
