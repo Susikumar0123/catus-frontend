@@ -1,0 +1,32 @@
+ admin.html                               |    2 [32m+[m[31m-[m
+ cerood-cart.html                         |    2 [32m+[m[31m-[m
+ clothing-admin.html                      |   80 [31m-[m
+ clothing-checkout.html                   | 2550 [31m---------[m
+ clothing-dashboard.html                  |  572 [31m--[m
+ clothing-product.html                    | 1269 [31m-----[m
+ clothing.html                            |  528 [31m--[m
+ cosmetics-admin.html                     |   79 [31m-[m
+ cosmetics-checkout.html                  | 2576 [31m---------[m
+ cosmetics-dashboard.html                 |  683 [31m---[m
+ cosmetics-product.html                   | 1360 [31m-----[m
+ cosmetics.html                           |  599 [31m--[m
+ index.html                               |    2 [32m+[m[31m-[m
+ renewed-admin-login.html                 |   17 [31m-[m
+ renewed-admin.html                       |  670 [31m---[m
+ renewed-checkout.html                    | 2822 [31m----------[m
+ renewed-dashboard.html                   |  857 [31m---[m
+ renewed-product.html                     | 1474 [31m-----[m
+ renewed.html                             |  569 [31m--[m
+ seller-auth.css                          |  313 [31m--[m
+ seller-config.js                         |  166 [31m-[m
+ seller-dashboard-test/connected.js       |    2 [32m+[m[31m-[m
+ seller-dashboard.html                    | 9028 [31m------------------------------[m
+ seller-register.html => seller-join.html |    4 [32m+[m[31m-[m
+ seller-login.html                        |  403 [31m--[m
+ seller-workspace.js                      |  156 [31m-[m
+ shop-checkout.html                       |    4 [32m+[m[31m-[m
+ shop-dashboard.html                      |   27 [31m-[m
+ shop-product.html                        |    2 [32m+[m[31m-[m
+ shop.html                                |    2 [32m+[m[31m-[m
+ vercel.json                              |  100 [32m+[m
+ 31 files changed, 110 insertions(+), 26808 deletions(-)

@@ -309,6 +309,13 @@ const description = isChennaiTVRepair
             html = html.replace('</head>', `<meta property="${property}" content="${escapeHtml(value)}">\n</head>`);
         }
 
+        const shareImage = String(page.image_url || applianceServices.find(item => String(item.service_id) === String(page.service_id))?.image_url || '');
+        if (/^https:\/\//i.test(shareImage)) {
+            html = html.replace(/<meta\b(?=[^>]*\b(?:property|name)=["'](?:og:image|og:image:alt|twitter:image|twitter:card)["'])[^>]*>/gi, '');
+            const imageTags = '<meta property="og:image" content="'+escapeHtml(shareImage)+'">\n<meta property="og:image:alt" content="'+escapeHtml(serviceName)+'">\n<meta name="twitter:image" content="'+escapeHtml(shareImage)+'">\n<meta name="twitter:card" content="summary_large_image">';
+            html = html.replace('</head>', imageTags+'\n</head>');
+        }
+
 // ==========================================
 // ROBOTS + SOCIAL META (HEAD ONLY)
 // ==========================================
