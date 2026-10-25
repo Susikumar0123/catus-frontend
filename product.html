@@ -10098,7 +10098,7 @@ html:root body#ceroodProductReference#ceroodProductReference#ceroodProductRefere
 </div>
 </div>
 <!-- RIGHT : BOOKING PANEL -->
-<div class="cerood-booking-panel" id="ceroodVisitPanel"><h2>Choose a visit</h2><div class="cerood-visit-fields"><label class="cerood-visit-field cerood-visit-date"><span>Visit date</span><input id="ceroodVisitDate" type="date" aria-label="Visit date" required></label><div class="cerood-visit-time-range"><label class="cerood-visit-field"><span>From time</span><select id="ceroodVisitFrom" aria-label="From time" required></select></label><label class="cerood-visit-field"><span>To time</span><select id="ceroodVisitTo" aria-label="To time" required></select></label></div><p id="ceroodVisitWindow" aria-live="polite"></p><p id="ceroodVisitError" role="alert" hidden></p></div><div class="cerood-location-mini">
+<div class="cerood-booking-panel" id="ceroodVisitPanel"><h2>Choose a visit</h2><div class="cerood-visit-fields"><label class="cerood-visit-field cerood-visit-date"><span>Visit date</span><input id="ceroodVisitDate" type="date" aria-label="Visit date" required></label><div class="cerood-visit-time-range"><label class="cerood-visit-field"><span>From time · 9 AM onwards</span><select id="ceroodVisitFrom" aria-label="From time" required></select></label><label class="cerood-visit-field"><span>To time · by 8 PM</span><select id="ceroodVisitTo" aria-label="To time" required></select></label></div><p id="ceroodVisitWindow" aria-live="polite"></p><p id="ceroodVisitError" role="alert" hidden></p></div><div class="cerood-location-mini">
 <i class="fa-solid fa-location-dot"></i>
 <div>
 <span>Service at your home</span>
@@ -13576,6 +13576,7 @@ function ceroodTimeLabel(value) {const [h,m]=value.split(':').map(Number);return
 function validateCeroodVisit(date, from, to, now=new Date()) {
  if(!date||!from||!to)return 'Select a visit date and both times.';
  if(date<formatServiceDateLocal(now))return 'Choose today or a future date.';
+ if(!/^\d{2}:(00|30)$/.test(from)||!/^\d{2}:(00|30)$/.test(to)||from<'09:00'||from>='20:00'||to>'20:00')return 'Choose a visit window between 9:00 AM and 8:00 PM.';
  if(to<=from)return 'To time must be later than From time.';
  const start=new Date(`${date}T${from}:00`);
  if(!Number.isFinite(start.getTime()))return 'Choose a valid visit date.';
@@ -13594,16 +13595,18 @@ function syncCeroodVisitSelection(report=false) {
  if(report&&message){(date.value?to:date).focus();error.scrollIntoView({block:'center',behavior:'smooth'});}
  return !message;
 }
+function ceroodVisitTimes() {
+ const values=[];for(let minutes=9*60;minutes<=20*60;minutes+=30)values.push(String(Math.floor(minutes/60)).padStart(2,'0')+':'+String(minutes%60).padStart(2,'0'));return values;
+}
 function initializeProductBookingOptions() {
  const date=document.getElementById('ceroodVisitDate'),from=document.getElementById('ceroodVisitFrom'),to=document.getElementById('ceroodVisitTo');if(!date||!from||!to)return;
- for(let h=0;h<24;h++)for(const m of [0,30]){const value=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');for(const field of [from,to]){const option=document.createElement('option');option.value=value;option.textContent=ceroodTimeLabel(value);field.append(option);}}
- const now=new Date(),visit=new Date(now);visit.setMinutes(Math.ceil((now.getMinutes()+1)/30)*30,0,0);
- if(visit.getHours()<8)visit.setHours(10,0,0,0);
- if(visit.getHours()>20){visit.setDate(visit.getDate()+1);visit.setHours(10,0,0,0);}
- const finish=new Date(visit);finish.setHours(visit.getHours()+2);
- date.min=formatServiceDateLocal(now);date.value=formatServiceDateLocal(visit);
- from.value=String(visit.getHours()).padStart(2,'0')+':'+String(visit.getMinutes()).padStart(2,'0');to.value=String(finish.getHours()).padStart(2,'0')+':'+String(finish.getMinutes()).padStart(2,'0');
- for(const field of [date,from,to])field.addEventListener('change',()=>syncCeroodVisitSelection());syncCeroodVisitSelection();
+ const times=ceroodVisitTimes();
+ function setOptions(field,values,preferred){field.replaceChildren();for(const value of values){const option=document.createElement('option');option.value=value;option.textContent=ceroodTimeLabel(value);field.append(option);}field.value=values.includes(preferred)?preferred:(values[0]||'');}
+ function updateEnd(){const previous=to.value,values=times.filter(value=>value>from.value);const index=times.indexOf(from.value);const suggested=times[Math.min(index+4,times.length-1)];setOptions(to,from.value?values:[],values.includes(previous)?previous:suggested);syncCeroodVisitSelection();}
+ function updateStart(){const now=new Date(),previous=from.value;date.min=formatServiceDateLocal(now);const values=times.filter(value=>value<'20:00'&&(date.value!==date.min||new Date(date.value+'T'+value+':00')>now));setOptions(from,values,previous);updateEnd();}
+ const now=new Date();date.min=formatServiceDateLocal(now);date.value=date.min;
+ if(!times.some(value=>value<'20:00'&&new Date(date.value+'T'+value+':00')>now)){const next=new Date(now);next.setDate(next.getDate()+1);date.value=formatServiceDateLocal(next);}
+ date.addEventListener('change',updateStart);from.addEventListener('change',updateEnd);to.addEventListener('change',()=>syncCeroodVisitSelection());updateStart();
 }
 
 document.addEventListener(
