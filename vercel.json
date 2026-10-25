@@ -69,6 +69,106 @@
       "source": "/tamil-nadu/chennai/chennai/:service([a-z0-9-]+)",
       "destination": "/tamil-nadu/chennai/:service",
       "permanent": true
+    },
+    {
+      "source": "/renewed-product.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/clothing-checkout.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/renewed-admin.html",
+      "destination": "/seller-dashboard-test/admin.html",
+      "permanent": false
+    },
+    {
+      "source": "/cosmetics-dashboard.html",
+      "destination": "/seller-dashboard-test/connected.html",
+      "permanent": false
+    },
+    {
+      "source": "/cosmetics-checkout.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/clothing-admin.html",
+      "destination": "/seller-dashboard-test/admin.html",
+      "permanent": false
+    },
+    {
+      "source": "/renewed-dashboard.html",
+      "destination": "/seller-dashboard-test/connected.html",
+      "permanent": false
+    },
+    {
+      "source": "/clothing.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/clothing-product.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/cosmetics.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/clothing-dashboard.html",
+      "destination": "/seller-dashboard-test/connected.html",
+      "permanent": false
+    },
+    {
+      "source": "/renewed-admin-login.html",
+      "destination": "/seller-dashboard-test/admin.html",
+      "permanent": false
+    },
+    {
+      "source": "/renewed-checkout.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/renewed.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/cosmetics-product.html",
+      "destination": "/shop.html",
+      "permanent": false
+    },
+    {
+      "source": "/cosmetics-admin.html",
+      "destination": "/seller-dashboard-test/admin.html",
+      "permanent": false
+    },
+    {
+      "source": "/seller-dashboard.html",
+      "destination": "/seller-dashboard-test/connected.html",
+      "permanent": false
+    },
+    {
+      "source": "/seller-login.html",
+      "destination": "/seller-dashboard-test/connected.html",
+      "permanent": false
+    },
+    {
+      "source": "/seller-register.html",
+      "destination": "/seller-join.html",
+      "permanent": false
+    },
+    {
+      "source": "/shop-dashboard.html",
+      "destination": "/seller-dashboard-test/connected.html",
+      "permanent": false
     }
   ]
 }
