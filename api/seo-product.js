@@ -420,7 +420,7 @@ if (applianceChoicesHtml) {
 
 const isGasRefill = service === 'ac-gas-refill';
 // Restore visible details using the same escaped renderer as client hydration.
-if (serviceFamily === 'home') {
+{
  const catalogService = applianceServices.find(item => String(item.service_id) === String(page.service_id)) || {};
  const detailService = {...catalogService, ...page, slug: service};
  const details = require(path.join(process.cwd(), 'cerood-service-details.js')).html(detailService);
