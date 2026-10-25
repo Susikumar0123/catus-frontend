@@ -1,0 +1,27 @@
+SHOP ENTRY UPDATE — CHANGED / NEW FILES ONLY
+Requires your previously installed ecommerce V3 files. Existing shared assets and payment code are unchanged and are not included.
+
+LOCATION FOR ALL 8 FILES:
+C:\Users\ELCOT\OneDrive\Desktop\catus-frontend\
+(the SAME folder as your existing index.html)
+
+ADD these 3 new files:
+shop.html
+cerood-shop-entry.js
+apply-shop-entry.cjs
+
+REPLACE these 5 existing files:
+shop-product.html
+shop-checkout.html
+cerood-orders.html
+cerood-storefront.js
+cerood-catalog.js
+
+After copying the 8 files into that frontend root, run:
+node apply-shop-entry.cjs
+
+The installer adds the Shop link to your EXISTING index.html/home-services.html using one script tag. It backs up originals outside the frontend repository. No replacement index.html/home-services.html is supplied. Keep your existing Home Services homepage. Do not copy any files into the backend.
+
+Then review git status, commit/push the changed/new frontend files and wait for your normal deployment. Ecommerce opens at /shop.html after deployment. No live publication has been performed by the assistant.
+
+READ-ME.txt is instructions only; no need to copy it into your repository.
