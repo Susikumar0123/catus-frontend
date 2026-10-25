@@ -1,0 +1,9 @@
+/* Visual viewport support only; no authentication requests, values or handlers changed. */
+(function(){'use strict';
+const modal=document.getElementById('authModal');if(!modal)return;
+const vv=window.visualViewport;let baseline=vv?vv.height:window.innerHeight,lastWidth=window.innerWidth,raf=0;
+function keepVisible(){const field=document.activeElement,panel=modal.querySelector('.auth-right-panel');if(!panel||!field||!modal.contains(field)||!field.matches('input,select,textarea'))return;const a=field.getBoundingClientRect(),b=panel.getBoundingClientRect();const bottom=Math.min(b.bottom,(vv?vv.offsetTop+vv.height:window.innerHeight))-18;const top=b.top+18;const wantedBottom=a.bottom+Math.min(72,(b.bottom-b.top)/5);if(wantedBottom>bottom)panel.scrollTop+=wantedBottom-bottom;else if(a.top<top)panel.scrollTop-=top-a.top;}
+function paint(){raf=0;const height=vv?vv.height:window.innerHeight,top=vv?vv.offsetTop:0;if(Math.abs(window.innerWidth-lastWidth)>80){baseline=height;lastWidth=window.innerWidth;}baseline=Math.max(baseline,height);for(const [key,value] of [['--cerood-auth-vh',Math.round(height)+'px'],['--cerood-auth-vtop',Math.round(top)+'px']])if(modal.style.getPropertyValue(key)!==value)modal.style.setProperty(key,value);const typing=modal.contains(document.activeElement)&&document.activeElement.matches('input,textarea,select');const keyboard=typing&&baseline-height>140;modal.classList.toggle('cerood-auth-keyboard',keyboard);keepVisible();}
+function schedule(){if(!raf)raf=requestAnimationFrame(paint);}
+vv?.addEventListener('resize',schedule);vv?.addEventListener('scroll',schedule);window.addEventListener('resize',schedule);modal.addEventListener('focusin',schedule);modal.addEventListener('focusout',schedule);new MutationObserver(schedule).observe(modal,{attributes:true,attributeFilter:['style'],subtree:false});paint();
+})();
