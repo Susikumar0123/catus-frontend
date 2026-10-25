@@ -21,7 +21,7 @@
  }catch(e){note.textContent=e.message;}}
  new MutationObserver(()=>{link();if(config && !pending && Date.now()>config.refreshAt && modal.getClientRects().length)refresh();}).observe(modal,{attributes:true,attributeFilter:['class','style','hidden']});window.addEventListener('cerood:auth-changed',link);
  window.addEventListener('pagehide',clear);
- function render(){google.accounts.id.initialize({client_id:config.clientId,nonce:config.nonce,callback:accept,auto_select:false});button.replaceChildren();google.accounts.id.renderButton(button,{type:'standard',theme:'outline',size:'large',text:'continue_with',shape:'rectangular',width:280});}
+ function render(){google.accounts.id.initialize({client_id:config.clientId,nonce:config.nonce,callback:accept,auto_select:false});button.replaceChildren();google.accounts.id.renderButton(button,{type:'standard',theme:'outline',size:'large',text:'continue_with',shape:'pill',width:Math.min(364, Math.max(200, window.innerWidth-80))});}
  async function refresh(){if(refreshing)return;refreshing=true;try{const d=await api('/api/home-services/auth/google/config');if(!d.enabled)throw Error('Google unavailable');config={...d,refreshAt:Date.now()+8*60000};render();}catch(_){note.textContent='Google refresh failed. Use mobile login or reload.';}finally{refreshing=false;}}
  setInterval(()=>{if(config&&!pending&&Date.now()>config.refreshAt&&modal.getClientRects().length)refresh();},60000);
  api('/api/home-services/auth/google/config').then(d=>{if(!d.enabled){box.hidden=true;return;}config={...d,refreshAt:Date.now()+8*60000};note.textContent='First use links Google to your mobile account. By continuing, you agree to this link.';
