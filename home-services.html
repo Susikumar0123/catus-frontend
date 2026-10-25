@@ -14315,8 +14315,8 @@ html:root body #ceroodBeautyFirstSection .uc-card-img-wrapper{aspect-ratio:1/1!i
 html:root body #ceroodBeautyFirstSection .uc-carousel-arrow{display:none!important}
 @media(max-width:850px){#ceroodBeautyFirstSection{margin:12px 15px 18px}html:root body #ceroodBeautyFirstSection .uc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
 </style><script defer src="/cerood-home-conversion.js"></script>
-<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=1"><link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=1"><link rel="shortcut icon" href="/favicon.ico?v=1"><link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=1"><link rel="stylesheet" href="/cerood-home-auth.css?v=2">
-<script defer src="/cerood-home-auth.js?v=2"></script>
+<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=1"><link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=1"><link rel="shortcut icon" href="/favicon.ico?v=1"><link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=1"><link rel="stylesheet" href="/cerood-home-auth.css?v=4">
+<script defer src="/cerood-home-auth.js?v=4"></script>
 </head>
 <body id="ceroodFestivalPage">
 <!-- Master Single Container -->
@@ -16982,33 +16982,13 @@ async function proceedToOtpFromRegister() {
     // NAME VALIDATION
     // ==========================================
 
-    if (!name) {
-
-        alert('Please enter your full name.');
-
-        if (nameInput) {
-            nameInput.focus();
-        }
-
-        return;
-    }
-
+    // Profile name is collected at booking; OTP registration does not require it.
 
     // ==========================================
     // PINCODE VALIDATION
     // ==========================================
 
-    if (!/^\d{6}$/.test(pincode)) {
-
-        alert('Please enter a valid 6-digit pincode.');
-
-        if (pincodeInput) {
-            pincodeInput.focus();
-        }
-
-        return;
-    }
-
+    // Booking address collects the pincode; do not require it at signup.
 
     // ==========================================
     // PASSWORD VALIDATION
@@ -17522,7 +17502,7 @@ async function verifyOtpAndSetPassword() {
    currentUser=result.user;if(currentUser&&currentUser.wallet===undefined)currentUser.wallet=0;
    localStorage.setItem('cerood_home_service_user',JSON.stringify(currentUser));
    if(result.home_service_session)localStorage.setItem('cerood_home_service_session',result.home_service_session);
-   updateHeaderLoginUI();toggleAuthModal(false);openPremiumDashboard();showToast('Account created successfully!',false);
+   updateHeaderLoginUI();if(typeof window.CeroodFinishProfile==='function'){window.CeroodFinishProfile();}else{toggleAuthModal(false);openPremiumDashboard();}showToast('Account created successfully!',false);
    pendingRegData={};authFlowMode=null;otpVerified=false;msg91ReqId='';msg91AccessToken='';
   }else if(flow==='forgot'){
    otpVerified=true;showAuthStep('newpassword');showToast('OTP verified successfully!',false);

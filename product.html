@@ -9947,8 +9947,8 @@ html:root body#ceroodProductReference#ceroodProductReference#ceroodProductRefere
 }
 </style>
 <script src="/cerood-service-share.js?v=2" defer></script>
-<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=1"><link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=1"><link rel="shortcut icon" href="/favicon.ico?v=1"><link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=1"><link rel="stylesheet" href="/cerood-home-auth.css?v=2">
-<script defer src="/cerood-home-auth.js?v=2"></script>
+<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=1"><link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=1"><link rel="shortcut icon" href="/favicon.ico?v=1"><link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=1"><link rel="stylesheet" href="/cerood-home-auth.css?v=4">
+<script defer src="/cerood-home-auth.js?v=4"></script>
 </head>
 <body id="ceroodProductReference">
 <!-- Master Single Container -->
@@ -14619,9 +14619,9 @@ async function verifyOtpAndSetPassword() {
    const result=await response.json();
    if(!response.ok||!result.success)throw new Error(result.message||'Unable to complete registration.');
    const signedInAfterRegistration=ceroodProductAcceptAuthResponse(result);
-   updateHeaderLoginUI();toggleAuthModal(false);
-   if(signedInAfterRegistration)openPremiumDashboard();
-   else if(window.CeroodAuth)window.CeroodAuth.open();
+   updateHeaderLoginUI();
+   if(signedInAfterRegistration && typeof window.CeroodFinishProfile==='function')window.CeroodFinishProfile();
+   else {toggleAuthModal(false);if(signedInAfterRegistration)openPremiumDashboard();else if(window.CeroodAuth)window.CeroodAuth.open();}
    showToast('Account created successfully!',false);
    pendingRegData={};authFlowMode=null;otpVerified=false;msg91ReqId='';msg91AccessToken='';
   }else if(flow==='forgot'){
@@ -14823,33 +14823,13 @@ async function proceedToOtpFromRegister() {
     // NAME VALIDATION
     // ==========================================
 
-    if (!name) {
-
-        alert('Please enter your full name.');
-
-        if (nameInput) {
-            nameInput.focus();
-        }
-
-        return;
-    }
-
+    // Profile name is collected at booking; OTP registration does not require it.
 
     // ==========================================
     // PINCODE VALIDATION
     // ==========================================
 
-    if (!/^\d{6}$/.test(pincode)) {
-
-        alert('Please enter a valid 6-digit pincode.');
-
-        if (pincodeInput) {
-            pincodeInput.focus();
-        }
-
-        return;
-    }
-
+    // Booking address collects the pincode; do not require it at signup.
 
     // ==========================================
     // PASSWORD VALIDATION
