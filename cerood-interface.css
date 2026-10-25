@@ -1,0 +1,11 @@
+/* Cerood interface typography v1. Product/customer content keeps its own case. */
+:root{--cerood-ui-font:Inter,"Segoe UI",Arial,sans-serif;--font:var(--cerood-ui-font);--display:var(--cerood-ui-font)}
+html body{font-family:var(--cerood-ui-font)!important;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body :is(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,legend,th,nav,.eyebrow,.navlabel,.panel-kicker,.section-title,.brand small,.wordmark small,.btn,.button){font-family:var(--cerood-ui-font)!important}
+body :is(h1,h2,h3,h4,h5,h6,button,label,legend,th,nav,.eyebrow,.navlabel,.panel-kicker,.section-title,.brand small,.wordmark small,.btn,.button,.chip,.pill,.tab,.filter-heading,.hero-index,.hero-corner,.step-caption,.art-top span){text-transform:none!important}
+body :is(.eyebrow,.navlabel,.panel-kicker,.brand small,.wordmark small,.hero-index,.hero-corner,.step-caption,.art-top span){letter-spacing:.01em!important;font-weight:600!important;line-height:1.6}
+body :is(.eyebrow,.navlabel,.panel-kicker){font-size:12px!important}
+body :is(label,legend,th){letter-spacing:normal!important}
+body :is(.navlabel,.filter-heading,.section-title){font-weight:600!important}
+body :is(button,.btn,.button,.chip,.tab){letter-spacing:normal!important}
+body [data-cerood-redundant-copy]{display:none!important}

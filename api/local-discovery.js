@@ -33,6 +33,10 @@ function rebase(text) {
   text = text.replace(/(["'`])\/(?=["'`?#])/g, '$1'+PREFIX+'/');
   // The photo allowlist uses an escaped regular expression, not a string URL.
   text = text.split('\\/api\\/photos').join('\\/local\\/api\\/photos');
+  // Apply the shared interface only to Local HTML, never JSON/scripts/images.
+  if (/<html[\s>]/i.test(text) && /<head[\s>]/i.test(text) && !text.includes('cerood-interface.css?v=1')) {
+    text=text.replace(/<\/head>/i, '<link rel="stylesheet" href="/cerood-interface.css?v=1"><script defer src="/cerood-interface.js?v=1"></script></head>');
+  }
   return text;
 }
 function sessionCookie(header) {
