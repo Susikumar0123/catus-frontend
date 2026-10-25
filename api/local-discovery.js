@@ -57,7 +57,10 @@ async function handler(req,res) {
     if(!['GET','HEAD','POST'].includes(method))return fail(res,405,'Method not allowed.');
     if(method==='POST'&&!path.startsWith('/api/'))return fail(res,405,'Method not allowed.');
     const origin=req.headers.origin;
-    if((origin&&origin!==PUBLIC)||(method==='POST'&&origin!==PUBLIC)||req.headers['sec-fetch-site']==='cross-site')return fail(res,403,'Cross-origin Local request rejected.');
+    // External links may open public pages. Cross-site API/session requests
+    // and every mutation still require the trusted browser origin.
+    const crossSite=req.headers['sec-fetch-site']==='cross-site';
+    if((origin&&origin!==PUBLIC)||(method==='POST'&&(origin!==PUBLIC||crossSite))||(path.startsWith('/api/')&&crossSite))return fail(res,403,'Cross-origin Local request rejected.');
     const query=new URL(req.url,'https://unused.invalid').searchParams;query.delete('localPath');
     const target=UPSTREAM+path+(query.size?'?'+query.toString():'');
     const headers={Accept:req.headers.accept||'*/*'};
