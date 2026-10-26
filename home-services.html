@@ -18400,7 +18400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('name', 'cerood_home_service_query');
     input.setAttribute('aria-controls', 'suggestionsBox');
     input.value = '';
-    input.addEventListener('focus', () => { clearTimeout(blurTimer); });
+    input.addEventListener('focus', () => { clearTimeout(blurTimer); ceroodLoadServiceSearch(API_BASE_URL).catch(()=>{}); });
     input.addEventListener('input', async () => {
         clearTimeout(blurTimer);
         const query = input.value.toLowerCase().trim();
@@ -19979,73 +19979,14 @@ function detectCurrentLocation() {
 }
 
 // இந்தியாவின் அனைத்து கிராமங்கள், ஊர்களைத் தேடும் சரியான API லாஜிக்
-document.addEventListener('DOMContentLoaded', () => {
-    const locInput = document.getElementById('locSearchInput');
-    const locBox = document.getElementById('locSuggestionsBox');
-    let searchTimeout = null;
-
-    if (locInput && locBox) {
-        locInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim();
-            clearTimeout(searchTimeout);
-            
-            if (query.length < 3) {
-                locBox.style.display = 'none';
-                locBox.innerHTML = '';
-                return;
-            }
-
-            searchTimeout = setTimeout(async () => {
-                try {
-                    const response = await fetch(
-    `${API_BASE_URL}/api/search-locations?q=${encodeURIComponent(query)}`
-);
-
-const result = await response.json();
-
-const data =
-    result.success && Array.isArray(result.locations)
-        ? result.locations
-        : [];
-                    if (data && data.length > 0) {
-
-    let html = '';
-
-    window.catusLocationResults = data;
-
-    data.forEach((item, index) => {
-
-    const displayName = [
-        item.name,
-        item.district,
-        item.state,
-        item.pincode
-    ].filter(Boolean).join(', ');
-
-    html += `
-        <div
-            class="location-suggestion-item"
-            onclick="selectLocationSuggestionByIndex(${index})"
-        >
-            ${displayName}
-        </div>
-    `;
+document.addEventListener('DOMContentLoaded',()=>{
+ const input=document.getElementById('locSearchInput'),box=document.getElementById('locSuggestionsBox');if(!input||!box)return;
+ const cache=new Map();let timer,controller,version=0;
+ function notice(text){box.replaceChildren();const row=document.createElement('div');row.style.cssText='padding:10px 12px;font-size:13px;color:#64748b';row.setAttribute('role','status');row.textContent=text;box.append(row);box.style.display='block';}
+ function paint(data){window.catusLocationResults=data;box.replaceChildren();data.forEach((item,index)=>{const row=document.createElement('button');row.type='button';row.className='location-suggestion-item';row.style.cssText='display:block;width:100%;border:0;background:transparent;text-align:left;cursor:pointer;padding:10px 12px';row.textContent=[item.name,item.district,item.state,item.pincode].filter(Boolean).join(', ');row.onclick=()=>selectLocationSuggestionByIndex(index);box.append(row);});if(!data.length)notice('No villages or locations found');else box.style.display='block';}
+ input.addEventListener('input',()=>{clearTimeout(timer);if(controller)controller.abort();const query=input.value.trim(),key=query.toLowerCase(),id=++version;if(query.length<3){box.replaceChildren();box.style.display='none';return;}const hit=cache.get(key);if(hit&&Date.now()-hit.time<300000){paint(hit.data);return;}notice('Searching locations…');timer=setTimeout(async()=>{controller=new AbortController();try{const response=await fetch(`${API_BASE_URL}/api/search-locations?q=${encodeURIComponent(query)}`,{signal:controller.signal});if(!response.ok)throw Error('Location search unavailable');const result=await response.json();if(id!==version)return;const data=result.success&&Array.isArray(result.locations)?result.locations:[];if(cache.size>=50)cache.delete(cache.keys().next().value);cache.set(key,{data,time:Date.now()});paint(data);}catch(error){if(error.name!=='AbortError'&&id===version)notice('Unable to load locations. Please try again.');}},150);});
 });
 
-    locBox.innerHTML = html;
-    locBox.style.display = 'block';
-
-} else {
-                        locBox.innerHTML = `<div style="padding: 10px 12px; font-size: 13px; color: #ef4444;">No villages or locations found</div>`;
-                        locBox.style.display = 'block';
-                    }
-                } catch (err) {
-                    console.error("Location search error:", err);
-                }
-            }, 400);
-        });
-    }
-});
 
 async function selectLocationSuggestionByIndex(index) {
 
@@ -20820,10 +20761,7 @@ function closeCeroodInfoModal(modalId) {
 <input autocomplete="off" id="locSearchInput" placeholder="Search village, area, town or pincode" style="border: none; outline: none; width: 100%; font-size: 14px; color: #1e293b; background: transparent;" type="text"/>
 </div>
 <div id="locSuggestionsBox" style="max-height: 180px; overflow-y: auto; margin-top: 5px; display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px;"></div>
-<div onclick="detectCurrentLocation()" style="display: flex; align-items: center; gap: 12px; padding: 16px 0; margin-top: 15px; cursor: pointer; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weight: 500; color: #7c3aed;">
-<i class="fa-solid fa-location-crosshairs" style="font-size: 16px;"></i>
-<span>Use current location</span>
-</div>
+
 <!-- Opens a separate popup; search stays only in Change location. -->
 <button id="ceroodManualAddressToggle" onclick="openCeroodManualAddress(false)" style="width:100%;display:flex;align-items:center;gap:10px;padding:15px 0;border:0;border-bottom:1px solid #f1f5f9;background:transparent;color:#7c3aed;font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" type="button">
 <i class="fa-solid fa-pen-to-square"></i> Enter address manually
