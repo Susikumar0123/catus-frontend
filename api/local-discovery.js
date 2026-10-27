@@ -4,11 +4,11 @@ const UPSTREAM = 'https://cerood-local-discovery.susikumar.chatgpt.site';
 const PUBLIC = 'https://www.cerood.com';
 const PREFIX = '/local';
 const COOKIE = 'cerood_local_session';
-const ASSETS = new Set(['directory.css','directory.js','business-profile.css','business-profile.js','local-form-options.css','local-form-options.js','local-transport.js','local-operations.js','widget-login.js','notifications.js','enquiry-thread.js','launch-ui.js','favicon.svg']);
+const ASSETS = new Set(['directory.css','directory.js','business-profile.css','business-profile.js','local-form-options.css','local-form-options.js','local-transport.js','local-operations.js','widget-login.js','notifications.js','enquiry-thread.js','launch-ui.js','local-account-push.js','local-account-push-worker.js','favicon.svg']);
 function allowed(path) {
   return path === '/' || /^\/(help|contact|privacy|terms|robots\.txt|sitemap\.xml)$/.test(path) ||
     /^\/business\/[a-zA-Z0-9_-]{1,100}$/.test(path) || ASSETS.has(path.slice(1)) ||
-    /^\/api\/(directory|photos|notifications)$/.test(path) ||
+    /^\/api\/(directory|photos|notifications|push)$/.test(path) ||
     /^\/api\/local\/auth\/(config|widget-login|me|logout)$/.test(path);
 }
 function photoPath(s, inward = false) {
@@ -31,7 +31,7 @@ function rebase(text) {
   text = text.replace(/https:\/\/(?:local\.cerood\.com|cerood-local-discovery\.susikumar\.chatgpt\.site)(?=[/"'\s<]|$)/g, PUBLIC+PREFIX);
   // Administration keeps the original ChatGPT owner authentication boundary.
   text = text.replace(/(["'`])\/(admin|signin-with-chatgpt|signout-with-chatgpt)(?=[/?#"'`])/g, '$1'+UPSTREAM+'/$2');
-  text = text.replace(/(["'`])\/(?=(?:api\/|business\/|help\b|contact\b|privacy\b|terms\b|sitemap\.xml\b|robots\.txt\b|(?:directory|business-profile|local-form-options|local-transport|local-operations|widget-login|notifications|enquiry-thread|launch-ui|favicon)\.(?:js|css|svg)\b))/g, '$1'+PREFIX+'/');
+  text = text.replace(/(["'`])\/(?=(?:api\/|business\/|help\b|contact\b|privacy\b|terms\b|sitemap\.xml\b|robots\.txt\b|(?:directory|business-profile|local-form-options|local-transport|local-operations|widget-login|notifications|enquiry-thread|launch-ui|local-account-push|local-account-push-worker|favicon)\.(?:js|css|svg)\b))/g, '$1'+PREFIX+'/');
   text = text.replace(/(["'`])\/(?=["'`?#])/g, '$1'+PREFIX+'/');
   // The photo allowlist uses an escaped regular expression, not a string URL.
   text = text.split('\\/api\\/photos').join('\\/local\\/api\\/photos');

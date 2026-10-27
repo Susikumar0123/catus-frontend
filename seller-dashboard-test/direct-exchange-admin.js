@@ -1,0 +1,9 @@
+'use strict';
+pages.push(['direct-exchanges','Direct exchanges']);
+views['direct-exchanges']=async()=>{
+ const d=await api.request('/api/admin/shop/direct-exchanges');
+ return {html:'<p class="muted">Same-seller exchanges after receipt and inspection. Customers pay only the extra price; cheaper selections need a real partial refund. Seller settlement is held for separate reconciliation. Do not use the original full-refund or same-option replacement actions.</p>'+table(['Product','Original / new value','Difference','State','Actions'],(d.exchanges||[]).map((x,i)=>'<tr><td>'+esc(x.target.product_name)+'</td><td>'+money(x.original_paise/100)+' / '+money(x.target_paise/100)+'</td><td>'+(x.pay_paise?'Customer pays '+money(x.pay_paise/100):x.refund_paise?'Refund '+money(x.refund_paise/100):'No difference')+'</td><td>'+esc(x.state)+'</td><td>'+(x.state==='refund_required'?'<button class="btn" data-dx-refund="'+i+'">Refund difference</button> ':'')+'<button class="btn" data-dx-reconcile="'+i+'">Check status</button></td></tr>')),bind(){
+ document.querySelectorAll('[data-dx-refund]').forEach(b=>b.onclick=()=>{const x=d.exchanges[Number(b.dataset.dxRefund)];mutationForm('Refund exchange price difference','<p>Issue a real partial refund of '+money(x.refund_paise/100)+' to the original captured payment. The replacement is reserved; original seller settlement remains held.</p>'+check('I authorise this real partial refund.'),f=>command('/api/admin/shop/direct-exchanges/'+encodeURIComponent(x.id)+'/refund-difference','POST',{confirmed:f.has('confirmed')}),'Issue difference refund')});
+ document.querySelectorAll('[data-dx-reconcile]').forEach(b=>b.onclick=()=>{const x=d.exchanges[Number(b.dataset.dxReconcile)];mutationForm('Check exchange status','<p>Fetch existing provider records. No new payment or refund is sent.</p>',()=>command('/api/admin/shop/direct-exchanges/'+encodeURIComponent(x.id)+'/reconcile','POST',{}),'Check status')});
+ }};
+};
