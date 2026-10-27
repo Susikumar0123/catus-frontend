@@ -33,3 +33,25 @@ html[data-auth-page="admin-login"] input{background:#fff!important;color:#15213a
 html[data-auth-page="admin-login"] h2{color:#14213a!important}
 html[data-auth-page="admin-login"] .cerood-login-kicker,html[data-auth-page="admin-login"] .cerood-login-brand span,html[data-auth-page="admin-login"] .cerood-password-toggle{color:#2454ff!important}
 @media(max-width:540px){html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace>main{padding:22px 14px!important}html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content>.panel{padding:26px 22px!important}html[data-auth-page="registration"] .panel{padding:26px 20px!important}html[data-auth-page="registration"] .wrap{margin:20px auto!important}}
+
+/* Refined full-page sign-in: branding only on the left; workspace stays gated. */
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace{background:#fff!important;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace::before{content:'Your business.\A One workspace.';white-space:pre-line;position:fixed;inset:0 auto 0 0;width:35%;box-sizing:border-box;padding:clamp(180px,30vh,300px) 44px 50px;background:#111916 url('/brand/logo-white.png') 44px 44px/170px auto no-repeat;color:#fff;font:600 clamp(30px,3.2vw,48px)/1.2 Inter,system-ui,sans-serif;letter-spacing:-1.7px}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace>main{width:65%!important;margin:0 0 0 35%!important;padding:56px 48px!important;background:#fff!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content{width:min(100%,400px)!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content>.panel{padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content>.panel::before{content:'Welcome to Cerood';background:none!important;width:auto!important;height:auto!important;margin:0 0 13px!important;font:500 12px/1.5 Inter,system-ui,sans-serif!important;color:#69766f!important;letter-spacing:.2px!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content h2{font:650 32px/1.2 Inter,system-ui,sans-serif!important;letter-spacing:-1px!important;color:#121c17!important;margin:0 0 10px!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content .muted{font:400 14px/1.6 Inter,system-ui,sans-serif!important;color:#6b756f!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content form{margin:30px 0 0!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content .field{font:500 13px/1.5 Inter,system-ui,sans-serif!important;margin-bottom:20px!important;gap:8px!important;color:#263c30!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content input{min-height:48px!important;background:#fff!important;border-color:#dce3de!important;border-radius:7px!important;font:400 15px/1.4 Inter,system-ui,sans-serif!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content .btn.primary{min-height:48px!important;border-radius:7px!important;font:600 14px/1.4 Inter,system-ui,sans-serif!important;background:#2454ff!important;margin-top:8px!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content input:-webkit-autofill{-webkit-text-fill-color:#15213a!important;box-shadow:0 0 0 1000px #f5f8ff inset!important}
+@media(max-width:760px){
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace::before{position:relative;display:block;inset:auto;width:100%;height:96px;padding:0;background:#111916 url('/brand/logo-white.png') 24px center/144px auto no-repeat;content:''}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace>main{width:100%!important;margin:0!important;padding:42px 24px!important;min-height:calc(100vh - 96px)!important;min-height:calc(100dvh - 96px)!important;align-items:start!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content{margin:0 auto!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content h2{font-size:28px!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content input{font-size:16px!important}
+}
