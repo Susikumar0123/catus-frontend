@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const M=window.CeroodShopModel,$=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const link=p=>'/shop-product.html?store=general&id='+encodeURIComponent(p.id||p.product_id),money=n=>'₹'+Number(n).toLocaleString('en-IN');
+const link=p=>'/store-product.html?store=general&id='+encodeURIComponent(p.id||p.product_id),money=n=>'₹'+Number(n).toLocaleString('en-IN');
 let products=[],cats=[],limit=12,category=new URLSearchParams(location.search).get('category')||'';
 const query=(new URLSearchParams(location.search).get('q')||'').trim();
 const sub=document.createElement('label');sub.className='subcategory-control';sub.textContent='Category / subcategory';const select=document.createElement('select');select.id='subcategorySelect';select.setAttribute('aria-label','Category or subcategory');sub.append(select);$('categoryList').after(sub);

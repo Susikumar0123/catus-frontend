@@ -68,6 +68,31 @@
   ],
   "redirects": [
     {
+      "source": "/shop-product.html",
+      "destination": "/store-product.html",
+      "permanent": false
+    },
+    {
+      "source": "/shop-checkout.html",
+      "destination": "/store-checkout.html",
+      "permanent": false
+    },
+    {
+      "source": "/cerood-orders.html",
+      "destination": "/store-orders.html",
+      "permanent": false
+    },
+    {
+      "source": "/shop-after-sales.html",
+      "destination": "/store-after-sales.html",
+      "permanent": false
+    },
+    {
+      "source": "/cerood-cart.html",
+      "destination": "/store-checkout.html?mode=cart",
+      "permanent": false
+    },
+    {
       "source": "/",
       "destination": "/home-services.html",
       "permanent": false
