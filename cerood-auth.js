@@ -50,7 +50,7 @@
       zIndex: '2147483000'
     });
     const frame = document.createElement('iframe');
-    frame.src = '/cerood-auth.html';
+    frame.src = '/cerood-auth.html?v=20261027-shop-auth2';
     frame.title = 'Cerood Login and Registration';
     frame.setAttribute('aria-label', 'Cerood Account');
     Object.assign(frame.style, { width: '100%', height: '100%', border: '0', display: 'block' });
