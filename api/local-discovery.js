@@ -25,6 +25,8 @@ function mapData(value, inward = false, key = '') {
   return ['photos','url'].includes(key) ? photoPath(value,inward) : value;
 }
 function rebase(text) {
+  if (/<html[\s>]/i.test(text) && /<head[\s>]/i.test(text) && !text.includes('/cerood-india-select.js')) text=text.replace(/<\/head>/i, '<script defer src="/cerood-india-data.js?v=1"></script><script defer src="/cerood-india-select.js?v=1"></script></head>');
+
   // Only known application paths; customer descriptions and third-party URLs remain untouched.
   text = text.replace(/https:\/\/(?:local\.cerood\.com|cerood-local-discovery\.susikumar\.chatgpt\.site)(?=[/"'\s<]|$)/g, PUBLIC+PREFIX);
   // Administration keeps the original ChatGPT owner authentication boundary.
