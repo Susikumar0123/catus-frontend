@@ -28,6 +28,7 @@ function list(id,items,empty){
 function productMedia(p){
  const out=[],seen=new Set();
  const add=(url,alt,type)=>{const u=safeUrl(url);if(!u||seen.has(u))return;seen.add(u);out.push({url:u,alt:alt||p.name||'Product image',type:type||(/\.mp4|\.webm/i.test(u)?'video':'image')})};
+ add(p.image_url||p.image,'Main product image');
  const imgs=p.product_images;
  if(Array.isArray(imgs)) imgs.forEach((x,i)=>typeof x==='string'?add(x,`${p.name||'Product'} image ${i+1}`):x&&add(x.url||x.image_url,x.label||x.slot_key,x.type));
  else if(imgs&&typeof imgs==='object') Object.entries(imgs).forEach(([k,v])=>{
