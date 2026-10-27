@@ -14,12 +14,7 @@
     clear();
     if (!mobile.matches || !editable(field)) return;
     let root = field.closest('dialog,#locationPopupModal,#authModal,[role=dialog],.cart-modal-overlay,.auth-modal-wrapper,.modal-overlay,.popup-overlay');
-    if (!root) {
-      for (let el = field.parentElement; el && el !== document.body; el = el.parentElement) {
-        if (getComputedStyle(el).position === 'fixed') { root = el; break; }
-      }
-    }
-    if (!root) return;
+    if (!root || root.matches('header,nav,.uc-homepage-wrapper,.header-main-container') || field.closest('.uc-homepage-wrapper,.header-main-container')) return;
     const height = viewport ? viewport.height : window.innerHeight;
     const top = viewport ? viewport.offsetTop : 0;
     document.documentElement.style.setProperty('--cerood-visible-popup-height', height + 'px');
