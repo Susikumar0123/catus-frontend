@@ -1,0 +1,35 @@
+/* Keep dashboard chrome out of signed-out and session-check screens. */
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace{display:block!important;min-height:100vh!important;min-height:100dvh!important;margin:0!important;background:#f7f9ff!important;color:#15213a!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace>aside,
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) main>.preview,
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) main>header,
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) main>footer{display:none!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace>main{box-sizing:border-box!important;display:grid!important;place-items:center!important;width:100%!important;max-width:none!important;min-height:100vh!important;min-height:100dvh!important;margin:0!important;padding:32px 18px!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content{width:min(100%,440px)!important;margin:0!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content>.panel{box-sizing:border-box!important;width:100%!important;padding:34px!important;border:1px solid #e2e8f3!important;border-radius:20px!important;background:#fff!important;box-shadow:0 18px 60px #152b5810!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content>.panel::before{content:'';display:block;height:42px;width:150px;margin:0 0 28px;background:url('/cerood-logo.webp') left center/contain no-repeat}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content h2{font:700 26px/1.2 Inter,system-ui,sans-serif!important;color:#14213a!important;letter-spacing:-.7px!important;margin:0 0 10px!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content .muted{font:400 13px/1.65 Inter,system-ui,sans-serif!important;color:#64748b!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content form{margin-top:24px!important;max-width:none!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content .field{display:grid!important;gap:8px!important;margin:0 0 18px!important;font:500 13px/1.4 Inter,system-ui,sans-serif!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content input{box-sizing:border-box!important;width:100%!important;min-height:48px!important;border:1px solid #d7dfec!important;border-radius:10px!important;padding:12px 14px!important;background:#fff!important;color:#15213a!important;font:400 16px/1.4 Inter,system-ui,sans-serif!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content input:focus{outline:2px solid #2454ff!important;outline-offset:2px!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content .btn.primary{display:block!important;width:100%!important;min-height:48px!important;background:#2454ff!important;color:#fff!important;border:0!important;border-radius:10px!important;font-weight:600!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content a{color:#2454ff!important}
+html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #loginError{color:#b42318!important;font-size:13px!important;line-height:1.5!important}
+html[data-workspace-auth="checking"] #content:empty::after{content:'Checking your session…';display:block;text-align:center;color:#64748b;font:14px system-ui,sans-serif}
+/* Registration remains the existing verified seller flow, on a dedicated full page. */
+html[data-auth-page="registration"] body{background:#f7f9ff!important}
+html[data-auth-page="registration"] .intro{display:none!important}
+html[data-auth-page="registration"] .wrap{display:block!important;max-width:650px!important;margin:32px auto!important;padding:0 16px!important}
+html[data-auth-page="registration"] .panel{box-sizing:border-box!important;width:100%!important;max-width:none!important;background:#fff!important;border:1px solid #e2e8f3!important;border-radius:20px!important;padding:32px!important}
+html[data-auth-page="registration"] .btn:not(.btn-outline){background:#2454ff!important;border-color:#2454ff!important;color:#fff!important}
+html[data-auth-page="registration"] input,html[data-auth-page="registration"] select{font-size:16px!important}
+html[data-auth-page="admin-login"] body{background:#f7f9ff!important}
+html[data-auth-page="admin-login"] .login-card{background:#fff!important;border:1px solid #e2e8f3!important;box-shadow:0 18px 60px #152b5810!important;border-radius:20px!important}
+html[data-auth-page="admin-login"] .login-card::before{background:#2454ff!important}
+html[data-auth-page="admin-login"] .login-btn{background:#2454ff!important;box-shadow:none!important}
+html[data-auth-page="admin-login"] input{background:#fff!important;color:#15213a!important;font-size:16px!important}
+html[data-auth-page="admin-login"] h2{color:#14213a!important}
+html[data-auth-page="admin-login"] .cerood-login-kicker,html[data-auth-page="admin-login"] .cerood-login-brand span,html[data-auth-page="admin-login"] .cerood-password-toggle{color:#2454ff!important}
+@media(max-width:540px){html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) body.connected-workspace>main{padding:22px 14px!important}html[data-workspace-auth]:not([data-workspace-auth="authenticated"]) #content>.panel{padding:26px 22px!important}html[data-auth-page="registration"] .panel{padding:26px 20px!important}html[data-auth-page="registration"] .wrap{margin:20px auto!important}}
