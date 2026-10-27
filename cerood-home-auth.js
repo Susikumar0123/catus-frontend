@@ -10,9 +10,6 @@ const summary=document.createElement('div');summary.className='cerood-auth-numbe
 const number=document.createElement('span'),edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.addEventListener('click',()=>{if(typeof backToPhoneStep==='function')backToPhoneStep();phone.focus();});
 summary.append(number,edit);pass.parentElement.before(summary);
 const legal=document.createElement('p');legal.className='auth-terms-text';const terms=document.createElement('a'),privacy=document.createElement('a');terms.href='/terms.html';terms.textContent='Terms of use';privacy.href='/privacy-policy.html';privacy.textContent='Privacy policy';legal.append(terms,document.createTextNode('  |  '),privacy);reg.append(legal);
-function syncPassword(){if(confirm)confirm.value=pass.value;}
-pass.addEventListener('input',syncPassword);
-reg.addEventListener('click',e=>{if(e.target.closest('.auth-primary-btn'))syncPassword();},true);
 const profile=document.createElement('div');profile.id='ceroodAuthProfile';profile.style.display='none';profile.className='cerood-auth-profile';
 const title=document.createElement('h3');title.textContent='Your details';
 const description=document.createElement('p');description.textContent='Add your name and email, or skip for now.';
@@ -61,7 +58,7 @@ if(isRegister){
 const saved=phone.value.trim();if(/^[6-9]\d{9}$/.test(saved))input.value=saved;
 if(!/^[6-9]\d{9}$/.test(input.value)){if(typeof backToPhoneStep==='function')backToPhoneStep();return;}
 const text='+91 '+input.value;if(number.textContent!==text)number.textContent=text;
-syncPassword();
+
 }
 if(isOTP){const title=document.getElementById('otpTitle');if(title&&title.textContent!=='Check your phone')title.textContent='Check your phone';const info=document.getElementById('setPasswordInfo');const digits=input.value||phone.value;const message='Enter the verification code sent to +91 '+digits+'.';if(info&&info.textContent!==message)info.textContent=message;}
 const phoneTitle=document.querySelector('#authStepPhone h3');if(phoneTitle&&phoneTitle.textContent!=='Log in or sign up')phoneTitle.textContent='Log in or sign up';

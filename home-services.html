@@ -14315,8 +14315,8 @@ html:root body #ceroodBeautyFirstSection .uc-card-img-wrapper{aspect-ratio:1/1!i
 html:root body #ceroodBeautyFirstSection .uc-carousel-arrow{display:none!important}
 @media(max-width:850px){#ceroodBeautyFirstSection{margin:12px 15px 18px}html:root body #ceroodBeautyFirstSection .uc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
 </style><script defer src="/cerood-home-conversion.js"></script>
-<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=1"><link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=1"><link rel="shortcut icon" href="/favicon.ico?v=1"><link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=1"><link rel="stylesheet" href="/cerood-home-auth.css?v=5">
-<script defer src="/cerood-home-auth.js?v=4"></script>
+<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=1"><link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=1"><link rel="shortcut icon" href="/favicon.ico?v=1"><link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=1"><link rel="stylesheet" href="/cerood-home-auth.css?v=5-confirm-resend">
+<script defer src="/cerood-home-auth.js?v=5-confirm-resend"></script>
 <link rel="stylesheet" href="/cerood-mobile-refinement.css?v=2">
 <script defer src="/cerood-mobile-refinement.js?v=1"></script>
 <script defer src="/cerood-password-toggle.js?v=1"></script>
@@ -14758,14 +14758,7 @@ html:root body#ceroodFestivalPage#ceroodFestivalPage#ceroodFestivalPage#ceroodFe
                                 2:00
                             </b>
 </span>
-<span id="resendOtpBtn" onclick="resendCurrentOtp()" style="
-                                color: #2874f0;
-                                font-weight: 600;
-                                cursor: pointer;
-                                display: none;
-                            ">
-                            Resend OTP
-                        </span>
+<button id="resendOtpBtn" type="button" disabled onclick="resendCurrentOtp()">Resend OTP</button>
 </div>
 <!-- OTP INFO -->
 <div id="otpErrorMsg" style="
@@ -17459,66 +17452,21 @@ otpVerified = false;
 }
 
 // ⏱️ 2 நிமிடங்கள் டைமர் லாஜிக்
+let ceroodResendDeadline = 0;
+let ceroodResendPending = false;
 function startTwoMinTimer() {
-
-    let timeLeft = 120;
-
-    const timerCountEl =
-        document.getElementById('timerCount');
-
-    const resendBtnEl =
-        document.getElementById('resendOtpBtn');
-
-    if (twoMinTimer) {
-        clearInterval(twoMinTimer);
-        twoMinTimer = null;
-    }
-
-    if (timerCountEl) {
-
-        timerCountEl.textContent = '2:00';
-
-        if (timerCountEl.parentElement) {
-            timerCountEl.parentElement.style.display = '';
-        }
-    }
-
-    if (resendBtnEl) {
-        resendBtnEl.style.display = 'none';
-    }
-
-    twoMinTimer = setInterval(() => {
-
-        let mins = Math.floor(timeLeft / 60);
-        let secs = timeLeft % 60;
-
-        if (timerCountEl) {
-            timerCountEl.textContent =
-                `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        if (timeLeft <= 0) {
-
-            clearInterval(twoMinTimer);
-            twoMinTimer = null;
-
-            if (
-                timerCountEl &&
-                timerCountEl.parentElement
-            ) {
-                timerCountEl.parentElement.style.display = 'none';
-            }
-
-            if (resendBtnEl) {
-                resendBtnEl.style.display = 'inline';
-            }
-
-            return;
-        }
-
-        timeLeft--;
-
-    }, 1000);
+    if (twoMinTimer) clearInterval(twoMinTimer);
+    if (typeof otpCountdownTimer !== 'undefined' && otpCountdownTimer) clearInterval(otpCountdownTimer);
+    ceroodResendDeadline = Date.now() + 60000;
+    const tick = () => {
+        const left = Math.max(0, Math.ceil((ceroodResendDeadline-Date.now())/1000));
+        const count = document.getElementById('timerCount');
+        const button = document.getElementById('resendOtpBtn');
+        if(count){count.textContent= Math.floor(left/60)+':'+String(left%60).padStart(2,'0');count.parentElement.style.display=left?'':'none';}
+        if(button){button.style.display='inline-block';button.disabled=left>0 || ceroodResendPending;button.setAttribute('aria-disabled',String(button.disabled));}
+        if(!left){clearInterval(twoMinTimer);twoMinTimer=null;}
+    };
+    tick();twoMinTimer=setInterval(tick,250);
 }
 
 let ceroodOtpVerificationPending = false;
@@ -20243,121 +20191,25 @@ window.addEventListener('DOMContentLoaded', () => {
 let otpCountdownTimer = null;
 
 // OTP டைமரைத் தொடங்கும் பங்க்ஷன்
-function startOtpTimer() {
-    let timeLeft = 30;
-    const timerCountEl = document.getElementById('timerCount');
-    const otpTimerTextEl = document.getElementById('otpTimerText');
-    const resendBtnEl = document.getElementById('resendOtpBtn');
-
-    if (otpTimerTextEl) otpTimerTextEl.style.display = 'block';
-    if (resendBtnEl) resendBtnEl.style.display = 'none';
-    if (timerCountEl) timerCountEl.textContent = timeLeft;
-
-    if (otpCountdownTimer) clearInterval(otpCountdownTimer);
-
-    otpCountdownTimer = setInterval(() => {
-        timeLeft--;
-        if (timerCountEl) timerCountEl.textContent = timeLeft;
-
-        if (timeLeft <= 0) {
-            clearInterval(otpCountdownTimer);
-            if (otpTimerTextEl) otpTimerTextEl.style.display = 'none';
-            if (resendBtnEl) resendBtnEl.style.display = 'block'; // 30 விநாடிகளுக்குப் பிறகு ரீசெண்ட் பட்டன் தோன்றும்
-        }
-    }, 1000);
-}
+function startOtpTimer() { startTwoMinTimer(); }
 
 // "Resend OTP" பட்டனை க்ளிக் செய்யும்போது மீண்டும் SMS அனுப்பும் பங்க்ஷன்
 async function resendCurrentOtp() {
-
-    if (!tempPhone || !authFlowMode) {
-        alert(
-            'Please restart the authentication process.'
-        );
-        return;
-    }
-
-    if (!msg91ReqId) {
-        alert(
-            'OTP session expired. Please restart.'
-        );
-        return;
-    }
-
-    if (typeof window.retryOtp !== 'function') {
-        alert(
-            'OTP service is loading. Please try again.'
-        );
-        return;
-    }
-
-    try {
-
-        window.retryOtp(
-            null,
-
-            function (data) {
-
-                console.log(
-                    'MSG91 OTP resent:',
-                    data
-                );
-
-                const newReqId =
-                    getMsg91ReqId(data);
-
-                if (newReqId) {
-                    msg91ReqId = newReqId;
-                }
-
-                msg91AccessToken = '';
-                otpVerified = false;
-
-                const otpInput =
-                    document.getElementById(
-                        'inputRegOTP'
-                    );
-
-                if (otpInput) {
-                    otpInput.value = '';
-                    otpInput.focus();
-                }
-
-                startTwoMinTimer();
-
-                showToast(
-                    'OTP resent successfully!',
-                    false
-                );
-            },
-
-            function (error) {
-
-                console.error(
-                    'MSG91 resend OTP error:',
-                    error
-                );
-
-                alert(
-                    'Unable to resend OTP. Please try again.'
-                );
-            },
-
-            msg91ReqId
-        );
-
-    } catch (error) {
-
-        console.error(
-            'MSG91 resend OTP error:',
-            error
-        );
-
-        alert(
-            'Unable to resend OTP. Please try again.'
-        );
-    }
+ if(ceroodResendPending || Date.now()<ceroodResendDeadline)return;
+ if(!tempPhone || !authFlowMode || !msg91ReqId){alert('OTP session expired. Please restart.');return;}
+ if(typeof window.retryOtp!=='function'){alert('OTP service is loading. Please try again.');return;}
+ const button=document.getElementById('resendOtpBtn');
+ ceroodResendPending=true;if(button)button.disabled=true;
+ const fail=()=>{ceroodResendPending=false;if(button)button.disabled=Date.now()<ceroodResendDeadline;alert('Unable to resend OTP. Please try again.');};
+ try{window.retryOtp(null,function(data){
+   ceroodResendPending=false;
+   const requestId=getMsg91ReqId(data);if(requestId)msg91ReqId=requestId;
+   msg91AccessToken='';otpVerified=false;
+   const field=document.getElementById('inputRegOTP');if(field){field.value='';field.focus();}
+   startTwoMinTimer();showToast('OTP resent successfully!',false);
+ },fail,msg91ReqId);}catch(error){fail();}
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     // மொபைல் க்ளோஸ் பட்டனுக்கான ஈவென்ட்
     const mobileCloseBtn = document.querySelector('.mobile-header-close');
