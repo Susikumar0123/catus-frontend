@@ -49,8 +49,12 @@
       position: 'fixed', inset: '0', width: '100%', height: '100dvh',
       zIndex: '2147483000'
     });
+    // Blur must be applied in the parent page; iframe filters cannot blur its parent.
+    host.style.background = 'rgba(15, 23, 42, 0.28)';
+    host.style.backdropFilter = 'blur(8px)';
+    host.style.webkitBackdropFilter = 'blur(8px)';
     const frame = document.createElement('iframe');
-    frame.src = '/cerood-auth.html?v=20261027-shop-auth3';
+    frame.src = '/cerood-auth.html?v=20261027-shop-auth4-blur';
     frame.title = 'Cerood Login and Registration';
     frame.setAttribute('aria-label', 'Cerood Account');
     Object.assign(frame.style, { width: '100%', height: '100%', border: '0', display: 'block' });
