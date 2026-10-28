@@ -38,7 +38,7 @@ class SellerAPI {
  async download(path){
   if(!/^\/api\/sellers?\//.test(path))throw Error('Unsupported seller API route.');const token=this.storage.getItem('ceroodSellerConnectedToken');if(!token)throw Object.assign(Error('Sign in to download.'),{status:401});
   const response=await this.fetcher(this.base+path,{headers:{Authorization:'Bearer '+token},credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(45000)});
-  if(token!==this.storage.getItem('ceroodSellerConnectedToken'))throw Object.assign(Error('Session changed. Reload this section.'),{status:409});if(response.status===401)this.clear();if(!response.ok){let x;try{x=await response.json();}catch{}throw Object.assign(Error(x?.message||'Download failed.'),{status:response.status,code:typeof data?.code==='string'?data.code:undefined});}return response.blob();
+  if(token!==this.storage.getItem('ceroodSellerConnectedToken'))throw Object.assign(Error('Session changed. Reload this section.'),{status:409});if(response.status===401)this.clear();if(!response.ok){let x;try{x=await response.json();}catch{}throw Object.assign(Error(x?.message||'Download failed.'),{status:response.status,code:typeof x?.code==='string'?x.code:undefined});}return response.blob();
  }
  upload(file){const form=new FormData();form.append('file',file);return this.request('/api/sellers/upload-media',{method:'POST',body:form});}
 }
