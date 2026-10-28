@@ -1,0 +1,23 @@
+name: Seller API contract checks
+on:
+  push:
+    branches:
+      - migration/cloudflare-api-integration
+  pull_request:
+    paths:
+      - 'seller-dashboard-test/seller-api.js'
+      - 'tests/seller-api-contract.cjs'
+      - '.github/workflows/seller-api-contract.yml'
+permissions:
+  contents: read
+jobs:
+  seller-api-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run offline seller API contract checks
+        run: node tests/seller-api-contract.cjs
