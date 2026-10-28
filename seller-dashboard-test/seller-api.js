@@ -1,7 +1,7 @@
 (function(root){
 'use strict';
 class SellerAPI {
- constructor({fetcher=globalThis.fetch.bind(globalThis),storage=globalThis.sessionStorage,base='https://catus-backend-d2js.onrender.com'}={}){this.fetcher=fetcher;this.storage=storage;this.base=base;this.seller=null;this.epoch=0;this.pendingMutations=new Set();}
+ constructor({fetcher=globalThis.fetch.bind(globalThis),storage=globalThis.sessionStorage,base=(root.location&&/^https?:$/.test(root.location.protocol)?root.location.origin:'https://catus-backend-d2js.onrender.com')}={}){this.fetcher=fetcher;this.storage=storage;this.base=base;this.seller=null;this.epoch=0;this.pendingMutations=new Set();}
  clear(){this.epoch++;this.storage.removeItem('ceroodSellerConnectedToken');this.seller=null;}
  request(path,options={}){const method=options.method||'GET';if(method==='GET')return this._request(path,options);const key=this.epoch+'|'+method+'|'+path;if(this.pendingMutations.has(key))return Promise.reject(Object.assign(Error('This action is still processing. Wait for its result before another attempt.'),{status:409,code:'ACTION_IN_FLIGHT'}));this.pendingMutations.add(key);return this._request(path,options).finally(()=>this.pendingMutations.delete(key));}
  async _request(path,{method='GET',body,auth=true}={}){
