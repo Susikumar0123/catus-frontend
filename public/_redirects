@@ -1,4 +1,17 @@
-/:state/:district/location/:location /location.html 200
-/:state/:district/:location/:service /product.html 200
-/:state/:district/:service /product.html 200
-/:state/:district /district.html 200
+# Public site aliases
+/cerood-logo.webp /brand/logo-white.png 200
+/about /about.html 200
+/contact /contact.html 200
+/services /services.html 200
+/faq /faq.html 200
+/home-services /home-services.html 200
+/shop-product.html /store-product.html 302
+/shop-checkout.html /store-checkout.html 302
+/cerood-orders.html /store-orders.html 302
+/shop-after-sales.html /store-after-sales.html 302
+/cerood-cart.html /store-checkout.html?mode=cart 302
+# Limit SEO routes to Tamil Nadu so /brand and nested asset paths are served normally
+/tamil-nadu/:district/location/:location /location.html 200
+/tamil-nadu/:district/:location/:service /product.html 200
+/tamil-nadu/:district/:service /product.html 200
+/tamil-nadu/:district /district.html 200
