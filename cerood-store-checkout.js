@@ -1,6 +1,6 @@
 
 (()=>{'use strict';
-const API=['localhost','127.0.0.1'].includes(location.hostname)?'http://localhost:3000':'https://catus-backend-d2js.onrender.com';
+const API=['localhost','127.0.0.1'].includes(location.hostname)?'http://localhost:3000':location.hostname.endsWith('.workers.dev')?location.origin:'https://catus-backend-d2js.onrender.com';
 const $=id=>document.getElementById(id);
 const q=new URLSearchParams(location.search),mode=q.get('mode')==='buy'?'buy':'cart';
 const aliases={shop:'general',main:'general',clothing:'fashion',cosmetics:'beauty'};
