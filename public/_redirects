@@ -1,2 +1,4 @@
 /:state/:district/location/:location /location.html 200
+/:state/:district/:location/:service /product.html 200
+/:state/:district/:service /product.html 200
 /:state/:district /district.html 200
