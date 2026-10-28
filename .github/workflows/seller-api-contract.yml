@@ -7,6 +7,8 @@ on:
     paths:
       - 'seller-dashboard-test/seller-api.js'
       - 'tests/seller-api-contract.cjs'
+      - 'cloudflare-api-gateway.mjs'
+      - 'tests/cloudflare-gateway-contract.mjs'
       - '.github/workflows/seller-api-contract.yml'
 permissions:
   contents: read
@@ -21,3 +23,5 @@ jobs:
           node-version: '22'
       - name: Run offline seller API contract checks
         run: node tests/seller-api-contract.cjs
+      - name: Run Cloudflare API gateway contract checks
+        run: node tests/cloudflare-gateway-contract.mjs
