@@ -1,17 +1,15 @@
-# Public site aliases
+# Static file aliases are automatic with Workers default HTML handling.
+# Avoid /home-services -> /home-services.html 200: it creates a canonical redirect loop.
+# Legacy image alias (source file may still be referenced in existing pages).
 /cerood-logo.webp /brand/logo-white.png 200
-/about /about.html 200
-/contact /contact.html 200
-/services /services.html 200
-/faq /faq.html 200
-/home-services /home-services.html 200
-/shop-product.html /store-product.html 302
-/shop-checkout.html /store-checkout.html 302
-/cerood-orders.html /store-orders.html 302
-/shop-after-sales.html /store-after-sales.html 302
-/cerood-cart.html /store-checkout.html?mode=cart 302
-# Limit SEO routes to Tamil Nadu so /brand and nested asset paths are served normally
-/tamil-nadu/:district/location/:location /location.html 200
-/tamil-nadu/:district/:location/:service /product.html 200
-/tamil-nadu/:district/:service /product.html 200
-/tamil-nadu/:district /district.html 200
+# Temporary redirects for legacy store links.
+/shop-product.html /store-product 302
+/shop-checkout.html /store-checkout 302
+/cerood-orders.html /store-orders 302
+/shop-after-sales.html /store-after-sales 302
+/cerood-cart.html /store-checkout?mode=cart 302
+# Restrict SEO routes to Tamil Nadu, and target canonical paths without .html.
+/tamil-nadu/:district/location/:location /location 200
+/tamil-nadu/:district/:location/:service /product 200
+/tamil-nadu/:district/:service /product 200
+/tamil-nadu/:district /district 200
