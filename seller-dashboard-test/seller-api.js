@@ -11,7 +11,7 @@ class SellerAPI {
   const headers={};if(auth)headers.Authorization='Bearer '+token;
   const form=typeof FormData!=='undefined'&&body instanceof FormData;
   if(body!==undefined&&!form)headers['Content-Type']='application/json';
-  let response;try{response=await this.fetcher(this.base+path,{method,headers,body:body===undefined?undefined:form?body:JSON.stringify(body),cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(45000)});}catch(e){throw Error(e.name==='TimeoutError'?'The server took too long. Try again.':'Cannot reach the seller API. Check your connection and the backend CORS allowlist.');}
+  let response;try{response=await this.fetcher(this.base+path,{method,headers,body:body===undefined?undefined:form?body:JSON.stringify(body),cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(form?90000:45000)});}catch(e){throw Error(e.name==='TimeoutError'?'The server took too long. Try again.':'Cannot reach the seller API. Check your connection and the backend CORS allowlist.');}
   if(auth&&token!==this.storage.getItem('ceroodSellerConnectedToken'))throw Object.assign(Error('Session changed. Reload this section.'),{status:409,code:'SESSION_CHANGED'});if(response.status===401&&auth)this.clear();
   let data;try{data=await response.json();}catch{throw Object.assign(Error(response.status===401?'Your session expired. Sign in again.':'The seller API returned an invalid response.'),{status:response.status,code:typeof data?.code==='string'?data.code:undefined});}
   if(!data||typeof data!=='object'||Array.isArray(data))throw Object.assign(Error('The seller API returned an invalid response.'),{status:response.status,code:typeof data?.code==='string'?data.code:undefined});
@@ -40,7 +40,15 @@ class SellerAPI {
   const response=await this.fetcher(this.base+path,{headers:{Authorization:'Bearer '+token},credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(45000)});
   if(token!==this.storage.getItem('ceroodSellerConnectedToken'))throw Object.assign(Error('Session changed. Reload this section.'),{status:409});if(response.status===401)this.clear();if(!response.ok){let x;try{x=await response.json();}catch{}throw Object.assign(Error(x?.message||'Download failed.'),{status:response.status,code:typeof x?.code==='string'?x.code:undefined});}return response.blob();
  }
- upload(file){const form=new FormData();form.append('file',file);return this.request('/api/sellers/upload-media',{method:'POST',body:form});}
+ upload(file){
+  if(!file||typeof file.size!=='number'||typeof file.type!=='string')throw Error('Select a product photo or video.');
+  const limits={'image/jpeg':10*1024*1024,'image/png':10*1024*1024,'image/webp':10*1024*1024,'video/mp4':25*1024*1024,'video/webm':25*1024*1024};
+  const max=limits[file.type];
+  if(!max)throw Error('Use JPG, PNG, WebP, MP4 or WebM.');
+  if(file.size===0)throw Error('The selected file is empty.');
+  if(file.size>max)throw Error(file.type.startsWith('image/')?'Product photos must be 10 MB or smaller.':'Product videos must be 25 MB or smaller.');
+  const form=new FormData();form.append('file',file);return this.request('/api/sellers/upload-media',{method:'POST',body:form});
+ }
 }
 root.SellerAPI=SellerAPI;if(typeof module!=='undefined')module.exports=SellerAPI;
 })(typeof window!=='undefined'?window:globalThis);
