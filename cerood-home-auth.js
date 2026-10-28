@@ -38,7 +38,7 @@ form.addEventListener('submit',async e=>{
  save.disabled=true;skip.disabled=true;error.textContent='';
  try{
  const token=localStorage.getItem('cerood_home_service_session');if(!token)throw Error('Please log in again.');
- const r=await fetch('https://catus-backend-d2js.onrender.com/api/home-services/customer/update-profile',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({name,email})});
+ const r=await fetch((location.hostname.endsWith('.workers.dev') ? location.origin : 'https://catus-backend-d2js.onrender.com')+'/api/home-services/customer/update-profile',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({name,email})});
  const d=await r.json();if(!r.ok||!d.success||!d.user)throw Error(d.message||'Could not save your profile. Please try again.');
  localStorage.setItem('cerood_home_service_user',JSON.stringify(d.user));
  if(typeof currentUser!=='undefined')currentUser=d.user;
