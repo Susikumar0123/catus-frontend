@@ -18301,8 +18301,8 @@ function getSmallProductImageUrl(imageUrl) {
             '/storage/v1/object/public/',
             '/storage/v1/render/image/public/'
         );
-        u.searchParams.set('width', '320');
-        u.searchParams.set('quality', '75');
+        u.searchParams.set('width', '256');
+        u.searchParams.set('quality', '65');
         u.searchParams.set('resize', 'contain');
         return u.href;
     } catch (_) {
@@ -18925,6 +18925,7 @@ const priceHTML = showStartingPrice ? '<div class="cerood-starting-price cerood-
     src="${getSmallProductImageUrl(s.image_url)}"
 alt="${s.service_name}"
 loading="lazy"
+width="256" height="256"
 decoding="async">
             </div>
 
@@ -19002,7 +19003,8 @@ if (
                         src="${getSmallProductImageUrl(s.image_url)}"
                         alt="${s.service_name}"
                         loading="lazy"
-                        decoding="async"
+                        width="256" height="256"
+decoding="async"
                     >
 
                 </div>
