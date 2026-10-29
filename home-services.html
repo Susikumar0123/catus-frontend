@@ -18288,9 +18288,45 @@ document.querySelectorAll(
         });
 }
 
+// Service-card thumbnails: keep admin uploads and original Supabase objects unchanged.
+// Supabase image transformations require a supported project/plan.
+// If unavailable, the capture-phase error handler falls back to the original URL.
 function getSmallProductImageUrl(imageUrl) {
-    return imageUrl || '';
+    if (!imageUrl || typeof imageUrl !== 'string') return imageUrl || '';
+    try {
+        const u = new URL(imageUrl, window.location.href);
+        if (!u.hostname.endsWith('.supabase.co') ||
+            !u.pathname.includes('/storage/v1/object/public/')) return imageUrl;
+        u.pathname = u.pathname.replace(
+            '/storage/v1/object/public/',
+            '/storage/v1/render/image/public/'
+        );
+        u.searchParams.set('width', '320');
+        u.searchParams.set('quality', '75');
+        u.searchParams.set('resize', 'contain');
+        return u.href;
+    } catch (_) {
+        return imageUrl;
+    }
 }
+
+document.addEventListener('error', function ceroodThumbnailFallback(event) {
+    const img = event.target;
+    if (!img || img.tagName !== 'IMG') return;
+    const src = img.currentSrc || img.src || '';
+    if (!src.includes('/storage/v1/render/image/public/')) return;
+    try {
+        const u = new URL(img.src);
+        u.pathname = u.pathname.replace(
+            '/storage/v1/render/image/public/',
+            '/storage/v1/object/public/'
+        );
+        u.searchParams.delete('width');
+        u.searchParams.delete('quality');
+        u.searchParams.delete('resize');
+        img.src = u.href;
+    } catch (_) { /* Keep existing image error behavior. */ }
+}, true);
 
     function filterProducts(keyword, categoryOnly = false) {
         const query = keyword.toLowerCase().trim();
